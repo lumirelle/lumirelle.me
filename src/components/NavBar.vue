@@ -48,7 +48,7 @@ const { y: scroll } = useWindowScroll()
         <RouterLink to="/demos" title="Demos">
           <div i-ri-screenshot-line />
         </RouterLink>
-        <a href="https://github.com/Lumirelle" target="_blank" title="GitHub" class="lt-md:hidden">
+        <a href="https://github.com/lumirelle" target="_blank" title="GitHub" class="lt-md:hidden">
           <div i-uil-github-alt />
         </a>
         <a href="/feed.xml" target="_blank" title="RSS" class="lt-md:hidden">

@@ -30,7 +30,7 @@
       Sponsor to support Lumirelle (GitHub)
     </a>
     <a
-      href="https://afdian.com/a/Lumirelle"
+      href="https://afdian.com/a/lumirelle"
       target="_blank"
       class="group btn-yellow inline-block"
     >

@@ -14,7 +14,7 @@ function slug(name: string) {
     <div class="prose pb5 mx-auto mt10 text-center">
       <div flex="~ gap-2 justify-center">
         <a
-          href="https://github.com/Lumirelle"
+          href="https://github.com/lumirelle"
           target="_blank"
           class="group btn-blue inline-block"
         >

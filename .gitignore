@@ -3,6 +3,7 @@ node_modules
 dist
 *.local
 .idea
+.obsidian
 .presite
 dist-ssr
 .vite-ssg-temp

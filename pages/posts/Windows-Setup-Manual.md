@@ -1,5 +1,5 @@
 ---
-title: Windows 配置手册 / Windows Setup Manual
+title: Windows Setup Manual
 date: 2025-08-24T19:40:00
 lang: en
 duration: 30min
@@ -129,14 +129,21 @@ winget install <PACKAGE_NAME> --location "/PATH/YOU/LIKE"
     ^fnm env --json | from json | load-env
     $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os-info.name == 'windows' {''} else {'bin'}))
 
-    # Install Node.js 22
+    # Install Node.js of latest major version 22
+    # Notice that, we will just use the LTS version of Node.js
+    # In fnm, they will be tagged with version code like `Iron` for Node.js 20 LTS
     fnm i 22
 
     # Install useful global node package
     npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
-    # It's recommended to upgrade npm to >= 10.9.2
+    # If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
+    npm i @antfu/ni czg -g
+
+    # It's recommended to upgrade npm to >= 10.9.3
+    # Node.js < 18
+    # Use bundled npm
     # Node.js 18
-    npm i npm@^10.9.2 -g
+    npm i npm@^10.9.3 -g
     # Node.js 20+
     npm i npm@latest -g
 
@@ -155,14 +162,21 @@ winget install <PACKAGE_NAME> --location "/PATH/YOU/LIKE"
     # Start fnm temporary
     fnm env --use-on-cd --corepack-enabled --shell powershell | Out-String | Invoke-Expression
 
-    # Install Node.js 22
+    # Install Node.js of latest major version 22
+    # Notice that, we will just use the LTS version of Node.js
+    # In fnm, they will be tagged with version code like `Iron` for Node.js 20 LTS
     fnm i 22
 
     # Install useful global node package
     npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
-    # It's recommended to upgrade npm to >= 10.9.2
+    # If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
+    npm i @antfu/ni czg -g
+
+    # It's recommended to upgrade npm to >= 10.9.3
+    # Node.js < 18
+    # Use bundled npm
     # Node.js 18
-    npm i npm@^10.9.2 -g
+    npm i npm@^10.9.3 -g
     # Node.js 20+
     npm i npm@latest -g
 

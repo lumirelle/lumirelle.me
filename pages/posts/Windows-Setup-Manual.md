@@ -196,7 +196,7 @@ winget install <PACKAGE_NAME> --location "/PATH/YOU/LIKE"
 
   | Software | Source/Install Method | Note |
   | -------- | --------------------- | ---- |
-  | Brave | [Brave](https://brave.com/download/) | [Extensions](#brave-extensions) |
+  | Brave | [Brave](https://brave.com/download/) | [Extensions](#_5-brave-browser) |
   | uTools | [uTools](https://www.u-tools.cn/download/) | Extensions: npm包实时搜索, 编码小助手, 聚合翻译, Any Rule, 本地搜索, 颜色助手, OCR文字识别, 计算稿纸 |
   | Auto Dark Mode | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435) | / |
   | NanaZip | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R) | / |

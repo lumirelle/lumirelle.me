@@ -197,7 +197,7 @@ winget install <PACKAGE_NAME> --location "/PATH/YOU/LIKE"
   | Software | Source/Install Method | Note |
   | -------- | --------------------- | ---- |
   | Brave | [Brave](https://brave.com/download/) | [Extensions](#_5-brave-browser) |
-  | uTools | [uTools](https://www.u-tools.cn/download/) | Extensions: npm包实时搜索, 编码小助手, 聚合翻译, Any Rule, 本地搜索, 颜色助手, OCR文字识别, 计算稿纸 |
+  | uTools | [uTools](https://www.u-tools.cn/download/) | Basic Extensions: 聚合翻译, 本地搜索, OCR文字识别, 计算稿纸, 颜色助手<br><br>Dev Extensions: npm包实时搜索, 编码小助手, 超级JavaScript, Any Rule |
   | Auto Dark Mode | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435) | / |
   | NanaZip | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R) | / |
   | KeePass 2 | [KeePass](https://keepass.info/download.html)  | Extensions: ColoredPassword, HaveIBeenPwned, KeePassHttp |
@@ -266,7 +266,7 @@ I hate Chrome because it's too opinionated, I hate Edge because it's too heavy.
 
 I just want a Chromium based browser, who is tiny, clean and customizable.
 
-- Install useful extensions (Notice: "篡改猴" extension requires you to open the develop mode）
+- Install useful extensions (Notice: "篡改猴" extension requires you to open the develop mode)
 
   | Extension | Source/Install Method (`~` is the same as above) | Note |
   | -------- | ------------------------------------------------ | ---- |

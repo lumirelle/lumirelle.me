@@ -11,51 +11,47 @@ I know Windows is the best OS to play games, but the worst OS to develop.
 
 If we have no choice, the only one thing we can do is trying our best to make Windows be better for our development.
 
-## First Step: Install or Reinstall
+## First Step: Install Windows
 
-We can use [Ventoy](https://www.ventoy.net/cn/download.html) to make a USB flash driver boot loader to install or reinstall Windows.
+We can use [Ventoy](https://www.ventoy.net/en/download.html) to make a bootable USB drive to install Windows.
 
-Notice that, by default, Ventoy will skip the device check and online check while Windows is setting up. You can also bypass these check manually by these commands below (Press `Shift + F10` to open CMD):
+Notice that, by default, Ventoy will skip the device check and online check while Windows is setting up.
+
+You can also bypass these check manually by unplugging the network cable and executing these commands below (Press `Shift + F10` to open CMD):
 
 ```sh
 cd OOBE
 BypassNRO.cmd
 ```
 
-### Install Ventoy
+### Install And Set Up Ventoy
 
-Insert your USB flash driver, follow the steps in [official document](https://www.ventoy.net/cn/doc_start.html) to install and set up Ventoy.
+Insert your USB flash driver, follow the steps in the [official document](https://www.ventoy.net/en/doc_start.html) to install and set up Ventoy.
 
 ### Download Windows ISO
 
-For developers, it's recommended to use the professional edition of Windows.
+For developers, it's recommended to use the latest professional edition of Windows.
 
 From Microsoft (Official):
 
-- [Windows 11 LTSC Enterprise](https://golf.rendering.prod.mscas.io/en-us/evalcenter/download-windows-11-enterprise) (I preferred)
 - [Windows 11 ISO](https://www.microsoft.com/en-us/software-download/windows11)
 - [Windows 10 ISO](https://www.microsoft.com/en-us/software-download/windows10)
 
-From NEXT, ITELLYOU (For specific Windows edition or version):
+From MAS:
 
-- [Windows 11 ISO](https://next.itellyou.cn/Original/#cbp=Product?ID=42e87ac8-9cd6-eb11-bdf8-e0d4e850c9c6)
-- [Windows 10 ISO](https://next.itellyou.cn/Original/#cbp=Product?ID=f905b2d9-11e7-4ee3-8b52-407a8befe8d1)
-- [Others edition or version](https://next.itellyou.cn/Original/)
+- [Windows 11 ISO](https://massgrave.dev/windows_11_links)
+- [Windows 10 ISO](https://massgrave.dev/windows_10_links)
+- [Windows LTSC ISO](https://massgrave.dev/windows_ltsc_links)
 
-If you want to download the Windows ISO via NEXT, ITELLYOU, a BT downloader is required. I recommend [qBittorrent Enhanced Edition](https://github.com/c0re100/qBittorrent-Enhanced-Edition/releases).
-Then, you should set the tracker: <https://fastly.jsdelivr.net/gh/XIU2/TrackersListCollection/all.txt>
-
-Notice that, if you are using VPN tool like Clash, please close it or switch to direct mode for better download speed.
-
-### Prepare USB Flash Driver Boot Loader
+### Make A Bootable USB Drive
 
 Move the downloaded Windows ISO file to the USB flash drive.
 
-Insert your USB flash driver with the installation of Ventoy and Windows ISO, and choose it to boot your computer in BIOS.
+Insert the USB flash drive, enter BIOS and choose it in boot menu.
 
-After Ventoy starts up, choose the right edition & version of Windows ISO and just start to install it.
+After Ventoy starts up, choose the Windows ISO and just start to install it.
 
-Then, wait for the installation to complete.
+Then, customize your installation options and wait for the installation to complete.
 
 ## Second Step: Setting Up System Preferences
 
@@ -78,30 +74,40 @@ sudo winget install "<PACKAGE_NAME>" --scope machine
 
 Install on specific location:
 
-```shell
+```sh
 winget install "<PACKAGE_NAME>" --location "/PATH/YOU/LIKE"
+```
+
+For more information:
+
+```sh
+winget -?
 ```
 
 ### 1: Clean Up Annoyed System Bundled Software
 
-If you use Windows Home Edition or Professional Edition, please uninstall Office 365, Microsoft PC Manager and other trash (system bundled software)
+Uninstall Office 365, Microsoft PC Manager and other trash (system bundled software) you don't need at all, close the UAC (User Account Control) as your need.
 
-Then, close the anti-virus feature of Windows Defender, use [Huorong](https://www.huorong.cn/person) instead (Much quieter and non-invasive)
+Then, close all of anti-virus features of Windows Defender, and use [Huorong](https://www.huorong.cn/person) instead (Much quieter and non-invasive)
 
 | Software | Source/Install Method                    |
 | -------- | ---------------------------------------- |
 | Huorong  | [Huorong](https://www.huorong.cn/person) |
 
-~~At the end, use Windows 11 Setting Easily (Support Windows 10 too) to close Windows Defender completely, adjust system setting.~~
-~~Don't forget to restart your computer at last.~~
+After Huorong start up, restart your computer, Windows Defender will be closed.
 
-| ~~Software~~                  | ~~Source/Install Method~~                                                   |
-| ----------------------------- | --------------------------------------------------------------------------- |
-| ~~Windows 11 Setting Easily~~ | ~~[Article on Bilibili](https://www.bilibili.com/opus/904672369138729017)~~ |
+At the end, use Windows 11 Setting Easily (Support Windows 10 too) to close Windows Defender completely, you will see
+there is only the Windows Defender service exists, and Windows Defender is being disabled entirely.
+
+| Software                  | Source/Install Method                                                   |
+| ------------------------- | ----------------------------------------------------------------------- |
+| Windows 11 Setting Easily | [Article on Bilibili](https://www.bilibili.com/opus/904672369138729017) |
+
+Notice that, you should close Windows Defender first, because it will clean Windows 11 Setting Easily as a potential threat.
 
 ### 2: Setting Up Network Tool (Optional)
 
-Just install Clash Verge Rev, We will configure it later.
+Just install Clash Verge Rev, We will configure it [later](#3-setting-up-personal-preferences).
 
 | Software        | Source/Install Method                                                          |
 | --------------- | ------------------------------------------------------------------------------ |
@@ -111,14 +117,13 @@ Just install Clash Verge Rev, We will configure it later.
 
 Runtime requires:
 
-| Software                           | Source/Install Method                                                           | Notice                                                                                                                                                                                                                                               |
-| ---------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Windows Terminal                   | [Microsoft Store](https://apps.microsoft.com/detail/9n0dx20hk701)               | /                                                                                                                                                                                                                                                    |
-| gsudo                              | `winget install gerardog.gsudo --scope machine`                                 | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using latest Windows 11, please put gsudo the very front to avoid being covered by built-in `sudo` command which is not useful |
-| Nushell                            | `sudo winget install nushell --scope machine`                                   | Command `sudo` is powered by gsudo now                                                                                                                                                                                                               |
-| ~~PowerShell 7 (Will Deprecated)~~ | ~~[GitHub Releases](https://github.com/PowerShell/PowerShell/releases/latest)~~ | ~~/~~                                                                                                                                                                                                                                                |
-| Oh My Posh                         | `sudo winget install JanDeDobbeleer.OhMyPosh --scope machine`                   | /                                                                                                                                                                                                                                                    |
-| fnm                                | `sudo winget install Schniz.fnm`                                                | Maybe not support `--scope machine` yet                                                                                                                                                                                                              |
+| Software         | Source/Install Method                                             | Notice                                                                                                                                                                                                                                                                                                      |
+| ---------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows Terminal | [Microsoft Store](https://apps.microsoft.com/detail/9n0dx20hk701) | /                                                                                                                                                                                                                                                                                                           |
+| gsudo            | `winget install gerardog.gsudo --scope machine`                   | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful |
+| Nushell          | `sudo winget install nushell --scope machine`                     | Command `sudo` is powered by gsudo now                                                                                                                                                                                                                                                                      |
+| Oh My Posh       | `sudo winget install JanDeDobbeleer.OhMyPosh --scope machine`     | /                                                                                                                                                                                                                                                                                                           |
+| fnm              | `sudo winget install Schniz.fnm --scope machine`                  | /                                                                                                                                                                                                                                                                                                           |
 
 Setting up via Nushell:
 
@@ -132,18 +137,18 @@ $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os
 # In fnm, they will be tagged with version code like `Iron` for Node.js 20 LTS
 fnm i 22
 
+# It's recommended to upgrade npm to >= 10.9.3
+# Node.js 20+
+npm i npm@latest -g
+# Node.js 18
+# npm i npm@^10.9.3 -g
+# Node.js < 18
+# Use bundled npm
+
 # Install useful global node package
 npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
 # If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
-npm i @antfu/ni czg -g
-
-# It's recommended to upgrade npm to >= 10.9.3
-# Node.js < 18
-# Use bundled npm
-# Node.js 18
-npm i npm@^10.9.3 -g
-# Node.js 20+
-npm i npm@latest -g
+# npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i impurities -g
@@ -165,18 +170,18 @@ fnm env --use-on-cd --corepack-enabled --shell powershell | Out-String | Invoke-
 # In fnm, they will be tagged with version code like `Iron` for Node.js 20 LTS
 fnm i 22
 
+# It's recommended to upgrade npm to >= 10.9.3
+# Node.js 20+
+npm i npm@latest -g
+# Node.js 18
+# npm i npm@^10.9.3 -g
+# Node.js < 18
+# Use bundled npm
+
 # Install useful global node package
 npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
 # If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
-npm i @antfu/ni czg -g
-
-# It's recommended to upgrade npm to >= 10.9.3
-# Node.js < 18
-# Use bundled npm
-# Node.js 18
-npm i npm@^10.9.3 -g
-# Node.js 20+
-npm i npm@latest -g
+# npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i impurities -g
@@ -190,7 +195,7 @@ Install the basic software below in order:
 
 | Software                        | Source/Install Method                                                                   | Note                                                                                                                                             |
 | ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Brave                           | [Brave](https://brave.com/download/)                                                    | [Extensions](#_5-brave-browser)                                                                                                                  |
+| Brave                           | [Brave](https://brave.com/download/)                                                    | [Extensions](#5-brave-browser)                                                                                                                   |
 | uTools                          | [uTools](https://www.u-tools.cn/download/)                                              | Basic Extensions: 聚合翻译, 本地搜索, OCR文字识别, 计算稿纸, 颜色助手<br><br>Dev Extensions: npm包实时搜索, 编码小助手, 超级JavaScript, Any Rule |
 | Auto Dark Mode                  | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435)                     | /                                                                                                                                                |
 | NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                    | /                                                                                                                                                |
@@ -205,7 +210,6 @@ Install the basic software below in order:
 | DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                  |
 | Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)           | /                                                                                                                                                |
 | Revo Uninstaller                | [Revo Uninstaller](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)  | /                                                                                                                                                |
-| HEU KMS Activator               | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases)                  | /                                                                                                                                                |
 
 Install the tool software below in order:
 
@@ -220,7 +224,7 @@ Install the tool software below in order:
 | PotPlayer        | [Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)     |
 | NVIDIA App       | [NVIDIA](https://www.nvidia.cn/software/nvidia-app/)                    |
 | Steam            | [Steam](https://store.steampowered.com/about)                           |
-| Epic Games       | [Epic Games](https://store.epicgames.com/zh-CN/download)                |
+| Epic Games       | [Epic Games](https://store.epicgames.com/download)                      |
 | OBS Studio       | [OBS Studio](https://obsproject.com/download)                           |
 
 Install the dev software below in order:
@@ -230,25 +234,24 @@ Install the dev software below in order:
 | Mingw-w64            | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | /                                             |
 | Neovim               | `winget install Neovim.Neovim`                                                     | /                                             |
 | LazyVim              | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                             |
-| JDK                  | [Oracle](https://www.oracle.com/cn/java/technologies/downloads/#graalvmjava21)     | /                                             |
+| JDK                  | [Oracle](https://www.oracle.com/java/technologies/downloads/#graalvmjava21)        | /                                             |
 | VEnv                 | `python -m venv /path/to/new/virtual/environment`                                  | /                                             |
-| JetBrains Toolbox    | [JetBrains](https://www.jetbrains.com/zh-cn/lp/toolbox/)                           | /                                             |
+| JetBrains Toolbox    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                             |
 | JetBrains IDEA       | Install from JetBrains Toolbox                                                     | /                                             |
-| Visual Studio        | [Visual Studio](https://visualstudio.microsoft.com/zh-hans/downloads/)             | /                                             |
-| Navicat Premium Lite | [Navicat](https://www.navicat.com.cn/download/navicat-premium-lite)                | /                                             |
+| Visual Studio        | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | /                                             |
+| Navicat Premium Lite | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                             |
 | WSL                  | `wsl --install`                                                                    | You should enable Hyper-V & WSL support first |
 | Docker Desktop       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                             |
 
 (Optional) Install other software below:
 
-| Software             | Source/Install Method                                                               |
-| -------------------- | ----------------------------------------------------------------------------------- |
-| Ventoy               | [GitHub Releases](https://github.com/ventoy/Ventoy/releases)                        |
-| qBittorrent Enhanced | [GitHub Releases](https://github.com/c0re100/qBittorrent-Enhanced-Edition/releases) |
-| AIDE64               |                                                                                     |
-| Crystal Disk Info    | [CrystalDiskInfo](https://crystalmark.info/en/software/crystaldiskinfo/)            |
-| KeyboardSplitter     | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases)     |
-| PDF SAM              | [PDF SAM](https://pdfsam.org/zh/download-pdfsam-basic/)                             |
+| Software          | Source/Install Method                                                           |
+| ----------------- | ------------------------------------------------------------------------------- |
+| Ventoy            | [GitHub Releases](https://github.com/ventoy/Ventoy/releases)                    |
+| AIDE64            |                                                                                 |
+| Crystal Disk Info | [CrystalDiskInfo](https://crystalmark.info/software/crystaldiskinfo/)           |
+| KeyboardSplitter  | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases) |
+| PDF SAM           | [PDF SAM](https://pdfsam.org/download-pdfsam-basic/)                            |
 
 ### 5: Brave Browser
 
@@ -258,13 +261,13 @@ I just want a Chromium based browser, who is tiny, clean and customizable.
 
 Install useful extensions (Notice: "篡改猴" extension requires you to open the develop mode):
 
-| Extension     | Source/Install Method (`~` is the same as above) | Note                                   |
-| ------------- | ------------------------------------------------ | -------------------------------------- |
-| 篡改猴        | Chrome Extension Marketplace                     | Scripts: 下载 VS Code 扩展插件 VSIX 包 |
-| ChromeKeePass | ~                                                | /                                      |
-| Dark Reader   | ~                                                | /                                      |
-| 沉浸式翻译    | ~                                                | /                                      |
-| Grammarly     | ~                                                | /                                      |
+| Extension           | Source/Install Method (`~` is the same as above) | Note                                   |
+| ------------------- | ------------------------------------------------ | -------------------------------------- |
+| Tampermonkey        | Chrome Extension Marketplace                     | Scripts: 下载 VS Code 扩展插件 VSIX 包 |
+| ChromeKeePass       | ~                                                | /                                      |
+| Dark Reader         | ~                                                | /                                      |
+| Immersive Translate | ~                                                | /                                      |
+| Grammarly           | ~                                                | /                                      |
 
 Install dev extensions:
 

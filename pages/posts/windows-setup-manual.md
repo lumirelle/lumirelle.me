@@ -201,10 +201,10 @@ Install the basic software below in order:
 | NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                    | /                                                                                                                                                |
 | KeePass 2                       | [KeePass](https://keepass.info/download.html)                                           | Extensions: ColoredPassword, HaveIBeenPwned, KeePassHttp                                                                                         |
 | Visual Studio Code              | [Visual Studio Code](https://code.visualstudio.com/Download)                            | /                                                                                                                                                |
-| Cursor                          | [Cursor](https://www.cursor.com/cn/downloads)                                           | /                                                                                                                                                |
+| Cursor                          | [Cursor](https://www.cursor.com/downloads)                                              | /                                                                                                                                                |
 | IDM                             | [Internet Download Manager](https://www.internetdownloadmanager.com/download.html)      | /                                                                                                                                                |
 | Git                             | [Git](https://git-scm.com/download/win)                                                 | /                                                                                                                                                |
-| Visual C++ Redistributable      | [Microsoft](https://learn.microsoft.com/zh-cn/cpp/windows/latest-supported-vc-redist)   | /                                                                                                                                                |
+| Visual C++ Redistributable      | [Microsoft](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)         | /                                                                                                                                                |
 | Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | /                                                                                                                                                |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | /                                                                                                                                                |
 | DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                  |
@@ -219,10 +219,10 @@ Install the tool software below in order:
 | QQ               | [QQ](https://im.qq.com/pcqq/index.shtml)                                |
 | Telegram         | [Telegram](https://desktop.telegram.org/)                               |
 | WPS Office       | [123pan](https://www.123pan.com/s/sXtA-iLVEh.html)                      |
-| PixPin           | [PixPin](https://pixpin.cn/)                                            |
+| PixPin           | [PixPin](https://pixpin.com/)                                           |
 | LX Music Desktop | [GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases) |
 | PotPlayer        | [Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)     |
-| NVIDIA App       | [NVIDIA](https://www.nvidia.cn/software/nvidia-app/)                    |
+| NVIDIA App       | [NVIDIA](https://www.nvidia.com/en-us/software/nvidia-app/)             |
 | Steam            | [Steam](https://store.steampowered.com/about)                           |
 | Epic Games       | [Epic Games](https://store.epicgames.com/download)                      |
 | OBS Studio       | [OBS Studio](https://obsproject.com/download)                           |
@@ -231,6 +231,7 @@ Install the dev software below in order:
 
 | Software             | Source/Install Method                                                              | Note                                          |
 | -------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------- |
+| WSL                  | `wsl --install`                                                                    | You should enable Hyper-V & WSL support first |
 | Mingw-w64            | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | /                                             |
 | Neovim               | `winget install Neovim.Neovim`                                                     | /                                             |
 | LazyVim              | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                             |
@@ -240,14 +241,12 @@ Install the dev software below in order:
 | JetBrains IDEA       | Install from JetBrains Toolbox                                                     | /                                             |
 | Visual Studio        | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | /                                             |
 | Navicat Premium Lite | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                             |
-| WSL                  | `wsl --install`                                                                    | You should enable Hyper-V & WSL support first |
 | Docker Desktop       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                             |
 
 (Optional) Install other software below:
 
 | Software          | Source/Install Method                                                           |
 | ----------------- | ------------------------------------------------------------------------------- |
-| Ventoy            | [GitHub Releases](https://github.com/ventoy/Ventoy/releases)                    |
 | AIDE64            |                                                                                 |
 | Crystal Disk Info | [CrystalDiskInfo](https://crystalmark.info/software/crystaldiskinfo/)           |
 | KeyboardSplitter  | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases) |
@@ -305,8 +304,8 @@ Programs should under:
 
 Projects should under:
 
-- `<DRIVER>:/Projects/`
 - `<DRIVER>:/i/` (Inspired by [antfu](https://github.com/antfu))
+- `<DRIVER>:/Projects/`
 
 Use Revo Uninstaller clean useless software at regular intervals.
 

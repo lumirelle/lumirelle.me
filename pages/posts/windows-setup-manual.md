@@ -230,19 +230,19 @@ Install the tool software below in order:
 
 Install the dev software below in order:
 
-| Software             | Source/Install Method                                                              | Note                                          |
-| -------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------- |
-| WSL                  | `wsl --install`                                                                    | You should enable Hyper-V & WSL support first |
-| Mingw-w64            | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | /                                             |
-| Neovim               | `winget install Neovim.Neovim`                                                     | /                                             |
-| LazyVim              | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                             |
-| JDK                  | [Oracle](https://www.oracle.com/java/technologies/downloads/#graalvmjava21)        | /                                             |
-| VEnv                 | `python -m venv /path/to/new/virtual/environment`                                  | /                                             |
-| JetBrains Toolbox    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                             |
-| JetBrains IDEA       | Install from JetBrains Toolbox                                                     | /                                             |
-| Visual Studio        | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | /                                             |
-| Navicat Premium Lite | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                             |
-| Docker Desktop       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                             |
+| Software             | Source/Install Method                                                              | Note                                       |
+| -------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------ |
+| WSL                  | `wsl --install`                                                                    | /                                          |
+| Mingw-w64            | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | I choose Posix thread model and UC runtime |
+| Neovim               | `sudo winget install Neovim.Neovim --scope machine`                                | /                                          |
+| LazyVim              | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                          |
+| JDK                  | [Oracle](https://www.oracle.com/java/technologies/downloads/#graalvmjava21)        | /                                          |
+| VEnv                 | `python -m venv /path/to/new/virtual/environment`                                  | /                                          |
+| JetBrains Toolbox    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                          |
+| JetBrains IDEA       | Install from JetBrains Toolbox                                                     | /                                          |
+| Visual Studio        | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | /                                          |
+| Navicat Premium Lite | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                          |
+| Docker Desktop       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                          |
 
 (Optional) Install other software below:
 
@@ -261,13 +261,13 @@ I just want a Chromium based browser, who is tiny, clean and customizable.
 
 Install useful extensions (Notice: "篡改猴" extension requires you to open the develop mode):
 
-| Extension           | Source/Install Method (`~` is the same as above) | Note                                   |
-| ------------------- | ------------------------------------------------ | -------------------------------------- |
-| Tampermonkey        | Chrome Extension Marketplace                     | Scripts: 下载 VS Code 扩展插件 VSIX 包 |
-| ChromeKeePass       | ~                                                | /                                      |
-| Dark Reader         | ~                                                | /                                      |
-| Immersive Translate | ~                                                | /                                      |
-| Grammarly           | ~                                                | /                                      |
+| Extension           | Source/Install Method (`~` is the same as above) | Note                                              |
+| ------------------- | ------------------------------------------------ | ------------------------------------------------- |
+| Tampermonkey        | Chrome Extension Marketplace                     | Scripts: Download VS Code Extension VSIX Packages |
+| ChromeKeePass       | ~                                                | /                                                 |
+| Dark Reader         | ~                                                | /                                                 |
+| Immersive Translate | ~                                                | /                                                 |
+| Grammarly           | ~                                                | /                                                 |
 
 Install dev extensions:
 

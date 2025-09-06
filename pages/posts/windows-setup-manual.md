@@ -210,6 +210,7 @@ Install the basic software below in order:
 | DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                  |
 | Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)           | /                                                                                                                                                |
 | Revo Uninstaller                | [Revo Uninstaller](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)  | /                                                                                                                                                |
+| DeskPins                        | [DeskPins](https://efotinis.neocities.org/deskpins/)                                    | /                                                                                                                                                |
 
 Install the tool software below in order:
 

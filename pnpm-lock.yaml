@@ -91,6 +91,9 @@ catalogs:
     cross-env:
       specifier: ^7.0.3
       version: 7.0.3
+    czg:
+      specifier: ^1.12.0
+      version: 1.12.0
     degit:
       specifier: ^2.8.4
       version: 2.8.4
@@ -364,7 +367,7 @@ importers:
         specifier: catalog:dev
         version: 7.0.3
       czg:
-        specifier: ^1.12.0
+        specifier: catalog:dev
         version: 1.12.0
       degit:
         specifier: catalog:dev

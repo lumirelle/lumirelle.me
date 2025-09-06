@@ -305,7 +305,7 @@ Programs should under:
 
 Projects should under:
 
-- `<DRIVER>:/i/` (Inspired by [antfu](https://github.com/antfu))
+- `~/i/` (Inspired by [antfu](https://github.com/antfu))
 - `<DRIVER>:/Projects/`
 
 Use Revo Uninstaller clean useless software at regular intervals.

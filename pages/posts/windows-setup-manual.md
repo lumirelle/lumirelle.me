@@ -151,9 +151,9 @@ npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
 # npm i @antfu/ni czg -g
 
 # Install my personal preferences
-npm i impurities -g
-# Requires admin permission
-sudo we i -f
+npm i starship-butler -g
+# Requires admin permission to setting up the whole system
+sudo butler set-sys -f
 ```
 
 ~~Setting up via PowerShell (Deprecated)~~
@@ -184,9 +184,9 @@ npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
 # npm i @antfu/ni czg -g
 
 # Install my personal preferences
-npm i impurities -g
-# Requires admin permission
-sudo we i -f
+npm i starship-butler -g
+# Requires admin permission to setting up the whole system
+sudo butler set-sys -f
 ```
 
 ### 4: Install Software Preferred

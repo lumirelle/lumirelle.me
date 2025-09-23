@@ -1,8 +1,8 @@
 ---
 title: Windows Setup Manual
-date: 2025-08-24T19:40:00
+date: 2025-08-24T19:40:00+08:00
 lang: en
-duration: 30min
+duration: 9min
 ---
 
 [[toc]]

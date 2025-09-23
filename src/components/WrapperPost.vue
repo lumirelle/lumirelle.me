@@ -106,7 +106,7 @@ const ArtComponent = computed(() => {
       v-if="frontmatter.date"
       class="opacity-50 !-mt-6 slide-enter-50"
     >
-      {{ formatDate(frontmatter.date, false) }} <span v-if="frontmatter.duration">· {{ frontmatter.duration }}</span>
+      First post on {{ formatDate(frontmatter.date, false) }} <span v-if="frontmatter.update">· Last edit on {{ formatDate(frontmatter.update, false) }}</span> <span v-if="frontmatter.duration">· {{ frontmatter.duration }}</span>
     </p>
     <p v-if="frontmatter.place" class="mt--4!">
       <span op50>at </span>

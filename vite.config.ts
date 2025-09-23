@@ -7,6 +7,8 @@ import Vue from '@vitejs/plugin-vue'
 import fs from 'fs-extra'
 import matter from 'gray-matter'
 import anchor from 'markdown-it-anchor'
+// @ts-expect-error missing types
+import FootNote from 'markdown-it-footnote'
 import GitHubAlerts from 'markdown-it-github-alerts'
 import LinkAttributes from 'markdown-it-link-attributes'
 import MarkdownItMagicLink from 'markdown-it-magic-link'
@@ -164,6 +166,8 @@ export default defineConfig({
         })
 
         md.use(GitHubAlerts)
+
+        md.use(FootNote)
       },
       frontmatterPreprocess(frontmatter, options, id, defaults) {
         (() => {

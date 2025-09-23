@@ -26,8 +26,86 @@ declare module 'vue-router/auto-routes' {
     '/notes': RouteRecordInfo<'/notes', '/notes', Record<never, never>, Record<never, never>>,
     '/photos': RouteRecordInfo<'/photos', '/photos', Record<never, never>, Record<never, never>>,
     '/posts/': RouteRecordInfo<'/posts/', '/posts', Record<never, never>, Record<never, never>>,
+    '/posts/symbol-name-pattern-manual': RouteRecordInfo<'/posts/symbol-name-pattern-manual', '/posts/symbol-name-pattern-manual', Record<never, never>, Record<never, never>>,
+    '/posts/windows-setup-manual': RouteRecordInfo<'/posts/windows-setup-manual', '/posts/windows-setup-manual', Record<never, never>, Record<never, never>>,
     '/projects': RouteRecordInfo<'/projects', '/projects', Record<never, never>, Record<never, never>>,
     '/sponsors-list': RouteRecordInfo<'/sponsors-list', '/sponsors-list', Record<never, never>, Record<never, never>>,
     '/use': RouteRecordInfo<'/use', '/use', Record<never, never>, Record<never, never>>,
   }
+
+  /**
+   * Route file to route info map by unplugin-vue-router.
+   * Used by the volar plugin to automatically type useRoute()
+   *
+   * Each key is a file path relative to the project root with 2 properties:
+   * - routes: union of route names of the possible routes when in this page (passed to useRoute<...>())
+   * - views: names of nested views (can be passed to <RouterView name="...">)
+   *
+   * @internal
+   */
+  export interface _RouteFileInfoMap {
+    'pages/index.md': {
+      routes: '/'
+      views: never
+    }
+    'pages/[...404].md': {
+      routes: '/[...404]'
+      views: never
+    }
+    'pages/bookmarks.md': {
+      routes: '/bookmarks'
+      views: never
+    }
+    'pages/demos.md': {
+      routes: '/demos'
+      views: never
+    }
+    'pages/media.md': {
+      routes: '/media'
+      views: never
+    }
+    'pages/notes.md': {
+      routes: '/notes'
+      views: never
+    }
+    'pages/photos.md': {
+      routes: '/photos'
+      views: never
+    }
+    'pages/posts/index.md': {
+      routes: '/posts/'
+      views: never
+    }
+    'pages/posts/symbol-name-pattern-manual.md': {
+      routes: '/posts/symbol-name-pattern-manual'
+      views: never
+    }
+    'pages/posts/windows-setup-manual.md': {
+      routes: '/posts/windows-setup-manual'
+      views: never
+    }
+    'pages/projects.md': {
+      routes: '/projects'
+      views: never
+    }
+    'pages/sponsors-list.md': {
+      routes: '/sponsors-list'
+      views: never
+    }
+    'pages/use.md': {
+      routes: '/use'
+      views: never
+    }
+  }
+
+  /**
+   * Get a union of possible route names in a certain route component file.
+   * Used by the volar plugin to automatically type useRoute()
+   *
+   * @internal
+   */
+  export type _RouteNamesForFilePath<FilePath extends string> =
+    _RouteFileInfoMap extends Record<FilePath, infer Info>
+      ? Info['routes']
+      : keyof RouteNamedMap
 }

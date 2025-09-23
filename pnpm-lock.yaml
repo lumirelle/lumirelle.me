@@ -30,6 +30,9 @@ catalogs:
     markdown-it-anchor:
       specifier: ^9.2.0
       version: 9.2.0
+    markdown-it-footnote:
+      specifier: ^4.0.0
+      version: 4.0.0
     markdown-it-github-alerts:
       specifier: ^1.0.0
       version: 1.0.0
@@ -405,6 +408,9 @@ importers:
       markdown-it-anchor:
         specifier: catalog:build
         version: 9.2.0(@types/markdown-it@14.1.2)(markdown-it@14.1.0)
+      markdown-it-footnote:
+        specifier: catalog:build
+        version: 4.0.0
       markdown-it-github-alerts:
         specifier: catalog:build
         version: 1.0.0(markdown-it@14.1.0)
@@ -2756,6 +2762,9 @@ packages:
 
   markdown-it-async@2.2.0:
     resolution: {integrity: sha512-sITME+kf799vMeO/ww/CjH6q+c05f6TLpn6VOmmWCGNqPJzSh+uFgZoMB9s0plNtW6afy63qglNAC3MhrhP/gg==}
+
+  markdown-it-footnote@4.0.0:
+    resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
 
   markdown-it-github-alerts@1.0.0:
     resolution: {integrity: sha512-RU3cbB/ewujrDpYNdyabvp4CscZ5J/3D71NWbJW+JSA0nplfutIXDMCwtGWlMLwzgBDAYkFMvYGkigq8nWOVdA==}
@@ -6424,6 +6433,8 @@ snapshots:
     dependencies:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.1.0
+
+  markdown-it-footnote@4.0.0: {}
 
   markdown-it-github-alerts@1.0.0(markdown-it@14.1.0):
     dependencies:

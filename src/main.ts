@@ -26,13 +26,13 @@ export const createApp = ViteSSG(
   {
     routes,
   },
-  ({ router, app, isClient }) => {
+  ({ router, app }) => {
     dayjs.extend(LocalizedFormat)
 
     app.use(FloatingVue)
     app.use(createPinia())
 
-    if (isClient) {
+    if (!import.meta.env.SSR) {
       const html = document.querySelector('html')!
       setupRouterScroller(router, {
         selectors: {

@@ -69,6 +69,7 @@
     "lint-staged": "catalog:dev",
     "markdown-it": "catalog:build",
     "markdown-it-anchor": "catalog:build",
+    "markdown-it-footnote": "catalog:build",
     "markdown-it-github-alerts": "catalog:build",
     "markdown-it-link-attributes": "catalog:build",
     "markdown-it-magic-link": "catalog:build",

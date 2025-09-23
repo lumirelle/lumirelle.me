@@ -1,7 +1,7 @@
 ---
 title: Symbol Name Pattern Manual
-date: 2025-09-23T15:58+08:00
-update: 2025-09-23T20:04+08:00
+date: 2025-09-23T15:58:00+08:00
+update: 2025-09-23T20:04:00+08:00
 lang: en
 duration: 5min
 ---

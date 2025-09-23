@@ -20,7 +20,8 @@ reactive variable in Vue component:
   const userInfo = ref(null)
 
   /**
-   * This Vue component method has the same name as the endpoint function. It's hard to distinguish them in the code.
+   * This Vue component method has the same name as the endpoint
+   * function. It's hard to distinguish them in the code.
    */
   async function getUserInfo() {
     userInfo.value = await getUserInfo()
@@ -62,11 +63,13 @@ For example:
   import { ref } from 'vue'
 
   /**
-   * "formRef" is used to store form reference. `block` is "form", `modifier` is "Ref".
+   * "formRef" is used to store form reference. `block` is "form",
+   * `modifier` is "Ref".
    */
   const formRef = ref<InstanceType<typeof ElForm>>(null)
   /**
-   * "formData" is used to store form data. `block` is "form", `modifier` is "Data".
+   * "formData" is used to store form data. `block` is "form",
+   * `modifier` is "Data".
    */
   const formData = ref({
     name: null,
@@ -74,14 +77,16 @@ For example:
   })
 
   /**
-   * "tableData" is used to store table data. `block` is "table", `modifier` is "Data".
+   * "tableData" is used to store table data. `block` is "table",
+   * `modifier` is "Data".
    */
   const tableData = ref([
     { name: 'data1', email: 'data2' },
     { name: 'data3', email: 'data4' },
   ])
   /**
-   * "tableColumnConfigs" is used to store table column configs. `block` is "table", `element` is "Column", `modifier`
+   * "tableColumnConfigs" is used to store table column configs.
+   * `block` is "table", `element` is "Column", `modifier`
    * is "Configs".
    */
   const tableColumnConfigs = ref([
@@ -152,7 +157,7 @@ State:
 
 ## Function Names
 
-<table><tr><td width="500px" valign="top">
+<table><tr><td width="300px" valign="top">
 
 ### Endpoint Function
 
@@ -180,28 +185,32 @@ _model/user.ts_
 import request from '@/utils/request.js'
 
 /**
- * "apiGet${Data}" is used for endpoint function with "GET" method and "get" operation.
+ * "apiGet${Data}" is used for endpoint function with "GET"
+ method and "get" operation.
  */
 export async function apiGetUserInfo(params?: Record<string, any>) {
   return await request.get('/user/info', { params })
 }
 
 /**
- * "apiCreate${Data}" is used for endpoint function with "POST" method and "create" operation.
+ * "apiCreate${Data}" is used for endpoint function with "POST"
+ method and "create" operation.
  */
 export async function apiCreateUserInfo(data: Record<string, any>) {
   return await request.post('/user/info', { data })
 }
 
 /**
- * "apiUpdate${Data}" is used for endpoint function with "PUT" method and "update" operation.
+ * "apiUpdate${Data}" is used for endpoint function with "PUT"
+ method and "update" operation.
  */
 export async function apiUpdateUserInfo(data: Record<string, any>) {
   return await request.put('/user/info', { data })
 }
 
 /**
- * "apiUpdate${Data}${Attribute}" is used for endpoint function with "PUT" method and "update" operation for specific
+ * "apiUpdate${Data}${Attribute}" is used for endpoint function
+  with "PUT" method and "update" operation for specific
  * attribute.
  */
 export async function apiUpdateUserInfoState(data: Record<string, any>) {
@@ -209,21 +218,23 @@ export async function apiUpdateUserInfoState(data: Record<string, any>) {
 }
 
 /**
- * "apiUpsert${Data}" is used for endpoint function with "PUT" method and "upsert" operation.
+ * "apiUpsert${Data}" is used for endpoint function with "PUT"
+ method and "upsert" operation.
  */
 export async function apiUpsertUserInfo(data: Record<string, any>) {
   return await request.put('/user/info', { data })
 }
 
 /**
- * "apiDelete${Data}" is used for endpoint function with "DELETE" method and "delete" operation.
+ * "apiDelete${Data}" is used for endpoint function with "DELETE"
+  method and "delete" operation.
  */
 export async function apiDeleteUserInfo(data: Record<string, any>) {
   return await request.delete('/user/info', { data })
 }
 ```
 
-</td><td width="500px" valign="top">
+</td><td width="300px" valign="top">
 
 ### Vue Component Method
 

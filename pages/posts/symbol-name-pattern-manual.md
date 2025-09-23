@@ -1,6 +1,7 @@
 ---
 title: Symbol Name Pattern Manual
 date: 2025-09-23T15:58+08:00
+update: 2025-09-23T20:04+08:00
 lang: en
 duration: 5min
 ---
@@ -44,6 +45,8 @@ The best practice is to use different names for different symbols. This article 
 preferred in my projects.
 
 ## Variable Names
+
+### Recommended Pattern
 
 The recommended variable name pattern has the similar concept with BEM (Block Element Modifier) class name pattern:
 
@@ -96,56 +99,32 @@ For example:
 </script>
 ```
 
-Some common `block`, `element`, `modifier` examples are:
+Some common `block`, `element`, `modifier` examples are (`/` means the same as above):
 
-### Blocks:
+| Block                                           | Element  | Modifier                                                         |
+| ----------------------------------------------- | -------- | ---------------------------------------------------------------- |
+| `form`                                          | `Item`   | [`Not State`](#not-state-modifier)<br>[`State`](#state-modifier) |
+| `table`                                         | `Column` | /                                                                |
+| /                                               | `Row`    | /                                                                |
+| /                                               | `Cell`   | /                                                                |
+| `dialog`                                        | `Header` | /                                                                |
+| /                                               | `Body`   | /                                                                |
+| /                                               | `Footer` | /                                                                |
+| `menu`<br>`dropmenu`<br>`sidemenu`<br>`navmenu` | `Group`  | /                                                                |
+| /                                               | `Item`   | /                                                                |
+| `card`                                          | `Box`    | /                                                                |
+| /                                               | `Header` | /                                                                |
+| /                                               | `Body`   | /                                                                |
+| /                                               | `Footer` | /                                                                |
+| /                                               | `Cover`  | /                                                                |
 
-- `form`
-- `table`
-- `dialog`
-- `menu` (`dropmenu` / `sidemenu` / `navmenu`)
-- `card`
-
-### Elements:
-
-For `form`:
-
-- `Item`
-
-For `table`:
-
-- `Column`
-- `Row`
-- `Cell`
-
-For `dialog`:
-
-- `Header`
-- `Body`
-- `Footer`
-
-For `menu`:
-
-- `Group`
-- `Item`
-
-For `card`:
-
-- `Box`
-- `Header`
-- `Body`
-- `Footer`
-- `Cover`
-
-### Modifiers:
-
-Not State:
+### Not State Modifier
 
 - `Ref`
 - `Data`
 - `Config[s]`
 
-State:
+### State Modifier
 
 - `Visible` / `Invisible`
 - `Shown` / `Hidden`
@@ -156,8 +135,6 @@ State:
 - `Active` / `Inactive`
 
 ## Function Names
-
-<table><tr><td width="300px" valign="top">
 
 ### Endpoint Function
 
@@ -174,10 +151,6 @@ To read the demo code below, please ensure you know the difference between HTTP 
 - `DELETE` method is used to delete data, which corresponds to `delete` operation, it's **not safe** but **idempotent**.
 - `upsert` operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe**
   but **idempotent**.
-
-[^1]: Safe means that the operation does not modify any data on the server.
-
-[^2]: Idempotent means that performing the operation multiple times has the same effect as performing it once.
 
 _model/user.ts_
 
@@ -234,8 +207,6 @@ export async function apiDeleteUserInfo(data: Record<string, any>) {
 }
 ```
 
-</td><td width="300px" valign="top">
-
 ### Vue Component Method
 
 The Vue component method name should start with verbs `get`, `create`, `update`, `upsert`, `delete` to indicate the
@@ -287,4 +258,6 @@ _pages/users.vue_
 </template>
 ```
 
-</td></tr></table>
+[^1]: Safe means that the operation does not modify any data on the server.
+
+[^2]: Idempotent means that performing the operation multiple times has the same effect as performing it once.

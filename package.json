@@ -81,6 +81,7 @@
     "sharp": "catalog:dev",
     "simple-git": "catalog:dev",
     "simple-git-hooks": "catalog:dev",
+    "taze": "catalog:dev",
     "tsx": "catalog:dev",
     "typescript": "catalog:dev",
     "unocss": "catalog:build",

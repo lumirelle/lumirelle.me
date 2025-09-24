@@ -99,6 +99,9 @@ For example:
 </script>
 ```
 
+For a really huge amount of symbols, you should not only follow the naming patterns but also
+[encapsulate and modularize](encapsulation-and-modularity.md) them into components, composables, or modules.
+
 Some common `block`, `element`, `modifier` examples are (`/` means the same as above):
 
 | Block                                           | Element  | Modifier                                                         |

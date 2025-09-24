@@ -26,6 +26,7 @@ declare module 'vue-router/auto-routes' {
     '/notes': RouteRecordInfo<'/notes', '/notes', Record<never, never>, Record<never, never>>,
     '/photos': RouteRecordInfo<'/photos', '/photos', Record<never, never>, Record<never, never>>,
     '/posts/': RouteRecordInfo<'/posts/', '/posts', Record<never, never>, Record<never, never>>,
+    '/posts/encapsulation-and-modularity': RouteRecordInfo<'/posts/encapsulation-and-modularity', '/posts/encapsulation-and-modularity', Record<never, never>, Record<never, never>>,
     '/posts/symbol-name-pattern-manual': RouteRecordInfo<'/posts/symbol-name-pattern-manual', '/posts/symbol-name-pattern-manual', Record<never, never>, Record<never, never>>,
     '/posts/windows-setup-manual': RouteRecordInfo<'/posts/windows-setup-manual', '/posts/windows-setup-manual', Record<never, never>, Record<never, never>>,
     '/projects': RouteRecordInfo<'/projects', '/projects', Record<never, never>, Record<never, never>>,
@@ -74,6 +75,10 @@ declare module 'vue-router/auto-routes' {
     }
     'pages/posts/index.md': {
       routes: '/posts/'
+      views: never
+    }
+    'pages/posts/encapsulation-and-modularity.md': {
+      routes: '/posts/encapsulation-and-modularity'
       views: never
     }
     'pages/posts/symbol-name-pattern-manual.md': {

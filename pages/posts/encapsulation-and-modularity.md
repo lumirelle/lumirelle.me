@@ -1,5 +1,5 @@
 ---
-title: Symbol Name Pattern Manual
+title: Encapsulation and Modularity
 date: 2025-09-24T16:36+08:00
 update: 2025-09-24T16:36+08:00
 lang: en

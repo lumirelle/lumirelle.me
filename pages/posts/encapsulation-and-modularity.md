@@ -55,16 +55,11 @@ _pages/buying/product1.vue_
 
 ```html
 <script setup lang="ts">
-  interface FormData {
-    id?: string | null
-    name?: string | null
-    type?: number | null
-  }
-
-  const formData = reactive<FormData>({
-    id: null,
-    name: null,
-    type: null,
+  // [!code highlight:5]
+  const formData = reactive({
+    id: '',
+    name: '',
+    type: 0,
   })
 
   interface Product1 {
@@ -87,13 +82,14 @@ _pages/buying/product1.vue_
     { label: 'Inventory', props: 'inventory', type: 'slot' },
   ]
 
+  // [!code highlight:8]
   const route = useRoute()
 
   function initFormDataFromRoute() {
     const query = route.query
-    formData.id = (query.id as string) || null
-    formData.name = (query.name as string) || null
-    formData.type = query.type ? +query.type : null
+    formData.id = (query.id as string) ?? ''
+    formData.name = (query.name as string) ?? ''
+    formData.type = +query.type ?? 0
   }
 
   const { buyingApi: api } = useApi()
@@ -109,6 +105,7 @@ _pages/buying/product1.vue_
   }
 
   onMounted(() => {
+    // [!code highlight:1]
     initFormDataFromRoute()
     getProduct1List()
   })
@@ -125,65 +122,15 @@ _pages/buying/product1.vue_
 
 After encapsulation and modularity:
 
-_composables/use-query-form.ts_
-
-```ts
-import deepClone from 'deep-clone'
-import { reactive } from 'vue'
-
-/**
- * This composable is used to initialize form data from route query parameters.
- * It takes a default form data object and populates it with values from the route query.
- * If a query parameter is not present, the corresponding form data field is set to null.
- */
-export function useQueryForm<T>(defaultFormData: T) {
-  const formData = reactive<T>(deepClone(defaultFormData))
-
-  const route = useRoute()
-
-  function initFormDataFromRoute() {
-    const query = route.query
-    Object.keys(formData).forEach((key) => {
-      const k = key as keyof T
-      if (query[key]) {
-        const value = query[key]
-        if (typeof formData[k] === 'number') {
-          formData[k] = +value as T[keyof T]
-        }
-        else {
-          formData[k] = value as T[keyof T]
-        }
-      }
-      else {
-        formData[k] = null as T[keyof T]
-      }
-    })
-  }
-
-  onMounted(() => {
-    initFormDataFromRoute()
-  })
-
-  return {
-    formData,
-  }
-}
-```
-
 _pages/buying/product1.vue_
 
 ```html
 <script setup lang="ts">
-  interface FormData {
-    id?: string | null
-    name?: string | null
-    type?: number | null
-  }
-
-  const formData = useQueryForm<FormData>({
-    id: null,
-    name: null,
-    type: null,
+  // [!code highlight:5]
+  const formData = useQueryForm({
+    id: '',
+    name: '',
+    type: 0,
   })
 
   interface Product1 {
@@ -230,6 +177,64 @@ _pages/buying/product1.vue_
 <template>
   <!-- ... -->
 </template>
+```
+
+_composables/use-query-form.ts_
+
+```ts
+import deepClone from 'deep-clone'
+import { reactive } from 'vue'
+
+/**
+ * This composable is used to initialize form data from route query parameters.
+ * It takes a default form data object and populates it with values from the route query.
+ *
+ * The type of each form field is preserved during the assignment. If cannot be converted,
+ * the type will be `string`.
+ */
+export function useQueryForm<T>(defaultFormData: T) {
+  const formData = reactive<T>(deepClone(defaultFormData))
+
+  const route = useRoute()
+
+  function initFormDataFromRoute() {
+    const query = route.query
+    Object.keys(formData).forEach((key) => {
+      const k = key as keyof typeof formData
+      if (query[key]) {
+        const value = query[key]
+        formData[k] = convertValue(formData[k], value as string)
+      }
+    })
+  }
+
+  onMounted(() => {
+    initFormDataFromRoute()
+  })
+
+  return {
+    formData,
+  }
+}
+
+function convertValue<T>(formField: T, value: string): T {
+  switch (typeof formField) {
+    case 'boolean':
+      return (value === 'true') as T
+    case 'number':
+      return +value as T
+    case 'object':
+      try {
+        return JSON.parse(value) as T
+      }
+      catch (e) {
+        console.warn(`Failed to parse value to an "object", falling back to "string"!`, e)
+        return value as T
+      }
+    default:
+      return value as T
+  }
+}
 ```
 
 The example above shows how to encapsulate the logic of initializing form data from route query parameters into a

@@ -74,16 +74,9 @@ git ren https://github.com/username/repo.git
 Then push your commits to the remote repository:
 
 ```bash
-# Command `psup`: Push commit on current branch to the remote repository and set
-# the upstream branch
-git psup
-```
-
-Or if you have already set the upstream branch:
-
-```bash
-# Command `ps`: Push commit on current branch to the remote repository if you
-# already set the upstream branch
+# Command `ps`: Push commit on current branch to the remote repository, if you
+# have not set the upstream branch, it will set the upstream branch to the remote
+# branch with the same name as the current branch.
 git ps
 ```
 
@@ -135,9 +128,8 @@ following command to discard changes of specific files:
 
 ```bash
 # Command `x`: Discard changes of specific files in working directory
-# git x <file-path>
-git x index.html
-
+# git x <...file-path>
+git x index.html index.css
 ```
 
 Or you want to discard all changes in your working directory:
@@ -149,27 +141,26 @@ git xa
 
 ### Drop changes in staging area
 
-When you work on your feature branch, you may want to discard some changes in your staging area. You can use the
+When you work on your feature branch, you may want to unstage some changes in your staging area. You can use the
 following command to do that:
 
 ```bash
-# TODO(Lumirelle): Not implemented yet.
-# Command `au`: Discard changes of specific files in staging area
+# Command `au`: Unstage changes of specific files in staging area
 # git au <file-path>
 git au index.html
 ```
 
-Or you want to discard all changes in your staging area:
+Or you want to unstage all changes in your staging area:
 
 ```bash
-# Command `aau`: Discard all changes in staging area
+# Command `aau`: Unstage all changes in staging area
 # git aau
 git aau
 ```
 
 ### Drop last commit
 
-When you work on your feature branch, you may want to discard some commits in your local branch. You can use the
+When you work on your feature branch, you may want to undo some commits in your local branch. You can use the
 following command to do that:
 
 ```bash
@@ -278,7 +269,7 @@ git rb dev
 When you finished your feature and merged it back to the `dev` branch, you can delete your feature branch locally:
 
 ```bash
-# Command `brx`: Delete a specific branch
+# Command `brx`: Delete a specific branch locally
 # git brx <branch-name>
 git brx feature/your-feature-name
 ```
@@ -286,19 +277,19 @@ git brx feature/your-feature-name
 And then delete it on remote:
 
 ```bash
-# Command `brxe`: Delete a specific branch on remote, if `remote-name` is not
+# Command `brxre`: Delete a specific branch on remote, if `remote-name` is not
 # provided, it will be set to `origin` by default.
-# git brxe [remote-name] <branch-name>
-git brxe feature/your-feature-name
+# git brxre [remote-name] <branch-name>
+git brxre feature/your-feature-name
 ```
 
 Or you can delete it both locally and on remote in one command:
 
 ```bash
-# Command `brxx`: Delete a specific branch both locally and on remote, if
+# Command `brxbt`: Delete a specific branch both locally and on remote, if
 # `remote-name` is not provided, it will be set to `origin` by default.
-# git brxx [remote-name] <branch-name>
-git brxx feature/your-feature-name
+# git brxbt [remote-name] <branch-name>
+git brxbt feature/your-feature-name
 ```
 
 ### Cherry-pick commits
@@ -341,11 +332,11 @@ systems) and add your configuration settings there. Here is an example of a basi
 
 ```ini
 [user]
-  name = Your Name
-  email = your.email@example.com
+name = Your Name
+email = your.email@example.com
 
 [core]
-  editor = code --wait
+editor = code --wait
 ```
 
 To get full configuration example, please refer to my

@@ -65,7 +65,7 @@ create
 
 And select the `Library` template in the startup prompt.
 
-![project-create-manual](project-create-manual.png)
+![project-create-manual](/public/posts/project-create-manual.png)
 
 ## JS/TS Monorepo
 
@@ -78,7 +78,7 @@ create
 
 And select the `Monorepo` template in the startup prompt.
 
-![project-create-manual](project-create-manual.png)
+![project-create-manual](/public/posts/project-create-manual.png)
 
 ## VS Code Extension
 
@@ -91,7 +91,7 @@ create
 
 And select the `VS Code` template in the startup prompt.
 
-![project-create-manual](project-create-manual.png)
+![project-create-manual](/public/posts/project-create-manual.png)
 
 ## Vue
 
@@ -106,7 +106,7 @@ create
 
 And select the `Vitesse Lite` template in the startup prompt.
 
-![project-create-manual](project-create-manual.png)
+![project-create-manual](/public/posts/project-create-manual.png)
 
 ### Vue CLI (Vue 3 + Webpack + JavaScript)
 
@@ -156,7 +156,7 @@ create
 
 And select the `Vitesse Nuxt` template in the startup prompt.
 
-![project-create-manual](project-create-manual.png)
+![project-create-manual](/public/posts/project-create-manual.png)
 
 ### `create-nuxt-app` (Nuxt 2 + Webpack + JavaScript)
 

@@ -3,7 +3,7 @@ title: First Time Trying Roller Coaster
 date: 2025-09-28T09:39+08:00
 update: 2025-09-28T09:39+08:00
 lang: en
-duration: n/a
+duration: 2min
 ---
 
 [[toc]]

@@ -27,6 +27,10 @@ declare module 'vue-router/auto-routes' {
     '/photos': RouteRecordInfo<'/photos', '/photos', Record<never, never>, Record<never, never>>,
     '/posts/': RouteRecordInfo<'/posts/', '/posts', Record<never, never>, Record<never, never>>,
     '/posts/encapsulation-and-modularity': RouteRecordInfo<'/posts/encapsulation-and-modularity', '/posts/encapsulation-and-modularity', Record<never, never>, Record<never, never>>,
+    '/posts/first-time-trying-roller-coaster': RouteRecordInfo<'/posts/first-time-trying-roller-coaster', '/posts/first-time-trying-roller-coaster', Record<never, never>, Record<never, never>>,
+    '/posts/git-manual': RouteRecordInfo<'/posts/git-manual', '/posts/git-manual', Record<never, never>, Record<never, never>>,
+    '/posts/js-advanced-grammar-manual': RouteRecordInfo<'/posts/js-advanced-grammar-manual', '/posts/js-advanced-grammar-manual', Record<never, never>, Record<never, never>>,
+    '/posts/project-create-manual': RouteRecordInfo<'/posts/project-create-manual', '/posts/project-create-manual', Record<never, never>, Record<never, never>>,
     '/posts/symbol-name-pattern-manual': RouteRecordInfo<'/posts/symbol-name-pattern-manual', '/posts/symbol-name-pattern-manual', Record<never, never>, Record<never, never>>,
     '/posts/windows-setup-manual': RouteRecordInfo<'/posts/windows-setup-manual', '/posts/windows-setup-manual', Record<never, never>, Record<never, never>>,
     '/projects': RouteRecordInfo<'/projects', '/projects', Record<never, never>, Record<never, never>>,
@@ -79,6 +83,22 @@ declare module 'vue-router/auto-routes' {
     }
     'pages/posts/encapsulation-and-modularity.md': {
       routes: '/posts/encapsulation-and-modularity'
+      views: never
+    }
+    'pages/posts/first-time-trying-roller-coaster.md': {
+      routes: '/posts/first-time-trying-roller-coaster'
+      views: never
+    }
+    'pages/posts/git-manual.md': {
+      routes: '/posts/git-manual'
+      views: never
+    }
+    'pages/posts/js-advanced-grammar-manual.md': {
+      routes: '/posts/js-advanced-grammar-manual'
+      views: never
+    }
+    'pages/posts/project-create-manual.md': {
+      routes: '/posts/project-create-manual'
       views: never
     }
     'pages/posts/symbol-name-pattern-manual.md': {

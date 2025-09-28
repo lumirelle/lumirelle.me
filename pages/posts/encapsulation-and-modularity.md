@@ -182,7 +182,6 @@ _pages/buying/product1.vue_
 _composables/use-query-form.ts_
 
 ```ts
-import deepClone from 'deep-clone'
 import { reactive } from 'vue'
 
 /**
@@ -193,7 +192,7 @@ import { reactive } from 'vue'
  * the type will be `string`.
  */
 export function useQueryForm<T>(defaultFormData: T) {
-  const formData = reactive<T>(deepClone(defaultFormData))
+  const formData = reactive<T>(structuredClone(defaultFormData))
 
   const route = useRoute()
 

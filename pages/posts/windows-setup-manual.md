@@ -3,6 +3,7 @@ title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
 lang: en
 duration: 9min
+type: blog+note
 ---
 
 [[toc]]

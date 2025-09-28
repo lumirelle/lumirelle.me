@@ -7,6 +7,8 @@ duration: 9min
 
 [[toc]]
 
+## Foreword
+
 I know Windows is the best OS to play games, but the worst OS to develop.
 
 If we have no choice, the only one thing we can do is trying our best to make Windows be better for our development.

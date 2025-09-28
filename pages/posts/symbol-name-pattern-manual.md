@@ -8,6 +8,8 @@ duration: 5min
 
 [[toc]]
 
+### Why we need to care about symbol name patterns?
+
 In a huge Vue project, we may have thousands of symbols, likes variable names, function names, hook names, component
 names, etc. Especially function names, for example, we may have an endpoint function called `getUserInfo`, and a Vue
 component method called `getUserInfo` which is used to call the endpoint function and set the response data to a

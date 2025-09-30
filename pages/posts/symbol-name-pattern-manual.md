@@ -158,6 +158,8 @@ To read the demo code below, please ensure you know the difference between HTTP 
 - `upsert` operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe**
   but **idempotent**.
 
+To learn more about HTTP methods, please read [this note](http-manual.md#http-methods).
+
 _model/user.ts_
 
 ```ts

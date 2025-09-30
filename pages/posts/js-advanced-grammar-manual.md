@@ -1,9 +1,9 @@
 ---
-title: JS Advanced Grammar Manual
+title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
 update: 2025-09-28T13:48+08:00
 lang: en
-duration: 24min
+duration: 29min
 type: blog+note
 ---
 
@@ -60,11 +60,11 @@ For example, you can assign a value to a variable that has not been declared, th
 implicitly. But if there is already a global variable with the same name that used by other part of the code, it will be
 overwritten without any warning:
 
-_src/counter.js_
+_src/counter.JavaScript_
 
 ```js
 // There is already a global variable `counter` fetched from the server
-counter = await fetch('/api/counter').then(res => res.json())
+counter = await fetch('/api/counter').then(res => res.JavaScripton())
 
 // Omit 2000 lines of code...
 // ...
@@ -95,10 +95,11 @@ someFunctionUseCounter(counter)
 Another example is global `this`:
 
 ```js
-console.log(this) // In this case, `this` is the global object `window` (browser) or `globalThis` (node.js)
+console.log(this) // In this case, `this` is the global object `window` (browser) or `globalThis` (node.JavaScript)
 ```
 
-`"use strict"` directive is a way to end these situations, let JS developers write more secure and optimized code.
+`"use strict"` directive is a way to end these situations, let JavaScript developers write more secure and optimized
+code.
 
 When you use strict mode, the following things will happen:
 
@@ -109,7 +110,7 @@ When you use strict mode, the following things will happen:
 By default, you need to explicitly enable it by adding it to the top of a
 file or a function:
 
-_src/your-code.js_
+_src/your-code.JavaScript_
 
 ```js
 'use strict'
@@ -122,7 +123,7 @@ console.log('This is strict mode')
 If you are using "classes" or "ES modules" in your source code, they will automatically enabled strict mode so you don't
 need to add `"use strict"` manually:
 
-- Case 1: _src/your-code-with-classes.js_
+- Case 1: _src/your-code-with-classes.JavaScript_
 
   ```js
   class MyClass {
@@ -132,7 +133,7 @@ need to add `"use strict"` manually:
   }
   ```
 
-- Case 2: _src/your-code-as-es-module.mjs_
+- Case 2: _src/your-code-as-es-module.mJavaScript_
 
   ```js
   export function myFunction() {
@@ -140,7 +141,7 @@ need to add `"use strict"` manually:
   }
   ```
 
-- Case 3: _package.json_
+- Case 3: _package.JavaScripton_
 
   ```json
   {
@@ -148,7 +149,7 @@ need to add `"use strict"` manually:
   }
   ```
 
-  > All `.js` files will be treated as ES modules, and thus in strict mode.
+  > All `.JavaScript` files will be treated as ES modules, and thus in strict mode.
 
 #### Summary
 
@@ -208,7 +209,7 @@ console.log(y) // ReferenceError: y is not defined
 > })()
 > ```
 >
-> We can find them in a lot of old JS code, and now, you know why they are there.
+> We can find them in a lot of old JavaScript code, and now, you know why they are there.
 >
 > Nowadays, we can use `let` and `const` to create block scope variables, so IIFE is no longer necessary.
 
@@ -396,7 +397,8 @@ will be destroyed:
 
 ```js
 const str = 'hello'
-console.log(str.toUpperCase()) // 'HELLO', JS will wrap `str` with `String` object temporarily, and then destroy it
+// 'HELLO', JavaScript will wrap `str` with `String` object temporarily, and then destroy it
+console.log(str.toUpperCase())
 ```
 
 The most important thing to use "object wrappers" is to avoid using `new` keyword with them, because that will create an
@@ -488,11 +490,11 @@ console.log(str.at(-1)) // 'o'
 >
 > `str.at(index)` method is included in ECMAScript 2022, so it may not be supported in older environments.
 >
-> You can use a polyfill or a library like `core-js` to add support for it in older environments.
+> You can use a polyfill or a library like `core-JavaScript` to add support for it in older environments.
 
 #### Tagged template literals
 
-JS supports
+JavaScript supports
 [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates)
 , which allows you to create custom string processing functions:
 
@@ -592,8 +594,8 @@ const arrayLike = {
 }
 ```
 
-An iterable object is an object that implements the iterable protocol, which means it has a `Symbol.iterator` method that
-returns an iterator:
+An iterable object is an object that implements the iterable protocol, which means it has a `Symbol.iterator` method
+that returns an iterator:
 
 ```js
 const iterable = {
@@ -626,8 +628,8 @@ values (for `WeakSet`), and they do not prevent garbage collection of the object
 What's more, they do not have methods to iterate over their elements, such as `keys()`, `values()`, `entries()`, or
 `forEach()`.
 
-They are designed to be used in scenarios where you want to **associate data with an object** without preventing that object
-from being garbage collected:
+They are designed to be used in scenarios where you want to **associate data with an object** without preventing that
+object from being garbage collected:
 
 ```js
 const users = [
@@ -659,7 +661,7 @@ function userLogout(user) {
 
 ### Converting to number
 
-In JS, we have three ways to convert a value to a number:
+In JavaScript, we have three ways to convert a value to a number:
 
 #### `Number.parseInt()`
 
@@ -781,11 +783,11 @@ console.log(a == b) // true!
 
 Closure is a function that remembers its outer variables (outer lexical environment) and can access them.
 
-In JS, every function has a hidden property `[[Environment]]`, which is a reference to the lexical environment where the
-function was created (there is only one exception, it uses global lexical environment which is to be covered in
-[`new Function` syntax](#new-function-syntax)), that's to say, all functions are closures in JS.
+In JavaScript, every function has a hidden property `[[Environment]]`, which is a reference to the lexical environment
+where the function was created (there is only one exception, it uses global lexical environment which is to be covered
+in [`new Function` syntax](#new-function-syntax)), that's to say, all functions are closures in JavaScript.
 
-See https://javascript.info/closure for the theory and implementation details of closure in JS.
+See https://javascript.info/closure for the theory and implementation details of closure in JavaScript.
 
 #### Garbage collection
 
@@ -904,7 +906,7 @@ So if new Function had access to outer variables, it would be unable to find the
 
 You write this code:
 
-_src/script.js_
+_src/script.JavaScript_
 
 <!-- eslint-disable -->
 
@@ -917,12 +919,90 @@ func()
 
 After minification, it may become:
 
-_dist/script.min.js_
+_dist/script.min.JavaScript_
 
 <!-- eslint-disable -->
 
 ```js
 let a=1;let b=new Function("console.log(value)");b(); // ReferenceError: value is not defined
+```
+
+### `this` and `func.call/apply/bind`
+
+As we all know, `this` is a special variable that refers to the context of the function call:
+
+- For a constructor function, `this` refers to the newly created object.
+- For a method, `this` refers to the object that the method is called on.
+- For a regular function, `this` refers to the global object (or `undefined` in strict mode).
+- For an arrow function, `this` refers to the `this` of the outer lexical environment.
+
+And we can use `func.call/apply/bind` to call a function with a specific `this` value and arguments.
+
+#### `func.call/apply`
+
+The only difference between `func.call` and `func.apply` is how to pass arguments to the function. `func.call` accepts
+arguments **one by one**, while `func.apply` accepts arguments **as an array**.
+
+- `func.call(thisArg, arg1, arg2, ...)`
+- `func.apply(thisArg, [argsArray])`
+
+They can be used to change the `this` value of a function call for one-time:
+
+<!-- eslint-disable -->
+
+```js
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`)
+}
+
+let user1 = { name: 'John' }
+let user2 = { name: 'Jane' }
+greet.call(user1, 'Hello', '!') // Hello, John!
+greet.apply(user2, ['Hi', '.']) // Hi, Jane.
+```
+
+#### `func.bind`
+
+If you want to create a new function with a specific `this` value and arguments, you can use `func.bind`:
+
+- `func.bind(thisArg, arg1, arg2, ...)`
+
+For instance:
+
+<!-- eslint-disable -->
+
+```js
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`)
+}
+let user = { name: 'John' }
+
+// Create a new function with `this` set to `user` and first argument set to 'Hello',
+// Now, the new function only needs one argument.
+let greetUser = greet.bind(user, 'Hello')
+greetUser('!') // Hello, John!
+```
+
+If you want to create a function that is bound to a specific argument and left `this` unchanged, you can use this simple
+workaround:
+
+<!-- eslint-disable -->
+
+```js
+function partial(func, ...argsBound) {
+  return function(...args) { // This returns a new function, and passes `this` correctly
+    return func.call(this, ...argsBound, ...args);
+  }
+}
+
+let user = {
+  name: 'John',
+  greet(greeting, punctuation) {
+    console.log(`${greeting}, ${this.name}${punctuation}`)
+  }
+}
+user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
+user.greetHello('!') // Hello, John!
 ```
 
 ## Advanced working with objects
@@ -1001,7 +1081,9 @@ For data properties, besides a value, have three special attributes (so-called "
   </details>
 
 - <details>
-  <summary>`configurable` – if `true`, the property can be deleted and these attributes can be modified, otherwise not.</summary>
+  <summary>
+  `configurable` – if `true`, the property can be deleted and these attributes can be modified, otherwise not.
+  </summary>
 
   `configurable` is `true`:
 
@@ -1078,7 +1160,7 @@ let user = {
 }
 
 let descriptor = Object.getOwnPropertyDescriptor(user, 'name')
-console.log(JSON.stringify(descriptor, null, 2))
+console.log(JavaScriptON.stringify(descriptor, null, 2))
 /* {
   "value": "John",
   "writable": true,
@@ -1102,7 +1184,7 @@ Object.defineProperty(user, 'name', {
 })
 
 let descriptor = Object.getOwnPropertyDescriptor(user, 'name')
-console.log(JSON.stringify(descriptor, null, 2))
+console.log(JavaScriptON.stringify(descriptor, null, 2))
 /* {
   "value": "John",
   "writable": false,
@@ -1132,7 +1214,7 @@ Object.defineProperty(user, 'name', {
 
 let clonedUser = Object.defineProperties({}, Object.getOwnPropertyDescriptors(user))
 let descriptor = Object.getOwnPropertyDescriptor(clonedUser, 'name')
-console.log(JSON.stringify(descriptor, null, 2))
+console.log(JavaScriptON.stringify(descriptor, null, 2))
 /* {
   "value": "John",
   "writable": false,
@@ -1162,4 +1244,158 @@ These methods are rarely used in practice, but good to know.
 
 ### Prototypes, inheritance
 
-TODO(Lumirelle): Write this section after reading https://javascript.info/prototypes.
+#### What is prototype?
+
+JavaScript uses prototype to express inheritance.
+
+Every object has a hidden property `[[prototype]]` (which can be accessed by `__proto__` accessor property, or
+`Object.getPrototypeOf` & `Object.setPrototypeOf` method) finally referencing to `Object.prototype`, which is the
+top-level prototype.
+
+When we try to **get (only get)** a property of an object, if it doesn't exist in the object itself, JavaScript will
+look for it in the prototype, and then the prototype's prototype, and so on, until it finds the property or reaches the
+top-level prototype and returns `undefined`.
+
+Through this way, an object can "inherit" properties from its prototype.
+
+> [!Note]
+>
+> Prototype can be only an object or `null`, set it to other types are not allowed and will be ignored.
+
+#### `Func.prototype` property
+
+We know that constructor functions can be used to create objects:
+
+<!-- eslint-disable -->
+
+```js
+function User(name) {
+  this.name = name
+}
+let user = new User('John')
+console.log(user.name) // 'John'
+```
+
+So how can we change the prototype of the objects created by a constructor function?
+
+JavaScript uses a regular property named `prototype` of a function to determine the prototype of the objects created by
+it.
+
+Please note that `Func.prototype` here means a regular property named `prototype` on `F`. It sounds something similar to
+the term "prototype", but here we really mean a regular property with this name. For instance:
+
+<!-- eslint-disable -->
+
+```js
+let animal = {
+  eats: true
+}
+
+function Rabbit(name) {
+  this.name = name
+}
+
+Rabbit.prototype = animal
+
+let rabbit = new Rabbit("White Rabbit") //  rabbit.__proto__ == animal
+
+alert( rabbit.eats ) // true
+```
+
+Every function has the default `prototype` property even if we don't supply it.
+
+The default `prototype` is an object with only one property `constructor`, which points back to the function itself:
+
+<!-- eslint-disable -->
+
+```js
+function User() {}
+/**
+ * `User.prototype`:
+ * {
+ *   constructor: User
+ * }
+ */
+```
+
+That's to say you can create a new object without knowing it's constructor function:
+
+<!-- eslint-disable -->
+
+```js
+import { user } from './some-module.JavaScript'
+
+// We don't know how `user` is created,
+// But we can create a new object with the same constructor as `user`
+let newUser = new user.constructor()
+```
+
+> [!Caution]
+>
+> JavaScript does not ensure there is a `constructor` property in the prototype of a `Function`, it's not a standard.
+>
+> If we manually set `Func.prototype` to another object, the `constructor` property may be lost, so we shouldn't rely on
+> it:
+>
+> <!-- eslint-disable -->
+>
+> ```js
+> function User() {}
+>
+> User.prototype = {
+>   sayHi() {
+>     console.log('Hi')
+>   }
+> }
+>
+> let user = new User()
+> console.log(user.constructor === User) // false, `undefined` !== User
+> ```
+>
+> The best practice is not to totally replace `Func.prototype`, but to add properties to it:
+>
+> <!-- eslint-disable -->
+>
+> ```js
+> function User() {}
+>
+> User.prototype.sayHi = function() {
+>   console.log('Hi')
+> }
+>
+> let user = new User()
+> console.log(user.constructor === User) // true
+> ```
+
+#### Native prototypes
+
+The `prototype` property is widely used by the core of JavaScript itself. All built-in constructor functions use it.
+
+For built-in constructor function `Object`, there is a property `Object.prototype` which is the prototype of objects
+created by `{}` or `new Object`.
+
+By specification, all of the built-in prototypes have `Object.prototype` on the top. That’s why some people say that
+"everything inherits from objects".
+
+Other built-in constructor functions such as `Array`, `Date`, `Function` and others also keep methods in prototypes, we
+can access them through `Array.prototype`, `Date.prototype`, `Function.prototype` and so on.
+
+> [!Caution]
+>
+> These built-in prototypes can be modified, but change anything of them is a bad idea, can lead to hard-to-debug
+> errors.
+
+#### How to access prototype?
+
+For modern JavaScript development, we shouldn't use `__proto__` to get or set the prototype of an object, they are in
+the Annex B of the ECMAScript specification, which means they are only for web browser compatibility.
+
+Now we have the following standard methods to work with prototypes:
+
+- `Object.getPrototypeOf(obj)` – returns the prototype of `obj`.
+- `Object.setPrototypeOf(obj, proto)` – sets the prototype of `obj` to `proto`.
+- `Object.create(proto, [descriptors])` – creates a new object with the specified prototype and property descriptors.
+
+## Classes
+
+TODO(Lumirelle): Add more content about classes after reading [this article](https://javascript.info/classes).

@@ -379,7 +379,8 @@ common methods are:
 
 #### HTTP headers
 
-See [MDN Web Docs: HTTP headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers) for more information.
+See [MDN Web Docs: HTTP headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers) for more
+information.
 
 #### HTTP status codes
 
@@ -410,11 +411,70 @@ Here are some common HTTP status codes:
   - `503 Service Unavailable`
   - `504 Gateway Timeout`
 
-See [MDN Web Docs: HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) for more information.
+See [MDN Web Docs: HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) for
+more information.
 
 #### HTTP versions
 
 TODO(Lumirelle): Add more details about different HTTP versions.
+
+#### Making HTTP requests in VSCode
+
+You can use the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension to make
+HTTP requests directly in VSCode.
+
+I highly recommend it, it's very convenient for testing and debugging APIs when developing web applications.
+
+The only few things you need to do is:
+
+1. Install the extension.
+2. Setting up the environment variables if needed:
+
+   _.vscode/settings.json_
+
+   ```json
+   {
+     "rest-client.environmentVariables": {
+       "$shared": {
+         // The variables shared across all environments
+       },
+       "local": {
+         "baseUrl": "http://localhost:3000",
+         "authToken": "your-auth-token"
+       },
+       "production": {
+         "baseUrl": "https://api.example.com",
+         "authToken": "your-auth-token"
+       }
+     }
+   }
+   ```
+
+3. Create a file with `.http` or `.rest` extension, write your HTTP requests in standard HTTP request format:
+
+   _api-test.http_
+
+   ```http
+   ### Get user info
+   GET {{baseUrl}}/users/1
+   Authorization: Bearer {{authToken}}
+   Accept: application/json
+
+   ### Create a new user
+   POST {{baseUrl}}/users
+   Content-Type: application/json
+   Authorization: Bearer {{authToken}}
+
+   {
+     "name": "John Doe",
+     "email": "john.doe@example.com"
+   }
+   ```
+
+   Btw, you can use `###` to separate multiple requests in a single file.
+
+See [REST Client documentation](https://github.com/Huachao/vscode-restclient/blob/master/README.md) for more
+information.
 
 [^1]:
     IPv4 address, there is also IPv6 address which is a 128-bit (16 bytes) identifier, usually represented in
@@ -422,10 +482,10 @@ TODO(Lumirelle): Add more details about different HTTP versions.
 
 [^2]: By default, there are two special IP addresses in each subnet is reserved and cannot be assigned to any computer:
 
-    - The first address (the network address) is used to identify the subnet itself. It is the lowest address in the subnet
-      range.
-    - The last address (the broadcast address) is used to send data to all hosts in the subnet. It is the highest address in
-      the subnet range.
+    - The first address (the network address) is used to identify the subnet itself. It is the lowest address in the
+      subnet range.
+    - The last address (the broadcast address) is used to send data to all hosts in the subnet. It is the highest
+      address in the subnet range.
 
 [^3]:
     **Safe** methods are those that do not modify resources on the server. They are intended for information retrieval

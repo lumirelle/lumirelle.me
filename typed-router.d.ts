@@ -29,8 +29,8 @@ declare module 'vue-router/auto-routes' {
     '/posts/code-style/encapsulation-and-modularity': RouteRecordInfo<'/posts/code-style/encapsulation-and-modularity', '/posts/code-style/encapsulation-and-modularity', Record<never, never>, Record<never, never>>,
     '/posts/code-style/symbol-name-pattern': RouteRecordInfo<'/posts/code-style/symbol-name-pattern', '/posts/code-style/symbol-name-pattern', Record<never, never>, Record<never, never>>,
     '/posts/first-time-trying-roller-coaster': RouteRecordInfo<'/posts/first-time-trying-roller-coaster', '/posts/first-time-trying-roller-coaster', Record<never, never>, Record<never, never>>,
+    '/posts/manual/computer-network-manual': RouteRecordInfo<'/posts/manual/computer-network-manual', '/posts/manual/computer-network-manual', Record<never, never>, Record<never, never>>,
     '/posts/manual/git-manual': RouteRecordInfo<'/posts/manual/git-manual', '/posts/manual/git-manual', Record<never, never>, Record<never, never>>,
-    '/posts/manual/http-manual': RouteRecordInfo<'/posts/manual/http-manual', '/posts/manual/http-manual', Record<never, never>, Record<never, never>>,
     '/posts/manual/js-advanced-grammar-manual': RouteRecordInfo<'/posts/manual/js-advanced-grammar-manual', '/posts/manual/js-advanced-grammar-manual', Record<never, never>, Record<never, never>>,
     '/posts/manual/project-create-manual': RouteRecordInfo<'/posts/manual/project-create-manual', '/posts/manual/project-create-manual', Record<never, never>, Record<never, never>>,
     '/posts/manual/windows-setup-manual': RouteRecordInfo<'/posts/manual/windows-setup-manual', '/posts/manual/windows-setup-manual', Record<never, never>, Record<never, never>>,
@@ -94,12 +94,12 @@ declare module 'vue-router/auto-routes' {
       routes: '/posts/first-time-trying-roller-coaster'
       views: never
     }
-    'pages/posts/manual/git-manual.md': {
-      routes: '/posts/manual/git-manual'
+    'pages/posts/manual/computer-network-manual.md': {
+      routes: '/posts/manual/computer-network-manual'
       views: never
     }
-    'pages/posts/manual/http-manual.md': {
-      routes: '/posts/manual/http-manual'
+    'pages/posts/manual/git-manual.md': {
+      routes: '/posts/manual/git-manual'
       views: never
     }
     'pages/posts/manual/js-advanced-grammar-manual.md': {

@@ -1,5 +1,5 @@
 ---
-title: Symbol Name Pattern Manual
+title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
 update: 2025-09-23T20:04:00+08:00
 lang: en

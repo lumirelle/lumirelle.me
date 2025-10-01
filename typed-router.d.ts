@@ -26,13 +26,14 @@ declare module 'vue-router/auto-routes' {
     '/notes': RouteRecordInfo<'/notes', '/notes', Record<never, never>, Record<never, never>>,
     '/photos': RouteRecordInfo<'/photos', '/photos', Record<never, never>, Record<never, never>>,
     '/posts/': RouteRecordInfo<'/posts/', '/posts', Record<never, never>, Record<never, never>>,
-    '/posts/encapsulation-and-modularity': RouteRecordInfo<'/posts/encapsulation-and-modularity', '/posts/encapsulation-and-modularity', Record<never, never>, Record<never, never>>,
+    '/posts/code-style/encapsulation-and-modularity': RouteRecordInfo<'/posts/code-style/encapsulation-and-modularity', '/posts/code-style/encapsulation-and-modularity', Record<never, never>, Record<never, never>>,
+    '/posts/code-style/symbol-name-pattern': RouteRecordInfo<'/posts/code-style/symbol-name-pattern', '/posts/code-style/symbol-name-pattern', Record<never, never>, Record<never, never>>,
     '/posts/first-time-trying-roller-coaster': RouteRecordInfo<'/posts/first-time-trying-roller-coaster', '/posts/first-time-trying-roller-coaster', Record<never, never>, Record<never, never>>,
-    '/posts/git-manual': RouteRecordInfo<'/posts/git-manual', '/posts/git-manual', Record<never, never>, Record<never, never>>,
-    '/posts/js-advanced-grammar-manual': RouteRecordInfo<'/posts/js-advanced-grammar-manual', '/posts/js-advanced-grammar-manual', Record<never, never>, Record<never, never>>,
-    '/posts/project-create-manual': RouteRecordInfo<'/posts/project-create-manual', '/posts/project-create-manual', Record<never, never>, Record<never, never>>,
-    '/posts/symbol-name-pattern-manual': RouteRecordInfo<'/posts/symbol-name-pattern-manual', '/posts/symbol-name-pattern-manual', Record<never, never>, Record<never, never>>,
-    '/posts/windows-setup-manual': RouteRecordInfo<'/posts/windows-setup-manual', '/posts/windows-setup-manual', Record<never, never>, Record<never, never>>,
+    '/posts/manual/git-manual': RouteRecordInfo<'/posts/manual/git-manual', '/posts/manual/git-manual', Record<never, never>, Record<never, never>>,
+    '/posts/manual/http-manual': RouteRecordInfo<'/posts/manual/http-manual', '/posts/manual/http-manual', Record<never, never>, Record<never, never>>,
+    '/posts/manual/js-advanced-grammar-manual': RouteRecordInfo<'/posts/manual/js-advanced-grammar-manual', '/posts/manual/js-advanced-grammar-manual', Record<never, never>, Record<never, never>>,
+    '/posts/manual/project-create-manual': RouteRecordInfo<'/posts/manual/project-create-manual', '/posts/manual/project-create-manual', Record<never, never>, Record<never, never>>,
+    '/posts/manual/windows-setup-manual': RouteRecordInfo<'/posts/manual/windows-setup-manual', '/posts/manual/windows-setup-manual', Record<never, never>, Record<never, never>>,
     '/projects': RouteRecordInfo<'/projects', '/projects', Record<never, never>, Record<never, never>>,
     '/sponsors-list': RouteRecordInfo<'/sponsors-list', '/sponsors-list', Record<never, never>, Record<never, never>>,
     '/use': RouteRecordInfo<'/use', '/use', Record<never, never>, Record<never, never>>,
@@ -81,32 +82,36 @@ declare module 'vue-router/auto-routes' {
       routes: '/posts/'
       views: never
     }
-    'pages/posts/encapsulation-and-modularity.md': {
-      routes: '/posts/encapsulation-and-modularity'
+    'pages/posts/code-style/encapsulation-and-modularity.md': {
+      routes: '/posts/code-style/encapsulation-and-modularity'
+      views: never
+    }
+    'pages/posts/code-style/symbol-name-pattern.md': {
+      routes: '/posts/code-style/symbol-name-pattern'
       views: never
     }
     'pages/posts/first-time-trying-roller-coaster.md': {
       routes: '/posts/first-time-trying-roller-coaster'
       views: never
     }
-    'pages/posts/git-manual.md': {
-      routes: '/posts/git-manual'
+    'pages/posts/manual/git-manual.md': {
+      routes: '/posts/manual/git-manual'
       views: never
     }
-    'pages/posts/js-advanced-grammar-manual.md': {
-      routes: '/posts/js-advanced-grammar-manual'
+    'pages/posts/manual/http-manual.md': {
+      routes: '/posts/manual/http-manual'
       views: never
     }
-    'pages/posts/project-create-manual.md': {
-      routes: '/posts/project-create-manual'
+    'pages/posts/manual/js-advanced-grammar-manual.md': {
+      routes: '/posts/manual/js-advanced-grammar-manual'
       views: never
     }
-    'pages/posts/symbol-name-pattern-manual.md': {
-      routes: '/posts/symbol-name-pattern-manual'
+    'pages/posts/manual/project-create-manual.md': {
+      routes: '/posts/manual/project-create-manual'
       views: never
     }
-    'pages/posts/windows-setup-manual.md': {
-      routes: '/posts/windows-setup-manual'
+    'pages/posts/manual/windows-setup-manual.md': {
+      routes: '/posts/manual/windows-setup-manual'
       views: never
     }
     'pages/projects.md': {

@@ -1,9 +1,10 @@
 ---
-title: Encapsulation and Modularity
+title: 'Code Style: Encapsulation and Modularity'
 date: 2025-09-24T16:36+08:00
 update: 2025-09-24T16:36+08:00
 lang: en
 duration: 5min
+type: blog+note
 ---
 
 [[toc]]

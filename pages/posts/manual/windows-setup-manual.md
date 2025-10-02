@@ -128,7 +128,8 @@ Runtime requires:
 | Oh My Posh       | `sudo winget install JanDeDobbeleer.OhMyPosh --scope machine`     | /                                                                                                                                                                                                                                                                                                           |
 | fnm              | `sudo winget install Schniz.fnm --scope machine`                  | /                                                                                                                                                                                                                                                                                                           |
 
-Setting up via Nushell:
+<details>
+<summary>Setting up via Nushell (Recommended)</summary>
 
 ```sh
 # Start fnm temporary
@@ -159,7 +160,10 @@ npm i starship-butler -g
 sudo butler set-sys -f
 ```
 
-~~Setting up via PowerShell (Deprecated)~~
+</details>
+
+<details>
+<summary>Setting up via PowerShell (Deprecated)</summary>
 
 ```sh
 # Must allow executing local scripts
@@ -191,6 +195,8 @@ npm i starship-butler -g
 # Requires admin permission to setting up the whole system
 sudo butler set-sys -f
 ```
+
+</details>
 
 ### 4: Install Software Preferred
 
@@ -233,19 +239,19 @@ Install the tool software below in order:
 
 Install the dev software below in order:
 
-| Software             | Source/Install Method                                                              | Note                                       |
-| -------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------ |
-| WSL                  | `wsl --install`                                                                    | /                                          |
-| Mingw-w64            | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | I choose Posix thread model and UC runtime |
-| Neovim               | `sudo winget install Neovim.Neovim --scope machine`                                | /                                          |
-| LazyVim              | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                          |
-| JDK                  | [Oracle](https://www.oracle.com/java/technologies/downloads/#graalvmjava21)        | /                                          |
-| VEnv                 | `python -m venv /path/to/new/virtual/environment`                                  | /                                          |
-| JetBrains Toolbox    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                          |
-| JetBrains IDEA       | Install from JetBrains Toolbox                                                     | /                                          |
-| Visual Studio        | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | /                                          |
-| Navicat Premium Lite | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                          |
-| Docker Desktop       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                          |
+| Software                 | Source/Install Method                                                              | Note                                       |
+| ------------------------ | ---------------------------------------------------------------------------------- | ------------------------------------------ |
+| WSL                      | `wsl --install`                                                                    | /                                          |
+| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | I choose Posix thread model and UC runtime |
+| Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                          |
+| LazyVim                  | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                          |
+| GraalVM                  | [GraalVM](https://www.graalvm.org/downloads/)                                      | Java JDK but better performance            |
+| Visual Studio            | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | Also Microsoft Visual C++ (MSVC)           |
+| ~~VEnv~~                 | `python -m venv /path/to/new/virtual/environment`                                  | /                                          |
+| ~~JetBrains Toolbox~~    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                          |
+| ~~JetBrains IDEA~~       | Install from JetBrains Toolbox                                                     | /                                          |
+| ~~Navicat Premium Lite~~ | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                          |
+| ~~Docker Desktop~~       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                          |
 
 (Optional) Install other software below:
 

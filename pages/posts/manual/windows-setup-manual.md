@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-10-08T18:33+08:00
+update: 2025-10-08T22:19+08:00
 lang: en
 duration: 9min
 type: blog+note
@@ -240,19 +240,19 @@ Install the tool software below in order:
 
 Install the dev software below in order:
 
-| Software                 | Source/Install Method                                                              | Note                                                                                                                                          |
-| ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| WSL                      | `wsl --install`                                                                    | /                                                                                                                                             |
-| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | Provides C/C++ development environment with **gcc toolchain**<br><br>I prefer to choose **"Posix thread model"** and **"UC runtime"** options |
-| Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                                                                                                                             |
-| LazyVim                  | [LazyVim](https://www.lazyvim.org/installation)                                    | Requires C/C++ development environment with gcc toolchain                                                                                     |
-| GraalVM                  | [GraalVM](https://www.graalvm.org/downloads/)                                      | GraalVM with JDK                                                                                                                              |
-| Visual Studio            | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | Also provides C/C++ development environment with **MSVC toolchain**                                                                           |
-| Python                   | [Python](https://www.python.org/downloads/)                                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                                              |
-| ~~JetBrains Toolbox~~    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                                                                                                                             |
-| ~~JetBrains IDEA~~       | Install from JetBrains Toolbox                                                     | /                                                                                                                                             |
-| ~~Navicat Premium Lite~~ | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                                                                                                                             |
-| ~~Docker Desktop~~       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                                                                                                                             |
+| Software                 | Source/Install Method                                                              | Note                                                                                                                                    |
+| ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| WSL                      | `wsl --install`                                                                    | /                                                                                                                                       |
+| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **"Posix thread model"** and **"UC runtime"** options |
+| Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                                                                                                                       |
+| LazyVim                  | [LazyVim](https://www.lazyvim.org/installation)                                    | Requires **GCC**                                                                                                                        |
+| GraalVM                  | [GraalVM](https://www.graalvm.org/downloads/)                                      | **GraalVM** with **JDK**                                                                                                                |
+| Visual Studio            | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                                        |
+| Python                   | [Python](https://www.python.org/downloads/)                                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                                        |
+| JetBrains Toolbox        | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                                                                                                                       |
+| JetBrains IntelliJ IDEA  | Install from JetBrains Toolbox                                                     | /                                                                                                                                       |
+| ~~Navicat Premium Lite~~ | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                                                                                                                       |
+| ~~Docker Desktop~~       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                                                                                                                       |
 
 (Optional) Install other software below:
 

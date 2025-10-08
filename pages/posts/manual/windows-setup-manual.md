@@ -1,6 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
+update: 2025-10-08T18:33+08:00
 lang: en
 duration: 9min
 type: blog+note
@@ -214,8 +215,8 @@ Install the basic software below in order:
 | IDM                             | [Internet Download Manager](https://www.internetdownloadmanager.com/download.html)      | /                                                                                                                                                |
 | Git                             | [Git](https://git-scm.com/download/win)                                                 | /                                                                                                                                                |
 | Visual C++ Redistributable      | [Microsoft](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)         | /                                                                                                                                                |
-| Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | /                                                                                                                                                |
-| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | /                                                                                                                                                |
+| Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | For classic context menu                                                                                                                         |
+| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For new context menu                                                                                                                             |
 | DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                  |
 | Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)           | /                                                                                                                                                |
 | Revo Uninstaller                | [Revo Uninstaller](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)  | /                                                                                                                                                |
@@ -239,19 +240,19 @@ Install the tool software below in order:
 
 Install the dev software below in order:
 
-| Software                 | Source/Install Method                                                              | Note                                       |
-| ------------------------ | ---------------------------------------------------------------------------------- | ------------------------------------------ |
-| WSL                      | `wsl --install`                                                                    | /                                          |
-| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | I choose Posix thread model and UC runtime |
-| Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                          |
-| LazyVim                  | [LazyVim](https://www.lazyvim.org/installation)                                    | /                                          |
-| GraalVM                  | [GraalVM](https://www.graalvm.org/downloads/)                                      | Java JDK but better performance            |
-| Visual Studio            | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | Also Microsoft Visual C++ (MSVC)           |
-| ~~VEnv~~                 | `python -m venv /path/to/new/virtual/environment`                                  | /                                          |
-| ~~JetBrains Toolbox~~    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                          |
-| ~~JetBrains IDEA~~       | Install from JetBrains Toolbox                                                     | /                                          |
-| ~~Navicat Premium Lite~~ | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                          |
-| ~~Docker Desktop~~       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                          |
+| Software                 | Source/Install Method                                                              | Note                                                                                                                                          |
+| ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| WSL                      | `wsl --install`                                                                    | /                                                                                                                                             |
+| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | Provides C/C++ development environment with **gcc toolchain**<br><br>I prefer to choose **"Posix thread model"** and **"UC runtime"** options |
+| Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                                                                                                                             |
+| LazyVim                  | [LazyVim](https://www.lazyvim.org/installation)                                    | Requires C/C++ development environment with gcc toolchain                                                                                     |
+| GraalVM                  | [GraalVM](https://www.graalvm.org/downloads/)                                      | GraalVM with JDK                                                                                                                              |
+| Visual Studio            | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | Also provides C/C++ development environment with **MSVC toolchain**                                                                           |
+| Python                   | [Python](https://www.python.org/downloads/)                                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                                              |
+| ~~JetBrains Toolbox~~    | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                                                                                                                             |
+| ~~JetBrains IDEA~~       | Install from JetBrains Toolbox                                                     | /                                                                                                                                             |
+| ~~Navicat Premium Lite~~ | [Navicat](https://www.navicat.com/download/navicat-premium-lite)                   | /                                                                                                                                             |
+| ~~Docker Desktop~~       | [Docker](https://www.docker.com/products/docker-desktop/)                          | /                                                                                                                                             |
 
 (Optional) Install other software below:
 

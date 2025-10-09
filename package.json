@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "pnpm@10.18.1",
   "scripts": {
-    "build": "npm run static && cross-env NODE_ENV=production vite-ssg build && tsx ./scripts/copy-fonts.ts && tsx ./scripts/rss.ts && cp _dist_redirects dist/_redirects",
+    "build": "npm run static && NODE_ENV=production vite-ssg build && tsx ./scripts/copy-fonts.ts && tsx ./scripts/rss.ts && cp _dist_redirects dist/_redirects",
     "dev": "vite --port 3333 --open",
     "preview": "vite preview",
     "static": "rimraf temp && degit lumirelle/static temp --force && tsx scripts/copy-sponsors",
@@ -55,7 +55,6 @@
     "@unocss/preset-web-fonts": "catalog:build",
     "@vitejs/plugin-vue": "catalog:build",
     "ansis": "catalog:dev",
-    "cross-env": "catalog:dev",
     "czg": "catalog:dev",
     "degit": "catalog:dev",
     "diacritics": "catalog:dev",

@@ -126,7 +126,7 @@ Runtime requires:
 | Windows Terminal | [Microsoft Store](https://apps.microsoft.com/detail/9n0dx20hk701) | /                                                                                                                                                                                                                                                                                                           |
 | gsudo            | `winget install gerardog.gsudo --scope machine`                   | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful |
 | Nushell          | `sudo winget install nushell --scope machine`                     | Command `sudo` is powered by gsudo now                                                                                                                                                                                                                                                                      |
-| Oh My Posh       | `sudo winget install JanDeDobbeleer.OhMyPosh --scope machine`     | /                                                                                                                                                                                                                                                                                                           |
+| Starship         | `sudo winget install Starship.Starship --scope machine`           | A rust shell prompt                                                                                                                                                                                                                                                                                         |
 | fnm              | `sudo winget install Schniz.fnm --scope machine`                  | /                                                                                                                                                                                                                                                                                                           |
 
 <details>
@@ -139,26 +139,24 @@ $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os
 
 # Install Node.js of latest major version 22
 # Notice that, we will just use the LTS version of Node.js
-# In fnm, they will be tagged with version code like `Iron` for Node.js 20 LTS
+# In fnm, they will be tagged with version code, like `Iron` for Node.js 20 LTS
 fnm i 22
 
 # It's recommended to upgrade npm to >= 10.9.3
 # Node.js 20+
 npm i npm@latest -g
 # Node.js 18
-# npm i npm@^10.9.3 -g
-# Node.js < 18
-# Use bundled npm
+npm i npm@^10.9.3 -g
+# Node.js < 18, use the bundled npm
 
 # Install useful global node package
-npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
+npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
 # If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
 # npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g
-# Requires admin permission to setting up the whole system
-sudo butler set-sys -f
+butler cfsys -f
 ```
 
 </details>
@@ -175,26 +173,26 @@ fnm env --use-on-cd --corepack-enabled --shell powershell | Out-String | Invoke-
 
 # Install Node.js of latest major version 22
 # Notice that, we will just use the LTS version of Node.js
-# In fnm, they will be tagged with version code like `Iron` for Node.js 20 LTS
+# In fnm, they will be tagged with version code, like `Iron` for Node.js 20 LTS
 fnm i 22
 
 # It's recommended to upgrade npm to >= 10.9.3
 # Node.js 20+
 npm i npm@latest -g
+# Node.js 20+
+npm i npm@latest -g
 # Node.js 18
-# npm i npm@^10.9.3 -g
-# Node.js < 18
-# Use bundled npm
+npm i npm@^10.9.3 -g
+# Node.js < 18, use the bundled npm
 
 # Install useful global node package
-npm i @antfu/ni @antfu/nip @sxzz/create taze czg -g
+npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
 # If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
 # npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g
-# Requires admin permission to setting up the whole system
-sudo butler set-sys -f
+butler cfsys -f
 ```
 
 </details>

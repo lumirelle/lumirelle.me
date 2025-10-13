@@ -17,7 +17,7 @@
       />
       Sponsor to support Lumirelle (Open Collective)
     </a>
-    <a
+    <!-- <a
       href="https://github.com/sponsors/lumirelle"
       target="_blank"
       class="group btn-rose inline-block"
@@ -40,6 +40,6 @@
         transition-all duration-200 ease-out
       />
       在爱发电上支持我
-    </a>
+    </a> -->
   </p>
 </template>

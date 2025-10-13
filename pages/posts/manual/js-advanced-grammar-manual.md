@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2025-10-13T14:00+08:00
+update: 2025-10-13T16:42+08:00
 lang: en
-duration: 64min
+duration: 66min
 type: blog+note
 ---
 

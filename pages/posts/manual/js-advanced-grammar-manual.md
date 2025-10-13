@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2025-10-13T12:00+08:00
+update: 2025-10-13T14:00+08:00
 lang: en
-duration: 60min
+duration: 64min
 type: blog+note
 ---
 
@@ -2947,4 +2947,256 @@ It's the better way to write promise-based code, making it look like synchronous
 
 ## Generators, advanced iteration
 
-TODO(Lumirelle): Add content after reading https://javascript.info/generators-iterators.
+### Generators
+
+Regular functions return only one, single value (or nothing).
+
+Generators can return ("yield") multiple values, one after another, on-demand. They work great with iterables, allowing
+to create data streams with ease.
+
+```js
+function* generateSequence() {
+  yield 1
+  yield 2
+  return 3
+}
+```
+
+Generator functions are declared with `function*` syntax.
+
+When called, they don’t run the function body right away. Instead, they return a special object called "generator
+object" to manage the execution.
+
+```js
+function* generateSequence() {
+  yield 1
+  yield 2
+  return 3
+}
+
+// "generator function" creates "generator object"
+const generator = generateSequence()
+console.log(generator) // -> [object Generator]
+```
+
+The main method of a generator is `next()`. When called, it runs the execution until the nearest `yield [value]`
+statement (`value` can be omitted, then it’s `undefined`). Then the function execution pauses, and the yielded value is
+returned to the outer code.
+
+The result of next() is always an object with two properties:
+
+- `value`: the yielded value
+- `done`: `true` if the function has finished, `false` otherwise
+
+As you probably already guessed looking at the next() method, generators are iterable.
+
+We can loop over their values using for..of:
+
+```js
+function* generateSequence() {
+  yield 1
+  yield 2
+  return 3
+}
+
+const generator = generateSequence()
+
+for (const value of generator) {
+  console.log(value) // -> 1, then 2
+}
+```
+
+Looks a lot nicer than calling `next().value`.
+
+But please note: the example above shows 1, then 2, and that’s all. It doesn’t show 3!
+
+It’s because `for..of` iteration ignores the last value, when `done: true`. So, if we want all results to be shown by
+`for..of`, we must return them with `yield`:
+
+```js
+function* generateSequence() {
+  yield 1
+  yield 2
+  yield 3
+}
+
+const generator = generateSequence()
+
+for (const value of generator) {
+  console.log(value) // => 1, then 2, then 3
+}
+```
+
+### Generator composition
+
+Generator composition is a special feature of generators that allows to transparently "embed" generators in each other.
+
+```js
+function* generateSequence(start, end) {
+  for (let i = start; i <= end; i++) yield i
+}
+
+function* generatePasswordCodes() {
+  // 0..9
+  yield* generateSequence(48, 57)
+
+  // A..Z
+  yield* generateSequence(65, 90)
+
+  // a..z
+  yield* generateSequence(97, 122)
+}
+
+let str = ''
+
+for (const code of generatePasswordCodes()) {
+  str += String.fromCharCode(code)
+}
+
+console.log(str) // -> 0..9A..Za..z
+```
+
+The `yield*` directive delegates the execution to another generator. This term means that `yield* gen` iterates over the
+generator `gen` and transparently forwards its yields outside. As if the values were yielded by the outer generator.
+
+### `yield` is a two-way street
+
+`yield` is a two-way street: it not only returns the result to the outside, but also can pass the value inside the
+generator.
+
+The result of `yield` expression is the value passed to the next `next(value)` call.
+
+```js
+function* gen() {
+  const ask1 = yield '2 + 2 = ?'
+
+  console.log(ask1) // -> 4
+
+  const ask2 = yield '3 * 3 = ?'
+
+  console.log(ask2) // -> 9
+}
+
+const generator = gen()
+
+console.log(generator.next().value) // -> "2 + 2 = ?"
+
+console.log(generator.next(4).value) // -> "3 * 3 = ?"
+
+console.log(generator.next(9).done) // -> true
+```
+
+### Generator API
+
+#### `generator.throw()`
+
+As we observed in the examples above, the outer code may pass a value into the generator, as the result of `yield`.
+
+So it should also support passing an error into the generator, we can use `throw` method to achieve this:
+
+```js
+function* gen() {
+  try {
+    const result = yield '2 + 2 = ?'
+
+    console.log('The execution does not reach here, because the exception is thrown above')
+  }
+  catch (e) {
+    console.error(e) // shows the error
+  }
+}
+
+const generator = gen()
+
+const question = generator.next().value
+
+generator.throw(new Error('The answer is not found in my database'))
+```
+
+#### `generator.return()`
+
+The `return` method stops the generator and sets `done: true` with the given value.
+
+```js
+function* gen() {
+  yield 1
+  yield 2
+  yield 3
+}
+
+const g = gen()
+
+g.next() // { value: 1, done: false }
+g.return('foo') // { value: "foo", done: true }
+g.next() // { value: undefined, done: true }
+```
+
+It's only useful when we want to stop the generator from outside, before it naturally finishes.
+
+But it's good to know that it exists.
+
+### Async generators and iteration
+
+For most practical applications, when we’d like to make an object that asynchronously generates a sequence of values, we
+can use an asynchronous generator.
+
+The syntax is simple: prepend `function*` with `async`. That makes the generator asynchronous.
+
+```js
+async function* generateSequence(start, end) {
+  for (let i = start; i <= end; i++) {
+    // Wow, can use await!
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
+    yield i
+  }
+}
+
+const generator = generateSequence(1, 5)
+for await (const value of generator) {
+  alert(value) // 1, then 2, then 3, then 4, then 5 (with delay between)
+}
+```
+
+As the generator is asynchronous, we can use await inside it, rely on promises, perform network requests and so on.
+
+Asynchronous iteration allow us to iterate over data that comes asynchronously, on-demand. Like, for instance, when we
+download something chunk-by-chunk over a network. And asynchronous generators make it even more convenient.
+
+```js
+const range = {
+  from: 1,
+  to: 5,
+
+  [Symbol.asyncIterator]() { // (1)
+    return {
+      current: this.from,
+      last: this.to,
+
+      async next() { // (2)
+        // Note: we can use "await" inside the async next:
+        await new Promise(resolve => setTimeout(resolve, 1000)) // (3)
+
+        if (this.current <= this.last) {
+          return { done: false, value: this.current++ }
+        }
+        else {
+          return { done: true }
+        }
+      }
+    }
+  }
+}
+
+for await (const value of range) { // (4)
+  console.log(value) // -> 1,2,3,4,5
+}
+```
+
+> [!Caution]
+>
+> The spread syntax `...` doesn’t work asynchronously.
+>
+> That’s natural, as it expects to find `Symbol.iterator`, not `Symbol.asyncIterator`.
+>
+> It’s also the case for `for..of`: the syntax without `await` needs `Symbol.iterator`.

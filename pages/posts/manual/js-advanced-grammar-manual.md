@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2025-10-09T14:32+08:00
+update: 2025-10-13T12:00+08:00
 lang: en
-duration: 50min
+duration: 60min
 type: blog+note
 ---
 
@@ -2544,4 +2544,407 @@ The essential parts are:
 
 ## Promises, async/await
 
-TODO(Lumirelle): Complete later after reading https://javascript.info/async.
+### Callbacks and promises
+
+In the past, JavaScript used callbacks to implement asynchronous programming, but it leads to "callback hell" and
+makes code hard to read.
+
+```js
+function loadScript(src, onfullfilled, onrejected) {
+  const script = document.createElement('script')
+  script.src = src
+  script.onload = () => onfullfilled(script)
+  script.onerror = () => onrejected(new Error(`Failed to load script: ${src}`))
+  document.head.append(script)
+}
+
+loadScript(
+  '/my/script.js',
+  (script) => {
+    loadScript(
+      '/my/script2.js',
+      (script) => {
+        loadScript(
+          '/my/script3.js',
+          (script) => {
+            // ...continue after all scripts are loaded
+          },
+          (error) => {
+            console.error(error)
+          }
+        )
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+  },
+  (error) => {
+    console.error(error)
+  }
+)
+```
+
+To solve this problem, JavaScript introduced `Promise`.
+
+A promise has a constructor that takes a function with two parameters: `resolve` and `reject`.
+
+This function is called the "executor", it's the operation we want to perform asynchronously.
+
+Promise has three states, when we call `resolve` or `reject`, the state changes:
+
+- `pending`: initial state, meaning that the operation is still ongoing.
+- `fulfilled`: After we call `resolve` in the executor, promise turns to this state, meaning that the operation
+  completed successfully.
+- `rejected`: After we call `reject` or got an error in the executor, promise turns to this state, meaning that the
+  operation failed.
+
+> [!Note]
+>
+> We can say that a promise is `settled` if it is either `fulfilled` or `rejected`.
+
+We can call `then` method on `Promise`, it accepts two callback function that is called when the promise is `fulfilled`
+or `rejected`, which are called "handlers".
+
+There is also a `catch` method, which is a shorthand for `.then(null, rejectionHandler)`.
+
+These allows us to flatten the nested callbacks structure we had before, and makes code more readable, to handle
+asynchronous operations in a more elegant way.
+
+```js
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = src
+    script.onload = () => resolve(script)
+    script.onerror = () => reject(new Error(`Failed to load script: ${src}`))
+    document.head.append(script)
+  })
+}
+
+loadScript('/my/script.js')
+  .then(
+    (script) => {
+      return loadScript('/my/script2.js')
+    },
+    (error) => {
+      console.error(error)
+    }
+  )
+  .then(
+    (script) => {
+      return loadScript('/my/script3.js')
+    },
+    (error) => {
+      console.error(error)
+    }
+  )
+  .then(
+    (script) => {
+    // ...continue after all scripts are loaded
+    },
+    (error) => {
+      console.error(error)
+    }
+  )
+```
+
+Notice that, `then` or `catch` method always returns **a new promise**, and spreads the result to the next handler.
+
+If the handler return isn't a promise, it will be wrapped in a promise resolved with that value:
+
+```js
+new Promise((resolve, reject) => {
+  setTimeout(() => resolve(1), 1000) // (*)
+})
+  .then((result) => {
+    console.log(result) // -> 1
+    return result * 2
+  })
+```
+
+Are the same as:
+
+```js
+new Promise((resolve, reject) => {
+  setTimeout(() => resolve(1), 1000) // (*)
+})
+  .then((result) => {
+    console.log(result) // -> 1
+    return new Promise(resolve => resolve(result * 2)) // Will automatically wrap in a promise
+  })
+```
+
+> [!Note]
+>
+> To be precise, a handler may return not exactly a promise, but a so-called "thenable" object – an arbitrary object
+> that has a method `then`. It will be treated the same way as a promise.
+>
+> The idea is that 3rd-party libraries may implement “promise-compatible” objects of their own. They can have an
+> extended set of methods, but also be compatible with native promises, because they implement `then`.
+>
+> ```js
+> class Thenable {
+>   constructor(num) {
+>     this.num = num
+>   }
+>
+>   then(resolve, reject) {
+>     console.log(resolve) // function() { native code }
+>     // resolve with this.num*2 after the 1 second
+>     setTimeout(() => resolve(this.num * 2), 1000) // (**)
+>   }
+> }
+>
+> new Promise(resolve => resolve(1))
+>   .then((result) => {
+>     return new Thenable(result) // (*)
+>   })
+>   .then(console.log) // shows 2 after 1000ms
+> ```
+>
+> JavaScript checks the object returned by the .then handler in line (\*): if it has a callable method named then, then
+> it calls that method providing native functions resolve, reject as arguments (similar to an executor) and waits until
+> one of them is called. In the example above resolve(2) is called after 1 second (\*\*). Then the result is passed
+> further down the chain.
+>
+> This feature allows us to integrate custom objects with promise chains without having to inherit from Promise.
+
+Like `try...catch...finally`, `Promise` also has a `finally` method, which is called when the promise is either
+`fulfilled` or `rejected`. The idea of `finally` is to execute a handler without any arguments, which is used to
+finalize the process, regardless of the outcome.
+
+```js
+new Promise((resolve, reject) => {
+  /* do something that takes time, and then call resolve or maybe reject */
+})
+  // runs when the promise is settled, doesn't matter successfully or not
+  .finally(() => stopLoadingIndicator())
+  // so the loading indicator is always stopped before we go on
+  .then(result => showResult(result), err => showError(err))
+```
+
+Differently, `finally` method has no return value, the returns will always be ignored. It just passes the result from
+the previous promise or error to the next handler.
+
+### Promises chaining
+
+We can call `then` method both standalone or chained:
+
+```js
+// This call three times on the same promise
+const standalone = new Promise((resolve, reject) => {
+  setTimeout(() => resolve(1), 1000)
+})
+standalone.then((result) => { // sp1
+  console.log(result) // -> 1
+  return result * 2
+})
+standalone.then((result) => { // sp2
+  console.log(result) // -> 1
+  return result * 2
+})
+standalone.then((result) => { // sp3
+  console.log(result) // -> 1
+  return result * 2
+})
+
+// This call each time on the new promise returned by the previous `then`
+const chained = new Promise((resolve, reject) => {
+  setTimeout(() => resolve(1), 1000)
+})
+  .then((result) => { // cp1
+    console.log(result) // -> 1
+    return result * 2
+  })
+  .then((result) => { // cp2
+    console.log(result) // -> 2
+    return result * 2
+  })
+  .then((result) => { // cp3
+    console.log(result) // -> 4
+    return result * 2
+  })
+```
+
+They are quite different.
+
+For standalone promises, each `then` is independent, they all get the same result of the original promise.
+
+```txt
+new Promise => 1
+    |
+    +-------------------+-------------------+
+    |                   |                   |
+    then => 2 (sp1)     then => 2 (sp2)     then => 2 (sp3)
+```
+
+For chained promises, each `then` is dependent on the previous one, they all get the result of the previous promise.
+
+```txt
+new Promise => 1
+    |
+    +- then => new Promise => 1 2 (cp1)
+                   |
+                   +- then => new Promise => 2 4 (cp2)
+                                  |
+                                  +- then => new Promise => 4 8 (cp3)
+```
+
+In practice we rarely need multiple handlers for one promise. Chaining is used much more often, but this is good to
+know.
+
+### Promise API
+
+#### `Promise.all`
+
+If we want to run multiple asynchronous operations in parallel and wait until all of them are completed, we can use
+`Promise.all`.
+
+It accepts an iterable (usually an array) of promises, and returns a new promise that is fulfilled when **all** the
+input promises are fulfilled, or rejected when **any** of the input promises is rejected.
+
+```js
+Promise.all([
+  new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
+  new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
+  new Promise(resolve => setTimeout(() => resolve(3), 1000)) // 3
+]).then(console.log) // 1,2,3 when promises are ready: each promise contributes an array member
+```
+
+Please note that the order of the resulting array members is the same as in its source promises.
+
+> [!Caution]
+>
+> If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list.
+> Their results are ignored.
+
+#### `Promise.allSettled`
+
+In ECMAScript 2020, `Promise.allSettled` was added to the language.
+
+Differently from `Promise.all`, it waits until all input promises are settled, regardless of whether they are
+fulfilled or rejected.
+
+This is useful when we want to know the result of all operations, without failing fast on the first rejection.
+
+#### `Promise.race`
+
+As it's name suggests, `Promise.race` returns a promise that **settles** as soon as one of the input promises settles,
+with the same value or reason.
+
+#### `Promise.any`
+
+As it's name suggests, `Promise.any` returns a promise that **fulfills** as soon as one of the input promises fulfills,
+with the value of the fulfilled promise.
+
+If all input promises are rejected, it rejects with an `AggregateError`, a new error type that groups multiple errors
+together.
+
+### Microtasks
+
+Promise handlers `then`/`catch`/`finally` are always asynchronous.
+
+Even when a Promise is immediately resolved, the code on the lines below `then`/`catch`/`finally` will still execute
+before these handlers.
+
+Here’s a demo:
+
+```js
+const promise = Promise.resolve()
+
+promise.then(() => console.log('promise done!'))
+
+console.log('code finished') // This console.log shows first
+```
+
+If you run it, you see code finished first, and then promise done!
+
+Why did the `then` trigger afterwards? What’s going on?
+
+#### Microtasks queue
+
+Asynchronous tasks need proper management. For that, the ECMA standard specifies an internal queue PromiseJobs, more
+often referred to as the "microtask queue" (V8 term).
+
+As stated in the [specification](https://tc39.github.io/ecma262/#sec-jobs-and-job-queues):
+
+- The queue is first-in-first-out: tasks enqueued first are run first.
+- Execution of a task is initiated only when nothing else is running.
+
+Or, to put it more simply, when a promise is ready, its `then`/`catch`/`finally` handlers are put into the queue; they
+are not executed yet. When the JavaScript engine becomes free from the current code, it takes a task from the queue and
+executes it.
+
+That’s why "code finished" in the example above shows first.
+
+**What if the order matters for us? How can we make code finished appear after promise done?**
+
+Easy, just put it into the queue with `then`:
+
+```js
+Promise.resolve()
+  .then(() => console.log('promise done!'))
+  .then(() => console.log('code finished'))
+```
+
+TODO(Lumirelle): Add more explanation about event loop and macrotasks (new chapter).
+
+#### Unhandled rejections
+
+Now we can see exactly how JavaScript finds out that there was an unhandled rejection.
+
+**An "unhandled rejection" occurs when a promise error is not handled at the end of the microtask queue.**
+
+### Async/await
+
+Async function means a function that always returns a promise. Other values are wrapped in a resolved promise automatically.
+
+```js
+async function f() {
+  return 1 // Same as: return Promise.resolve(1)
+}
+f().then(console.log) // -> 1
+```
+
+The keyword `await` is only allowed inside async functions, it makes JavaScript wait until that promise settles and
+returns its result.
+
+```js
+async function f() {
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => resolve('done!'), 1000)
+  })
+
+  const result = await promise // Wait until the promise resolves (*)
+
+  console.log(result) // -> "done!"
+}
+
+f()
+```
+
+It's the better way to write promise-based code, making it look like synchronous.
+
+> [!Note]
+>
+> In modern browsers, `await` on top level works just fine, when we’re inside a module.
+>
+> If we’re not using modules, or [older browsers](https://caniuse.com/mdn-javascript_operators_await_top_level) must be
+> supported, there’s a universal recipe: wrapping into an anonymous async function.
+>
+> ```js
+> (async () => {
+>   const response = await fetch('/article/promise-chaining/user.json')
+>   const user = await response.json()
+>   // ...
+> })()
+> ```
+
+> [!Note]
+>
+> Like promise.then, await allows us to use thenable objects.
+
+## Generators, advanced iteration
+
+TODO(Lumirelle): Add content after reading https://javascript.info/generators-iterators.

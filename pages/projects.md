@@ -14,6 +14,10 @@ projects:
       link: 'https://github.com/lumirelle/stylelint-config'
       desc: 'My Stylelint config.'
       icon: 'i-vscode-icons-file-type-stylelint'
+    - name: 'VS Code Shell Script Formatter (Rev)'
+      link: 'https://github.com/lumirelle/vs-shell-format'
+      desc: 'The shellscript、Dockerfile、properties ...... format extension.'
+      icon: 'i-vscode-icons-file-type-vscode'
   Starters:
     - name: 'Vitesse Nuxt'
       link: 'https://github.com/lumirelle/starter-vitesse-nuxt'

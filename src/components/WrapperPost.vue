@@ -138,7 +138,7 @@ const ArtComponent = computed(() => {
     <slot />
   </article>
   <div v-if="route.path !== '/'" class="prose m-auto mt-8 mb-8 slide-enter animate-delay-500 print:hidden">
-    <template v-if="frontmatter.duration">
+    <template v-if="false && frontmatter.duration">
       <span font-mono op50>> </span>
       <span op50>comment on </span>
       <a :href="blueskyUrl" target="_blank" op50>bluesky</a>

@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts Manual
 date: 2025-10-15T14:10+08:00
-update: 2025-10-15T16:11+08:00
+update: 2025-10-15T19:27+08:00
 lang: en
 duration: 4min
 type: blog+note
@@ -14,14 +14,14 @@ type: blog+note
 As we all know, monospace fonts are necessary for us to programming.
 
 As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more
-attention to the width of the fonts, in order to let 2 Latin characters = 1 CJK character.
+attention to the width of the fonts, in order to let the width of 2 Latin characters = 1 CJK character.
 
-I categorize the fonts I use into two groups by character width:
+I categorize the fonts I used into two groups by character width:
 
-- 50%: If font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like
-  "M Plus Code Latin 50" and "Source Han Sans TC", etc.
-- 60%: If font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \* 2),
-  like "Go Mono" and "Maple Font", etc.
+- 50%: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2),
+  like "M Plus Code Latin 50" and "Source Han Sans TC", etc.
+- 60%: If the font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \*
+  2), like "Go Mono" and "Maple Font", etc.
 
 Every group has more than one Latin font and at least one CJK font.
 
@@ -36,8 +36,8 @@ And Latin fonts have more choice:
     weights and italicable[^1].
   - ["Iosevka" (Monospace, Default)](https://github.com/be5invis/Iosevka/releases): A huge font family with many weights
     and italicable.
-  - ["M Plus Code Latin 50"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts): 7 weights from `Thin` to `Bold`,
-    not italicable.
+  - **["M Plus Code Latin 50"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts): 7 weights from `Thin` to `Bold`,
+    not italicable. (which I preferred)**
 - Tiny or thin
   - ["Binchotan Sharp"](https://fontesk.com/binchotan-font/): A tiny and rounded font. `Regular`, not italicable.
   - ["Lekton"](http://www.fontsquirrel.com/fonts/lekton): A thin font. `Regular`, `Bold`, not italicable (only has
@@ -81,8 +81,8 @@ And Latin fonts have more choice:
   >
   > See the [issue](https://github.com/googlefonts/googlesans-code/issues/23) for more details.
 
-- ["Rec Mono Casual"](https://github.com/arrowtype/recursive/releases): A recursive & casual font. Regular, Bold,
-  italicable.
+- **["Rec Mono Casual"](https://github.com/arrowtype/recursive/releases): A recursive & casual font. Regular, Bold,
+  italicable. (which I preferred)**
 
 Then, you can using these font like this:
 

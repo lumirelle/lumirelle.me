@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-10-12T17:23+08:00
+update: 2025-10-15T19:34+08:00
 lang: en
 duration: 9min
 type: blog+note
@@ -13,7 +13,7 @@ type: blog+note
 
 I know Windows is the best OS to play games, but the worst OS to develop.
 
-If we have no choice, the only one thing we can do is trying our best to make Windows be better for our development.
+If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development.
 
 ## First Step: Install Windows
 
@@ -51,7 +51,7 @@ From MAS:
 
 Move the downloaded Windows ISO file to the USB flash drive.
 
-Insert the USB flash drive, enter BIOS and choose it in boot menu.
+Insert the USB flash drive, restart your computer and enter BIOS, then choose your USB flash drive in the boot menu.
 
 After Ventoy starts up, choose the Windows ISO and just start to install it.
 

@@ -17,39 +17,39 @@ catalogs:
     markdown-it-table-of-contents: ^1.1.0
     unocss: ^66.5.4
     unplugin-auto-import: ^20.2.0
-    unplugin-icons: ^22.4.2
-    unplugin-vue-components: ^29.1.0
+    unplugin-icons: ^22.5.0
+    unplugin-vue-components: ^29.2.0
     unplugin-vue-markdown: ^29.2.0
     unplugin-vue-router: ^0.16.0
-    vite: ^7.1.10
+    vite: ^7.1.11
     vite-plugin-inspect: ^11.3.3
     vite-plugin-optimize-exclude: ^0.0.1
-    vite-ssg: ^28.2.1
+    vite-ssg: ^28.2.2
     vite-svg-loader: ^5.1.0
   dev:
     '@antfu/eslint-config': ^6.0.0
-    '@iconify/json': ^2.2.396
+    '@iconify/json': ^2.2.398
     '@octokit/core': ^7.0.5
     '@octokit/rest': ^22.0.0
     ansis: ^4.2.0
     czg: ^1.12.0
     degit: ^2.8.4
     diacritics: ^1.3.0
-    eslint: ^9.37.0
+    eslint: ^9.38.0
     eslint-plugin-format: ^1.0.2
     exifreader: ^4.32.0
     fast-glob: ^3.3.3
     feed: ^5.1.0
     fs-extra: ^11.3.2
-    lint-staged: ^16.2.4
+    lint-staged: ^16.2.5
     pathe: ^2.0.3
-    pnpm: ^10.18.3
+    pnpm: ^10.19.0
     prompts: ^2.4.2
     rimraf: ^6.0.1
     sharp: 0.32.6
     simple-git: ^3.28.0
     simple-git-hooks: ^2.13.1
-    taze: ^19.7.0
+    taze: ^19.8.1
     tsx: ^4.20.6
     typescript: ~5.9.3
   frontend:
@@ -80,7 +80,7 @@ catalogs:
     '@types/fs-extra': ^11.0.4
     '@types/markdown-it': ^14.1.2
     '@types/markdown-it-link-attributes': ^3.0.5
-    '@types/node': ^24.8.0
+    '@types/node': ^24.9.1
     '@types/nprogress': ^0.2.3
     '@types/prompts': ^2.4.9
 

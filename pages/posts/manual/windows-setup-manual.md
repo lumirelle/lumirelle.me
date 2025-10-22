@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-10-15T19:34+08:00
+update: 2025-10-22T15:27+08:00
 lang: en
-duration: 9min
+duration: 8min
 type: blog+note
 ---
 
@@ -137,10 +137,13 @@ Runtime requires:
 ^fnm env --json | from json | load-env
 $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os-info.name == 'windows' {''} else {'bin'}))
 
-# Install Node.js of latest major version 22
-# Notice that, we will just use the LTS version of Node.js
-# In fnm, they will be tagged with version code, like `Iron` for Node.js 20 LTS
-fnm i 22
+# Use Node.js version 22
+fnm use 22
+
+# Install useful global node package
+npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
+# If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
+npm i @antfu/ni czg -g
 
 # It's recommended to upgrade npm to >= 10.9.3
 # Node.js 20+
@@ -148,11 +151,6 @@ npm i npm@latest -g
 # Node.js 18
 npm i npm@^10.9.3 -g
 # Node.js < 18, use the bundled npm
-
-# Install useful global node package
-npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
-# If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
-# npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g
@@ -171,24 +169,20 @@ Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 # Start fnm temporary
 fnm env --use-on-cd --corepack-enabled --shell powershell | Out-String | Invoke-Expression
 
-# Install Node.js of latest major version 22
-# Notice that, we will just use the LTS version of Node.js
-# In fnm, they will be tagged with version code, like `Iron` for Node.js 20 LTS
-fnm i 22
+# Use Node.js version 22
+fnm use 22
+
+# Install useful global node package
+npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
+# If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
+npm i @antfu/ni czg -g
 
 # It's recommended to upgrade npm to >= 10.9.3
-# Node.js 20+
-npm i npm@latest -g
 # Node.js 20+
 npm i npm@latest -g
 # Node.js 18
 npm i npm@^10.9.3 -g
 # Node.js < 18, use the bundled npm
-
-# Install useful global node package
-npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
-# If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
-# npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g

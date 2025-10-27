@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-10-22T15:27+08:00
+update: 2025-10-27T13:25+08:00
 lang: en
-duration: 8min
+duration: 9min
 type: blog+note
 ---
 
@@ -140,17 +140,22 @@ $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os
 # Use Node.js version 22
 fnm use 22
 
-# Install useful global node package
-npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
-# If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
-npm i @antfu/ni czg -g
-
 # It's recommended to upgrade npm to >= 10.9.3
 # Node.js 20+
 npm i npm@latest -g
 # Node.js 18
 npm i npm@^10.9.3 -g
 # Node.js < 18, use the bundled npm
+
+# Install useful global node package
+# Dependencies manager
+npm i corepack @antfu/ni @antfu/nip taze bun -g
+# Project scaffolding
+npm i @sxzz/create esbuild -g
+# Commit message generator
+npm i czg -g
+# If you are still using Node.js < 18
+npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g
@@ -172,17 +177,22 @@ fnm env --use-on-cd --corepack-enabled --shell powershell | Out-String | Invoke-
 # Use Node.js version 22
 fnm use 22
 
-# Install useful global node package
-npm i @antfu/ni @antfu/nip @sxzz/create czg esbuild taze -g
-# If you are using Node.js < 18, you can just install @antfu/ni and czg as they do not strongly relied on Node.js version
-npm i @antfu/ni czg -g
-
 # It's recommended to upgrade npm to >= 10.9.3
 # Node.js 20+
 npm i npm@latest -g
 # Node.js 18
 npm i npm@^10.9.3 -g
 # Node.js < 18, use the bundled npm
+
+# Install useful global node package
+# Dependencies manager
+npm i corepack @antfu/ni @antfu/nip taze bun -g
+# Project scaffolding
+npm i @sxzz/create esbuild -g
+# Commit message generator
+npm i czg -g
+# If you are still using Node.js < 18
+npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g
@@ -204,9 +214,9 @@ Install the basic software below in order:
 | KeePass 2                       | [KeePass](https://keepass.info/download.html)                                           | Extensions: ColoredPassword, HaveIBeenPwned, KeePassHttp                                                                                         |
 | Visual Studio Code              | [Visual Studio Code](https://code.visualstudio.com/Download)                            | /                                                                                                                                                |
 | Cursor                          | [Cursor](https://www.cursor.com/downloads)                                              | /                                                                                                                                                |
+| Zed                             | [Zed](https://zed.dev/)                                                                 | /                                                                                                                                                |
 | IDM                             | [Internet Download Manager](https://www.internetdownloadmanager.com/download.html)      | /                                                                                                                                                |
 | Git                             | [Git](https://git-scm.com/download/win)                                                 | /                                                                                                                                                |
-| Visual C++ Redistributable      | [Microsoft](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist)         | /                                                                                                                                                |
 | Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | For classic context menu                                                                                                                         |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For new context menu                                                                                                                             |
 | DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                  |
@@ -249,12 +259,13 @@ Install the dev software (WSL / SDK / IDE) below in order:
 
 (Optional) Install other software below:
 
-| Software          | Source/Install Method                                                           |
-| ----------------- | ------------------------------------------------------------------------------- |
-| AIDE64            |                                                                                 |
-| Crystal Disk Info | [CrystalDiskInfo](https://crystalmark.info/software/crystaldiskinfo/)           |
-| KeyboardSplitter  | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases) |
-| PDF SAM           | [PDF SAM](https://pdfsam.org/download-pdfsam-basic/)                            |
+| Software                   | Source/Install Method                                                           |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| Visual C++ Redistributable | [Microsoft](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) |
+| AIDE64                     |                                                                                 |
+| Crystal Disk Info          | [CrystalDiskInfo](https://crystalmark.info/software/crystaldiskinfo/)           |
+| KeyboardSplitter           | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases) |
+| PDF SAM                    | [PDF SAM](https://pdfsam.org/download-pdfsam-basic/)                            |
 
 ### 5: Brave Browser
 
@@ -274,14 +285,13 @@ Install useful extensions (Notice: "篡改猴" extension requires you to open th
 
 Install dev extensions:
 
-| Extension                        | Source/Install Method (`~` is the same as above) | Note                                              |
-| -------------------------------- | ------------------------------------------------ | ------------------------------------------------- |
-| Vue.js Devtools                  | Chrome Extension Marketplace                     | /                                                 |
-| Vue.js Devtools (Legacy)         | ~                                                | /                                                 |
-| Cookie Editor                    | ~                                                | Extension Key：`ookdjilphngeeeghgngjabigmpepanpl` |
-| SEO META in 1 CLICK              | ~                                                | /                                                 |
-| Refined Github                   | ~                                                | /                                                 |
-| File Icons for GitHub and GitLab | ~                                                | /                                                 |
+| Extension                        | Source/Install Method (`~` is the same as above) | Note                                                                                        |
+| -------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------- |
+| Vue.js Devtools (Legacy)         | Chrome Extension Marketplace                     | For Vue 3, I recommended to use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) |
+| Cookie Editor                    | ~                                                | Extension Key：`ookdjilphngeeeghgngjabigmpepanpl`                                           |
+| SEO META in 1 CLICK              | ~                                                | /                                                                                           |
+| Refined Github                   | ~                                                | /                                                                                           |
+| File Icons for GitHub and GitLab | ~                                                | /                                                                                           |
 
 ### 6: Configure Windows Itself
 

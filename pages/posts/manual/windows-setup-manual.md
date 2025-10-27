@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-10-27T13:25+08:00
+update: 2025-10-27T14:31+08:00
 lang: en
 duration: 9min
 type: blog+note
@@ -152,8 +152,8 @@ npm i npm@^10.9.3 -g
 npm i corepack @antfu/ni @antfu/nip taze bun -g
 # Project scaffolding
 npm i @sxzz/create esbuild -g
-# Commit message generator
-npm i czg -g
+# Version control helper
+npm i czg bumpp changelogithub -g
 # If you are still using Node.js < 18
 npm i @antfu/ni czg -g
 
@@ -189,8 +189,8 @@ npm i npm@^10.9.3 -g
 npm i corepack @antfu/ni @antfu/nip taze bun -g
 # Project scaffolding
 npm i @sxzz/create esbuild -g
-# Commit message generator
-npm i czg -g
+# Version control helper
+npm i czg bumpp changelogithub -g
 # If you are still using Node.js < 18
 npm i @antfu/ni czg -g
 

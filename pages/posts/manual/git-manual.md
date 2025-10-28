@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2025-09-26T11:47+08:00
+update: 2025-10-28T11:56+08:00
 lang: en
-duration: 10min
+duration: 13min
 type: blog+note
 ---
 
@@ -66,8 +66,8 @@ repository. You can use services like GitHub, GitLab, or Bitbucket to host your 
 To add a remote repository, use the following command:
 
 ```bash
-# Command `ren`: Add a remote repository, if `remote-name` is not provided, it
-# will be set to `origin` by default
+# Command `ren`: Add a remote repository, if `remote-name` is not
+# provided, it will be set to `origin` by default
 # git ren [remote-name] <remote-url>
 git ren https://github.com/username/repo.git
 ```
@@ -75,9 +75,9 @@ git ren https://github.com/username/repo.git
 Then push your commits to the remote repository:
 
 ```bash
-# Command `ps`: Push commit on current branch to the remote repository, if you
-# have not set the upstream branch, it will set the upstream branch to the remote
-# branch with the same name as the current branch.
+# Command `ps`: Push commit on current branch to the remote repository,
+# if you have not set the upstream branch, it will set the upstream
+# branch to the remote branch with the same name as the current branch.
 git ps
 ```
 
@@ -86,23 +86,27 @@ git ps
 To update your local repository with changes from the remote repository, you can pull the latest changes:
 
 ```bash
-# Command `plup`: Pull the latest changes from the remote repository and set the
-# upstream branch
+# Command `plup`: Pull the latest changes from the remote repository
+# and set the upstream branch
 git plup
 ```
 
 Or if you have already set the upstream branch:
 
 ```bash
-# Command `pl`: Pull the latest changes from the remote repository if you
-# already set the upstream branch
+# Command `pl`: Pull the latest changes from the remote repository
+# if you already set the upstream branch
 git pl
 ```
 
 ### Work with branches
 
-After the initial commit, you should create new branches to work on features or fixes without affecting the main branch.
-Commonly, we named this branch `develop` or `dev`.
+That's come back to general workflow.
+
+After the initial tasks are done, now you have a `main` branch with your initial commit.
+
+To start development, we should create a `dev` branch based on the `main` branch to keep the `main` branch stable: Only
+if the code on the `dev` branch is tested and verified, we can merge it back to the `main` branch.
 
 ```bash
 # Command `swn`: Switch to a new branch and create it (if it doesn't exist?) If
@@ -112,12 +116,28 @@ Commonly, we named this branch `develop` or `dev`.
 git swn dev main
 ```
 
-What's more, we often need to create feature branches based on the `dev` branch to work on specific features instead of
-working directly on the `dev` branch.
+We also need a `test` branch based on the `dev` branch to perform test tasks:
 
 ```bash
-git swn feature/your-feature-name dev
+git swn test dev
 ```
+
+What's more, we are not working directly on the `dev` branch, because we may have multiple features to develop at the
+same time, and we don't want to mix them together: They may have different development progress, so the slower one will
+block other faster ones.
+
+To solve this, we will create a new feature branch for each new feature based on the `main` branch:
+
+> [!Caution]
+>
+> Do not create feature branches based on the `dev` branch, or you may integrate other features which are untested but
+> already been integrated into `dev` branch into your branch accidentally.
+
+```bash
+git swn feature/your-feature-name main
+```
+
+Now, you can work on your feature branch, commit changes frequently, and push the branch to remote regularly.
 
 Following the [standardized multi-person collaboration development process](https://github.com/wibetter/akfun/blob/master/%E5%A6%82%E4%BD%95%E8%A7%84%E8%8C%83%E5%A4%9A%E4%BA%BA%E5%8D%8F%E4%BD%9C%E5%BC%80%E5%8F%91.md),
 can help you maintain your project better.
@@ -197,8 +217,8 @@ Or if you want to amend the last commit message:
 git mdi
 ```
 
-Then Git will open your default editor to let you edit the commit message, after you save and close the editor, the last
-commit will be amended.
+Then Git will open your default editor (`vim` is the default) to let you edit the commit message, after you save and
+close the editor, the last commit will be amended.
 
 > [!Caution]
 >
@@ -222,7 +242,7 @@ This is the only one choice in the case above, the cost is that the commit histo
 ```bash
 # Command `rv`: Revert a specific commit by its ID or relative position to HEAD
 # git rv <commit-id|relative-head>
-git rv HEAD^
+git rv HEAD
 ```
 
 ### Merge branches
@@ -244,30 +264,107 @@ git mg feature/your-feature-name
 git ps
 ```
 
+And then, merge all changes from the `dev` branch into the `test` branch to perform test tasks:
+
+```bash
+git sw test
+git mg dev
+git ps
+```
+
+Your test tasks now can be performed on the `test` branch.
+
+When your test team finds some bugs during testing, you can commit the bug fixes directly on the `test` branch, and then
+merge the `test` branch back to the `dev` branch again to integrate the bug fixes:
+
+```bash
+# Apply some bug fixes
+git sw test
+git aacmms "fix: some bugs found during testing"
+git ps
+
+# Merge `test` branch back to `dev` branch to integrate the bug fixes
+git sw dev
+git mg test
+git ps
+```
+
+After all test tasks are done and verified, you can create a new release by merging the `test` branch back to the `main` branch:
+
+```bash
+git sw main
+git mg test
+git ps
+```
+
+### Manage tags
+
+After a new release, we should create a version tag to mark this point on the `main` branch.
+
+```bash
+git sw main
+
+# Command `tgn`: Create a new tag with a specific name
+# Simple tag:
+# git tgn <tag-name>
+# Annotated tag:
+# git tgn <tag-name> <tag-message>
+git tgn v1.0.0
+git tgn v1.0.0 "Release version 1.0.0"
+```
+
+Then push the tag to remote:
+
+```bash
+# Command `pstg`: Push a specific tag to the remote repository
+# git pstg [remote-name] <tag-name>
+git pstg v1.0.0
+```
+
+Or if you want delete a tag both locally and on remote:
+
+```bash
+# Command `tgxbt`: Delete a specific tag both locally and on remote, if
+# `remote-name` is not provided, it will be set to `origin` by default.
+# git tgxbt [remote-name] <tag-name>
+git tgxbt v1.0.0
+```
+
 ### Rebase branches
 
-When something changes been integrated into the `dev` branch, and you also want to integrate these changes into your
-feature branch, you can rebase your feature branch onto the latest `dev` branch.
+When something changes been integrated into the `main` branch, and you also want to integrate these changes into your
+feature branch, you can rebase your feature branch onto the latest `main` branch.
 
 ```bash
 git sw feature/your-feature-name
 
 # Command `rb`: Rebase the current branch onto a specific branch
 # git rb <branch-name>
-git rb dev
+git rb main
 ```
 
 > [!Caution]
 >
-> Do not rebase a branch which has been pushed to remote and shared with others. Rebase likes to pull out a branch from
-> the tree and insert it into another place.
+> Do not rebase a branch which has been pushed to remote and shared with others.
 >
-> For other collaborators working on this branch, they will lose their branch. This may cause problems for everyone, so
-> please just use it on local branch and with caution.
+> Rebase likes to pull out a branch from the tree and insert it into another place. For other collaborators working on
+> this branch, they will lose their branch.
+>
+> This may cause problems for everyone, so please just use it on local branch and with caution.
 
 ### Delete branches
 
-When you finished your feature and merged it back to the `dev` branch, you can delete your feature branch locally:
+Now, you have some types of branches in your repository: `main`, `dev`, `test`, and multiple feature branches.
+
+The `main`, `dev`, and `test` branches are long-lived branches, which will stay in the repository for a long time (I mean forever).
+
+But the feature branches are not.
+
+When you finished your feature and merged it back to the `dev` branch, you can delete your feature branch, because it's mission
+is accomplished, bug fixes and additional improvements can be done on the `test` branch later, and will be merged back to
+the `dev` branch again.
+
+To delete a branch locally:
 
 ```bash
 # Command `brx`: Delete a specific branch locally
@@ -302,21 +399,65 @@ branch. In this case, you can use the cherry-pick command to apply the changes i
 # Command `cp`: Cherry-pick a specific commit by its ID (or relative position to
 # HEAD?)
 # git cp <commit-id|relative-head?>
-git cp xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# This is a short commit ID example:
+git cp 3b88e2d
 ```
 
 ### Recommended workflow
 
 A recommended workflow for using Git in a collaborative environment is as follows:
 
+```txt
+main
+ |      dev
+ +------>+      test
+ |       +------>+      feature/your-feature-name
+ +---------------------->+
+ |       |       |       |
+ |       |       |      ...
+ |       |       |       |
+ |       +<--------------+
+ |       |       |
+ |      ...      |
+ |       |       |
+ |       +------>+
+ |       |       |
+ |       |      ...
+ |       |       |
+ |       +<------+
+ +<--------------+ (tag: v1.0.0)
+ |       |       |
+...      |       |
+ |       |       |              hotfix/your-hotfix-name
+ +------------------------------>+
+ |       |       |               |
+ |       |       |              ...
+ |       |       |               |
+ +<------------------------------+ (tag: v1.0.1)
+ |       |       |               |
+...     ...     ...             ...
+```
+
 1. Use the `main` branch as the **stable production** branch.
-2. Create a `dev` branch based on the `main` branch for **ongoing development**.
-3. For each **new feature**, create a new feature branch based on the `dev` branch.
-4. For each **bug fix**, create a new hotfix branch based on the `main` branch.
-5. Work on the feature & hotfix branches, commit changes frequently, and push the branches to remote regularly. When the
-   feature is complete, create a **pull request** to merge the feature branch into the `dev` branch, and then delete the
-   feature branch both locally and on remote.
-6. Every time after merging `dev` branch into `main` branch, create a **new release** and tag it with a version number.
+2. Create a `dev` branch based on the `main` branch for **ongoing development**, and a `test` branch for **testing**.
+3. For each **new feature**, create a new feature branch based on the `main` branch.
+4. For each **hotfix**, create a new hotfix branch based on the `main` branch.
+5. Work on the feature & hotfix branches, commit changes frequently, and push the branches to remote regularly.
+
+   When the feature is complete, create a **pull request** to merge the feature branch into the `dev` branch, and then
+   delete the feature branch both locally and on remote.
+
+   When the hotfix is complete, create a **pull request** to merge the hotfix branch into the `main` branch, `dev` branch,
+   and then delete the hotfix branch both locally and on remote.
+
+6. After all features are merged into the `dev` branch, merge the `dev` branch into the `test` branch to perform test tasks.
+
+   When bugs are found during testing, commit the bug fixes directly on the `test` branch, and then merge the `test`
+   branch back to the `dev` branch again to integrate the bug fixes.
+
+7. After all test tasks are done and verified, merge the `test` branch back to the `main` branch to create a **new release**.
+8. Every time create a **new release**, add a tag with a version number.
+
    The version number should follow the [Semantic Versioning](https://semver.org/) specification:
    - **MAJOR** version when you make breaking changes
    - **MINOR** version when you add functionality in a backwards-compatible manner

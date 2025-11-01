@@ -100,6 +100,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/manual/categorize-your-dependencies': RouteRecordInfo<
+      '/posts/manual/categorize-your-dependencies',
+      '/posts/manual/categorize-your-dependencies',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual/computer-network-manual': RouteRecordInfo<
       '/posts/manual/computer-network-manual',
       '/posts/manual/computer-network-manual',
@@ -246,6 +253,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/first-time-trying-roller-coaster.md': {
       routes:
         | '/posts/first-time-trying-roller-coaster'
+      views:
+        | never
+    }
+    'pages/posts/manual/categorize-your-dependencies.md': {
+      routes:
+        | '/posts/manual/categorize-your-dependencies'
       views:
         | never
     }

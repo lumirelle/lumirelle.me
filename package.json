@@ -1,7 +1,7 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.19.0",
+  "packageManager": "pnpm@10.20.0",
   "scripts": {
     "build": "npm run static && NODE_ENV=production vite-ssg build && tsx ./scripts/copy-fonts.ts && tsx ./scripts/rss.ts && cp _dist_redirects dist/_redirects",
     "dev": "vite --port 3333 --open",
@@ -36,6 +36,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "catalog:dev",
     "@antfu/utils": "catalog:frontend",
+    "@clack/prompts": "catalog:dev",
     "@iconify/json": "catalog:dev",
     "@octokit/core": "catalog:dev",
     "@octokit/rest": "catalog:dev",
@@ -51,7 +52,6 @@
     "@types/markdown-it-link-attributes": "catalog:types",
     "@types/node": "catalog:types",
     "@types/nprogress": "catalog:types",
-    "@types/prompts": "catalog:types",
     "@unocss/preset-web-fonts": "catalog:build",
     "@vitejs/plugin-vue": "catalog:build",
     "ansis": "catalog:dev",
@@ -75,7 +75,6 @@
     "markdown-it-table-of-contents": "catalog:build",
     "pathe": "catalog:dev",
     "pnpm": "catalog:dev",
-    "prompts": "catalog:dev",
     "rimraf": "catalog:dev",
     "sharp": "catalog:dev",
     "simple-git": "catalog:dev",

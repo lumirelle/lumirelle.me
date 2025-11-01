@@ -1,4 +1,4 @@
-import prompts from 'prompts'
+import { confirm } from '@clack/prompts'
 import Git from 'simple-git'
 import { compressImages } from './img-compress'
 
@@ -11,15 +11,13 @@ const stagedFiles = (await git.diff(['--cached', '--name-only']))
 const images = stagedFiles.filter(i => i.match(/\.(png|jpe?g|webp)$/i))
 if (images.length > 0) {
   console.log('Images to compress:\n', images)
-  const { confirm } = await prompts({
-    type: 'confirm',
-    name: 'confirm',
+  const isConfirmed = await confirm({
     message: `Compress ${images.length} images?`,
   })
 
   compressImages(images)
 
-  if (!confirm)
+  if (!isConfirmed)
     process.exit(0)
 }
 else {

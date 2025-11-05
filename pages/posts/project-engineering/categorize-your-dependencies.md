@@ -1,5 +1,5 @@
 ---
-title: Categorize Your Dependencies
+title: 'Project Engineering: Categorize Your Dependencies'
 date: 2025-11-01T16:06+08:00
 update: 2025-11-01T16:06+08:00
 lang: en

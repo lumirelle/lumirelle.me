@@ -100,13 +100,6 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/manual/categorize-your-dependencies': RouteRecordInfo<
-      '/posts/manual/categorize-your-dependencies',
-      '/posts/manual/categorize-your-dependencies',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
     '/posts/manual/computer-network-manual': RouteRecordInfo<
       '/posts/manual/computer-network-manual',
       '/posts/manual/computer-network-manual',
@@ -152,6 +145,20 @@ declare module 'vue-router/auto-routes' {
     '/posts/manual/windows-setup-manual': RouteRecordInfo<
       '/posts/manual/windows-setup-manual',
       '/posts/manual/windows-setup-manual',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/project-engineering/categorize-your-dependencies': RouteRecordInfo<
+      '/posts/project-engineering/categorize-your-dependencies',
+      '/posts/project-engineering/categorize-your-dependencies',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/project-engineering/manually-split-chunks': RouteRecordInfo<
+      '/posts/project-engineering/manually-split-chunks',
+      '/posts/project-engineering/manually-split-chunks',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -256,12 +263,6 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/manual/categorize-your-dependencies.md': {
-      routes:
-        | '/posts/manual/categorize-your-dependencies'
-      views:
-        | never
-    }
     'pages/posts/manual/computer-network-manual.md': {
       routes:
         | '/posts/manual/computer-network-manual'
@@ -301,6 +302,18 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/manual/windows-setup-manual.md': {
       routes:
         | '/posts/manual/windows-setup-manual'
+      views:
+        | never
+    }
+    'pages/posts/project-engineering/categorize-your-dependencies.md': {
+      routes:
+        | '/posts/project-engineering/categorize-your-dependencies'
+      views:
+        | never
+    }
+    'pages/posts/project-engineering/manually-split-chunks.md': {
+      routes:
+        | '/posts/project-engineering/manually-split-chunks'
       views:
         | never
     }

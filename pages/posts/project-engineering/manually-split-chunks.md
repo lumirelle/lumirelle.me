@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Manually Split Chunks'
 date: 2025-11-05T16:22+08:00
-update: 2025-11-06T00:09+08:00
+update: 2025-11-06T10:58+08:00
 lang: en
 duration: 5min
 type: blog+note
@@ -122,7 +122,7 @@ export default {
     /**
      * Webpack does not attach hash to chunk files by default, so we should configure it manually.
      */
-    filename: '[name]-[fullhash].js',
+    filename: '[name]-[contenthash:8].js',
   },
   optimization: {
     splitChunks: {
@@ -164,8 +164,10 @@ export default {
 
 ### Vite
 
-For Vite, we can use the `build.rollupOptions.output.chunkFileNames` in the configuration (like `vite.config.ts`) to
+For Vite 7, we can use the `build.rollupOptions.output.manualChunks` in the configuration (like `vite.config.ts`) to
 group chunks.
+
+For Rolldown Vite (Vite 8), you can see the [official documentation](https://vite.dev/guide/rolldown#api-differences) for more details.
 
 _vite.config.ts_
 

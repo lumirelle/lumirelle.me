@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2025-10-28T11:56+08:00
+update: 2025-11-10T12:15+08:00
 lang: en
-duration: 13min
+duration: 14min
 type: blog+note
 ---
 
@@ -264,13 +264,21 @@ git mg feature/your-feature-name
 git ps
 ```
 
-And then, merge all changes from the `dev` branch into the `test` branch to perform test tasks:
+When all features are merged into the `dev` branch, and ready for testing, you can merge the `dev` branch into the
+`test` branch to perform test tasks:
 
 ```bash
 git sw test
 git mg dev
 git ps
 ```
+
+> [!CAUTION]
+>
+> Just like the reason why you should not base your feature branch on the `dev` branch, merge the `dev` branch into the
+> `test` branch should also be done with caution.
+>
+> You should really think twice is there any features not yet ready for testing.
 
 Your test tasks now can be performed on the `test` branch.
 

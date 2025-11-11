@@ -8,96 +8,142 @@ art: dots
 
 [[toc]]
 
-## Hardware
+## Devices
 
-- PC: i5-13490F, MaxSun B760M Challenger, Aigo DDR4 3200/C12 16G, RTX 5060ti 16G, Western Digital SN770 1TB, Lenovo
-  R27qe 2K 27" 180Hz...
-- Mouse: ...
-- Keyboard: ...
+### Working & Gaming
 
-### Gaming
+- PC:
+  - MaxSun B760M Challenger
+  - i5-13490F
+  - RTX 5060ti 16G x 2
+  - Aigo DDR4 3200/C12 16G
+  - Western Digital SN770 1TB
+  - Lenovo R27qe 2K 27" 180Hz
+  - **Windows 11**
+  - ...
 
-- ...
+I'm really want to try MAC mini if I have chance in the future. ☺️
 
-## Development
+## Software
 
-### Configuration
+### Configuration Setup Helpers
 
-- My profiles: [lumirelle/starship-butler](https://github.com/lumirelle/starship-butler)
+- My personal CLI tool for configuration setup: [lumirelle/starship-butler](https://github.com/lumirelle/starship-butler)
 
-### Editor
+### Editors
 
-- Editor: [VS Code](https://code.visualstudio.com/) & [Cursor](https://www.cursor.com/) & [Zed](https://zed.dev/) (in
-  early access)
-- Editor Settings & Extensions: [my profiles](#configuration)
+- Editors:
+  - [VS Code](https://code.visualstudio.com/) (Basic choice)
+  - [Cursor](https://www.cursor.com/) (Better AI coding experience)
+  - [Zed](https://zed.dev/) (Look forward to the future)
+  - [Neovim](https://neovim.io/) (For terminal lovers) with [`LazyVim`](https://www.lazyvim.org/) setup
+- Editor Settings & Extensions: [Configuration setup](#configuration-setup-helpers)
 - Fonts: See [programming fonts manual](posts/manual/programming-fonts-manual.md) for more details.
 - Theme: [Vitesse Theme](https://github.com/antfu/vscode-theme-vitesse)
 - Icons Theme: [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 - Product Icons: [Carbon Icons](https://github.com/antfu/vscode-icons-carbon)
-- Formatting & Linting: [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with
-  [`@antfu/eslint-config`](https://github.com/antfu/eslint-config), some times
-  [`Stylelint`](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) with
-  [`@lumirelle/stylelint-config`](https://github.com/lumirelle/stylelint-config).
+- Formatting & Linting:
+  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with
+    [`@antfu/eslint-config`](https://github.com/antfu/eslint-config)
+  - ...some times [`Stylelint`](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) with
+    [`@lumirelle/stylelint-config`](https://github.com/lumirelle/stylelint-config).
 
-### Browser
+### Browser (Daily Use)
 
 Switched to [Brave](https://brave.com/) as Chrome is pushing hard on
 [Manifest V3](https://www.eff.org/deeplinks/2021/12/chrome-users-beware-manifest-v3-deceitful-and-threatening) without a
-good solution for Ad blockers.
+good solution for AD blockers.
 
-See my [manuals](posts/manual/windows-setup-manual.md#5-brave-browser) for more details about my Brave setup.
+See my [manuals](/posts/manual/windows-setup-manual#_5-brave-browser) for more details about my Brave setup.
 
 ### Design / Social Media
 
 - [Figma](https://www.figma.com/) - Illustrations, Logos, Social Media Banners
 - [OBS](https://obsproject.com/) - Streaming & Recording
 
-### Terminal & Shell & Prompt
+### Terminal & Shell & Shell Prompt
 
-- [Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/) - Terminal
-  - Config: [my profiles](#configuration)
+- [Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/) - Terminal, **Windows Only**
+  - Configuration: [Configuration setup](#configuration-setup-helpers)
 - [`Nushell`](https://www.nushell.sh/) - Shell
-  - Config: [my profiles](#configuration)
-- [`Starship`](https://starship.rs/) - Prompt
-  - Config: [my profiles](#configuration)
+  - Configuration: [Configuration setup](#configuration-setup-helpers)
+- [`Starship`](https://starship.rs/) - Shell Prompt
+  - Configuration: [Configuration setup](#configuration-setup-helpers)
 
-### Environment
+## Development
 
-- [`fnm`](https://fnm.vercel.app/) - Node.js version manager
+### General
 
-### Cli
-
-#### Project Management
-
-- [`@sxzz/create`](https://github.com/sxzz/create) - Create new projects with ease (any language)
-- [`pnpm`](https://pnpm.io/) - Preferred package managers, also for monorepo
-- [`@antfu/ni`](https://github.com/antfu-collective/ni) - Aliasing package managers
-- [`@antfu/nip`](https://github.com/antfu/nip) - A better `pnpm install xxx` with prompts and catalogs support
-- [`taze`](https://github.com/antfu/taze) - Upgrade dependencies
-- [`bumpp`](https://github.com/antfu/bumpp) - Bump package version version for new release
-
-#### Git Commit Message
-
+- [`@sxzz/create`](https://github.com/sxzz/create) - Create new projects from GitHub templates with ease (any language)
 - [`czg`](https://cz-git.qbb.sh/cli/) - Interactive CLI that generate standardized git commit messages
+- [`hyperfine`](https://github.com/sharkdp/hyperfine) - A command-line benchmarking tool
 
-#### Build Tools
+### C/C++
 
-- [`tsx`](https://github.com/privatenumber/tsx) - Run TypeScript files without compilation
+Build tools:
+
+- [`Mingw-w64`](https://github.com/niXman/mingw-builds-binaries/releases/latest) - GCC (GNU Compiler Collection) for **Windows**
+- [`MSVC`](https://visualstudio.microsoft.com/visual-cpp-build-tools/) - Microsoft C++ Build Tools for **Windows**
+
+### Rust
+
+Build tools:
+
+- [`Rust`](https://rust-lang.org/tools/install/) - Rust development kits
+
+### Node.js (JavaScript/TypeScript)
+
+Runtimes:
+
+- [`Node.js`](https://nodejs.org/en/download/) - Node.js runtime
+- [`FNM`](https://fnm.vercel.app/) - Faster Node.js version manager
+
+Build tools:
+
 - [`tsdown`](https://github.com/rolldown/tsdown) - Build TypeScript library projects
-- [`esbuild`](https://esbuild.github.io/) - An extremely fast bundler and minifier
+- [`vite`](https://github.com/vitejs/vite) - Build frontend projects
 - [`sass-embedded`](https://sass-lang.com/install) - Compile SCSS files
 
-#### Code Quality
+Project management:
+
+- [`@antfu/ni`](https://github.com/antfu-collective/ni) - Aliasing package managers
+- [`pnpm`](https://pnpm.io/) - Preferred package managers, also for monorepo
+- [`@antfu/nip`](https://github.com/antfu/nip) - A better `pnpm install xxx` with prompts and catalogs support
+- [`pnpm-patch-i`](https://github.com/antfu/pnpm-patch-i) - A better and interactive pnpm patch
+- [`taze`](https://github.com/antfu/taze) - Upgrade dependencies
+- [`bumpp`](https://github.com/antfu/bumpp) - Interactive CLI that bumps your version numbers and more
+- [`node-modules-inspector`](https://github.com/antfu/node-modules-inspector) - Visualize your node_modules, inspect dependencies, and more
+
+Code Quality:
 
 - [`eslint`](https://eslint.org/) - Linter & Formatter
-  - Config: [antfu/eslint-config](https://github.com/antfu/eslint-config)
+  - Configuration: [antfu/eslint-config](https://github.com/antfu/eslint-config)
 - [`stylelint`](https://stylelint.io/) - Linter & Formatter for styles
-  - Config: [lumirelle/stylelint-config](https://github.com/lumirelle/stylelint-config)
+  - Configuration: [lumirelle/stylelint-config](https://github.com/lumirelle/stylelint-config)
 
-### Starter Templates
+Useful libraries & frameworks:
+
+- [`tsx`](https://github.com/privatenumber/tsx) - Run TypeScript files without compilation
+- [`esbuild`](https://esbuild.github.io/) - An extremely fast bundler and minifier
+
+### JVM (Java/Kotlin/Scala...)
+
+Runtime & Build tools:
+
+- [`Graal VM`](https://www.graalvm.org/downloads/) - JVM language's development kits
+
+### Python
+
+Runtime & Build tools:
+
+- [`Python`](https://www.python.org/downloads/)- Python development kits
+
+## Project Starter Templates
+
+### Node.js (JavaScript/TypeScript)
 
 - [`starter-ts`](https://github.com/lumirelle/starter-ts) - TypeScript starter template
-- [`starter-ts`](https://github.com/lumirelle/starter-monorepo) - TypeScript starter template
+- [`starter-ts`](https://github.com/lumirelle/starter-monorepo) - TypeScript starter template for monorepo
 - [`starter-vscode`](https://github.com/antfu/starter-vscode) - VS Code Extension starter template
 - [`vitesse`](https://github.com/antfu/vitesse) - Opinionated Vite + Vue starter template
 - [`vitesse-nuxt`](https://github.com/lumirelle/starter-vitesse-nuxt) - Opinionated Nuxt starter template

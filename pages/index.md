@@ -5,9 +5,16 @@ image: https://lumirelle.me/og.png
 art: random
 ---
 
-Hey! I'm Lumirelle, a rookie who is losing myself in fantasy SE technology.
+Hey! I'm Lumirelle, a developer who wants to learn every kind of technology and share what I've learned with the world.
 
-Here are some every day logs and study records wrote by me. Please enjoy!
+My dream is to become a full-stack developer who can build amazing applications from scratch and contribute to
+open-source projects.
+
+In my spare time, I enjoy exploring new programming languages, frameworks, and tools, find the [right ones](/use) for me
+to get faster and more efficient.
+
+I also love reading tech blogs, watching tutorials, and participating in coding challenges. Let's say together:
+Learning is never ending!
 
 <div flex-auto />
 

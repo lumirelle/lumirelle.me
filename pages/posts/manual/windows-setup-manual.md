@@ -152,8 +152,8 @@ Then setting up via Nushell:
 ^fnm env --json | from json | load-env
 $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os-info.name == 'windows' {''} else {'bin'}))
 
-# Use Node.js version 22
-fnm use 22
+# Use Node.js version 24
+fnm use 24
 
 # It's recommended to upgrade npm to >= 10.9.3
 # Node.js 20+

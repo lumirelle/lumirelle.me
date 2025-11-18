@@ -1,7 +1,7 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2025-10-22T15:28+08:00
+update: 2025-11-18T16:15+08:00
 lang: en
 duration: 4min
 type: blog+note
@@ -124,6 +124,16 @@ For monorepo, we can use `-r` option with `nr` to run the script of all sub-pack
 {
   "scripts": {
     "build": "nr -r build" // nr -r <script>
+  }
+}
+```
+
+For change working directory to the sub-package, we can use `-C` option with `nr`:
+
+```json
+{
+  "scripts": {
+    "build": "nr -C packages/core build" // nr -C <path> <script>
   }
 }
 ```

@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2025-09-28T11:34+08:00
+update: 2025-11-18T10:28+08:00
 lang: en
 duration: 2min
 type: blog+note
@@ -145,7 +145,7 @@ Then, select **Vue 2 preset** in the startup prompt.
 
 ## Nuxt
 
-### Vitesse Nuxt (Nuxt 3 + Vite + TypeScript)
+### Vitesse Nuxt (Nuxt 4 + Vite + TypeScript)
 
 Use `@sxzz/create` CLI tool:
 
@@ -162,7 +162,7 @@ And select the `Vitesse Nuxt` template in the startup prompt.
 
 > [!Note]
 >
-> Since the version of 6, `create-nuxt-app` using `nuxi` under the hood, so it will create Nuxt 3 project not Nuxt 2
+> Since the version of 6, `create-nuxt-app` using `nuxi` under the hood, so it will create Nuxt 4 project not Nuxt 2
 > project!
 
 ```bash

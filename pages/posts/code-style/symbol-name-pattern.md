@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
-update: 2025-11-18T10:23+08:00
+update: 2025-11-18T16:47+08:00
 lang: en
 duration: 6min
 type: blog+note
@@ -9,7 +9,7 @@ type: blog+note
 
 [[toc]]
 
-### Why we need to care about symbol name patterns?
+## Why We Need to Care About Symbol Name Patterns?
 
 In a huge Vue project, we may have thousands of symbols, likes variable names,
 function names, hook names, component names, etc. If we cannot encapsulate and

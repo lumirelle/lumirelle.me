@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-11-01T11:10+08:00
+update: 2025-11-18T16:47+08:00
 lang: en
 duration: 8min
 type: blog+note
@@ -13,28 +13,35 @@ type: blog+note
 
 I know Windows is the best OS to play games, but the worst OS to develop.
 
-If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development.
+If we have no choice, the only one thing we can do is trying our best to make
+Windows being better for our development.
 
 ## First Step: Install Windows
 
-We can use [Ventoy](https://www.ventoy.net/en/download.html) to make a bootable USB drive to install Windows.
+We can use [Ventoy](https://www.ventoy.net/en/download.html) to make a bootable
+USB drive to install Windows.
 
-Notice that, by default, Ventoy will skip the device check and online check while Windows is setting up.
+Notice that, by default, Ventoy will skip the device check and online check
+while Windows is setting up.
 
-You can also bypass these check manually by unplugging the network cable and executing these commands below (Press `Shift + F10` to open CMD):
+You can also bypass these check manually by unplugging the network cable and
+executing these commands below (Press `Shift + F10` to open CMD):
 
 ```sh
 cd OOBE
 BypassNRO.cmd
 ```
 
-### Install And Set Up Ventoy
+### Install and Set up Ventoy
 
-Insert your USB flash driver, follow the steps in the [official document](https://www.ventoy.net/en/doc_start.html) to install and set up Ventoy.
+Insert your USB flash driver, follow the steps in the [official
+document](https://www.ventoy.net/en/doc_start.html) to install and set up
+Ventoy.
 
 ### Download Windows ISO
 
-For developers, it's recommended to use the latest professional edition of Windows.
+For developers, it's recommended to use the latest professional edition of
+Windows.
 
 From Microsoft (Official):
 
@@ -47,21 +54,24 @@ From MAS:
 - [Windows 10 ISO](https://massgrave.dev/windows_10_links)
 - [Windows LTSC ISO](https://massgrave.dev/windows_ltsc_links)
 
-### Make A Bootable USB Drive
+### Make a Bootable USB Drive
 
 Move the downloaded Windows ISO file to the USB flash drive.
 
-Insert the USB flash drive, restart your computer and enter BIOS, then choose your USB flash drive in the boot menu.
+Insert the USB flash drive, restart your computer and enter BIOS, then choose
+your USB flash drive in the boot menu.
 
 After Ventoy starts up, choose the Windows ISO and just start to install it.
 
-Then, customize your installation options and wait for the installation to complete.
+Then, customize your installation options and wait for the installation to
+complete.
 
-## Second Step: Setting Up System Preferences
+## Second Step: Setting up System Preferences
 
-Just follow the steps below, clean up the annoyed system bundled software, and install tools you preferred. 😍
+Just follow the steps below, clean up the annoyed system bundled software, and
+install tools you preferred. 😍
 
-### 0: Learn How To Use winget
+### 0: Learn How to Use winget
 
 Install (User Scope):
 
@@ -88,11 +98,14 @@ For more information:
 winget -?
 ```
 
-### 1: Clean Up Annoyed System Bundled Software
+### 1: Clean up Annoyed System Bundled Software
 
-Uninstall Office 365, Microsoft PC Manager and other trash (system bundled software) you don't need at all, close the UAC (User Account Control) as your need.
+Uninstall Office 365, Microsoft PC Manager and other trash (system bundled
+software) you don't need at all, close the UAC (User Account Control) as your
+need.
 
-Then, close all of anti-virus features of Windows Defender, and use [Huorong](https://www.huorong.cn/person) instead (Much quieter and non-invasive)
+Then, close all of anti-virus features of Windows Defender, and use
+[Huorong](https://www.huorong.cn/person) instead (Much quieter and non-invasive)
 
 | Software | Source/Install Method                    |
 | -------- | ---------------------------------------- |
@@ -100,24 +113,27 @@ Then, close all of anti-virus features of Windows Defender, and use [Huorong](ht
 
 After Huorong start up, restart your computer, Windows Defender will be closed.
 
-At the end, use Windows 11 Setting Easily (Support Windows 10 too) to close Windows Defender completely, you will see
-there is only the Windows Defender service exists, and Windows Defender is being disabled entirely.
+At the end, use Windows 11 Setting Easily (Support Windows 10 too) to close
+Windows Defender completely, you will see there is only the Windows Defender
+service exists, and Windows Defender is being disabled entirely.
 
 | Software                  | Source/Install Method                                                   |
 | ------------------------- | ----------------------------------------------------------------------- |
 | Windows 11 Setting Easily | [Article on Bilibili](https://www.bilibili.com/opus/904672369138729017) |
 
-Notice that, you should close Windows Defender first, because it will clean Windows 11 Setting Easily as a potential threat.
+Notice that, you should close Windows Defender first, because it will clean
+Windows 11 Setting Easily as a potential threat.
 
-### 2: Setting Up Network Tool (Optional)
+### 2: Setting up Network Tool (Optional)
 
-Just install Clash Verge Rev, We will configure it [later](#3-setting-up-personal-preferences).
+Just install Clash Verge Rev, We will configure it
+[later](#3-setting-up-personal-preferences).
 
 | Software        | Source/Install Method                                                          |
 | --------------- | ------------------------------------------------------------------------------ |
 | Clash Verge Rev | [GitHub Releases](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
 
-### 3: Setting Up Personal Preferences
+### 3: Setting up Personal Preferences
 
 Runtime requires:
 
@@ -234,15 +250,16 @@ Install the dev software (WSL / SDK / IDE) below in order:
 
 I hate Chrome because it's too opinionated, I hate Edge because it's too heavy.
 
-Though we have to use Chrome for development, and Edge is deeply bundled with Windows, so we have to suffer from them,
-but for daily use, I just want a Chromium based browser, who is tiny, clean and customizable.
+Though we have to use Chrome for development, and Edge is deeply bundled with
+Windows, so we have to suffer from them, but for daily use, I just want a
+Chromium based browser, who is tiny, clean and customizable.
 
 I choose Brave currently.
 
 Useful extensions:
 
-> [!NOTE]
-> "Tampermonkey" extension requires you to open the develop mode to install scripts.
+> [!NOTE] "Tampermonkey" extension requires you to open the develop mode to
+> install scripts.
 
 | Extension                       | Source/Install Method (`~` means the same as above)                                                                    | Note                                                                                                                                          |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -292,8 +309,8 @@ Projects should under:
 
 > [!NOTE]
 >
-> Use a symlink to link the projects folder to `~/i/` is a bad behavior, it can cause problems when resolving the
-> project path.
+> Use a symlink to link the projects folder to `~/i/` is a bad behavior, it can
+> cause problems when resolving the project path.
 
 ~~Use Revo Uninstaller clean useless software at regular intervals.~~
 

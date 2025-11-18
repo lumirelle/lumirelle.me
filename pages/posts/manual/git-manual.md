@@ -14,7 +14,7 @@ type: blog+note
 Git is a distributed version control system, which is used to track changes in
 source code during software development.
 
-### Core concepts
+### Core Concepts
 
 - **Repository (Repo)**:
 
@@ -76,7 +76,7 @@ source code during software development.
   commit and branch. When the HEAD changes, the working directory will also
   change accordingly.
 
-## Basic usage of Git
+## Basic Usage of Git
 
 > [!Note]
 >
@@ -84,7 +84,7 @@ source code during software development.
 > [`custom Git configuration`](https://github.com/lumirelle/starship-butler/blob/main/packages/config-provider/assets/vcs/git/.gitconfig)
 > .
 
-### Initialize a Git repository
+### Initialize a Git Repository
 
 To initialize a new Git repository, navigate to your project directory and run:
 
@@ -95,7 +95,7 @@ git init
 Then, Git will create a `.git` directory in your project directory, which
 contains all the Git metadata for your project.
 
-### Make a commit
+### Make a Commit
 
 After initializing, you may need to add some basic files (like `package.json`
 for Node.js project) to the repository.
@@ -118,7 +118,7 @@ This is the most basic version control usecase.
 
 So -- every time you want to make some changes, don't forget to commit them!
 
-### Add a remote
+### Add a Remote
 
 As a distributed version control system, Git allows you to collaborate with
 others by syncing your local repository with a remote repository. You can use
@@ -133,7 +133,7 @@ To add a remote repository, use the following command:
 git ren https://github.com/username/repo.git
 ```
 
-### Pull and push commits
+### Pull and Push Commits
 
 To sync your commits with a remote repository, you can `pull` and `push` commits
 from/to the remote repository.
@@ -164,7 +164,7 @@ To push your commits to the remote repository:
 git ps
 ```
 
-### Work with branches (Git workflow)
+### Work with Branches (Git Workflow)
 
 Branches are one of the most important concepts in collaborative development.
 
@@ -236,7 +236,7 @@ complexity.
 
 This article will use the most complex Git Flow workflow as an example.
 
-### Create a new feature branch
+### Create a New Feature Branch
 
 After the initial commit, we should create a `dev` branch based on the `main` to
 hold completed new features.
@@ -249,7 +249,8 @@ hold completed new features.
 git swn dev main
 ```
 
-For each new feature, we will create a new feature branch based on the `dev` branch:
+For each new feature, we will create a new feature branch based on the `dev`
+branch:
 
 > [!Caution]
 >
@@ -269,7 +270,7 @@ git swn feature/your-feature-name dev
 Now, you can work on your feature branch, commit changes frequently, and push
 the branch to remote regularly.
 
-### Drop changes in working directory
+### Drop Changes in Working Directory
 
 When you work on your feature branch, you may want to discard some changes in
 your working directory. You can use the following command to discard changes of
@@ -288,7 +289,7 @@ Or you want to discard all changes in your working directory:
 git xa
 ```
 
-### Drop changes in staging area
+### Drop Changes in Staging Area
 
 When you work on your feature branch, you may want to unstage some changes in
 your staging area. You can use the following command to do that:
@@ -307,7 +308,7 @@ Or you want to unstage all changes in your staging area:
 git aau
 ```
 
-### Drop last commit
+### Drop Last Commit
 
 When you work on your feature branch, you may want to undo some commits in your
 local branch. You can use the following command to do that:
@@ -329,7 +330,7 @@ git cmu
 > This may cause problems for other collaborators, so please use it with
 > caution.
 
-### Amend the last commit
+### Amend the Last Commit
 
 If you want to amend the last commit, more conveniently than drop the last
 commit and create a new one, you can amend it directly:
@@ -363,7 +364,7 @@ amended.
 > This may cause problems for other collaborators, so please use it with
 > caution.
 
-### Revert a commit
+### Revert a Commit
 
 If you already pushed some wrong commits to a branch which has branch protection
 enabled, you cannot force push to the remote branch. In this case, you can
@@ -380,7 +381,7 @@ through the ages.
 git rv HEAD
 ```
 
-### Merge branches
+### Merge Branches
 
 Come back to general workflow, after you finished your feature on your feature
 branch, you need to merge it back to the `dev` branch.
@@ -400,8 +401,8 @@ git ps
 ```
 
 When all features are merged into the `dev` branch, and ready for testing, this
-means one period of development is done, you should create a new `release` branch
-to prepare for testing and release tasks:
+means one period of development is done, you should create a new `release`
+branch to prepare for testing and release tasks:
 
 ```bash
 git sw dev
@@ -419,8 +420,8 @@ git ps
 Your test tasks now can be performed on the `release` branch.
 
 When your test team finds some bugs during testing, you can commit the bug fixes
-directly on the `release` branch, and then merge the `release` branch back to the
-`develop` branch again to integrate the bug fixes:
+directly on the `release` branch, and then merge the `release` branch back to
+the `develop` branch again to integrate the bug fixes:
 
 ```bash
 # Apply some bug fixes
@@ -443,7 +444,7 @@ git mg release/vx.x.x
 git ps
 ```
 
-### Manage tags
+### Manage Tags
 
 After a new release, we should create a version tag to mark this point on the
 `main` branch, and push it to remote.
@@ -480,7 +481,7 @@ Or if you want delete a tag both locally and on remote:
 git tgxbt v1.0.0
 ```
 
-### Rebase branches
+### Rebase Branches
 
 When something changes been integrated into the `dev` branch, and you also want
 to integrate these changes into your feature branch, you can rebase your feature
@@ -504,7 +505,7 @@ git rb dev
 > branch. This may cause problems for everyone, so please just use it with
 > caution.
 
-### Delete branches
+### Delete Branches
 
 Now, you have some types of branches in your repository: `main`, `dev`,
 and multiple `release` and `feature` branches.
@@ -551,7 +552,7 @@ git brxbt feature/your-feature-name
 git brxbt release/vx.x.x
 ```
 
-### Cherry-pick commits
+### Cherry-Pick Commits
 
 Sometimes, you may want to apply some specific commits from one branch to
 another branch without merging the entire branch. In this case, you can use the
@@ -565,7 +566,7 @@ cherry-pick command to apply the changes introduced by specific commits.
 git cp 3b88e2d
 ```
 
-### Git configuration
+### Git Configuration
 
 #### `.gitconfig`
 

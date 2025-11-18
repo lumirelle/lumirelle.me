@@ -1,7 +1,7 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2025-11-18T16:11+08:00
+update: 2025-11-18T16:55+08:00
 lang: en
 duration: 68min
 type: blog+note
@@ -11,7 +11,7 @@ type: blog+note
 
 ## Code Style
 
-### Particular Case Of Omitting Semicolons
+### Particular Case of Omitting Semicolons
 
 I think this particular case is something that everyone who uses semicolon-free
 style in JavaScript must be aware of.
@@ -99,7 +99,7 @@ console.log(this)
 developers write more secure and optimized code, so we should always use it in
 modern JavaScript development.
 
-#### How To `"use strict"`?
+#### How to `"use strict"`?
 
 For **CommonJS** modules, you need to explicitly enable it by adding `"use
 strict"` to the top of a file or a function:
@@ -209,7 +209,7 @@ console.log(y) // -> ReferenceError: `y` is not defined
 > Nowadays, we can use `let` and `const` to create block scope variables, so
 > IIFE is no longer necessary.
 
-#### `var` Declarations Are Hoisted
+#### `var` Declarations are Hoisted
 
 `var` declarations are hoisted to the top of their enclosing function or global
 scope. This means that you can use a `var` variable before its declaration
@@ -255,10 +255,11 @@ This kind of tolerance is the most intolerable thing for us with `var`!
 
 ### Object
 
-#### Keys (Property Names) Of An Object
+#### Keys (Property Names) of an Object
 
-In technical, keys of an object can be only `string`, `number`, or `Symbol`. But in practice,
-everything execpt `Symbol` will be implicitly converted to `string`:
+In technical, keys of an object can be only `string`, `number`, or `Symbol`. But
+in practice, everything execpt `Symbol` will be implicitly converted to
+`string`:
 
 <!-- eslint-disable dot-notation -->
 
@@ -348,7 +349,8 @@ bag[fruit] = 5
 
 #### Accessor Properties
 
-Object has two kinds of properties: **data properties** and **accessor properties**.
+Object has two kinds of properties: **data properties** and
+**accessor properties**.
 
 Data properties just store different types of values, we already know how to
 work with them.
@@ -388,7 +390,7 @@ const a = obj.propName // -> Getter called implicitly
 >
 > If it only has a setter, that means it’s write-only.
 
-#### Order Of Properties In An Object
+#### Order of Properties in an Object
 
 In JavaScript, the order of properties in an object is not guaranteed, but in
 practice, most JavaScript engines maintain the order of properties following the
@@ -418,7 +420,7 @@ const obj = {
 console.log(Reflect.ownKeys(obj)) // -> [ '3', 'x1', 'x0', Symbol(sym1) ]
 ```
 
-#### Deep Clone An Object
+#### Deep Clone an Object
 
 As we all know, primitive values are copied by value, assigning or passing them
 will create a copy of the value; Objects are copied by reference, assigning or
@@ -455,7 +457,8 @@ console.log(obj1.b.c) // -> 2
 console.log(obj2.b.c) // -> 3
 ```
 
-For objects **with functions**, you can use a library like `lodash.clonedeep` to achieve this:
+For objects **with functions**, you can use a library like `lodash.clonedeep` to
+achieve this:
 
 ```js
 import cloneDeep from 'lodash.clonedeep'
@@ -467,7 +470,7 @@ console.log(obj1.b.c) // -> 2
 console.log(obj2.b.c) // -> 3
 ```
 
-#### Transform An Object To Primitive Types
+#### Transform an Object to Primitive Types
 
 The object-to-primitive conversion is called automatically by many built-in
 functions and operators that expect a primitive as a value.
@@ -503,7 +506,7 @@ const obj = {
 }
 ```
 
-#### Object Wrappers For Primitive Types
+#### Object Wrappers for Primitive Types
 
 JavaScript has three primitive types that have corresponding object wrappers:
 
@@ -703,7 +706,7 @@ remove or replace elements in an array just in place.
   console.log(arr) // -> [1, 'a', 'b', 4, 5]
   ```
 
-#### Array-like Objects vs Iterable Objects
+#### Array-like Objects vs. Iterable Objects
 
 An array-like object is an object that has:
 
@@ -796,7 +799,7 @@ function userLogout(user) {
 
 ## Type Conversion
 
-### Explicitly Converting Anything To Number
+### Explicitly Converting Anything to Number
 
 In JavaScript, we have three ways to convert a value to a number explicitly:
 
@@ -931,7 +934,7 @@ console.log(a == b) // -> `true`! They are both converted to number `0`
 > I prefer to use `if (value == null)` instead of `if (value)`, because it's
 > more secure.
 
-## Advanced Working With Functions
+## Advanced Working with Functions
 
 ### Constructor Functions
 
@@ -994,7 +997,7 @@ function MyConstructor() {
 
 ### Closure
 
-#### What Is Closure?
+#### What is Closure?
 
 Closure is a function that remembers its outer variables (called **outer lexical
 environment**) and can access them even after the outer function has finished
@@ -1091,7 +1094,7 @@ function expression.
 
 ### `new Function` Syntax
 
-#### What Is `new Function`?
+#### What is `new Function`?
 
 There’s one more way to create a function. It’s rarely used, and not recommended
 (because it use `eval` under the hood), but it's still good to know.
@@ -1126,7 +1129,7 @@ arguments are the names for the function parameters.
 > unless you really know what you are doing and you can trust the source of the
 > function body.
 
-#### `new Function` Syntax With Closure
+#### `new Function` Syntax with Closure
 
 Usually, a function remembers the lexical environment where it was created. But
 when a function is created with `new Function`, it always uses the global
@@ -1164,7 +1167,7 @@ _dist/script.min.js_
 const a=1;const b=new Function("console.log(value)");b(); // ReferenceError: value is not defined
 ```
 
-### `this` And `func.call/apply/bind`
+### `this` and `func.call/apply/bind`
 
 As we all know, `this` is a special variable that refers to the context of the
 function call:
@@ -1242,11 +1245,11 @@ user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
 user.greetHello('!') // -> Hello, John!
 ```
 
-## Advanced Working With Objects
+## Advanced Working with Objects
 
 ### Property Flags (So Called Descriptors)
 
-#### What Are Property Flags?
+#### What are Property Flags?
 
 For [data properties](#accessor-properties), besides a value, have three special
 attributes (so-called "flags"):
@@ -1441,7 +1444,7 @@ console.log(JSON.stringify(descriptor, null, 2))
 > }
 > ```
 
-#### Clone Properties With Flags
+#### Clone Properties with Flags
 
 When we shallow clone an object with `Object.assign` or spread syntax
 `{ ...obj}`, only enumerable properties are copied, and the flags are not
@@ -1471,7 +1474,7 @@ console.log(JSON.stringify(descriptor, null, 2))
 } */
 ```
 
-#### Sealing An Object Globally
+#### Sealing an Object Globally
 
 Property descriptors work at the level of individual properties.
 
@@ -1497,7 +1500,7 @@ These methods are rarely used in practice, but good to know.
 
 ### Prototypes, Inheritance
 
-#### What Is Prototype?
+#### What is Prototype?
 
 JavaScript uses prototype to express inheritance.
 
@@ -1528,7 +1531,7 @@ Through this way, an object can "inherit" properties from its prototype.
 > Prototype can be only an object or `null`, set it to other types are not
 > allowed and will be ignored.
 
-#### `prototype` Property Of A Constructor Function
+#### `prototype` Property of a Constructor Function
 
 We know that constructor functions can be used to create objects:
 
@@ -1628,7 +1631,7 @@ others also keep methods in prototypes, we can access them through
 > These built-in prototypes can be modified, but change anything of them is a
 > bad idea, can lead to hard-to-debug errors.
 
-#### How To Access Prototype?
+#### How to Access Prototype?
 
 For modern JavaScript development, we shouldn't use `__proto__` to get or set
 the prototype of an object, they are in the Annex B of the ECMAScript
@@ -1643,7 +1646,7 @@ Now we have the following standard methods to work with prototypes:
 
 ## Classes
 
-### What Is Class?
+### What is Class?
 
 Actually, `class` in JavaScript is just a kind of `function`.
 
@@ -1732,7 +1735,7 @@ const User = class {
 Similar to [Named Function Expressions](#named-function-expression), class
 expressions may have a name, and it's visible inside the class only.
 
-### Getters/Setters And Dynamic Property Names
+### Getters/Setters and Dynamic Property Names
 
 Just like literal objects, classes may include
 [getters/setters](#accessor-properties),
@@ -1904,8 +1907,8 @@ Animal -- prototype --> Animal.prototype
                          dog = new Dog('Rex')
 ```
 
-We can see that `extends` keyword is used to set the `[[prototype]]` of the child class
-to the parent class.
+We can see that `extends` keyword is used to set the `[[prototype]]` of the
+child class to the parent class.
 
 So that's how inheritance works in JavaScript (static inheritance will be
 explained [later](#static-members)).
@@ -2499,7 +2502,7 @@ That's how static methods and fields are inherited.
 >   `Object.prototype`, so there’s no, for example, `keys()` static method in
 >   `Array` and `Date` classes.
 
-### Private And Protected Members
+### Private and Protected Members
 
 In JavaScript, we can use naming conventions (prefixing with an underscore "\_")
 to define protected members.
@@ -2552,7 +2555,7 @@ class User {
 }
 ```
 
-### Check Class Of Instance
+### Check Class of Instance
 
 As we all know, we can use `typeof` operator to check the type of a variable:
 
@@ -2740,7 +2743,7 @@ The essential parts are:
 
 ## Promises, Async/Await
 
-### Callbacks vs Promises
+### Callbacks vs. Promises
 
 In the past, JavaScript used callbacks to implement asynchronous programming,
 but it leads to "callback hell" and makes code hard to read.
@@ -2784,8 +2787,8 @@ loadScript(
 
 To solve this problem, JavaScript introduced `Promise`.
 
-By using `Promise`, we can flatten the nested callbacks structure we had before to chain
-the promises, making code more readable:
+By using `Promise`, we can flatten the nested callbacks structure we had before
+to chain the promises, making code more readable:
 
 ```js
 function loadScript(src) {
@@ -2826,7 +2829,7 @@ loadScript('/my/script.js')
   )
 ```
 
-### What Is Promise?
+### What is Promise?
 
 A promise has a constructor that takes a function called "executor", with two
 parameter functions: `resolve` and `reject`.
@@ -2844,7 +2847,7 @@ When we call `resolve` or `reject`, the state of the promise changes:
 > We can say that a promise is `settled` if it is either `fulfilled` or
 > `rejected`.
 
-### `then`, `catch` And `finally`
+### `then`, `catch` and `finally`
 
 Promise has two methods `then` and `catch` which can be used to spread the
 result to the next promise.
@@ -2901,7 +2904,8 @@ new Promise((resolve, reject) => {
 
 ### Promises Chaining
 
-We can call `then` method both **standalone** or **chained**, they are quite different.
+We can call `then` method both **standalone** or **chained**, they are quite
+different.
 
 ```js
 // This call three times on the same promise
@@ -3335,7 +3339,7 @@ means that `yield* gen` iterates over the generator `gen` and transparently
 forwards its yields outside. As if the values were yielded by the outer
 generator.
 
-### `yield` Is A Two-Way Street
+### `yield` is a Two-Way Street
 
 `yield` is a two-way street: It not only returns the result to the outside, but
 also can pass the value inside the generator.
@@ -3420,7 +3424,7 @@ naturally finishes.
 
 But it's good to know that it exists.
 
-### Async Generators And Iteration
+### Async Generators and Iteration
 
 For most practical applications, when we’d like to make an object that
 asynchronously generates a sequence of values, we can use an asynchronous

@@ -1,7 +1,7 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2025-11-18T16:15+08:00
+update: 2025-11-18T16:58+08:00
 lang: en
 duration: 4min
 type: blog+note
@@ -29,8 +29,9 @@ For the server-side, we have many package managers, like:
 
 In most cases, we use Node.js as the server-side runtime environment.
 
-NPM is the bundled package manager for Node.js, it is a good choice for legacy environments, such as Node.js 18 or
-lower, but for modern environments, I recommend using PNPM.
+NPM is the bundled package manager for Node.js, it is a good choice for legacy
+environments, such as Node.js 18 or lower, but for modern environments, I
+recommend using PNPM.
 
 PNPM has many advantages over NPM, like:
 
@@ -44,18 +45,20 @@ PNPM has many advantages over NPM, like:
 
 If you are using Bun or Deno, you may simply use the built-in package manager.
 
-## Handle the case of different package managers
+## Handle the Case of Different Package Managers
 
-Of course, everyone has their own preferences, so you may have to face the case of using different package managers in
-one project.
+Of course, everyone has their own preferences, so you may have to face the case
+of using different package managers in one project.
 
-[@antfu/ni](https://github.com/antfu-collective/ni) is a tool that can help us handle this case.
+[@antfu/ni](https://github.com/antfu-collective/ni) is a tool that can help us
+handle this case.
 
-### Dependency management
+### Dependency Management
 
 We can globally install `@antfu/ni` to handle the dependency management for us.
 
-In the project folder, we can use `ni` to use the right package manager to install the dependencies:
+In the project folder, we can use `ni` to use the right package manager to
+install the dependencies:
 
 ```sh
 npm i @antfu/ni -g
@@ -84,7 +87,8 @@ cd <project-folder>
 nd
 ```
 
-We can also use `ni`, `nun` to add/remove dependencies, the supported options are just like the `install` command of the package manager:
+We can also use `ni`, `nun` to add/remove dependencies, the supported options
+are just like the `install` command of the package manager:
 
 ```sh
 # Whatever package manager this project is using, `ni` will automatically choose the right one,
@@ -100,7 +104,7 @@ ni <dependency> [-g] [-D] [-E] ...
 nun <dependency> [-g] ...
 ```
 
-### Run scripts & commands
+### Run Scripts & Commands
 
 If we install it in our project, we can use `nr` to run the NPM scripts:
 
@@ -118,7 +122,8 @@ ni @antfu/ni -D
 }
 ```
 
-For monorepo, we can use `-r` option with `nr` to run the script of all sub-packages:
+For monorepo, we can use `-r` option with `nr` to run the script of all
+sub-packages:
 
 ```json
 {
@@ -128,7 +133,8 @@ For monorepo, we can use `-r` option with `nr` to run the script of all sub-pack
 }
 ```
 
-For change working directory to the sub-package, we can use `-C` option with `nr`:
+For change working directory to the sub-package, we can use `-C` option with
+`nr`:
 
 ```json
 {
@@ -168,15 +174,17 @@ na run <command>
   -> ...
 ```
 
-## Manage your own packages
+## Manage Your Own Packages
 
-If you are developing your own packages, you may want to publish them to the package registry.
+If you are developing your own packages, you may want to publish them to the
+package registry.
 
 > [!Note]
 >
-> Because I just use NPM and PNPM in my projects, the following commands are only tested on NPM and PNPM.
+> Because I just use NPM and PNPM in my projects, the following commands are
+> only tested on NPM and PNPM.
 
-### Login to the package registry
+### Login to the Package Registry
 
 ```sh
 na login
@@ -185,7 +193,7 @@ na login
   -> ...
 ```
 
-### Publish your package
+### Publish Your Package
 
 ```sh
 na publish
@@ -194,7 +202,7 @@ na publish
   -> ...
 ```
 
-### Unpublish your package
+### Unpublish Your Package
 
 ```sh
 na unpublish <package-name>
@@ -203,7 +211,7 @@ na unpublish <package-name>
   -> ...
 ```
 
-### Manage package version tags
+### Manage Package Version Tags
 
 Remove a version tag from a package:
 

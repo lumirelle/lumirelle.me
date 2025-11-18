@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Categorize Your Dependencies'
 date: 2025-11-01T16:06+08:00
-update: 2025-11-18T16:42+08:00
+update: 2025-11-18T16:58+08:00
 lang: en
 duration: 3min
 type: blog+note
@@ -97,7 +97,7 @@ catalogs:
 # ...
 ```
 
-## What's The Best Practice?
+## What's the Best Practice?
 
 The meaning of categorizing your dependencies is to simplify the dependency
 management, so we shouldn't spend a lot of time to categorize them clearly and
@@ -121,8 +121,8 @@ There are my personal opinions about the catalog names:
 
 The difference is caused by the usage scenarios for those dependencies:
 
-- **builders/bundlers and their plugins** are the ones who will modify the source code and produce
-  the final output, such as Vite, Webpack, TSDown, etc.
+- **builders/bundlers and their plugins** are the ones who will modify the
+  source code and produce the final output, such as Vite, Webpack, TSDown, etc.
 
   For frontend projects, the builder and related packages are a huge part of
   dependencies, which are worth to be categorized into a separate category.
@@ -138,7 +138,8 @@ The difference is caused by the usage scenarios for those dependencies:
 
   For library packages, I call them `prod` dependencies.
 
-- **inlined dependencies** and **documentation** are library-specific dependencies.
+- **inlined dependencies** and **documentation** are library-specific
+  dependencies.
 
   inlined dependencies are the ones that will be packed into the library package
   directly while building, and the users of the library package will not need to

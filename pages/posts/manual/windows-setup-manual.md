@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-11-18T16:47+08:00
+update: 2025-11-20T23:37+08:00
 lang: en
 duration: 8min
 type: blog+note
@@ -169,6 +169,8 @@ npm i corepack @antfu/ni @antfu/nip taze pnpm-patch-i bun -g
 npm i @sxzz/create esbuild -g
 # Version control helper
 npm i czg bumpp changelogithub -g
+# NeoVim plugin CLI
+npm i tree-sitter-cli -g
 # If you are still using Node.js < 18
 npm i @antfu/ni czg -g
 

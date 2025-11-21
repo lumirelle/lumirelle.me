@@ -79,83 +79,56 @@ const str: string = 'hello'
 console.log(str.toUpperCase())
 ```
 
-These wrappers are not meant to **be used directly**, like using `new
-String('hello')` in your code, they are used internally by the JavaScript engine
-to **provide methods on primitive values**.
+These wrappers are not meant to **be used directly**, they are object under the
+hood, and are designed to be used internally by the JavaScript engine to
+**provide methods on primitive values**.
 
 And there is nothing different in TypeScript: There are some types with the
 PascalCase name pattern to express the wrapper types of primitives, and they are
 not meant to **be used directly too**. They are used for similar purpose:
 **provide type support for methods on primitive values**.
 
-> [!Caution]
->
-> Below are just examples on how to get the wrapper types of primitives, you
-> should not use them in your code like that.
-
 - `String`
-  <!-- eslint-disable ts/no-wrapper-object-types, no-new-wrappers, unicorn/new-for-builtins -->
+  <!-- eslint-disable ts/no-wrapper-object-types -->
   ```ts
-  const str: String = new String('hello')
+  const strProto: String = String.prototype
   ```
 - `Number`
-  <!-- eslint-disable ts/no-wrapper-object-types, no-new-wrappers, unicorn/new-for-builtins -->
+  <!-- eslint-disable ts/no-wrapper-object-types -->
   ```ts
-  const num: Number = new Number(1)
+  const numProto: Number = Number.prototype
   ```
 - `BigInt`:
-  <!-- eslint-disable ts/no-wrapper-object-types, no-new-wrappers, unicorn/new-for-builtins -->
+  <!-- eslint-disable ts/no-wrapper-object-types -->
   ```ts
-  const big: BigInt = new BigInt(1)
+  const bigProto: BigInt = BigInt.prototype
   ```
 - `Boolean`:
-  <!-- eslint-disable ts/no-wrapper-object-types, no-new-wrappers, unicorn/new-for-builtins -->
+  <!-- eslint-disable ts/no-wrapper-object-types -->
   ```ts
-  const bool: Boolean = new Boolean(true)
+  const boolProto: Boolean = Boolean.prototype
   ```
 - `Symbol`:
-  <!-- eslint-disable ts/no-wrapper-object-types, no-new-wrappers, unicorn/new-for-builtins -->
+  <!-- eslint-disable ts/no-wrapper-object-types -->
   ```ts
-  const sym: Symbol = new Symbol('sym')
+  const symProto: Symbol = Symbol.prototype
   ```
 - `Object`:
-  <!-- eslint-disable ts/no-wrapper-object-types, no-new-wrappers, unicorn/new-for-builtins -->
+  <!-- eslint-disable ts/no-wrapper-object-types -->
   ```ts
-  const obj: Object = new Object({})
+  const objProto: Object = Object.prototype
   ```
 
-Something interesting is that you can assign a wrapper object to a variable with
-the primitive type directly:
-
-<!-- eslint-disable no-new-wrappers, unicorn/new-for-builtins -->
-
-```ts
-const str: string = new String('hello')
-const num: number = new Number(1)
-const big: bigint = new BigInt(1)
-const bool: boolean = new Boolean(true)
-const sym: symbol = new Symbol('sym')
-const obj: object = new Object({})
-```
-
-What? You are just assigning a object value to primitive type variable? 😨
-
-Actually, the reason is very simple: Calling methods on primitive values is a
-very common operation and a recommended behavior in JavaScript, as the designer
-of TypeScript, you want to provide a type that supports this behavior for
-compatibility, the only thing you can do is let `number` "inherit" from
-`Number`.
-
-Yes, `number` is inheriting from `Number` in technically, so you know what will
-happen.
-
-So, there is nothing strange at all, right? 🤣
-
-At the end, let's take a look at the type definition of `String` in TypeScript:
+At the end, let's take a look at the type definition of `String` in TypeScript,
+to learn more about the wrapper types:
 
 <!-- eslint-disable no-var, vars-on-top -->
 
 ```ts
+// @file: node_modules/typescript/lib/lib.es5.d.ts
+
+// ...
+
 /**
  * The type definition of `String` wrapper object
  */
@@ -182,20 +155,36 @@ interface StringConstructor {
    * The prototype of `StringConstructor` is `String` too...
    */
   readonly prototype: String
+
   // ...
 }
 
 /**
  * The type definition of global `String` we used everyday.
- *
- * @example
- *   // The `String` here is actually the `StringConstructor`
- *   String.fromCharCode(97)
  */
 declare var String: StringConstructor
+
+// ...
 ```
 
 ### Advanced Types
+
+#### More Clear Object Types
+
+Instead of using `object` type, you can use `{}` syntax to define an more clear
+object type:
+
+```ts
+const obj: {
+  a: number
+  b: string
+  c: boolean
+} = {
+  a: 1,
+  b: 'hello',
+  c: true,
+}
+```
 
 #### Array and Tuple
 
@@ -203,8 +192,9 @@ In TypeScript, we use the `Array` or `<type>[]` to define array types,
 and they are the same:
 
 ```ts
-const arr: Array<string> = ['a', 'b', 'c']
-const arr: string[] = ['a', 'b', 'c']
+const arr1: Array<string> = ['a', 'b', 'c']
+// or
+const arr2: string[] = ['a', 'b', 'c']
 ```
 
 And tuple is a special array type that is used to describe an array with a
@@ -262,59 +252,92 @@ without any problem:
 const fn: object = (a: number, b: number) => a + b
 ```
 
-#### Union
+#### Union and Intersection
 
 As we all know, JavaScript is a dynamic typing language, so one variable can be
-assigned to different types of values at different times.
+assigned to different types of values at different times. and when we try to get
+the value of the variable, the value can only be one of the types at one time.
 
-Just like the thing you done before, to support this behavior, you invented a
-type called "union", it uses the `|` operator to join multiple types:
+Just like the thing you done before, to support this behavior, you invented the
+**union** and **intersection**.
 
-```ts
-const a: number | string = 1
+Union sounds like "or", it means a type that satisfies any one of the types in
+it. You can use **`|` operator** to create a union type:
+
+```ts [twoslash]
+// @errors: 2322
+
+/**
+ * `number | string` means `number` or `string`
+ */
+let a: number | string = 1
 a = 'hello'
 a = 5
-a = true // Error: Type 'boolean' is not assignable to type 'number | string'
+a = true
+
+/**
+ * When we try to get the value of the variable,
+ * the value maybe `number` or `string`,
+ * so we need to use `typeof` to check the type of the value.
+ */
+if (typeof a === 'number') {
+  a.toFixed(2)
+}
+else if (typeof a === 'string') {
+  a.toUpperCase()
+}
 ```
 
-The role of union is just like it's name, a union of types, so that the variable
-can be assigned to a value with any of the types in the union.
+Naturally, there is also a type called **"never"**, it accepts no types:
 
-Union type in TypeScript has the same meaning as the mathematical union, so,
-naturally, there is also a type to express the "empty union", called "never", it
-refuses any type:
+```ts [twoslash]
+// @errors: 2322
 
-```ts
-const b: never = 1 // Error: Type 'number' is not assignable to type 'never'
-const c: never = 'hello' // Error: Type 'string' is not assignable to type 'never'
+const b: never = 1
+const c: never = 'hello'
 // ...
 ```
 
-Notice that, we are talking about the union of
-**the accaptable types of the variable**, not the actual value type it holds.
-They are different concepts:
+Intersection sounds like "and", it means a type that satisfies all the types in
+it. You can use **`&` operator (intersect operator)** to create a intersection
+type:
 
-- If the union is about the accaptable types:
-  - The variable can be assigned to a value with any of the types in the union.
-  - But when we try to get the value type, it can only be one of the types in
-    the union at one time.
-- If the union is about the actual value types:
-  - The variable should always be assigned to a value which satisfies all the types in the union.
-  - When we try to get the accaptable types, it can satisfies any of the types in the union.
+<!-- eslint-disable ts/consistent-type-definitions -->
 
-#### Intersection
+```ts [twoslash]
+// @errors: 2322
 
-We have union in TypeScript, so we also have intersection in TypeScript, it uses
-the `&` operator to join multiple types:
+/**
+ * `number & string` means a type that satisfies both `number` and `string`,
+ * which is `never`, because there is no type that can satisfy two different
+ * primitive types at the same time.
+ */
+let d: number & string = 1
+d = 1
+d = 'hello'
+d = true
 
-```ts
-const d: { a: number, b: string } & { a: number, c: boolean } = { a: 1, b: 'hello', c: true }
-console.log(d.a) // -> 1
-console.log(d.b) // -> 'hello'
-console.log(d.c) // -> true
+/**
+ * In this case, the type satisfies both `Type1` and `Type2`
+ * is `{ a: number, b: string, c: boolean }`.
+ */
+type Type1 = {
+  a: number
+  b: string
+}
+type Type2 = {
+  a: number
+  c: boolean
+}
+const a: Type1 & Type2 = {
+  a: 1,
+  b: 'hello',
+  c: true
+}
+a.a = 2
+a.b = 'world'
+a.c = false
 ```
-
-Intersection type in TypeScript has the same meaning as the mathematical intersection, so, naturally, there is also a type to express the "empty intersection", called "never", it accepts any type:
 
 ## Type Challenges
 

@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2025-11-18T10:28+08:00
+update: 2025-11-21T15:26+08:00
 lang: en
 duration: 2min
 type: blog+note
@@ -65,7 +65,7 @@ create
 
 And select the `Library` template in the startup prompt.
 
-![project-create-manual](/public/posts/project-create-manual.png)
+<img src="/posts/project-create-manual.png" alt="project-create-manual" style="width: 40%; height: auto;" />
 
 ## JS/TS Monorepo
 
@@ -78,7 +78,7 @@ create
 
 And select the `Monorepo` template in the startup prompt.
 
-![project-create-manual](/public/posts/project-create-manual.png)
+<img src="/posts/project-create-manual.png" alt="project-create-manual" style="width: 40%; height: auto;" />
 
 ## VS Code Extension
 
@@ -91,7 +91,7 @@ create
 
 And select the `VS Code` template in the startup prompt.
 
-![project-create-manual](/public/posts/project-create-manual.png)
+<img src="/posts/project-create-manual.png" alt="project-create-manual" style="width: 40%; height: auto;" />
 
 ## Vue
 
@@ -106,7 +106,7 @@ create
 
 And select the `Vitesse Lite` template in the startup prompt.
 
-![project-create-manual](/public/posts/project-create-manual.png)
+<img src="/posts/project-create-manual.png" alt="project-create-manual" style="width: 40%; height: auto;" />
 
 ### Vue CLI (Vue 3 + Webpack + JavaScript)
 
@@ -156,7 +156,7 @@ create
 
 And select the `Vitesse Nuxt` template in the startup prompt.
 
-![project-create-manual](/public/posts/project-create-manual.png)
+<img src="/posts/project-create-manual.png" alt="project-create-manual" style="width: 40%; height: auto;" />
 
 ### `create-nuxt-app` (Nuxt 2 + Webpack + JavaScript)
 

@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
-update: 2025-11-18T16:47+08:00
+update: 2025-11-21T15:26+08:00
 lang: en
 duration: 6min
 type: blog+note
@@ -153,7 +153,7 @@ import request from '@/utils/request.js'
 // [!code highlight:7]
 /**
  * "get${Data}" is used for endpoint function with "GET"
- method and "get" operation.
+ * method and "get" operation.
  */
 async function getUserInfo(params?: Record<string, any>) {
   return await request.get('/user/info', { params })
@@ -162,7 +162,7 @@ async function getUserInfo(params?: Record<string, any>) {
 // [!code highlight:7]
 /**
  * "create${Data}" is used for endpoint function with "POST"
- method and "create" operation.
+ * method and "create" operation.
  */
 async function createUserInfo(data: Record<string, any>) {
   return await request.post('/user/info', { data })
@@ -171,7 +171,7 @@ async function createUserInfo(data: Record<string, any>) {
 // [!code highlight:7]
 /**
  * "update${Data}" is used for endpoint function with "PUT"
- method and "update" operation.
+ * method and "update" operation.
  */
 async function updateUserInfo(data: Record<string, any>) {
   return await request.put('/user/info', { data })
@@ -180,7 +180,7 @@ async function updateUserInfo(data: Record<string, any>) {
 // [!code highlight:8]
 /**
  * "update${Data}${Attribute}" is used for endpoint function
-  with "PUT" method and "update" operation for specific
+ * with "PUT" method and "update" operation for specific
  * attribute.
  */
 async function updateUserInfoState(data: Record<string, any>) {
@@ -190,7 +190,7 @@ async function updateUserInfoState(data: Record<string, any>) {
 // [!code highlight:7]
 /**
  * "upsert${Data}" is used for endpoint function with "POST"
- method and "upsert" operation.
+ * method and "upsert" operation.
  */
 async function upsertUserInfo(data: Record<string, any>) {
   return await request.put('/user/info', { data })
@@ -199,7 +199,7 @@ async function upsertUserInfo(data: Record<string, any>) {
 // [!code highlight:7]
 /**
  * "delete${Data}" is used for endpoint function with "DELETE"
-  method and "delete" operation.
+ * method and "delete" operation.
  */
 async function deleteUserInfo(data: Record<string, any>) {
   return await request.delete('/user/info', { data })

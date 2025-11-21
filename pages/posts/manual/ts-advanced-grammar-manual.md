@@ -11,16 +11,19 @@ type: blog+note
 
 ## Introduction
 
+> [!Note]
+>
+> This manual hypothesizes that you have already read
+> [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual).
+
 TypeScript is a superset of JavaScript that adds static typing to the language.
 
 It's the main purpose of TypeScript, remember it and that will help you a lot.
 
-## Types in TypeScript
+## Types for JavaScript Basic Data Types
 
-### Types for JavaScript Data Types
-
-TypeScript has the following 8 types to express corresponding JavaScript data
-types:
+TypeScript has the following 8 types to express corresponding JavaScript basic
+data types:
 
 - `string`:
   ```ts
@@ -64,63 +67,76 @@ And they can be categorized as following:
 | Null      | `null`                                            |
 | Undefined | `undefined`                                       |
 
-### Wrapper Types for Primitives
+## Types for JavaScript Built-In Prototypes
 
-And as we all know, in JavaScript, when you call a method on a variable which
-stores a primitive value, the engine will automatically create a wrapper
-object for it temporarily, so that you can call methods on it:
+> [!Note]
+>
+> If you don't know what is `prototype`, please read
+> [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual#prototypes-inheritance)
+> for more details.
 
-```ts
-const str: string = 'hello'
-/**
- * At that moment, `'hello'` is automatically wrapped like `new String('hello')`
- * temporarily, so that you can call methods on it.
- */
-console.log(str.toUpperCase())
-```
+TypeScript also has some types to express corresponding JavaScript built-in
+prototypes:
 
-These wrappers are not meant to **be used directly**, they are object under the
-hood, and are designed to be used internally by the JavaScript engine to
-**provide methods on primitive values**.
+| Category            | JavaScript Built-In Prototype | TypeScript Type |
+| ------------------- | ----------------------------- | --------------- |
+| Primitive Wrapper   | `String.prototype`            | `String`        |
+| /                   | `Number.prototype`            | `Number`        |
+| /                   | `BigInt.prototype`            | `BigInt`        |
+| /                   | `Boolean.prototype`           | `Boolean`       |
+| /                   | `Symbol.prototype`            | `Symbol`        |
+| Top Level Prototype | `Object.prototype`            | `Object`        |
+| Data Structure      | `Array.prototype`             | `Array`         |
+| /                   | `Map.prototype`               | `Map`           |
+| /                   | `Set.prototype`               | `Set`           |
+| /                   | `Function.prototype`          | `Function`      |
+| /                   | `Date.prototype`              | `Date`          |
+| /                   | `RegExp.prototype`            | `RegExp`        |
+| Error               | `Error.prototype`             | `Error`         |
+| Promise             | `Promise.prototype`           | `Promise`       |
+| ...                 | ...                           | ...             |
 
-And there is nothing different in TypeScript: There are some types with the
-PascalCase name pattern to express the wrapper types of primitives, and they are
-not meant to **be used directly too**. They are used for similar purpose:
-**provide type support for methods on primitive values**.
-
-- `String`
-  <!-- eslint-disable ts/no-wrapper-object-types -->
-  ```ts
-  const strProto: String = String.prototype
-  ```
-- `Number`
-  <!-- eslint-disable ts/no-wrapper-object-types -->
-  ```ts
-  const numProto: Number = Number.prototype
-  ```
-- `BigInt`:
-  <!-- eslint-disable ts/no-wrapper-object-types -->
-  ```ts
-  const bigProto: BigInt = BigInt.prototype
-  ```
-- `Boolean`:
-  <!-- eslint-disable ts/no-wrapper-object-types -->
-  ```ts
-  const boolProto: Boolean = Boolean.prototype
-  ```
-- `Symbol`:
-  <!-- eslint-disable ts/no-wrapper-object-types -->
-  ```ts
-  const symProto: Symbol = Symbol.prototype
-  ```
-- `Object`:
-  <!-- eslint-disable ts/no-wrapper-object-types -->
-  ```ts
-  const objProto: Object = Object.prototype
-  ```
+> [!Note]
+>
+> As primitive wrapper objects are not meant to **be used directly** in
+> JavaScript, because they are only designed to be used internally by the
+> JavaScript engine to **support calling methods on primitive values**, and may
+> cause unexpected behavior:
+>
+> <!-- eslint-disable no-new-wrappers, unicorn/new-for-builtins -->
+>
+> ```ts
+> if (new Boolean(false)) {
+>   console.log('Boolean(false) is truthy') // This will be logged!
+> }
+> else {
+>   console.log('Boolean(false) is falsy')
+> }
+>
+> if (false) {
+>   console.log('false is truthy')
+> }
+> else {
+>   console.log('false is falsy') // This will be logged!
+> }
+> ```
+>
+> There is nothing different in TypeScript: The corresponding types of wrapper
+> objects for primitivesare not meant to **be used directly too**. They are
+> used for similar purpose:
+> **provide type support for methods on primitive values**.
+>
+> ```ts
+> const str: string = 'hello'
+> /**
+>  * A value of type `string` is automatically "inherited" from the wrapper type
+>  * `String`, so that you can get the definition of methods on it.
+>  */
+> console.log(str.toUpperCase())
+> ```
 
 At the end, let's take a look at the type definition of `String` in TypeScript,
-to learn more about the wrapper types:
+to learn more about them:
 
 <!-- eslint-disable no-var, vars-on-top -->
 
@@ -130,29 +146,32 @@ to learn more about the wrapper types:
 // ...
 
 /**
- * The type definition of `String` wrapper object
+ * The type definition of string wrapper object, also the type of global
+ * `String.prototype`.
  */
 interface String {
-  // ... Members of `String` wrapper object
+  // ... Members of `String.prototype`
 
   readonly [index: number]: string
+
+  // ...
 }
 
 /**
- * The type definition of the constructor of `String` wrapper object.
+ * The type definition of string wrapper constructor, also the global `String`.
  */
 interface StringConstructor {
   /**
-   * So `new String('hello')` will return `String`...
+   * So `new String('hello')` will return `String` type.
    */
   new (value?: any): String
   /**
-   * And, `String('hello')` will return primitive `string`,
-   * and now you know it inherits from `String` under the hood...
+   * And, `String('hello')` will return primitive `string` type.
    */
   (value?: any): string
   /**
-   * The prototype of `StringConstructor` is `String` too...
+   * `String.prototype` is the prototype of string wrapper object, it's
+   * `String` type.
    */
   readonly prototype: String
 
@@ -167,12 +186,13 @@ declare var String: StringConstructor
 // ...
 ```
 
-### Advanced Types
+## Object
 
-#### More Clear Object Types
+We know that everything except primitive values is object in JavaScript, so it's
+important to know how to define an object type in TypeScript.
 
-Instead of using `object` type, you can use `{}` syntax to define an more clear
-object type:
+Instead of using `object` type directly, you can use `{}` syntax to define an
+more clear object type, we call it **object type literal**:
 
 ```ts
 const obj: {
@@ -186,9 +206,11 @@ const obj: {
 }
 ```
 
-#### Array and Tuple
+## Array and Tuple
 
-In TypeScript, we use the `Array` or `<type>[]` to define array types,
+In TypeScript, we use the **`Array`** type (we mentioned it in
+[built-in prototypes](#types-for-javascript-built-in-prototypes) section before)
+or **`[]` (array type literal)** to define array types,
 and they are the same:
 
 ```ts
@@ -197,8 +219,9 @@ const arr1: Array<string> = ['a', 'b', 'c']
 const arr2: string[] = ['a', 'b', 'c']
 ```
 
-And tuple is a special array type that is used to describe an array with a
-**fixed length and element types**:
+And tuple is a special array type that is used to describe an array with
+**fixed length and element types**, we can create it by using
+**tuple type literal**:
 
 ```ts
 const tuple: [string, number, boolean] = ['a', 1, true]
@@ -228,11 +251,11 @@ const arr: object = ['a', 'b', 'c']
 
 Nothing magic!
 
-#### Function
+## Function
 
 In TypeScript, there are two ways to define function types, corresponding to the
-two ways to define functions in JavaScript: function declaration and function
-expression.
+two ways to define functions in JavaScript: **function declaration** and
+**function expression**.
 
 Just like other languages with static typing, the syntax is nothing special:
 
@@ -243,30 +266,30 @@ function fd(a: number, b: number): number {
 const fe: (a: number, b: number) => number = (a, b) => a + b
 ```
 
-Like array, function is also a kind of object in JavaScript (Actually,
-everything except primitive values is object in JavaScript, that's sounds like
-Java and some of other OOP languages, right? 😏), so you can do like this
-without any problem:
+Function declaration integrates types into the function declaration itself, and
+function expression uses **function type literal** to define the type.
+
+Like array, function is also a kind of object in JavaScript, so you can do like
+this without any problem:
 
 ```ts
 const fn: object = (a: number, b: number) => a + b
 ```
 
-#### Union and Intersection
+## Union and Intersection
 
 As we all know, JavaScript is a dynamic typing language, so one variable can be
 assigned to different types of values at different times. and when we try to get
 the value of the variable, the value can only be one of the types at one time.
 
-Just like the thing you done before, to support this behavior, you invented the
-**union** and **intersection**.
+As the smart designer of TypeScript,in order to support this behavior, you
+invented the **union** and **intersection** types.
 
-Union sounds like "or", it means a type that satisfies any one of the types in
-it. You can use **`|` operator** to create a union type:
+Union likes "or", it standard for **a type that satisfies any one of the types** in
+it. You can use **`|` operator (union operator)** to create a union type:
 
 ```ts [twoslash]
 // @errors: 2322
-
 /**
  * `number | string` means `number` or `string`
  */
@@ -292,13 +315,20 @@ Naturally, there is also a type called **"never"**, it accepts no types:
 
 ```ts [twoslash]
 // @errors: 2322
-
-const b: never = 1
-const c: never = 'hello'
+const a: never = 1
+const b: never = 'hello'
 // ...
 ```
 
-Intersection sounds like "and", it means a type that satisfies all the types in
+And, there is also a type called **"any"**, it accepts any types:
+
+```ts [twoslash]
+const a: any = 1
+const b: any = 'hello'
+// ...
+```
+
+Intersection likes "and", it standard for **a type that satisfies all the types** in
 it. You can use **`&` operator (intersect operator)** to create a intersection
 type:
 
@@ -306,7 +336,6 @@ type:
 
 ```ts [twoslash]
 // @errors: 2322
-
 /**
  * `number & string` means a type that satisfies both `number` and `string`,
  * which is `never`, because there is no type that can satisfy two different
@@ -337,6 +366,76 @@ const a: Type1 & Type2 = {
 a.a = 2
 a.b = 'world'
 a.c = false
+```
+
+## Custom Types/Interfaces
+
+You may already notice that, we can use `type` keyword to define a custom type:
+
+<!-- eslint-disable ts/consistent-type-definitions -->
+
+```ts
+type NumberOrString = number | string
+type CustomObject = {
+  a: number
+  b: string
+  c: boolean
+}
+```
+
+And `interface` is a better way to define a custom object type literal:
+
+```ts
+interface CustomObject {
+  a: number
+  b: string
+  c: boolean
+}
+```
+
+Then use them in your code:
+
+```ts [twoslash]
+// @errors: 2322
+type NumberOrString = number | string
+// ---cut---
+let numOrString: NumberOrString = 1
+numOrString = 'hello'
+numOrString = true
+```
+
+These two are very important things in TypeScript, through them, you can create
+your own utility types, for better type development, like:
+
+```ts
+type Nullable<T> = T | null | undefined
+
+// Before:
+const a1: number | null | undefined = 1
+
+// After:
+const a2: Nullable<number> = 1
+```
+
+## Built-in Utility Types
+
+See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+for more details.
+
+## `keyof` Operator
+
+The `keyof` operator is used to get the union of all the keys of an object type:
+
+<!-- eslint-disable ts/consistent-type-definitions -->
+
+```ts [twoslash]
+type ObjectType = {
+  a: number
+  b: string
+  c: boolean
+}
+type ObjectKeys = keyof ObjectType & {}
+//    ^?
 ```
 
 ## Type Challenges

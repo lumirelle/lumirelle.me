@@ -1,13 +1,18 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2025-11-18T16:55+08:00
+update: 2025-11-24T18:08+08:00
 lang: en
-duration: 68min
+duration: 69min
 type: blog+note
 ---
 
 [[toc]]
+
+> [!Note]
+>
+> This manual hypothesizes that you have already know the basic of JavaScript or
+> other programming languages.
 
 ## Code Style
 
@@ -254,6 +259,29 @@ This kind of tolerance is the most intolerable thing for us with `var`!
 ## Data Types
 
 ### Object
+
+Like other OOP languages, everything except primitive values in JavaScript is an
+object.
+
+```js
+const obj = {}
+console.log(obj instanceof Object) // -> true
+```
+
+```js
+const date = new Date()
+console.log(date instanceof Object) // -> true
+```
+
+```js
+const arr = [1, 2, 3]
+console.log(arr instanceof Object) // -> true
+```
+
+```js
+function func() {}
+console.log(func instanceof Object) // -> true
+```
 
 #### Keys (Property Names) of an Object
 
@@ -934,317 +962,6 @@ console.log(a == b) // -> `true`! They are both converted to number `0`
 > I prefer to use `if (value == null)` instead of `if (value)`, because it's
 > more secure.
 
-## Advanced Working with Functions
-
-### Constructor Functions
-
-A constructor function is a regular function that is used to create objects. It
-should be called with the `new` keyword.
-
-Calling a constructor function with `new` and without `new` can have completely
-different behavior:
-
-- With `new`: A new object is created, and `this` inside the constructor points
-  to that new object. If the constructor does not explicitly return an object,
-  the new object is returned by default.
-
-  In other words, `new MyConstructor(...)` does something like:
-
-  ```js
-  function MyConstructor() {
-    // this = {} (implicitly)
-
-    this.value = 42
-
-    // return this (implicitly)
-  }
-  const obj1 = new MyConstructor()
-  ```
-
-- Without `new`: The constructor function is called as a regular function, and
-  `this` inside the function points to the global object (or `undefined` in
-  strict mode). The return value of the function is returned directly.
-
-  In other words, `MyConstructor(...)` does something like:
-
-  ```js
-  function MyConstructor() {
-    this.value = 42
-
-    // return (implicitly)
-  }
-  const obj2 = MyConstructor() // obj2 === undefined
-  ```
-
-We can use `new.target` to determine whether a function is called with `new` or
-not, so that we can limit the usage of a our functions:
-
-```js
-function MyConstructor() {
-  // If `new.target` is `undefined`, it means the function is called without `new`,
-  // otherwise, it is called with `new`.
-  if (!new.target) {
-    throw new Error('MyConstructor() must be called with new')
-  }
-  this.value = 42
-}
-```
-
-> [!Note]
->
-> There is a special case called "derived constructor", which will not create a
-> new object itself, but the "parent constructor".
-
-### Closure
-
-#### What is Closure?
-
-Closure is a function that remembers its outer variables (called **outer lexical
-environment**) and can access them even after the outer function has finished
-executing.
-
-In JavaScript, every function has a hidden property `[[Environment]]`, which is
-a reference to the lexical environment where the function was created (there is
-only one exception, it uses global lexical environment which is to be covered in
-[`new Function` syntax](#new-function-syntax-with-closure)), so we can say that
-all functions are closures in JavaScript.
-
-See https://javascript.info/closure for the theory and implementation details of
-closure in JavaScript.
-
-#### Garbage Collection
-
-Usually, a lexical environment is removed from memory with all the variables
-after the function call finishes. That’s because there are no references to it.
-As any JavaScript object, it’s only kept in memory while it’s reachable.
-
-However, if there’s a nested function that is still reachable after the end of a
-function, then it has `[[Environment]]` property that references the lexical
-environment, so the lexical environment is still reachable even after the
-function call finishes.
-
-> [!Note]
->
-> An important side effect in V8 engine (Chrome, Edge, Opera...) is that such
-> variable will be optimized while debugging:
->
-> <!-- eslint-disable no-debugger -->
->
-> ```js
-> function f() {
->   const value = Math.random()
->
->   function g() {
->     debugger // In console, after you typing `console.log(value)`, you will get `No such variable`!
->   }
->
->   return g
-> }
->
-> const g = f()
-> g()
-> ```
->
-> As you could see, there is no such variable! In theory, it should be
-> accessible, but the engine optimized it out.
-
-### Named Function Expression
-
-A named function expression is a function expression that has a name. The name
-is **only accessible within the function itself**.
-
-So why do we need it? For instance, when we want to create a recursive function
-expression:
-
-<!-- eslint-disable antfu/top-level-function -->
-
-```js
-const doFact = function fact(n) {
-  if (n <= 1)
-    return 1
-  return n * fact(n - 1) // Use `fact` to call itself
-}
-```
-
-You may think we can use `doFact` to call itself, but that will not work if we
-reassign `doFact` to other value:
-
-<!-- eslint-disable antfu/top-level-function -->
-
-```js
-let doFact = function fact(n) {
-  if (n <= 1)
-    return 1
-  return n * doFact(n - 1) // Use `doFact` to call itself
-}
-
-const anotherFact = doFact
-doFact = null // Reassign `doFact` to `null`
-
-console.log(anotherFact(5)) // -> TypeError: doFact is not a function
-```
-
-That happens because the function takes `doFact` from the outer lexical
-environment, and it can be changed by other code. That's why we need named
-function expression.
-
-> [!Note]
->
-> This "internal name" features is only available for **function expressions**.
-
-### `new Function` Syntax
-
-#### What is `new Function`?
-
-There’s one more way to create a function. It’s rarely used, and not recommended
-(because it use `eval` under the hood), but it's still good to know.
-
-<!-- eslint-disable no-new-func -->
-
-```js
-// new Function ([arg1, arg2, ...argN], functionBody)
-const sum = new Function('a', 'b', 'return a + b')
-console.log(sum(1, 2)) // -> 3
-```
-
-The last argument of `new Function` is the function body, and the previous
-arguments are the names for the function parameters.
-
-> [!Caution]
->
-> Through `new Function`, we can create functions dynamically, for instance,
-> from a string received from a server:
->
-> <!-- eslint-disable no-new-func -->
->
-> ```js
-> const res = await fetch('/api/function-body').then(res => res.text())
->
-> const func = new Function('a', 'b', res)
-> func(1, 2)
-> ```
->
-> But it's **really really really dangerous**, because the function body may
-> contain malicious code, and it will be executed directly. So, never do this
-> unless you really know what you are doing and you can trust the source of the
-> function body.
-
-#### `new Function` Syntax with Closure
-
-Usually, a function remembers the lexical environment where it was created. But
-when a function is created with `new Function`, it always uses the global
-lexical environment as `[[Environment]]`. So it can’t access outer variables,
-only global ones.
-
-What if it could access outer variables?
-
-The problem is that before JavaScript is published to production, we may
-compressed the source code using a minifier, a special program that shrinks code
-by removing extra comments, spaces and what’s important: renames local variables
-into shorter ones. So if `new Function` had access to outer variables, it would
-be unable to find them after minification:
-
-For instance, we have a source code like this:
-
-_src/script.js_
-
-<!-- eslint-disable no-new-func -->
-
-```js
-const value = 1
-
-const func = new Function('console.log(value)') // It seems works
-func()
-```
-
-After minification, it may become:
-
-_dist/script.min.js_
-
-<!-- eslint-skip -->
-
-```js
-const a=1;const b=new Function("console.log(value)");b(); // ReferenceError: value is not defined
-```
-
-### `this` and `func.call/apply/bind`
-
-As we all know, `this` is a special variable that refers to the context of the
-function call:
-
-- For a constructor function, `this` refers to the newly created object.
-- For a method, `this` refers to the object that the method is called on.
-- For a regular function, `this` refers to the global object (or `undefined` in
-  strict mode).
-- For an arrow function, `this` refers to the `this` of the outer lexical
-  environment.
-
-And we can use `func.call/apply/bind` to call a function with a specific `this`
-value and arguments.
-
-#### `func.call/apply`
-
-The only difference between `func.call` and `func.apply` is how to pass
-arguments to the function. `func.call` accepts arguments **as rest parameters**,
-while `func.apply` accepts arguments **as an array**.
-
-- `func.call(thisArg, arg1, arg2, ...)`
-- `func.apply(thisArg, [argsArray])`
-
-They can be used to change the `this` value of a function call for one-time:
-
-```js
-function greet(greeting, punctuation) {
-  console.log(`${greeting}, ${this.name}${punctuation}`)
-}
-
-const user1 = { name: 'John' }
-const user2 = { name: 'Jane' }
-greet.call(user1, 'Hello', '!') // -> Hello, John!
-greet.apply(user2, ['Hi', '.']) // -> Hi, Jane.
-```
-
-#### `func.bind`
-
-If you want to create a new function with a specific `this` value and arguments,
-you can use `func.bind`:
-
-- `func.bind(thisArg, arg1, arg2, ...)`
-
-For instance:
-
-```js
-function greet(greeting, punctuation) {
-  console.log(`${greeting}, ${this.name}${punctuation}`)
-}
-const user = { name: 'John' }
-
-// Create a new function with `this` set to `user` and first argument set to 'Hello',
-// Now, the new function only needs one argument.
-const greetUser = greet.bind(user, 'Hello')
-greetUser('!') // -> Hello, John!
-```
-
-If you want to create a function that is bound to a specific argument and left
-`this` unchanged, you can use this simple workaround:
-
-```js
-function partial(func, ...argsBound) {
-  return function (...args) { // This returns a new function, and passes `this` correctly
-    return func.call(this, ...argsBound, ...args)
-  }
-}
-
-const user = {
-  name: 'John',
-  greet(greeting, punctuation) {
-    console.log(`${greeting}, ${this.name}${punctuation}`)
-  }
-}
-user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
-user.greetHello('!') // -> Hello, John!
-```
-
 ## Advanced Working with Objects
 
 ### Property Flags (So Called Descriptors)
@@ -1643,6 +1360,379 @@ Now we have the following standard methods to work with prototypes:
 - `Object.setPrototypeOf(obj, proto)` – sets the prototype of `obj` to `proto`.
 - `Object.create(proto, [descriptors])` – creates a new object with the
   specified prototype and property descriptors.
+
+## Advanced Working with Functions
+
+### Constructor Functions
+
+A constructor function is a regular function that is used to create objects. It
+should be called with the `new` keyword.
+
+Calling a constructor function with `new` and without `new` can have completely
+different behavior:
+
+- With `new`: A new object is created, and `this` inside the constructor points
+  to that new object. If the constructor does not explicitly return an object,
+  the new object is returned by default.
+
+  In other words, `new MyConstructor(...)` does something like:
+
+  ```js
+  function MyConstructor() {
+    // this = {} (implicitly)
+
+    this.value = 42
+
+    // return this (implicitly)
+  }
+  const obj1 = new MyConstructor()
+  ```
+
+- Without `new`: The constructor function is called as a regular function, and
+  `this` inside the function points to the global object (or `undefined` in
+  strict mode). The return value of the function is returned directly.
+
+  In other words, `MyConstructor(...)` does something like:
+
+  ```js
+  function MyConstructor() {
+    this.value = 42
+
+    // return (implicitly)
+  }
+  const obj2 = MyConstructor() // obj2 === undefined
+  ```
+
+We can use `new.target` to determine whether a function is called with `new` or
+not, so that we can limit the usage of a our functions:
+
+```js
+function MyConstructor() {
+  // If `new.target` is `undefined`, it means the function is called without `new`,
+  // otherwise, it is called with `new`.
+  if (!new.target) {
+    throw new Error('MyConstructor() must be called with new')
+  }
+  this.value = 42
+}
+```
+
+> [!Note]
+>
+> There is a special case called "derived constructor", which will not create a
+> new object itself, but the "parent constructor".
+
+### Closure
+
+#### What is Closure?
+
+Closure is a function that remembers its outer variables (called
+**outer lexical environment**) and can access them even after the outer
+function has finished executing.
+
+In JavaScript, every function has a hidden property `[[Environment]]`, which is
+a reference to the lexical environment where the function was created (there is
+only one exception, it uses global lexical environment which is to be covered in
+[`new Function` syntax](#new-function-syntax-with-closure)), so we can say that
+all functions are closures in JavaScript.
+
+See https://javascript.info/closure for the theory and implementation details of
+closure in JavaScript.
+
+#### Garbage Collection
+
+Usually, a lexical environment is removed from memory with all the variables
+after the function call finishes. That’s because there are no references to it.
+As any JavaScript object, it’s only kept in memory while it’s reachable.
+
+However, if there’s a nested function that is still reachable after the end of a
+function, then it has `[[Environment]]` property that references the lexical
+environment, so the lexical environment is still reachable even after the
+function call finishes.
+
+> [!Note]
+>
+> An important side effect in V8 engine (Chrome, Edge, Opera...) is that such
+> variable will be optimized while debugging:
+>
+> <!-- eslint-disable no-debugger -->
+>
+> ```js
+> function f() {
+>   const value = Math.random()
+>
+>   function g() {
+>     debugger // In console, after you typing `console.log(value)`, you will get `No such variable`!
+>   }
+>
+>   return g
+> }
+>
+> const g = f()
+> g()
+> ```
+>
+> As you could see, there is no such variable! In theory, it should be
+> accessible, but the engine optimized it out.
+
+### Function Expression
+
+A function expression is a way to define a function as a value. It's similar to
+a function declaration, but it's not hoisted.
+
+<!-- eslint-disable antfu/top-level-function -->
+
+```js
+const func = function (a, b) {
+  return a + b
+}
+console.log(func(1, 2)) // -> 3
+```
+
+### Named Function Expression
+
+A named function expression is a function expression that has a name. The name
+is **only accessible within the function itself**.
+
+So why do we need it? For instance, when we want to create a recursive function
+expression:
+
+<!-- eslint-disable antfu/top-level-function -->
+
+```js
+const doFact = function fact(n) {
+  if (n <= 1)
+    return 1
+  return n * fact(n - 1) // Use `fact` to call itself
+}
+```
+
+You may think we can use `doFact` to call itself, but that will not work if we
+reassign `doFact` to other value:
+
+<!-- eslint-disable antfu/top-level-function -->
+
+```js
+let doFact = function fact(n) {
+  if (n <= 1)
+    return 1
+  return n * doFact(n - 1) // Use `doFact` to call itself
+}
+
+const anotherFact = doFact
+doFact = null // Reassign `doFact` to `null`
+
+console.log(anotherFact(5)) // -> TypeError: doFact is not a function
+```
+
+That happens because the function takes `doFact` from the outer lexical
+environment, and it can be changed by other code. That's why we need named
+function expression.
+
+> [!Note]
+>
+> This "internal name" features is only available for **function expressions**.
+
+### Arrow Functions
+
+An arrow function is a function expression that is defined with the `=>` syntax.
+
+```js
+const func = (a, b) => a + b
+console.log(func(1, 2)) // -> 3
+```
+
+Arrow functions is quite different from regular function and function
+expression: Arrow functions don't have `this`, `arguments`, `super`, and
+`new.target`, it's always bound to the outer lexical environment where the arrow
+function was created.
+
+So, if you want to use shareable constructor function, you should use function
+expression instead of arrow function.
+
+<!-- eslint-skip -->
+
+```js
+const Fun1 = function (value) {
+  if (new.target) {
+    return new Number(value)
+  }
+  else {
+    return value
+  }
+}
+const value1 = Fun1(1)
+console.log(typeof value1) // -> 'number'
+const value2 = new Fun1(1)
+console.log(typeof value2) // -> 'object'
+
+const Fun2 = (value) => {
+  // Error: `new.target` can only be used in functions or class properties.
+  if (new.target) {
+    return new Number(value)
+  }
+  else {
+    return value
+  }
+}
+const value3 = Fun2(1)
+console.log(typeof value3) // -> 'number'
+const value4 = new Fun2(1)
+console.log(typeof value4) // -> 'object'
+```
+
+### `new Function` Syntax
+
+#### What is `new Function`?
+
+There’s one more way to create a function. It’s rarely used, and not recommended
+(because it use `eval` under the hood), but it's still good to know.
+
+<!-- eslint-disable no-new-func -->
+
+```js
+// new Function ([arg1, arg2, ...argN], functionBody)
+const sum = new Function('a', 'b', 'return a + b')
+console.log(sum(1, 2)) // -> 3
+```
+
+The last argument of `new Function` is the function body, and the previous
+arguments are the names for the function parameters.
+
+> [!Caution]
+>
+> Through `new Function`, we can create functions dynamically, for instance,
+> from a string received from a server:
+>
+> <!-- eslint-disable no-new-func -->
+>
+> ```js
+> const res = await fetch('/api/function-body').then(res => res.text())
+>
+> const func = new Function('a', 'b', res)
+> func(1, 2)
+> ```
+>
+> But it's **really really really dangerous**, because the function body may
+> contain malicious code, and it will be executed directly. So, never do this
+> unless you really know what you are doing and you can trust the source of the
+> function body.
+
+#### `new Function` Syntax with Closure
+
+Usually, a function remembers the lexical environment where it was created. But
+when a function is created with `new Function`, it always uses the global
+lexical environment as `[[Environment]]`. So it can’t access outer variables,
+only global ones.
+
+What if it could access outer variables?
+
+The problem is that before JavaScript is published to production, we may
+compressed the source code using a minifier, a special program that shrinks code
+by removing extra comments, spaces and what’s important: renames local variables
+into shorter ones. So if `new Function` had access to outer variables, it would
+be unable to find them after minification:
+
+For instance, we have a source code like this:
+
+_src/script.js_
+
+<!-- eslint-disable no-new-func -->
+
+```js
+const value = 1
+
+const func = new Function('console.log(value)') // It seems works
+func()
+```
+
+After minification, it may become:
+
+_dist/script.min.js_
+
+<!-- eslint-skip -->
+
+```js
+const a=1;const b=new Function("console.log(value)");b(); // ReferenceError: value is not defined
+```
+
+### `this` and `func.call/apply/bind`
+
+As we all know, `this` is a special variable that refers to the context of the
+function call:
+
+- For a constructor function, `this` refers to the newly created object.
+- For a method, `this` refers to the object that the method is called on.
+- For a regular function, `this` refers to the global object (or `undefined` in
+  strict mode).
+- For an arrow function, `this` refers to the `this` of the outer lexical
+  environment.
+
+And we can use `func.call/apply/bind` to call a function with a specific `this`
+value and arguments.
+
+#### `func.call/apply`
+
+The only difference between `func.call` and `func.apply` is how to pass
+arguments to the function. `func.call` accepts arguments **as rest parameters**,
+while `func.apply` accepts arguments **as an array**.
+
+- `func.call(thisArg, arg1, arg2, ...)`
+- `func.apply(thisArg, [argsArray])`
+
+They can be used to change the `this` value of a function call for one-time:
+
+```js
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`)
+}
+
+const user1 = { name: 'John' }
+const user2 = { name: 'Jane' }
+greet.call(user1, 'Hello', '!') // -> Hello, John!
+greet.apply(user2, ['Hi', '.']) // -> Hi, Jane.
+```
+
+#### `func.bind`
+
+If you want to create a new function with a specific `this` value and arguments,
+you can use `func.bind`:
+
+- `func.bind(thisArg, arg1, arg2, ...)`
+
+For instance:
+
+```js
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`)
+}
+const user = { name: 'John' }
+
+// Create a new function with `this` set to `user` and first argument set to 'Hello',
+// Now, the new function only needs one argument.
+const greetUser = greet.bind(user, 'Hello')
+greetUser('!') // -> Hello, John!
+```
+
+If you want to create a function that is bound to a specific argument and left
+`this` unchanged, you can use this simple workaround:
+
+```js
+function partial(func, ...argsBound) {
+  return function (...args) { // This returns a new function, and passes `this` correctly
+    return func.call(this, ...argsBound, ...args)
+  }
+}
+
+const user = {
+  name: 'John',
+  greet(greeting, punctuation) {
+    console.log(`${greeting}, ${this.name}${punctuation}`)
+  }
+}
+user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
+user.greetHello('!') // -> Hello, John!
+```
 
 ## Classes
 

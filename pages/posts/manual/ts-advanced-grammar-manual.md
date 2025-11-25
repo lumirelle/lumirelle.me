@@ -1,9 +1,9 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2025-11-18T17:16+08:00
+update: 2025-11-25T10:30+08:00
 lang: en
-duration: 0min
+duration: 28min
 type: blog+note
 ---
 
@@ -234,6 +234,23 @@ And, there is also a type called **"any"**, it accepts any types:
 ```ts
 const a: any = 1
 const b: any = 'hello'
+```
+
+**unknown** is a type that is more strict than `any`, it accepts any types, but
+you can't do anything with it, you need to check the type first:
+
+```ts [twoslash]
+// @errors: 18046
+const a: unknown = 1
+
+a.toFixed(2)
+
+if (typeof a === 'number') {
+  a.toFixed(2)
+}
+else if (typeof a === 'string') {
+  a.toUpperCase()
+}
 ```
 
 Intersection likes "and", it standard for **a type that satisfies all the types** in
@@ -523,7 +540,8 @@ to understand.
 
 `type` vs. `interface`:
 
-- Extending: Both can be extended, but interfaces support declaration merging.
+- Extending: Both can be extended, but interfaces support
+  [declaration merging](#declaration-merging).
 - Unions/Intersections: Only type aliases support union and intersection types.
 - Implements: Classes can implement either.
 - Recommendation: Use interface for objects, type for everything else.
@@ -982,6 +1000,245 @@ class Dog extends Animal {
 > }
 > ```
 
+## Decorators
+
+Decorators provide a way to add both annotations and a meta-programming syntax
+for class declarations and members (Like annotations in Java).
+
+To enable experimental support for decorators, you must enable the
+`experimentalDecorators` compiler option (typescript@^5.0.0):
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}
+```
+
+A Decorator is a special function that can be attached to a
+**class declaration**, **method**, **accessor**, **property**, or **parameter**.
+
+Decorators use the form `@expression`, where `expression` must evaluate to a
+function that will be called at runtime with information about the decorated
+declaration.
+
+For example:
+
+```ts
+function logClass(constructor: new (...args: any[]) => any) {
+  console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
+}
+
+@logClass
+class UserService {
+  getUsers() {
+    return ['Alice', 'Bob', 'Charlie']
+  }
+}
+
+// When the code is loaded, the `logClass` function will be called with the
+// `UserService` class constructor
+```
+
+### Decorator Factories
+
+A decorator factory is a function that returns a decorator.
+
+```ts
+function logMethod(message: string) {
+  return function (constructor: new (...args: any[]) => any) { // [!code highlight:3]
+    console.log(message)
+  }
+}
+
+@logMethod('Method getUsers was called')
+class UserService {
+  getUsers() {
+    return ['Alice', 'Bob', 'Charlie']
+  }
+}
+```
+
+### Class Decorators
+
+The class decorator is applied to the constructor of the class and can be used
+to observe, modify, or replace a class definition.
+
+```ts
+// [!code highlight:4]
+function sealed(constructor: new (...args: any[]) => any) {
+  Object.seal(constructor)
+  Object.seal(constructor.prototype)
+}
+
+// [!code highlight:1]
+@sealed
+class BugReport {
+  type = 'report'
+  title: string
+
+  constructor(t: string) {
+    this.title = t
+  }
+}
+
+// [!code highlight:1]
+BugReport.prototype.newMethod = function () {}
+```
+
+### Method Decorators
+
+The method decorator is applied to the property descriptor for the method, and
+can be used to observe, modify, or replace a method definition.
+
+```ts
+// [!code highlight:11]
+function measureTime(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value
+  descriptor.value = function (...args: any[]) {
+    const start = performance.now()
+    const result = originalMethod.apply(this, args)
+    const end = performance.now()
+    console.info(`${propertyKey} executed in ${(end - start).toFixed(2)}ms`)
+    return result
+  }
+  return descriptor
+}
+
+class DataProcessor {
+  // [!code highlight:1]
+  @measureTime
+  processData(data: number[]): number[] {
+    for (let i = 0; i < 100000000; i++) { /* processing */ }
+    return data.map(x => x * 2)
+  }
+}
+
+// [!code highlight:2]
+const processor = new DataProcessor()
+processor.processData([1, 2, 3, 4, 5])
+```
+
+### Property Decorators
+
+The property decorator is applied to the property of the class, and can be used
+to observe, modify, or replace a property definition.
+
+We can use metadata to record information about the property, as in the
+following example:
+
+```ts
+import 'reflect-metadata'
+
+// [!code highlight:7]
+const formatMetadataKey = Symbol('format')
+function format(formatString: string) {
+  return Reflect.metadata(formatMetadataKey, formatString)
+}
+function getFormat(target: any, propertyKey: string) {
+  return Reflect.getMetadata(formatMetadataKey, target, propertyKey)
+}
+
+class Greeter {
+  // [!code highlight:1]
+  @format('Hello, %s')
+  greeting: string
+
+  constructor(message: string) {
+    this.greeting = message
+  }
+
+  greet() {
+    // [!code highlight:1]
+    const formatString = getFormat(this, 'greeting')
+    return formatString.replace('%s', this.greeting)
+  }
+}
+```
+
+### Constructor/Method Parameter Decorators
+
+The parameter decorator is applied to the function for a class constructor or
+method declaration.
+
+```ts
+import 'reflect-metadata'
+
+// [!code highlight:33]
+const requiredMetadataKey = Symbol('required')
+function required(
+  target: object,
+  propertyKey: string | symbol,
+  parameterIndex: number
+) {
+  const requiredParameters: number[]
+    = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) ?? []
+  requiredParameters.push(parameterIndex)
+  Reflect.defineMetadata(
+    requiredMetadataKey,
+    requiredParameters,
+    target,
+    propertyKey
+  )
+}
+function validate(
+  target: any,
+  propertyName: string,
+  descriptor: TypedPropertyDescriptor<(...args: any[]) => any>
+) {
+  const method = descriptor.value!
+  descriptor.value = function () {
+    const requiredParameters: number[]
+      = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName) ?? []
+    for (const parameterIndex of requiredParameters) {
+      if (parameterIndex >= arguments.length || arguments[parameterIndex] === undefined) {
+        throw new Error('Missing required argument.')
+      }
+    }
+    return method.apply(this, arguments)
+  }
+}
+
+class BugReport {
+  type = 'report'
+  title: string
+
+  constructor(t: string) {
+    this.title = t
+  }
+
+  // [!code highlight:2]
+  @validate
+  print(@required verbose: boolean) {
+    if (verbose) {
+      return `type: ${this.type}\ntitle: ${this.title}`
+    }
+    else {
+      return this.title
+    }
+  }
+}
+```
+
+### Metadata
+
+Some examples use the `reflect-metadata` library which adds a polyfill for an
+experimental metadata API. This library is not yet part of the ECMAScript
+(JavaScript) standard. However, once decorators are officially adopted as part
+of the ECMAScript standard, these extensions will be proposed for adoption.
+
+Before that, you need to install this library via npm:
+
+```sh
+npm i reflect-metadata --save
+```
+
+## JSDoc
+
+See [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for
+more examples.
+
 ## Custom Types
 
 You may already notice that, we can use `type` keyword to define a custom type:
@@ -1300,6 +1557,127 @@ type Config = EventConfig<SquareEvent | CircleEvent>
 
 // ...
 ```
+
+### Declaration Merging
+
+Declaration merging is a powerful TypeScript feature that allows you to combine
+multiple declarations with the same name into a single definition.
+
+> [!Note]
+>
+> Excessive declaration merging can increase compilation time and impact IDE
+> performance.
+
+- Interface merging
+
+  Useful when you want to add some extra members to an existing interface.
+
+  ```ts [twoslash]
+  interface A {
+    x: number
+  }
+  interface A {
+    y: number
+  }
+
+  type keyOfA = keyof A & {}
+  //   ^?
+  // ...
+  ```
+
+- Function overloads merging
+
+  Useful when overload an existing function.
+
+  ```ts [twoslash]
+  // @errors: 2769
+  // Function overloads
+  function fn(x: number): number
+  function fn(x: string): string
+  // Implementation that handles all overloads, it's not a overload itself
+  function fn(x: number | string): number | string {
+    return x
+  }
+
+  console.log(fn('hello')) // "HELLO"
+  console.log(fn(10)) // 20
+  console.log(fn(true)) // false
+  ```
+
+- Enum merging
+
+  Useful when you want to add some extra members to an existing enum.
+
+  ```ts [twoslash]
+  enum A {
+    x = 1
+  }
+  enum A {
+    y = 2
+  }
+
+  console.log(A.x) // -> 1
+  //            ^?
+  // ...
+
+  console.log(A.y) // -> 2
+  //            ^?
+  // ...
+  ```
+
+- Class and interface merging
+
+  **Dangerous**, use inheritance instead.
+
+  <!-- eslint-disable ts/no-unsafe-declaration-merging -->
+
+  ```ts [twoslash]
+  interface A {
+    x: number
+  }
+  class A {
+    y: number = 0
+  }
+
+  type keyOfA = keyof A & {}
+  //   ^?
+  // ...
+
+  const instanceOfA = new A()
+  console.log(instanceOfA.x) // -> undefined
+  //                      ^?
+  // ...
+
+  console.log(instanceOfA.y) // -> 0
+  //                      ^?
+  // ...
+  ```
+
+- Namespace merging
+
+  Useful when you want to add some extra exported members to an existing
+  namespace, often be used with other declarations merging.
+
+  ```ts [twoslash]
+  namespace A {
+    export interface X {
+      x: number
+    }
+  }
+  namespace A {
+    export interface Y {
+      y: number
+    }
+  }
+
+  type keyOfX = keyof A.X & {}
+  //   ^?
+  // ...
+
+  type keyOfY = keyof A.Y & {}
+  //   ^?
+  // ...
+  ```
 
 ## Built-in Utility Types
 

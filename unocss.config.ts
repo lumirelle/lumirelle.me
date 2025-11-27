@@ -41,6 +41,7 @@ export default defineConfig({
         mono: 'DM Mono',
         condensed: 'Roboto Condensed',
         wisper: 'Bad Script',
+        percent60: ['Monaspace Xenon', 'Maple Mono CN'],
       },
       processors: createLocalFontProcessor(),
     }),

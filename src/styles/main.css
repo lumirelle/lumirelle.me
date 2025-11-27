@@ -4,6 +4,20 @@
   --c-scrollbar-hover: #bbb;
 }
 
+@font-face {
+  font-family: 'Monaspace Xenon';
+  src: url('/fonts/MonaspaceXenon-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Maple Mono CN';
+  src: url('/fonts/MapleMono-CN-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html {
   background-color: var(--c-bg);
   overflow-x: hidden;

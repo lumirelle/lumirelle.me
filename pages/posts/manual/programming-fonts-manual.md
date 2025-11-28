@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts Manual
 date: 2025-10-15T14:10+08:00
-update: 2025-11-27T10:48+08:00
+update: 2025-11-28T09:52+08:00
 lang: en
 duration: 5min
 type: blog+note
@@ -30,49 +30,49 @@ And Latin fonts have more choice:
 
 - ["Inconsolata"](https://github.com/google/fonts/tree/main/ofl/inconsolata/static):
 
-  <TextTag text="NEED TRIAL..." preset="purple" />
+  <TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
 
   A huge font family with many weights and italicable[^1].
 
 - ["Iosevka" (Monospace, Default)](https://github.com/be5invis/Iosevka/releases):
 
-  <TextTag text="NEED TRIAL..." preset="purple" />
+  <TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" />
 
   A huge font family with many weights and italicable.
 
 - ["M Plus Code Latin 50"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts):
 
-  <TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
+  <TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
 
   **7 weights from `Thin` to `Bold`, not italicable. (Which I preferred)**
 
-- ["Binchotan Sharp"](https://fontesk.com/binchotan-font/):
+- ["Binchotan_Sharp"](https://fontesk.com/binchotan-font/):
 
-  <TextTag text="TINY" /><TextTag text="NEED TRIAL..." preset="purple" />
+  <TextTag text="TINY" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
 
   `Regular`, not italicable.
 
 - ["Lekton"](http://www.fontsquirrel.com/fonts/lekton):
 
-  <TextTag text="TINY" /><TextTag text="THIN" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
 
   `Regular`, `Bold`, not italicable (Only has `Italic` which is corresponding to `Regular`).
 
 - ["Monofur"](http://www.dafont.com/monofur.font):
 
-  <TextTag text="ROUNDED" /><TextTag text="TINY" /><TextTag text="THIN" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
+  <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
 
   `Regular`, italicable.
 
 - ["NanumGothicCoding"](https://github.com/naver/nanumfont):
 
-  <TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="TINY" /><TextTag text="THIN" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" />
 
   `Regular`, `Bold`, not italicable.
 
 - ["Ubuntu Mono"](https://fonts.google.com/specimen/Ubuntu+Mono?query=Ubuntu):
 
-  <TextTag text="ROUNDED" /><TextTag text="TINY" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="TINY" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
 
   `Regular`, `Bold`, and italicable.
 
@@ -97,13 +97,13 @@ And Latin fonts have more choice:
 
 - ["Adwaita Mono"](https://gitlab.gnome.org/GNOME/adwaita-fonts/-/tree/main/mono?ref_type=heads):
 
-  <TextTag text="CONVENTIONAL" preset="red" /><TextTag text="NEED TRIAL..." preset="purple" />
+  <TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CONVENTIONAL" preset="red" />
 
   Regular, Bold, italicable, but a little bit conventional.
 
-- ["Geist"](https://github.com/vercel/geist-font/releases):
+- ["Geist Mono"](https://github.com/vercel/geist-font/releases):
 
-  <TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="NEED TRIAL..." preset="purple" />
+  <TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
 
   A beautiful font designed by Vercel. 9 weights, italicable.
 
@@ -127,13 +127,13 @@ And Latin fonts have more choice:
 
 - ["Rec Mono Casual"](https://github.com/arrowtype/recursive/releases):
 
-  <TextTag text="ROUNDED" /><TextTag text="SLAB" preset="amber" /><TextTag text="CASUAL" preset="red" />
+  <TextTag text="ROUNDED" /><TextTag text="SLAB" preset="amber" /><TextTag text="CASUAL" preset="green" />
 
   A recursive & casual font. Regular, Bold, italicable.
 
 - ["Monaspace Xenon"](https://github.com/githubnext/monaspace/releases):
 
-  <TextTag text="SLAB" preset="amber" />
+  <TextTag text="ROUNDED" /><TextTag text="SLAB" preset="amber" /><TextTag text="LIVELY" preset="green" />
 
   **A beautiful font designed by GitHub. (Which I preferred)**
 

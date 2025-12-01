@@ -1236,8 +1236,7 @@ npm i reflect-metadata --save
 
 ## JSDoc
 
-See [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for
-more examples.
+See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) or [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for more examples.
 
 ## Custom Types
 

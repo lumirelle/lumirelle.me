@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts Manual
 date: 2025-10-15T14:10+08:00
-update: 2025-11-28T09:52+08:00
+update: 2025-12-01T13:49+08:00
 lang: en
 duration: 5min
 type: blog+note

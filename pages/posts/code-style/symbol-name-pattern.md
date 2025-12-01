@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
-update: 2025-11-21T15:26+08:00
+update: 2025-12-01T13:49+08:00
 lang: en
 duration: 6min
 type: blog+note
@@ -11,10 +11,7 @@ type: blog+note
 
 ## Why We Need to Care About Symbol Name Patterns?
 
-In a huge Vue project, we may have thousands of symbols, likes variable names,
-function names, hook names, component names, etc. If we cannot encapsulate and
-modularize them, the only thing we can do is to use the better naming patterns
-to avoid naming conflicts.
+In a huge Vue project, we may have thousands of symbols, likes variable names, function names, hook names, component names, etc. If we cannot encapsulate and modularize them, the only thing we can do is to use the better naming patterns to avoid naming conflicts.
 
 This article will introduce some naming patterns I preferred in my projects.
 
@@ -22,8 +19,7 @@ This article will introduce some naming patterns I preferred in my projects.
 
 ### Recommended Pattern
 
-The recommended variable name pattern has the similar concept with BEM (Block
-Element Modifier) class name pattern:
+The recommended variable name pattern has the similar concept with BEM (Block Element Modifier) class name pattern:
 
 ```ts
 // Not State
@@ -76,12 +72,9 @@ const tableColumnConfigs = ref([
 </script>
 ```
 
-For a really huge amount of symbols, you should not only follow the naming
-patterns but also [encapsulate and modularize](encapsulation-and-modularity.md)
-them into components, composables, or modules.
+For a really huge amount of symbols, you should not only follow the naming patterns but also [encapsulate and modularize](encapsulation-and-modularity.md) them into components, composables, or modules.
 
-Some common `block`, `element`, `modifier` examples are (`/` means the same as
-above):
+Some common `block`, `element`, `modifier` examples are (`/` means the same as above):
 
 | Block                                           | Element  | Modifier                                                         |
 | ----------------------------------------------- | -------- | ---------------------------------------------------------------- |
@@ -122,28 +115,19 @@ above):
 
 ### Endpoint Function
 
-The endpoint function name should start with verbs `get`, `create`, `update`,
-`upsert`, `delete` to introduce the operation type.
+The endpoint function name should start with verbs `get`, `create`, `update`, `upsert`, `delete` to introduce the operation type.
 
-To read the demo code below, please ensure you know the difference between HTTP
-methods and CRUD operation types:
+To read the demo code below, please ensure you know the difference between HTTP methods and CRUD operation types:
 
-- `GET` method is used to read data, which corresponds to `get` operation, it's
-  **safe[^1]** and **idempotent[^2]**.
-- `POST` method is used to create data, which corresponds to `create` operation,
-  it's **not safe** and **not idempotent**.
-- `PUT` method is used to update (replace) data, which corresponds to `update`
-  operation, it's **not safe** but **idempotent**.
-- `DELETE` method is used to delete data, which corresponds to `delete`
-  operation, it's **not safe** but **idempotent**.
-- `upsert` operation means to create or update data, which can be implemented by
-  `PUT` method, because it's **not safe** but **idempotent**.
+- `GET` method is used to read data, which corresponds to `get` operation, it's **safe[^1]** and **idempotent[^2]**.
+- `POST` method is used to create data, which corresponds to `create` operation, it's **not safe** and **not idempotent**.
+- `PUT` method is used to update (replace) data, which corresponds to `update` operation, it's **not safe** but **idempotent**.
+- `DELETE` method is used to delete data, which corresponds to `delete` operation, it's **not safe** but **idempotent**.
+- `upsert` operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe** but **idempotent**.
 
-To learn more about HTTP methods, please read the
-[computer network manual](/posts/manual/computer-network-manual.md#http-methods).
+To learn more about HTTP methods, please read the [computer network manual](/posts/manual/computer-network-manual.md#http-methods).
 
-For example, the endpoint functions for user info are defined seperately and
-exported as a single object for easy import:
+For example, the endpoint functions for user info are defined seperately and exported as a single object for easy import:
 
 _api/user.ts_
 
@@ -216,8 +200,7 @@ export default {
 }
 ```
 
-Then, use the endpoint functions in Vue component by importing the default
-exported object:
+Then, use the endpoint functions in Vue component by importing the default exported object:
 
 _pages/user.vue_
 
@@ -246,9 +229,7 @@ onMounted(async () => {
 </template>
 ```
 
-The same as the endpoint function name pattern, the Vue component method name
-who is used to call the endpoint functions should start with verbs `get`,
-`create`, `update`, `upsert`, `delete` to indicate the operation type.
+The same as the endpoint function name pattern, the Vue component method name who is used to call the endpoint functions should start with verbs `get`, `create`, `update`, `upsert`, `delete` to indicate the operation type.
 
 _pages/user.vue_
 
@@ -311,8 +292,7 @@ onMounted(async () => {
 
 ### Event Handler Function
 
-The event handler function name should start with verbs `on`, `after`, `before`
-to indicate the event handler type.
+The event handler function name should start with verbs `on`, `after`, `before` to indicate the event handler type.
 
 For example:
 
@@ -372,6 +352,4 @@ onMounted(() => {
 
 [^1]: Safe means that the operation does not modify any data on the server.
 
-[^2]:
-    Idempotent means that performing the operation multiple times has the same
-    effect as performing it once.
+[^2]: Idempotent means that performing the operation multiple times has the same effect as performing it once.

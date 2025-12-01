@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Encapsulation and Modularity'
 date: 2025-09-24T16:36+08:00
-update: 2025-09-24T16:36+08:00
+update: 2025-12-01T13:49+08:00
 lang: en
 duration: 5min
 type: blog+note
@@ -11,49 +11,30 @@ type: blog+note
 
 ## Why Encapsulation and Modularity are Necessary?
 
-First of all, reduce the frequency of copy-paste. Copy-paste is a bad practice,
-because it makes code harder to maintain. If you need to change something, you
-have to change it in multiple places.
+First of all, reduce the frequency of copy-paste. Copy-paste is a bad practice, because it makes code harder to maintain. If you need to change something, you have to change it in multiple places.
 
-Just imagine that, you completed the product 2's buying page through copy-paste
-the product 1's one. After a long time, you get a new request about changing the
-implementation details, will you remember to change both pages, will you think
-it's troublesome to make double the changes every time? Worse still, you also
-need to pay attention to whether the same changes still apply to these two pages
-after dozens of version iterations.
+Just imagine that, you completed the product 2's buying page through copy-paste the product 1's one. After a long time, you get a new request about changing the implementation details, will you remember to change both pages, will you think it's troublesome to make double the changes every time? Worse still, you also need to pay attention to whether the same changes still apply to these two pages after dozens of version iterations.
 
-Second, reduce the complexity of the code. If every page has its own
-implementation for the same feature, the code will be like a real "mud hill".
-Every time you forget the logic of these pages, you have to understand both the
-implementation details of and the differences between each page.
+Second, reduce the complexity of the code. If every page has its own implementation for the same feature, the code will be like a real "mud hill". Every time you forget the logic of these pages, you have to understand both the implementation details of and the differences between each page.
 
 Tell the truth, I really feel tired to face these "mud hills".
 
-Read through the above two points, are you feeling hot and dry, are you eager to
-achieve them? Then I'have to pour cold water on you.
+Read through the above two points, are you feeling hot and dry, are you eager to achieve them? Then I'have to pour cold water on you.
 
-Encapsulation and modularity are not a panacea, excessive encapsulation and
-modularity will bring you more trouble:
+Encapsulation and modularity are not a panacea, excessive encapsulation and modularity will bring you more trouble:
 
-- The encapsulation and modularity that is hard to use or unnecessary are waste
-  of time and effort of no value.
-- Excessive encapsulation and modularity will instead increase the cost of
-  understanding and using the code.
+- The encapsulation and modularity that is hard to use or unnecessary are waste of time and effort of no value.
+- Excessive encapsulation and modularity will instead increase the cost of understanding and using the code.
 
 Therefore, we need to find a balance point, which is the focus of this article.
 
 ## The Principle of Encapsulation and Modularity
 
-To avoid the above problems, we need to follow the following principles when
-encapsulating and modularizing:
+To avoid the above problems, we need to follow the following principles when encapsulating and modularizing:
 
-1. Only encapsulate and modularize the code **as needed**: when you must to
-   reuse a part of code belong another page, module or component.
-2. List the **value & cost** points of encapsulation and modularity. If they
-   cannot persuade you to do that, then please just give up immediately.
-3. If you decide to do that, you should treat yourself as the first user through
-   the whole development process (including design, implementation and testing),
-   **easy to use**, **out of box**, **robust** are the three key concepts.
+1. Only encapsulate and modularize the code **as needed**: when you must to reuse a part of code belong another page, module or component.
+2. List the **value & cost** points of encapsulation and modularity. If they cannot persuade you to do that, then please just give up immediately.
+3. If you decide to do that, you should treat yourself as the first user through the whole development process (including design, implementation and testing), **easy to use**, **out of box**, **robust** are the three key concepts.
 4. Don't forget to write the **documentation**.
 
 ## Examples
@@ -245,8 +226,4 @@ function convertValue<T>(formField: T, value: string): T {
 }
 ```
 
-The example above shows how to encapsulate the logic of initializing form data
-from route query parameters into a composable function `useQueryForm`. This
-reduces code duplication and improves maintainability. After encapsulation, if
-you need to use this logic in another page, you can simply call the
-`useQueryForm` function with the appropriate default form data.
+The example above shows how to encapsulate the logic of initializing form data from route query parameters into a composable function `useQueryForm`. This reduces code duplication and improves maintainability. After encapsulation, if you need to use this logic in another page, you can simply call the `useQueryForm` function with the appropriate default form data.

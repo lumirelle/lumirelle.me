@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2025-11-21T15:26+08:00
+update: 2025-12-01T13:49+08:00
 lang: en
 duration: 2min
 type: blog+note
@@ -162,8 +162,7 @@ And select the `Vitesse Nuxt` template in the startup prompt.
 
 > [!Note]
 >
-> Since the version of 6, `create-nuxt-app` using `nuxi` under the hood, so it
-> will create Nuxt 4 project not Nuxt 2 project!
+> Since the version of 6, `create-nuxt-app` using `nuxi` under the hood, so it will create Nuxt 4 project not Nuxt 2 project!
 
 ```bash
 cd <folder/to/hold/your/project>

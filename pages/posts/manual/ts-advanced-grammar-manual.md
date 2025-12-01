@@ -1,9 +1,9 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2025-11-25T10:30+08:00
+update: 2025-12-01T13:49+08:00
 lang: en
-duration: 28min
+duration: 27min
 type: blog+note
 ---
 
@@ -13,8 +13,7 @@ type: blog+note
 
 > [!Note]
 >
-> This manual hypothesizes that you have already read
-> [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual).
+> This manual hypothesizes that you have already read [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual).
 
 TypeScript is a superset of JavaScript that adds static typing to the language.
 
@@ -22,8 +21,7 @@ It's the main purpose of TypeScript, remember it and that will help you a lot.
 
 ## Types for JavaScript Basic Data Types
 
-TypeScript has the following 8 types to express corresponding JavaScript basic
-data types:
+TypeScript has the following 8 types to express corresponding JavaScript basic data types:
 
 - `string`:
   ```ts
@@ -71,12 +69,9 @@ And they can be categorized as following:
 
 > [!Note]
 >
-> If you don't know what is `prototype`, please read
-> [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual#prototypes-inheritance)
-> for more details.
+> If you don't know what is `prototype`, please read [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual#prototypes-inheritance) for more details.
 
-TypeScript also has some types to express corresponding JavaScript built-in
-prototypes:
+TypeScript also has some types to express corresponding JavaScript built-in prototypes:
 
 | Category            | JavaScript Built-In Prototype | TypeScript Type |
 | ------------------- | ----------------------------- | --------------- |
@@ -98,10 +93,7 @@ prototypes:
 
 > [!Note]
 >
-> As primitive wrapper objects are not meant to **be used directly** in
-> JavaScript, because they are only designed to be used internally by the
-> JavaScript engine to **support calling methods on primitive values**, and may
-> cause unexpected behavior:
+> As primitive wrapper objects are not meant to **be used directly** in JavaScript, because they are only designed to be used internally by the JavaScript engine to **support calling methods on primitive values**, and may cause unexpected behavior:
 >
 > <!-- eslint-disable no-new-wrappers, unicorn/new-for-builtins -->
 >
@@ -121,10 +113,7 @@ prototypes:
 > }
 > ```
 >
-> There is nothing different in TypeScript: The corresponding types of wrapper
-> objects for primitivesare not meant to **be used directly too**. They are
-> used for similar purpose:
-> **provide type support for methods on primitive values**.
+> There is nothing different in TypeScript: The corresponding types of wrapper objects for primitivesare not meant to **be used directly too**. They are used for similar purpose: **provide type support for methods on primitive values**.
 >
 > ```ts
 > const str: string = 'hello'
@@ -135,8 +124,7 @@ prototypes:
 > console.log(str.toUpperCase())
 > ```
 
-At the end, let's take a look at the type definition of `String` in TypeScript,
-to learn more about them:
+At the end, let's take a look at the type definition of `String` in TypeScript, to learn more about them:
 
 <!-- eslint-disable no-var, vars-on-top -->
 
@@ -188,15 +176,11 @@ declare var String: StringConstructor
 
 ## Union and Intersection
 
-As we all know, JavaScript is a dynamic typing language, so one variable can be
-assigned to different types of values at different times. and when we try to get
-the value of the variable, the value can only be one of the types at one time.
+As we all know, JavaScript is a dynamic typing language, so one variable can be assigned to different types of values at different times. and when we try to get the value of the variable, the value can only be one of the types at one time.
 
-As the smart designer of TypeScript,in order to support this behavior, you
-invented the **union** and **intersection** types.
+As the smart designer of TypeScript,in order to support this behavior, you invented the **union** and **intersection** types.
 
-Union likes "or", it standard for **a type that satisfies any one of the types** in
-it. You can use **`|` operator (union operator)** to create a union type:
+Union likes "or", it standard for **a type that satisfies any one of the types** in it. You can use **`|` operator (union operator)** to create a union type:
 
 ```ts [twoslash]
 // @errors: 2322
@@ -236,8 +220,7 @@ const a: any = 1
 const b: any = 'hello'
 ```
 
-**unknown** is a type that is more strict than `any`, it accepts any types, but
-you can't do anything with it, you need to check the type first:
+**unknown** is a type that is more strict than `any`, it accepts any types, but you can't do anything with it, you need to check the type first:
 
 ```ts [twoslash]
 // @errors: 18046
@@ -253,9 +236,7 @@ else if (typeof a === 'string') {
 }
 ```
 
-Intersection likes "and", it standard for **a type that satisfies all the types** in
-it. You can use **`&` operator (intersect operator)** to create a intersection
-type:
+Intersection likes "and", it standard for **a type that satisfies all the types** in it. You can use **`&` operator (intersect operator)** to create a intersection type:
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -295,8 +276,7 @@ a.c = false
 
 ### Type Narrowing
 
-When you want to implement some logic based on the union types, you need to
-narrow the type first, then implement the type-specific logic.
+When you want to implement some logic based on the union types, you need to narrow the type first, then implement the type-specific logic.
 
 For type narrowing, we can use:
 
@@ -363,8 +343,7 @@ For type narrowing, we can use:
   }
   ```
 
-- ...and some other checks with conditional statements can help TypeScript to
-  infer the type of the variable
+- ...and some other checks with conditional statements can help TypeScript to infer the type of the variable
 
   <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -413,13 +392,11 @@ For type narrowing, we can use:
   ```
 
 - Using [type guard functions](#type-guards)
-- Using
-  [type assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions) (Not recommended)
+- Using [type assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions) (Not recommended)
 
 ### Type Guards
 
-As the most important thing in TypeScript, type guards are a way to check the
-type of a variable at runtime.
+As the most important thing in TypeScript, type guards are a way to check the type of a variable at runtime.
 
 For example:
 
@@ -439,18 +416,15 @@ else {
 }
 ```
 
-A function with return type of `x is Type` is a type guard function, it can be
-used to narrow the type of the variable.
+A function with return type of `x is Type` is a type guard function, it can be used to narrow the type of the variable.
 
 ## Object Types
 
 ### Object Type Literal
 
-We know that everything except primitive values is object in JavaScript, so it's
-important to know how to define an object type in TypeScript.
+We know that everything except primitive values is object in JavaScript, so it's important to know how to define an object type in TypeScript.
 
-Instead of using `object` type directly, you can use `{}` syntax to define an
-more clear object type, we call it **object type literal**:
+Instead of using `object` type directly, you can use `{}` syntax to define an more clear object type, we call it **object type literal**:
 
 <!-- eslint-disable ts/method-signature-style -->
 
@@ -499,11 +473,9 @@ const obj: {
 
 ### Index Signature
 
-Sometimes you don’t know all the names of a type’s properties ahead of time, but
-you do know the shape of the values.
+Sometimes you don’t know all the names of a type’s properties ahead of time, but you do know the shape of the values.
 
-In those cases you can use an index signature to describe the types of possible
-values, for example:
+In those cases you can use an index signature to describe the types of possible values, for example:
 
 ```ts [twoslash]
 // `number` index signature
@@ -534,14 +506,11 @@ const s: StringObject = {
 
 ## Interface Types
 
-Interface is a better way to define a custom
-[object type literal](#object-type-literal), which are more intuitive and easier
-to understand.
+Interface is a better way to define a custom [object type literal](#object-type-literal), which are more intuitive and easier to understand.
 
 `type` vs. `interface`:
 
-- Extending: Both can be extended, but interfaces support
-  [declaration merging](#declaration-merging).
+- Extending: Both can be extended, but interfaces support [declaration merging](#declaration-merging).
 - Unions/Intersections: Only type aliases support union and intersection types.
 - Implements: Classes can implement either.
 - Recommendation: Use interface for objects, type for everything else.
@@ -592,9 +561,7 @@ class MyClass2 implements MyObject2 {
 
 > [!Note]
 >
-> Sometimes, when you want to accept some class constructor function that
-> produces an instance of a class which derives from some interface/abstract class, you
-> should use **constructor signature** to define the type:
+> Sometimes, when you want to accept some class constructor function that produces an instance of a class which derives from some interface/abstract class, you should use **constructor signature** to define the type:
 >
 > ❌ Use the type directly:
 >
@@ -623,10 +590,7 @@ class MyClass2 implements MyObject2 {
 
 ## Array and Tuple Types
 
-In TypeScript, we use the **`Array`** type (we mentioned it in
-[built-in prototypes](#types-for-javascript-built-in-prototypes) section before)
-or **`[]` (array type literal)** to define array types,
-and they are the same:
+In TypeScript, we use the **`Array`** type (we mentioned it in [built-in prototypes](#types-for-javascript-built-in-prototypes) section before) or **`[]` (array type literal)** to define array types, and they are the same:
 
 ```ts
 const arr1: Array<string> = ['a', 'b', 'c']
@@ -634,9 +598,7 @@ const arr1: Array<string> = ['a', 'b', 'c']
 const arr2: string[] = ['a', 'b', 'c']
 ```
 
-And tuple is a special array type that is used to describe an array with
-**fixed length and element types**, we can create it by using
-**tuple type literal**:
+And tuple is a special array type that is used to describe an array with **fixed length and element types**, we can create it by using **tuple type literal**:
 
 ```ts
 const tuple1: [number, number] = [0.5, 7.8]
@@ -646,9 +608,7 @@ const tuple2: [x: number, y: number] = [0.5, 7.8]
 
 That's all about them. So let's talk about something digressive. 😏
 
-As we all know, array is a kind of object in JavaScript, and there is also a
-term called "array-like object" to describe an object that has a `length`
-property and indexed elements:
+As we all know, array is a kind of object in JavaScript, and there is also a term called "array-like object" to describe an object that has a `length` property and indexed elements:
 
 ```ts
 interface ArrayLike {
@@ -657,8 +617,7 @@ interface ArrayLike {
 }
 ```
 
-So that, you can even assign a array value to a variable with the `object` or `ArrayLike` type
-directly:
+So that, you can even assign a array value to a variable with the `object` or `ArrayLike` type directly:
 
 ```ts
 const arr1: object = ['a', 'b', 'c']
@@ -669,8 +628,7 @@ Nothing magic!
 
 ## Function Types
 
-In TypeScript, there are two ways to define function types:
-**function declaration** and **function type literal**.
+In TypeScript, there are two ways to define function types: **function declaration** and **function type literal**.
 
 And the syntax is nothing special:
 
@@ -687,8 +645,7 @@ const fe: (a: number, b: number) => number = function (a, b) {
 const fa: (a: number, b: number) => number = (a, b) => a + b
 ```
 
-Like array, function is also a kind of object in JavaScript, and there is also a
-term called "function like object" to describe an object that can be called:
+Like array, function is also a kind of object in JavaScript, and there is also a term called "function like object" to describe an object that can be called:
 
 ```ts
 interface FunctionLike {
@@ -703,8 +660,7 @@ interface BothConstructorAndFunctionLike {
 }
 ```
 
-So that we can assign a function to a variable with `object` or function-like
-type directly:
+So that we can assign a function to a variable with `object` or function-like type directly:
 
 - Function Like:
 
@@ -779,9 +735,7 @@ type directly:
 
 ### Function Overloading
 
-Function overloading is a way to define multiple function signatures for the
-same function, the only thing you need to do is to define the function
-signatures together, and put the implementation after them:
+Function overloading is a way to define multiple function signatures for the same function, the only thing you need to do is to define the function signatures together, and put the implementation after them:
 
 ```ts [twoslash]
 function fn(x: number, y: number): number
@@ -796,8 +750,7 @@ function fn(x: string | number, y: number = 0): number {
 }
 ```
 
-Notice that, the overload function signatures should compatible with the
-implementation, or you will get an error:
+Notice that, the overload function signatures should compatible with the implementation, or you will get an error:
 
 ```ts [twoslash]
 // @errors: 2394
@@ -816,8 +769,7 @@ function fn(x: string | number, y: number = 0): number {
 
 ## String Template Literal Type
 
-String template literal types build on string literal, and have the ability to
-expand into many strings via unions:
+String template literal types build on string literal, and have the ability to expand into many strings via unions:
 
 ```ts [twoslash]
 type World = 'World'
@@ -829,8 +781,7 @@ type Greeting = `Hello ${World}, ${Name}!`
 
 ## Generic Types
 
-Just like other OOP languages with generics, TypeScript has generic types to
-create reusable types, and their usage is similar.
+Just like other OOP languages with generics, TypeScript has generic types to create reusable types, and their usage is similar.
 
 For example:
 
@@ -851,8 +802,7 @@ TypeScript has some additional features on JavaScript's classes.
 
 ### Member Types
 
-In TypeScript, you can define the type of class members, like fields,
-constructor parameters, method parameters, method return:
+In TypeScript, you can define the type of class members, like fields, constructor parameters, method parameters, method return:
 
 ```ts
 class Person {
@@ -875,13 +825,11 @@ person.sayHello('Nice to meet you!')
 >
 > Constructor can not have generic parameters and return type:
 >
-> Generic parameters should placed [in the class declaration](#generic-classes),
-> while the return type of constructor is implicit to the class itself.
+> Generic parameters should placed [in the class declaration](#generic-classes), while the return type of constructor is implicit to the class itself.
 
 ### Readonly Fields
 
-Like object types, you can use `readonly` keyword to define a readonly field in
-class:
+Like object types, you can use `readonly` keyword to define a readonly field in class:
 
 ```ts [twoslash]
 // @errors: 2540
@@ -899,8 +847,7 @@ person.name = 'Bob'
 
 ### Member Visibility
 
-TypeScript add three visibility modifiers to class members: `public`,
-`protected` and `private`:
+TypeScript add three visibility modifiers to class members: `public`, `protected` and `private`:
 
 ```ts
 class Person {
@@ -937,8 +884,7 @@ class Person {
 
 ### Generic Classes
 
-Classes, much like interfaces, can be generic, and the generic parameters can
-only be used in **instance scope**:
+Classes, much like interfaces, can be generic, and the generic parameters can only be used in **instance scope**:
 
 ```ts [twoslash]
 // @errors: 2302
@@ -953,8 +899,7 @@ class MyClass<T> {
 
 ### Abstract Classes
 
-Just like other OOP languages, TypeScript has `interface` and `implements`
-keywords (We mentioned them [before](#interface-types)).
+Just like other OOP languages, TypeScript has `interface` and `implements` keywords (We mentioned them [before](#interface-types)).
 
 There is also a `abstract` keyword to define an abstract class:
 
@@ -971,9 +916,7 @@ class Dog extends Animal {
 
 > [!Note]
 >
-> Sometimes, when you want to accept some class constructor function that
-> produces an instance of a class which derives from some interface/abstract class, you
-> should use **constructor signature** to define the type:
+> Sometimes, when you want to accept some class constructor function that produces an instance of a class which derives from some interface/abstract class, you should use **constructor signature** to define the type:
 >
 > ❌ Use the type directly:
 >
@@ -1002,11 +945,9 @@ class Dog extends Animal {
 
 ## Decorators
 
-Decorators provide a way to add both annotations and a meta-programming syntax
-for class declarations and members (Like annotations in Java).
+Decorators provide a way to add both annotations and a meta-programming syntax for class declarations and members (Like annotations in Java).
 
-To enable experimental support for decorators, you must enable the
-`experimentalDecorators` compiler option (typescript@^5.0.0):
+To enable experimental support for decorators, you must enable the `experimentalDecorators` compiler option (typescript@^5.0.0):
 
 ```json
 {
@@ -1016,12 +957,9 @@ To enable experimental support for decorators, you must enable the
 }
 ```
 
-A Decorator is a special function that can be attached to a
-**class declaration**, **method**, **accessor**, **property**, or **parameter**.
+A Decorator is a special function that can be attached to a **class declaration**, **method**, **accessor**, **property**, or **parameter**.
 
-Decorators use the form `@expression`, where `expression` must evaluate to a
-function that will be called at runtime with information about the decorated
-declaration.
+Decorators use the form `@expression`, where `expression` must evaluate to a function that will be called at runtime with information about the decorated declaration.
 
 For example:
 
@@ -1062,8 +1000,7 @@ class UserService {
 
 ### Class Decorators
 
-The class decorator is applied to the constructor of the class and can be used
-to observe, modify, or replace a class definition.
+The class decorator is applied to the constructor of the class and can be used to observe, modify, or replace a class definition.
 
 ```ts
 // [!code highlight:4]
@@ -1089,8 +1026,7 @@ BugReport.prototype.newMethod = function () {}
 
 ### Method Decorators
 
-The method decorator is applied to the property descriptor for the method, and
-can be used to observe, modify, or replace a method definition.
+The method decorator is applied to the property descriptor for the method, and can be used to observe, modify, or replace a method definition.
 
 ```ts
 // [!code highlight:11]
@@ -1122,11 +1058,9 @@ processor.processData([1, 2, 3, 4, 5])
 
 ### Property Decorators
 
-The property decorator is applied to the property of the class, and can be used
-to observe, modify, or replace a property definition.
+The property decorator is applied to the property of the class, and can be used to observe, modify, or replace a property definition.
 
-We can use metadata to record information about the property, as in the
-following example:
+We can use metadata to record information about the property, as in the following example:
 
 ```ts
 import 'reflect-metadata'
@@ -1159,8 +1093,7 @@ class Greeter {
 
 ### Constructor/Method Parameter Decorators
 
-The parameter decorator is applied to the function for a class constructor or
-method declaration.
+The parameter decorator is applied to the function for a class constructor or method declaration.
 
 ```ts
 import 'reflect-metadata'
@@ -1223,10 +1156,7 @@ class BugReport {
 
 ### Metadata
 
-Some examples use the `reflect-metadata` library which adds a polyfill for an
-experimental metadata API. This library is not yet part of the ECMAScript
-(JavaScript) standard. However, once decorators are officially adopted as part
-of the ECMAScript standard, these extensions will be proposed for adoption.
+Some examples use the `reflect-metadata` library which adds a polyfill for an experimental metadata API. This library is not yet part of the ECMAScript (JavaScript) standard. However, once decorators are officially adopted as part of the ECMAScript standard, these extensions will be proposed for adoption.
 
 Before that, you need to install this library via npm:
 
@@ -1264,8 +1194,7 @@ numOrString = 'hello'
 numOrString = true
 ```
 
-This is very important in TypeScript, through it, you can create your own
-utility types, for better type development, like:
+This is very important in TypeScript, through it, you can create your own utility types, for better type development, like:
 
 ```ts
 type Nullable<T> = T | null | undefined
@@ -1305,8 +1234,7 @@ type A = typeof a
 // ...
 ```
 
-TypeScript intentionally limits the sorts of expressions you can use typeof on.
-Specifically, it’s only legal to use typeof on identifiers, but not expressions:
+TypeScript intentionally limits the sorts of expressions you can use typeof on. Specifically, it’s only legal to use typeof on identifiers, but not expressions:
 
 <!-- eslint-skip -->
 
@@ -1318,8 +1246,7 @@ let shouldContinue: typeof alert("Are you sure you want to continue?");
 
 ### Indexed Access Types
 
-We can use an indexed access type to look up a specific property on another
-type:
+We can use an indexed access type to look up a specific property on another type:
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1330,8 +1257,7 @@ type Age = Person['age']
 // ...
 ```
 
-The indexing type is itself a type, so we can use unions, keyof, or other types
-entirely:
+The indexing type is itself a type, so we can use unions, keyof, or other types entirely:
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1400,15 +1326,13 @@ SomeType extends OtherType ? TrueType : FalseType
 
 #### Distributive Conditional Types
 
-When conditional types act on a generic type, they become distributive when
-given a union type. For example, take the following:
+When conditional types act on a generic type, they become distributive when given a union type. For example, take the following:
 
 ```ts
 type ToArray<Type> = Type extends any ? Type[] : never
 ```
 
-If we plug a union type into ToArray, then the conditional type will be applied
-to each member of that union.
+If we plug a union type into ToArray, then the conditional type will be applied to each member of that union.
 
 ```ts [twoslash]
 type ToArray<Type> = Type extends any ? Type[] : never
@@ -1430,8 +1354,7 @@ type StrArrOrNumArr = ToArray<string | number>
                     = string[] | number[]
 ```
 
-If you want to avoid this behavior, you can use tuple type to wrap the type, it
-does not change the result but makes it non-distributive:
+If you want to avoid this behavior, you can use tuple type to wrap the type, it does not change the result but makes it non-distributive:
 
 ```ts [twoslash]
 type ToArray<Type> = [Type] extends [any] ? Type[] : never
@@ -1443,13 +1366,9 @@ type StrArrOrNumArr = ToArray<string | number>
 
 ### Mapped Types
 
-Mapped types are a way to create new types by transforming properties of
-existing types.
+Mapped types are a way to create new types by transforming properties of existing types.
 
-For example below, we use
-[**dynamic property names**](/posts/manual/js-advanced-grammar-manual#dynamic-computed-property-names)
-to get the names of the properties of the existing type, use indexed access type to get the type
-of the property.
+For example below, we use [**dynamic property names**](/posts/manual/js-advanced-grammar-manual#dynamic-computed-property-names) to get the names of the properties of the existing type, use indexed access type to get the type of the property.
 
 ```ts
 type MappedType<T> = {
@@ -1459,8 +1378,7 @@ type MappedType<T> = {
 
 #### Mapping Modifiers
 
-There are two additional modifiers which can be applied during mapping:
-`readonly` and `?` which affect mutability and optionality respectively.
+There are two additional modifiers which can be applied during mapping: `readonly` and `?` which affect mutability and optionality respectively.
 
 ```ts
 type Mutable<T> = {
@@ -1482,11 +1400,9 @@ type Required<T> = {
 
 #### Key Remapping via `as`
 
-In TypeScript 4.1 and onwards, you can re-map keys in mapped types with an `as`
-clause in a mapped type.
+In TypeScript 4.1 and onwards, you can re-map keys in mapped types with an `as` clause in a mapped type.
 
-You can leverage features like **template literal types** to create new property
-names from prior ones:
+You can leverage features like **template literal types** to create new property names from prior ones:
 
 ```ts [twoslash]
 type Getters<Type> = {
@@ -1535,8 +1451,7 @@ type KindlessCircle = RemoveKindField<Circle>
 // ...
 ```
 
-You can map over arbitrary unions, not just unions of
-`string | number | symbol`, but unions of any type:
+You can map over arbitrary unions, not just unions of `string | number | symbol`, but unions of any type:
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1559,13 +1474,11 @@ type Config = EventConfig<SquareEvent | CircleEvent>
 
 ### Declaration Merging
 
-Declaration merging is a powerful TypeScript feature that allows you to combine
-multiple declarations with the same name into a single definition.
+Declaration merging is a powerful TypeScript feature that allows you to combine multiple declarations with the same name into a single definition.
 
 > [!Note]
 >
-> Excessive declaration merging can increase compilation time and impact IDE
-> performance.
+> Excessive declaration merging can increase compilation time and impact IDE performance.
 
 - Interface merging
 
@@ -1654,8 +1567,7 @@ multiple declarations with the same name into a single definition.
 
 - Namespace merging
 
-  Useful when you want to add some extra exported members to an existing
-  namespace, often be used with other declarations merging.
+  Useful when you want to add some extra exported members to an existing namespace, often be used with other declarations merging.
 
   ```ts [twoslash]
   namespace A {
@@ -1680,8 +1592,7 @@ multiple declarations with the same name into a single definition.
 
 ## Built-in Utility Types
 
-See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/utility-types.html)
-for more details.
+See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/utility-types.html) for more details.
 
 ## Type Challenges
 

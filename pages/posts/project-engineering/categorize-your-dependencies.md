@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Categorize Your Dependencies'
 date: 2025-11-01T16:06+08:00
-update: 2025-11-18T16:58+08:00
+update: 2025-12-01T13:49+08:00
 lang: en
 duration: 3min
 type: blog+note
@@ -11,11 +11,9 @@ type: blog+note
 
 ## Introduction
 
-As we use PNPM as our Node.js project's package manager, we can now categorize
-the dependencies by using PNPM catalogs.
+As we use PNPM as our Node.js project's package manager, we can now categorize the dependencies by using PNPM catalogs.
 
-So, now we have `testing` dependencies which are meant to be used for testing,
-and `dev` dependencies which are used for development...
+So, now we have `testing` dependencies which are meant to be used for testing, and `dev` dependencies which are used for development...
 
 Here are two examples:
 
@@ -99,13 +97,9 @@ catalogs:
 
 ## What's the Best Practice?
 
-The meaning of categorizing your dependencies is to simplify the dependency
-management, so we shouldn't spend a lot of time to categorize them clearly and
-exactly.
+The meaning of categorizing your dependencies is to simplify the dependency management, so we shouldn't spend a lot of time to categorize them clearly and exactly.
 
-For example, you don't need to categorize dev dependencies into `linter`,
-`formatter`, and other more small pieces, just put them together in the `dev`
-catalog, and that's quit enough.
+For example, you don't need to categorize dev dependencies into `linter`, `formatter`, and other more small pieces, just put them together in the `dev` catalog, and that's quit enough.
 
 There are my personal opinions about the catalog names:
 
@@ -121,28 +115,20 @@ There are my personal opinions about the catalog names:
 
 The difference is caused by the usage scenarios for those dependencies:
 
-- **builders/bundlers and their plugins** are the ones who will modify the
-  source code and produce the final output, such as Vite, Webpack, TSDown, etc.
+- **builders/bundlers and their plugins** are the ones who will modify the source code and produce the final output, such as Vite, Webpack, TSDown, etc.
 
-  For frontend projects, the builder and related packages are a huge part of
-  dependencies, which are worth to be categorized into a separate category.
+  For frontend projects, the builder and related packages are a huge part of dependencies, which are worth to be categorized into a separate category.
 
-  For library packages, the builder will be simply categorized as `dev`
-  dependencies.
+  For library packages, the builder will be simply categorized as `dev` dependencies.
 
-- **production dependencies** are the ones who will be used in the production
-  environment.
+- **production dependencies** are the ones who will be used in the production environment.
 
-  For frontend projects, it's the dependencies that will be used in the browser
-  environment, so I call them `frontend` dependencies.
+  For frontend projects, it's the dependencies that will be used in the browser environment, so I call them `frontend` dependencies.
 
   For library packages, I call them `prod` dependencies.
 
-- **inlined dependencies** and **documentation** are library-specific
-  dependencies.
+- **inlined dependencies** and **documentation** are library-specific dependencies.
 
-  inlined dependencies are the ones that will be packed into the library package
-  directly while building, and the users of the library package will not need to
-  install them, that's meaningless for frontend projects.
+  Inlined dependencies are the ones that will be packed into the library package directly while building, and the users of the library package will not need to install them that's meaningless for frontend projects.
 
   What's more, no one will write documentation for frontend projects.

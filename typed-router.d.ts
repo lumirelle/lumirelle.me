@@ -100,6 +100,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/manual/bash-script-manual': RouteRecordInfo<
+      '/posts/manual/bash-script-manual',
+      '/posts/manual/bash-script-manual',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual/computer-network-manual': RouteRecordInfo<
       '/posts/manual/computer-network-manual',
       '/posts/manual/computer-network-manual',
@@ -267,6 +274,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/first-time-trying-roller-coaster.md': {
       routes:
         | '/posts/first-time-trying-roller-coaster'
+      views:
+        | never
+    }
+    'pages/posts/manual/bash-script-manual.md': {
+      routes:
+        | '/posts/manual/bash-script-manual'
       views:
         | never
     }

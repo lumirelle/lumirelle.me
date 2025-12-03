@@ -177,6 +177,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/vite-and-unbundled': RouteRecordInfo<
+      '/posts/vite-and-unbundled',
+      '/posts/vite-and-unbundled',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/projects': RouteRecordInfo<
       '/projects',
       '/projects',
@@ -340,6 +347,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/project-engineering/manually-split-chunks.md': {
       routes:
         | '/posts/project-engineering/manually-split-chunks'
+      views:
+        | never
+    }
+    'pages/posts/vite-and-unbundled.md': {
+      routes:
+        | '/posts/vite-and-unbundled'
       views:
         | never
     }

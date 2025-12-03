@@ -1,9 +1,9 @@
 ---
 title: Bash Script Manual
 date: 2025-12-01T15:50+08:00
-update: 2025-12-01T15:50+08:00
+update: 2025-12-03T10:29+08:00
 lang: en
-duration: n/a
+duration: 25min
 type: blog+note
 ---
 
@@ -23,7 +23,7 @@ On Windows, you can use Bash through the **Windows Subsystem for Linux (WSL)** o
 
 Bash scripts are plain text files containing a series of commands that can be executed by the Bash interpreter.
 
-You can create and run your first Bash script by following these steps:
+You can create and run your first Bash script by following steps:
 
 1. Open your WSL terminal (e.g., Ubuntu), it will open Bash by default.
 2. Create a new file named `hello.sh` using a text editor like `vi`:
@@ -77,11 +77,12 @@ In this manual, we are talking about Bash scripts, so we will always use `#!/bin
 
 ## Statement Separator
 
-In Bash, you can use the semicolon `;` to separate multiple commands on the same line.
+In Bash, you can use the semicolon `;` to separate multiple commands on the same line, just like what JavaScript does, it can be omitted if each command is on a separate line:
 
 ```bash
 #!/bin/bash
 echo "Hello"; echo "Bash!"
+echo "Welcome to Bash scripting."
 ```
 
 ## Variables
@@ -179,13 +180,7 @@ unset name
 echo "Hello, ${name}!"  # -> Hello, !
 ```
 
-Of course, readonly variables cannot be unset:
-
-```bash
-#!/bin/bash
-readonly PI=3.14
-unset PI  # -> -bash: unset: PI: cannot unset: readonly variable
-```
+Of course, [readonly variables](#work-with-declare-command) cannot be unset.
 
 ### Work with `declare` command
 
@@ -360,19 +355,46 @@ In script environment, including all above plus:
 
 ## Data Types
 
-Likes other scripting languages, Bash is dynamically typed.
+Likes JavaScript, Bash is dynamically typed, that's means a variable can hold values of different data types at different times during execution.
 
-There are totally three data types in Bash: **string**, **integer**, **boolean** and **array**.
-
-The only two data types which are worth to mention in Bash are **string** and **array**.
+There are totally four data types in Bash: **string**, **integer**, **boolean** and **array**.
 
 ### String
 
+#### Plain Text Strings
+
+In Bash, a plain text will be treated as a string by default:
+
+```bash
+#!/bin/bash
+str1=HelloWorld
+str1=${str1}+1
+echo ${str1} # -> HelloWorld+1
+
+str2=1
+str2=${str2}+1
+echo ${str2} # -> 1+1
+```
+
+> [!Note]
+>
+> If you need to define a integer variable, you should use `declare -i` or `let` command, see [Work with `declare` command](#work-with-declare-command) and [Work with `let` command](#work-with-let-command) sections for more detail.
+
+If there are spaces in the text, you need to use quotes or double quotes to enclose it:
+
+```bash
+#!/bin/bash
+str="Hello World"
+echo ${str} # -> Hello World
+```
+
+> [!Note]
+>
+> For my own opinion, surrounding strings with quotes as possible is the best practice in Bash scripting.
+
 #### Quotes vs Double Quotes
 
-Bash has two ways to define a string literal value: using **quotes** or **double quotes**.
-
-- Using Quotes: Strings defined with quotes will treat **everything literally**, including special characters like `$`, `\`, and backticks `` ` ``.
+- Using **Quotes**: Strings defined with quotes will treat **everything literally**, including special characters like `$`, `\`, and backticks `` ` ``.
 
   ```bash
   #!/bin/bash
@@ -380,7 +402,7 @@ Bash has two ways to define a string literal value: using **quotes** or **double
   echo -e ${str}  # -> Hello, $USER! \n Today is `date`.
   ```
 
-- Using Double Quotes: Strings defined with double quotes will **interpret** special characters like `$`, `\`, and backticks `` ` ``.
+- Using **Double Quotes**: Strings defined with double quotes will **interpret** special characters like `$`, `\`, and backticks `` ` ``.
 
   ```bash
   #!/bin/bash
@@ -430,7 +452,7 @@ Bash has two kinds of array: **indexed arrays** and **associative arrays**.
 
 In this manual, if we talk about "arrays", it means both indexed arrays and associative arrays, unless otherwise specified.
 
-Additionally, we can just treat a associative arrays with string indexed arrays.
+Additionally, we can just treat a associative array as a string indexed array.
 
 #### Indexed Arrays
 
@@ -523,7 +545,7 @@ colors["blueberry"]="blue"
 echo ${colors}  # -> (empty value)
 ```
 
-`${array_name[@]}` and `${array_name[*]}` can be used to access **all values** in both indexed and associative arrays, they will spread the array into **multiple words**:
+`${array_name[@]}` and `${array_name[*]}` can be used to access **all values** in both indexed and associative arrays, they will expand the array into **a plain text with multiple words**:
 
 ```bash
 #!/bin/bash
@@ -539,7 +561,7 @@ echo ${colors[@]}  # -> red blue yellow
 echo ${colors[*]}  # -> red blue yellow
 ```
 
-And quoted version `"${array_name[@]}"` and `"${array_name[*]}"` behave differently than unquoted versions `${fruits[@]}` when used in loops or assignments:
+And quoted version `"${array_name[@]}"` and `"${array_name[*]}"` behave differently than unquoted versions `${fruits[@]}` when used in `for ... in ...` loops:
 
 ```bash
 #!/bin/bash
@@ -589,7 +611,7 @@ ${fruits[@]}    # => Apple Pie Banana Split Blueberry Muffin
 ${fruits[*]}    # => Apple Pie Banana Split Blueberry Muffin
 ```
 
-And:
+And ([why?](#for--in--loops)):
 
 ```bash
 for i in "Apple Pie" "Banana Split" "Blueberry Muffin"; do
@@ -934,7 +956,7 @@ if [ $a -lt $b ]; then
 fi
 ```
 
-You can use arithmetic judgment with double parentheses `((` and `))`:
+You can use arithmetic judgment with double parentheses `((` and `))`, it's more concise and easier to read:
 
 ```bash
 #!/bin/bash
@@ -967,7 +989,7 @@ if true; then
 fi
 ```
 
-The different thing is the `if` statement in Bash does not support evaluate conditions natively, you need to combine it with the `test` command judgment (or its variants with square brackets), arithmetic judgment to evaluate conditions. For example:
+The different thing is the `if` statement in Bash does not support evaluate conditions natively, you need to combine it with the `test` command judgment (or its variants with square brackets) or arithmetic judgment to evaluate conditions. For example:
 
 ```bash
 #!/bin/bash
@@ -988,4 +1010,257 @@ elif (( a == b )); then
 else
   echo "$a is greater than $b"
 fi
+```
+
+### `case` Statement
+
+Bash use `case` statement to execute commands based on pattern matching, like `switch` statement in other programming languages:
+
+```bash
+case <variable> in
+  pattern1)
+    # commands to execute if variable matches pattern1
+    ;;
+  pattern2)
+    # commands to execute if variable matches pattern2
+    ;;
+  *)
+    # commands to execute if variable does not match any pattern
+    ;;
+esac
+```
+
+Patterns can receive a regex-like string, a special pattern or special pattern combinations:
+
+Regex-like string:
+
+- `*`: Match any string (including empty string)
+- `?`: Match any single character
+- ...
+
+Special patterns:
+
+- `[[:lower:]]`: Match any lowercase letter
+- `[[:upper:]]`: Match any uppercase letter
+- `[[:digit:]]`: Match any digit
+- `[[:alpha:]]`: Match any alphabetic character
+- ...
+
+Special pattern combinations:
+
+- `[[:lower:]] | [[:upper:]]`: Match any letter
+- ...
+
+For example:
+
+```bash
+#!/bin/bash
+fruit="Banana"
+case $fruit in
+  "Apple")
+    echo "You selected Apple."
+    ;;
+  "Banana")
+    echo "You selected Banana."
+    ;;
+  "Blueberry")
+    echo "You selected Blueberry."
+    ;;
+  [[:lower:]] | [[:upper:]])
+    echo "You selected a fruit unknown but it's name is in one word."
+    ;;
+  [0-9])
+    echo "That's a number, fool!"
+    ;;
+  *)
+    echo "Unknown fruit."
+    ;;
+esac
+```
+
+#### No Break `case` Statement
+
+After Bash 4.0, you can use `;;&` to create a no break `case` statement, which means after executing the commands of a matched pattern, it will continue to execute the commands of the next pattern without checking its condition:
+
+```bash
+#!/bin/bash
+REPLY="a"
+case $REPLY in
+  [[:upper:]])    echo "'$REPLY' is upper case." ;;&
+  [[:lower:]])    echo "'$REPLY' is lower case." ;;&
+  [[:alpha:]])    echo "'$REPLY' is alphabetic." ;;&
+  [[:digit:]])    echo "'$REPLY' is a digit." ;;&
+  [[:graph:]])    echo "'$REPLY' is a visible character." ;;&
+  [[:punct:]])    echo "'$REPLY' is a punctuation symbol." ;;&
+  [[:space:]])    echo "'$REPLY' is a whitespace character." ;;&
+  [[:xdigit:]])   echo "'$REPLY' is a hexadecimal digit." ;;&
+esac
+```
+
+The output will be:
+
+```
+'a' is lower case.
+'a' is alphabetic.
+'a' is a visible character.
+'a' is a hexadecimal digit.
+```
+
+## Loops
+
+### `for` Loops
+
+The syntax of a `for` loop in Bash looks like other scripting languages, but it use **[arithmetic judgment](#arithmetic-judgment)** to evaluate the loop expressions, so all expressions should follow the rules of arithmetic judgment:
+
+```bash
+for (( initial_expression; condition_expression; step_expression )); do
+  # commands to execute in each iteration
+done
+```
+
+### `for ... in ...` Loops
+
+Bash also supports iterating over a list of items by `for ... in ...` syntax:
+
+```bash
+for item in list; do
+  # commands to execute for each item
+done
+```
+
+If `list` is omitted, it will iterate over the special variable `$@` (all command-line arguments passed to the script as separate words) by default, but you **shouldn't do this** in practice to avoid confusion.
+
+If `list` is **a plain text contains multiple words**, `for ... in ...` loop will iterate over each word separately, so if you want to iterate over items with spaces, you should quote the `list`:
+
+```bash
+#!/bin/bash
+for fruit in Apple Pie Banana Split Blueberry Muffin; do
+  echo $fruit
+done
+# -> Apple
+#    Pie
+#    Banana
+#    Split
+#    Blueberry
+#    Muffin
+
+for fruit in "Apple Pie" "Banana Split" "Blueberry Muffin"; do
+  echo $fruit
+done
+# -> Apple Pie
+#    Banana Split
+#    Blueberry Muffin
+```
+
+> [!Note]
+>
+> By using this feature, you can easily count the number of words in a file:
+>
+> ```bash
+> #!/bin/bash
+> word_count=0
+> for word in $(cat filename.txt); do
+>   word_count=$((word_count + 1))
+> done
+> echo "Total words: $word_count"
+> ```
+>
+> But the cost is you should pay more attention to [quoted and unquoted strings](#access-array-elements) when working with `for ... in ...` loops.
+
+Regex-like strings can also be used in the `list`, additionally, it will **expand to the matched files from the current directory**:
+
+```bash
+#!/bin/bash
+for file in *.sh; do
+  echo "Found shell script file: $file"
+done
+```
+
+### `while` Loop
+
+The syntax of a `while` loop is nothing special, but the condition expression should follow the same rules of [`if` statement](#if-statement):
+
+```bash
+while condition; do
+  # commands to execute in each iteration
+done
+```
+
+### `until` Loop
+
+`until` loop is the opposite of `while` loop, it will keep executing the commands until the condition becomes true:
+
+```bash
+until condition; do
+  # commands to execute in each iteration
+done
+```
+
+### `continue` and `break`
+
+Bash also provides `continue` and `break` statements to control the flow of loops:
+
+- `continue`: Skip the current iteration and move to the next iteration of the loop.
+- `break`: Exit the loop immediately.
+
+### `select` Loop
+
+Just like `for ... in ...` loop, `select` loop also iterates over a list of items, but it provides a simple way to create a menu for user selection:
+
+```bash
+select item in list; do
+  # commands to execute for the selected item
+done
+```
+
+For example:
+
+```bash
+#!/bin/bash
+PS3="Please select your favorite fruit (or 'Ctrl+C' to quit): "
+select fruit in "Apple" "Banana" "Blueberry" "Durian" "Elderberry"; do
+  echo "You selected: $fruit"
+done
+```
+
+When you run the script, it will display a numbered menu for selection. You can enter the number corresponding to your choice, and the selected item will be stored in the variable `fruit`.
+
+If you enter with nothing, it will re-display the menu.
+
+To exit the menu, you can press `Ctrl+C`.
+
+## Built-in Commands
+
+### `seq` Command
+
+`seq` command can be used to **generate a sequence of numbers**.
+
+The syntax of `seq` command is (`[x=y]` means the parameter `x` is optional, and has a default value of `y`):
+
+```bash
+seq [options] [first=0] [step=1] <last>
+```
+
+For example, to generate a sequence of numbers from 1 to 5:
+
+```bash
+#!/bin/bash
+echo $(seq 5)
+# -> 1
+#    2
+#    3
+#    4
+#    5
+```
+
+You can also specify the start number, end number and step value:
+
+```bash
+#!/bin/bash
+echo $(seq 2 2 10)
+# -> 2
+#    4
+#    6
+#    8
+#    10
 ```

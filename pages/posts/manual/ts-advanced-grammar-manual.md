@@ -1,9 +1,9 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2025-12-01T13:49+08:00
+update: 2025-12-04T17:34+08:00
 lang: en
-duration: 27min
+duration: 34min
 type: blog+note
 ---
 
@@ -17,7 +17,7 @@ type: blog+note
 
 TypeScript is a superset of JavaScript that adds static typing to the language.
 
-It's the main purpose of TypeScript, remember it and that will help you a lot.
+So adding type support for JavaScript and improving development experience are the main purposes of TypeScript, remember that will help you a lot.
 
 ## Types for JavaScript Basic Data Types
 
@@ -65,6 +65,106 @@ And they can be categorized as following:
 | Null      | `null`                                            |
 | Undefined | `undefined`                                       |
 
+### Type Literal
+
+For `const` variables, TypeScript provides more exact data types (except for `symbol`): Using the value itself as the type, we call it **type literal**.
+
+For example:
+
+```ts [twoslash]
+const a = 'hello'
+//    ^?
+// ...
+
+const b = 1
+//    ^?
+// ...
+
+const c = 1n
+//    ^?
+// ...
+
+const d = true
+//    ^?
+// ...
+
+const e = {
+  a: 1,
+  b: 'hello',
+  c: true,
+  d: () => {
+    console.log('hello')
+  },
+  e() {
+    console.log('hello')
+  },
+} as const
+console.log(e)
+//          ^?
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// ...
+```
+
+> [!Note]
+>
+> You may notice that for objects, you should manually append `as const` to the object literal.
+>
+> This is because, in JavaScript, a `const` variable just means it cannot be reassigned with other values, but does not mean it's value cannot be mutated, especially for objects.
+>
+> So TypeScript lets you use `as const` to decide whether the object value is immutable or mutable, just like `Object.freeze` and `Object.seal`, but compile-time only, with more compatibility.
+
+And you can also use them as types explicitly:
+
+<!-- eslint-disable ts/prefer-as-const -->
+
+```ts [twoslash]
+const a: 'hello' = 'hello'
+//    ^?
+// ...
+
+const b: 1 = 1
+//    ^?
+// ...
+
+const c: 1n = 1n
+//    ^?
+// ...
+
+const d: true = true
+//    ^?
+// ...
+
+const e: { a: 1, b: 'hello', c: true } = { a: 1, b: 'hello', c: true }
+//    ^?
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// Or more loosely:
+const f: { a: number, b: string, c: boolean } = { a: 1, b: 'hello', c: true }
+//    ^?
+// ...
+
+// ...
+
+// ...
+
+// ...
+```
+
+The most commonly used type literals are [string](#string-template-literal-type) and [object](#object-type-literal).
+
 ## Types for JavaScript Built-In Prototypes
 
 > [!Note]
@@ -93,40 +193,52 @@ TypeScript also has some types to express corresponding JavaScript built-in prot
 
 > [!Note]
 >
-> As primitive wrapper objects are not meant to **be used directly** in JavaScript, because they are only designed to be used internally by the JavaScript engine to **support calling methods on primitive values**, and may cause unexpected behavior:
+> As primitive prototypes are only designed to **be used internally** by the JavaScript engine to **support calling methods on primitive values**, it may cause unexpected behavior:
 >
 > <!-- eslint-disable no-new-wrappers, unicorn/new-for-builtins -->
 >
 > ```ts
+> // Objects are truthy, although it's a wrapper object for `false` // [!code highlight:4]
 > if (new Boolean(false)) {
->   console.log('Boolean(false) is truthy') // This will be logged!
+>   console.log('new Boolean(false) is truthy') // This will be logged!
 > }
 > else {
->   console.log('Boolean(false) is falsy')
+>   console.log('new Boolean(false) is falsy')
 > }
 >
+> // Of course, `false` is falsy // [!code highlight:1]
 > if (false) {
 >   console.log('false is truthy')
 > }
-> else {
+> else { // [!code highlight:3]
 >   console.log('false is falsy') // This will be logged!
 > }
 > ```
 >
-> There is nothing different in TypeScript: The corresponding types of wrapper objects for primitivesare not meant to **be used directly too**. They are used for similar purpose: **provide type support for methods on primitive values**.
+> There is nothing different in TypeScript: The corresponding types of primitive prototypes are designed to **be used internally** too, in order to **provide type support for methods on primitive values**.
 >
-> ```ts
-> const str: string = 'hello'
-> /**
->  * A value of type `string` is automatically "inherited" from the wrapper type
->  * `String`, so that you can get the definition of methods on it.
->  */
-> console.log(str.toUpperCase())
+> <!-- eslint-disable no-new-wrappers, unicorn/new-for-builtins, ts/no-wrapper-object-types -->
+>
+> ```ts [twoslash]
+> // The primitive type `string` contains all the members of `String.prototype`
+> // internally, so you can call methods on it.
+> const str1: string = 'hello'
+> //    ^?
+> // ..
+>
+> console.log(str1.toUpperCase())
+> //               ^?
+>
+> // ...
+>
+> // ⚠️ No errors, but you must not do like this!
+> const str2: String = 'hello'
+> const str3: String = new String('hello')
 > ```
 
 At the end, let's take a look at the type definition of `String` in TypeScript, to learn more about them:
 
-<!-- eslint-disable no-var, vars-on-top -->
+<!-- eslint-disable no-var, vars-on-top, ts/method-signature-style -->
 
 ```ts
 // @file: node_modules/typescript/lib/lib.es5.d.ts
@@ -134,11 +246,13 @@ At the end, let's take a look at the type definition of `String` in TypeScript, 
 // ...
 
 /**
- * The type definition of string wrapper object, also the type of global
- * `String.prototype`.
+ * The type definition of prototype of all string values.
  */
 interface String {
-  // ... Members of `String.prototype`
+  toString(): string
+  charAt(pos: number): string
+
+  // ...
 
   readonly [index: number]: string
 
@@ -146,7 +260,7 @@ interface String {
 }
 
 /**
- * The type definition of string wrapper constructor, also the global `String`.
+ * The type definition of `String` constructor.
  */
 interface StringConstructor {
   /**
@@ -165,10 +279,6 @@ interface StringConstructor {
 
   // ...
 }
-
-/**
- * The type definition of global `String` we used everyday.
- */
 declare var String: StringConstructor
 
 // ...
@@ -220,7 +330,7 @@ const a: any = 1
 const b: any = 'hello'
 ```
 
-**unknown** is a type that is more strict than `any`, it accepts any types, but you can't do anything with it, you need to check the type first:
+**unknown** is a type that is more strict than `any`, it accepts any types, but you can't do anything with it, you need to confirm the real type first:
 
 ```ts [twoslash]
 // @errors: 18046
@@ -276,7 +386,7 @@ a.c = false
 
 ### Type Narrowing
 
-When you want to implement some logic based on the union types, you need to narrow the type first, then implement the type-specific logic.
+When you want to implement some type-specific logic, you need to narrow the type first.
 
 For type narrowing, we can use:
 
@@ -396,9 +506,9 @@ For type narrowing, we can use:
 
 ### Type Guards
 
-As the most important thing in TypeScript, type guards are a way to check the type of a variable at runtime.
+Type guards are the way to check the type of a variable at runtime.
 
-For example:
+A function with return type of `x is Type` is a type guard function, it can be used to narrow the type of the variable. You can use it like how you use `typeof` keyword,for example:
 
 ```ts [twoslash]
 function isNumber(a: any): a is number {
@@ -416,7 +526,17 @@ else {
 }
 ```
 
-A function with return type of `x is Type` is a type guard function, it can be used to narrow the type of the variable.
+## String Template Literal Type
+
+String template literal types build on string literal, and have the ability to expand into many strings via unions:
+
+```ts [twoslash]
+type World = 'World'
+type Name = 'Alice' | 'Bob'
+type Greeting = `Hello ${World}, ${Name}!`
+//   ^?
+// ...
+```
 
 ## Object Types
 
@@ -424,7 +544,7 @@ A function with return type of `x is Type` is a type guard function, it can be u
 
 We know that everything except primitive values is object in JavaScript, so it's important to know how to define an object type in TypeScript.
 
-Instead of using `object` type directly, you can use `{}` syntax to define an more clear object type, we call it **object type literal**:
+Instead of using `object` type directly, you can use `{ ... }` syntax to define a more exact object type, we call it **object type literal**:
 
 <!-- eslint-disable ts/method-signature-style -->
 
@@ -477,9 +597,11 @@ Sometimes you don’t know all the names of a type’s properties ahead of time,
 
 In those cases you can use an index signature to describe the types of possible values, for example:
 
+<!-- eslint-disable ts/consistent-type-definitions -->
+
 ```ts [twoslash]
 // `number` index signature
-interface NumberObject {
+type NumberObject = {
   [index: number]: string
 }
 const n1: NumberObject = {
@@ -494,7 +616,7 @@ const n2: NumberObject = [
 ]
 
 // `string` index signature
-interface StringObject {
+type StringObject = {
   [index: string]: string
 }
 const s: StringObject = {
@@ -506,14 +628,32 @@ const s: StringObject = {
 
 ## Interface Types
 
-Interface is a better way to define a custom [object type literal](#object-type-literal), which are more intuitive and easier to understand.
+If you need a reusable object type, you must define it with name by `type` or `interface` keyword.
 
-`type` vs. `interface`:
+<!-- eslint-disable ts/consistent-type-definitions -->
+
+```ts
+type MyObject = {
+  a: number
+  b: string
+  c: boolean
+}
+
+interface MyInterface {
+  a: number
+  b: string
+  c: boolean
+}
+```
+
+### `type` vs. `interface`
+
+Interface is a better way to define a custom [object type literal](#object-type-literal), which are more intuitive and more powerful:
 
 - Extending: Both can be extended, but interfaces support [declaration merging](#declaration-merging).
 - Unions/Intersections: Only type aliases support union and intersection types.
 - Implements: Classes can implement either.
-- Recommendation: Use interface for objects, type for everything else.
+- Recommendation: Use interface for objects (except for the need of using union/intersection), type for everything else.
 
 <!-- eslint-disable ts/consistent-type-definitions, ts/method-signature-style -->
 
@@ -559,35 +699,6 @@ class MyClass2 implements MyObject2 {
 }
 ```
 
-> [!Note]
->
-> Sometimes, when you want to accept some class constructor function that produces an instance of a class which derives from some interface/abstract class, you should use **constructor signature** to define the type:
->
-> ❌ Use the type directly:
->
-> ```ts [twoslash]
-> // @errors: 2391 2351
-> interface Animal {
->   makeSound: () => void
-> }
-> function greetAnimal(constructor: Animal) {
->   const instance = new constructor()
->   instance.makeSound()
-> }
-> ```
->
-> ✔️ Use the constructor signature:
->
-> ```ts [twoslash]
-> interface Animal {
->   makeSound: () => void
-> }
-> function greetAnimal(constructor: new (...args: any[]) => Animal) {
->   const instance = new constructor()
->   instance.makeSound()
-> }
-> ```
-
 ## Array and Tuple Types
 
 In TypeScript, we use the **`Array`** type (we mentioned it in [built-in prototypes](#types-for-javascript-built-in-prototypes) section before) or **`[]` (array type literal)** to define array types, and they are the same:
@@ -598,7 +709,7 @@ const arr1: Array<string> = ['a', 'b', 'c']
 const arr2: string[] = ['a', 'b', 'c']
 ```
 
-And tuple is a special array type that is used to describe an array with **fixed length and element types**, we can create it by using **tuple type literal**:
+And tuple is a special array type that is used to describe an array with **fixed length and element types**, we can create it by using **`[ ... ]` (tuple type literal)**:
 
 ```ts
 const tuple1: [number, number] = [0.5, 7.8]
@@ -628,7 +739,7 @@ Nothing magic!
 
 ## Function Types
 
-In TypeScript, there are two ways to define function types: **function declaration** and **function type literal**.
+In TypeScript, there are two ways to define function types: **`function fn( ... ) { ... }` (function declaration)** and **`( ... ) => ...` (function type literal)**, corresponding to the function declaration and function expression in JavaScript.
 
 And the syntax is nothing special:
 
@@ -662,56 +773,67 @@ interface BothConstructorAndFunctionLike {
 
 So that we can assign a function to a variable with `object` or function-like type directly:
 
+- Object:
+
+```ts [twoslash]
+const obj: object = function () {
+  console.log('hello')
+}
+```
+
 - Function Like:
 
   ```ts [twoslash]
   // @errors: 7009
-  interface SymbolConstructor {
+  interface FunctionLike {
     (description?: string | number): symbol
   }
-  const SymbolConstructor: SymbolConstructor = function (
+  const FunctionLike: FunctionLike = function (
     description?: string | number
   ): symbol {
     return Symbol(description)
   }
 
-  const symbol1 = SymbolConstructor('symbol')
+  const symbol1 = FunctionLike('symbol')
   //    ^?
   // ...
 
-  const symbol2 = new SymbolConstructor('symbol')
+  // You cannot call `new` on a function-like object
+  const symbol2 = new FunctionLike('symbol')
   ```
 
 - Constructor Like:
 
   ```ts [twoslash]
   // @errors: 2348
-  interface DateConstructor {
+  interface ConstructorLike {
     new (value: string | number | Date): Date
   }
-  const DateConstructor: DateConstructor = function (
+  const ConstructorLike: ConstructorLike = function (
     value: string | number | Date
   ): Date {
     return new Date(value)
   } as any
-  const date1 = DateConstructor('2025-11-24')
 
-  const date2 = new DateConstructor('2025-11-24')
+  // You cannot call without `new` on a constructor-like object
+  const date1 = ConstructorLike('2025-11-24')
+
+  const date2 = new ConstructorLike('2025-11-24')
   //    ^?
   // ...
   ```
 
-- Both Constructor and Function Like:
+- Both Function and Constructor Like:
 
   <!-- eslint-disable no-var, no-new-wrappers, ts/no-wrapper-object-types, unicorn/new-for-builtins -->
 
   ```ts [twoslash]
-  interface NumberConstructor {
+  interface BothLike {
     <T extends number>(value: T): T
     new<T extends number>(value: T): Number
   }
-  // We declare this constructor function with type `NumberConstructor`
-  const NumberConstructor: NumberConstructor = function <T extends number>(
+  // We declare this constructor function with type `BothLike`
+  const BothLike: BothLike = function <T extends number>(
     value: T
   ): number | Number {
     if (new.target) {
@@ -720,27 +842,29 @@ So that we can assign a function to a variable with `object` or function-like ty
     else {
       return value
     }
-    // We cannot create a function that satisfies `NumberConstructor` type
+    // We cannot create a function that satisfies `BothLike` type
     // directly, so we use `as any` to bypass the type check.
   } as any
 
-  const number1 = NumberConstructor(1)
+  const number1 = BothLike(1)
   //    ^?
   // ...
 
-  const number2 = new NumberConstructor(1)
+  const number2 = new BothLike(1)
   //    ^?
   // ...
   ```
 
-### Function Overloading
+### Function Overload
 
-Function overloading is a way to define multiple function signatures for the same function, the only thing you need to do is to define the function signatures together, and put the implementation after them:
+Function overload is a way to define multiple function signatures for the same function, the only thing you need to do is to define the function signatures together, and put the implementation after them.
+
+The signature of implementation function will not be used in the type system, it's used for implementation only, that means you can only see two definitions of `fn` in the example below:
 
 ```ts [twoslash]
-function fn(x: number, y: number): number
-function fn(xy: string): number
-function fn(x: string | number, y: number = 0): number {
+function fn(x: number, y: number): number // -> Overload 1
+function fn(xy: string): number // -> Overload 2
+function fn(x: string | number, y: number = 0): number { // -> Implementation
   if (typeof x === 'string') {
     return +x
   }
@@ -748,6 +872,12 @@ function fn(x: string | number, y: number = 0): number {
     return x + y
   }
 }
+
+// One signature with one overload, totally two definitions.
+console.log(fn)
+//          ^?
+
+// ...
 ```
 
 Notice that, the overload function signatures should compatible with the implementation, or you will get an error:
@@ -765,18 +895,6 @@ function fn(x: string | number, y: number = 0): number {
     return x + y
   }
 }
-```
-
-## String Template Literal Type
-
-String template literal types build on string literal, and have the ability to expand into many strings via unions:
-
-```ts [twoslash]
-type World = 'World'
-type Name = 'Alice' | 'Bob'
-type Greeting = `Hello ${World}, ${Name}!`
-//   ^?
-// ...
 ```
 
 ## Generic Types
@@ -914,83 +1032,94 @@ class Dog extends Animal {
 }
 ```
 
-> [!Note]
->
-> Sometimes, when you want to accept some class constructor function that produces an instance of a class which derives from some interface/abstract class, you should use **constructor signature** to define the type:
->
-> ❌ Use the type directly:
->
-> ```ts [twoslash]
-> // @errors: 2391 2351
-> abstract class Mammal {
->   abstract makeSound(): void
-> }
-> function greetMammal(constructor: Mammal) {
->   const instance = new constructor()
->   instance.makeSound()
-> }
-> ```
->
-> ✔️ Use the constructor signature:
->
-> ```ts [twoslash]
-> abstract class Mammal {
->   abstract makeSound(): void
-> }
-> function greetMammal(constructor: new (...args: any[]) => Mammal) {
->   const instance = new constructor()
->   instance.makeSound()
-> }
-> ```
-
 ## Decorators
 
-Decorators provide a way to add both annotations and a meta-programming syntax for class declarations and members (Like annotations in Java).
+Decorator in is a special function that can be called on **classes**, **class elements**, or **other JavaScript syntax forms** during definition (Like annotations in Java).
 
-To enable experimental support for decorators, you must enable the `experimentalDecorators` compiler option (typescript@^5.0.0):
+Now that both [Decorators](https://github.com/tc39/proposal-decorators) and [Decorator Metadata](https://github.com/tc39/proposal-decorator-metadata) have achieved Stage 3 within TC39, you can use them in TypeScript without any configuration.
 
-```json
-{
-  "compilerOptions": {
-    "experimentalDecorators": true
+[Parameter Decorator](https://github.com/tc39/proposal-class-method-parameter-decorators) is still in Stage 1, hope it will be supported in the future.
+
+### Decorator Definitions
+
+Using TypeScript interfaces for brevity and clarity, this is the general shape of the API:
+
+```ts
+type Decorator = (value: Input, context: {
+  kind: string
+  name: string | symbol
+  access: {
+    get?: () => unknown
+    set?: (value: unknown) => void
   }
+  private?: boolean
+  static?: boolean
+  metadata: Record<string | number | symbol, unknown>
+  addInitializer: (initializer: () => void) => void
+}) => Output | void
+```
+
+The `Input` is determind by the target of the decorator, and if a decorator returns a value, it means replace the original `Input` on target with the returned one.
+
+For example, for class decorator, the `Input` is the class constructor:
+
+```ts
+// Using `Constructor<T = void>` type from `@antfu/utils` for more concise
+// code, is the same as `new<T = void>(...args: any[]) => T`.
+import type { Constructor } from '@antfu/utils'
+
+function logClass(constructor: Constructor) {
+  console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
 }
 ```
 
-A Decorator is a special function that can be attached to a **class declaration**, **method**, **accessor**, **property**, or **parameter**.
+For context, TypeScript already has types to support them. See the showing examples below for more details.
+
+### Using Decorators
 
 Decorators use the form `@expression`, where `expression` must evaluate to a function that will be called at runtime with information about the decorated declaration.
 
 For example:
 
 ```ts
-function logClass(constructor: new (...args: any[]) => any) {
+import type { Constructor } from '@antfu/utils'
+
+function logClass(constructor: Constructor, { kind }: ClassDecoratorContext) {
+  if (kind !== 'class')
+    return
   console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
 }
 
+// When the code is loaded, the `logClass` function will be called with the
+// `UserService` class constructor
+// -> Class UserService was defined at 2025-12-04T04:03:55.667Z // [!code highlight:2]
 @logClass
 class UserService {
   getUsers() {
     return ['Alice', 'Bob', 'Charlie']
   }
 }
-
-// When the code is loaded, the `logClass` function will be called with the
-// `UserService` class constructor
 ```
 
 ### Decorator Factories
 
-A decorator factory is a function that returns a decorator.
+A decorator factory is a function that returns a decorator, you can call it with arguments to create a decorator with different configurations:
 
 ```ts
-function logMethod(message: string) {
-  return function (constructor: new (...args: any[]) => any) { // [!code highlight:3]
+function logClass(message: string) {
+  return function (constructor: Constructor, { kind }: ClassDecoratorContext) { // [!code highlight:6]
+    if (kind !== 'class')
+      return
     console.log(message)
+    console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
   }
 }
 
-@logMethod('Method getUsers was called')
+@logClass('Class UserService was defined!') // [!code highlight:5]
+/**
+ * -> Class UserService was defined!
+ *    Class UserService was defined at 2025-12-04T04:03:55.667Z
+ */
 class UserService {
   getUsers() {
     return ['Alice', 'Bob', 'Charlie']
@@ -1000,13 +1129,25 @@ class UserService {
 
 ### Class Decorators
 
-The class decorator is applied to the constructor of the class and can be used to observe, modify, or replace a class definition.
+The class decorator is applied to the class constructor.
+
+When the class constructor definition is loaded, the decorator will be called with the constructor and the decorator context.
 
 ```ts
-// [!code highlight:4]
-function sealed(constructor: new (...args: any[]) => any) {
-  Object.seal(constructor)
+// [!code highlight:14]
+function sealed(constructor: Constructor, { kind, name }: ClassDecoratorContext) {
+  if (kind !== 'class')
+    return
+
+  // You cannot seal the class constructor, or you will break the behavior
+  // of decorators, e.g.:
+  // Object.seal(constructor)
+  // -> TypeError: Cannot add property Symbol(Symbol.metadata), object is not extensible
+
+  // You can only seal the prototype of the class constructor:
   Object.seal(constructor.prototype)
+
+  console.log(name)
 }
 
 // [!code highlight:1]
@@ -1020,26 +1161,32 @@ class BugReport {
   }
 }
 
-// [!code highlight:1]
+// [!code highlight:2]
 BugReport.prototype.newMethod = function () {}
+// -> BugReport
+// -> TypeError: Cannot add property newMethod, object is not extensible
 ```
 
-### Method Decorators
+### Class Method Decorators
 
-The method decorator is applied to the property descriptor for the method, and can be used to observe, modify, or replace a method definition.
+When the class method definition is loaded, the decorator will be called with the method and the decorator context.
 
 ```ts
-// [!code highlight:11]
-function measureTime(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-  const originalMethod = descriptor.value
-  descriptor.value = function (...args: any[]) {
+// [!code highlight:15]
+function measureTime(
+  method: (...args: any[]) => any,
+  { kind, name }: ClassMethodDecoratorContext
+) {
+  if (kind !== 'method')
+    return
+  return function (...args: any[]) {
     const start = performance.now()
-    const result = originalMethod.apply(this, args)
+    // @ts-expect-error Missing type support
+    const result = method.call(this, args)
     const end = performance.now()
-    console.info(`${propertyKey} executed in ${(end - start).toFixed(2)}ms`)
+    console.info(`${String(name)} executed in ${(end - start).toFixed(2)}ms`)
     return result
   }
-  return descriptor
 }
 
 class DataProcessor {
@@ -1053,25 +1200,26 @@ class DataProcessor {
 
 // [!code highlight:2]
 const processor = new DataProcessor()
-processor.processData([1, 2, 3, 4, 5])
+processor.processData([1, 2, 3, 4, 5]) // -> processData executed in 24.53ms
 ```
 
-### Property Decorators
+### Class Field Decorators
 
-The property decorator is applied to the property of the class, and can be used to observe, modify, or replace a property definition.
+When the class field definition is loaded, the decorator will be called with `undefined` and the decorator context.
 
-We can use metadata to record information about the property, as in the following example:
+We can use metadata to record information about the field, as in the following example:
 
 ```ts
-import 'reflect-metadata'
+// Runtime polyfill for environment that does not support metadata API
+(Symbol as { metadata: symbol }).metadata ??= Symbol('Symbol.metadata')
 
 // [!code highlight:7]
-const formatMetadataKey = Symbol('format')
 function format(formatString: string) {
-  return Reflect.metadata(formatMetadataKey, formatString)
-}
-function getFormat(target: any, propertyKey: string) {
-  return Reflect.getMetadata(formatMetadataKey, target, propertyKey)
+  return function (_: undefined, { kind, metadata }: ClassFieldDecoratorContext) {
+    if (kind !== 'field')
+      return
+    metadata.format = formatString
+  }
 }
 
 class Greeter {
@@ -1085,13 +1233,136 @@ class Greeter {
 
   greet() {
     // [!code highlight:1]
-    const formatString = getFormat(this, 'greeting')
+    const formatString = Greeter[Symbol.metadata]?.format as string ?? ''
     return formatString.replace('%s', this.greeting)
+  }
+}
+
+const greeter = new Greeter('world!') // [!code highlight:3]
+console.log(greeter.greet()) // -> Hello, world!
+console.log(greeter.greeting) // -> world!
+```
+
+### Class Getter/Setter Decorators
+
+When the class getter/setter definition is loaded, the decorator will be called with the getter/setter and the decorator context.
+
+<!-- eslint-disable accessor-pairs -->
+
+```ts
+function logged<T extends (...args: any[]) => any>(
+  method: T, { kind, name }: ClassGetterDecoratorContext): T
+function logged<T extends (...args: any[]) => any>(
+  method: T, { kind, name }: ClassSetterDecoratorContext): T
+function logged<T extends (...args: any[]) => any>(
+  method: T,
+  { kind, name }: ClassGetterDecoratorContext | ClassSetterDecoratorContext
+) {
+  if (kind !== 'getter' && kind !== 'setter')
+    return
+  return function (...args: any[]) {
+    console.log(`Starting ${String(name)} with arguments ${args.join(', ')}`)
+    const ret = method.call(this, ...args)
+    console.log(`Ending ${String(name)}`)
+    return ret
+  }
+}
+
+class C {
+  @logged
+  set x(arg: number) {}
+}
+
+new C().x = 1
+// -> Starting x with arguments 1
+//    Ending x
+```
+
+#### Class Auto Accessor Decorators
+
+Auto-Accessors is part of [Grouped and Auto-Accessors](https://github.com/tc39/proposal-grouped-and-auto-accessors) proposal in Stage 1 within TC39, it allows you to define a class field with a grouped accessor without explicitly defining the getter and setter.
+
+```ts
+class C {
+  accessor x = 1
+}
+```
+
+This is the same as:
+
+```ts
+class C {
+  #__x = 1
+  get x() {
+    return this.#__x
+  }
+
+  set x(value) {
+    this.#__x = value
   }
 }
 ```
 
-### Constructor/Method Parameter Decorators
+Decorators are also supported.
+
+```ts
+function logged<T, V>(
+  value: ClassAccessorDecoratorTarget<T, V>,
+  { name }: ClassAccessorDecoratorContext
+): ClassAccessorDecoratorResult<T, V> {
+  const { get, set } = value
+  return {
+    init(initialValue) {
+      console.log(`Initializing ${String(name)} with value ${initialValue}`)
+      return initialValue
+    },
+    get() {
+      console.log(`Getting ${String(name)}`)
+      return get.call(this)
+    },
+    set(val) {
+      console.log(`Setting ${String(name)} to ${val}`)
+      return set.call(this, val)
+    },
+  }
+}
+
+class C {
+  @logged accessor x = 1
+}
+
+const c = new C() // -> Initializing x with value 1
+c.x // -> Getting x
+c.x = 123 // -> Setting x to 123
+```
+
+### Class Constructor/Method Parameter Decorators
+
+> [!Caution]
+>
+> As [Decorators](https://github.com/tc39/proposal-decorators) has removed the parameter decorator support while archiving Stage 3 within TC39, and new solution [Parameter Decorators](https://github.com/tc39/proposal-class-method-parameter-decorators) is still in Stage 1.
+>
+> As a workaround, this is still the implementation using [the old Decorators in Stage 2](https://github.com/tc39/proposal-decorators-previous), and it's **incompatible** with new decorators.
+>
+> To run this example, you need:
+>
+> - Install `reflect-metadata` package:
+>
+>   ```sh
+>   npm i reflect-metadata --save
+>   ```
+>
+> - Enable `experimentalDecorators` in `tsconfig.json`:
+>
+>   ```json
+>   {
+>     "compilerOptions": {
+>       "experimentalDecorators": true
+>     }
+>   }
+>   ```
+>
+> Hope there will be a better solution in the future. (These decorators are quite important for parameter validation and dependency injection! 😭)
 
 The parameter decorator is applied to the function for a class constructor or method declaration.
 
@@ -1103,7 +1374,7 @@ const requiredMetadataKey = Symbol('required')
 function required(
   target: object,
   propertyKey: string | symbol,
-  parameterIndex: number
+  parameterIndex: number,
 ) {
   const requiredParameters: number[]
     = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) ?? []
@@ -1112,13 +1383,13 @@ function required(
     requiredMetadataKey,
     requiredParameters,
     target,
-    propertyKey
+    propertyKey,
   )
 }
 function validate(
   target: any,
   propertyName: string,
-  descriptor: TypedPropertyDescriptor<(...args: any[]) => any>
+  descriptor: TypedPropertyDescriptor<(...args: any[]) => any>,
 ) {
   const method = descriptor.value!
   descriptor.value = function () {
@@ -1152,21 +1423,97 @@ class BugReport {
     }
   }
 }
+
+// [!code highlight:14]
+const bugReport = new BugReport('A bug flew into the system!')
+console.log(bugReport.print(true))
+/**
+ * -> type: report
+ *    title: A bug flew into the system!
+ */
+console.log(bugReport.print(false))
+/**
+ * -> A bug flew into the system!
+ */
+console.log(bugReport.print(undefined))
+/**
+ * -> Error: Missing required argument.
+ */
 ```
 
-### Metadata
+## Types Manipulation
 
-Some examples use the `reflect-metadata` library which adds a polyfill for an experimental metadata API. This library is not yet part of the ECMAScript (JavaScript) standard. However, once decorators are officially adopted as part of the ECMAScript standard, these extensions will be proposed for adoption.
+Welcome! You are now reading the most import part of TypeScript.
 
-Before that, you need to install this library via npm:
+Before this, you already know the a lot of the features of different types in TypeScript, now you will learn how to manipulate them.
 
-```sh
-npm i reflect-metadata --save
+### Type Variables
+
+To type a variable, you already know the syntax:
+
+```
+<var|let|const> <variable_name>: <Type> ...
 ```
 
-## JSDoc
+For example:
 
-See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) or [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for more examples.
+```ts
+const a: number = 1
+```
+
+But there are some best practices to follow:
+
+- For a `const` variable in JavaScript, it means it cannot be reassigned with other values, but does not mean it's value cannot be mutated.
+
+  So, TypeScript recognizes the properties of an `const` object **mutable**, the type of it's properties are not exactly `1`, `true`, but `number`, `boolean`:
+
+  ```ts [twoslash]
+  const obj = {
+    a: 1,
+    b: true,
+    c: {
+      d: 'abcd',
+      e: null
+    }
+  }
+  console.log(obj)
+  //          ^?
+
+  // ...
+
+  // ...
+
+  // ...
+
+  // ...
+
+  // ...
+  ```
+
+  Instead, you should manually using `as const` to tell TypeScript I won't mutate the value after it's assigned:
+
+  ```ts [twoslash]
+  const obj = {
+    a: 1,
+    b: true,
+    c: {
+      d: 'abcd',
+      e: null
+    }
+  } as const
+  console.log(obj)
+  //          ^?
+
+  // ...
+
+  // ...
+
+  // ...
+
+  // ...
+
+  // ...
+  ```
 
 ## Custom Types
 
@@ -1194,7 +1541,7 @@ numOrString = 'hello'
 numOrString = true
 ```
 
-This is very important in TypeScript, through it, you can create your own utility types, for better type development, like:
+This is also very important in TypeScript, through it, you can create your own utility types, for better type development, like:
 
 ```ts
 type Nullable<T> = T | null | undefined
@@ -1589,6 +1936,10 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
   //   ^?
   // ...
   ```
+
+## JSDoc
+
+See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) or [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for more examples.
 
 ## Built-in Utility Types
 

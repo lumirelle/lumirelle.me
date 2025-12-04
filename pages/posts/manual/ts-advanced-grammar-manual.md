@@ -119,6 +119,8 @@ console.log(e)
 > This is because, in JavaScript, a `const` variable just means it cannot be reassigned with other values, but does not mean it's value cannot be mutated, especially for objects.
 >
 > So TypeScript lets you use `as const` to decide whether the object value is immutable or mutable, just like `Object.freeze` and `Object.seal`, but compile-time only, with more compatibility.
+>
+> (Array, tuple, function are the same, because they are objects under the hood 🙂)
 
 And you can also use them as types explicitly:
 
@@ -715,6 +717,14 @@ And tuple is a special array type that is used to describe an array with **fixed
 const tuple1: [number, number] = [0.5, 7.8]
 // You can also provide the names of the elements, for better information
 const tuple2: [x: number, y: number] = [0.5, 7.8]
+```
+
+So we can imagine that, a constant array is a tuple, because it's length and element types are fixed:
+
+```ts [twoslash]
+const constArr = [1, 2, 3] as const
+//    ^?
+// ...
 ```
 
 That's all about them. So let's talk about something digressive. 😏
@@ -1447,77 +1457,9 @@ Welcome! You are now reading the most import part of TypeScript.
 
 Before this, you already know the a lot of the features of different types in TypeScript, now you will learn how to manipulate them.
 
-### Type Variables
+### Type Alias
 
-To type a variable, you already know the syntax:
-
-```
-<var|let|const> <variable_name>: <Type> ...
-```
-
-For example:
-
-```ts
-const a: number = 1
-```
-
-But there are some best practices to follow:
-
-- For a `const` variable in JavaScript, it means it cannot be reassigned with other values, but does not mean it's value cannot be mutated.
-
-  So, TypeScript recognizes the properties of an `const` object **mutable**, the type of it's properties are not exactly `1`, `true`, but `number`, `boolean`:
-
-  ```ts [twoslash]
-  const obj = {
-    a: 1,
-    b: true,
-    c: {
-      d: 'abcd',
-      e: null
-    }
-  }
-  console.log(obj)
-  //          ^?
-
-  // ...
-
-  // ...
-
-  // ...
-
-  // ...
-
-  // ...
-  ```
-
-  Instead, you should manually using `as const` to tell TypeScript I won't mutate the value after it's assigned:
-
-  ```ts [twoslash]
-  const obj = {
-    a: 1,
-    b: true,
-    c: {
-      d: 'abcd',
-      e: null
-    }
-  } as const
-  console.log(obj)
-  //          ^?
-
-  // ...
-
-  // ...
-
-  // ...
-
-  // ...
-
-  // ...
-  ```
-
-## Custom Types
-
-You may already notice that, we can use `type` keyword to define a custom type:
+You may already notice that, we can use `type` keyword to define a custom type (create a type alias):
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1528,6 +1470,8 @@ type CustomObject = {
   b: string
   c: boolean
 }
+type CustomFunction = (a: number, b: string) => boolean
+// ...
 ```
 
 Then use them in your code:
@@ -1539,18 +1483,33 @@ type NumberOrString = number | string
 let numOrString: NumberOrString = 1
 numOrString = 'hello'
 numOrString = true
+// ...
 ```
 
-This is also very important in TypeScript, through it, you can create your own utility types, for better type development, like:
+Through it, you can create complex and reusable types, for better type development.
 
-```ts
-type Nullable<T> = T | null | undefined
+### `typeof` Operator
 
-// Before:
-const a1: number | null | undefined = 1
+Sometimes, especially when you are facing a really complex type, you doesn't want to construct that type manually, and that type is not exported, the only way to get the type is to use `typeof` operator:
 
-// After:
-const a2: Nullable<number> = 1
+```vue
+<script setup lang="ts">
+const xxxRef = ref<typeof ComponentXxx>()
+</script>
+
+<template>
+  <ComponentXxx ref="xxxRef" />
+</template>
+```
+
+Additionally, TypeScript intentionally limits the sorts of expressions you can use typeof on: It’s only legal to use `typeof` on **identifiers**, but not **expressions**:
+
+<!-- eslint-skip -->
+
+```ts [twoslash]
+// @errors: 1005
+// Instead, you should use `ReturnType<typeof alert>`.
+let shouldContinue: typeof alert("Are you sure you want to continue?");
 ```
 
 ### `keyof` Operator
@@ -1570,30 +1529,9 @@ type ObjectKeys = keyof ObjectType & {}
 // ...
 ```
 
-### `typeof` Operator
-
-The `typeof` operator is used to get the type of a variable:
-
-```ts [twoslash]
-const a: number = 1
-type A = typeof a
-//   ^?
-// ...
-```
-
-TypeScript intentionally limits the sorts of expressions you can use typeof on. Specifically, it’s only legal to use typeof on identifiers, but not expressions:
-
-<!-- eslint-skip -->
-
-```ts [twoslash]
-// @errors: 1005
-// Meant to use = ReturnType<typeof alert>
-let shouldContinue: typeof alert("Are you sure you want to continue?");
-```
-
 ### Indexed Access Types
 
-We can use an indexed access type to look up a specific property on another type:
+We can use an indexed access type to look up a specific property on object type (Don't forget, array, tuple, and function are also object types 😄):
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1602,9 +1540,14 @@ type Person = { age: number, name: string, alive: boolean }
 type Age = Person['age']
 //   ^?
 // ...
+
+type Persons = Person[]
+type PersonsCount = Persons['length']
+//   ^?
+// ...
 ```
 
-The indexing type is itself a type, so we can use unions, keyof, or other types entirely:
+The index itself is a type, so we can use unions, keyof, or other types entirely:
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1648,6 +1591,40 @@ type Age = typeof MyArray[number]['age']
 // ...
 ```
 
+Recall what array-like object is? Yes, an object with index signature from `number` to its elements, plus some array-specific properties like `length`.
+
+```ts
+interface Array<T> {
+  [index: number]: T
+  length: number
+  // ...
+}
+```
+
+What's more, what `number` is? It's just a union type of all numbers!
+
+So `Array[number]` and `Tuple[number]` will naturally return the union of all element types!
+
+```ts [twoslash]
+const arr = [1, 2, 3]
+//    ^?
+// ...
+
+type ArrayElements = typeof arr[number]
+//   ^?
+// ...
+
+// A constant array is a tuple, because it's length and element types are
+// fixed.
+const tuple = [1, 2, 3] as const
+//    ^?
+// ...
+
+type TupleElements = typeof tuple[number]
+//   ^?
+// ...
+```
+
 ### Conditional Types
 
 Conditional types let you can make decisions based on the type of the input:
@@ -1665,10 +1642,10 @@ type B = IsString<number>
 // ...
 ```
 
-The syntax is:
+The syntax is quite simple:
 
-```
-SomeType extends OtherType ? TrueType : FalseType
+```ts
+type ConditionalType = SomeType extends OtherType ? TrueType : FalseType
 ```
 
 #### Distributive Conditional Types
@@ -1695,6 +1672,11 @@ This is because:
 
 ```ts
 type StrArrOrNumArr = ToArray<string | number>
+                    // TypeScript will read the definition of `ToArray`
+                    // first, so it knows `Type` in `ToArray` is a naked
+                    // type, and it expands `ToArray<string | number>` to
+                    // `ToArray<string> | ToArray<number>` directly before
+                    // destructuring `ToArray`.
                     = ToArray<string> | ToArray<number>
                     = (string extends any ? string[] : never)
                       | (number extends any ? number[] : never)
@@ -1709,6 +1691,18 @@ type ToArray<Type> = [Type] extends [any] ? Type[] : never
 type StrArrOrNumArr = ToArray<string | number>
 //   ^?
 // ...
+```
+
+Now:
+
+<!-- eslint-skip -->
+
+```ts
+type StrArrOrNumArr = ToArray<string | number>
+                    // Now, TypeScript knows `Type` in `ToArray` is a tuple
+                    // type, so it will not expand it.
+                    = [string | number] extends [any] ? (string | number)[] : never
+                    = (string | number)[]
 ```
 
 ### Mapped Types

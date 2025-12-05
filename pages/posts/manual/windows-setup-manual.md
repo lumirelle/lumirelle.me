@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-12-01T13:49+08:00
+update: 2025-12-05T10:49+08:00
 lang: en
 duration: 8min
 type: blog+note
@@ -126,9 +126,10 @@ Runtime requires:
 | gsudo            | `winget install gerardog.gsudo --scope machine`                   | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful |
 | Nushell          | `sudo winget install nushell --scope machine`                     | Command `sudo` is powered by gsudo now                                                                                                                                                                                                                                                                      |
 | Starship         | `sudo winget install Starship.Starship --scope machine`           | A rust shell prompt                                                                                                                                                                                                                                                                                         |
-| fnm              | `sudo winget install Schniz.fnm --scope machine`                  | /                                                                                                                                                                                                                                                                                                           |
+| ~~fnm~~          | ~~`sudo winget install Schniz.fnm --scope machine`~~              | ~~/~~                                                                                                                                                                                                                                                                                                       |
+| Bun              | `sudo winget install Oven-sh.Bun --scope machine`                 | **WIP**                                                                                                                                                                                                                                                                                                     |
 
-Then setting up via Nushell:
+Then setting up via Nushell (I only use node.js 24+ for development):
 
 ```nu
 # Start fnm temporary
@@ -138,24 +139,18 @@ $env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os
 # Use Node.js version 24
 fnm use 24
 
-# It's recommended to upgrade npm to >= 10.9.3
-# Node.js 20+
+# Upgrade npm to latest version
 npm i npm@latest -g
-# Node.js 18
-npm i npm@^10.9.3 -g
-# Node.js < 18, use the bundled npm
 
 # Install useful global node package
 # Dependencies manager
-npm i corepack @antfu/ni @antfu/nip taze pnpm-patch-i bun -g
+npm i corepack @antfu/ni @antfu/nip taze pnpm-patch-i -g
 # Project scaffolding
 npm i @sxzz/create esbuild -g
 # Version control helper
 npm i czg bumpp changelogithub -g
 # NeoVim plugin CLI
 npm i tree-sitter-cli -g
-# If you are still using Node.js < 18
-npm i @antfu/ni czg -g
 
 # Install my personal preferences
 npm i starship-butler -g
@@ -168,24 +163,24 @@ butler cfsys
 
 Install the basic software below in order:
 
-| Software                        | Source/Install Method                                                                      | Note                                                                                                                                                               |
-| ------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Brave                           | [Brave](https://brave.com/download/)                                                       | [Extensions](#_5-brave-browser)                                                                                                                                    |
-| uTools                          | [uTools](https://www.u-tools.cn/download/)                                                 | Basic Extensions: _聚合翻译_, _本地搜索_, _OCR文字识别_, _计算稿纸_, _颜色助手_<br><br>Dev Extensions: _npm包实时搜索_, _编码小助手_, _超级JavaScript_, _Any Rule_ |
-| Auto Dark Mode                  | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435)                        | /                                                                                                                                                                  |
-| NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                       | /                                                                                                                                                                  |
-| KeePass 2                       | [KeePass](https://keepass.info/download.html)                                              | Extensions: _ColoredPassword_, _HaveIBeenPwned_, _KeePassHttp_                                                                                                     |
-| Visual Studio Code              | [Visual Studio Code](https://code.visualstudio.com/Download)                               | /                                                                                                                                                                  |
-| Cursor                          | [Cursor](https://www.cursor.com/downloads)                                                 | /                                                                                                                                                                  |
-| Zed                             | [Zed](https://zed.dev/)                                                                    | **Still experimental**                                                                                                                                             |
-| IDM                             | [Internet Download Manager](https://www.internetdownloadmanager.com/download.html)         | /                                                                                                                                                                  |
-| Git                             | [Git](https://git-scm.com/download/win)                                                    | /                                                                                                                                                                  |
-| Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)           | For classic context menu                                                                                                                                           |
-| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases)    | For Windows 11 new context menu                                                                                                                                    |
-| DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)              |                                                                                                                                                                    |
-| Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)              | /                                                                                                                                                                  |
-| ~~Revo Uninstaller~~            | ~~[Revo Uninstaller](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)~~ | /                                                                                                                                                                  |
-| DeskPins                        | [DeskPins](https://efotinis.neocities.org/deskpins/)                                       | /                                                                                                                                                                  |
+| Software                        | Source/Install Method                                                                   | Note                                                                                                                                                               |
+| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Brave                           | [Brave](https://brave.com/download/)                                                    | [Extensions](#_5-brave-browser)                                                                                                                                    |
+| uTools                          | [uTools](https://www.u-tools.cn/download/)                                              | Basic Extensions: _聚合翻译_, _本地搜索_, _OCR文字识别_, _计算稿纸_, _颜色助手_<br><br>Dev Extensions: _npm包实时搜索_, _编码小助手_, _超级JavaScript_, _Any Rule_ |
+| Auto Dark Mode                  | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435)                     | /                                                                                                                                                                  |
+| NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                    | /                                                                                                                                                                  |
+| KeePass 2                       | [KeePass](https://keepass.info/download.html)                                           | Extensions: _ColoredPassword_, _HaveIBeenPwned_, _KeePassHttp_                                                                                                     |
+| Visual Studio Code              | [Visual Studio Code](https://code.visualstudio.com/Download)                            | /                                                                                                                                                                  |
+| Cursor                          | [Cursor](https://www.cursor.com/downloads)                                              | /                                                                                                                                                                  |
+| Zed                             | [Zed](https://zed.dev/)                                                                 | **Still experimental**                                                                                                                                             |
+| IDM                             | [Internet Download Manager](https://www.internetdownloadmanager.com/download.html)      | /                                                                                                                                                                  |
+| Git                             | [Git](https://git-scm.com/download/win)                                                 | /                                                                                                                                                                  |
+| Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | For classic context menu                                                                                                                                           |
+| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu                                                                                                                                    |
+| DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                                    |
+| Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)           | /                                                                                                                                                                  |
+| Revo Uninstaller                | [Revo Uninstaller](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)  | /                                                                                                                                                                  |
+| DeskPins                        | [DeskPins](https://efotinis.neocities.org/deskpins/)                                    | /                                                                                                                                                                  |
 
 Install the tool software below in order:
 
@@ -241,7 +236,9 @@ I choose Brave currently.
 
 Useful extensions:
 
-> [!NOTE] "Tampermonkey" extension requires you to open the develop mode to install scripts.
+> [!NOTE]
+>
+> "Tampermonkey" extension requires you to open the develop mode to install scripts.
 
 | Extension                       | Source/Install Method (`~` means the same as above)                                                                    | Note                                                                                                                                          |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -253,13 +250,13 @@ Useful extensions:
 
 Useful extensions for developers:
 
-| Extension                        | Source/Install Method (`~` means the same as above)                                                                         | Note                                                                                                                                          |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Vue.js Devtools (v5)             | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/vuejs-devtools-v5/hkddcnbhifppgmfgflgaelippbigjpjo) | Used only for Vue 2 projects, Vue 3 projects can use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
-| Cookie Editor                    | [~](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl)                                | /                                                                                                                                             |
-| SEO META in 1 CLICK              | [~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc)                          | /                                                                                                                                             |
-| Refined Github                   | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf)                               | /                                                                                                                                             |
-| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe)                    | /                                                                                                                                             |
+| Extension                        | Source/Install Method (`~` means the same as above)                                                                     | Note                                                                                                                                             |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Vue.js Devtools (Community)      | [GitHub](https://github.com/kxxxlfe/devtools)                                                                           | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
+| Cookie Editor                    | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl) | /                                                                                                                                                |
+| SEO META in 1 CLICK              | [~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc)                      | /                                                                                                                                                |
+| Refined Github                   | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf)                           | /                                                                                                                                                |
+| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe)                | /                                                                                                                                                |
 
 ### 6: Configure Windows Itself
 
@@ -293,7 +290,7 @@ Projects should under:
 >
 > Use a symlink to link the projects folder to `~/i/` is a bad behavior, it can cause problems when resolving the project path.
 
-~~Use Revo Uninstaller clean useless software at regular intervals.~~
+Use Revo Uninstaller clean useless software at regular intervals.
 
 Use DISM++ clean system at regular intervals.
 

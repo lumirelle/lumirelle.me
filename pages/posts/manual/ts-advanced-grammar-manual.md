@@ -1,7 +1,7 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2025-12-05T09:49+08:00
+update: 2025-12-05T10:02+08:00
 lang: en
 duration: 36min
 type: blog+note
@@ -1810,6 +1810,63 @@ type Config = EventConfig<SquareEvent | CircleEvent>
 
 // ...
 
+// ...
+```
+
+### `satisfies` operator
+
+The `satisfies` operator is a type assertion that allows you to check if a type is satisfied another type without change it's original type.
+
+This is very useful.
+
+For an example without `satisfies` operator:
+
+```ts [twoslash]
+interface Route { path: string, children?: Routes }
+type Routes = Record<string, Route>
+
+const routes: Routes = {
+  AUTH: {
+    path: '/auth',
+  },
+}
+
+console.log(routes)
+//          ^?
+// ...
+
+// No type error, but it's actually not exists in the `routes` object.
+console.log(routes.NOT_FOUND)
+//                 ^?
+// ...
+```
+
+With `satisfies` operator:
+
+```ts [twoslash]
+// @errors: 2339
+interface Route { path: string, children?: Routes }
+type Routes = Record<string, Route>
+// ---cut---
+const routes = {
+  AUTH: {
+    path: '/auth',
+  },
+} as const satisfies Routes // We still have the type suggestion/check for the `routes` object.
+
+console.log(routes)
+//          ^?
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// And now, TypeScript knows it's not exists in the `routes` object.
+console.log(routes.NOT_FOUND)
+//                 ^?
 // ...
 ```
 

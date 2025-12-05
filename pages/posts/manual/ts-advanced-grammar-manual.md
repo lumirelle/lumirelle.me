@@ -1,9 +1,9 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2025-12-04T17:34+08:00
+update: 2025-12-05T09:49+08:00
 lang: en
-duration: 34min
+duration: 36min
 type: blog+note
 ---
 
@@ -1673,8 +1673,8 @@ This is because:
 ```ts
 type StrArrOrNumArr = ToArray<string | number>
                     // TypeScript will read the definition of `ToArray`
-                    // first, so it knows `Type` in `ToArray` is a naked
-                    // type, and it expands `ToArray<string | number>` to
+                    // first, so it knows `Type` in `ToArray` is used
+                    // lonely, then it expands `ToArray<string | number>` to
                     // `ToArray<string> | ToArray<number>` directly before
                     // destructuring `ToArray`.
                     = ToArray<string> | ToArray<number>
@@ -1699,17 +1699,17 @@ Now:
 
 ```ts
 type StrArrOrNumArr = ToArray<string | number>
-                    // Now, TypeScript knows `Type` in `ToArray` is a tuple
-                    // type, so it will not expand it.
+                    // Now, TypeScript knows `Type` in `ToArray` is in a
+                    // tuple, so it will not expand it.
                     = [string | number] extends [any] ? (string | number)[] : never
                     = (string | number)[]
 ```
 
 ### Mapped Types
 
-Mapped types are a way to create new types by transforming properties of existing types.
+Mapped types are a way to create new types by transforming properties of existing types, it based on indexed access types and `keyof` operator, and also support conditional types.
 
-For example below, we use [**dynamic property names**](/posts/manual/js-advanced-grammar-manual#dynamic-computed-property-names) to get the names of the properties of the existing type, use indexed access type to get the type of the property.
+For example below, we use [**dynamic property names**](/posts/manual/js-advanced-grammar-manual#dynamic-computed-property-names) with `Key in Union` to iterate through the property keys of the existing type, and use indexed access type to get the value type of that property:
 
 ```ts
 type MappedType<T> = {
@@ -1723,27 +1723,27 @@ There are two additional modifiers which can be applied during mapping: `readonl
 
 ```ts
 type Mutable<T> = {
-  -readonly [Key in keyof T]: T[Key]
+  -readonly [Key in keyof T]: T[Key] // [!code highlight:1]
 }
 
 type Readonly<T> = {
-  readonly [Key in keyof T]: T[Key]
+  readonly [Key in keyof T]: T[Key] // [!code highlight:1]
 }
 
 type Optional<T> = {
-  [Key in keyof T]?: T[Key]
+  [Key in keyof T]?: T[Key] // [!code highlight:1]
 }
 
 type Required<T> = {
-  [Key in keyof T]-?: T[Key]
+  [Key in keyof T]-?: T[Key] // [!code highlight:1]
 }
 ```
 
-#### Key Remapping via `as`
+#### Mapping with `as`
 
-In TypeScript 4.1 and onwards, you can re-map keys in mapped types with an `as` clause in a mapped type.
+In TypeScript 4.1 and onwards, you can mapping with an `as` clause in a mapped type, it can be used to change the property keys.
 
-You can leverage features like **template literal types** to create new property names from prior ones:
+For example, you can leverage features like string template literal types to create new property keys from prior ones:
 
 ```ts [twoslash]
 type Getters<Type> = {
@@ -1768,7 +1768,7 @@ type LazyPerson = Getters<Person>
 // ...
 ```
 
-You can filter out keys by producing never via a conditional type:
+You can even filter out keys by producing `never` via a conditional type:
 
 ```ts [twoslash]
 // Remove the 'kind' property
@@ -1792,7 +1792,7 @@ type KindlessCircle = RemoveKindField<Circle>
 // ...
 ```
 
-You can map over arbitrary unions, not just unions of `string | number | symbol`, but unions of any type:
+Of course, now you can iterate over arbitrary unions, not just unions of `string | number | symbol`, but unions of any type, and then use `as` to let the property key back to `string | number | symbol`:
 
 <!-- eslint-disable ts/consistent-type-definitions -->
 
@@ -1817,6 +1817,8 @@ type Config = EventConfig<SquareEvent | CircleEvent>
 
 Declaration merging is a powerful TypeScript feature that allows you to combine multiple declarations with the same name into a single definition.
 
+This is commonly used in libraries to extend the existing types, but not in standalone module development.
+
 > [!Note]
 >
 > Excessive declaration merging can increase compilation time and impact IDE performance.
@@ -1840,7 +1842,7 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
 
 - Function overloads merging
 
-  Useful when overload an existing function.
+  Yes, this is also a kind of declaration merging, you already know it.
 
   ```ts [twoslash]
   // @errors: 2769
@@ -1854,6 +1856,7 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
 
   console.log(fn('hello')) // "HELLO"
   console.log(fn(10)) // 20
+  // `true` is not accepted
   console.log(fn(true)) // false
   ```
 
@@ -1880,7 +1883,34 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
 
 - Class and interface merging
 
-  **Dangerous**, use inheritance instead.
+  > [!Caution]
+  >
+  > This is a dangerous behavior, for example:
+  >
+  > Hypothesize you have a type `Form` in global scope and you don't know it's existence:
+  >
+  > ```ts
+  > interface Form {
+  >   name: string
+  > }
+  > ```
+  >
+  > And you create a class `Form` in your new module:
+  >
+  > ```ts
+  > class Form {
+  >   id: string
+  > }
+  > ```
+  >
+  > When you use `Form` class, you will get in trouble: Why there is always a type suggestion to `name` property? I do not define it at all! 🤨
+  >
+  > ```ts
+  > const form = new Form()
+  > console.log(form.name) // -> undefined
+  > ```
+  >
+  > So, just please using `extends` keyword instead. 🙂
 
   <!-- eslint-disable ts/no-unsafe-declaration-merging -->
 
@@ -1931,14 +1961,38 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
   // ...
   ```
 
-## JSDoc
+### Built-in Utility Types
 
-See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) or [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for more examples.
-
-## Built-in Utility Types
+TypeScript provides some useful built-in utility types to help you with common tasks.
 
 See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/utility-types.html) for more details.
 
+## JSDoc
+
+So is there any way to type the JavaScript code?
+
+Yes, JSDoc can do this!
+
+```js
+/**
+ * @param {number} a
+ *   The first number
+ * @param {number} b
+ *   The second number
+ * @returns {number}
+ *   The sum of a and b
+ */
+function add(a, b) {
+  return a + b
+}
+```
+
+See [TypeScript Documentation](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) or [W3Schools](https://www.w3schools.com/typescript/typescript_jsdoc.php) for more usage cases.
+
 ## Type Challenges
 
-Now, please try to complete the [Type Challenges](https://github.com/type-challenges/type-challenges/blob/main/README.zh-CN.md).
+Now, you are a successful TypeScript developer, congratulations! 🎉
+
+Please try to complete the [Type Challenges](https://github.com/type-challenges/type-challenges/blob/main/README.zh-CN.md) to test your skills.
+
+Good luck! 😊

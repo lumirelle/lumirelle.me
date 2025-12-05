@@ -1,18 +1,26 @@
 {
-  // Enable the flat config support
-  "eslint.useFlatConfig": true,
-
-  // Disable the default formatter
-  "prettier.enable": false,
-  "editor.formatOnSave": false,
-
-  // Auto fix
+  // Editor Code Actions on Save
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "never"
   },
 
-  // Silent the stylistic rules in you IDE, but still auto fix them
+  // Formatter & Linter
+  "prettier.enable": false,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "vue",
+    "html",
+    "markdown",
+    "json",
+    "jsonc",
+    "yaml",
+    "toml",
+    "xml"
+  ],
   "eslint.rules.customizations": [
     { "rule": "style/*", "severity": "off" },
     { "rule": "format/*", "severity": "off" },
@@ -24,18 +32,5 @@
     { "rule": "*-newline", "severity": "off" },
     { "rule": "*quotes", "severity": "off" },
     { "rule": "*semi", "severity": "off" }
-  ],
-
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "vue",
-    "html",
-    "markdown",
-    "json",
-    "jsonc",
-    "yaml"
   ]
 }

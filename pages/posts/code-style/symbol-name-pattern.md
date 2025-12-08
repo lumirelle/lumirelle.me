@@ -76,39 +76,39 @@ For a really huge amount of symbols, you should not only follow the naming patte
 
 Some common `block`, `element`, `modifier` examples are (`/` means the same as above):
 
-| Block                                           | Element  | Modifier                                                         |
-| ----------------------------------------------- | -------- | ---------------------------------------------------------------- |
-| `form`                                          | `Item`   | [`Not State`](#not-state-modifier)<br>[`State`](#state-modifier) |
-| `table`                                         | `Column` | /                                                                |
-| /                                               | `Row`    | /                                                                |
-| /                                               | `Cell`   | /                                                                |
-| `dialog`                                        | `Header` | /                                                                |
-| /                                               | `Body`   | /                                                                |
-| /                                               | `Footer` | /                                                                |
-| `menu`<br>`dropmenu`<br>`sidemenu`<br>`navmenu` | `Group`  | /                                                                |
-| /                                               | `Item`   | /                                                                |
-| `card`                                          | `Box`    | /                                                                |
-| /                                               | `Header` | /                                                                |
-| /                                               | `Body`   | /                                                                |
-| /                                               | `Footer` | /                                                                |
-| /                                               | `Cover`  | /                                                                |
+| Block                                   | Element | Modifier                                                     |
+| --------------------------------------- | ------- | ------------------------------------------------------------ |
+| form                                    | Item    | [Not State](#not-state-modifier)<br>[State](#state-modifier) |
+| table                                   | Column  | /                                                            |
+|                                         | Row     | /                                                            |
+|                                         | Cell    | /                                                            |
+| dialog                                  | Header  | /                                                            |
+|                                         | Body    | /                                                            |
+|                                         | Footer  | /                                                            |
+| menu<br>dropmenu<br>sidemenu<br>navmenu | Group   | /                                                            |
+|                                         | Item    | /                                                            |
+| card                                    | Box     | /                                                            |
+|                                         | Header  | /                                                            |
+|                                         | Body    | /                                                            |
+|                                         | Footer  | /                                                            |
+|                                         | Cover   | /                                                            |
 
 ### Not State Modifier
 
-- `Ref`
-- `Data`
-- `Config[s]`
+- Ref
+- Data
+- Config[s]
 - ...
 
 ### State Modifier
 
-- `Visible` / `Invisible`
-- `Shown` / `Hidden`
-- `Enabled` / `Disabled`
-- `Loading` / `Loaded`
-- `Pending` / `Fulfilled` / `Rejected`
-- `Success` / `Failure`
-- `Active` / `Inactive`
+- Visible / Invisible
+- Shown / Hidden
+- Enabled / Disabled
+- Loading / Loaded
+- Pending / Fulfilled / Rejected
+- Success / Failure
+- Active / Inactive
 - ...
 
 ## Function Names

@@ -80,7 +80,7 @@ So why we still should care about chunks splitting? Because there is still one t
 
 If you are familiar with the principle of the modern builders/bundlers, you may know that the modern builders/bundlers will attach file hash to each output file, so that we (actually, it's the browser) can identify the file version easily.
 
-In our front-end project, we may use some third-party dependencies, just like `vue`, `bignumber.js`, etc. And we `import` them in our source code.
+In our front-end project, we may use some third-party dependencies, just like vue, bignumber.js, etc. And we import them in our source code.
 
 For this default case, some output chunks may contain the compiled result of both our source code and the dependencies' code. Every time we change the source code and re-build our project, the hash of these chunks will always change, and the cache on the CDN will be always invalidated.
 

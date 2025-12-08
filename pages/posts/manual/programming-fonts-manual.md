@@ -44,37 +44,37 @@ And Latin fonts have more choice:
 
   <TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
 
-  **7 weights from `Thin` to `Bold`, not italicable. (Which I preferred)**
+  **7 weights from Thin to Bold, not italicable. (Which I preferred)**
 
 - ["Binchotan_Sharp"](https://fontesk.com/binchotan-font/):
 
   <TextTag text="TINY" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
 
-  `Regular`, not italicable.
+  Regular, not italicable.
 
 - ["Lekton"](http://www.fontsquirrel.com/fonts/lekton):
 
   <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
 
-  `Regular`, `Bold`, not italicable (Only has `Italic` which is corresponding to `Regular`).
+  Regular, Bold, not italicable (Only has Italic which is corresponding to Regular).
 
 - ["Monofur"](http://www.dafont.com/monofur.font):
 
   <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
 
-  `Regular`, italicable.
+  Regular, italicable.
 
 - ["NanumGothicCoding"](https://github.com/naver/nanumfont):
 
   <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" />
 
-  `Regular`, `Bold`, not italicable.
+  Regular, Bold, not italicable.
 
 - ["Ubuntu Mono"](https://fonts.google.com/specimen/Ubuntu+Mono?query=Ubuntu):
 
   <TextTag text="TINY" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
 
-  `Regular`, `Bold`, and italicable.
+  Regular, Bold, and italicable.
 
 For my opinion, better eyeshield is the most important thing. So I prefer to use the first three fonts as they are in general size.
 

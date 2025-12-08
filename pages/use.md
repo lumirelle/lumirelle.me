@@ -79,7 +79,7 @@ See my [manuals](/posts/manual/windows-setup-manual#_5-brave-browser) for more d
 Build tools:
 
 - [Mingw-w64](https://github.com/niXman/mingw-builds-binaries/releases/latest) - GCC (GNU Compiler Collection) for **Windows**
-- [MSVC](https://visualstudio.microsoft.com/visual-cpp-build-tools/) - Microsoft C++ Build Tools for **Windows**
+- [MSVC](https://visualstudio.microsoft.com/visual-cpp-build-tools/) - Microsoft Visual C++ Compiler Toolchain for **Windows**
 
 ### Rust
 
@@ -87,25 +87,21 @@ Build tools:
 
 - [Rust](https://rust-lang.org/tools/install/) - Rust development kits
 
-### Node.js (JavaScript/TypeScript)
+### JavaScript/TypeScript
 
-Runtimes:
+Standalone runtimes:
 
-- [Node.js](https://nodejs.org/en/download/) - Node.js runtime
-- [FNM](https://fnm.vercel.app/) - Faster Node.js version manager
+- [Bun](https://bun.sh/download) - Bun runtime (for development)
+- [Node.js](https://nodejs.org/en/download/) - Node.js runtime (for production and legacy projects)
 
 Build tools:
 
 - [tsdown](https://github.com/rolldown/tsdown) - Build TypeScript library projects
 - [vite](https://github.com/vitejs/vite) - Build frontend projects
-- [sass-embedded](https://sass-lang.com/install) - Compile SCSS files
 
 Project management:
 
 - [@antfu/ni](https://github.com/antfu-collective/ni) - Aliasing package managers
-- [pnpm](https://pnpm.io/) - Preferred package managers, also for monorepo
-- [@antfu/nip](https://github.com/antfu/nip) - A better `pnpm install xxx` with prompts and catalogs support
-- [pnpm-patch-i](https://github.com/antfu/pnpm-patch-i) - A better and interactive pnpm patch
 - [taze](https://github.com/antfu/taze) - Upgrade dependencies
 - [bumpp](https://github.com/antfu/bumpp) - Interactive CLI that bumps your version numbers and more
 - [node-modules-inspector](https://github.com/antfu/node-modules-inspector) - Visualize your node_modules, inspect dependencies, and more
@@ -119,8 +115,7 @@ Code Quality:
 
 Useful libraries & frameworks:
 
-- [tsx](https://github.com/privatenumber/tsx) - Run TypeScript files without compilation
-- [esbuild](https://esbuild.github.io/) - An extremely fast bundler and minifier
+- [esbuild](https://esbuild.github.io/) - An extremely fast bundler and minifier, used to power [the import-cost VSCode extension](https://marketplace.visualstudio.com/items?itemName=hyrious.import-cost).
 
 ### JVM (Java/Kotlin/Scala...)
 

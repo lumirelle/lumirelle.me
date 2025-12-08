@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-12-05T10:49+08:00
+update: 2025-12-08T12:31+08:00
 lang: en
 duration: 8min
 type: blog+note
@@ -23,7 +23,7 @@ Notice that, by default, Ventoy will skip the device check and online check whil
 
 You can also bypass these check manually by unplugging the network cable and executing these commands below (Press `Shift + F10` to open CMD):
 
-```sh
+```bat
 cd OOBE
 BypassNRO.cmd
 ```
@@ -61,34 +61,46 @@ Then, customize your installation options and wait for the installation to compl
 
 Just follow the steps below, clean up the annoyed system bundled software, and install tools you preferred. 😍
 
-### 0: Learn How to Use winget
+### Learn How to Use winget
 
 Install (User Scope):
 
-```sh
-winget install '<PACKAGE_NAME>' '[--scope user]'
+```nu
+winget install <PACKAGE_NAME> [--scope user]
 ```
 
 Install (Machine Scope, requires admin permission):
 
-```sh
+```nu
 # In windows, `sudo` command is powered by `gsudo`
-sudo winget install '<PACKAGE_NAME>' --scope machine
+sudo winget install <PACKAGE_NAME> --scope machine
 ```
 
 Install on specific location:
 
-```sh
-winget install '<PACKAGE_NAME>' --location '/PATH/YOU/LIKE'
+```nu
+winget install <PACKAGE_NAME> -l '/PATH/YOU/LIKE'
+```
+
+Install with interactive mode (default is non-interactive UI mode):
+
+```nu
+winget install <PACKAGE_NAME> -i
+```
+
+Install with no UI mode (default is non-interactive UI mode):
+
+```nu
+winget install <PACKAGE_NAME> -h
 ```
 
 For more information:
 
-```sh
+```nu
 winget -?
 ```
 
-### 1: Clean up Annoyed System Bundled Software
+### Clean up Annoyed System Bundled Software
 
 Uninstall Office 365, Microsoft PC Manager and other trash (system bundled software) you don't need at all, close the UAC (User Account Control) as your need.
 
@@ -98,135 +110,125 @@ Then, close all of anti-virus features of Windows Defender, and use [Huorong](ht
 | -------- | ---------------------------------------- |
 | Huorong  | [Huorong](https://www.huorong.cn/person) |
 
-After Huorong start up, restart your computer, Windows Defender will be closed.
-
-At the end, use Windows 11 Setting Easily (Support Windows 10 too) to close Windows Defender completely, you will see there is only the Windows Defender service exists, and Windows Defender is being disabled entirely.
+After that, use Windows 11 Setting Easily (Support Windows 10 too) to close Windows Defender completely, and restart your computer. You will see there is only the Windows Defender service exists at the end, that's means Windows Defender is being disabled entirely.
 
 | Software                  | Source/Install Method                                                   |
 | ------------------------- | ----------------------------------------------------------------------- |
 | Windows 11 Setting Easily | [Article on Bilibili](https://www.bilibili.com/opus/904672369138729017) |
 
-Notice that, you should close Windows Defender first, because it will clean Windows 11 Setting Easily as a potential threat.
+> [!Note]
+>
+> You should close Windows Defender first, because it will clean Windows 11 Setting Easily as a potential threat.
 
-### 2: Setting up Network Tool (Optional)
+### Setting up Network Tool (Optional)
 
-Just install Clash Verge Rev, We will configure it [later](#3-setting-up-personal-preferences).
+Just install Clash Verge Rev, We will configure it [later](#setting-up-personal-preferences).
 
 | Software        | Source/Install Method                                                          |
 | --------------- | ------------------------------------------------------------------------------ |
 | Clash Verge Rev | [GitHub Releases](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
 
-### 3: Setting up Personal Preferences
+### Setting up Personal Preferences
 
-Runtime requires:
+Requires:
 
-| Software         | Source/Install Method                                             | Notice                                                                                                                                                                                                                                                                                                      |
-| ---------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Windows Terminal | [Microsoft Store](https://apps.microsoft.com/detail/9n0dx20hk701) | /                                                                                                                                                                                                                                                                                                           |
-| gsudo            | `winget install gerardog.gsudo --scope machine`                   | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful |
-| Nushell          | `sudo winget install nushell --scope machine`                     | Command `sudo` is powered by gsudo now                                                                                                                                                                                                                                                                      |
-| Starship         | `sudo winget install Starship.Starship --scope machine`           | A rust shell prompt                                                                                                                                                                                                                                                                                         |
-| ~~fnm~~          | ~~`sudo winget install Schniz.fnm --scope machine`~~              | ~~/~~                                                                                                                                                                                                                                                                                                       |
-| Bun              | `sudo winget install Oven-sh.Bun --scope machine`                 | **WIP**                                                                                                                                                                                                                                                                                                     |
+| Software         | Source/Install Method                                             | Note                                                                                                                                                                                                                                                                                                         |
+| ---------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Windows Terminal | [Microsoft Store](https://apps.microsoft.com/detail/9n0dx20hk701) | System bundled, if not, you can install it manually.                                                                                                                                                                                                                                                         |
+| gsudo            | `winget install gerardog.gsudo --scope machine`                   | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
+| Nushell          | `sudo winget install nushell --scope machine`                     | Command `sudo` is powered by gsudo now.                                                                                                                                                                                                                                                                      |
+| Starship         | `sudo winget install Starship.Starship --scope machine`           | A rust-powered shell prompt.                                                                                                                                                                                                                                                                                 |
+| Bun              | `sudo winget install Oven-sh.Bun --scope machine`                 | /                                                                                                                                                                                                                                                                                                            |
 
-Then setting up via Nushell (I only use node.js 24+ for development):
+Running the commands below:
 
 ```nu
-# Start fnm temporary
-^fnm env --json | from json | load-env
-$env.PATH = $env.PATH | prepend ($env.FNM_MULTISHELL_PATH | path join (if $nu.os-info.name == 'windows' {''} else {'bin'}))
-
-# Use Node.js version 24
-fnm use 24
-
-# Upgrade npm to latest version
-npm i npm@latest -g
-
 # Install useful global node package
-# Dependencies manager
-npm i corepack @antfu/ni @antfu/nip taze pnpm-patch-i -g
-# Project scaffolding
-npm i @sxzz/create esbuild -g
-# Version control helper
-npm i czg bumpp changelogithub -g
-# NeoVim plugin CLI
-npm i tree-sitter-cli -g
+# PM Adapter & Dependencies Updater
+bun i @antfu/ni taze -g
+# Project Creator & Build Tools
+bun i @sxzz/create esbuild vite -g
+# Version Control Helper
+bun i czg bumpp changelogithub -g
+# NeoVim Setup Requires
+bun i tree-sitter-cli -g
 
 # Install my personal preferences
-npm i starship-butler -g
+bun i starship-butler -g
 butler cfsys -f
-# Or you don't want to override the existing configs:
+# Or you don't want to override your existing configs:
 butler cfsys
 ```
 
-### 4: Install Software Preferred
+### Install Software Preferred
 
 Install the basic software below in order:
 
-| Software                        | Source/Install Method                                                                   | Note                                                                                                                                                               |
-| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Brave                           | [Brave](https://brave.com/download/)                                                    | [Extensions](#_5-brave-browser)                                                                                                                                    |
-| uTools                          | [uTools](https://www.u-tools.cn/download/)                                              | Basic Extensions: _聚合翻译_, _本地搜索_, _OCR文字识别_, _计算稿纸_, _颜色助手_<br><br>Dev Extensions: _npm包实时搜索_, _编码小助手_, _超级JavaScript_, _Any Rule_ |
-| Auto Dark Mode                  | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435)                     | /                                                                                                                                                                  |
-| NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                    | /                                                                                                                                                                  |
-| KeePass 2                       | [KeePass](https://keepass.info/download.html)                                           | Extensions: _ColoredPassword_, _HaveIBeenPwned_, _KeePassHttp_                                                                                                     |
-| Visual Studio Code              | [Visual Studio Code](https://code.visualstudio.com/Download)                            | /                                                                                                                                                                  |
-| Cursor                          | [Cursor](https://www.cursor.com/downloads)                                              | /                                                                                                                                                                  |
-| Zed                             | [Zed](https://zed.dev/)                                                                 | **Still experimental**                                                                                                                                             |
-| IDM                             | [Internet Download Manager](https://www.internetdownloadmanager.com/download.html)      | /                                                                                                                                                                  |
-| Git                             | [Git](https://git-scm.com/download/win)                                                 | /                                                                                                                                                                  |
-| Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | For classic context menu                                                                                                                                           |
-| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu                                                                                                                                    |
-| DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           |                                                                                                                                                                    |
-| Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)           | /                                                                                                                                                                  |
-| Revo Uninstaller                | [Revo Uninstaller](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)  | /                                                                                                                                                                  |
-| DeskPins                        | [DeskPins](https://efotinis.neocities.org/deskpins/)                                    | /                                                                                                                                                                  |
+| Software                        | Source/Install Method                                                                   | Note                                                                                                                                                                                                                                        |
+| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Brave                           | [Official Website](https://brave.com/download/)                                         | [Extensions](#brave-browser)                                                                                                                                                                                                                |
+| RayCast                         | [Official Website](https://www.raycast.com/)                                            | Basic Extensions: _Installed Extensions_, _Google Translate_, _Spell_, _GitHub_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_<br><br>Dev Extensions: _DevDocs_, _Svgl_, _Search MDN_, _Search npm Packages_, _Random Data Generator_ |
+| Auto Dark Mode                  | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435)                     | /                                                                                                                                                                                                                                           |
+| NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                    | /                                                                                                                                                                                                                                           |
+| ~~KeePass 2~~                   | ~~[Official Website](https://keepass.info/download.html)~~                              | ~~Extensions: _ColoredPassword_, _HaveIBeenPwned_, _KeePassHttp_~~                                                                                                                                                                          |
+| KeePassXC                       | [Official Website](https://keepassxc.org/download/)                                     | **In migration...**                                                                                                                                                                                                                         |
+| Visual Studio Code              | [Official Website](https://code.visualstudio.com/Download)                              | /                                                                                                                                                                                                                                           |
+| Cursor                          | [Official Website](https://www.cursor.com/downloads)                                    | /                                                                                                                                                                                                                                           |
+| Zed                             | [Official Website](https://zed.dev/)                                                    | **Still experimental**                                                                                                                                                                                                                      |
+| IDM                             | [Official Website](https://www.internetdownloadmanager.com/download.html)               | /                                                                                                                                                                                                                                           |
+| Git                             | [Official Website](https://git-scm.com/download/win)                                    | /                                                                                                                                                                                                                                           |
+| Context Menu Manager            | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases)        | For classic context menu                                                                                                                                                                                                                    |
+| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu                                                                                                                                                                                                             |
+| DISM++                          | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases)           | /                                                                                                                                                                                                                                           |
+| Driver Store Explorer           | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases)           | /                                                                                                                                                                                                                                           |
+| Revo Uninstaller                | [Official Website](https://www.revouninstaller.com/zh/revo-uninstaller-free-download/)  | /                                                                                                                                                                                                                                           |
+| DeskPins                        | [Official Website](https://efotinis.neocities.org/deskpins/)                            | /                                                                                                                                                                                                                                           |
 
 Install the tool software below in order:
 
-| Software         | Source/Install Method                                                   |
-| ---------------- | ----------------------------------------------------------------------- |
-| 微信             | [微信](https://pc.weixin.qq.com/)                                       |
-| QQ               | [QQ](https://im.qq.com/pcqq/index.shtml)                                |
-| Telegram         | [Telegram](https://desktop.telegram.org/)                               |
-| ~~WPS Office~~   | ~~[123pan](https://www.123pan.com/s/sXtA-iLVEh.html)~~                  |
-| PixPin           | [PixPin](https://pixpin.com/)                                           |
-| LX Music Desktop | [GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases) |
-| PotPlayer        | [Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)     |
-| NVIDIA App       | [NVIDIA](https://www.nvidia.com/en-us/software/nvidia-app/)             |
-| Steam            | [Steam](https://store.steampowered.com/about)                           |
-| Epic Games       | [Epic Games](https://store.epicgames.com/download)                      |
-| OBS Studio       | [OBS Studio](https://obsproject.com/download)                           |
-| Cherry Studio    | [Cherry Studio](https://www.cherry-ai.com/download)                     |
+| Software         | Source/Install Method                                                          |
+| ---------------- | ------------------------------------------------------------------------------ |
+| Weixin           | [Official Website](https://pc.weixin.qq.com/?t=win_weixin&platform=wx&lang=en) |
+| QQ               | [Official Website](https://im.qq.com/pcqq/index.shtml)                         |
+| Telegram         | [Official Website](https://desktop.telegram.org/)                              |
+| ~~WPS Office~~   | ~~[Netdisk](https://www.123pan.com/s/sXtA-iLVEh.html)~~                        |
+| PixPin           | [Official Website](https://pixpin.com/)                                        |
+| LX Music Desktop | [GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)        |
+| PotPlayer        | [Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)            |
+| NVIDIA App       | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/)          |
+| Steam            | [Official Website](https://store.steampowered.com/about)                       |
+| Epic Games       | [Official Website](https://store.epicgames.com/download)                       |
+| OBS Studio       | [Official Website](https://obsproject.com/download)                            |
+| Cherry Studio    | [Official Website](https://www.cherry-ai.com/download)                         |
 
 Install the dev software (WSL / SDK / IDE) below in order:
 
 | Software                 | Source/Install Method                                                              | Note                                                                                                                                    |
 | ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | WSL                      | `wsl --install`                                                                    | /                                                                                                                                       |
-| Rust                     | [Rust](https://rust-lang.org/tools/install/)                                       | /                                                                                                                                       |
-| GraalVM                  | [GraalVM](https://www.graalvm.org/downloads/)                                      | /                                                                                                                                       |
-| Python                   | [Python](https://www.python.org/downloads/)                                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                                        |
+| Rust                     | `winget install Rustlang.Rustup`                                                   | Automatically setup Rust toolchains                                                                                                     |
+| GraalVM                  | [Official Website](https://www.graalvm.org/downloads/)                             | /                                                                                                                                       |
+| Python                   | `sudo winget install Python.Python.3.14 --scope machine -i`                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                                        |
 | Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **"Posix thread model"** and **"UC runtime"** options |
 | Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                                                                                                                       |
-| LazyVim                  | [LazyVim](https://www.lazyvim.org/installation)                                    | Requires **GCC**                                                                                                                        |
-| Visual Studio            | [Visual Studio](https://visualstudio.microsoft.com/downloads/)                     | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                                        |
-| JetBrains Toolbox        | [JetBrains](https://www.jetbrains.com/toolbox-app/)                                | /                                                                                                                                       |
+| LazyVim                  | [Official Website](https://www.lazyvim.org/installation)                           | Requires **GCC**                                                                                                                        |
+| Visual Studio            | [Official Website](https://visualstudio.microsoft.com/downloads/)                  | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                                        |
+| JetBrains Toolbox        | [Official Website](https://www.jetbrains.com/toolbox-app/)                         | /                                                                                                                                       |
 | JetBrains IntelliJ IDEA  | Install from JetBrains Toolbox                                                     | /                                                                                                                                       |
-| ~~Navicat Premium Lite~~ | ~~[Navicat](https://www.navicat.com/download/navicat-premium-lite)~~               | /                                                                                                                                       |
-| ~~Docker Desktop~~       | ~~[Docker](https://www.docker.com/products/docker-desktop/)~~                      | /                                                                                                                                       |
+| ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~      | /                                                                                                                                       |
+| ~~Docker Desktop~~       | ~~[Official Website](https://www.docker.com/products/docker-desktop/)~~            | /                                                                                                                                       |
 
 (Optional) Install other software below:
 
-| Software                   | Source/Install Method                                                           |
-| -------------------------- | ------------------------------------------------------------------------------- |
-| Visual C++ Redistributable | [Microsoft](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) |
-| AIDE64                     | /                                                                               |
-| Crystal Disk Info          | [CrystalDiskInfo](https://crystalmark.info/software/crystaldiskinfo/)           |
-| KeyboardSplitter           | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases) |
-| PDF SAM                    | [PDF SAM](https://pdfsam.org/download-pdfsam-basic/)                            |
+| Software                   | Source/Install Method                                                                  |
+| -------------------------- | -------------------------------------------------------------------------------------- |
+| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) |
+| AIDE64                     | /                                                                                      |
+| Crystal Disk Info          | [Official Website](https://crystalmark.info/software/crystaldiskinfo/)                 |
+| KeyboardSplitter           | [GitHub Releases](https://github.com/djlastnight/KeyboardSplitterXbox/releases)        |
+| PDF SAM                    | [Official Website](https://pdfsam.org/download-pdfsam-basic/)                          |
 
-### 5: Brave Browser
+### Brave Browser
 
 I hate Chrome because it's too opinionated, I hate Edge because it's too heavy.
 
@@ -238,27 +240,30 @@ Useful extensions:
 
 > [!NOTE]
 >
-> "Tampermonkey" extension requires you to open the develop mode to install scripts.
+> "Tampermonkey" extension requires you to open the develop mode to running external JavaScript.
 
-| Extension                       | Source/Install Method (`~` means the same as above)                                                                    | Note                                                                                                                                          |
+`~` in the below tables means the same as above.
+
+| Extension                       | Source/Install Method                                                                                                  | Note                                                                                                                                          |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Tampermonkey                    | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used scripts: [_Download VS Code Extension VSIX Packages_](https://greasyfork.org/en/scripts/530462-download-vs-code-extension-vsix-packages) |
-| ChromeKeePass                   | [~](https://chromewebstore.google.com/detail/chromekeepass/dphoaaiomekdhacmfoblfblmncpnbahm)                           | /                                                                                                                                             |
+| ~~ChromeKeePass~~               | ~~[~](https://chromewebstore.google.com/detail/chromekeepass/dphoaaiomekdhacmfoblfblmncpnbahm)~~                       | ~~/~~                                                                                                                                         |
+| KeePassXC-Browser               | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)                       | **In migration...**                                                                                                                           |
 | Dark Reader                     | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)                             | /                                                                                                                                             |
 | Immersive Translate             | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh)               | /                                                                                                                                             |
 | Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen)               | /                                                                                                                                             |
 
 Useful extensions for developers:
 
-| Extension                        | Source/Install Method (`~` means the same as above)                                                                     | Note                                                                                                                                             |
+| Extension                        | Source/Install Method                                                                                                   | Note                                                                                                                                             |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Vue.js Devtools (Community)      | [GitHub](https://github.com/kxxxlfe/devtools)                                                                           | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
+| Vue.js Devtools (Community)      | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases)                                                         | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
 | Cookie Editor                    | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl) | /                                                                                                                                                |
 | SEO META in 1 CLICK              | [~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc)                      | /                                                                                                                                                |
 | Refined Github                   | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf)                           | /                                                                                                                                                |
 | File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe)                | /                                                                                                                                                |
 
-### 6: Configure Windows Itself
+### Configure Windows Itself
 
 (Optional) Use HEU KMS Activator to activate Windows
 

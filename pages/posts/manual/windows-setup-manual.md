@@ -150,10 +150,10 @@ Running the commands below:
 
 ```nu
 # Install useful global node package
-# PM Adapter & Dependencies Updater
+# Package Manager
 bun i @antfu/ni taze -g
-# Project Creator & Build Tools
-bun i @sxzz/create esbuild vite -g
+# Project Manager
+bun i @sxzz/create vite rimraf -g
 # Version Control Helper
 bun i czg bumpp changelogithub -g
 # NeoVim Setup Requires
@@ -209,20 +209,21 @@ Install the tool software below in order:
 
 Install the dev software (WSL / SDK / IDE) below in order:
 
-| Software                 | Source/Install Method                                                              | Note                                                                                                                                    |
-| ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| WSL                      | `wsl --install`                                                                    | /                                                                                                                                       |
-| Rust                     | `winget add Rustlang.Rustup`                                                       | Automatically setup Rust toolchains                                                                                                     |
-| GraalVM                  | [Official Website](https://www.graalvm.org/downloads/)                             | /                                                                                                                                       |
-| Python                   | `sudo winget add Python.Python.3.14 --scope machine -i`                            | I prefer to disable **"tcl/tk and IDLE"** option                                                                                        |
-| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **"Posix thread model"** and **"UC runtime"** options |
-| Neovim                   | `sudo winget add Neovim.Neovim --scope machine`                                    | /                                                                                                                                       |
-| LazyVim                  | [Official Website](https://www.lazyvim.org/installation)                           | Requires **GCC**                                                                                                                        |
-| Visual Studio            | [Official Website](https://visualstudio.microsoft.com/downloads/)                  | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                                        |
-| JetBrains Toolbox        | [Official Website](https://www.jetbrains.com/toolbox-app/)                         | /                                                                                                                                       |
-| JetBrains IntelliJ IDEA  | Install from JetBrains Toolbox                                                     | /                                                                                                                                       |
-| ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~      | /                                                                                                                                       |
-| ~~Docker Desktop~~       | ~~[Official Website](https://www.docker.com/products/docker-desktop/)~~            | /                                                                                                                                       |
+| Software                 | Source/Install Method                                                              | Note                                                                                                                        |
+| ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| WSL                      | `wsl --install`                                                                    | /                                                                                                                           |
+| Node.js                  | [Official Website](https://nodejs.org/en/download/)                                | I prefer the **portable edition** toolchains                                                                                |
+| Rust                     | `winget add Rustlang.Rustup`                                                       | Automatically setup Rust toolchains                                                                                         |
+| GraalVM                  | [Official Website](https://www.graalvm.org/downloads/)                             | /                                                                                                                           |
+| Python                   | `sudo winget add Python.Python.3.14 --scope machine -i`                            | I prefer to disable **"tcl/tk and IDLE"** option                                                                            |
+| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime** |
+| Neovim                   | `sudo winget add Neovim.Neovim --scope machine`                                    | /                                                                                                                           |
+| LazyVim                  | [Official Website](https://www.lazyvim.org/installation)                           | Requires **GCC**                                                                                                            |
+| Visual Studio            | [Official Website](https://visualstudio.microsoft.com/downloads/)                  | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                            |
+| JetBrains Toolbox        | [Official Website](https://www.jetbrains.com/toolbox-app/)                         | /                                                                                                                           |
+| JetBrains IntelliJ IDEA  | Install from JetBrains Toolbox                                                     | /                                                                                                                           |
+| ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~      | /                                                                                                                           |
+| ~~Docker Desktop~~       | ~~[Official Website](https://www.docker.com/products/docker-desktop/)~~            | /                                                                                                                           |
 
 (Optional) Install other software below:
 

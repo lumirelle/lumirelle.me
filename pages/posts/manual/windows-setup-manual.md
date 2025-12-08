@@ -66,32 +66,38 @@ Just follow the steps below, clean up the annoyed system bundled software, and i
 Install (User Scope):
 
 ```nu
-winget install <PACKAGE_NAME> [--scope user]
+winget add <PACKAGE_NAME> [--scope user]
 ```
 
 Install (Machine Scope, requires admin permission):
 
 ```nu
 # In windows, `sudo` command is powered by `gsudo`
-sudo winget install <PACKAGE_NAME> --scope machine
+sudo winget add <PACKAGE_NAME> --scope machine
 ```
 
 Install on specific location:
 
 ```nu
-winget install <PACKAGE_NAME> -l '/PATH/YOU/LIKE'
+winget add <PACKAGE_NAME> -l '/PATH/YOU/LIKE'
 ```
 
 Install with interactive mode (default is non-interactive UI mode):
 
 ```nu
-winget install <PACKAGE_NAME> -i
+winget add <PACKAGE_NAME> -i
 ```
 
 Install with no UI mode (default is non-interactive UI mode):
 
 ```nu
-winget install <PACKAGE_NAME> -h
+winget add <PACKAGE_NAME> -h
+```
+
+Uninstall:
+
+```nu
+winget rm <PACKAGE_NAME>
 ```
 
 For more information:
@@ -135,10 +141,10 @@ Requires:
 | Software         | Source/Install Method                                             | Note                                                                                                                                                                                                                                                                                                         |
 | ---------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Windows Terminal | [Microsoft Store](https://apps.microsoft.com/detail/9n0dx20hk701) | System bundled, if not, you can install it manually.                                                                                                                                                                                                                                                         |
-| gsudo            | `winget install gerardog.gsudo --scope machine`                   | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
-| Nushell          | `sudo winget install nushell --scope machine`                     | Command `sudo` is powered by gsudo now.                                                                                                                                                                                                                                                                      |
-| Starship         | `sudo winget install Starship.Starship --scope machine`           | A rust-powered shell prompt.                                                                                                                                                                                                                                                                                 |
-| Bun              | `sudo winget install Oven-sh.Bun --scope machine`                 | /                                                                                                                                                                                                                                                                                                            |
+| gsudo            | `winget add gerardog.gsudo --scope machine`                       | Run Windows Terminal as admin, because gsudo isn't installed yet, we don't have `sudo` command now.<br><br>If you are using Windows 11, please put `C:\Program Files\WinGet\Links` in path the very front to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
+| Nushell          | `sudo winget add nushell --scope machine`                         | Command `sudo` is powered by gsudo now.                                                                                                                                                                                                                                                                      |
+| Starship         | `sudo winget add Starship.Starship --scope machine`               | A rust-powered shell prompt.                                                                                                                                                                                                                                                                                 |
+| Bun              | `sudo winget add Oven-sh.Bun --scope machine`                     | /                                                                                                                                                                                                                                                                                                            |
 
 Running the commands below:
 
@@ -206,11 +212,11 @@ Install the dev software (WSL / SDK / IDE) below in order:
 | Software                 | Source/Install Method                                                              | Note                                                                                                                                    |
 | ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | WSL                      | `wsl --install`                                                                    | /                                                                                                                                       |
-| Rust                     | `winget install Rustlang.Rustup`                                                   | Automatically setup Rust toolchains                                                                                                     |
+| Rust                     | `winget add Rustlang.Rustup`                                                       | Automatically setup Rust toolchains                                                                                                     |
 | GraalVM                  | [Official Website](https://www.graalvm.org/downloads/)                             | /                                                                                                                                       |
-| Python                   | `sudo winget install Python.Python.3.14 --scope machine -i`                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                                        |
+| Python                   | `sudo winget add Python.Python.3.14 --scope machine -i`                            | I prefer to disable **"tcl/tk and IDLE"** option                                                                                        |
 | Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **"Posix thread model"** and **"UC runtime"** options |
-| Neovim                   | `sudo winget install Neovim.Neovim --scope machine`                                | /                                                                                                                                       |
+| Neovim                   | `sudo winget add Neovim.Neovim --scope machine`                                    | /                                                                                                                                       |
 | LazyVim                  | [Official Website](https://www.lazyvim.org/installation)                           | Requires **GCC**                                                                                                                        |
 | Visual Studio            | [Official Website](https://visualstudio.microsoft.com/downloads/)                  | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                                        |
 | JetBrains Toolbox        | [Official Website](https://www.jetbrains.com/toolbox-app/)                         | /                                                                                                                                       |

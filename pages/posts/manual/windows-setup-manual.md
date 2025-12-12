@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-12-08T12:31+08:00
+update: 2025-12-12T14:36+08:00
 lang: en
-duration: 8min
+duration: 9min
 type: blog+note
 ---
 
@@ -151,7 +151,7 @@ Running the commands below:
 ```nu
 # Install useful global node package
 # Package Manager
-bun i @antfu/ni taze -g
+bun i @antfu/ni -g
 # Project Manager
 bun i @sxzz/create vite rimraf -g
 # Version Control Helper
@@ -159,11 +159,13 @@ bun i czg bumpp changelogithub -g
 # NeoVim Setup Requires
 bun i tree-sitter-cli -g
 
-# Install my personal preferences
+# Install my personal preferences (apply all presets)
 bun i starship-butler -g
-butler cfsys -f
-# Or you don't want to override your existing configs:
-butler cfsys
+butler preset -a
+# Or you want to override your existing configs:
+butler preset -af
+# Or you want to install a specific preset:
+butler preset -i <preset_id_pattern>
 ```
 
 ### Install Software Preferred
@@ -176,8 +178,7 @@ Install the basic software below in order:
 | RayCast                         | [Official Website](https://www.raycast.com/)                                            | Basic Extensions: _Installed Extensions_, _Google Translate_, _Spell_, _GitHub_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_<br><br>Dev Extensions: _DevDocs_, _Svgl_, _Search MDN_, _Search npm Packages_, _Random Data Generator_ |
 | Auto Dark Mode                  | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435)                     | /                                                                                                                                                                                                                                           |
 | NanaZip                         | [Microsoft Store](https://www.microsoft.com/store/apps/9N8G7TSCL18R)                    | /                                                                                                                                                                                                                                           |
-| ~~KeePass 2~~                   | ~~[Official Website](https://keepass.info/download.html)~~                              | ~~Extensions: _ColoredPassword_, _HaveIBeenPwned_, _KeePassHttp_~~                                                                                                                                                                          |
-| KeePassXC                       | [Official Website](https://keepassxc.org/download/)                                     | **In migration...**                                                                                                                                                                                                                         |
+| KeePassXC                       | [Official Website](https://keepassxc.org/download/)                                     | /                                                                                                                                                                                                                                           |
 | Visual Studio Code              | [Official Website](https://code.visualstudio.com/Download)                              | /                                                                                                                                                                                                                                           |
 | Cursor                          | [Official Website](https://www.cursor.com/downloads)                                    | /                                                                                                                                                                                                                                           |
 | Zed                             | [Official Website](https://zed.dev/)                                                    | **Still experimental**                                                                                                                                                                                                                      |
@@ -209,21 +210,21 @@ Install the tool software below in order:
 
 Install the dev software (WSL / SDK / IDE) below in order:
 
-| Software                 | Source/Install Method                                                              | Note                                                                                                                        |
-| ------------------------ | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| WSL                      | `wsl --install`                                                                    | /                                                                                                                           |
-| Node.js                  | [Official Website](https://nodejs.org/en/download/)                                | I prefer the **portable edition** toolchains                                                                                |
-| Rust                     | `winget add Rustlang.Rustup`                                                       | Automatically setup Rust toolchains                                                                                         |
-| GraalVM                  | [Official Website](https://www.graalvm.org/downloads/)                             | /                                                                                                                           |
-| Python                   | `sudo winget add Python.Python.3.14 --scope machine -i`                            | I prefer to disable **"tcl/tk and IDLE"** option                                                                            |
-| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime** |
-| Neovim                   | `sudo winget add Neovim.Neovim --scope machine`                                    | /                                                                                                                           |
-| LazyVim                  | [Official Website](https://www.lazyvim.org/installation)                           | Requires **GCC**                                                                                                            |
-| Visual Studio            | [Official Website](https://visualstudio.microsoft.com/downloads/)                  | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                            |
-| JetBrains Toolbox        | [Official Website](https://www.jetbrains.com/toolbox-app/)                         | /                                                                                                                           |
-| JetBrains IntelliJ IDEA  | Install from JetBrains Toolbox                                                     | /                                                                                                                           |
-| ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~      | /                                                                                                                           |
-| ~~Docker Desktop~~       | ~~[Official Website](https://www.docker.com/products/docker-desktop/)~~            | /                                                                                                                           |
+| Software                 | Source/Install Method                                                                                                                                          | Note                                                                                                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| WSL                      | `wsl --install`                                                                                                                                                | /                                                                                                                           |
+| Node.js                  | [Official Website](https://nodejs.org/en/download/)<br><br>Setup: `npm i corepack@latest npm@latest esbuild taze -g`<br><br>Enable corepack: `corepack enable` | I prefer the **portable edition**                                                                                           |
+| Rust                     | `winget add Rustlang.Rustup`                                                                                                                                   | Automatically setup Rust toolchains                                                                                         |
+| GraalVM                  | [Official Website](https://www.graalvm.org/downloads/)                                                                                                         | /                                                                                                                           |
+| Python                   | `sudo winget add Python.Python.3.14 --scope machine -i`                                                                                                        | I prefer to disable **"tcl/tk and IDLE"** option                                                                            |
+| Mingw-w64                | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest)                                                                             | **GCC (GNU Compiler Collection)** migration for Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime** |
+| Neovim                   | `sudo winget add Neovim.Neovim --scope machine`                                                                                                                | /                                                                                                                           |
+| LazyVim                  | [Official Website](https://www.lazyvim.org/installation)                                                                                                       | Requires **GCC**                                                                                                            |
+| Visual Studio            | [Official Website](https://visualstudio.microsoft.com/downloads/)                                                                                              | Bundles **MSVC (Microsoft Visual C++) compiler**                                                                            |
+| JetBrains Toolbox        | [Official Website](https://www.jetbrains.com/toolbox-app/)                                                                                                     | /                                                                                                                           |
+| JetBrains IntelliJ IDEA  | Install from JetBrains Toolbox                                                                                                                                 | /                                                                                                                           |
+| ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~                                                                                  | /                                                                                                                           |
+| ~~Docker Desktop~~       | ~~[Official Website](https://www.docker.com/products/docker-desktop/)~~                                                                                        | /                                                                                                                           |
 
 (Optional) Install other software below:
 
@@ -254,8 +255,7 @@ Useful extensions:
 | Extension                       | Source/Install Method                                                                                                  | Note                                                                                                                                          |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Tampermonkey                    | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used scripts: [_Download VS Code Extension VSIX Packages_](https://greasyfork.org/en/scripts/530462-download-vs-code-extension-vsix-packages) |
-| ~~ChromeKeePass~~               | ~~[~](https://chromewebstore.google.com/detail/chromekeepass/dphoaaiomekdhacmfoblfblmncpnbahm)~~                       | ~~/~~                                                                                                                                         |
-| KeePassXC-Browser               | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)                       | **In migration...**                                                                                                                           |
+| KeePassXC-Browser               | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)                       | /                                                                                                                                             |
 | Dark Reader                     | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)                             | /                                                                                                                                             |
 | Immersive Translate             | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh)               | /                                                                                                                                             |
 | Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen)               | /                                                                                                                                             |

@@ -155,7 +155,7 @@ bun i @antfu/ni -g
 # Project Manager
 bun i @sxzz/create vite rimraf -g
 # Version Control Helper
-bun i czg bumpp changelogithub -g
+bun i bumpp changelogithub -g
 # NeoVim Setup Requires
 bun i tree-sitter-cli -g
 

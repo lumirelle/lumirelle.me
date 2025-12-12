@@ -56,7 +56,6 @@
     "@unocss/preset-web-fonts": "catalog:build",
     "@vitejs/plugin-vue": "catalog:build",
     "ansis": "catalog:dev",
-    "czg": "catalog:dev",
     "degit": "catalog:dev",
     "diacritics": "catalog:dev",
     "eslint": "catalog:dev",

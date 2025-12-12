@@ -40,7 +40,6 @@ catalogs:
     '@octokit/rest': ^22.0.1
     '@prettier/plugin-xml': ^3.4.2
     ansis: ^4.2.0
-    czg: ^1.12.0
     degit: ^2.8.4
     diacritics: ^1.3.0
     eslint: ^9.39.1

@@ -5,8 +5,15 @@
 }
 
 @font-face {
-  font-family: 'Monaspace Xenon';
-  src: url('/fonts/MonaspaceXenon-Regular.ttf') format('ttf');
+  font-family: 'M Plus Code Latin';
+  src: url('/fonts/MplusCodeLatin50-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source Han Sans TC';
+  src: url('/fonts/SourceHanSansTC-Normal.otf') format('otf');
   font-weight: normal;
   font-style: normal;
 }

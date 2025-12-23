@@ -1,156 +1,181 @@
 ---
 title: Programming Fonts Manual
 date: 2025-10-15T14:10+08:00
-update: 2025-12-01T13:49+08:00
+update: 2025-12-23T17:24+08:00
 lang: en
-duration: 5min
+duration: 8min
 type: blog+note
 ---
 
 [[toc]]
 
-## Monospace Fonts
+## Monospace Font Families
 
-As we all know, monospace fonts are necessary for us to programming.
+As we all know, monospace font families are necessary for us to programming.
 
-As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more attention to the width of the fonts, in order to let the width of 2 Latin characters = 1 CJK character.
+As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get better development experience.
 
-I categorize the fonts I used into two groups by character width:
+I categorize the fonts I used into three groups by the **default character width** (As some font families are variable, they may support custom character width):
 
-- 50%: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like "M Plus Code Latin 50" and "Source Han Sans TC", etc.
-- 60%: If the font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \* 2), like "Go Mono" and "Maple Font", etc.
+- **50%**: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like "M Plus Code Latin" and "Source Han Sans TC", etc.
+- **60%**: If the font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \* 2), like "Go Mono" and "Maple Font", etc.
+- **62%**: If the font size is 16px, one Latin character will be 9.92px (62%), and one CJK character will be 19.84px (62% \* 2), like "Monaspace Xenon Var", etc.
 
-Every group has more than one Latin font and at least one CJK font.
+Generally, every group has more than one Latin fonts and at least one CJK font.
 
 ## 50% Group
 
-In this group, I use ["Source Hans Sans TC"](https://github.com/adobe-fonts/source-han-sans/releases) as the CJK font.
+This group uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK characters support. Most of CJK fonts are designed to be 50% width, but very few Latin fonts are.
 
-And Latin fonts have more choice:
+These are some latin fonts you can choose for this group:
 
-- ["Inconsolata"](https://github.com/google/fonts/tree/main/ofl/inconsolata/static):
+- ["Inconsolata"](https://github.com/google/fonts/blob/main/ofl/inconsolata):
 
-  <TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
-  A huge font family with many weights and italicable[^1].
+  A huge font family. With weights from 200 to 900, with italic.
 
-- ["Iosevka" (Monospace, Default)](https://github.com/be5invis/Iosevka/releases):
+  <img src="/posts/programming-fonts-manual/inconsolata.png" alt="Inconsolata" style="width: 100%; height: auto; border-radius: 12px;" />
 
-  <TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" />
+- ["Iosevka"](https://github.com/be5invis/Iosevka/releases):
 
-  A huge font family with many weights and italicable.
+  <TextTag text="STATIC" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
-- ["M Plus Code Latin 50"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts):
+  A huge font family. With 9 weights from 100 to 900, with italic.
 
-  <TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
+  <img src="/posts/programming-fonts-manual/iosevka.png" alt="Iosevka" style="width: 100%; height: auto; border-radius: 12px;" />
 
-  **7 weights from Thin to Bold, not italicable. (Which I preferred)**
+- ["M Plus Code Latin"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts):
 
-- ["Binchotan_Sharp"](https://fontesk.com/binchotan-font/):
+  <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
-  <TextTag text="TINY" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
+  With weights from 100 to 700, but without italic.
 
-  Regular, not italicable.
-
-- ["Lekton"](http://www.fontsquirrel.com/fonts/lekton):
-
-  <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
-
-  Regular, Bold, not italicable (Only has Italic which is corresponding to Regular).
-
-- ["Monofur"](http://www.dafont.com/monofur.font):
-
-  <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CARTOON" preset="green" />
-
-  Regular, italicable.
-
-- ["NanumGothicCoding"](https://github.com/naver/nanumfont):
-
-  <TextTag text="TINY" preset="red" /><TextTag text="THIN" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" />
-
-  Regular, Bold, not italicable.
+  <img src="/posts/programming-fonts-manual/m-plus-code-latin.png" alt="M Plus Code Latin" style="width: 100%; height: auto; border-radius: 12px;" />
 
 - ["Ubuntu Mono"](https://fonts.google.com/specimen/Ubuntu+Mono?query=Ubuntu):
 
-  <TextTag text="TINY" preset="red" /><TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="STATIC" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" /><TextTag text="TINY" preset="red" />
 
-  Regular, Bold, and italicable.
+  A beautiful font used by Ubuntu OS. With 2 weights: regular (400), bold (700), with italic.
 
-For my opinion, better eyeshield is the most important thing. So I prefer to use the first three fonts as they are in general size.
+  <img src="/posts/programming-fonts-manual/ubuntu-mono.png" alt="Ubuntu Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
 Then, you can using these font like this:
 
 ```json
-// 'M Plus Code Latin 50' can be replaced by any other Latin fonts listed above
-"'M Plus Code Latin 50', 'Source Han Sans TC', 'Symbols Nerd Font', monospace"
+// 'M Plus Code Latin' can be replaced by any other Latin fonts listed above
+"'Symbols Nerd Font', 'M Plus Code Latin', 'Source Han Sans TC', monospace"
 ```
 
 ## 60% Group
 
-In this group, I use ["Maple Mono CN (Ligature)"](https://github.com/subframe7536/maple-font/releases) as the CJK font.
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support. Most of Latin fonts are designed to be 60% width, but very few CJK fonts are.
 
 > [!Note]
 >
-> "Maple Mono CN" itself is a monospace font, so you can use it alone if you want.
+> "Maple Mono CN" itself is a beautiful monospace font, you can use it standalone if you want.
+>
+> The variable version of Maple Mono CN is in progress, just see the [discussion](https://github.com/subframe7536/maple-font/discussions/503).
 
-And Latin fonts have more choice:
+And Latin font have more choice:
 
 - ["Adwaita Mono"](https://gitlab.gnome.org/GNOME/adwaita-fonts/-/tree/main/mono?ref_type=heads):
 
-  <TextTag text="ROUNDED" /><TextTag text="NARROW" /><TextTag text="NO SLAB" preset="amber" /><TextTag text="CONVENTIONAL" preset="red" />
+  <TextTag text="STATIC" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
-  Regular, Bold, italicable, but a little bit conventional.
+  A conventional font designed by GNOME. With 2 weights: regular (400), bold (700), with italic.
+
+  <img src="/posts/programming-fonts-manual/adwaita-mono.png" alt="Adwaita Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
 - ["Geist Mono"](https://github.com/vercel/geist-font/releases):
 
-  <TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
-  A beautiful font designed by Vercel. 9 weights, italicable.
+  A beautiful font designed by Vercel. With weights from 100 to 900, with italic.
+
+  <img src="/posts/programming-fonts-manual/geist-mono.png" alt="Geist Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
 - ["Go Mono"](https://go.googlesource.com/image/+/refs/heads/master/font/gofont/ttfs/):
 
-  <TextTag text="ROUNDED" /><TextTag text="SLAB" preset="amber" />
+  <TextTag text="STATIC" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SERIF" />
 
-  A beautiful font designed by Google. Regular, Bold, and italicable.
+  A beautiful font designed for Go language by Google. With 2 weights: regular (400), bold (600, not 700), with italic.
+
+  <img src="/posts/programming-fonts-manual/go-mono.png" alt="Go Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
 - ["Google Sans Code"](https://github.com/googlefonts/googlesans-code/releases):
 
-  <TextTag text="ROUNDED" /><TextTag text="NO SLAB" preset="amber" />
+  <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
-  A beautiful font designed by Google, too. 6 weights, italicable.
+  A beautiful variable font designed by Google, too. With weights from 300 to 800, with italic.
 
-  > [!Caution]
-  >
-  > If you are using Windows 10, please download the font files from Google Fonts, instead of Github.
-  >
-  > See the [issue](https://github.com/googlefonts/googlesans-code/issues/23) for more details.
+  <img src="/posts/programming-fonts-manual/google-sans-code.png" alt="Google Sans Code" style="width: 100%; height: auto; border-radius: 12px;" />
 
 - ["Rec Mono Casual"](https://github.com/arrowtype/recursive/releases):
 
-  <TextTag text="ROUNDED" /><TextTag text="SLAB" preset="amber" /><TextTag text="CASUAL" preset="green" />
+  <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SERIF" />
 
-  A recursive & casual font. Regular, Bold, italicable.
+  Mono and casual style of Recursive variable font family. With weights from 300 to 1000, with italic.
 
-- ["Monaspace Xenon"](https://github.com/githubnext/monaspace/releases):
+  <img src="/posts/programming-fonts-manual/recursive-mono-casual.png" alt="Rec Mono Casual" style="width: 100%; height: auto; border-radius: 12px;" />
 
-  <TextTag text="ROUNDED" /><TextTag text="SLAB" preset="amber" /><TextTag text="LIVELY" preset="green" />
+- ["DM Mono"](https://fonts.google.com/specimen/DM+Mono):
 
-  **A beautiful font designed by GitHub. (Which I preferred)**
+  <TextTag text="STATIC" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" /><TextTag text="CURRENT USAGE" preset="green" />
 
-  > [!Caution]
-  >
-  > The real width of this font is 62%, not 60% exactly, so there will be some difference between the Latin and CJK characters.
+  A static font family with 3 weights from 300 to 500, with italic.
+
+  <img src="/posts/programming-fonts-manual/dm-mono.png" alt="DM Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
 Then, you can using these font like this:
 
 ```json
-// 'Monaspace Xenon' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'Monaspace Xenon', 'Maple Mono CN', monospace"
+// 'DM Mono' can be replaced by any other Latin fonts listed above
+"'Symbols Nerd Font', 'DM Mono', 'Maple Mono CN', monospace"
+```
+
+## 62% Group
+
+> [!Warning]
+>
+> This group is currently Latin-only.
+
+- ["Monaspace Xenon Var"](https://github.com/githubnext/monaspace/releases):
+
+  <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SERIF" preset="blue" />
+
+  A beautiful font designed by GitHub. With weights from 200 to 800, with italic.
+
+  <img src="/posts/programming-fonts-manual/monaspace-xenon.png" alt="Monaspace Xenon" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can using these font like this:
+
+```json
+"'Symbols Nerd Font', 'Monaspace Xenon Var', monospace"
 ```
 
 ## Font Preview
 
-### Latin vs. CJK Characters
+### Latin Characters with CJK Characters
+
+50% Group:
+
+<div font="*:percent50!">
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+</div>
+
+60% Group:
 
 <div font="*:percent60!">
 
@@ -167,6 +192,108 @@ w
 </div>
 
 ### Code
+
+50% Group:
+
+<div font="*:percent50!">
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || await _copyPasteConfig(source, target, options)) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || await _symlinkConfig(source, target, options)) {
+      consola.success(`Configuration ${highlight.important(`"${target}"`)} ${
+        dryRun ? highlight.green('will') : 'is'
+      } symlinked to ${highlight.important(`"${source}"`)}.`)
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(
+      join(import.meta.dirname, '..', 'assets', source),
+      target,
+      force,
+    ),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(
+    join(import.meta.dirname, '..', 'assets', source),
+    target,
+    force,
+  )
+}
+```
+
+</div>
+
+60% Group:
 
 <div font="*:percent60!">
 
@@ -265,5 +392,3 @@ async function _symlinkConfig(
 ```
 
 </div>
-
-[^1]: Italicable means every font weight has a corresponding italic style.

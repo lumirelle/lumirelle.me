@@ -226,7 +226,7 @@ The seven layers of computer network are:
 3. **Internet Layer**: Responsible for routing data packets across different networks, including IP addressing and packet forwarding, also called the **IP Layer**.
 4. **Transport Layer**: Responsible for end-to-end communication, including TCP and UDP protocols, port is used in this layer to identify specific processes inside computers.
 5. **Session Layer**: Responsible for establishing, managing, and terminating sessions between applications, for example, RPC (Remote Procedure Call) protocol.
-6. **Presentation Layer**: Responsible for data representation anqd encryption, including data compression and encryption protocols like TLS/SSL protocols.
+6. **Presentation Layer**: Responsible for data representation and encryption, including data compression and encryption protocols like TLS/SSL protocols.
 7. **Application Layer**: Responsible for providing network services to applications, including HTTP, FTP, and DNS protocols.
 
 ## Going Further

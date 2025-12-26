@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-12-26T13:25+08:00
+update: 2025-12-26T15:35+08:00
 lang: en
-duration: 8min
+duration: 9min
 type: blog+note
 ---
 
@@ -250,13 +250,14 @@ Useful extensions:
 
 `~` in the below tables means the same as above.
 
-| Extension                       | Source/Install Method                                                                                                  | Note                                                                                                                                          |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Tampermonkey                    | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used scripts: [_Download VS Code Extension VSIX Packages_](https://greasyfork.org/en/scripts/530462-download-vs-code-extension-vsix-packages) |
-| KeePassXC-Browser               | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)                       | /                                                                                                                                             |
-| Dark Reader                     | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)                             | /                                                                                                                                             |
-| Immersive Translate             | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh)               | /                                                                                                                                             |
-| Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen)               | /                                                                                                                                             |
+| Extension                       | Source/Install Method                                                                                                  | Note                                                                                                                                                       |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tampermonkey                    | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used scripts: [_Download VS Code Extension VSIX Packages_](https://greasyfork.org/en/scripts/530462-download-vs-code-extension-vsix-packages)              |
+| KeePassXC-Browser               | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk)                       | /                                                                                                                                                          |
+| Dark Reader                     | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh)                             | /                                                                                                                                                          |
+| Immersive Translate             | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh)               | /                                                                                                                                                          |
+| Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen)               | /                                                                                                                                                          |
+| Vimium C - All by Keyboard      | [~](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg)                | For better UX, you should set "New tab page shows" to "Homepage", and "Show home button" to "https://search.brave.com/" (Or any other homepage you prefer) |
 
 Useful extensions for developers:
 

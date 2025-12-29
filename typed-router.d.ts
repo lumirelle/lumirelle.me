@@ -135,6 +135,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/manual/neovim-lazyvim-manual': RouteRecordInfo<
+      '/posts/manual/neovim-lazyvim-manual',
+      '/posts/manual/neovim-lazyvim-manual',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual/programming-fonts-manual': RouteRecordInfo<
       '/posts/manual/programming-fonts-manual',
       '/posts/manual/programming-fonts-manual',
@@ -311,6 +318,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/manual/js-pm-manual.md': {
       routes:
         | '/posts/manual/js-pm-manual'
+      views:
+        | never
+    }
+    'pages/posts/manual/neovim-lazyvim-manual.md': {
+      routes:
+        | '/posts/manual/neovim-lazyvim-manual'
       views:
         | never
     }

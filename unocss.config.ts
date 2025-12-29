@@ -41,10 +41,34 @@ export default defineConfig({
         mono: 'DM Mono',
         condensed: 'Roboto Condensed',
         wisper: 'Bad Script',
-        percent50: ['M Plus Code Latin', 'Source Han Sans TC'],
-        percent60: ['DM Mono', 'Maple Mono CN'],
+        percent50: ['M PLUS Code Latin', 'Source Han Sans TC'],
+        percent60: [
+          /**
+           * UnoCSS only supports WGHT property currently. It recognizes `Recursive:MONO@1` as `Recursive:wght@MONO@1` if it receives a plain string, and `Recursive` as the font family name.
+           *
+           * We use object syntax to avoid this behavior. As the cost, UnoCSS will use 'Recursive:MONO@1' as the font name.
+           *
+           * To fix this, we use a custom processor below to replace the font-family name in the generated CSS.
+           *
+           * @see {@link https://github.com/unocss/unocss/blob/main/packages-presets/preset-web-fonts/src/preset.ts#L26}
+           */
+          {
+            name: 'Recursive:MONO@1',
+          },
+          'Maple Mono CN',
+        ],
       },
-      processors: createLocalFontProcessor(),
+      processors: [
+        createLocalFontProcessor(),
+        /**
+         * Use a custom processor to replace the font-family name.
+         */
+        {
+          transformCSS(css) {
+            return Promise.resolve(css.replace(/font-family: 'Recursive'/g, 'font-family: \'Recursive:MONO@1\''))
+          },
+        },
+      ],
     }),
   ],
   transformers: [

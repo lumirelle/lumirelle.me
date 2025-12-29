@@ -17,7 +17,7 @@ As a Chinese, sometimes I have to use both Latin characters and CJK characters i
 
 I categorize the fonts I used into three groups by the **default character width** (As some font families are variable, they may support custom character width):
 
-- **50%**: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like "M Plus Code Latin" and "Source Han Sans TC", etc.
+- **50%**: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like "M PLUS Code Latin" and "Source Han Sans TC", etc.
 - **60%**: If the font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \* 2), like "Go Mono" and "Maple Font", etc.
 - **62%**: If the font size is 16px, one Latin character will be 9.92px (62%), and one CJK character will be 19.84px (62% \* 2), like "Monaspace Xenon Var", etc.
 
@@ -45,13 +45,13 @@ These are some latin fonts you can choose for this group:
 
   <img src="/posts/programming-fonts-manual/iosevka.png" alt="Iosevka" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- ["M Plus Code Latin"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts):
+- ["M PLUS Code Latin"](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts):
 
   <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SANS" />
 
   With weights from 100 to 700, but without italic.
 
-  <img src="/posts/programming-fonts-manual/m-plus-code-latin.png" alt="M Plus Code Latin" style="width: 100%; height: auto; border-radius: 12px;" />
+  <img src="/posts/programming-fonts-manual/m-plus-code-latin.png" alt="M PLUS Code Latin" style="width: 100%; height: auto; border-radius: 12px;" />
 
 - ["Ubuntu Mono"](https://fonts.google.com/specimen/Ubuntu+Mono?query=Ubuntu):
 
@@ -64,8 +64,8 @@ These are some latin fonts you can choose for this group:
 Then, you can using these font like this:
 
 ```json
-// 'M Plus Code Latin' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'M Plus Code Latin', 'Source Han Sans TC', monospace"
+// 'M PLUS Code Latin' can be replaced by any other Latin fonts listed above
+"'Symbols Nerd Font', 'M PLUS Code Latin', 'Source Han Sans TC', monospace"
 ```
 
 ## 60% Group

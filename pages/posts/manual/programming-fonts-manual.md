@@ -112,7 +112,7 @@ And Latin font have more choice:
 
   <img src="/posts/programming-fonts-manual/google-sans-code.png" alt="Google Sans Code" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- ["Rec Mono Casual"](https://github.com/arrowtype/recursive/releases):
+- ["Recursive Mono Linear/Casual"](https://github.com/arrowtype/recursive/releases):
 
   <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SERIF" />
 
@@ -131,8 +131,8 @@ And Latin font have more choice:
 Then, you can using these font like this:
 
 ```json
-// 'DM Mono' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'DM Mono', 'Maple Mono CN', monospace"
+// 'Recursive Mono Linear' can be replaced by any other Latin fonts listed above
+"'Symbols Nerd Font', 'Recursive Mono Linear', 'Maple Mono CN', monospace"
 ```
 
 ## 62% Group

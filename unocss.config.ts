@@ -23,6 +23,9 @@ export default defineConfig({
     [/^slide-enter-(\d+)$/, ([_, n]) => ({
       '--enter-stage': n,
     })],
+    ['font-50%em', {
+      'font-family': '\'M PLUS Code Latin\', \'Source Han Sans TC\'',
+    }],
     ['font-60%em', {
       'font-family': '\'Recursive\', \'Maple Mono CN\'',
       'font-variation-settings': '"MONO" 1, "CASL" 0, "wght" 400, "slnt" 0, "CRSV" 0.5',
@@ -41,12 +44,11 @@ export default defineConfig({
     presetWind3(),
     presetWebFonts({
       fonts: {
-        'sans': 'Inter',
-        'mono': 'DM Mono',
-        'condensed': 'Roboto Condensed',
-        'wisper': 'Bad Script',
-        '50%em': ['M PLUS Code Latin', 'Source Han Sans TC'],
-        '_60%em': ['Maple Mono CN'],
+        sans: 'Inter',
+        mono: 'DM Mono',
+        condensed: 'Roboto Condensed',
+        wisper: 'Bad Script',
+        mplus: 'M PLUS Code Latin',
       },
       processors: [
         createLocalFontProcessor(),

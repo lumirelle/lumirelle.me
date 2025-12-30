@@ -161,7 +161,7 @@ Then, you can using these font like this:
 
 50% Group:
 
-<div font="*:percent50!">
+<div font="[&_code]:50%em!">
 
 ```js
 console.log('Holly shit!')
@@ -177,7 +177,7 @@ w
 
 60% Group:
 
-<div font="*:percent60!">
+<div font="[&_code]:60%em!">
 
 ```js
 console.log('Holly shit!')
@@ -195,7 +195,7 @@ w
 
 50% Group:
 
-<div font="*:percent50!">
+<div font="[&_code]:50%em!">
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'
@@ -295,7 +295,7 @@ async function _symlinkConfig(
 
 60% Group:
 
-<div font="*:percent60!">
+<div font="[&_code]:60%em!">
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'

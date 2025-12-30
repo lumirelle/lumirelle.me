@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts Manual
 date: 2025-10-15T14:10+08:00
-update: 2025-12-23T17:24+08:00
+update: 2025-12-30T22:45+08:00
 lang: en
 duration: 8min
 type: blog+note
@@ -15,17 +15,23 @@ As we all know, monospace font families are necessary for us to programming.
 
 As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get better development experience.
 
-I categorize the fonts I used into three groups by the **default character width** (As some font families are variable, they may support custom character width):
+> [!Note]
+>
+> In CSS, `em` is base on the current font size. For example, if the font size is `16px`, then `1em` = `16px`.
 
-- **50%**: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like "M PLUS Code Latin" and "Source Han Sans TC", etc.
-- **60%**: If the font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \* 2), like "Go Mono" and "Maple Font", etc.
-- **62%**: If the font size is 16px, one Latin character will be 9.92px (62%), and one CJK character will be 19.84px (62% \* 2), like "Monaspace Xenon Var", etc.
+I categorize the fonts I used into three groups by the **default character width (as some font families are variable, they may support custom character width) relative to the font size**:
 
-Generally, every group has more than one Latin fonts and at least one CJK font.
+- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%), and one CJK character will be 16px (50% \* 2), like "M PLUS Code Latin" and "Source Han Sans TC", etc.
+- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%), and one CJK character will be 19.2px (60% \* 2), like "Go Mono" and "Maple Font", etc.
+- **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%), and one CJK character will be 19.84px (62% \* 2), like "Monaspace Xenon Var", etc.
 
-## 50% Group
+## 50%em Group
 
-This group uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK characters support. Most of CJK fonts are designed to be 50% width, but very few Latin fonts are.
+> [!Note]
+>
+> Most of CJK fonts are designed to be 50% width, but very few Latin fonts are.
+
+This group may look a bit narrow for most people, it uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK characters support.
 
 These are some latin fonts you can choose for this group:
 
@@ -68,15 +74,19 @@ Then, you can using these font like this:
 "'Symbols Nerd Font', 'M PLUS Code Latin', 'Source Han Sans TC', monospace"
 ```
 
-## 60% Group
+## 60%em Group
 
-This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support. Most of Latin fonts are designed to be 60% width, but very few CJK fonts are.
+> [!Note]
+>
+> Most of Latin fonts are designed to be 60% width, but very few CJK fonts are.
+
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support.
 
 > [!Note]
 >
 > "Maple Mono CN" itself is a beautiful monospace font, you can use it standalone if you want.
 >
-> The variable version of Maple Mono CN is in progress, just see the [discussion](https://github.com/subframe7536/maple-font/discussions/503).
+> The variable version of Maple Mono CN is still in progress, just see the [discussion](https://github.com/subframe7536/maple-font/discussions/503).
 
 And Latin font have more choice:
 
@@ -114,6 +124,10 @@ And Latin font have more choice:
 
 - ["Recursive Mono Linear/Casual"](https://github.com/arrowtype/recursive/releases):
 
+  > [!Warning]
+  >
+  > Variable version has some rendering issues about non-breaking space in Chromium-based applications (like Chrome, VSCode, etc.), please track the [issue #472245780](https://issues.chromium.org/issues/472245780).
+
   <TextTag text="VARIABLE" preset="amber" /><TextTag text="ROUNDED" /><TextTag text="SERIF" />
 
   Mono and casual style of Recursive variable font family. With weights from 300 to 1000, with italic.
@@ -135,7 +149,7 @@ Then, you can using these font like this:
 "'Symbols Nerd Font', 'Recursive Mono Linear', 'Maple Mono CN', monospace"
 ```
 
-## 62% Group
+## 62%em Group
 
 > [!Warning]
 >
@@ -159,7 +173,7 @@ Then, you can using these font like this:
 
 ### Latin Characters with CJK Characters
 
-50% Group:
+50%em Group:
 
 <div font="[&_code]:50%em!">
 
@@ -175,7 +189,7 @@ w
 
 </div>
 
-60% Group:
+60%em Group:
 
 <div font="[&_code]:60%em!">
 
@@ -193,7 +207,7 @@ w
 
 ### Code
 
-50% Group:
+50%em Group:
 
 <div font="[&_code]:50%em!">
 
@@ -293,7 +307,7 @@ async function _symlinkConfig(
 
 </div>
 
-60% Group:
+60%em Group:
 
 <div font="[&_code]:60%em!">
 

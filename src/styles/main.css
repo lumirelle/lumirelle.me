@@ -1,15 +1,22 @@
 @font-face {
   font-family: 'Source Han Sans TC';
-  src: url('/fonts/SourceHanSansTC-Normal.otf') format('otf');
+  src: url('/fonts/SourceHanSansTC-Normal.otf');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Maple Mono CN';
-  src: url('/fonts/MapleMono-CN-Regular.ttf') format('ttf');
+  src: url('/fonts/MapleMono-CN-Regular.ttf');
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'Recursive';
+  src: url('/fonts/Recursive_VF_1.085.woff2');
+  font-weight: 300 1000;
+  font-style: oblique 0deg 14deg;
 }
 
 :root {

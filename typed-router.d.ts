@@ -184,6 +184,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/test/recursive-mono-nbsp-rendering': RouteRecordInfo<
+      '/posts/test/recursive-mono-nbsp-rendering',
+      '/posts/test/recursive-mono-nbsp-rendering',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/vite-and-unbundled': RouteRecordInfo<
       '/posts/vite-and-unbundled',
       '/posts/vite-and-unbundled',
@@ -360,6 +367,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/project-engineering/manually-split-chunks.md': {
       routes:
         | '/posts/project-engineering/manually-split-chunks'
+      views:
+        | never
+    }
+    'pages/posts/test/recursive-mono-nbsp-rendering.md': {
+      routes:
+        | '/posts/test/recursive-mono-nbsp-rendering'
       views:
         | never
     }

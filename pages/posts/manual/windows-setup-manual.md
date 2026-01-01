@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2025-12-29T09:30+08:00
+update: 2026-01-01T23:28+08:00
 lang: en
 duration: 9min
 type: blog+note
@@ -153,7 +153,9 @@ Running the commands below:
 # Package Manager
 bun i @antfu/ni taze -g
 # Project Manager
-bun i @sxzz/create vite -g
+bun i @sxzz/create @arethetypeswrong/cli publint knip -g
+# Build Tools
+bun i vite -g
 # NeoVim Setup Requires
 bun i tree-sitter-cli -g
 

@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-06T15:10+08:00
 lang: en
 duration: 15min
 type: blog+note
@@ -67,7 +67,11 @@ Git is a distributed version control system, which is used to track changes in s
 
 > [!Note]
 >
-> This article is based on my [`custom Git configuration`](https://github.com/lumirelle/starship-butler/blob/main/packages/config-provider/assets/vcs/git/.gitconfig).
+> This article is based on my own `.gitconfig` configuration.
+>
+> For more details about the changed default behavior and custom alias, please see [the source file](https://github.com/lumirelle/starship-butler/blob/main/packages/config-provider/assets/vcs/git/.gitconfig).
+>
+> If you are interested in my configuration, you can try my configurations setting up tool: [`starship-butler`](https://github.com/lumirelle/starship-butler) or download the source file manually.
 
 ### Initialize a Git Repository
 
@@ -86,11 +90,11 @@ After initializing, you may need to add some basic files (like `package.json` fo
 After that, you can make your initial commit:
 
 ```bash
-# Command `aa`: Add all files to the staging area
-git aa
+# Alias `a` = `add`
+git a .
 
-# Command `cmms`: Commit the changes with a message
-git cmms "feat: initial commit"
+# Alias `cm` = `commit-with-message` = `commit --message`
+git cm "feat: initial commit"
 ```
 
 Commit will record the changes you made, and makes a new node in the commit history tree based on the previous node. Each node is like a snapshot version of your project at a specific time, so that you can revert to it if needed.
@@ -106,9 +110,9 @@ As a distributed version control system, Git allows you to collaborate with othe
 To add a remote repository, use the following command:
 
 ```bash
-# Command `ren`: Add a remote repository, if `remote-name` is not
-# provided, it will be set to `origin` by default
-# git ren [remote-name] <remote-url>
+# Alias `ren` = `remote-new` = (custom-alias): Add a remote repository, if `remote-name` is not
+# provided, it will use `origin` by default
+# Usage: git ren [remote-name] <remote-url>
 git ren https://github.com/username/repo.git
 ```
 
@@ -119,26 +123,15 @@ To sync your commits with a remote repository, you can `pull` and `push` commits
 To pull latest changes from the remote repository, you can use the following command:
 
 ```bash
-# Command `pl`: Pull the latest changes from the remote repository
-# if you already set the upstream branch
-git pl
-```
-
-Or if you haven't set the upstream branch of the current branch yet:
-
-```bash
-# Command `plup`: Pull the latest changes from the remote repository
-# and set the upstream branch
-git plup
+# Alias `l` = `pull`: Pull the latest changes from the remote repository
+git l
 ```
 
 To push your commits to the remote repository:
 
 ```bash
-# Command `ps`: Push commit on current branch to the remote repository,
-# if you have not set the upstream branch, it will set the upstream
-# branch to the remote branch with the same name as the current branch.
-git ps
+# Alias `p` = `push`: Push commit on current branch to the remote repository
+git p
 ```
 
 ### Work with Branches (Git Workflow)
@@ -192,10 +185,9 @@ This article will use the most complex Git Flow workflow as an example.
 After the initial commit, we should create a `dev` branch based on the `main` to hold completed new features.
 
 ```bash
-# Command `swn`: Switch to a new branch and create it (if it doesn't exist?) If
-# the `start-point` is not provided, it will be based on the current branch by
-# default.
-# git swn <branch-name> [start-point]
+# Alias `swn` = `switch-new` = `switch --create`: Switch to a new branch and create it. If the
+# `start-point` is not provided, it will use the current branch by default.
+# Usage: git swn <branch-name> [start-point]
 git swn dev main
 ```
 
@@ -218,16 +210,16 @@ Now, you can work on your feature branch, commit changes frequently, and push th
 When you work on your feature branch, you may want to discard some changes in your working directory. You can use the following command to discard changes of specific files:
 
 ```bash
-# Command `x`: Discard changes of specific files in working directory
-# git x <...file-path>
+# Alias `x` = `discard` = (custom-alias): Discard changes under specific paths
+# in working directory
+# Usage: git x <...path>
 git x index.html index.css
 ```
 
 Or you want to discard all changes in your working directory:
 
 ```bash
-# Command `xa`: Discard all changes in working directory
-git xa
+git x .
 ```
 
 ### Drop Changes in Staging Area
@@ -235,17 +227,16 @@ git xa
 When you work on your feature branch, you may want to unstage some changes in your staging area. You can use the following command to do that:
 
 ```bash
-# Command `au`: Unstage changes of specific files in staging area
-# git au <file-path>
-git au index.html
+# Alias `u` = `disadd` = (custom-alias): Unstage changes under specific paths
+# in staging area
+# Usage: git u <...path>
+git u index.html index.css
 ```
 
 Or you want to unstage all changes in your staging area:
 
 ```bash
-# Command `aau`: Unstage all changes in staging area
-# git aau
-git aau
+git u .
 ```
 
 ### Drop Last Commit
@@ -253,8 +244,9 @@ git aau
 When you work on your feature branch, you may want to undo some commits in your local branch. You can use the following command to do that:
 
 ```bash
-# Command `cmu`: Undo the last commit and keep the changes in staging area
-git cmu
+# Alias `uc` = `uncommit` = (custom-alias): Undo the last commit and keep the
+# changes in staging area
+git uc
 ```
 
 > [!Caution]
@@ -262,7 +254,7 @@ git cmu
 > If this commit has been pushed to remote, you need to force push the branch to remote after dropping the last commit:
 >
 > ```bash
-> git psf
+> git p -f
 > ```
 >
 > This may cause problems for other collaborators, so please use it with caution.
@@ -272,16 +264,17 @@ git cmu
 If you want to amend the last commit, more conveniently than drop the last commit and create a new one, you can amend it directly:
 
 ```bash
-# Command `md`: Amend the last commit with the changes in staging area
-git md
+# Alias `ca` = `commit-amend` = `commit --amend --no-edit`: Amend the last commit
+# with the changes in staging area
+git ca
 ```
 
 Or if you want to amend the last commit message:
 
 ```bash
-# Command `mdi`: Amend the last commit and its message with the changes in
-# staging area
-git mdi
+# Command `ce` = `commit-amend-with-edit` = `commit --amend`: Amend the last
+# commit and its message with the changes in staging area
+git ce
 ```
 
 Then Git will open your default editor (`vim` is the default) to let you edit the commit message, after you save and close the editor, the last commit will be amended.
@@ -291,7 +284,7 @@ Then Git will open your default editor (`vim` is the default) to let you edit th
 > If this commit has been pushed to remote, you need to force push the branch to remote after dropping the last commit:
 >
 > ```bash
-> git psf
+> git p -f
 > ```
 >
 > This may cause problems for other collaborators, so please use it with caution.
@@ -303,8 +296,9 @@ If you already pushed some wrong commits to a branch which has branch protection
 This is the only one choice in the case above, the cost is that the commit history will be more ugly, likes your "evidence of guilt", which will spread through the ages.
 
 ```bash
-# Command `rv`: Revert a specific commit by its ID or relative position to HEAD
-# git rv <commit-id|relative-head>
+# Alias `rv` = `revert`: Revert a specific commit by its ID or relative
+# position to HEAD
+# Usage: git rv <commit-id|relative-head>
 git rv HEAD
 ```
 
@@ -313,17 +307,18 @@ git rv HEAD
 Come back to general workflow, after you finished your feature on your feature branch, you need to merge it back to the `dev` branch.
 
 ```bash
-# Command `sw`: Switch to an existing branch
-# git sw <branch-name>
+# Alias `sw` = `switch`: Switch to an existing branch
+# Usage: git sw <branch-name>
 git sw dev
 
-# Command `mg`: Merge a specific branch into the current branch with default
-# message: "chore: merge branch 'branch-name' into 'current-branch-name'"
-# git mg <branch-name>
-git mg feature/your-feature-name
+# Alias `m` = `merge-with-default-message` = (custom-alias): Merge a specific
+# branch into the current branch with default  message:
+# "chore: merge branch branch-name into current-branch-name"
+# Usage: git m <branch-name>
+git m feature/your-feature-name
 
 # Don't forget to push the `dev` branch to remote after merging
-git ps
+git p
 ```
 
 When all features are merged into the `dev` branch, and ready for testing, this means one period of development is done, you should create a new `release` branch to prepare for testing and release tasks:
@@ -332,7 +327,7 @@ When all features are merged into the `dev` branch, and ready for testing, this 
 git sw dev
 # vx.x.x is the version number of the next release, e.g. v1.0.0.
 git swn release/vx.x.x dev
-git ps
+git p
 ```
 
 > [!CAUTION]
@@ -346,21 +341,22 @@ When your test team finds some bugs during testing, you can commit the bug fixes
 ```bash
 # Apply some bug fixes
 git sw test
-git aacmms "fix: some bugs found during testing"
-git ps
+git a .
+git cm "fix: some bugs found during testing"
+git p
 
 # Merge `test` branch back to `dev` branch to integrate the bug fixes
 git sw dev
-git mg test
-git ps
+git m test
+git p
 ```
 
 After all test tasks are done and verified, you can finally create a new release by merging the `release` branch back to the `main` branch:
 
 ```bash
 git sw main
-git mg release/vx.x.x
-git ps
+git m release/vx.x.x
+git p
 ```
 
 ### Manage Tags
@@ -370,33 +366,27 @@ After a new release, we should create a version tag to mark this point on the `m
 ```bash
 git sw main
 
-# Command `tgn`: Create a new tag with a specific name
-# Simple tag:
-# git tgn <tag-name>
-# Annotated tag:
-# git tgn <tag-name> <tag-message>
-git tgn v1.0.0
-git tgn v1.0.0 "Release version 1.0.0"
+# Alias `t` = `tag-wrapper` = (custom-alias): Create a new tag with a specific name
+# Usage for Simple tag:
+# git t <tag-name>
+# Usage for Annotated tag:
+# git t <tag-name> <tag-message>
+git t v1.0.0
+git t v1.0.0 "Release version 1.0.0"
 ```
 
 Then push the tag to remote:
 
 ```bash
-# Command `pstg`: Push a specific tag to the remote repository, if `remote-name`
-# is not provided, it will be set to `origin` by default. If `tag-name` is not
-# provided, it will push all tags to remote.
-# git pstg [remote-name] [tag-name]
-git pstg
-git pstg v1.0.0
+git p
 ```
 
 Or if you want delete a tag both locally and on remote:
 
 ```bash
-# Command `tgxbt`: Delete a specific tag both locally and on remote, if
-# `remote-name` is not provided, it will be set to `origin` by default.
-# git tgxbt [remote-name] <tag-name>
-git tgxbt v1.0.0
+# Alias `tx` = `tag-delete` = (custom-alias): Delete a specific tag
+# Usage: git tx <tag-name> [-o, -origin] [-a, -all]
+git tx -a v1.0.0
 ```
 
 ### Rebase Branches
@@ -406,9 +396,9 @@ When something changes been integrated into the `dev` branch, and you also want 
 ```bash
 git sw feature/your-feature-name
 
-# Command `rb`: Rebase the current branch onto a specific branch
-# git rb <branch-name>
-git rb dev
+# Alias `r` = `rebase`: Rebase the current branch onto a specific branch
+# Usage: git r <branch-name>
+git r dev
 ```
 
 > [!Caution]
@@ -432,30 +422,24 @@ When you finished your release tasks and merged it back to the `main` and `dev` 
 To delete a branch locally:
 
 ```bash
-# Command `brx`: Delete a specific branch locally
-# git brx <branch-name>
-git brx feature/your-feature-name
-git brx release/vx.x.x
+# Alias `bx` = `branch-delete` = (custom-alias): Delete a specific branch
+# Usage: git bx <branch-name> [-o, --origin] [-a, --all] [-f, --force]
+git bx feature/your-feature-name
+git bx release/vx.x.x
 ```
 
-And then delete it on remote:
+And then delete it from origin remote:
 
 ```bash
-# Command `brxre`: Delete a specific branch on remote, if `remote-name` is not
-# provided, it will be set to `origin` by default.
-# git brxre [remote-name] <branch-name>
-git brxre feature/your-feature-name
-git brxre release/vx.x.x
+git bx -o feature/your-feature-name
+git bx -o release/vx.x.x
 ```
 
-Or you can delete it both locally and on remote in one command:
+Or you can delete it both locally and on origin in one command:
 
 ```bash
-# Command `brxbt`: Delete a specific branch both locally and on remote, if
-# `remote-name` is not provided, it will be set to `origin` by default.
-# git brxbt [remote-name] <branch-name>
-git brxbt feature/your-feature-name
-git brxbt release/vx.x.x
+git bx -a feature/your-feature-name
+git bx -a release/vx.x.x
 ```
 
 ### Cherry-Pick Commits
@@ -463,9 +447,9 @@ git brxbt release/vx.x.x
 Sometimes, you may want to apply some specific commits from one branch to another branch without merging the entire branch. In this case, you can use the cherry-pick command to apply the changes introduced by specific commits.
 
 ```bash
-# Command `cp`: Cherry-pick a specific commit by its ID (or relative position to
-# HEAD?)
-# git cp <commit-id|relative-head?>
+# Alias `cp` = `cherry-pick`: Cherry-pick a specific commit by its ID
+# (or relative position to HEAD?)
+# Usage: git cp <commit-id|relative-head?>
 # This is a short commit ID example:
 git cp 3b88e2d
 ```
@@ -482,7 +466,7 @@ name = Your Name
 email = your.email@example.com
 
 [core]
-editor = code --wait
+editor = nvim
 ```
 
 To get full configuration example, please refer to my [`.gitconfig`](https://github.com/lumirelle/starship-butler/blob/main/packages/config-provider/assets/vcs/git/.gitconfig) file.

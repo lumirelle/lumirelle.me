@@ -3,7 +3,7 @@ title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
 update: 2026-01-06T10:56+08:00
 lang: en
-duration: 6min
+duration: 11min
 type: blog+note
 ---
 

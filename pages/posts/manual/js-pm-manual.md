@@ -1,7 +1,7 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-06T16:41+08:00
 lang: en
 duration: 4min
 type: blog+note
@@ -25,9 +25,13 @@ For the server-side, we have many package managers, like:
 - [Deno](https://deno.com/)
 - ...
 
+### Bun & Deno
+
+If you are using Bun or Deno, you may simply use the built-in package manager.
+
 ### Node.js
 
-In most cases, we use Node.js as the server-side runtime environment.
+If you are using Node.js as the server-side runtime environment:
 
 NPM is the bundled package manager for Node.js, it is a good choice for legacy environments, such as Node.js 18 or lower, but for modern environments, I recommend using PNPM.
 
@@ -39,10 +43,6 @@ PNPM has many advantages over NPM, like:
 - Monorepo support
 - ...
 
-### Bun & Deno
-
-If you are using Bun or Deno, you may simply use the built-in package manager.
-
 ## Handle the Case of Different Package Managers
 
 Of course, everyone has their own preferences, so you may have to face the case of using different package managers in one project.
@@ -50,44 +50,52 @@ Of course, everyone has their own preferences, so you may have to face the case 
 [@antfu/ni](https://github.com/antfu-collective/ni) is a tool that can help us
 handle this case.
 
+> [!Note]
+>
+> As bun and deno are also supported by this package, you can even use it to achieve cross-runtime package management.
+
 ### Dependency Management
 
 We can globally install `@antfu/ni` to handle the dependency management for us.
 
-In the project folder, we can use `ni` to use the right package manager to install the dependencies:
+In the project folder, we can use `nci` to use the right package manager to clean install the dependencies:
 
 ```sh
-npm i @antfu/ni -g
+bun i @antfu/ni -g
 
-# Whatever package manager this project is using, `ni` will automatically choose the right one,
-# then install the dependencies.
+# Whatever package manager this project is using, `nci` will automatically choose
+# the right one, then clean install the dependencies.
 cd <project-folder>
-ni
+nci
 ```
 
 We can use `nup` to upgrade the dependencies:
 
 ```sh
-# Whatever package manager this project is using, `ni` will automatically choose the right one,
-# then upgrade the dependencies.
+# Whatever package manager this project is using, `nup` will automatically choose
+# the right one, then upgrade the dependencies.
 cd <project-folder>
-nup
+nup -ri # -r: recursive, -i: interactive
 ```
 
 We can also use `nd` to dedupe the dependencies:
 
+> [!Warning]
+>
+> `Bun` currently not support deduping dependencies.
+
 ```sh
-# Whatever package manager this project is using, `ni` will automatically choose the right one,
-# then dedupe the dependencies.
+# Whatever package manager this project is using, `nd` will automatically choose
+# the right one, then dedupe the dependencies.
 cd <project-folder>
 nd
 ```
 
-We can also use `ni`, `nun` to add/remove dependencies, the supported options are just like the `install` command of the package manager:
+We can also use `ni`, `nun` to add/remove dependencies, the supported options are just like the `install` command of the corresponding package manager:
 
 ```sh
-# Whatever package manager this project is using, `ni` will automatically choose the right one,
-# then add/remove the dependencies.
+# Whatever package manager this project is using, `ni` will automatically choose
+# the right one, then add/remove the dependencies.
 #
 # Supported options:
 # -g: Globally operate
@@ -117,32 +125,16 @@ ni @antfu/ni -D
 }
 ```
 
-For monorepo, we can use `-r` option with `nr` to run the script of all sub-packages:
+The same as other commands, the supported options are just like the `run` command of the corresponding package manager.
 
-```json
-{
-  "scripts": {
-    "build": "nr -r build" // nr -r <script>
-  }
-}
-```
+So check the supported options by running `<package-manager> run --help`.
 
-For change working directory to the sub-package, we can use `-C` option with `nr`:
-
-```json
-{
-  "scripts": {
-    "build": "nr -C packages/core build" // nr -C <path> <script>
-  }
-}
-```
-
-We can also run the commands by using `nlx` or `na exec`:
+We can also run the commands by using `nlx`:
 
 ```json
 {
   "simple-git-hooks": {
-    "pre-commit": "na exec lint-staged" // `na exec` is equivalent to `nlx` here, but more recommended
+    "pre-commit": "nlx lint-staged" // `na exec` is equivalent to `nlx` here, but more recommended
   }
 }
 ```
@@ -173,7 +165,9 @@ If you are developing your own packages, you may want to publish them to the pac
 
 > [!Note]
 >
-> Because I just use NPM and PNPM in my projects, the following commands are only tested on NPM and PNPM.
+> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/). But for the first time, you still publish your package manually.
+>
+> As `bun publish` are not support trusted publishing currently, the workaround is to build the tarball using `bun pm pack --filename <filename>` and publish it using `bunx npm publish --access public`. See the example in [my workflow configs](https://github.com/lumirelle/workflows/blob/main/.github/workflows/release.yml).
 
 ### Login to the Package Registry
 
@@ -190,6 +184,9 @@ na login
 na publish
   -> npm publish
   -> pnpm publish
+  # You don't need to login if you are using bun, it will open a website for
+  # authentication when you running publish
+  -> bun publish
   -> ...
 ```
 

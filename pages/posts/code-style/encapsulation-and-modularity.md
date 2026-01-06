@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Encapsulation and Modularity'
 date: 2025-09-24T16:36+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-06T15:09+08:00
 lang: en
 duration: 5min
 type: blog+note
@@ -63,7 +63,7 @@ _pages/buying/product1.vue_
 
   const product1List = ref<Product1[]>([])
 
-  const tableColumns = [
+  const tableColumnConfigs = [
     { label: 'ID', props: 'id' },
     { label: 'Name', props: 'name' },
     { label: 'Description', props: 'description' },
@@ -75,17 +75,17 @@ _pages/buying/product1.vue_
   // [!code highlight:8]
   const route = useRoute()
 
-  function initFormDataFromRoute() {
+  function extractRouteQueryToForm() {
     const query = route.query
     formData.id = (query.id as string) ?? ''
     formData.name = (query.name as string) ?? ''
     formData.type = +query.type ?? 0
   }
 
-  const { buyingApi: api } = useApi()
+  const api = useApi()
 
-  async function getProduct1List(params = formData) {
-    const res = await api.getProduct1List(params)
+  async function queryProduct1s(params = formData) {
+    const res = await api.queryProduct1s(params)
     if (res.success) {
       product1List.value = res.data
     } else {
@@ -96,12 +96,12 @@ _pages/buying/product1.vue_
 
   onMounted(() => {
     // [!code highlight:1]
-    initFormDataFromRoute()
-    getProduct1List()
+    extractRouteQueryToForm()
+    queryProduct1s()
   })
 
   function onSearch() {
-    getProduct1List()
+    queryProduct1s()
   }
 </script>
 
@@ -134,7 +134,7 @@ _pages/buying/product1.vue_
 
   const product1List = ref<Product1[]>([])
 
-  const tableColumns = [
+  const tableColumnConfigs = [
     { label: 'ID', props: 'id' },
     { label: 'Name', props: 'name' },
     { label: 'Description', props: 'description' },
@@ -143,10 +143,10 @@ _pages/buying/product1.vue_
     { label: 'Inventory', props: 'inventory', type: 'slot' },
   ]
 
-  const { buyingApi: api } = useApi()
+  const api = useApi()
 
-  async function getProduct1List(params = formData) {
-    const res = await api.getProduct1List(params)
+  async function queryProduct1s(params = formData) {
+    const res = await api.queryProduct1s(params)
     if (res.success) {
       product1List.value = res.data
     } else {
@@ -156,11 +156,11 @@ _pages/buying/product1.vue_
   }
 
   onMounted(() => {
-    getProduct1List()
+    queryProduct1s()
   })
 
   function onSearch() {
-    getProduct1List()
+    queryProduct1s()
   }
 </script>
 
@@ -186,19 +186,19 @@ export function useQueryForm<T>(defaultFormData: T) {
 
   const route = useRoute()
 
-  function initFormDataFromRoute() {
+  function extractRouteQueryToForm() {
     const query = route.query
     Object.keys(formData).forEach((key) => {
       const k = key as keyof typeof formData
       if (query[key]) {
         const value = query[key]
-        formData[k] = convertValue(formData[k], value as string)
+        formData[k] = convertValueType(value as string, formData[k])
       }
     })
   }
 
   onMounted(() => {
-    initFormDataFromRoute()
+    extractRouteQueryToForm()
   })
 
   return {
@@ -206,7 +206,7 @@ export function useQueryForm<T>(defaultFormData: T) {
   }
 }
 
-function convertValue<T>(formField: T, value: string): T {
+function convertValueType<T>(value: string, formField: T): T {
   switch (typeof formField) {
     case 'boolean':
       return (value === 'true') as T

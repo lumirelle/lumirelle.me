@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-06T16:20+08:00
 lang: en
 duration: 2min
 type: blog+note
@@ -15,7 +15,7 @@ This is a manual for how to create a new project with specific tech stack.
 
 ## Prerequisites
 
-- Node.js (v18+ recommended)
+- [Bun](https://bun.sh/) latest installed.
 - <details>
   <summary>`@sxzz/create` CLI tool (if capable)</summary>
 
@@ -113,7 +113,7 @@ And select the `Vitesse Lite` template in the startup prompt.
 Use the Vue CLI tool:
 
 ```bash
-npm i @vue/cli@latest -g
+bun i @vue/cli@latest -g
 
 cd <folder/to/hold/your/project>
 vue create project-name
@@ -127,7 +127,7 @@ Use the `create-vue` CLI tool:
 
 ```bash
 cd <folder/to/hold/your/project>
-npm create vue@legacy
+bun create vue@legacy
 ```
 
 ### Vue CLI (Vue 2 + Webpack + JavaScript)
@@ -135,7 +135,7 @@ npm create vue@legacy
 Use the Vue CLI tool:
 
 ```bash
-npm i @vue/cli@latest -g
+bun i @vue/cli@latest -g
 
 cd <folder/to/hold/your/project>
 vue create project-name
@@ -166,5 +166,5 @@ And select the `Vitesse Nuxt` template in the startup prompt.
 
 ```bash
 cd <folder/to/hold/your/project>
-npm create nuxt-app@^5 <project-name>
+bun create nuxt-app@^5 <project-name>
 ```

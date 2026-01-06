@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-06T10:56+08:00
 lang: en
 duration: 6min
 type: blog+note
@@ -11,7 +11,7 @@ type: blog+note
 
 ## Why We Need to Care About Symbol Name Patterns?
 
-In a huge Vue project, we may have thousands of symbols, likes variable names, function names, hook names, component names, etc. If we cannot encapsulate and modularize them, the only thing we can do is to use the better naming patterns to avoid naming conflicts.
+In a huge Vue project, we may have thousands of symbols, likes variable names, function names, hook names, component names, etc. If we cannot encapsulate and modularize them, the only thing we can do is to use the better naming patterns to improve the code readability and maintainability.
 
 This article will introduce some naming patterns I preferred in my projects.
 
@@ -22,11 +22,11 @@ This article will introduce some naming patterns I preferred in my projects.
 The recommended variable name pattern has the similar concept with BEM (Block Element Modifier) class name pattern:
 
 ```ts
-// Not State
+// When the variable is none-state, modifier is a type or purpose of the variable
 '(block)[Element][Modifier]'
 
-// State
-'is|can|should(Block)[Element][Modifier]'
+// When the variable is a state, modifier is a state description
+'(is|has|can|should)(Block)[Element][Modifier]'
 ```
 
 For example:
@@ -72,227 +72,425 @@ const tableColumnConfigs = ref([
 </script>
 ```
 
+The prefix verbs for state variables are used to introduce the state type:
+
+- `is`: The current state
+- `has`: The possession state
+- `can`: The ability
+- `should`: The necessity
+
 For a really huge amount of symbols, you should not only follow the naming patterns but also [encapsulate and modularize](encapsulation-and-modularity.md) them into components, composables, or modules.
 
-Some common `block`, `element`, `modifier` examples are (`/` means the same as above):
+### Common Examples
 
-| Block                                   | Element | Modifier                                                     |
-| --------------------------------------- | ------- | ------------------------------------------------------------ |
-| form                                    | Item    | [Not State](#not-state-modifier)<br>[State](#state-modifier) |
-| table                                   | Column  | /                                                            |
-|                                         | Row     | /                                                            |
-|                                         | Cell    | /                                                            |
-| dialog                                  | Header  | /                                                            |
-|                                         | Body    | /                                                            |
-|                                         | Footer  | /                                                            |
-| menu<br>dropmenu<br>sidemenu<br>navmenu | Group   | /                                                            |
-|                                         | Item    | /                                                            |
-| card                                    | Box     | /                                                            |
-|                                         | Header  | /                                                            |
-|                                         | Body    | /                                                            |
-|                                         | Footer  | /                                                            |
-|                                         | Cover   | /                                                            |
+Some common `block`, `element`, `modifier` examples are (`~` means the same as above):
 
-### Not State Modifier
+| Block                                          | Element      | Modifier                                                        |
+| ---------------------------------------------- | ------------ | --------------------------------------------------------------- |
+| form                                           | /            | [None-state](#none-state-modifier) vs. [State](#state-modifier) |
+|                                                | Item         | ~                                                               |
+|                                                | Input        | ~                                                               |
+|                                                | Select       | ~                                                               |
+|                                                | ...          | ...                                                             |
+| table                                          | /            | ~                                                               |
+|                                                | Column       | ~                                                               |
+|                                                | Row          | ~                                                               |
+|                                                | Cell         | ~                                                               |
+|                                                | ...          | ...                                                             |
+| dialog                                         | Header       | ~                                                               |
+|                                                | Body/Content | ~                                                               |
+|                                                | Footer       | ~                                                               |
+|                                                | ...          | ...                                                             |
+| menu<br>dropmenu<br>sidemenu<br>navmenu<br>... | /            | ~                                                               |
+|                                                | Group        | ~                                                               |
+|                                                | Item         | ~                                                               |
+|                                                | ...          | ...                                                             |
+| card                                           | /            | ~                                                               |
+|                                                | Header       | ~                                                               |
+|                                                | Body/Content | ~                                                               |
+|                                                | Footer       | ~                                                               |
+|                                                | Cover        | ~                                                               |
+|                                                | ...          | ...                                                             |
 
-- Ref
-- Data
-- Config[s]
+### None-state Modifier
+
+- Data: Just data.
+- Ref(s): The reference(s) to the DOM element(s) or component instance(s).
+- Config(s): Some custom setting(s) or something similar.
+- Options: Dropdown options, each option contains the label and value.
 - ...
 
 ### State Modifier
 
-- Visible / Invisible
-- Shown / Hidden
-- Enabled / Disabled
-- Loading / Loaded
+Visibility States:
+
+- Visible / Invisible: Passive visibility state.
+- Shown / Hidden: Proactive visibility state.
+- ...
+
+Activation States:
+
+- Active / Inactive (Selected / Deselected, Checked / Unchecked, ...): Passive activation state.
+- Enabled / Disabled: Proactive activation state.
+- ...
+
+Async Task States:
+
 - Pending / Fulfilled / Rejected
-- Success / Failure
-- Active / Inactive
+- Pending / Success / Failure
+- Loading / Loaded / Unloaded
+- ...
+
+Others:
+
 - ...
 
 ## Function Names
 
 ### Endpoint Function
 
-The endpoint function name should start with verbs `get`, `create`, `update`, `upsert`, `delete` to introduce the operation type.
+#### Recommended Pattern
 
-To read the demo code below, please ensure you know the difference between HTTP methods and CRUD operation types:
+The recommended endpoint function name pattern is similar:
 
-- `GET` method is used to read data, which corresponds to `get` operation, it's **safe[^1]** and **idempotent[^2]**.
-- `POST` method is used to create data, which corresponds to `create` operation, it's **not safe** and **not idempotent**.
-- `PUT` method is used to update (replace) data, which corresponds to `update` operation, it's **not safe** but **idempotent**.
-- `DELETE` method is used to delete data, which corresponds to `delete` operation, it's **not safe** but **idempotent**.
-- `upsert` operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe** but **idempotent**.
+`(verb)(Data)[Condition]`
+
+For example:
+
+```ts
+/**
+ * "getUserById" is used to get single user by id. `verb` is "get", `Data` is
+ * "User", `Condition` is "ById".
+ */
+export async function getUserById(id: Pick<User, 'id'>): Promise<User> {
+  return await request.get('/user', { params: { id } })
+}
+
+/**
+ * "listActiveUsers" is used to list multiple active users. `verb` is "list",
+ * `data` is `ActiveUsers`.
+ */
+export async function listActiveUsers(): Promise<User[]> {
+  return await request.get('/users', { params: { status: 'active' } })
+}
+```
+
+These prefix verbs (e.g. `get`, `create`, `update`, `upsert`, `delete`) are used to introduce the operation type or purpose.
+
+#### Common Examples
+
+> [!Note]
+>
+> Before you reading the introduction below, please ensure you know the difference between HTTP methods and commonly used CRUD operation types.
+
+- `GET` method is used to read data, it's **safe[^1]** and **idempotent[^2]**. The acceptable verbs are:
+  - `get` for getting **single data**.
+  - `list` for listting **multiple data**.
+  - `find` for finding **with dynamic conditions**.
+  - `search` for searching **with keyword**.
+  - `query` for querying **with complex conditions and pagination**.
+
+  E.g.:
+
+  ```ts
+  /**
+   * Mocked user interface.
+   */
+  export interface User {
+    id: string
+    username: string
+    name: string
+    sex: number
+    phone: number
+    avatarUrl?: string
+    email?: string
+    address?: string
+    status: 'active' | 'inactive'
+    // ...
+  }
+
+  /**
+   * Mocked query param interface.
+   */
+  export interface QueryParam<DataT> {
+    page?: number
+    pageSize?: number
+    sortBy?: keyof DataT
+    sortOrder?: 'asc' | 'desc'
+    filters?: Partial<DataT>
+    // ...
+  }
+
+  /**
+   * Mocked page interface.
+   */
+  export interface Page<DataT> {
+    data: DataT[]
+    total: number
+    // ...
+  }
+
+  /**
+   * Get single user.
+   */
+  export async function getUser(id: Pick<User, 'id'>): Promise<User> {
+    return await request.get('/user', { params: { id } })
+  }
+
+  /**
+   * List multiple users.
+   */
+  export async function listUsers(): Promise<User[]> {
+    return await request.get('/users')
+  }
+
+  /**
+   * List active users. (Static conditions still use `list` as the verb.)
+   */
+  export async function listActiveUsers(): Promise<User[]> {
+    return await request.get('/users', { params: { status: 'active' } })
+  }
+
+  /**
+   * Find users with conditions.
+   */
+  export async function findUsers(params: Partial<User>): Promise<User[]> {
+    return await request.get('/users', { params })
+  }
+
+  /**
+   * Find users by status.
+   */
+  export async function findUsersByStatus(
+    status: Pick<User, 'status'>
+  ): Promise<User[]> {
+    return await request.get('/users', { params: { status } })
+  }
+
+  /**
+   * Search users with keyword. This keyword maybe match multiple fields. For
+   * example, name, email, phone, etc.
+   */
+  export async function searchUsers(keyword: string): Promise<User[]> {
+    return await request.get('/users/search', { params: { q: keyword } })
+  }
+
+  /**
+   * Query users with complex conditions and pagination.
+   */
+  export async function queryUsers(
+    params: QueryParam<User>
+  ): Promise<Page<User>> {
+    return await request.get('/users/query', { params })
+  }
+  ```
+
+- `POST` method is used to create data, it's **not safe** and **not idempotent**. The acceptable verbs are:
+  - `create` for creating **new data**.
+  - `add` for adding **data to a collection**.
+  - ... For some special scenarios, you can also use `register`, `login`, `upload`, etc.
+
+  E.g.:
+
+  ```ts
+  export interface User {
+    id: string
+    username: string
+    name: string
+    sex: number
+    phone: number
+    avatarUrl?: string
+    email?: string
+    address?: string
+    status: 'active' | 'inactive'
+    // ...
+  }
+
+  /**
+   * Mocked sensitive user data interface, with sensitive information, used
+   * for registration and login.
+   */
+  export interface SensitiveUser extends User {
+    password: string
+  }
+
+  export interface Group {
+    id: string
+    // ...
+  }
+
+  /**
+   * Create new user.
+   */
+  export async function createUser(data: Partial<User>): Promise<User> {
+    return await request.post('/user', { data })
+  }
+
+  /**
+   * Add user to a group.
+   */
+  export async function addUserToGroup(
+    userId: Pick<User, 'id'>,
+    groupId: Pick<Group, 'id'>
+  ): Promise<void> {
+    return await request.post('/group/user', { data: { userId, groupId } })
+  }
+
+  /**
+   * Register new user.
+   */
+  export async function registerUser(
+    data: Partial<SensitiveUser>
+  ): Promise<User> {
+    return await request.post('/user/register', { data })
+  }
+
+  /**
+   * Login user.
+   */
+  export async function loginUser(
+    username: Pick<SensitiveUser, 'username'>,
+    password: Pick<SensitiveUser, 'password'>
+  ): Promise<{ token: string }> {
+    return await request.post('/user/login', { data: { username, password } })
+  }
+
+  /**
+   * Upload user avatar.
+   */
+  export async function uploadUserAvatar(
+    userId: Pick<User, 'id'>,
+    file: File
+  ): Promise<string> {
+    const formData = new FormData()
+    formData.append('userId', userId)
+    formData.append('file', file)
+    return await request.post('/user/avatar', { data: formData })
+  }
+  ```
+
+- `PUT` and `PATCH` method is used to update data, they're **not safe** but **idempotent**. The acceptable verbs are:
+  - `update` for updating **(partially or fully)** existing data.
+  - `patch` for exactly **partially updating** existing data.
+  - `replace` for exactly **fully updating** existing data.
+
+  E.g.:
+
+  ```ts
+  export interface User {
+    id: string
+    username: string
+    name: string
+    avatarUrl?: string
+    sex: number
+    phone: number
+    email?: string
+    address?: string
+    status: 'active' | 'inactive'
+    // ...
+  }
+
+  /**
+   * Update (partially or fully) existing user.
+   */
+  export async function updateUser(
+    data: Pick<User, 'id'> & Partial<Omit<User, 'id'>>
+  ): Promise<User> {
+    return await request.put('/user', { data })
+    // Or
+    // return await request.patch('/user', { data })
+  }
+
+  /**
+   * Patch (partially update) existing user.
+   */
+  export async function patchUserStatus(
+    id: Pick<User, 'id'>,
+    status: Pick<User, 'status'>
+  ): Promise<User> {
+    return await request.patch('/user/status', { data: { id, status } })
+  }
+
+  /**
+   * Replace (fully update) existing user.
+   */
+  export async function replaceUser(data: User): Promise<User> {
+    return await request.put('/user/replace', { data })
+  }
+  ```
+
+- `DELETE` method is used to delete data, it's **not safe** but **idempotent**. The acceptable verb is:
+  - `delete` for deleting **existing data**.
+  - ... For some special scenarios, you can also use `revoke`, etc.
+
+  E.g.:
+
+  ```ts
+  export interface User {
+    id: string
+    // ...
+  }
+
+  export async function deleteUser(id: Pick<User, 'id'>): Promise<void> {
+    return await request.delete('/user', { data: { id } })
+  }
+
+  export async function revokeUserAccess(id: Pick<User, 'id'>): Promise<void> {
+    return await request.delete('/user/access', { data: { id } })
+  }
+  ```
+
+- Upsert operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe** but **idempotent**, and it uses the verb `upsert`.
+
+  E.g.:
+
+  ```ts
+  export interface User {
+    id: string
+    username: string
+    name: string
+    // ...
+  }
+
+  export async function upsertUser(data: User): Promise<User> {
+    return await request.put('/user/upsert', { data })
+  }
+  ```
 
 To learn more about HTTP methods, please read the [computer network manual](/posts/manual/computer-network-manual.md#http-methods).
 
-For example, the endpoint functions for user info are defined seperately and exported as a single object for easy import:
+> [!Note]
+>
+> If you have try this rule in practice, you may find that it's more like a fantastic imagination, because when you work on a team, you cannot influence others' behavior:
+>
+> You may receive a endpoint function used to query data but with `POST` method, and the instigator just tells you: "I feel lazy to create a standlone DTO for query params, so I use `POST` method directly. Just make some adjustments yourself!".
+>
+> So how could we handle these situations? I suggest you to categorize the endpoint functions not only by their HTTP methods but also by their **purposes**.
 
-_api/user.ts_
+### Validation Function
 
-```ts
-import request from '@/utils/request.js'
+#### Recommended Pattern
 
-// [!code highlight:7]
-/**
- * "get${Data}" is used for endpoint function with "GET"
- * method and "get" operation.
- */
-async function getUserInfo(params?: Record<string, any>) {
-  return await request.get('/user/info', { params })
-}
+The recommended validation function name pattern is:
 
-// [!code highlight:7]
-/**
- * "create${Data}" is used for endpoint function with "POST"
- * method and "create" operation.
- */
-async function createUserInfo(data: Record<string, any>) {
-  return await request.post('/user/info', { data })
-}
+`(is|has|can|should|validate|check)(Subject)[Condition]`
 
-// [!code highlight:7]
-/**
- * "update${Data}" is used for endpoint function with "PUT"
- * method and "update" operation.
- */
-async function updateUserInfo(data: Record<string, any>) {
-  return await request.put('/user/info', { data })
-}
+These prefix verbs are used to introduce the validation type:
 
-// [!code highlight:8]
-/**
- * "update${Data}${Attribute}" is used for endpoint function
- * with "PUT" method and "update" operation for specific
- * attribute.
- */
-async function updateUserInfoState(data: Record<string, any>) {
-  return await request.put('/user/info/state', { data })
-}
-
-// [!code highlight:7]
-/**
- * "upsert${Data}" is used for endpoint function with "POST"
- * method and "upsert" operation.
- */
-async function upsertUserInfo(data: Record<string, any>) {
-  return await request.put('/user/info', { data })
-}
-
-// [!code highlight:7]
-/**
- * "delete${Data}" is used for endpoint function with "DELETE"
- * method and "delete" operation.
- */
-async function deleteUserInfo(data: Record<string, any>) {
-  return await request.delete('/user/info', { data })
-}
-
-// [!code highlight:8]
-export default {
-  createUserInfo,
-  deleteUserInfo,
-  getUserInfo,
-  updateUserInfo,
-  updateUserInfoState,
-  upsertUserInfo,
-}
-```
-
-Then, use the endpoint functions in Vue component by importing the default exported object:
-
-_pages/user.vue_
-
-```vue
-<script setup lang="ts">
-import { onMounted, ref } from 'vue'
-// [!code highlight:4]
-/**
- * Organize the endpoint functions into a single object `api` for easy import.
- */
-import api from '@/api/user'
-
-const userInfo = ref(null)
-
-onMounted(async () => {
-  // [!code highlight:1]
-  userInfo.value = await api.getUserInfo()
-})
-</script>
-
-<template>
-  <div>
-    <h1>User Info</h1>
-    <pre>{{ userInfo }}</pre>
-  </div>
-</template>
-```
-
-The same as the endpoint function name pattern, the Vue component method name who is used to call the endpoint functions should start with verbs `get`, `create`, `update`, `upsert`, `delete` to indicate the operation type.
-
-_pages/user.vue_
-
-```vue
-<script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import api from '@/api/user'
-
-const userInfo = ref(null)
-
-// [!code highlight:3]
-async function getUserInfo() {
-  userInfo.value = await api.getUserInfo()
-}
-
-// [!code highlight:3]
-async function createUserInfo(data: Record<string, any>) {
-  await api.createUserInfo(data)
-}
-
-// [!code highlight:3]
-async function updateUserInfo(data: Record<string, any>) {
-  await api.updateUserInfo(data)
-}
-
-// [!code highlight:3]
-async function updateUserInfoState(data: Record<string, any>) {
-  await api.updateUserInfoState(data)
-}
-
-// [!code highlight:3]
-async function upsertUserInfo(data: Record<string, any>) {
-  await api.upsertUserInfo(data)
-}
-
-onMounted(async () => {
-  await getUserInfo()
-})
-</script>
-
-<template>
-  <div>
-    <h1>User Info</h1>
-    <pre>{{ userInfo }}</pre>
-    <button @click="getUserInfo()">
-      Refresh
-    </button>
-    <button @click="createUserInfo({ name: 'New User' })">
-      Create New User Named "New User"
-    </button>
-    <button @click="updateUserInfo({ id: 1, name: 'New Name' })">
-      Update (Replace) User Name to "New Name" With ID "1"
-    </button>
-    <button @click="updateUserInfoState({ id: 1, state: 'active' })">
-      Update (Replace) User State to "active" With ID "1"
-    </button>
-  </div>
-</template>
-```
+- `is`: Check the current state
+- `has`: Check the possession
+- `can`: Check the ability
+- `should`: Check the necessity
+- `validate`: Validate the correctness
+- `check`: General check (nothing is invalid, so we use check instead of validate)
 
 ### Event Handler Function
 
+#### Recommended Pattern
+
 The event handler function name should start with verbs `on`, `after`, `before` to indicate the event handler type.
+
+`on|after|before(Event)[Condition]`
 
 For example:
 
@@ -308,7 +506,11 @@ interface UserInfo {
 
 const userInfo = ref<UserInfo | null>(null)
 
-// [!code highlight:6]
+// [!code highlight:10]
+/**
+ * "beforeUserInfoChange" is used to handle the event before user info
+ * changes. `Event` is "UserInfoChange", `Condition` is none.
+ */
 async function beforeUserInfoChange(
   oldUserInfo: UserInfo | null,
   newUserInfo: UserInfo | null
@@ -316,7 +518,11 @@ async function beforeUserInfoChange(
   console.log('User info changed before:', oldUserInfo, newUserInfo)
 }
 
-// [!code highlight:7]
+// [!code highlight:11]
+/**
+ * "onUserInfoChange" is used to handle the event when user info changes.
+ * `Event` is "UserInfoChange", `Condition` is none.
+ */
 async function onUserInfoChange(
   oldUserInfo: UserInfo | null,
   newUserInfo: UserInfo | null
@@ -325,29 +531,62 @@ async function onUserInfoChange(
   console.log('User info changed:', oldUserInfo, newUserInfo)
 }
 
-// [!code highlight:6]
+// [!code highlight:10]
+/**
+ * "afterUserInfoChange" is used to handle the event after user info
+ * changes. `Event` is "UserInfoChange", `Condition` is none.
+ */
 async function afterUserInfoChange(
   oldUserInfo: UserInfo | null,
   newUserInfo: UserInfo | null
 ) {
   console.log('User info changed after:', oldUserInfo, newUserInfo)
 }
-
-onMounted(() => {
-  const oldUserInfo = userInfo.value
-  const newUserInfo = await api.getUserInfo()
-  beforeUserInfoChange(oldUserInfo, newUserInfo)
-  onUserInfoChange(oldUserInfo, newUserInfo)
-  afterUserInfoChange(oldUserInfo, newUserInfo)
-})
 </script>
 
 <template>
   <div>
-    <h1>User Info</h1>
-    <pre>{{ userInfo }}</pre>
+    // [!code highlight:6]
+    <UserInfoCard
+      :user="userInfo"
+      @before-change="beforeUserInfoChange"
+      @change="onUserInfoChange"
+      @after-change="afterUserInfoChange"
+    />
   </div>
 </template>
+```
+
+### Business Logic Function
+
+There is no best practice for business logic function names, you can name them according to their purposes, just make sure the names can **express their functionalities clearly**.
+
+A good example:
+
+```ts
+/**
+ * "calcDiscountedPrice" is used to calculate discounted price.
+ */
+export function calcDiscountedPrice(
+  originalPrice: number,
+  discountRate: number
+): number {
+  return originalPrice * (1 - discountRate)
+}
+```
+
+A bad example:
+
+```ts
+/**
+ * "calcPrice" is too general to express its functionality.
+ */
+export function calcPrice(
+  originalPrice: number,
+  discountRate: number
+): number {
+  return originalPrice * (1 - discountRate)
+}
 ```
 
 [^1]: Safe means that the operation does not modify any data on the server.

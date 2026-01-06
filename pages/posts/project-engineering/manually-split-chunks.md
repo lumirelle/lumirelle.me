@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Manually Split Chunks'
 date: 2025-11-05T16:22+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-06T17:07+08:00
 lang: en
 duration: 5min
 type: blog+note
@@ -179,6 +179,10 @@ export default defineConfig({
   },
 })
 ```
+
+### How to Check the Effects?
+
+TODO...
 
 ### Example
 

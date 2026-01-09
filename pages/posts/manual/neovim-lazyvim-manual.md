@@ -1,7 +1,7 @@
 ---
 title: Neovim & LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2025-12-29T14:13+08:00
+update: 2026-01-09T18:19+08:00
 lang: en
 duration: n/a
 type: blog+note
@@ -56,8 +56,8 @@ To exit Neovim, you should use the `command`:
 For single buffer:
 
 - Type `:q` and press `Enter` to quit the current buffer and exit Neovim. Before you exit, Neovim will prompt you to save changes if there are unsaved changes.
-- Type `:wq` or `:x` and press `Enter` to save changes and quit.
-- Type `:q!` and press `Enter` to force quit without saving changes.
+- Type `:wq` and press `Enter`, or just type `ZZ` to save changes and quit.
+- Type `:q!` and press `Enter`, or just type `ZQ` to force quit without saving changes.
 
 For multiple buffers:
 
@@ -117,13 +117,6 @@ To move around whole lines, you can use the following commands:
 - `$`: Move to the end of the current line, recall the regex, `$` means the end
 - `g$`: Move to the end of the current line, similar to `$`, but works in soft-wrapped lines
 
-#### Move Around Paragraphs
-
-To move around paragraphs, you can use:
-
-- `{`: Move to the previous beginning of paragraph (a paragraph is separated by one or more blank lines)
-- `}`: Move to the next beginning of paragraph
-
 #### Move Around by Finding
 
 If you have a really long file and want to move to a specific character or word, you can achieve this by finding:
@@ -137,6 +130,21 @@ If you have a really long file and want to move to a specific character or word,
 - `?{string}`: Search backward for `{string}`, use `n` to go to the next occurrence and `N` to go to the previous occurrence
 - `*`: Search forward for the word under the cursor, use `n` to go to the next occurrence and `N` to go to the previous occurrence
 - `#`: Search backward for the word under the cursor, use `n` to go to the next occurrence and `N` to go to the previous occurrence
+
+#### Move Around Brackets
+
+To move around brackets, you can use:
+
+- `%`: Move to the closest matching brackets (works for `()`, `{}`, `[]`, `<>`)
+- `[(`, `[{`, `[<`: Move to the previous unmatched opening bracket
+- `])`, `}]`, `]>`: Move to the next unmatched closing
+
+#### Move Around Paragraphs
+
+To move around paragraphs, you can use:
+
+- `{`: Move to the previous beginning of paragraph (a paragraph is separated by one or more blank lines)
+- `}`: Move to the next beginning of paragraph
 
 #### Move Around Whole File
 
@@ -157,13 +165,6 @@ To move around screen without moving the cursor, you can use:
 - `zt`: Move the current line to the top of the screen
 - `zb`: Move the current line to the bottom of the screen
 
-#### Move Around Buffers (Tabs)
-
-To move around buffers (tabs), you can use the following commands:
-
-- `H`: Move to the previous buffer
-- `L`: Move to the next buffer
-
 #### Move Around Windows
 
 To move around windows, you can use the following commands:
@@ -172,6 +173,13 @@ To move around windows, you can use the following commands:
 - `<C-j>`: Move to the window below
 - `<C-k>`: Move to the window above
 - `<C-l>`: Move to the right window
+
+#### Move Around Buffers
+
+To move around buffers, you can use the following commands:
+
+- `H`: Move to the previous buffer
+- `L`: Move to the next buffer
 
 ### Editing
 
@@ -188,7 +196,7 @@ You can enter insert mode by using the following commands:
 
 Then you can start typing just like a normal text editor.
 
-Use `<esc>` or `Ctrl-[` to exit insert mode and return to normal mode.
+Use `<esc>` to exit insert mode and return to normal mode.
 
 #### Copy and Paste
 

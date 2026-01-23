@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40:00+08:00
-update: 2026-01-15T17:44+08:00
+update: 2026-01-23T17:28+08:00
 lang: en
 duration: 9min
 type: blog+note
@@ -15,13 +15,15 @@ I know Windows is the best OS to play games, but the worst OS to develop.
 
 If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development.
 
-## First Step: Install Windows
+## First Step: Reinstall Clean Windows
 
-We can use [Ventoy](https://www.ventoy.net/en/download.html) to make a bootable USB drive to install Windows.
+We can use [Ventoy](https://www.ventoy.net/en/download.html) to make a bootable USB drive to reinstall Windows. This allows us to decide which version/edition of Windows to use.
 
-Notice that, by default, Ventoy will skip the device check and online check while Windows is setting up.
+Before that, we need install and set up Ventoy in your USB flash drive with a Windows ISO file.
 
-You can also bypass these check manually by unplugging the network cable and executing these commands below (Press `Shift + F10` to open CMD):
+Generally, Ventoy will skip the **device & online check** of Windows.
+
+If not, you can also bypass these check manually by unplugging the network cable and executing these commands below (Press `Shift + F10` to open CMD):
 
 ```bat
 cd OOBE
@@ -66,6 +68,7 @@ Just follow the steps below, clean up the annoyed system bundled software, and i
 Search:
 
 ```nu
+# Search both name and ID
 winget search <QUERY>
 # Search name only
 winget search --name <QUERY>
@@ -73,14 +76,14 @@ winget search --name <QUERY>
 winget search --id <QUERY>
 ```
 
-Install (User Scope):
+Install (User scope):
 
 ```nu
 # `add` is an alias of command `install`
 winget add <QUERY>
 ```
 
-Install (Machine Scope, requires admin permission):
+Install (Machine scope, requires admin permission):
 
 ```nu
 # In windows, `sudo` command is powered by `gsudo`
@@ -144,15 +147,15 @@ winget <command> -?
 
 ### Clean up Annoyed System Bundled Software
 
-Uninstall Office 365, Microsoft PC Manager and other trash (system bundled software) you don't need at all, close the UAC (User Account Control) as your need.
+Uninstall _Office 365_, _Microsoft PC Manager_ and other trash (system bundled software) you don't need at all, close the UAC (User Account Control) as your need.
 
-Then, close all of anti-virus features of Windows Defender, and use [Huorong](https://www.huorong.cn/person) instead (Much quieter and non-invasive)
+Then, close all of anti-virus features of _Windows Defender_, and use [Huorong](https://www.huorong.cn/person) instead (Much quieter and non-invasive)
 
 | Software | Source/Install Method                    |
 | -------- | ---------------------------------------- |
 | Huorong  | [Huorong](https://www.huorong.cn/person) |
 
-After that, use Windows 11 Setting Easily (Support Windows 10 too) to close Windows Defender completely, and restart your computer. You will see there is only the Windows Defender service exists at the end, that's means Windows Defender is being disabled entirely.
+After that, use _Windows 11 Setting Easily_ (Support Windows 10 too) to close Windows Defender completely, and restart your computer. You will see there is only the Windows Defender service exists at the end, that's means Windows Defender is being disabled entirely.
 
 | Software                  | Source/Install Method                                                   |
 | ------------------------- | ----------------------------------------------------------------------- |
@@ -160,17 +163,21 @@ After that, use Windows 11 Setting Easily (Support Windows 10 too) to close Wind
 
 > [!Note]
 >
-> You should close Windows Defender first, because it will clean Windows 11 Setting Easily as a potential threat.
+> You should close _Windows Defender_ first, because it will recognize _Windows 11 Setting Easily_ as a potential threat and clean it.
 
 ### Setting up Network Tool (Optional)
 
-Just install Clash Verge Rev, We will configure it [later](#setting-up-personal-preferences).
+Just install _Clash Verge Rev_, We will configure it [later](#setting-up-personal-preferences).
 
 | Software        | Source/Install Method                                                          |
 | --------------- | ------------------------------------------------------------------------------ |
 | Clash Verge Rev | [GitHub Releases](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
 
 ### Setting up Personal Preferences
+
+> [!Note]
+>
+> This is the setting up of my personal preferences, if you does not interest in this, you can skip this part.
 
 Requires:
 

@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2025-12-01T13:49+08:00
+update: 2026-01-26T16:40+08:00
 lang: en
-duration: 69min
+duration: 70min
 type: blog+note
 ---
 
@@ -254,6 +254,60 @@ console.log(arr instanceof Object) // -> true
 function func() {}
 console.log(func instanceof Object) // -> true
 ```
+
+#### Property Accessing Under the Hood
+
+In JavaScript, there are two ways to access properties of an object: dot notation (`obj.prop`) and bracket notation (`obj['prop']`).
+
+Both notations will call the internal method `[[Get]]` to retrieve the property value, and `[[Set]]` to set the property value.
+
+These two internal method is implemented by the JavaScript engine, and the signatures looks like:
+
+```js
+// obj: the object
+// propName: the name of the property
+// receiver: the value of `this` inside getter/setter
+[[Get]](obj, propName, receiver)
+```
+
+```js
+// obj: the object
+// propName: the name of the property
+// value: the value to set
+// receiver: the value of `this` inside getter/setter
+[[Set]](obj, propName, value, receiver)
+```
+
+The key difference between the two notations is how they pass the `propName` argument to the internal methods:
+
+- Dot notation:
+
+  It will call `[[Get]]` or `[[Set]]` with a string literal as the property name.
+
+  ```js
+  const obj = { name: 'Alice' }
+  obj.name
+  // => [[Get]](obj, 'name', obj)
+  ```
+
+- Bracket notation:
+
+  If the expression inside the brackets is a Symbol, it will call `[[Get]]` or `[[Set]]` with a Symbol as the property name. Otherwise, it will call them with the value of the expression converted to a string as the property name.
+
+  <!-- eslint-disable dot-notation -->
+
+  ```js
+  const obj = { name: 'Alice' }
+  obj['name']
+  // => [[Get]](obj, String('name'), obj)
+  //    => [[Get]](obj, 'name', obj)
+  obj[1]
+  // => [[Get]](obj, String(1), obj)
+  //    => [[Get]](obj, '1', obj)
+  obj[{ key: 'name' }]
+  // => [[Get]](obj, String({ key: 'name' }), obj)
+  //    => [[Get]](obj, '[object Object]', obj)
+  ```
 
 #### Keys (Property Names) of an Object
 

@@ -11,7 +11,7 @@
     },
     "resolveJsonModule": true,
     "types": [
-      "node",
+      "bun",
       "vite/client",
       "unplugin-vue-router/client"
     ],

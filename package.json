@@ -1,17 +1,105 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.24.0",
   "scripts": {
-    "build": "npm run static && NODE_ENV=production vite-ssg build && tsx ./scripts/copy-fonts.ts && tsx ./scripts/rss.ts && cp _dist_redirects dist/_redirects",
-    "dev": "vite --port 3333 --open",
-    "preview": "vite preview",
-    "static": "rimraf temp && degit lumirelle/static temp --force && tsx scripts/copy-sponsors",
-    "redirects": "tsx scripts/redirects.ts",
-    "lint": "eslint .",
-    "compress": "tsx scripts/img-compress-staged.ts",
-    "photos": "tsx scripts/photos-manage.ts",
-    "prepare": "simple-git-hooks"
+    "build": "bun run static && NODE_ENV=production bun vite-ssg build && bun run ./scripts/copy-fonts.ts && bun run ./scripts/rss.ts && bun exec 'cp _dist_redirects dist/_redirects'",
+    "dev": "bun vite --port 3333 --open",
+    "preview": "bun vite preview",
+    "static": "bun rimraf temp && bun degit lumirelle/static temp --force && bun run scripts/copy-sponsors",
+    "redirects": "bun run scripts/redirects.ts",
+    "lint": "bun eslint .",
+    "compress": "bun run scripts/img-compress-staged.ts",
+    "photos": "bun run scripts/photos-manage.ts",
+    "prepare": "bun simple-git-hooks"
+  },
+  "workspaces": {
+    "catalogs": {
+      "build": {
+        "@shikijs/markdown-it": "^3.19.0",
+        "@shikijs/transformers": "^3.19.0",
+        "@shikijs/twoslash": "^3.19.0",
+        "@unocss/preset-web-fonts": "^66.5.10",
+        "@vitejs/plugin-vue": "^6.0.2",
+        "gray-matter": "^4.0.3",
+        "markdown-it": "^14.1.0",
+        "markdown-it-anchor": "^9.2.0",
+        "markdown-it-footnote": "^4.0.0",
+        "markdown-it-github-alerts": "^1.0.0",
+        "markdown-it-link-attributes": "^4.0.1",
+        "markdown-it-magic-link": "^0.1.4",
+        "markdown-it-table-of-contents": "^1.1.0",
+        "unocss": "^66.5.10",
+        "unplugin-auto-import": "^21.0.0",
+        "unplugin-icons": "^23.0.1",
+        "unplugin-vue-components": "^31.0.0",
+        "unplugin-vue-markdown": "^29.2.0",
+        "unplugin-vue-router": "^0.19.0",
+        "vite": "^7.2.7",
+        "vite-plugin-inspect": "^11.3.3",
+        "vite-plugin-optimize-exclude": "^0.0.1",
+        "vite-ssg": "^28.2.2",
+        "vite-svg-loader": "^5.1.0"
+      },
+      "dev": {
+        "@antfu/eslint-config": "^7.2.0",
+        "@clack/prompts": "^0.11.0",
+        "@iconify/json": "^2.2.415",
+        "@octokit/core": "^7.0.6",
+        "@octokit/rest": "^22.0.1",
+        "@prettier/plugin-xml": "^3.4.2",
+        "ansis": "^4.2.0",
+        "degit": "^2.8.4",
+        "diacritics": "^1.3.0",
+        "eslint": "^9.39.1",
+        "eslint-plugin-format": "^1.1.0",
+        "exifreader": "^4.33.1",
+        "fast-glob": "^3.3.3",
+        "feed": "^5.1.0",
+        "fs-extra": "^11.3.2",
+        "lint-staged": "^16.2.7",
+        "pathe": "^2.0.3",
+        "pnpm": "^10.24.0",
+        "rimraf": "^6.1.2",
+        "sharp": "0.34.5",
+        "simple-git": "^3.30.0",
+        "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
+        "taze": "^19.9.2",
+        "tsx": "^4.21.0",
+        "typescript": "~5.9.3"
+      },
+      "frontend": {
+        "@antfu/utils": "^9.3.0",
+        "@unhead/vue": "^2.0.19",
+        "@unocss/reset": "^66.5.10",
+        "@vueuse/core": "^14.1.0",
+        "d3-hierarchy": "^3.1.2",
+        "d3-shape": "^3.2.0",
+        "dayjs": "^1.11.19",
+        "floating-vue": "^5.2.2",
+        "matter-attractors": "^0.1.6",
+        "matter-js": "^0.20.0",
+        "nprogress": "^0.2.0",
+        "pinia": "^3.0.4",
+        "pixi.js": "^8.14.3",
+        "shiki": "^3.19.0",
+        "shiki-magic-move": "^1.2.1",
+        "simplex-noise": "^4.0.3",
+        "vue": "^3.5.25",
+        "vue-router": "^4.6.3",
+        "vue-router-better-scroller": "^0.0.0"
+      },
+      "types": {
+        "@types/bun": "^1.3.6",
+        "@types/d3-hierarchy": "^3.1.7",
+        "@types/d3-shape": "^3.1.7",
+        "@types/degit": "^2.8.6",
+        "@types/diacritics": "^1.3.3",
+        "@types/fs-extra": "^11.0.4",
+        "@types/markdown-it": "^14.1.2",
+        "@types/markdown-it-link-attributes": "^3.0.5",
+        "@types/nprogress": "^0.2.3"
+      }
+    }
   },
   "dependencies": {
     "@unhead/vue": "catalog:frontend",
@@ -44,6 +132,7 @@
     "@shikijs/markdown-it": "catalog:build",
     "@shikijs/transformers": "catalog:build",
     "@shikijs/twoslash": "catalog:build",
+    "@types/bun": "catalog:types",
     "@types/d3-hierarchy": "catalog:types",
     "@types/d3-shape": "catalog:types",
     "@types/degit": "catalog:types",
@@ -51,7 +140,6 @@
     "@types/fs-extra": "catalog:types",
     "@types/markdown-it": "catalog:types",
     "@types/markdown-it-link-attributes": "catalog:types",
-    "@types/node": "catalog:types",
     "@types/nprogress": "catalog:types",
     "@unocss/preset-web-fonts": "catalog:build",
     "@vitejs/plugin-vue": "catalog:build",
@@ -95,9 +183,9 @@
     "vite-svg-loader": "catalog:build"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "bun lint-staged"
   },
   "lint-staged": {
-    "*": "eslint --fix"
+    "*": "bun eslint --fix"
   }
 }

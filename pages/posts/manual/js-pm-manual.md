@@ -1,9 +1,9 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2026-01-06T16:41+08:00
+update: 2026-01-26T16:28+08:00
 lang: en
-duration: 4min
+duration: 5min
 type: blog+note
 ---
 
@@ -16,7 +16,7 @@ JavaScript has two kind of runtime environments:
 - Server-side: Node.js, Bun, Deno, ...
 - Client-side: Browser, ...
 
-For the server-side, we have many package managers, like:
+For the server-side, we have `node_modules` with plenty of packages which can run on our device. There are also many package managers, like:
 
 - [NPM](https://www.npmjs.com/)
 - [PNPM](https://pnpm.io/)
@@ -43,24 +43,40 @@ PNPM has many advantages over NPM, like:
 - Monorepo support
 - ...
 
+> [!Note]
+>
+> You can also use `bun` as the package manager for Node.js.
+>
+> But as Bun is still in active development, some features may not be stable enough than PNPM.
+
 ## Handle the Case of Different Package Managers
 
-Of course, everyone has their own preferences, so you may have to face the case of using different package managers in one project.
-
-[@antfu/ni](https://github.com/antfu-collective/ni) is a tool that can help us
-handle this case.
+If you are facing the case of using different package managers in different projects, [@antfu/ni](https://github.com/antfu-collective/ni) is a tool that can help us handle this case.
 
 > [!Note]
 >
 > As bun and deno are also supported by this package, you can even use it to achieve cross-runtime package management.
 
+If you are using multiple package managers in one project, make sure you know [the default detect strategy](https://github.com/antfu-collective/package-manager-detector/blob/main/src/detect.ts#L61) of `@antfu/ni` (uses `package-manager-detector` under the hood):
+
+1. lockfile [(Source)](https://github.com/antfu-collective/package-manager-detector/blob/main/src/constants.ts#L13-L23)
+   1. `bun.lock` & `bun.lockb` -> Bun
+   2. `deno.lock` -> Deno
+   3. `pnpm-lock.yaml` & `pnpm-workspace.yaml` -> PNPM
+   4. `yarn.lock` -> Yarn
+   5. `package-lock.json` -> NPM
+   6. `npm-shrinkwrap.json` -> NPM
+2. package.json `packageManager` field
+3. package.json `devEngines` field
+
 ### Dependency Management
 
-We can globally install `@antfu/ni` to handle the dependency management for us.
+It's recommended to globally install `@antfu/ni`.
 
-In the project folder, we can use `nci` to use the right package manager to clean install the dependencies:
+Under the project folder, we can use `nci` to use the right package manager to clean install the dependencies (Clean install is enabled in PNPM and Bun by default, even if you are using normal `ni`/`pnpm install`/`bun install` command):
 
 ```sh
+# Use Bun as example:
 bun i @antfu/ni -g
 
 # Whatever package manager this project is using, `nci` will automatically choose
@@ -75,7 +91,9 @@ We can use `nup` to upgrade the dependencies:
 # Whatever package manager this project is using, `nup` will automatically choose
 # the right one, then upgrade the dependencies.
 cd <project-folder>
-nup -ri # -r: recursive, -i: interactive
+# For Bun, -r: recursive, -i: interactive,
+# these parameters are determined by the corresponding package manager
+nup -ri
 ```
 
 We can also use `nd` to dedupe the dependencies:
@@ -83,6 +101,8 @@ We can also use `nd` to dedupe the dependencies:
 > [!Warning]
 >
 > `Bun` currently not support deduping dependencies.
+>
+> See https://github.com/oven-sh/bun/issues/1343.
 
 ```sh
 # Whatever package manager this project is using, `nd` will automatically choose
@@ -109,16 +129,17 @@ nun <dependency> [-g] ...
 
 ### Run Scripts & Commands
 
-If we install it in our project, we can use `nr` to run the NPM scripts:
+If we install `@antfu/ni` in our project, we can use `nr` to run the NPM scripts for better compatibility:
 
 ```sh
 ni @antfu/ni -D
 ```
 
-```json
+```jsonc
 {
   "scripts": {
-    "prerelease": "nr test:run && nr typecheck", // nr <script>
+    // nr <script>, whatever package manager this project is using
+    "prerelease": "nr test:run && nr typecheck",
     "test:run": "vitest run",
     "typecheck": "tsc --noEmit"
   }
@@ -131,10 +152,12 @@ So check the supported options by running `<package-manager> run --help`.
 
 We can also run the commands by using `nlx`:
 
-```json
+```jsonc
 {
   "simple-git-hooks": {
-    "pre-commit": "nlx lint-staged" // `na exec` is equivalent to `nlx` here, but more recommended
+    // `na exec` is equivalent to `nlx` here, but more recommended.
+    // As PNPM and Bun support omit `exec` command, we can use `na lint-staged` directly for those two package managers.
+    "pre-commit": "nlx lint-staged"
   }
 }
 ```
@@ -165,9 +188,9 @@ If you are developing your own packages, you may want to publish them to the pac
 
 > [!Note]
 >
-> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/). But for the first time, you still publish your package manually.
+> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/). But for the first time, you still publish your package manually by command like: `npm login && na publish --tag latest`.
 >
-> As `bun publish` are not support trusted publishing currently, the workaround is to build the tarball using `bun pm pack --filename <filename>` and publish it using `bunx npm publish --access public`. See the example in [my workflow configs](https://github.com/lumirelle/workflows/blob/main/.github/workflows/release.yml).
+> After the first time publishing, as `bun publish` not supports trusted publishing currently, the workaround is to build the tarball using `bun pm pack --filename <filename>` and publish it using `bunx npm publish --access public`. See the example in [my workflow configs](https://github.com/lumirelle/workflows/blob/main/.github/workflows/release.yml).
 
 ### Login to the Package Registry
 
@@ -175,6 +198,8 @@ If you are developing your own packages, you may want to publish them to the pac
 na login
   -> npm login
   -> pnpm login
+  # Bun shared the login state (tokens in .npmrc) with npm,
+  # so you should use `npm login` instead
   -> ...
 ```
 
@@ -184,8 +209,6 @@ na login
 na publish
   -> npm publish
   -> pnpm publish
-  # You don't need to login if you are using bun, it will open a website for
-  # authentication when you running publish
   -> bun publish
   -> ...
 ```
@@ -196,6 +219,8 @@ na publish
 na unpublish <package-name>
   -> npm unpublish <package-name>
   -> pnpm unpublish <package-name>
+  # The same as login, you should use `npm unpublish`
+  # to unpublish your packages published by Bun
   -> ...
 ```
 
@@ -207,6 +232,8 @@ Remove a version tag from a package:
 na dist-tag rm <package-name> <tag>
   -> npm dist-tag rm <package-name> <tag>
   -> pnpm dist-tag rm <package-name> <tag>
+  # The same as login, you should use `npm dist-tag rm`
+  # to remove version tags for your packages published by Bun
   -> ...
 ```
 

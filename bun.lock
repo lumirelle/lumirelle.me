@@ -64,7 +64,6 @@
         "markdown-it-magic-link": "catalog:build",
         "markdown-it-table-of-contents": "catalog:build",
         "pathe": "catalog:dev",
-        "pnpm": "catalog:dev",
         "rimraf": "catalog:dev",
         "sharp": "catalog:dev",
         "simple-git": "catalog:dev",
@@ -131,7 +130,6 @@
       "fs-extra": "^11.3.2",
       "lint-staged": "^16.2.7",
       "pathe": "^2.0.3",
-      "pnpm": "^10.24.0",
       "rimraf": "^6.1.2",
       "sharp": "0.34.5",
       "simple-git": "^3.30.0",
@@ -1369,8 +1367,6 @@
     "pkg-types": ["pkg-types@2.3.0", "", { "dependencies": { "confbox": "^0.2.2", "exsolve": "^1.0.7", "pathe": "^2.0.3" } }, "sha512-SIqCzDRg0s9npO5XQ3tNZioRY1uK06lA41ynBC1YmFTmnY6FjUjVt6s4LoADmwoig1qqD0oK8h1p/8mlMx8Oig=="],
 
     "pluralize": ["pluralize@8.0.0", "", {}, "sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA=="],
-
-    "pnpm": ["pnpm@10.28.1", "", { "bin": { "pnpm": "bin/pnpm.cjs", "pnpx": "bin/pnpx.cjs" } }, "sha512-fX27yp6ZRHt8O/enMoavqva+mSUeuUmLrvp9QGiS9nuHmts6HX5of8TMwaOIxxdfuq5WeiarRNEGe1T8sNajFg=="],
 
     "pnpm-workspace-yaml": ["pnpm-workspace-yaml@1.5.0", "", { "dependencies": { "yaml": "^2.8.2" } }, "sha512-PxdyJuFvq5B0qm3s9PaH/xOtSxrcvpBRr+BblhucpWjs8c79d4b7/cXhyY4AyHOHCnqklCYZTjfl0bT/mFVTRw=="],
 

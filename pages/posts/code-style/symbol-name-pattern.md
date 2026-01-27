@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58:00+08:00
-update: 2026-01-06T10:56+08:00
+update: 2026-01-27T15:55+08:00
 lang: en
 duration: 11min
 type: blog+note
@@ -26,7 +26,7 @@ The recommended variable name pattern has the similar concept with BEM (Block El
 '(block)[Element][Modifier]'
 
 // When the variable is a state, modifier is a state description
-'(is|has|can|should)(Block)[Element][Modifier]'
+'(is|been|will|has|can|should)(Block)[Element][Modifier]'
 ```
 
 For example:
@@ -34,14 +34,14 @@ For example:
 ```vue
 <script setup lang="ts">
 import { ElForm } from 'element-plus'
-import { ref } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 
 // [!code highlight:13]
 /**
  * "formRef" is used to store form reference. `block` is "form",
  * `modifier` is "Ref".
  */
-const formRef = ref<InstanceType<typeof ElForm>>(null)
+const formRef = useTemplateRef('form')
 /**
  * "formData" is used to store form data. `block` is "form",
  * `modifier` is "Data".
@@ -74,7 +74,7 @@ const tableColumnConfigs = ref([
 
 The prefix verbs for state variables are used to introduce the state type:
 
-- `is`: The current state
+- `is`, `been`, `will`: The current/past/future state
 - `has`: The possession state
 - `can`: The ability
 - `should`: The necessity
@@ -185,10 +185,10 @@ These prefix verbs (e.g. `get`, `create`, `update`, `upsert`, `delete`) are used
 
 - `GET` method is used to read data, it's **safe[^1]** and **idempotent[^2]**. The acceptable verbs are:
   - `get` for getting **single data**.
-  - `list` for listting **multiple data**.
-  - `find` for finding **with dynamic conditions**.
-  - `search` for searching **with keyword**.
-  - `query` for querying **with complex conditions and pagination**.
+  - `list` for getting **multiple data** (only allows **static conditions**).
+  - `find` for getting **multiple data** with **dynamic conditions**.
+  - `search` for getting **multiple data** with **keyword matching**.
+  - `query` for getting **multiple data** with **pagination**.
 
   E.g.:
 
@@ -252,14 +252,14 @@ These prefix verbs (e.g. `get`, `create`, `update`, `upsert`, `delete`) are used
   }
 
   /**
-   * Find users with conditions.
+   * Find users with dynamic conditions.
    */
   export async function findUsers(params: Partial<User>): Promise<User[]> {
     return await request.get('/users', { params })
   }
 
   /**
-   * Find users by status.
+   * Find users by dynamic status.
    */
   export async function findUsersByStatus(
     status: Pick<User, 'status'>
@@ -276,7 +276,7 @@ These prefix verbs (e.g. `get`, `create`, `update`, `upsert`, `delete`) are used
   }
 
   /**
-   * Query users with complex conditions and pagination.
+   * Query users with pagination.
    */
   export async function queryUsers(
     params: QueryParam<User>
@@ -371,8 +371,8 @@ These prefix verbs (e.g. `get`, `create`, `update`, `upsert`, `delete`) are used
 
 - `PUT` and `PATCH` method is used to update data, they're **not safe** but **idempotent**. The acceptable verbs are:
   - `update` for updating **(partially or fully)** existing data.
-  - `patch` for exactly **partially updating** existing data.
-  - `replace` for exactly **fully updating** existing data.
+  - `patch` for **emphasizing partially updating** existing data.
+  - `replace` for **emphasizing fully updating** existing data.
 
   E.g.:
 
@@ -467,22 +467,139 @@ To learn more about HTTP methods, please read the [computer network manual](/pos
 >
 > So how could we handle these situations? I suggest you to categorize the endpoint functions not only by their HTTP methods but also by their **purposes**.
 
-### Validation Function
+### Validation Function/Method
 
 #### Recommended Pattern
 
-The recommended validation function name pattern is:
+Validation functions are used to check the state of something, so the recommended validation function name pattern is similar to the state variable name pattern:
 
-`(is|has|can|should|validate|check)(Subject)[Condition]`
+`(is|been|will|has|can|should)(Subject)[Condition]`
+
+For example:
+
+```ts
+type Permission = 'read' | 'write' | 'delete'
+
+const rolePermissionsMap: Record<string, Permission[]> = {
+  admin: ['read', 'write', 'delete'],
+  editor: ['read', 'write'],
+  viewer: ['read'],
+}
+
+interface User {
+  id: string
+  name: string
+  roles: string[]
+}
+const user: User = {
+  id: 'user1',
+  name: 'Alice',
+  roles: ['admin', 'editor'],
+}
+
+/**
+ * "hasPermission" is used to check whether the user has the specific
+ * permission. `verb` is "has", `Subject` is "Permission",
+ * `Condition` is none.
+ */
+export function hasPermission(
+  user: User,
+  permission: Permission
+): boolean {
+  for (const role of user.roles) {
+    const rolePermissions = rolePermissionsMap[role] || []
+    if (rolePermissions.includes(permission)) {
+      return true
+    }
+  }
+  return false
+}
+
+console.log(hasPermission(user, 'write')) // true
+console.log(hasPermission(user, 'delete')) // true
+console.log(hasPermission(user, 'execute')) // false
+
+/**
+ * We have globally defined:
+ *
+ *   - Permission
+ *   - rolePermissionsMap
+ *   - User
+ *   - user
+ *   - hasPermission
+ *
+ * If there are also other validation functions, we will have more symbols,
+ * e.g., "canEdit", "isActive", etc...
+ */
+```
+
+**In practice, these functions should not be defined in the global scope, instead, they should be class methods or instance methods. In this way, we can avoid global function pollution. For example:**
+
+```ts
+type Permission = 'read' | 'write' | 'delete'
+
+const rolePermissionsMap: Record<string, Permission[]> = {
+  admin: ['read', 'write', 'delete'],
+  editor: ['read', 'write'],
+  viewer: ['read'],
+}
+
+interface UserLike {
+  id: string
+  name: string
+  roles: string[]
+}
+class User implements UserLike {
+  id: string
+  name: string
+  roles: string[]
+
+  constructor(id: string, name: string, roles: string[]) {
+    this.id = id
+    this.name = name
+    this.roles = roles
+  }
+
+  /**
+   * "hasPermission" is used to check whether the user has the specific
+   * permission. `verb` is "has", `Subject` is "Permission",
+   * `Condition` is none.
+   */
+  hasPermission(permission: Permission): boolean {
+    for (const role of this.roles) {
+      const rolePermissions = rolePermissionsMap[role] || []
+      if (rolePermissions.includes(permission)) {
+        return true
+      }
+    }
+    return false
+  }
+}
+const user = new User('user1', 'Alice', ['admin', 'editor'])
+
+console.log(user.hasPermission('write')) // true
+console.log(user.hasPermission('delete')) // true
+console.log(user.hasPermission('execute')) // false
+
+/**
+ * We have globally defined:
+ *
+ *   - Permission
+ *   - rolePermissionsMap
+ *   - UserLike
+ *   - User
+ *   - user
+ *
+ * Whatever how many validation methods we need, there are always these symbols.
+ */
+```
 
 These prefix verbs are used to introduce the validation type:
 
-- `is`: Check the current state
+- `is`, `been`, `will`: Check the current/past/future state
 - `has`: Check the possession
 - `can`: Check the ability
 - `should`: Check the necessity
-- `validate`: Validate the correctness
-- `check`: General check (nothing is invalid, so we use check instead of validate)
 
 ### Event Handler Function
 

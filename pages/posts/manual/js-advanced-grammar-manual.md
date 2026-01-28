@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-01-26T16:40+08:00
+update: 2026-01-28T11:11+08:00
 lang: en
-duration: 70min
+duration: 71min
 type: note
 ---
 
@@ -685,6 +685,35 @@ console.log(arr) // -> [1, 2, 3]
 ```
 
 So, the most simple way to clear an array is to set its `length` property to `0`. 😏
+
+#### In-place array methods vs. non-mutating array methods
+
+Arrays have two kinds of methods: in-place methods and non-mutating methods. In-place methods modify the original array, while non-mutating methods return a new array without modifying the original one.
+
+In-place methods include:
+
+- `arr.push()`: Add elements to the end
+- `arr.pop()`: Remove the element from the end
+- `arr.unshift()`: Add elements to the beginning
+- `arr.shift()`: Remove the element from the beginning
+- `arr.splice()`: [Add, remove or replace elements](#arr-splice)
+- `arr.sort()`: Sort the array
+- `arr.reverse()`: Reverse the array
+- ...
+
+Non-mutating methods include:
+
+- `arr.toSpliced()`: No-mutating version of `arr.splice()`
+- `arr.toSorted()`: No-mutating version of `arr.sort()`
+- `arr.toReversed()`: No-mutating version of `arr.reverse()`
+- `arr.filter()`: Create a new array with all elements that pass the test implemented by the provided function
+- `arr.map()`: Create a new array with the results of calling a function on every element
+- `arr.reduce()`: Apply a function against an accumulator and each element to reduce it to a single value
+- `arr.flat()`: Flatten nested arrays
+- `arr.flatMap()`: Map each element and flatten the result
+- `arr.concat()`: Merge arrays
+- `arr.slice()`: Extract a section of an array and return a new array
+- ...
 
 #### `arr.splice()`
 

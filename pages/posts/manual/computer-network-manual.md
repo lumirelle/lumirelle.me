@@ -4,7 +4,7 @@ date: 2025-09-30T22:30+08:00
 update: 2025-12-01T13:49+08:00
 lang: en
 duration: 15min
-type: blog+note
+type: note
 ---
 
 [[toc]]

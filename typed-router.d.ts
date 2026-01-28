@@ -128,6 +128,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/manual/html-advanced-grammar-manual': RouteRecordInfo<
+      '/posts/manual/html-advanced-grammar-manual',
+      '/posts/manual/html-advanced-grammar-manual',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual/js-advanced-grammar-manual': RouteRecordInfo<
       '/posts/manual/js-advanced-grammar-manual',
       '/posts/manual/js-advanced-grammar-manual',
@@ -333,6 +340,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/manual/git-manual.md': {
       routes:
         | '/posts/manual/git-manual'
+      views:
+        | never
+    }
+    'pages/posts/manual/html-advanced-grammar-manual.md': {
+      routes:
+        | '/posts/manual/html-advanced-grammar-manual'
       views:
         | never
     }

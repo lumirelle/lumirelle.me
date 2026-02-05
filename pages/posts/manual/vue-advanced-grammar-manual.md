@@ -1,9 +1,9 @@
 ---
 title: Vue Advanced Grammar Manual
 date: 2026-01-28T11:47+08:00
-update: 2026-02-04T23:55+08:00
+update: 2026-02-05T15:23+08:00
 lang: en
-duration: 62min
+duration: 66min
 type: note
 ---
 
@@ -1778,6 +1778,10 @@ Don't worry, just take your time to understand them one by one!
 
 ## Reactivity System
 
+> [!Note]
+>
+> Vue team separated the reactivity system implementation into a standalone package called [`@vue/reactivity`](https://www.npmjs.com/package/@vue/reactivity). You can use it standalone without Vue.js!
+
 The most important feature of Vue.js is its low invasive reactivity system, it manages data and states inside Vue components. So what does "reactivity" mean?
 
 A classical example of reactivity is the formula of Excel spreadsheet: For the cell `C1` with formula `= A1 + B1`, when you change the value of cell `A1` or `B1`, the value of the cell will be updated automatically.
@@ -1786,7 +1790,14 @@ By this feature, we can separate the data and the logic of calculation, and only
 
 ### Implementing Reactivity in JavaScript
 
-How could we achieve this in JavaScript? First, for calculating/recalculating the value of `C1`, we need a update function. This function explains the relationship between `C1`, `A1` and `B1`, every time we call it, the value of `C1` will be updated:
+The key points of reactivity are:
+
+- Sources of data (Cells `A1` and `B1`)
+- Target of data (Cell `C1`)
+- The relationship between them (Formula `C1 = A1 + B1`)
+- Every time when the source data changes, the target data should be updated automatically according to the relationship.
+
+How could we achieve this in JavaScript? First, we need some variables `C1`, `A1` and `B1`, with a update function to explain the relationship between them:
 
 ```js
 let C1
@@ -1798,13 +1809,11 @@ function update() {
 
 And then we need to define some terms:
 
-- This `update()` function will create a **side effect** (Set the value of variable `C1` outside of the function to `A1 + B1`), because it will change the state of program.
+- We call the update on target data `C1` made by this `update()` function as a **side effect**, because this changes the state outside of the `update` function.
 
   > [!Note]
   >
-  > The opposite is a function that only returns a value without changing the external state.
-  >
-  > For example:
+  > The opposite is a function that only returns a value without changing the external state. For example:
   >
   > ```js
   > function add(a, b) {
@@ -1812,13 +1821,13 @@ And then we need to define some terms:
   > }
   > ```
 
-- The variables `A1` and `B1` are **dependencies** of the `update()` function, because the value of them are used to execute that side effect.
-- This side effect made by function `update()` can be called a **subscriber** of those dependencies. When any of the dependencies change, the subscriber should be notified to re-execute.
+- The source variables `A1` and `B1` are **dependencies** of the `update()` function, because the value of them are used to make that side effect.
+- This side effect can be called a **subscriber** of those dependencies. When any of the dependencies change, the subscriber should be notified to update.
 
-Then we need a magic function called `whenDepsChange()`, it receive a update function, and should complete the following tasks:
+Then we need a magic function called `effect()`, it receive a update function, and should complete the following tasks:
 
 ```js
-whenDepsChange(update)
+effect(update)
 ```
 
 - Call the `update()` function once to create the first side effect
@@ -1878,11 +1887,13 @@ There are two ways to achieve this:
   >
   > ```vue
   > <script>
+  > // [!code highlight:1]
   > const original = { A1: 1, B1: 2 }
   >
   > export default {
   >   data() {
   >     return {
+  >       // [!code highlight:1]
   >       state: original,
   >     }
   >   },
@@ -1897,14 +1908,17 @@ There are two ways to achieve this:
   > <template>
   >   <div>
   >     <div>
+  >       // [!code highlight:1]
   >       {{ state === original }} <!-- -> true -->
   >     </div>
+  >     // [!code highlight:2]
+  >     <!-- Will trigger watcher -->
   >     <button @click="state.A1 += 1">
-  >       <!-- Will trigger watcher -->
   >       Increment A1 from State
   >     </button>
+  >     // [!code highlight:2]
+  >     <!-- Will also trigger watcher -->
   >     <button @click="original.A1 += 1">
-  >       <!-- Will also trigger watcher -->
   >       Increment A1 from Original
   >     </button>
   >   </div>
@@ -1941,6 +1955,7 @@ There are two ways to achieve this:
   > <script setup>
   > import { reactive, watch } from 'vue'
   >
+  > // [!code highlight:2]
   > const original = { A1: 1, B1: 2 }
   > const state = reactive(original)
   >
@@ -1955,21 +1970,35 @@ There are two ways to achieve this:
   > <template>
   >   <div>
   >     <div>
+  >       // [!code highlight:1]
   >       {{ state === original }} <!-- -> false -->
   >     </div>
+  >     // [!code highlight:2]
+  >     <!-- Will trigger reactivity -->
   >     <button @click="state.A1 += 1">
-  >       <!-- Will trigger reactivity -->
   >       Increment A1 from State
   >     </button>
+  >     // [!code highlight:2]
+  >     <!-- Will NOT trigger reactivity -->
   >     <button @click="original.A1 += 1">
-  >       <!-- Will NOT trigger reactivity -->
   >       Increment A1 from Original
   >     </button>
   >   </div>
   > </template>
   > ```
 
-Now, when every time we access a property of a reactive object, the `track()` function will be called, and every time we change a property of a reactive object, the `trigger()` function will be called. 🥰
+With these two methods, every time we access a property of a reactive object, the `track()` function will be called, and every time we change a property of a reactive object, the `trigger()` function will be called. 🥰 The only thing we should do is creating reactive data by them:
+
+```js
+// Vue 2.x
+const state1 = {}
+for (const key in state1) {
+  defineReactive(state1, key)
+}
+
+// Vue 3.x
+const state2 = reactive({})
+```
 
 Of course, these are not always perfect: **When you destructure an object, the prop will lose its reactivity on both these two methods.**
 
@@ -2038,40 +2067,48 @@ The next task is registering side effect subscribers during `track()` calls, and
 
 Let's sort out the whole process:
 
-1. Now we can create some reactive objects, when their properties are accessed, it will call `track()` function or `trigger()` function accordingly.
-2. When calling the update function by `whenDepsChange(update)`, it's expected to call the update function once, so this will result the related `track()` calls
+1. Now we can create some reactive objects using `defineReactive()` or `reactive()`, when their properties are accessed, it will call `track()` function or `trigger()` function accordingly
+2. When calling `effect(update)`, it's expected to call the update function once, accesses the reactive properties and results the related `track()` calls
 
-Who are the active side effect during this `track()` calls? Yes, it's the `update()` function.
+Question, who are the active side effect during these `track()` calls? Yes, it's the `update()` function.
 
 Figure these out, we know we can use a global variable `activeEffect` to store the currently active side effect.
 
-Let's implement `whenDepsChange()` function first:
+And we also need a class `ReactiveEffect` to wrap the side effect function running, update the `activeEffect` before running and clear it after running:
 
 ```js
-let activeEffect
+// This will be set to the currently active side effect before `update()` call,
+// also before `track()` calls inside the execution context
+// Then reset to null after the execution of `update()` function.
+let activeEffect = null
 
-function whenDepsChange(update) {
-  const effect = () => {
-    activeEffect = effect
-    update()
+class ReactiveEffect {
+  constructor(fn) {
+    this.fn = fn
+  }
+
+  run() {
+    activeEffect = this
+    this.fn()
     activeEffect = null
   }
-  effect()
+}
+
+function effect(update) {
+  const e = new ReactiveEffect(update)
+  e.run()
 }
 ```
 
 > [!Note]
 >
-> You may see that we use a wrapper function `effect()` instead of using `update()` function directly, this is because when the side effect function is called by `trigger()` calls on the background instead of `whenDepsChange`, we still need to ensure the `activeEffect` is set to that side effect correctly.
+> Effect is the core members of Vue's reactivity system, every thing we can do when reactive data changes is based on effect re-execution.
+>
+> For example, `v-if` directive pack DOM element creation/removal logic in an effect, so when the reactive condition changes, the effect will be re-executed to update the DOM structure accordingly...
 
-Then, implement `track()` function:
+Then, the `track()` function:
 
 ```js
-// This is set to the currently active side effect before every `track()` calls,
-// because `track()` function are only called during the execution
-// of `update()` function.
-let activeEffect
-
 function track(target, key) {
   if (activeEffect) {
     const effects = getSubscribersForProperty(target, key)
@@ -2080,7 +2117,7 @@ function track(target, key) {
 }
 ```
 
-We stored all subscribers in a global `WeakMap<target, Map<key, Set<effect>>>` structure, `getSubscribersForProperty()` function will find the correct `Set<effect>` for that target object and key, creating them if necessary. They are simple data structure operations, so we won't go into details here.
+We stored all subscribers in a global `WeakMap<target, Map<key, Set<effect>>>` structure, `getSubscribersForProperty()` function will find the correct `Set<effect>` for that target reactive object and property key, creating them if necessary. They are simple data structure operations, so we won't go into details here.
 
 Finally, implement `trigger()` function. Inside `trigger()` function, we will find all of the subscribers of that variable, and re-execute them:
 
@@ -2104,22 +2141,20 @@ function update() {
   console.log('C1 updated:', state.C1)
 }
 
-// Create `effect()` wrapper function, set the `activeEffect` correctly,
+// Create effect, set the `activeEffect` correctly,
 // then call `update()` once, then trigger `track()` calls,
-// then store this `effect()` function as one of the subscribers.
-whenDepsChange(update) // -> C1 updated: 3
+// then store this effect as a subscriber.
+effect(update) // -> C1 updated: 3
 
-// Trigger `trigger()` calls when properties are changed,
+// Trigger `trigger()` calls when property values are changed,
 // find all of the related subscribers (effects),
-// trigger the re-execution of all related `effect()` functions (synchronously).
-//
-// For each `effect()` function call, set the `activeEffect` correctly,
+// trigger the re-execution of all related effects (synchronously),
 // then call `update()` again.
 state.A1 = 3 // -> C1 updated: 5
 state.B1 = 4 // -> C1 updated: 7
 ```
 
-Don't forget to handle the case of nested objects. We can make `reactive()` function a deep reactive by calling itself when a property is object:
+Don't forget to handle the case of nested objects. We can make `reactive()` function a deep reactive by calling itself when a property is object (Of course, lazily):
 
 ```js
 function reactive(obj) {
@@ -2127,6 +2162,7 @@ function reactive(obj) {
     get(target, key) {
       track(target, key)
       const value = target[key]
+      // [!code highlight:4]
       // If the property is an object, make it reactive too
       if (typeof value === 'object' && value !== null) {
         return reactive(value)
@@ -2143,11 +2179,40 @@ function reactive(obj) {
 
 > [!Note]
 >
-> This is how `reactive()` function works in Vue.js.
+> This is how `reactive()` and `effect()` functions works in `@vue/reactivity` package.
 >
-> If you don't want to make a deep reactive, you can use `shallowReactive()` function, which only makes the top-level properties reactive.
+> If you don't want to make a deep reactive, you can use `shallowReactive()` function, which only makes the top-level properties reactive. This is useful to improve performance.
+
+> [!Note]
 >
-> This is useful to improve performance when you know that nested objects won't change.
+> Our simple implementation of reactivity system does not handle some edge cases, like circular references, array methods, [watcher stop](#watcher-stop), etc. The real implementation in Vue.js is more complex and robust.
+
+### Reactive Principle Summary
+
+In Vue.js, the track and trigger behaviors are **passive**, and attached to the access of reactive object (created by `reactive()` or `ref()`) properties. This means you don't need to track something actively, instead, just **create some reactive data as sources**.
+
+```js
+import { reactive } from '@vue/reactivity'
+
+// Create a reactive object as the source
+const source = reactive({
+  name: 'Alice',
+  age: 25,
+})
+```
+
+When you need something to do when the reactive data changes, just **create an effect**, and put the logic inside the effect function. Vue will automatically record the dependencies and re-execute the effect when any of the dependencies change.
+
+```js
+import { effect } from '@vue/reactivity'
+
+// Create an effect to do something when the source changes
+effect(() => {
+  console.log(`Name: ${source.name}, Age: ${source.age}`)
+})
+```
+
+Watchers, computed properties, template directives, etc. are all built on top of this simple principle.
 
 ### Reactive Primitives
 
@@ -2181,7 +2246,11 @@ For object values, `ref()` still wraps them in this way, but also makes them rea
 
 > [!Note]
 >
-> This is how `ref()` function works in Vue.js, and there is also a `shallowRef()` function which only makes the top-level property reactive.
+> This is how `ref()` function works in `@vue/reactivity` package, and there is also a `shallowRef()` function which only makes the top-level property reactive.
+
+> [!Note]
+>
+> Our simple implementation of `ref()` does not handle some edge cases too...
 
 ### Unpack
 
@@ -2191,18 +2260,23 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
 
   This only happens to the top-level `ref()` values.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
-  import { ref } from 'vue'
+  import { ref } from '@vue/reactivity'
 
+  // [!code highlight:2]
   const topLevelRef = ref(1)
   const nestedRef = { inner: ref(2) }
   </script>
 
   <template>
+    // [!code highlight:2]
     <!-- topLevelRef is automatically unpacked -->
     <div v-text="topLevelRef" /> <!-- -> 1 -->
 
+    // [!code highlight:2]
     <!-- nestedRef.inner is NOT automatically unpacked -->
     <div v-text="nestedRef.inner.value" /> <!-- -> 2 -->
   </template>
@@ -2210,18 +2284,23 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
 
 - In text interpolations, when the evaluated JavaScript expression results in a `ref()` value, Vue will automatically unpack it.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
-  import { ref } from 'vue'
+  import { ref } from '@vue/reactivity'
 
+  // [!code highlight:2]
   const topLevelRef = ref(1)
   const nestedRef = { inner: ref(2) }
   </script>
 
   <template>
+    // [!code highlight:2]
     <!-- topLevelRef is automatically unpacked -->
     <div>{{ topLevelRef }}</div> <!-- -> 1 -->
 
+    // [!code highlight:2]
     <!-- nestedRef.inner is automatically unpacked -->
     <div>{{ nestedRef.inner }}</div> <!-- -> 2 -->
   </template>
@@ -2231,10 +2310,13 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
 
   This only happens when deep reactivity.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref } from '@vue/reactivity'
 
+  // [!code highlight:4]
   const refValue = ref(1)
   const state = reactive({
     a: refValue,
@@ -2242,6 +2324,7 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
   </script>
 
   <template>
+    // [!code highlight:2]
     <!-- state.a is automatically unpacked -->
     <div>{{ state.a }}</div> <!-- -> 1 -->
   </template>
@@ -2249,15 +2332,19 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
 
 - The special case is when a `ref()` value is accessed as a element of `reactive()` maps and sets, the unpacking does NOT happen.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
-  import { reactive, ref } from 'vue'
+  import { reactive, ref } from '@vue/reactivity'
 
+  // [!code highlight:2]
   const refValue = ref(1)
   const state = reactive([refValue])
   </script>
 
   <template>
+    // [!code highlight:2]
     <!-- state.[0] is NOT automatically unpacked -->
     <div>{{ state[0].value }}</div> <!-- -> 1 -->
   </template>
@@ -2265,89 +2352,48 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
 
 Notice that, unpack does not means removing the `ref()` wrapper, it's just a extra layer of convenience for users.
 
-### Computed Properties
+### Watchers and Computed Properties
 
-Both `reactive()` and `ref()` create reactive values from normal values, but sometimes we need to create a reactive value which is derived from other reactive values, and they cannot handle this case well:
-
-```vue
-<script setup>
-import { ref } from 'vue'
-
-const a = ref(1)
-const b = ref(2)
-// Below is NOT work,
-// because these accesses are not during a side effect execution,
-// the reactivity system cannot track the dependencies of `c`
-const c = ref(a.value + b.value)
-
-// The same as `reactive()` ...
-// ...
-</script>
-```
-
-Computed properties are designed for handling this case, its implementation looks like a wrapper of the usage of our simple reactivity system:
+With reactive data (`reactive()` and `ref()`) and effects (`ReactiveEffect`), we can build more powerful APIs on top of them, like watchers and computed properties.
 
 ```js
-function computed(getter) {
-  const state = ref()
-  function update() {
-    state.value = getter()
-  }
-  whenDepsChange(update)
-  return {
-    get value() {
-      return state.value
-    },
-  }
-}
-```
-
-Of course, the real implementation is much more complicated than that, there will be many edge case checking and optimizations. For example, the `trigger()` does not trigger `update()` calls immediately, it only marks the data as "dirty", and calls `update()` lazily when the value is accessed next time.
-
-But the usage is still simple:
-
-```js
-import { computed, reactive } from 'vue'
+import { reactive, watch } from '@vue/reactivity'
 
 const state = reactive({
   A1: 1,
   B1: 2,
 })
-const C1 = computed(() => state.A1 + state.B1)
 
-console.log('C1 initial:', C1.value) // -> C1 initial: 3
-state.A1 = 3
-console.log('C1 after A1 changed:', C1.value) // -> C1 after A1 changed: 5
-state.B1 = 4
-console.log('C1 after B1 changed:', C1.value) // -> C1 after B1 changed: 7
-```
-
-### Watchers
-
-The magic function `whenDepsChange()` we implemented before is similar to one API in Vue.js called `watchEffect()`, and we can rewrite the previous example by it:
-
-```js
-import { reactive, watchEffect } from 'vue'
-
-const state = reactive({
-  A1: 1,
-  B1: 2,
-  C1: undefined,
-})
-function update() {
-  state.C1 = state.A1 + state.B1
-  console.log('C1 updated:', state.C1)
-}
-
-watchEffect(
-  update,
+watch(
+  () => [state.A1, state.B1],
+  () => {
+    console.log('A1 or B1 updated:', state.A1, state.B1)
+  },
   { immediate: true }
-) // -> C1 updated: 3
-state.A1 = 3 // -> C1 updated: 5
-state.B1 = 4 // -> C1 updated: 7
+)
+
+const C1 = computed(() => state.A1 + state.B1)
 ```
 
-`watch()` is a custom version of `watchEffect()`, which allows you to specify the dependencies explicitly:
+You can refer to the [source of `watch()` function](https://github.com/vuejs/core/blob/main/packages/reactivity/src/watch.ts#L120) and [source of `computed()` function](https://github.com/vuejs/core/blob/main/packages/reactivity/src/computed.ts#L198) for more details.
+
+### High-Level Reactive APIs
+
+> [!Note]
+>
+> These high-level APIs are implemented in the Vue core, bundled with Vue.js.
+
+Vue.js provides more high-level APIs built on top of the reactivity system and Vue.js itself, to make it easier to use:
+
+- [Support cleanup](#watcher-cleanup)
+- [Support stop](#watcher-stop), bound the watcher lifecycle to component instance lifecycle
+- [Update trigger timing control](#watcher-trigger-timing)
+- Better error handling
+- ...
+
+#### Watchers
+
+`watch()` in `vue` is a high-level version of `watch()` in `@vue/reactivity`:
 
 ```js
 import { reactive, watch } from 'vue'
@@ -2370,9 +2416,32 @@ state.A1 = 3 // -> C1 updated: 5
 state.B1 = 4 // -> C1 updated: 7
 ```
 
-### Watcher Cleanup
+`watchEffect()` is a variant which watches the effect itself, without specifying the source explicitly:
 
-When using `watch()` or `watchEffect()`, sometimes when the source is changed, we may need to do some cleanup work to cancel the previous side effect execution.
+```js
+import { reactive, watchEffect } from 'vue'
+
+const state = reactive({
+  A1: 1,
+  B1: 2,
+  C1: undefined,
+})
+function update() {
+  state.C1 = state.A1 + state.B1
+  console.log('C1 updated:', state.C1)
+}
+
+watchEffect(
+  update,
+  { immediate: true }
+) // -> C1 updated: 3
+state.A1 = 3 // -> C1 updated: 5
+state.B1 = 4 // -> C1 updated: 7
+```
+
+#### Watcher Cleanup
+
+When using `watch()` or `watchEffect()`, sometimes when the source is changed, we may need to do some cleanup work to cancel the previous side effect execution. This is also not implemented in the low-level reactive APIs.
 
 We can use the 3th argument for `watch()` callback function, or the 1st argument for `watchEffect()` function to register a cleanup function:
 
@@ -2396,9 +2465,11 @@ watchEffect((onCleanup) => {
 
 From Vue 3.5+, there is a new API `onWatcherCleanup()`, it has more limitations, so for my opinion, it's better to use the above method.
 
-### Watcher Trigger Timing
+#### Watcher Trigger Timing
 
 When a reactive dependency is changed, both the Vue component template re-rendering and the watcher callback execution are triggered.
+
+The high-level reactive APIs provide options to control the timing of watcher callback execution.
 
 By default, the watcher callback is executed **after the parent component re-rendering** and **before the re-rendering of the component it belongs to**, but you can change this behavior by setting the `flush` option to one of the following values:
 
@@ -2420,9 +2491,11 @@ By default, the watcher callback is executed **after the parent component re-ren
   >
   > We should avoid using sync watchers on the source which may change frequently.
 
-### Watcher Stop
+#### Watcher Stop
 
-By default, watchers created by `watch()` and `watchEffect()` are destroyed automatically when the component is unmounted.
+The low-level reactive APIs do not provide a simple way to stop a watcher. If a watcher is no longer needed, it may cause memory leak if we don't stop it.
+
+Things is different in high-level reactive APIs. By default, watchers created by `watch()` and `watchEffect()` are bound to the host component instance, and will be destroyed automatically when the component is unmounted.
 
 The exception is async watchers:
 
@@ -2456,6 +2529,26 @@ setTimeout(() => {
 ```
 
 It's not recommended to use async watchers, you'd better find a way to avoid them first, instead of stopping them manually.
+
+#### Computed Properties
+
+`computed()` in `vue` is also a high-level version of `computed()` in `@vue/reactivity`:
+
+```js
+import { computed, reactive } from 'vue'
+
+const state = reactive({
+  A1: 1,
+  B1: 2,
+})
+const C1 = computed(() => state.A1 + state.B1)
+
+console.log('C1 initial:', C1.value) // -> C1 initial: 3
+state.A1 = 3
+console.log('C1 after A1 changed:', C1.value) // -> C1 after A1 changed: 5
+state.B1 = 4
+console.log('C1 after B1 changed:', C1.value) // -> C1 after B1 changed: 7
+```
 
 ### Debug Reactive
 
@@ -2541,9 +2634,23 @@ We already saw some examples of template syntax in previous sections, now let's 
 
 ### Directives
 
+Directives are special attributes that start with `v-`, they provide special reactive behavior to the DOM elements, which means reactive data can update the DOM structure and attributes dynamically with these directives.
+
+You may already know, they are built on top of the [reactivity system](#reactivity-system) we discussed before.
+
+The syntax of a directive is:
+
+```txt
+directive-name:parameter.modifier="value"
+```
+
 See all Vue Directives in the [official documentation](https://vuejs.org/api/built-in-directives.html).
 
 #### `v-if` Directive
+
+| Parameter | Modifier | Value                           |
+| --------- | -------- | ------------------------------- |
+| N/A       | N/A      | A JavaScript boolean expression |
 
 The `v-if` directive is used to conditionally render elements based on a boolean expression. If the expression evaluates to `true`, the element will be rendered; otherwise, it will not be included in the DOM.
 
@@ -2608,6 +2715,10 @@ const status = ref('active')
 
 #### `v-show` Directive
 
+| Parameter | Modifier | Value                           |
+| --------- | -------- | ------------------------------- |
+| N/A       | N/A      | A JavaScript boolean expression |
+
 Unlike `v-if`, the `v-show` directive always renders the element in the DOM, but toggles its visibility using CSS `display` property. It can only apply to a single element.
 
 <!-- eslint-skip -->
@@ -2633,6 +2744,10 @@ const isVisible = ref(true)
 ```
 
 #### `v-for` Directive
+
+| Parameter | Modifier | Value                                                      |
+| --------- | -------- | ---------------------------------------------------------- |
+| N/A       | N/A      | A special expression similar to JavaScript `for...in` loop |
 
 To render a list of items from, you can use `v-for` directive in the following syntax:
 
@@ -2661,6 +2776,8 @@ const object = ref({ key1: 'value1', key2: 'value2' })
   </div>
 </template>
 ```
+
+Different from JavaScript `for...in` loop, `v-for` directive iterates over both objects and arrays. It also use `()` to destructure multiple values instead `[]` array destructuring in JavaScript.
 
 By default, `v-for` uses the strategy of "in-place patch" when updating the elements, for example:
 
@@ -2716,6 +2833,10 @@ const items = ref(['A', 'B', 'C'])
 ```
 
 #### `v-bind` Directive
+
+| Parameter        | Modifier | Value        |
+| ---------------- | -------- | ------------ |
+| Target attribute | N/A      | Target value |
 
 The `v-bind` directive is used to bind HTML attributes to data in the Vue instance. When the data changes, the attributes will be updated accordingly.
 
@@ -2784,6 +2905,10 @@ Too learn about the difference between attributes and properties, please refer t
 
 #### `v-on` Directive
 
+| Parameter    | Modifier                  | Value         |
+| ------------ | ------------------------- | ------------- |
+| Target event | See the explanation below | Event handler |
+
 The `v-on` directive is used to listen to DOM events and execute some JavaScript when they are triggered. You can use it in the following ways:
 
 <!-- eslint-skip -->
@@ -2841,6 +2966,10 @@ It supports many event modifiers:
 - `.{key}` - listens for specific keyboard keys (See [MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/UI_Events/Keyboard_event_key_values) and [Vue documentation](https://vuejs.org/guide/essentials/event-handling.html#key-modifiers) for more details. Notice, the key name should transform to kebab-case).
 
 #### `v-model` Directive
+
+| Parameter        | Modifier                  | Value         |
+| ---------------- | ------------------------- | ------------- |
+| Target attribute | See the explanation below | Reactive data |
 
 The `v-model` directive is used for two-way data binding between form input elements / components and the Vue instance data.
 
@@ -2903,7 +3032,11 @@ See more details in the [model value binding](#model-value-binding), [forms inpu
 
 #### `v-slot` Directive
 
-The `v-slot` directive is used to define named slots in components, allowing you to pass content from a parent component to a child component.
+| Parameter        | Modifier | Value         |
+| ---------------- | -------- | ------------- |
+| Target slot name | N/A      | Slot bindings |
+
+The `v-slot` directive is used to pass content to slots in components:
 
 <!-- eslint-skip -->
 
@@ -3274,7 +3407,7 @@ Although Vue.js handle most of the DOM manipulations for us, sometimes we may st
 
 We can use template refs to get the DOM elements in Vue applications.
 
-After Vue 3.5+, better type support is provided by a new API `useTemplateRef()`:
+After Vue 3.5+ with composition API, better type support is provided by a new API `useTemplateRef()`:
 
 ```vue
 <script setup lang="ts">
@@ -3304,7 +3437,7 @@ onMounted(() => {
 </template>
 ```
 
-Before Vue 3.5:
+Before Vue 3.5 with composition API:
 
 ```vue
 <script setup lang="ts">
@@ -3335,13 +3468,43 @@ onMounted(() => {
 </template>
 ```
 
+For options API components, we can use `this.$refs` to access the template refs:
+
+```vue
+<script>
+import SubComponent from './SubComponent.vue'
+
+export default {
+  components: {
+    SubComponent,
+  },
+  mounted() {
+    // [!code highlight:2]
+    console.log('myDiv element:', this.$refs.myDiv)
+    console.log('mySubComponent instance:', this.$refs.mySubComponent)
+  },
+}
+</script>
+
+<template>
+  // [!code highlight:1]
+  <div ref="myDiv">
+    This is my div element.
+  </div>
+  // [!code highlight:1]
+  <SubComponent ref="mySubComponent">
+    This is my sub component.
+  </SubComponent>
+</template>
+```
+
 For DOM elements, the ref value will be the raw DOM element. For Vue components, the ref value will be the component instance.
 
 > [!Note]
 >
-> For options API components, you can easily access the component data and methods from the component instance.
+> For options API components, you can easily access all of the component data and methods from the component instance. But for composition API components, you can only access the public properties and methods exposed by `expose()` function from the component instance.
 >
-> But for composition API components, you can only access the public properties and methods exposed by `defineExpose()` macro from the component instance.
+> See more details in the [exposing public API](#exposing-public-api) section.
 
 > [!Note]
 >
@@ -3360,8 +3523,11 @@ For DOM elements, the ref value will be the raw DOM element. For Vue components,
 > </script>
 >
 > <template>
->   <div v-for="item in items" :key="item.id" :ref="itemsRef">
->     {{ item.name }}
+>   <div>
+>     <div v-for="item in items" :key="item.id" :ref="itemsRef">
+>       {{ item.name }}
+>     </div>
+>     {{ Array.isArray(itemsRef.value) }} <!-- -> true -->
 >   </div>
 > </template>
 > ```

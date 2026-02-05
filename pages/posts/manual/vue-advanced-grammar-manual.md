@@ -492,6 +492,10 @@ In a word:
 >
 > As you can see, `<script setup>` syntax is only compatible with composition API as it uses `setup()` function under the hood, it cannot be used with options API.
 
+### Composables
+
+<!-- TODO(Lumirelle): -->
+
 ### Register a Component
 
 We already know how to register a component globally in the Vue application instance:
@@ -1775,6 +1779,10 @@ You may see many things here:
 - ...
 
 Don't worry, just take your time to understand them one by one!
+
+### Built-in Components
+
+<!-- TODO(Lumirelle): -->
 
 ## Reactivity System
 
@@ -3110,6 +3118,10 @@ import ChildComponent from './ChildComponent.vue'
 </template>
 ```
 
+#### Custom Directives
+
+<!-- TODO(Lumirelle): -->
+
 ### Data Binding
 
 #### Text Interpolation vs. Attribute Binding
@@ -3614,3 +3626,7 @@ As a modern front-end framework, Vue.js aims to provide better compatibility for
 When you using `v-bind` to bind styles, Vue will automatically add vendor prefixes to the styles for better browser compatibility.
 
 This is a runtime behavior. If the current browser does not support that style attribute, Vue will add all of the available vendor prefixes to it.
+
+## Vue Plugins
+
+<!-- TODO(Lumirelle):  -->

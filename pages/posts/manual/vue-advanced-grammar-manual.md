@@ -492,10 +492,6 @@ In a word:
 >
 > As you can see, `<script setup>` syntax is only compatible with composition API as it uses `setup()` function under the hood, it cannot be used with options API.
 
-### Composables
-
-<!-- TODO(Lumirelle): -->
-
 ### Register a Component
 
 We already know how to register a component globally in the Vue application instance:
@@ -1645,6 +1641,26 @@ import ComponentWithSlots from './ComponentWithSlots.vue'
 </template>
 ```
 
+Specially, everything put directly inside the component without specifying slot will be passed to the default slot automatically:
+
+```vue
+<template>
+  <ComponentWithSlots>
+    // [!code highlight:10]
+    <!-- This content will be passed to the default slot -->
+    <p>Custom count content without `v-slot`.</p>
+
+    <!-- While this content will be passed to the footer slot -->
+    <template #footer>
+      <p>Custom footer content.</p>
+    </template>
+
+    <!-- This content will also be passed to the default slot -->
+    <p>Another content for default slot.</p>
+  </ComponentWithSlots>
+</template>
+```
+
 See more details about `v-slot` directive [there](#v-slot-directive).
 
 ### Dynamic Components
@@ -1704,29 +1720,332 @@ const tabs = [
 
 <!-- TODO(Lumirelle): -->
 
+### Component Lifecycle Hooks
+
+Every Vue component has its own lifecycle, from mounting, updating, to unmounting.
+
+For **composition API**, we use **lifecycle hook register functions** to register callback functions to different lifecycle hooks.
+
+Belows are the commonly used lifecycle hook registers:
+
+- `onBeforeMount`: Register a callback which will be called right before the component is mounted to the DOM.
+- `onMounted`: Register a callback which will be called after the component is mounted to the DOM. Useful for DOM-dependent operations.
+
+  ```vue
+  <script setup>
+  import { onMounted } from 'vue'
+
+  // [!code highlight:4]
+  onMounted(() => {
+    // `document` is only available after mounted
+    document.querySelector('#app').style.backgroundColor = 'lightblue'
+  })
+  </script>
+  ```
+
+- `onBeforeUnmount`: Register a callback which will be called right before the component is unmounted from the DOM.
+- `onUnmounted`: Register a callback which will be called after the component is unmounted from the DOM. Useful for cleanup side effects.
+
+  ```vue
+  <script setup>
+  import { onMounted, onUnmount } from 'vue'
+
+  function handleResize() {
+    console.log('Window resized')
+  }
+
+  onMounted(() => {
+    window.addEventListener('resize', handleResize)
+  })
+
+  // [!code highlight:4]
+  onUnmount(() => {
+    // Cleanup side effects here
+    window.removeEventListener('resize', handleResize)
+  })
+  </script>
+  ```
+
+Belows are the seldom used lifecycle hook registers:
+
+- `onBeforeUpdate`: Register a callback which will be called right before the component is updated due to reactive data changes.
+- `onUpdated`: Register a callback which will be called after the component is updated due to reactive data changes.
+- `onActivated`: Register a callback which will be called when a kept-alive component is activated.
+- `onDeactivated`: Register a callback which will be called when a kept-alive component is deactivated.
+- `onErrorCaptured`: Register a callback which will be called when an error is captured from a child component.
+- `onServerPrefetch`: Register a callback which will be called during server-side rendering to prefetch data. SSR only.
+
+There are also some development-only lifecycle hook registers for debugging purpose:
+
+- `onRenderTracked`: Register a callback which will be called when a reactive dependency is tracked during rendering. Development mode only.
+- `onRenderTriggered`: Register a callback which will be called when a reactive dependency triggers a re-render. Development mode only
+
+> [!Note]
+>
+> For composition API, all the lifecycle hook register functions above should be called starting from `setup()` function of Vue components **synchronously**. This means you should only call them inside the `setup()` function, or functions (like composables) used inside the `setup()` function synchronously.
+>
+> The callback functions can be async as your need.
+>
+> ```vue
+> <script setup>
+> import { onMounted } from 'vue'
+>
+> // [!code highlight:5]
+> onMounted(async () => {
+>   await fetch('https://api.example.com/data').then(res => res.json()).then((data) => {
+>     console.log('Fetched data on mounted:', data)
+>   })
+> })
+> </script>
+> ```
+
+For **options API**, you should define these **lifecycle hook callbacks** directly as options of Vue components, without `on` prefix, like `mounted`, `unmounted`, etc.
+
+```vue
+<script>
+export default {
+  // [!code highlight:8]
+  mounted() {
+    // `document` is only available after mounted
+    document.querySelector('#app').style.backgroundColor = 'lightblue'
+  },
+  unmounted() {
+  // Cleanup side effects here
+    window.removeEventListener('resize', handleResize)
+  },
+}
+</script>
+```
+
+> [!Note]
+>
+> Async callback is also supported in options API:
+>
+> ```vue
+> <script>
+> export default {
+>   // [!code highlight:5]
+>   async mounted() {
+>     await fetch('https://api.example.com/data').then(res => res.json()).then((data) => {
+>       console.log('Fetched data on mounted:', data)
+>     })
+>   },
+> }
+> </script>
+> ```
+
+> [!Note]
+>
+> The creation hooks `beforeCreate` and `created` are only available in options API, and there is no reason must to use them both in composition API and options API, so we will not cover them here.
+
+### Composables
+
+Composables are reusable functions that based on Vue composition API to encapsulate and share **stateful logic** between components.
+
+What's stateful and stateless logic?
+
+For example, utils like `formatDate()` or `calculateSum()` are stateless logic, they only take some input parameters and return the corresponding output values, without any internal state.
+
+_utils/date.js_
+
+```js
+import dayjs from 'dayjs'
+
+export function formatDate(date, format) {
+  return dayjs(date).format(format)
+}
+```
+
+_Usage_
+
+```js
+import { formatDate } from './utils/date.js'
+
+const formattedDate = formatDate(new Date(), 'YYYY-MM-DD')
+console.log(formattedDate)
+```
+
+Composables are different, they usually create and manage some reactive state internally, and expose them. For example, a `useMouse()` composable can create reactive data to track the mouse position, and expose them to the components who use this composable:
+
+_composables/useMouse.js_
+
+```js
+import { onMounted, onUnmounted, ref } from 'vue'
+
+export function useMouse() {
+  const x = ref(0)
+  const y = ref(0)
+
+  // Automatically update mouse position
+  function update(event) {
+    x.value = event.pageX
+    y.value = event.pageY
+  }
+
+  // Automatically add and remove event listeners
+  onMounted(() => {
+    window.addEventListener('mousemove', update)
+  })
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', update)
+  })
+
+  return {
+    x,
+    y,
+  }
+}
+```
+
+_Usage_
+
+```js
+import { useMouse } from './composables/useMouse.js'
+
+export default defineComponent({
+  setup() {
+    const { x, y } = useMouse()
+
+    // When the mouse position changes, it will be logged automatically
+    watch([x, y], ([newX, newY]) => {
+      console.log(`Mouse position: (${newX}, ${newY})`)
+    })
+
+    return {
+      x,
+      y,
+    }
+  },
+})
+```
+
+Futhermore, composables can also use other composables to build more complex stateful logic:
+
+_composables/useEventListener.js_
+
+```js
+/** Automatically add and remove event listeners */
+export function useEventListener(target, event, handler) {
+  onMounted(() => {
+    target.addEventListener(event, handler)
+  })
+  onUnmounted(() => {
+    target.removeEventListener(event, handler)
+  })
+}
+```
+
+_composables/useMouseV2.js_
+
+```js
+import { ref } from 'vue'
+// [!code highlight:1]
+import { useEventListener } from './useEventListener.js'
+
+export function useMouseV2() {
+  const x = ref(0)
+  const y = ref(0)
+
+  function update(event) {
+    x.value = event.pageX
+    y.value = event.pageY
+  }
+
+  // [!code highlight:2]
+  // Reuse the useEventListener composable
+  useEventListener(window, 'mousemove', update)
+
+  return {
+    x,
+    y,
+  }
+}
+```
+
+As you can see, composables can contain Vue lifecycle hooks, so it's expected that composables are only used inside the `setup()` function of Vue components. That's also why we say composables are built on top of Vue composition API.
+
+With composables, we can encapsulate and modularize related stateful logic, making it easier to manage and reuse, thus reduce the code inside a component. That's great for maintainability and scalability of a large Vue application.
+
+If you are composable author, there are some best practices you should follow:
+
+- The composable function name should start with `use` prefix, to indicate it's a composable.
+
+  ```js
+  // [!code highlight:1]
+  export function useXxx() {
+    // ...
+  }
+  ```
+
+- The parameters should compatible with both plain value, refs and getter functions, it's recommended to use `toValue()` (Vue 3.3+) helper to handle these cases.
+
+  ```js
+  import { toValue } from 'vue'
+
+  export function useXxx(param) {
+    // [!code highlight:1]
+    const value = toValue(param)
+    // ...
+  }
+  ```
+
+- The return values should be an non-reactive object, containing refs, reactive objects and functions. This ensures the destructuring of the return values doesn't break reactivity.
+
+  ```js
+  export function useXxx() {
+    const state = ref(0)
+    function doSomething() {
+      // ...
+    }
+    // [!code highlight:4]
+    return {
+      state,
+      doSomething,
+    }
+  }
+  ```
+
+> [!Note]
+>
+> Vue Use is a popular collection of useful composables for Vue.js, you can check it out at [https://vueuse.org/](https://vueuse.org/).
+
 ### Component Total Usage
 
-After learning all the above elements, now we can create a complete Vue component with props, events, slots, and model value binding:
+After learning all the above elements, now we can create a complete Vue component with props, events, slots, model value binding, etc.:
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useMouse } from './composables/useMouse.js'
 
-// Define props
 interface Props {
   title: string
   count?: number
 }
-const { count = 0 } = defineProps<Props>()
-
-defineEmits<Emits>()
-// Define emits
 interface Emits {
   close: []
   submit: [message: string]
 }
+
+// Define props
+const { count = 0 } = defineProps<Props>()
+
+// Define emits
+defineEmits<Emits>()
+
 // Define model value binding
 const modelValue = defineModel<string>({ required: true })
+
+// Use some composable
+const { x, y } = useMouse()
+
+// Register lifecycle hook callbacks
+onMounted(() => {
+  console.log('Component mounted!')
+})
+onUnmounted(() => {
+  console.log('Component unmounted!')
+})
 </script>
 
 <template>
@@ -1743,6 +2062,7 @@ const modelValue = defineModel<string>({ required: true })
     <slot :count="count">
       <p>The count is: {{ count }}</p>
     </slot>
+    <p>Mouse Position: ({{ x }}, {{ y }})</p>
   </div>
 </template>
 ```
@@ -1772,17 +2092,314 @@ const model = ref('Initial Model Value')
 </template>
 ```
 
-You may see many things here:
+You may see something familiar and yet strange here:
 
 - `ref` function is used to create a reactive data, it's belong to [Vue's reactivity system](#reactivity-system)
 - Some special attributes starting with `v-`, these are called [**directives**](#directives). `:` and `@` are shorthand syntax for `v-bind` and `v-on` directives respectively
 - ...
 
-Don't worry, just take your time to understand them one by one!
+Don't worry, we are now preparing to learn these concepts step by step!
 
 ### Built-in Components
 
-<!-- TODO(Lumirelle): -->
+#### `Transition` & `TransitionGroup`
+
+Vue provides two built-in components for applying transition effects based on reactive state changes:
+
+- `Transition` will apply transition effects when a element/component enters or leaves the DOM.
+- `TransitionGroup` will apply transition effects when a list of elements/components inside `v-for` directive are added, removed or moved in the DOM.
+
+See the [transition guide](https://vuejs.org/guide/built-ins/transition.html) and [transition-group guide](https://vuejs.org/guide/built-ins/transition-group.html) for more details and examples.
+
+#### `KeepAlive`
+
+`KeepAlive` is a built-in component that allows you to cache inactive component instances without destroying them.
+
+For example, in a component tab list, you may want to switch between different components:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import Counter from './Counter.vue'
+import InputBox from './InputBox.vue'
+
+const tabs = [
+  Counter,
+  InputBox,
+]
+const currentTabIndex = ref(0)
+</script>
+
+<template>
+  // [!code highlight:1]
+  <component :is="tabs[currentTabIndex]" />
+  <button @click="currentTabIndex = 0">
+    Counter
+  </button>
+  <button @click="currentTabIndex = 1">
+    Input Box
+  </button>
+</template>
+```
+
+When you switch between `Counter` and `InputBox` components, their states will be lost because they are unmounted and destroyed.
+
+With `KeepAlive`, you can cache the inactive component instances, so that their states are preserved when switching back:
+
+```vue
+<script setup>
+import { ref } from 'vue'
+import Counter from './Counter.vue'
+import InputBox from './InputBox.vue'
+
+const tabs = [
+  Counter,
+  InputBox,
+]
+const currentTabIndex = ref(0)
+</script>
+
+<template>
+  // [!code highlight:3]
+  <KeepAlive>
+    <component :is="tabs[currentTabIndex]" />
+  </KeepAlive>
+  <button @click="currentTabIndex = 0">
+    Counter
+  </button>
+  <button @click="currentTabIndex = 1">
+    Input Box
+  </button>
+</template>
+```
+
+You can also use `include` and `exclude` props to control which components should be cached by their names:
+
+```vue
+<script setup>
+// ...
+</script>
+
+<template>
+  // [!code highlight:4]
+  <!-- Name string -->
+  <KeepAlive include="Counter">
+    <component :is="tabs[currentTabIndex]" />
+  </KeepAlive>
+
+  // [!code highlight:4]
+  <!-- Or name regex -->
+  <KeepAlive :include="/^Counter$/">
+    <component :is="tabs[currentTabIndex]" />
+  </KeepAlive>
+
+  // [!code highlight:4]
+  <!-- Or name array -->
+  <KeepAlive :include="['Counter', 'InputBox']">
+    <component :is="tabs[currentTabIndex]" />
+  </KeepAlive>
+</template>
+```
+
+> [!Note]
+>
+> In Vue 3.2.34+, the component who is using `<script setup>` will have its name inferred from the file name automatically.
+>
+> In other cases, you may need to explicitly set the `name` option in the component definition to make it work with `KeepAlive`:
+>
+> ```js
+> export default {
+>   name: 'Counter',
+>   // ...
+> }
+> ```
+
+You can also control the maximum number of component instances to be cached by `max` prop, and the least recently used (LRU) instances will be pruned when the limit is reached:
+
+```vue
+<script setup>
+// ...
+</script>
+
+<template>
+  // [!code highlight:4]
+  <KeepAlive :max="10">
+    <component :is="tabs[currentTabIndex]" />
+  </KeepAlive>
+</template>
+```
+
+You can also use [lifecycle hooks](#component-lifecycle-hooks) `onActivated` and `onDeactivated` to perform operations when a kept-alive component is activated or deactivated respectively.
+
+See [API reference](https://vuejs.org/api/built-in-components.html#keepalive) for more details about `KeepAlive` component.
+
+#### `Teleport`
+
+`Teleport` is a built-in component that allows you to render its children into a different part of the DOM tree, outside of the current component hierarchy.
+
+For example, for full screen modals, we expect the modal element and its trigger button are in the same SFC, but this means the modal element will be nested deep inside the DOM tree as that button, this makes it hard to apply styles to the modal element.
+
+Imagine the following structure:
+
+_src/components/Xxx.vue_
+
+```vue
+<template>
+  <div class="outer">
+    <h3>Tooltips with Vue 3 Teleport</h3>
+    <div>
+      <MyModal />
+    </div>
+  </div>
+</template>
+```
+
+_src/components/MyModal.vue_
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <button @click="open = true">
+    Open Modal
+  </button>
+
+  <div v-if="open" class="modal">
+    <p>Hello from the modal!</p>
+    <button @click="open = false">
+      Close
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.modal {
+  position: fixed;
+  z-index: 999;
+  top: 20%;
+  left: 50%;
+  width: 300px;
+  margin-left: -150px;
+}
+</style>
+```
+
+There will be some potential problems with them:
+
+- There is a prerequire for `position: fixed` can be placed relative to the browser viewport: None of its ancestor elements should have `transform`, `filter`, or `perspective` CSS properties set to a value other than `none`. That's means if we add some transform effect to `.outer` class, the modal layout will be broken!
+- `z-index` of the modal is limited by its ancestor elements, if there is any element in the same stack context with `.outer` element and have higher `z-index` than it, the modal may be covered by it.
+
+`Teleport` can help us to solve these problems by rendering the modal element to the end of `body` element:
+
+_src/components/MyModal.vue_
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const open = ref(false)
+</script>
+
+<template>
+  <button @click="open = true">
+    Open Modal
+  </button>
+
+  // [!code highlight:8]
+  <Teleport to="body">
+    <div v-if="open" class="modal">
+      <p>Hello from the modal!</p>
+      <button @click="open = false">
+        Close
+      </button>
+    </div>
+  </Teleport>
+</template>
+```
+
+The `to` prop of `Teleport` component accepts a CSS selector string or a DOM element instance as the target.
+
+Of course, you may want to disable teleporting in some cases, for example, in mobile devices, you want to render the modal element inline for better performance. You can use `disabled` prop to control this behavior:
+
+```vue
+<script setup>
+// ...
+</script>
+
+<template>
+  // [!code highlight:1]
+  <Teleport to="body" :disabled="isMobileDevice">
+    <!-- ... -->
+  </Teleport>
+</template>
+```
+
+Above Vue 3.5, we can use `defer` prop to defer the target resolution until the end of microtask, this is useful when the target element may not be available during the initial render:
+
+```vue
+<script setup>
+// ...
+</script>
+
+<template>
+  // [!code highlight:1]
+  <Teleport to="#late-element" defer>
+    <!-- ... -->
+  </Teleport>
+</template>
+```
+
+> [!Note]
+>
+> The target element still needs to be mounted in the same microtask with the defer `Teleport`, otherwise it will throw an error.
+
+See [API reference](https://vuejs.org/api/built-in-components#teleport) for more details about `Teleport` component.
+
+#### `Suspense`
+
+> [!Warning]
+>
+> `Suspense` is still experimental and may change in future releases.
+
+`Suspense` is a built-in component that allows us to handle asynchronous dependencies in components more gracefully.
+
+Asynchornous dependencies have two different kinds:
+
+- Component with async `setup()` function. Including components with `<script setup>` and top-level `await`.
+- [Async components](#async-components).
+
+`Suspense` has two slots:
+
+- Default: The content to be rendered when all async dependencies are resolved.
+- Fallback: The content to be rendered while waiting for async dependencies to be resolved.
+
+Both these two slots only accept **a single element**.
+
+When initial rendering, if there are no async dependencies, `Suspense` will enter completed state immediately and render the default slot. Otherwise, it will enter pending state and render the fallback slot, until all async dependencies are resolved, then it will switch to completed state and render the default slot.
+
+```vue
+<template>
+  // [!code highlight:6]
+  <Suspense>
+    <AsyncComponent />
+    <template #fallback>
+      <div>Loading...</div>
+    </template>
+  </Suspense>
+</template>
+```
+
+`Suspense` has three events:
+
+- `pending`: Emitted when `Suspense` enters pending state.
+- `resolve`: Emitted when `Suspense` enters completed state.
+- `fallback`: Emitted when the fallback slot is rendered.
+
+For error handling, you can use `onErrorCaptured` lifecycle hook inside the parent component of `Suspense` to catch errors from all async dependencies.
 
 ## Reactivity System
 

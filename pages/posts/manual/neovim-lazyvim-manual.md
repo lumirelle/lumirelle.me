@@ -20,14 +20,14 @@ LazyVim is a Neovim configuration framework that simplifies the setup and manage
 To install Neovim, I highly recommend using the package manager for your operating system. For example, on Windows, you can use `winget`:
 
 ```nu
-winget install Neovim.Neovim --scope machine
+winget install --id Neovim.Neovim --scope machine
 ```
 
 To install LazyVim, check your system satisfies [the requirements](https://www.lazyvim.org/#%EF%B8%8F-requirements) first, then just simply follow [the official documentation](https://www.lazyvim.org/installation).
 
 ## Basic Usage
 
-[Fully Neovim commands](https://neovim.io/doc/user/vimindex.html).
+[Neovim Quick Reference](https://neovim.io/doc/user/quickref.html).
 
 ### Launch Neovim
 
@@ -51,7 +51,20 @@ Then you will see a editor buffer with the file opened.
 
 To exit Neovim, you should use the `command`:
 
-- Type `<esc>` for several times to ensure you are back to normal mode.
+- Type `<esc>` for several times to ensure you are in **normal mode**.
+
+| Command                     | Description                                                                                              |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `:q[uit]`                   | Quit current buffer, unless changes have been made; Exit Neovim when there are no other non-help buffers |
+| `:q[uit]!`                  | Quit current buffer always, discard any changes; Exit Neovim when there are no other non-help buffers    |
+| `:qa[ll]`                   | Exit Vim, unless changes have been made                                                                  |
+| `:qa[ll]!`                  | Exit Vim always, discard any changes                                                                     |
+| `:wq[!]`                    | Write the current file and exist                                                                         |
+| `:wq[!] {file}`             | Write to `{file}` and exit                                                                               |
+| `:x[it][!] [file]`          | Like `:wq` but write only when changes have been made                                                    |
+| `:xa[ll][!]` or `:wqall[!]` | Write all changed buffers and exit                                                                       |
+| `ZZ`                        | Same as `:x`                                                                                             |
+| `ZQ`                        | Same as `:q!`                                                                                            |
 
 For single buffer:
 
@@ -71,24 +84,16 @@ For multiple buffers:
 
 #### Move Around Characters
 
-Neovim uses `hjkl` keys for the most basic navigation:
-
-- `h`: Move left one character
-- `l`: Move right one character
-- `j`: Move down one line
-- `gj`: Move down one display line (when lines wrap)
-- `k`: Move up one line
-- `gk`: Move up one display line (when lines wrap)
+| Command | Description                                    |
+| ------- | ---------------------------------------------- |
+| N `h`   | Left (Also: `Ctrl-H`, `<Backspace>`, `<Left>`) |
+| N `j`   | Down                                           |
+| N `k`   | Up                                             |
+| N `l`   | Right (Also: `<Space>`, `<Right>`)             |
 
 It's highly recommended to enable relative line numbers in Neovim for better line navigation experience.
 
 By default, LazyVim remaps `j` and `k` to `gj` and `gk`, which are more recommended for modern usage.
-
-> [!Note]
->
-> You can start a command with a number to simply repeat it multiple times. For example, `5j` moves down 5 lines, `3h` moves left 3 characters.
->
-> Most of Neovim commands support this feature. Just try yourself!
 
 #### Move Around Words
 
@@ -112,8 +117,11 @@ There is a way can help you remember them easier:
 To move around whole lines, you can use the following commands:
 
 - `0`: Move to the beginning of the current line, `0` means the zero-th character of the line
+- `g0`: Move to the beginning of the current line, similar to `0`, but works in soft-wrapped lines
 - `^`: Move to the first non-blank character of the current line, recall the regex, `^` means the beginning
 - `g^`: Move to the first non-blank character of the current line, similar to `^`, but works in soft-wrapped lines
+- `gm`: Move to the middle of the current line
+- `gM`: Move to the middle of the current line, similar to `gm`, but works in soft-wrapped lines
 - `$`: Move to the end of the current line, recall the regex, `$` means the end
 - `g$`: Move to the end of the current line, similar to `$`, but works in soft-wrapped lines
 

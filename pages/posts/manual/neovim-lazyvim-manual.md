@@ -47,166 +47,215 @@ nvim path/to/your/file
 
 Then you will see a editor buffer with the file opened.
 
-### Exit Neovim
+### Writing and Quiting
 
-To exit Neovim, you should use the `command`:
+Belows are the common used commands for writing and quiting Neovim:
 
-- Type `<esc>` for several times to ensure you are in **normal mode**.
+| Group[^1]    | Command                   | Mode       | Description                                                                                                     |
+| ------------ | ------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------- |
+| Write        | `:[range]w[rite][!]`      | Normal[^2] | Write to the current file                                                                                       |
+|              | `:[range]w[rite] {file}`  | Normal     | Write to `{file}`, **unless** it already exists                                                                 |
+|              | `:[range]w[rite]! {file}` | Normal     | Write to `{file}`, **overwrite** if it already exists                                                           |
+|              | `:wa[ll][!]`              | Normal     | Write all **changed** buffers                                                                                   |
+| Quit         | `:q[uit]`                 | Normal     | Quit current buffer, **unless changes have been made**;<br>Exit Neovim when there are no other non-help buffers |
+|              | `:q[uit]!`                | Normal     | Quit current buffer always, **discard any changes**;<br>Exit Neovim when there are no other non-help buffers    |
+|              | `:qa[ll]`                 | Normal     | Exit Vim, **unless changes have been made**                                                                     |
+|              | `:qa[ll]!`                | Normal     | Exit Vim always, **discard any changes**                                                                        |
+| Write & Quit | `:wq[!]`                  | Normal     | Write the current file and exist                                                                                |
+|              | `:wq[!] {file}`           | Normal     | Write to `{file}` and exit                                                                                      |
+|              | `:wqall[!]`               | Normal     | Write all **changed** buffers and exit                                                                          |
+|              | `:x[it][!] [file]`        | Normal     | Like `:wq` but write **only when changes have been made**                                                       |
+|              | `:xa[ll][!]`              | Normal     | Write all **changed** buffers and exit                                                                          |
 
-| Command                     | Description                                                                                              |
-| --------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `:q[uit]`                   | Quit current buffer, unless changes have been made; Exit Neovim when there are no other non-help buffers |
-| `:q[uit]!`                  | Quit current buffer always, discard any changes; Exit Neovim when there are no other non-help buffers    |
-| `:qa[ll]`                   | Exit Vim, unless changes have been made                                                                  |
-| `:qa[ll]!`                  | Exit Vim always, discard any changes                                                                     |
-| `:wq[!]`                    | Write the current file and exist                                                                         |
-| `:wq[!] {file}`             | Write to `{file}` and exit                                                                               |
-| `:x[it][!] [file]`          | Like `:wq` but write only when changes have been made                                                    |
-| `:xa[ll][!]` or `:wqall[!]` | Write all changed buffers and exit                                                                       |
-| `ZZ`                        | Same as `:x`                                                                                             |
-| `ZQ`                        | Same as `:q!`                                                                                            |
+There are also some shortcuts for writing and quiting Neovim:
 
-For single buffer:
+| Command | Mode   | Description   |
+| ------- | ------ | ------------- |
+| `ZZ`    | Normal | Same as `:x`  |
+| `ZQ`    | Normal | Same as `:q!` |
 
-- Type `:q` and press `Enter` to quit the current buffer and exit Neovim. Before you exit, Neovim will prompt you to save changes if there are unsaved changes.
-- Type `:wq` and press `Enter`, or just type `ZZ` to save changes and quit.
-- Type `:q!` and press `Enter`, or just type `ZQ` to force quit without saving changes.
+[^1]: I use these groups to categorize the commands and help memorize them. There is no "group" concept in Neovim, it's just for learning purpose.
 
-For multiple buffers:
-
-- Type `:qa` and press `Enter` to quit all buffers and exit Neovim.
-- Type `:wqa` and press `Enter` to save changes in all buffers and quit.
-- Type `:qa!` and press `Enter` to force quit all buffers without saving changes. Alternatively, you can use the LazyVim shortcut `<leader>qq` which does the same thing.
+[^2]: This means you should start typing the command in normal mode. For the commands starting with `:`, it will enter command-line mode after you type `:` automatically.
 
 ### Motions
 
-> Motion is a cursor movement command. -- [Neovim documentation](https://neovim.io/doc/user/vimindex.html#normal-index)
+> `{motion}` is a cursor movement command. -- [Neovim documentation](https://neovim.io/doc/user/vimindex.html#normal-index)
 
-#### Move Around Characters
+#### Left-Right Motions
 
-| Command | Description                                    |
-| ------- | ---------------------------------------------- |
-| N `h`   | Left (Also: `Ctrl-H`, `<Backspace>`, `<Left>`) |
-| N `j`   | Down                                           |
-| N `k`   | Up                                             |
-| N `l`   | Right (Also: `<Space>`, `<Right>`)             |
+| Group  | Command | Mode   | Description                                       | Also                 |
+| ------ | ------- | ------ | ------------------------------------------------- | -------------------- |
+| Left   | N `h`   | Normal | Left N characters                                 | `<BS>`, `<Left>`     |
+| Right  | N `l`   | Normal | Right N characters                                | `<Space>`, `<Right>` |
+| Column | N `\|`  | Normal | To column N                                       |                      |
+| Start  | `0`     | Normal | To first character in the line                    | `<Home>`             |
+|        | `g0`    | Normal | To first character in **screen line**             |                      |
+|        | `^`     | Normal | To first non-blank character in the line          |                      |
+|        | `g^`    | Normal | To first non-blank character in **screen line**   |                      |
+| End    | N `$`   | Normal | To the next EOL (end of line) position            | `<End>`              |
+|        | N `g$`  | Normal | To the next EOL (end of **screen line**) position |                      |
+| Middle | `gm`    | Normal | To the middle of **screen line**                  |                      |
+|        | `gM`    | Normal | To the middle of the line                         |                      |
+
+#### Up-Down Motions
+
+| Group | Command | Mode   | Description                                                                                                                  | Also     |
+| ----- | ------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- | -------- |
+| Down  | N `j`   | Normal | Down N lines;<br>When N is not given, it behaves the same as `gj` (set by LazyVim)                                           | `<Up>`   |
+|       | N `gj`  | Normal | Down N screen lines                                                                                                          | `<Up>`   |
+|       | N `+`   | Normal | Down N lines, on the first non-blank character                                                                               |          |
+|       | N `_`   | Normal | Down **N - 1** lines, on the first non-blank character                                                                       |          |
+| Up    | N `k`   | Normal | Up N lines;<br>When N is not given, it behaves the same as `gk` (set by LazyVim)                                             | `<Down>` |
+|       | N `gk`  | Normal | Up N screen lines                                                                                                            |          |
+|       | N `-`   | Normal | Up N lines, on the first non-blank character                                                                                 |          |
+| Line  | N `G`   | Normal | Goto line N (Default: Last line),<br>on the first non-blank character **if `'startofline'` is enabled**                      |          |
+|       | N `gg`  | Normal | Goto line N (Default: First line),<br>on the first non-blank character **if `'startofline'` is enabled**                     |          |
+|       | N `%`   | Normal | Goto line N percentage down in the file;<br>**N must be given, otherwise it is another command: [`%`](#findsearch-motions)** |          |
+
+> [!Note]
+>
+> By default, LazyVim remaps `j` and `k` to `gj` and `gk` when N is not given, which are more recommended for modern usage.
 
 It's highly recommended to enable relative line numbers in Neovim for better line navigation experience.
 
-By default, LazyVim remaps `j` and `k` to `gj` and `gk`, which are more recommended for modern usage.
+#### Word Motions
 
-#### Move Around Words
+Moving by characters and lines is too slow for most cases, another kind of motions we often use is word motions:
 
-Just like what you think, move around characters one by one is too slow. Happily, Neovim provides several commands to move around words quickly:
-
-- `w`: Move to the next beginning of word
-- `e`: Move to the next end of word
-- `b`: Move to the previous beginning of word
-- `ge`: Move to the previous end of word
-
-If you master these commands, you can navigate through text much faster.
+| Group    | Command | Mode   | Description                                               |
+| -------- | ------- | ------ | --------------------------------------------------------- |
+| Forward  | N `w`   | Normal | N words forward                                           |
+|          | N `W`   | Normal | N WORDS **(blank-separated)** forward                     |
+|          | N `e`   | Normal | Forward to the end of the Nth word                        |
+|          | N `E`   | Normal | Forward to the end of the Nth WORD **(blank-separated)**  |
+| Backward | N `b`   | Normal | N words backward                                          |
+|          | N `B`   | Normal | N WORDS **(blank-separated)** backward                    |
+|          | N `ge`  | Normal | Backward to the end of the Nth word                       |
+|          | N `gE`  | Normal | Backward to the end of the Nth WORD **(blank-separated)** |
 
 There is a way can help you remember them easier:
 
 - `w`, `e` are the two adjacent keys on the keyboard, who are both used to move forward. `w` is the left one, which means moving forward to the beginning of word; `e` is the right one, which means moving forward to the end of word
 - `b` means "backward" and "beginning", which is used to move backward to the beginning of word
-- Move backward to the end of the word is not used so often, you can achieve this by the `goto command`: `ge`
+- Move backward to the end of the word is not used so often, we use **goto command** to express the oppsite of `e`: `ge`
 
-#### Move Around Whole Line
+#### Bracket Motions
 
-To move around whole lines, you can use the following commands:
+| Group             | Command | Mode   | Description                                                                |
+| ----------------- | ------- | ------ | -------------------------------------------------------------------------- |
+| Matches           | `%`     | Normal | Find the next brace, bracket, comment in this line,<br>then goto its match |
+| Unclosed forward  | N `])`  | Normal | N times forward to unclosed `)`                                            |
+|                   | N `]}`  | Normal | N times forward to unclosed `}`                                            |
+| Unclosed backward | N `[(`  | Normal | N times backward to unclosed `(`                                           |
+|                   | N `[{`  | Normal | N times backward to unclosed `{`                                           |
 
-- `0`: Move to the beginning of the current line, `0` means the zero-th character of the line
-- `g0`: Move to the beginning of the current line, similar to `0`, but works in soft-wrapped lines
-- `^`: Move to the first non-blank character of the current line, recall the regex, `^` means the beginning
-- `g^`: Move to the first non-blank character of the current line, similar to `^`, but works in soft-wrapped lines
-- `gm`: Move to the middle of the current line
-- `gM`: Move to the middle of the current line, similar to `gm`, but works in soft-wrapped lines
-- `$`: Move to the end of the current line, recall the regex, `$` means the end
-- `g$`: Move to the end of the current line, similar to `$`, but works in soft-wrapped lines
+#### Sentence/Paragraph/Section Motions
 
-#### Move Around by Finding
+| Group     | Command | Mode   | Description                                  |
+| --------- | ------- | ------ | -------------------------------------------- |
+| Sentence  | N `)`   | Normal | N sentences forward                          |
+|           | N `(`   | Normal | N sentences backward                         |
+| Paragraph | N `}`   | Normal | N paragraphs forward                         |
+|           | N `{`   | Normal | N paragraphs backward                        |
+| Section   | N `]]`  | Normal | N sections forward, at **start** of section  |
+|           | N `[[`  | Normal | N sections backward, at **start** of section |
+|           | N `][`  | Normal | N sections forward, at **end** of section    |
+|           | N `[]`  | Normal | N sections backward, at **end** of section   |
 
-If you have a really long file and want to move to a specific character or word, you can achieve this by finding:
+#### Other Text Object Motions
 
-- `f{char}`: Move to the next Nth occurrence of `{char}`
-- `F{char}`: Move to the previous Nth occurrence of `{char}`
-- `t{char}`: Move to just before the next Nth occurrence of `{char}`
-- `T{char}`: Move to just after the previous Nth occurrence of `{char}`
-- `s{char}`: Find `{char}` among the current display lines with hint, you can type the hint to move the cursor there
-- `/{string}`: Search forward for `{string}`, use `n` to go to the next occurrence and `N` to go to the previous occurrence
-- `?{string}`: Search backward for `{string}`, use `n` to go to the next occurrence and `N` to go to the previous occurrence
-- `*`: Search forward for the word under the cursor, use `n` to go to the next occurrence and `N` to go to the previous occurrence
-- `#`: Search backward for the word under the cursor, use `n` to go to the next occurrence and `N` to go to the previous occurrence
+| Group         | Command | Mode   | Description                                    |
+| ------------- | ------- | ------ | ---------------------------------------------- |
+| Block comment | N `[*`  | Normal | N times backward to the start of block comment |
+|               | N `]*`  | Normal | N times forward to the end of block comment    |
 
-#### Move Around Brackets
+#### Find/Search Motions
 
-To move around brackets, you can use:
+If you have a really long file and want to move to a specific character or word, you can achieve this by find/search motions:
 
-- `%`: Move to the closest matching brackets (works for `()`, `{}`, `[]`, `<>`)
-- `[(`, `[{`, `[<`: Move to the previous unmatched opening bracket
-- `])`, `}]`, `]>`: Move to the next unmatched closing
+| Group           | Command                       | Mode   | Description                                              |
+| --------------- | ----------------------------- | ------ | -------------------------------------------------------- |
+| Find forward    | N `f{char}`                   | Normal | To the forward Nth occurrence of `{char}`                |
+|                 | N `t{char}`                   | Normal | Till before the forward Nth occurrence of `{char}`       |
+| Find backward   | N `F{char}`                   | Normal | To the backward Nth occurrence of `{char}`               |
+|                 | N `T{char}`                   | Normal | Till after the backward Nth occurrence of `{char}`       |
+| Repeat Find     | N `;`                         | Normal | Repeat the last find N times                             |
+|                 | N `,`                         | Normal | Repeat the last find N times in **opposite direction**   |
+| Search forward  | N `/{pattern}[/[offset]]<CR>` | Normal | Search forward for the Nth occurrence of `{pattern}`     |
+|                 | N `*`                         | Normal | Search forward for the identifier under the cursor       |
+|                 | N `g*`                        | Normal | Like `*`, but also find **partial matches**              |
+| Search backward | N `?{pattern}[?[offset]]<CR>` | Normal | Search backward for the Nth occurrence of `{pattern}`    |
+|                 | N `#`                         | Normal | Search backward for the identifier under the cursor      |
+|                 | N `g#`                        | Normal | Like `#`, but also find **partial matches**              |
+| Repeat Search   | N `n`                         | Normal | Repeat the last search N times                           |
+|                 | N `N`                         | Normal | Repeat the last search N times in **opposite direction** |
 
-#### Move Around Paragraphs
+There are also some useful find/search motions for coding:
 
-To move around paragraphs, you can use:
+| Group              | Command | Mode   | Description                                               |
+| ------------------ | ------- | ------ | --------------------------------------------------------- |
+| Search declaration | `gd`    | Normal | Goto **local** declaration of identifier under the cursor |
+|                    | `gD`    | Normal | Goto **global** definition of identifier under the cursor |
 
-- `{`: Move to the previous beginning of paragraph (a paragraph is separated by one or more blank lines)
-- `}`: Move to the next beginning of paragraph
+#### Mark/Jump Motions
 
-#### Move Around Whole File
+| Group | Command               | Mode   | Description                                                                                   |
+| ----- | --------------------- | ------ | --------------------------------------------------------------------------------------------- |
+| Mark  | `m{a-zA-Z}`           | Normal | Mark current position with mark `{a-zA-Z}`;<br>Lowercase for file-local, uppercase for global |
+|       | `:marks`              | Normal | Print the active marks                                                                        |
+|       | `` `{a-z} ``          | Normal | Goto mark `{a-z}` within **the current file**                                                 |
+|       | `` `{A-Z} ``          | Normal | Goto mark `{A-Z}` in **any file**                                                             |
+|       | `` `{0-9[]'"<>.} ``   | Normal | Goto the mark `{0-9[]'"<>.}`                                                                  |
+|       | `'{a-zA-Z0-9[]'"<>.}` | Normal | Same as `` `{a-zA-Z0-9[]'"<>.} ``,<br>but on the first non-blank character in the line        |
+| Jump  | N `Ctrl-O`            | Normal | Goto Nth older position in jump list                                                          |
+|       | N `Ctrl-I`            | Normal | Goto Nth newer position in jump list                                                          |
+|       | `:ju[mps]`            | Normal | Print the jump list                                                                           |
 
-- `gg`: Move to the beginning of the file
-- `G`: Move to the end of the file
+### Scrolling
 
-#### Move Around Screen
+| Group          | Command      | Mode   | Description                       | Also    |
+| -------------- | ------------ | ------ | --------------------------------- | ------- |
+| Forward        | N `<Ctrl-E>` | Normal | Window N lines forward (downward) |         |
+|                | N `<Ctrl-D>` | Normal | Window N half pages forward       |         |
+|                | N `<Ctrl-F>` | Normal | Window N pages forward            |         |
+| Backward       | N `<Ctrl-Y>` | Normal | Window N lines backward (upward)  |         |
+|                | N `<Ctrl-U>` | Normal | Window N half pages backward      |         |
+|                | N `<Ctrl-B>` | Normal | Window N pages backward           |         |
+| Current window | `zt`         | Normal | Current line at top of window     | `z<CR>` |
+|                | `zz`         | Normal | Current line at center of window  | `z.`    |
+|                | `zb`         | Normal | Current line at bottom of window  | `z-`    |
 
-To move around screen without moving the cursor, you can use:
+### Switch Window/Buffer
 
-- `<C-e>`: Move down by one line
-- `<C-y>`: Move up by one line
-- `<C-d>`: Move down by half screen
-- `<C-u>`: Move up by half screen
-- `<C-f>`: Move down by one full screen
-- `<C-b>`: Move up by one full screen
-- `zz`: Center the current line in the screen
-- `zt`: Move the current line to the top of the screen
-- `zb`: Move the current line to the bottom of the screen
-
-#### Move Around Windows
-
-To move around windows, you can use the following commands:
-
-- `<C-h>`: Move to the left window
-- `<C-j>`: Move to the window below
-- `<C-k>`: Move to the window above
-- `<C-l>`: Move to the right window
-
-#### Move Around Buffers
-
-To move around buffers, you can use the following commands:
-
-- `H`: Move to the previous buffer
-- `L`: Move to the next buffer
+| Group  | Command | Mode   | Description                 |
+| ------ | ------- | ------ | --------------------------- |
+| Window | `<C-h>` | Normal | Move to the left window     |
+|        | `<C-j>` | Normal | Move to the window below    |
+|        | `<C-k>` | Normal | Move to the window above    |
+|        | `<C-l>` | Normal | Move to the right window    |
+| Buffer | `H`     | Normal | Move to the previous buffer |
+|        | `L`     | Normal | Move to the next buffer     |
 
 ### Editing
 
 #### Enter Insert Mode
 
-You can enter insert mode by using the following commands:
-
-- `i`: Insert before the cursor
-- `a`: Append after the cursor
-- `I`: Insert at the beginning of the line
-- `A`: Append at the end of the line
-- `o`: Open a new line below the current line and enter insert mode
-- `O`: Open a new line above the current line and enter insert mode
-
-Then you can start typing just like a normal text editor.
+| Group    | Command | Mode   | Description                                                            | Also       |
+| -------- | ------- | ------ | ---------------------------------------------------------------------- | ---------- |
+| Append   | N `a`   | Normal | Append text after the cursor (N times)                                 |            |
+|          | N `A`   | Normal | Append text at EOL (N times)                                           |            |
+| Insert   | N `i`   | Normal | Insert text before the cursor (N times)                                | `<Insert>` |
+|          | N `I`   | Normal | Insert text before the first non-blank character of the line (N times) |            |
+|          | N `gI`  | Normal | Insert text at the beginning of the line (N times)                     |            |
+| New line | N `o`   | Normal | Open a new line below the current line, append text (N times)          |            |
+|          | N `O`   | Normal | Open a new line above the current line, insert text (N times)          |            |
 
 Use `<esc>` to exit insert mode and return to normal mode.
 
 #### Copy and Paste
+
+<!-- TODO(Lumirelle): -->
 
 - `y<motion>`: Yank (copy) text specified by the `<motion>` (e.g., `cw` changes a word, `c3j` changes three lines down)
 

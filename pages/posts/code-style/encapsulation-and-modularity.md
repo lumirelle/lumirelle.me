@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Encapsulation and Modularity'
 date: 2025-09-24T16:36+08:00
-update: 2026-01-27T16:41+08:00
+update: 2026-02-09T22:51+08:00
 lang: en
 duration: 4min
 type: blog+note
@@ -94,12 +94,17 @@ Encapsulation and modularity are not panaceas, excessive encapsulation and modul
 
   ```ts
   // Hard to use example:
-  export function useForm(config: FormConfig, defaultValues?: Record<string, any>) {
+  export function useForm(
+    config: FormConfig,
+    defaultValues?: Record<string, any>
+  ) {
     const formData = reactive<Record<string, any>>({})
 
     function resetForm() {
-      for (const field of config.fields)
-        formData[field.name] = defaultValues?.[field.name] ?? field.defaultValue ?? null
+      for (const field of config.fields) {
+        formData[field.name]
+          = defaultValues?.[field.name] ?? field.defaultValue ?? null
+      }
     }
 
     resetForm()
@@ -109,6 +114,7 @@ Encapsulation and modularity are not panaceas, excessive encapsulation and modul
       resetForm,
     }
   }
+  // Usage
   useForm(
     {
       fields: [
@@ -134,6 +140,7 @@ Encapsulation and modularity are not panaceas, excessive encapsulation and modul
     return value === true
   }
   const value = Math.random() > 0.5
+  // Usage
   console.log(isTrue(value))
   // Expected: console.log(value === true)
   ```
@@ -145,6 +152,10 @@ Therefore, we need to find a balance point:
 > "Make it work, make it right, make it fast." -- Kent Beck
 
 - If you should reuse the old code **now**, do encapsulation and modularity.
-- If you **already** made a code too large or too complex, do encapsulation and modularity (Of course, you should pay attention to not to write codes with strong coupling, this is your basic personal quality).
+- If you **already** made a code too large or too complex, do encapsulation and modularity (Of course, you should pay attention to not to write codes with strong coupling in every day coding, this is your basic personal quality).
 
 I mean, mending the situation before it is too late is always better than too many drafts. 😉
+
+## Examples
+
+Hope there will be some examples in the future...

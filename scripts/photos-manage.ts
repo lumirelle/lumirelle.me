@@ -2,17 +2,18 @@ import { existsSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import ExifReader from 'exifreader'
-import fg from 'fast-glob'
 import { basename, join, parse } from 'pathe'
 import sharp from 'sharp'
+import { glob } from 'tinyglobby'
 import { compressSharp } from './img-compress'
 
 const folder = fileURLToPath(new URL('../photos', import.meta.url))
 
-const files = (await fg('**/*.{jpg,png,jpeg}', {
+const files = (await glob('**/*.{jpg,png,jpeg}', {
   caseSensitiveMatch: false,
   absolute: true,
   cwd: fileURLToPath(new URL('../photos', import.meta.url)),
+  expandDirectories: false,
 }))
   .sort((a, b) => a.localeCompare(b))
 

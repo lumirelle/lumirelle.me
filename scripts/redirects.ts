@@ -1,5 +1,5 @@
+import fs from 'node:fs/promises'
 import { Octokit } from '@octokit/rest'
-import fs from 'fs-extra'
 import { getStarsRankingUrl } from './stars-rank'
 
 const pages = 2
@@ -33,4 +33,4 @@ async function run() {
   await fs.writeFile('_dist_redirects', final, 'utf-8')
 }
 
-run()
+await run()

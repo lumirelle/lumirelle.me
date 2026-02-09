@@ -1,7 +1,7 @@
-import fs from 'fs-extra'
+import fs from 'node:fs/promises'
 
 async function run() {
-  await fs.copy('public/assets/fonts', 'dist/assets/fonts', { overwrite: true })
+  await fs.cp('public/assets/fonts', 'dist/assets/fonts', { recursive: true, force: true })
 }
 
-run()
+await run()

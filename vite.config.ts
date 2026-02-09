@@ -1,10 +1,10 @@
 import { Buffer } from 'node:buffer'
+import fs from 'node:fs'
 import { basename, dirname, resolve } from 'node:path'
 import MarkdownItShiki from '@shikijs/markdown-it'
 import { transformerNotationDiff, transformerNotationHighlight, transformerNotationWordHighlight } from '@shikijs/transformers'
 import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
 import Vue from '@vitejs/plugin-vue'
-import fs from 'fs-extra'
 import matter from 'gray-matter'
 import anchor from 'markdown-it-anchor'
 // @ts-expect-error missing types
@@ -179,8 +179,8 @@ export default defineConfig({
           const path = `og/${route}.png`
           promises.push(
             fs.existsSync(`${id.slice(0, -3)}.png`)
-              ? fs.copy(`${id.slice(0, -3)}.png`, `public/${path}`)
-              : generateOg(frontmatter.title!.replace(/\s-\s.*$/, '').trim(), `public/${path}`),
+              ? fs.promises.cp(`${id.slice(0, -3)}.png`, `public/${path}`)
+              : generateOg(frontmatter.title.replace(/\s-\s.*$/, '').trim(), `public/${path}`),
           )
           frontmatter.image = `https://lumirelle.me/${path}`
         })()
@@ -250,7 +250,7 @@ async function generateOg(title: string, output: string) {
   if (fs.existsSync(output))
     return
 
-  await fs.mkdir(dirname(output), { recursive: true })
+  await fs.promises.mkdir(dirname(output), { recursive: true })
   // breakline every 30 chars
   const lines = title.trim().split(/(.{0,30})(?:\s|$)/g).filter(Boolean)
 
@@ -259,7 +259,7 @@ async function generateOg(title: string, output: string) {
     line2: lines[1],
     line3: lines[2],
   }
-  const svg = ogSVg.replace(/\{\{([^}]+)\}\}/g, (_, name) => data[name] || '')
+  const svg = ogSVg.replaceAll(/\{\{([^}]+)\}\}/g, (_, name) => data[name] || '')
 
   console.log(`Generating ${output}`)
   try {

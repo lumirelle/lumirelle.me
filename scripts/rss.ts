@@ -1,10 +1,10 @@
 import type { FeedOptions, Item } from 'feed'
+import fs from 'node:fs/promises'
 import { dirname } from 'node:path'
-import fg from 'fast-glob'
 import { Feed } from 'feed'
-import fs from 'fs-extra'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
+import { glob } from 'tinyglobby'
 
 const DOMAIN = 'https://lumirelle.me'
 const AUTHOR = {
@@ -23,7 +23,9 @@ async function run() {
 }
 
 async function buildBlogRSS() {
-  const files = await fg('pages/posts/*.md')
+  const files = await glob('pages/posts/*.md', {
+    expandDirectories: false,
+  })
 
   const options = {
     title: 'Lumirelle',
@@ -79,10 +81,10 @@ async function writeFeed(name: string, options: FeedOptions, items: Item[]) {
   items.forEach(item => feed.addItem(item))
   // items.forEach(i=> console.log(i.title, i.date))
 
-  await fs.ensureDir(dirname(`./dist/${name}`))
+  await fs.mkdir(dirname(`./dist/${name}`), { recursive: true })
   await fs.writeFile(`./dist/${name}.xml`, feed.rss2(), 'utf-8')
   await fs.writeFile(`./dist/${name}.atom`, feed.atom1(), 'utf-8')
   await fs.writeFile(`./dist/${name}.json`, feed.json1(), 'utf-8')
 }
 
-run()
+await run()

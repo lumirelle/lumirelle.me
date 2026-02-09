@@ -1,9 +1,9 @@
 ---
 title: Neovim & LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-01-09T18:19+08:00
+update: 2026-02-09T11:54+08:00
 lang: en
-duration: n/a
+duration: 23min
 type: note
 ---
 
@@ -170,6 +170,33 @@ There is a way can help you remember them easier:
 | Block comment | N `[*`  | Normal | N times backward to the start of block comment |
 |               | N `]*`  | Normal | N times forward to the end of block comment    |
 
+#### Text Object Motions (Only for Visual Mode or after Operator)
+
+| Group     | Command    | Mode | Description                                             |
+| --------- | ---------- | ---- | ------------------------------------------------------- |
+| Word      | N `aw`     | /    | Select a word                                           |
+|           | N `iw`     | /    | Select inner word (Without leading and trailing spaces) |
+|           | N `aW`     | /    | Select a WORD (Blank-separated)                         |
+|           | N `iW`     | /    | Select inner WORD (Without leading and trailing spaces) |
+| Sentence  | N `as`     | /    | Select a sentence                                       |
+|           | N `is`     | /    | Select inner sentence                                   |
+| Paragraph | N `ap`     | /    | Select a paragraph                                      |
+|           | N `ip`     | /    | Select inner paragraph                                  |
+| Block     | N `ab`     | /    | Select a block (from `[(` to `)]`)                      |
+|           | N `ib`     | /    | Select inner block (from `[(` to `)]`)                  |
+|           | N `aB`     | /    | Select a Block (from `[{` to `]}`)                      |
+|           | N `iB`     | /    | Select inner Block (from `[{` to `]}`)                  |
+|           | N `a>`     | /    | Select a `<>` block                                     |
+|           | N `i>`     | /    | Select inner `<>` block                                 |
+|           | N `at`     | /    | Select a tag block (from `<xxx>` to `</xxx>`)           |
+|           | N `it`     | /    | Select inner tag block (from `<xxx>` to `</xxx>`)       |
+| String    | N `a'`     | /    | Select a single-quoted string                           |
+|           | N `i'`     | /    | Select inner of a single-quoted string                  |
+|           | N `a"`     | /    | Select a double-quoted string                           |
+|           | N `i"`     | /    | Select inner of a double-quoted string                  |
+|           | N `` a` `` | /    | Select a backtick-quoted string                         |
+|           | N `` i` `` | /    | Select inner of a backtick-quoted string                |
+
 #### Find/Search Motions
 
 If you have a really long file and want to move to a specific character or word, you can achieve this by find/search motions:
@@ -226,16 +253,34 @@ There are also some useful find/search motions for coding:
 |                | `zz`         | Normal | Current line at center of window  | `z.`    |
 |                | `zb`         | Normal | Current line at bottom of window  | `z-`    |
 
-### Switch Window/Buffer
+### Window/Buffer
 
-| Group  | Command | Mode   | Description                 |
-| ------ | ------- | ------ | --------------------------- |
-| Window | `<C-h>` | Normal | Move to the left window     |
-|        | `<C-j>` | Normal | Move to the window below    |
-|        | `<C-k>` | Normal | Move to the window above    |
-|        | `<C-l>` | Normal | Move to the right window    |
-| Buffer | `H`     | Normal | Move to the previous buffer |
-|        | `L`     | Normal | Move to the next buffer     |
+#### Split Window
+
+| Group  | Command     | Mode   | Description                                             |
+| ------ | ----------- | ------ | ------------------------------------------------------- |
+| Window | `<Ctrl-W>s` | Normal | Split the current window horizontally                   |
+| Window | `<Ctrl-W>v` | Normal | Split the current window vertically<br>(Set by Lazyvim) |
+
+#### Switch Window/Buffer
+
+| Group  | Command    | Mode   | Description                 |
+| ------ | ---------- | ------ | --------------------------- |
+| Window | `<Ctrl-H>` | Normal | Move to the left window     |
+|        | `<Ctrl-J>` | Normal | Move to the window below    |
+|        | `<Ctrl-K>` | Normal | Move to the window above    |
+|        | `<Ctrl-L>` | Normal | Move to the right window    |
+| Buffer | `H`        | Normal | Move to the previous buffer |
+|        | `L`        | Normal | Move to the next buffer     |
+
+### Visual Selection
+
+| Group     | Command | Mode   | Description                        |
+| --------- | ------- | ------ | ---------------------------------- |
+| Character | `v`     | Normal | Start visual mode                  |
+| Line      | `V`     | Normal | Start linewise visual mode         |
+| Block     | `<C-v>` | Normal | Start blockwise visual mode        |
+| Restore   | `gv`    | Normal | Reselect the last visual selection |
 
 ### Editing
 
@@ -251,25 +296,37 @@ There are also some useful find/search motions for coding:
 | New line | N `o`   | Normal | Open a new line below the current line, append text (N times)          |            |
 |          | N `O`   | Normal | Open a new line above the current line, insert text (N times)          |            |
 
-Use `<esc>` to exit insert mode and return to normal mode.
+Use `<Esc>` to exit insert mode and return to normal mode.
 
-#### Copy and Paste
+#### Special Keys in Insert Mode
 
-<!-- TODO(Lumirelle): -->
-
-- `y<motion>`: Yank (copy) text specified by the `<motion>` (e.g., `cw` changes a word, `c3j` changes three lines down)
-
-  > [!Note]
-  >
-  > The `<motion>` is one of the motion commands we mentioned before (Of course, except for screen, buffer, window movements). For example: `yw` yanks to the next end of word, `y2w` yanks to the second next end of word.
-  >
-  > There are two special modifiers when using motion commands with others: `i` and `a`. Different to numbers, they means `inside` and `around`. For example, `yiw` yanks inside the word (without spaces), `yaw` yanks around the word (with spaces).
-
-- `yy`: Yank (copy) the current line
-- `p`: Paste the yanked text after the cursor
-- `P`: Paste the yanked text before the cursor
+| Group  | Command              | Mode   | Description                                                           |
+| ------ | -------------------- | ------ | --------------------------------------------------------------------- |
+| Insert | `<Ctrl-A>`           | Insert | Insert previously inserted text                                       |
+|        | `<Ctrl-@>`           | Insert | Insert previously inserted text and stop insert mode                  |
+|        | `<Ctrl-R>{register}` | Insert | Insert the contents of `{register}`                                   |
+| Delete | `<Ctrl-W>`           | Insert | Delete word before the cursor                                         |
+|        | `<Ctrl-U>`           | Insert | Delete all entered characters in the current line                     |
+| Indent | `<Ctrl-T>`           | Insert | Indent in front of the line                                           |
+|        | `<Ctrl-D>`           | Insert | Unindent in front of the line                                         |
+|        | 0 `<Ctrl-D>`         | Insert | Delete all indent in the current line                                 |
+|        | ^ `<Ctrl-D>`         | Insert | Delete all indent in the current line,<br>restore indent in next line |
 
 #### Delete
+
+| Group            | Command         | Mode   | Description                                        | Also    |
+| ---------------- | --------------- | ------ | -------------------------------------------------- | ------- |
+| Character Delete | N `x`           | Normal | Delete N characters under and after the cursor     | `<Del>` |
+|                  | N `X`           | Normal | Delete N characters before the cursor              |         |
+| General Delete   | N `d{motion}`   | Normal | Delete the text that is moved over with `{motion}` |         |
+|                  | N `dd`          | Normal | Delete N lines                                     |         |
+|                  | N `D`           | Normal | Delete to the end of the line (and N-1 more lines) |         |
+|                  | `d`             | Visual | Delete the selected text                           |         |
+| Join             | N `J`           | Normal | Join N-1 lines (Delete EOLs)                       |         |
+|                  | N `gJ`          | Normal | Like `J`, but without inserting spaces             |         |
+|                  | `J`             | Visual | Join the selected lines                            |         |
+|                  | `gJ`            | Visual | Like `J`, but without inserting spaces             |         |
+| Range Delete     | `:[range]d [x]` | Normal | Delete [range] lines [into register x]             |         |
 
 To delete text without entering insert mode, you can use the following commands:
 
@@ -282,38 +339,111 @@ To delete text without entering insert mode, you can use the following commands:
 - `cc`: Delete (replace) the current line, enter insert mode
 - `C`: Delete from the cursor position to the end of the line, enter insert mode
 
-#### Replace
+#### Register, Yank and Put
 
-To replace characters without entering insert mode, you can use the following commands:
+| Group    | Command           | Mode   | Description                                               |
+| -------- | ----------------- | ------ | --------------------------------------------------------- |
+| Register | `"{register}`     | Normal | Use `{register}` for the next delete, yank, or put        |
+|          | `:reg`            | Normal | Show the contents of all registers                        |
+|          | `:reg {register}` | Normal | Show the contents of `{register}`                         |
+| Yank     | N `y{motion}`     | Normal | Yank the text moved over with `{motion}` into a register  |
+|          | N `yy`            | Normal | Yank N lines into a register                              |
+|          | N `Y`             | Normal | Yank N lines into a register<br>Mapped to `y$` by default |
+|          | `y`               | Visual | Yank the selected text into a register                    |
+| Put      | N `p`             | Normal | Put a register after the cursor position (N times)        |
+|          | N `]p`            | Normal | Like `p`, but adjust indent to current line               |
+|          | N `gp`            | Normal | Like `p`, but leave the cursor after the new text         |
+|          | N `P`             | Normal | Put a register before the cursor position (N times)       |
+|          | N `[p`            | Normal | Like `P`, but adjust indent to current line               |
+|          | N `gP`            | Normal | Like `P`, but leave the cursor after the new text         |
 
-- `r{char}`: Replace the character under the cursor with `{char}`
-- `R`: Enter replace mode, where you can overwrite existing text
-  e
+#### Replace and Change
+
+| Group                               | Command        | Mode         | Description                                                                      |
+| ----------------------------------- | -------------- | ------------ | -------------------------------------------------------------------------------- |
+| Replace                             | N `r{char}`    | Normal       | Replace N characters with `{char}`                                               |
+|                                     | N `gr{char}`   | Normal       | Replace N characters without affecting layout                                    |
+|                                     | `r{char}`      | Visual       | Replace the each char of the selected text with `{char}`                         |
+| Replace mode                        | N `R`          | Normal       | Enter **replace mode** (Repeat the entered text N times)                         |
+|                                     | N `gR`         | Normal       | Enter **virtual replace mode** (Like replace mode, but without affecting layout) |
+| Change (Delete & enter insert mode) | N `c{motion}`  | Normal       | Change the text that is moved over with `{motion}`                               |
+|                                     | N `cc`         | Normal       | Change N lines                                                                   |
+|                                     | N `C`          | Normal       | Change to the EOL (and N-1 more lines)                                           |
+|                                     | `c`            | Visual       | Change the selected text                                                         |
+|                                     | `c`            | Visual block | Change each of the selected lines with the entered text                          |
+|                                     | `C`            | Visual       | Change each of the selected lines until EOL with the entered text                |
+| Switch case                         | N `~`          | Normal       | Switch case for N characters and advance cursor                                  |
+|                                     | `g~{motion}`   | Normal       | Switch case for the text that is moved over with `{motion}`                      |
+|                                     | `~`            | Visual       | Switch case for selected text                                                    |
+|                                     | `gu{motion}`   | Normal       | Make the text that is moved over with `{motion}` lowercase                       |
+|                                     | `u`            | Visual       | Make the selected text lowercase                                                 |
+|                                     | `gU{motion}`   | Normal       | Make the text that is moved over with `{motion}` uppercase                       |
+|                                     | `U`            | Visual       | Make the selected text uppercase                                                 |
+| Move                                | N `Alt-j`      | Normal       | Move the current line down N times                                               |
+|                                     | N `Alt-k`      | Normal       | Move the current line up N times                                                 |
+| Number                              | N `<Ctrl-A>`   | Normal       | Add N to the number at or after the cursor                                       |
+|                                     | N `<Ctrl-X>`   | Normal       | Subtract N from the number at or after the cursor                                |
+| Indent                              | N `>{motion}`  | Normal       | Indent the lines that are moved over with `{motion}`                             |
+|                                     | N `>>`         | Normal       | Indent N lines                                                                   |
+|                                     | N `<`{motion}` | Normal       | Unindent the lines that are moved over with `{motion}`                           |
+|                                     | N `<<`         | Normal       | Unindent N lines                                                                 |
+| Format                              | N `={motion}`  | Normal       | Autoformat the lines that are moved over with `{motion}`                         |
+|                                     | N `==`         | Normal       | Autoformat N lines                                                               |
+| Comment                             | N `gc{motion}` | Normal       | Comment the lines that are moved over with `{motion}`                            |
+|                                     | N `gcc`        | Normal       | Comment N lines                                                                  |
 
 #### Undo and Redo
 
-- `u`: Undo the last change
-- `<C-r>`: Redo the last undone change
+| Group | Command      | Mode   | Description                |
+| ----- | ------------ | ------ | -------------------------- |
+| Undo  | N `u`        | Normal | Undo last N changes        |
+|       | `U`          | Normal | Undo last changed line     |
+| Redo  | N `<Ctrl-R>` | Normal | Redo last N undone changes |
 
-#### Move Lines Up/Down
+#### Multi Cursor
 
-To move the current line up or down, you can use:
+In Neovim, you can start multi cursor only from blockwise visual mode, with plugin `multicursor.nvim`, we can accomplish this in any visual mode:
 
-- `A-j`: Move the current line down by one line
-- `A-k`: Move the current line up by one line
+| Group  | Command | Mode   | Description                                                                   |
+| ------ | ------- | ------ | ----------------------------------------------------------------------------- |
+| Match  | `<C-n>` | Normal | Create multi cursor at the next occurrence of the current selection           |
+| Insert | `I`     | Visual | Create multi cursor at the beginning of each selected line, enter insert mode |
+| Append | `A`     | Visual | Create multi cursor at the end of each selected line, enter insert mode       |
 
-#### Comment/Uncomment Code
+> [!Note]
+>
+> For Neovim in VSCode, there is a better plugin called `vscode-neovim-multicursor`, which can trigger VSCode's native multi cursor feature, so we use it instead of `multicursor.nvim` in VSCode environment.
+>
+> They two have different behaviors and default keybindings (Although we will remap them to be the most similar as possible), you can check their documentation for more details.
 
-- `gc<motion>` : Toggle comment for the selected lines specified by `<motion>`
-- `gcc` : Toggle comment for the current line
+### Repeat Command
+
+| Group   | Command    | Mode   | Description                                           |
+| ------- | ---------- | ------ | ----------------------------------------------------- |
+| Repeat  | N `.`      | Normal | Repeat the last change (With count replaced with N)   |
+| Record  | `q{a-z}`   | Normal | Record typed characters into register `{a-z}`         |
+|         | `q{A-Z}`   | Normal | Record typed characters, appended to register `{a-z}` |
+|         | `q`        | Normal | Stop recording                                        |
+|         | `Q`        | Normal | Replay last recorded macro                            |
+| Execute | N `@{a-z}` | Normal | Execute the contents of register `{a-z}` (N times)    |
+|         | N `@@`     | Normal | Repeat previous register execution (N times)          |
+| Sleep   | N `gs`     | Normal | Goto sleep for N seconds                              |
 
 ### Other Useful Commands
 
 #### Fold/Unfold Code
 
-To fold or unfold code blocks, you can use the following commands:
+| Group        | Command | Mode   | Description                                           |
+| ------------ | ------- | ------ | ----------------------------------------------------- |
+| Toggle       | `za`    | Normal | Toggle fold under the cursor<br>(Set by Lazyvim)      |
+|              | `zA`    | Normal | Toggle all folds under the cursor<br>(Set by Lazyvim) |
+| Fold level   | `zm`    | Normal | Fold more, decrease `'foldlevel'`                     |
+|              | `zM`    | Normal | Fold all, set `'foldlevel'` to 0                      |
+| Unfold level | `zr`    | Normal | Unfold more, increase `'foldlevel'`                   |
+|              | `zR`    | Normal | Unfold all, set `'foldlevel'` to max                  |
 
-- `za`: Toggle fold
-- `zA`: Toggle fold recursively
-- `zM`: Fold all
-- `zR`: Unfold all
+#### Version Information
+
+| Group | Command      | Mode   | Description              |
+| ----- | ------------ | ------ | ------------------------ |
+| Info  | `:ve[rsion]` | Normal | Show version information |

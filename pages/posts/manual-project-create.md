@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-01-14T14:26+08:00
+update: 2026-02-10T12:03+08:00
 lang: en
 duration: 2min
 type: note
@@ -22,7 +22,7 @@ This is a manual for how to create a new project with specific tech stack.
   Install:
 
   ```bash
-  npm install -g @sxzz/create
+  bun install -g @sxzz/create
   ```
 
   Configuration (_~/create.config.yml_):

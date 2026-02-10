@@ -79,142 +79,142 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/bun-vs-nodejs': RouteRecordInfo<
-      '/posts/bun-vs-nodejs',
-      '/posts/bun-vs-nodejs',
+    '/posts/code-style-encapsulation-and-modularity': RouteRecordInfo<
+      '/posts/code-style-encapsulation-and-modularity',
+      '/posts/code-style-encapsulation-and-modularity',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/code-style/encapsulation-and-modularity': RouteRecordInfo<
-      '/posts/code-style/encapsulation-and-modularity',
-      '/posts/code-style/encapsulation-and-modularity',
+    '/posts/code-style-symbol-name-pattern': RouteRecordInfo<
+      '/posts/code-style-symbol-name-pattern',
+      '/posts/code-style-symbol-name-pattern',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/code-style/symbol-name-pattern': RouteRecordInfo<
-      '/posts/code-style/symbol-name-pattern',
-      '/posts/code-style/symbol-name-pattern',
+    '/posts/manual-bash-script': RouteRecordInfo<
+      '/posts/manual-bash-script',
+      '/posts/manual-bash-script',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/first-time-trying-roller-coaster': RouteRecordInfo<
-      '/posts/first-time-trying-roller-coaster',
-      '/posts/first-time-trying-roller-coaster',
+    '/posts/manual-computer-network': RouteRecordInfo<
+      '/posts/manual-computer-network',
+      '/posts/manual-computer-network',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/bash-script-manual': RouteRecordInfo<
-      '/posts/manual/bash-script-manual',
-      '/posts/manual/bash-script-manual',
+    '/posts/manual-git': RouteRecordInfo<
+      '/posts/manual-git',
+      '/posts/manual-git',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/computer-network-manual': RouteRecordInfo<
-      '/posts/manual/computer-network-manual',
-      '/posts/manual/computer-network-manual',
+    '/posts/manual-html-advanced-grammar': RouteRecordInfo<
+      '/posts/manual-html-advanced-grammar',
+      '/posts/manual-html-advanced-grammar',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/git-manual': RouteRecordInfo<
-      '/posts/manual/git-manual',
-      '/posts/manual/git-manual',
+    '/posts/manual-js-advanced-grammar': RouteRecordInfo<
+      '/posts/manual-js-advanced-grammar',
+      '/posts/manual-js-advanced-grammar',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/html-advanced-grammar-manual': RouteRecordInfo<
-      '/posts/manual/html-advanced-grammar-manual',
-      '/posts/manual/html-advanced-grammar-manual',
+    '/posts/manual-js-pm': RouteRecordInfo<
+      '/posts/manual-js-pm',
+      '/posts/manual-js-pm',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/js-advanced-grammar-manual': RouteRecordInfo<
-      '/posts/manual/js-advanced-grammar-manual',
-      '/posts/manual/js-advanced-grammar-manual',
+    '/posts/manual-neovim-lazyvim': RouteRecordInfo<
+      '/posts/manual-neovim-lazyvim',
+      '/posts/manual-neovim-lazyvim',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/js-pm-manual': RouteRecordInfo<
-      '/posts/manual/js-pm-manual',
-      '/posts/manual/js-pm-manual',
+    '/posts/manual-programming-fonts': RouteRecordInfo<
+      '/posts/manual-programming-fonts',
+      '/posts/manual-programming-fonts',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/neovim-lazyvim-manual': RouteRecordInfo<
-      '/posts/manual/neovim-lazyvim-manual',
-      '/posts/manual/neovim-lazyvim-manual',
+    '/posts/manual-project-create': RouteRecordInfo<
+      '/posts/manual-project-create',
+      '/posts/manual-project-create',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/programming-fonts-manual': RouteRecordInfo<
-      '/posts/manual/programming-fonts-manual',
-      '/posts/manual/programming-fonts-manual',
+    '/posts/manual-ts-advanced-grammar': RouteRecordInfo<
+      '/posts/manual-ts-advanced-grammar',
+      '/posts/manual-ts-advanced-grammar',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/project-create-manual': RouteRecordInfo<
-      '/posts/manual/project-create-manual',
-      '/posts/manual/project-create-manual',
+    '/posts/manual-vue-advanced-grammar': RouteRecordInfo<
+      '/posts/manual-vue-advanced-grammar',
+      '/posts/manual-vue-advanced-grammar',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/ts-advanced-grammar-manual': RouteRecordInfo<
-      '/posts/manual/ts-advanced-grammar-manual',
-      '/posts/manual/ts-advanced-grammar-manual',
+    '/posts/manual-windows-setup': RouteRecordInfo<
+      '/posts/manual-windows-setup',
+      '/posts/manual-windows-setup',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/vue-advanced-grammar-manual': RouteRecordInfo<
-      '/posts/manual/vue-advanced-grammar-manual',
-      '/posts/manual/vue-advanced-grammar-manual',
+    '/posts/misc-bun-vs-nodejs': RouteRecordInfo<
+      '/posts/misc-bun-vs-nodejs',
+      '/posts/misc-bun-vs-nodejs',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/manual/windows-setup-manual': RouteRecordInfo<
-      '/posts/manual/windows-setup-manual',
-      '/posts/manual/windows-setup-manual',
+    '/posts/misc-first-time-trying-roller-coaster': RouteRecordInfo<
+      '/posts/misc-first-time-trying-roller-coaster',
+      '/posts/misc-first-time-trying-roller-coaster',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/project-engineering/categorize-your-dependencies': RouteRecordInfo<
-      '/posts/project-engineering/categorize-your-dependencies',
-      '/posts/project-engineering/categorize-your-dependencies',
+    '/posts/misc-vite-and-unbundled': RouteRecordInfo<
+      '/posts/misc-vite-and-unbundled',
+      '/posts/misc-vite-and-unbundled',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/project-engineering/manually-split-chunks': RouteRecordInfo<
-      '/posts/project-engineering/manually-split-chunks',
-      '/posts/project-engineering/manually-split-chunks',
+    '/posts/project-engineering-categorize-your-dependencies': RouteRecordInfo<
+      '/posts/project-engineering-categorize-your-dependencies',
+      '/posts/project-engineering-categorize-your-dependencies',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/test/recursive-mono-nbsp-rendering': RouteRecordInfo<
-      '/posts/test/recursive-mono-nbsp-rendering',
-      '/posts/test/recursive-mono-nbsp-rendering',
+    '/posts/project-engineering-manually-split-chunks': RouteRecordInfo<
+      '/posts/project-engineering-manually-split-chunks',
+      '/posts/project-engineering-manually-split-chunks',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/vite-and-unbundled': RouteRecordInfo<
-      '/posts/vite-and-unbundled',
-      '/posts/vite-and-unbundled',
+    '/posts/test-recursive-mono-nbsp-rendering': RouteRecordInfo<
+      '/posts/test-recursive-mono-nbsp-rendering',
+      '/posts/test-recursive-mono-nbsp-rendering',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -301,123 +301,123 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/bun-vs-nodejs.md': {
+    'pages/posts/code-style-encapsulation-and-modularity.md': {
       routes:
-        | '/posts/bun-vs-nodejs'
+        | '/posts/code-style-encapsulation-and-modularity'
       views:
         | never
     }
-    'pages/posts/code-style/encapsulation-and-modularity.md': {
+    'pages/posts/code-style-symbol-name-pattern.md': {
       routes:
-        | '/posts/code-style/encapsulation-and-modularity'
+        | '/posts/code-style-symbol-name-pattern'
       views:
         | never
     }
-    'pages/posts/code-style/symbol-name-pattern.md': {
+    'pages/posts/manual-bash-script.md': {
       routes:
-        | '/posts/code-style/symbol-name-pattern'
+        | '/posts/manual-bash-script'
       views:
         | never
     }
-    'pages/posts/first-time-trying-roller-coaster.md': {
+    'pages/posts/manual-computer-network.md': {
       routes:
-        | '/posts/first-time-trying-roller-coaster'
+        | '/posts/manual-computer-network'
       views:
         | never
     }
-    'pages/posts/manual/bash-script-manual.md': {
+    'pages/posts/manual-git.md': {
       routes:
-        | '/posts/manual/bash-script-manual'
+        | '/posts/manual-git'
       views:
         | never
     }
-    'pages/posts/manual/computer-network-manual.md': {
+    'pages/posts/manual-html-advanced-grammar.md': {
       routes:
-        | '/posts/manual/computer-network-manual'
+        | '/posts/manual-html-advanced-grammar'
       views:
         | never
     }
-    'pages/posts/manual/git-manual.md': {
+    'pages/posts/manual-js-advanced-grammar.md': {
       routes:
-        | '/posts/manual/git-manual'
+        | '/posts/manual-js-advanced-grammar'
       views:
         | never
     }
-    'pages/posts/manual/html-advanced-grammar-manual.md': {
+    'pages/posts/manual-js-pm.md': {
       routes:
-        | '/posts/manual/html-advanced-grammar-manual'
+        | '/posts/manual-js-pm'
       views:
         | never
     }
-    'pages/posts/manual/js-advanced-grammar-manual.md': {
+    'pages/posts/manual-neovim-lazyvim.md': {
       routes:
-        | '/posts/manual/js-advanced-grammar-manual'
+        | '/posts/manual-neovim-lazyvim'
       views:
         | never
     }
-    'pages/posts/manual/js-pm-manual.md': {
+    'pages/posts/manual-programming-fonts.md': {
       routes:
-        | '/posts/manual/js-pm-manual'
+        | '/posts/manual-programming-fonts'
       views:
         | never
     }
-    'pages/posts/manual/neovim-lazyvim-manual.md': {
+    'pages/posts/manual-project-create.md': {
       routes:
-        | '/posts/manual/neovim-lazyvim-manual'
+        | '/posts/manual-project-create'
       views:
         | never
     }
-    'pages/posts/manual/programming-fonts-manual.md': {
+    'pages/posts/manual-ts-advanced-grammar.md': {
       routes:
-        | '/posts/manual/programming-fonts-manual'
+        | '/posts/manual-ts-advanced-grammar'
       views:
         | never
     }
-    'pages/posts/manual/project-create-manual.md': {
+    'pages/posts/manual-vue-advanced-grammar.md': {
       routes:
-        | '/posts/manual/project-create-manual'
+        | '/posts/manual-vue-advanced-grammar'
       views:
         | never
     }
-    'pages/posts/manual/ts-advanced-grammar-manual.md': {
+    'pages/posts/manual-windows-setup.md': {
       routes:
-        | '/posts/manual/ts-advanced-grammar-manual'
+        | '/posts/manual-windows-setup'
       views:
         | never
     }
-    'pages/posts/manual/vue-advanced-grammar-manual.md': {
+    'pages/posts/misc-bun-vs-nodejs.md': {
       routes:
-        | '/posts/manual/vue-advanced-grammar-manual'
+        | '/posts/misc-bun-vs-nodejs'
       views:
         | never
     }
-    'pages/posts/manual/windows-setup-manual.md': {
+    'pages/posts/misc-first-time-trying-roller-coaster.md': {
       routes:
-        | '/posts/manual/windows-setup-manual'
+        | '/posts/misc-first-time-trying-roller-coaster'
       views:
         | never
     }
-    'pages/posts/project-engineering/categorize-your-dependencies.md': {
+    'pages/posts/misc-vite-and-unbundled.md': {
       routes:
-        | '/posts/project-engineering/categorize-your-dependencies'
+        | '/posts/misc-vite-and-unbundled'
       views:
         | never
     }
-    'pages/posts/project-engineering/manually-split-chunks.md': {
+    'pages/posts/project-engineering-categorize-your-dependencies.md': {
       routes:
-        | '/posts/project-engineering/manually-split-chunks'
+        | '/posts/project-engineering-categorize-your-dependencies'
       views:
         | never
     }
-    'pages/posts/test/recursive-mono-nbsp-rendering.md': {
+    'pages/posts/project-engineering-manually-split-chunks.md': {
       routes:
-        | '/posts/test/recursive-mono-nbsp-rendering'
+        | '/posts/project-engineering-manually-split-chunks'
       views:
         | never
     }
-    'pages/posts/vite-and-unbundled.md': {
+    'pages/posts/test-recursive-mono-nbsp-rendering.md': {
       routes:
-        | '/posts/vite-and-unbundled'
+        | '/posts/test-recursive-mono-nbsp-rendering'
       views:
         | never
     }

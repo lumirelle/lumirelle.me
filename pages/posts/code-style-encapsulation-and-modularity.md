@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Encapsulation and Modularity'
 date: 2025-09-24T16:36+08:00
-update: 2026-02-09T22:51+08:00
+update: 2026-02-10T13:46+08:00
 lang: en
 duration: 4min
 type: blog+note
@@ -159,3 +159,7 @@ I mean, mending the situation before it is too late is always better than too ma
 ## Examples
 
 Hope there will be some examples in the future...
+
+## Antfu's Code Style
+
+[Antfu's code style](https://github.com/antfu/skills/blob/main/skills/antfu/SKILL.md) is a good reference for writing clean and maintainable code.

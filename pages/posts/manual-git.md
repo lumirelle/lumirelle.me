@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-01-06T15:10+08:00
+update: 2026-02-10T12:01+08:00
 lang: en
-duration: 15min
+duration: 17min
 type: note
 ---
 
@@ -23,9 +23,9 @@ Git is a distributed version control system, which is used to track changes in s
 
 - **Commit**:
 
-  A commit is a change record than the previous one. Each commit has a unique ID and contains information about the changes made.
+  A commit is a diff record than the previous one. Each commit has a unique ID and contains information about the changes made.
 
-  Different commits can based on the same previous commit, this forms a **commit history tree**.
+  If different commits are based on the same previous commit, this will form a **commit history tree**.
 
 - **Branch**:
 
@@ -34,7 +34,7 @@ Git is a distributed version control system, which is used to track changes in s
   ```txt
              +- biological sense branch -+
              v                           v
-             +--------------------------->
+             +===========================>
              |
   o----------+--------------------------->
 
@@ -42,9 +42,9 @@ Git is a distributed version control system, which is used to track changes in s
 
   +------------- Git branch -------------+
   |                                      v
-  |          +--------------------------->
+  |          +===========================>
   v          |
-  o----------+--------------------------->
+  o==========+--------------------------->
   ```
 
   The default branch is usually called `main` or `master`. You can create new branches based on the default branch to work on features or hotfixes without affecting it.
@@ -110,8 +110,9 @@ As a distributed version control system, Git allows you to collaborate with othe
 To add a remote repository, use the following command:
 
 ```bash
-# Alias `ren` = `remote-new` = (custom-alias): Add a remote repository, if `remote-name` is not
-# provided, it will use `origin` by default
+# Alias `ren` = `remote-new` = (custom-alias): Add a remote repository,
+# if `remote-name` is not provided, it will use `origin` by default
+#
 # Usage: git ren [remote-name] <remote-url>
 git ren https://github.com/username/repo.git
 ```
@@ -144,49 +145,137 @@ So, how can we work with branches? There are some common Git workflows:
 
 - **Centralized workflow**:
 
-  Everything works on the same main branch, only for personal projects.
+  Everything works on the main branch, uses tags to mark the version numbers. Release new version periodically or randomly.
+
+  Only for personal projects.
 
 - **Feature branch workflow**:
 
-  Create a new branch for each feature, and merge it back to the main branch after the task is done, suitable for small projects or personal projects.
+  Create a new branch for each feature, and merge it back to the main branch after the task is done. One or more merges can make a new version release. Tags on the main branch are used to mark the version numbers too.
 
-- **Git Flow workflow**:
+  Suitable for small projects or personal projects.
 
-  With some stable branches/branch groups like `main`, `develop` (or `dev`) , some temporary assistant branches like `release`, `hotfix/emergency` (or `hotfix/emerg`) , `feature` (or `feat`) , suitable for medium to large projects.
-  - `main` branch/branch group is the stable and reliable one of your project;
-  - `develop` branch contains the **completed** new features;
-  - `release` branch group is the branch for the next release.
-  - `hotfix` branch group is the branch for hotfixes.
-  - `feature` branch group is the branch for new features.
+- **Git flow workflow**:
+
+  With some long-term branches like `main`, `dev` (or `develop`) , and some temporary assistant branch groups like `release`, `hotfix/hotfeat`, `feat` (or `feature`) , suitable for medium to large projects:
+  - `main` branch is always the stable version, each merge to `main` branch will make a new release, and tags on the `main` branch are used to mark the version numbers;
+  - `dev` branch contains all of the **completed** new features for next iteration;
+  - `release` branch group is used to testing before making a new version release.
+  - `hotfix/hotfeat` branch group is used to make a hotfix or hotfeat to a released version.
+  - `feat` branch group is the branch for new features.
   - ...
 
-  For each feature, should create a new feature branch from `develop` branch, and merge them back to `develop` branch after the development is done.
+  When an iteration starts, for each feature, we should create a new feature branch from `dev` branch, and merge them back to `dev` branch after the development is done. For example:
 
-  After one period of development completed, should create a new `release` branch from `develop` to prepare for testing and release tasks, and vacate the `develop` branch for the next period of development.
+  | Iteration | Features       | Branch Name |
+  | --------- | -------------- | ----------- |
+  | v1.1.0    | New product: A | feat/a      |
+  |           | New product: B | feat/b      |
+  |           | New product: C | feat/c      |
+
+  After one iteration development completed (all features merged to `dev`), should create a new `release` branch from `dev` to prepare for testing and releasing, and vacate the `dev` branch for the next iteration development.
 
   After the test & release tasks (including bug fixes, changelog updates, etc.) are done, should merge the `release` branch back to `main` to create a new release, and `develop` to integrate the changes.
 
-  For hotfix and emergency features, should create a new `hotfix/emergency` branch from `main`, and create a new `release` branch for testing and release tasks after the development is done. After the tasks are done too, merge the `hotfix/emergency` branch back to `main` to create a new release, and `develop` to integrate the changes.
+  The final branch graph will be like this:
 
-  If your project provides more than one maintained version to the users, like `v1` and `latest`, you can use `v1` branch for `v1` version, and `main` branch for the latest version. The status of the `v1` branch is the same as the `main` branch, but commonly you don't want to providing new features on the `v1` branch, so `v1` branch has not corresponding `feature` branch group and `develop` branch, but `hotfix` branch group and `release` branch.
+  `*` means a node of the branch
 
-  You can also extend this workflow as needed, for example, you can define a new branch `test` for testing tasks, and use `release` branch for user acceptance testing tasks and release tasks.
+  `o` means the first node of the branch
 
-- **Fork workflow**:
+  `x` means the last node of the branch
 
-  Fork the original repository, create a new branch for feature development, and make a pull request to the original repository after the task is done. Suitable for open source projects.
+  `+` means a merge node of the branch
 
-You can choose one of the workflows above based on your project's size and complexity.
+  `@` means a iteration start node for that long-term branch
 
-This article will use the most complex Git Flow workflow as an example.
+  `$` means a iteration end node for that long-term branch
+
+  `@&$` means both the iteration start and end node for that long-term branch
+
+  `~` means working on that branch, contains a bunch of nodes
+
+  `...` means other iteration
+
+  ```txt
+         (v1.0.0)                             (v1.1.0)
+          ^                                    ^
+  o- ... -*-----------------------------------@&$- ... -> (main)
+  |                                            ^
+  |                                            |
+  |                                    o~~~~~~~x (release/v1.1.0)
+  |      (after create release/v1.0.0) ^       |
+  v       ^                            |       v
+  o- ... -@------+----------+----------$- ... -+- ... -> (dev)
+          |      ^          ^          ^
+          |      |          |          |
+          o~~~~~~x (feat/a) |          |
+          |                 |          |
+          |                 |          |
+          o~~~~~~~~~~~~~~~~~x (feat/b) |
+          |                            |
+          V                            |
+          o~~~~~~~~~~~~~~~~~~~~~~~~~~~~x (feat/c)
+  ```
+
+  For hotfix and hotfeat, should create a new `hotfix/hotfeat` branch from `main`, and create a new `release` branch for testing and releasing after the development is done. After the tasks are done too, merge the `hotfix/hotfeat` branch back to `main` to create a new release, and `dev` to integrate the changes.
+
+  For example:
+
+  | Current Main Version | Hotfix/Hotfeat | Branch Name |
+  | -------------------- | -------------- | ----------- |
+  | v1.1.0               | Hotfix: A      | hotfix/a    |
+  |                      | Hotfeat: B     | hotfeat/b   |
+
+  And the branch graph will be like this:
+
+  ```txt
+         (v1.1.0)    (v1.1.1)                   (v1.1.2)
+          ^           ^                          ^
+  o- ... -*-----------+--------------------------+- ... -> (main)
+  |       |           ^                          ^
+  |       |           |                          |
+  |       |   +~~~~~~~x (release/v1.1.1) +~~~~~~~x (release/v1.1.2)
+  |       |   ^       |                  |       |
+  |       |   |       v                  |       V
+  o- ... -|---|-------+------------------|-------+- ... -> (dev)
+          |   |                          |
+          o~~~x (hotfix/a)               |
+          |                              |
+          |                              |
+          o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~x (hotfeat/b)
+  ```
+
+  > [!Caution]
+  >
+  > 1. Never merge a uncompleted/postponed feature branch to the `dev` branch
+  > 2. If you want to integrate some changes on `dev` branch to your feature branch, use `rebase` please.
+
+- **Open source workflow**:
+
+  A variant of Git flow workflow, with only `main` and `feat` branches, and additional `v{version}` branch group.
+  - `main` branch is for the next major version
+  - `v{version}` branch group is for the current released major versions, e.g. `v1.0`, `v2.0`, etc. Tags on these branches are used to mark the version numbers, e.g. `v1.0.0`, `v2.0.0`, etc.
+  - `feat` branch group is for new features, which will be merged to `main` or `v{version}` branch after the development is done.
+
+  For participants who are not the maintainers of the repository, they can fork this repository and create a new feature branch in their fork, and make a pull request to `main` or `v{version}` branch of the original repository after the development is done.
+
+  Suitable for open source projects.
+
+You can choose one of the workflows above based on your project's size, complexity or your preference.
+
+> [!Note]
+>
+> This article will use the most complex Git flow workflow as an example.
 
 ### Create a New Feature Branch
 
-After the initial commit, we should create a `dev` branch based on the `main` to hold completed new features.
+After the initial commit, we should create a `dev` branch immediately based on the `main` for iterations.
 
 ```bash
 # Alias `swn` = `switch-new` = `switch --create`: Switch to a new branch and create it. If the
 # `start-point` is not provided, it will use the current branch by default.
+#
 # Usage: git swn <branch-name> [start-point]
 git swn dev main
 ```
@@ -195,9 +284,9 @@ For each new feature, we will create a new feature branch based on the `dev` bra
 
 > [!Caution]
 >
-> If the feature is out of development period, that's mean it's a emergency feature, should treat it as a hotfix.
+> Although we say **"NOT TO MERGE UNCOMPLETED/POSTPONED FEATURE BRANCH TO DEV"**, but you cannot affect other's behavior.
 >
-> You should also care about whether the `dev` branch contains incomplete features, if so, you should create new feature branch based on the more previous commit to escape the incomplete features in your new feature branch. The best workaround is to create a new feature branch based on the `main` branch.
+> If you found that there is already a uncompleted/postponed feature branch merged to `dev`, the simply workaround is to create you feature branch based on the specific commit before it or the `main` branch.
 
 ```bash
 git swn feature/your-feature-name dev
@@ -212,6 +301,7 @@ When you work on your feature branch, you may want to discard some changes in yo
 ```bash
 # Alias `x` = `discard` = (custom-alias): Discard changes under specific paths
 # in working directory
+#
 # Usage: git x <...path>
 git x index.html index.css
 ```
@@ -229,6 +319,7 @@ When you work on your feature branch, you may want to unstage some changes in yo
 ```bash
 # Alias `u` = `disadd` = (custom-alias): Unstage changes under specific paths
 # in staging area
+#
 # Usage: git u <...path>
 git u index.html index.css
 ```
@@ -298,6 +389,7 @@ This is the only one choice in the case above, the cost is that the commit histo
 ```bash
 # Alias `rv` = `revert`: Revert a specific commit by its ID or relative
 # position to HEAD
+#
 # Usage: git rv <commit-id|relative-head>
 git rv HEAD
 ```
@@ -308,12 +400,14 @@ Come back to general workflow, after you finished your feature on your feature b
 
 ```bash
 # Alias `sw` = `switch`: Switch to an existing branch
+#
 # Usage: git sw <branch-name>
 git sw dev
 
 # Alias `m` = `merge-with-default-message` = (custom-alias): Merge a specific
 # branch into the current branch with default  message:
 # "chore: merge branch branch-name into current-branch-name"
+#
 # Usage: git m <branch-name>
 git m feature/your-feature-name
 
@@ -321,7 +415,7 @@ git m feature/your-feature-name
 git p
 ```
 
-When all features are merged into the `dev` branch, and ready for testing, this means one period of development is done, you should create a new `release` branch to prepare for testing and release tasks:
+When all features are merged into the `dev` branch, and ready for testing, this means one iteration is done, you should create a new `release` branch to prepare for testing and releasing:
 
 ```bash
 git sw dev
@@ -336,25 +430,26 @@ git p
 
 Your test tasks now can be performed on the `release` branch.
 
-When your test team finds some bugs during testing, you can commit the bug fixes directly on the `release` branch, and then merge the `release` branch back to the `develop` branch again to integrate the bug fixes:
+When your test team finds some bugs during testing, you can commit the bug fixes directly on the `release` branch:
 
 ```bash
 # Apply some bug fixes
-git sw test
+git sw release/vx.x.x
 git a .
 git cm "fix: some bugs found during testing"
 git p
-
-# Merge `test` branch back to `dev` branch to integrate the bug fixes
-git sw dev
-git m test
-git p
 ```
 
-After all test tasks are done and verified, you can finally create a new release by merging the `release` branch back to the `main` branch:
+After all test tasks are done and verified, you can finally create a new release by merging the `release` branch back to the `main` branch, and then merge the `release` branch back to the `dev` branch again to integrate the bug fixes:
 
 ```bash
+# Merge `release` branch to `main` branch to create a new release
 git sw main
+git m release/vx.x.x
+git p
+
+# Merge `release` branch back to `dev` branch to integrate the bug fixes
+git sw dev
 git m release/vx.x.x
 git p
 ```
@@ -367,6 +462,7 @@ After a new release, we should create a version tag to mark this point on the `m
 git sw main
 
 # Alias `t` = `tag-wrapper` = (custom-alias): Create a new tag with a specific name
+#
 # Usage for Simple tag:
 # git t <tag-name>
 # Usage for Annotated tag:
@@ -385,6 +481,7 @@ Or if you want delete a tag both locally and on remote:
 
 ```bash
 # Alias `tx` = `tag-delete` = (custom-alias): Delete a specific tag
+#
 # Usage: git tx <tag-name> [-o, -origin] [-a, -all]
 git tx -a v1.0.0
 ```
@@ -397,6 +494,7 @@ When something changes been integrated into the `dev` branch, and you also want 
 git sw feature/your-feature-name
 
 # Alias `r` = `rebase`: Rebase the current branch onto a specific branch
+#
 # Usage: git r <branch-name>
 git r dev
 ```
@@ -405,7 +503,11 @@ git r dev
 >
 > Do not rebase a branch which has been **both pushed to remote and shared with others**.
 >
-> Rebase likes to pull out a "branch" from the tree and insert it into another place. For other collaborators working on this branch, they will lose their branch. This may cause problems for everyone, so please just use it with caution.
+> Rebase likes to pull out a "branch" from the tree and insert it into another place. For other collaborators working on this branch, they will lose their branch.
+>
+> What's worse, they will probably do a force push at any cost. (Don't trust user's input, and also don't trust your collaborator's behavior, this simple principle just suitable for many many situations 😅)
+>
+> This will bring you a lot of trouble, so please just use it with caution.
 
 ### Delete Branches
 
@@ -419,10 +521,17 @@ When you finished your feature development and merged it back to the `dev` branc
 
 When you finished your release tasks and merged it back to the `main` and `dev` branches, you can delete your `release` branch, because it's mission is accomplished too.
 
+After a branch's mission is accomplished, everything you want to do with it should targeting the later branches. A simple example, after new version release, any bug fix will upgrade to "hotfix".
+
+> It’s hard to collect the water after it's spilled~
+>
+> 覆水难收~
+
 To delete a branch locally:
 
 ```bash
 # Alias `bx` = `branch-delete` = (custom-alias): Delete a specific branch
+#
 # Usage: git bx <branch-name> [-o, --origin] [-a, --all] [-f, --force]
 git bx feature/your-feature-name
 git bx release/vx.x.x
@@ -444,11 +553,12 @@ git bx -a release/vx.x.x
 
 ### Cherry-Pick Commits
 
-Sometimes, you may want to apply some specific commits from one branch to another branch without merging the entire branch. In this case, you can use the cherry-pick command to apply the changes introduced by specific commits.
+Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing on the entire branch. In this case, you can use the cherry-pick command to apply the changes introduced by specific commits.
 
 ```bash
 # Alias `cp` = `cherry-pick`: Cherry-pick a specific commit by its ID
 # (or relative position to HEAD?)
+#
 # Usage: git cp <commit-id|relative-head?>
 # This is a short commit ID example:
 git cp 3b88e2d

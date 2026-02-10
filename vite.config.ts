@@ -261,7 +261,7 @@ async function generateOg(title: string, output: string) {
   }
   const svg = ogSVg.replaceAll(/\{\{([^}]+)\}\}/g, (_, name) => data[name] || '')
 
-  console.log(`Generating ${output}`)
+  console.log(`Generating ${output}. Notice you should install "Commic Shanns" font in your system.`)
   try {
     await sharp(Buffer.from(svg))
       .resize(1200 * 1.1, 630 * 1.1)

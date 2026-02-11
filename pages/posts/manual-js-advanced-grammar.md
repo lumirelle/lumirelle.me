@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-01-28T11:11+08:00
+update: 2026-02-11T16:25+08:00
 lang: en
-duration: 71min
+duration: 89min
 type: note
 ---
 
@@ -24,9 +24,21 @@ JavaScript has [automatic semicolon insertion (ASI)](https://tc39.github.io/ecma
 <!-- eslint-skip -->
 
 ```js
+// Example 1
 console.log('Hello')
 
-[1, 2, 3].forEach(n => console.log(n))
+// [!code highlight:1]
+[1].forEach(n => console.log(n))
+
+// Example 2
+(function () {
+  console.log('This is an anonymous function')
+})
+
+// [!code highlight:1]
+() => {
+  console.log('This is an arrow function')
+}
 ```
 
 In this case, you will get an error, because the JavaScript engine will interprets it as:
@@ -34,16 +46,42 @@ In this case, you will get an error, because the JavaScript engine will interpre
 <!-- eslint-skip -->
 
 ```js
-console.log('Hello')[1, 2, 3].forEach(n => console.log(n))
+// Example 1
+console.log('Hello')[1]
+
+// [!code highlight:1]
+.forEach(n => console.log(n))
+
+// Example 2
+(function () {
+  console.log('This is an anonymous function')
+})()
+
+// [!code highlight:1]
+=> {
+  console.log('This is an arrow function')
+}
 ```
 
-The best practice (for me) is always to use variable instead of array literal, so that I can keep omitting semicolons in any situation:
+Use variable can avoid these problem:
+
+<!-- eslint-disable prefer-arrow-callback,antfu/top-level-function -->
 
 ```js
+// Example 1
 console.log('Hello')
 
 const arr = [1, 2, 3]
 arr.forEach(n => console.log(n))
+
+// Example 2
+const anonymousFunc = function () {
+  console.log('This is an anonymous function')
+}
+
+const arrowFunc = () => {
+  console.log('This is an arrow function')
+}
 ```
 
 ### The Modern Code Style, `"use strict"`
@@ -54,12 +92,12 @@ For a long time, JavaScript evolved without compatibility issues. New features w
 
 That had the benefit of never breaking existing code. But the downside was that many early design defects got stuck in the language forever.
 
-For example, you can assign a value to a variable that has not been declared, that will create a global variable implicitly. But if there is already a global variable with the same name that used by other part of the code, it will be overwritten without any warning or error:
+For example, you can assign a value to a variable that has not been declared, that will create a global variable implicitly, just like Python:
 
 _src/counter.js_
 
 ```js
-// There is already a global variable `counter` fetched from the server
+// Without explicit declaration
 counter = await fetch('/api/counter').then(res => res.json())
 
 // Omit 2000 lines of code...
@@ -78,18 +116,20 @@ yourFunctionUseCounter(counter)
 someFunctionUseCounter(counter)
 ```
 
-Another example is global `this`, in non-strict mode, `this` in a regular function (not a method) will refer to the global object, which can lead to unexpected behaviors:
+Another example is global `this`, in non-strict mode, `this` in a regular function (not method or constructor) will refer to the global object, which can lead to unexpected behaviors:
 
 ```js
 // In this case (non-strict mode), `this` is the global object `window` (browser) or `globalThis` (node.js)
-console.log(this)
+(function () {
+  console.log(this) // -> global object
+})()
 ```
 
 `"use strict"` directive is a way to end these situations, let JavaScript developers write more secure and optimized code, so we should always use it in modern JavaScript development.
 
 #### How to `"use strict"`?
 
-For **CommonJS** modules, you need to explicitly enable it by adding `"use strict"` to the top of a file or a function:
+For **CommonJS module** files, you need to explicitly enable it by adding `"use strict"` to the top of a file or a function:
 
 _src/commonjs.js_
 
@@ -109,7 +149,7 @@ function foo() {
 }
 ```
 
-For **ES modules**, everything is in strict mode by default:
+For **ES module** files, everything is in strict mode:
 
 _src/es-module.js_
 
@@ -125,57 +165,54 @@ export function foo() {
 }
 ```
 
-And **Classes** are always in strict mode by default too:
+And code inside `class` is always in strict mode too:
 
 _src/class.js_
 
 ```js
 class MyClass {
   constructor() {
-    console.log('This class is in strict mode')
+    console.log('Code inside class is in strict mode')
   }
 }
 ```
 
-### The Ten SINS of `var`
+### Use `let` and `const` Instead of `var`
 
-`var` is a very different beast than `let`, it has a lot of weird behaviors different from the common way of variable declaration in modern languages. So we had to talk about it separately.
+`var` is a very different beast than `let` and `const`, it has a lot of weird behaviors different from the common way of variable declaration in modern languages.
 
-You shouldn't use `var` in modern JavaScript code, but you should know its behaviors to understand why you shouldn't use it.
+You shouldn't use `var` in modern JavaScript development, but it's still important to understand its behavior, because you may encounter it in old codebases, in some libraries or the build outputs.
 
-#### `var` Has No Block Scope
+#### Missing Block Scope
 
-`var` only has global scope and function scope, for instance:
+`var` only has **global scope** and **function scope**, the **block scope** is missing, for instance:
 
-<!-- eslint-disable no-var,vars-on-top,block-scoped-var -->
+<!-- eslint-disable no-use-before-define,no-var,vars-on-top,block-scoped-var -->
 
 ```js
-if (true) {
+/** A global scope `var` */
+var o = 1
+console.log(o) // -> 1
+
+function foo() {
+  /** A function scope `var` */
   var x = 1
 }
-console.log(x) // -> 1, `x` is accessible here
-```
+console.log(x) // -> ReferenceError: `x` is not defined
 
-As `var` has no block scope, we've got a global variable `x`.
-
-If we use `var` inside a function, it will be scoped to that function:
-
-<!-- eslint-disable no-var,vars-on-top,block-scoped-var -->
-
-```js
-function foo() {
-  if (true) {
-    var y = 2
-  }
-  console.log(y) // -> 2, `y` is accessible here
+if (true) {
+  /**
+   * There is no block scope for `var`,
+   * so this is still a global scope `var`
+   */
+  var y = 1
 }
-foo()
-console.log(y) // -> ReferenceError: `y` is not defined
+console.log(y) // -> 1, `y` is still accessible here
 ```
 
 > [!Note]
 >
-> As there was only `var` in the past, people used to use **IIFE (Immediately Invoked Function Expression)** to make workaround for the lack of block scope:
+> As there was only `var` in the old JavaScript, people used to use [IIFE (Immediately Invoked Function Expression)](#iife-immediately-invoked-function-expression) to avoid global scope pollution:
 >
 > <!-- eslint-disable no-var -->
 >
@@ -185,21 +222,26 @@ console.log(y) // -> ReferenceError: `y` is not defined
 >   var y = 2
 >   console.log(x + y) // 3
 > })()
+>
+> console.log(x) // ReferenceError: `x` is not defined
+> console.log(y) // ReferenceError: `y` is not defined
 > ```
 >
-> That's why sometimes you can find them appearing in some old JavaScript code. Nowadays, we can use `let` and `const` to create block scope variables, so IIFE is no longer necessary.
+> That's why IIFE exists. With `let` and `const`, we don't need this trick anymore.
 
-#### `var` Declarations are Hoisted
+#### Declaration Hoist
 
-`var` declarations are hoisted to the top of their enclosing function or global scope. This means that you can use a `var` variable before its declaration without getting a `ReferenceError`:
+`var` declarations are implicitly hoisted to the top of their function or global scope. This means you can use a `var` variable before its explicit declaration in code without getting a `ReferenceError`:
 
 <!-- eslint-disable no-use-before-define,no-var,vars-on-top -->
 
 ```js
+// What a bullshit code,
+// but it really works 😅
 a = 3
-console.log(a) // 3
+console.log(a) // -> 3
 var a
-console.log(a) // 3
+console.log(a) // -> 3
 ```
 
 This is technically equivalent to:
@@ -207,15 +249,35 @@ This is technically equivalent to:
 <!-- eslint-disable no-var -->
 
 ```js
-var a
+var a // This declaration is hoisted to the top of the scope
 a = 3
 console.log(a) // 3
 console.log(a) // 3
 ```
 
-Notice that, **declarations are hoisted, but assignments are not.**
+Notice that, **declarations are hoisted, but assignments are not**:
 
-#### `var` Tolerates Redeclarations
+<!-- eslint-disable no-use-before-define,no-var,vars-on-top -->
+
+```js
+console.log(a) // -> undefined
+
+var a = 3
+```
+
+This is technically equivalent to:
+
+<!-- eslint-disable no-var -->
+
+```js
+var a // This declaration is hoisted to the top of the scope
+
+console.log(a) // -> undefined, because `a` is declared but not assigned yet
+
+a = 3
+```
+
+#### Tolerate Redeclaration
 
 You can redeclare a variable using `var` without getting an error:
 
@@ -227,13 +289,273 @@ var b = 5
 console.log(b) // -> 5
 ```
 
-This kind of tolerance is the most intolerable thing for us with `var`!
+This kind of tolerance is the most intolerable thing for us with `var`.
 
-## Data Types
+When you have a HTML page with two forms and two external JavaScript files:
+
+_src/index.html_
+
+```html
+<html>
+  <head>
+    <!-- ... -->
+  </head>
+  <body>
+    <!-- ... -->
+    <script src="./a.js"></script>
+    <script src="./b.js"></script>
+  </body>
+</html>
+```
+
+_src/a.js_
+
+<!-- eslint-disable no-var -->
+
+```js
+// Ha! We use formData to store the user input!
+var formData = {
+  name: 'Alice',
+  age: 30,
+}
+$('#name').on('input', function () {
+  formData.name = this.value
+})
+$('#age').on('input', function () {
+  formData.age = this.value
+})
+$('#btn1').on('click', () => {
+  $.ajax({
+    url: '/api/submit',
+    method: 'POST',
+    data: formData,
+  })
+})
+```
+
+_src/b.js_
+
+<!-- eslint-disable no-var -->
+
+```js
+// Hints: This file is created by copy-pasting
+
+// Ha! We use formData to store the user input!
+var formData = {
+  needs: 'some data',
+}
+$('#needs').on('input', function () {
+  formData.needs = this.value
+})
+$('#btn2').on('click', () => {
+  $.ajax({
+    url: '/api/submit',
+    method: 'POST',
+    data: formData,
+  })
+})
+```
+
+After user completing both two forms and click one of button... Ops! The endpoint will get the combined data for this two forms. 😇
+
+### Other General Code Styles
+
+Is there any other general code style? Yes:
+
+- [Symbol name pattern](./code-style-symbol-name-pattern), whatever the programming language you are using
+- [Encapsulation and modularity](./code-style-encapsulation-and-modularity), of course not only for JavaScript
+- [Antfu's code style](https://github.com/antfu/skills/blob/main/skills/antfu/SKILL.md), highly recommended for JavaScript and TypeScript development
+
+Here is the most important piece of advice: **Don't get lost in finding best practices. They are born from practicing.**
+
+## Data Type
+
+### Primitive
+
+In JavaScript, a primitive (primitive value, primitive data type) is data that is not an [object](#object) and has no [methods](https://developer.mozilla.org/en-US/docs/Glossary/Method) or [properties](https://developer.mozilla.org/en-US/docs/Glossary/Property/JavaScript).
+
+There are 7 primitive types in JavaScript:
+
+- `string`
+- `number`
+- `bigint`
+- `boolean`
+- `symbol`
+- `undefined`
+- `null`
+
+#### String
+
+`string` can be created by string literals or `String()` [constructor function](#constructor-function):
+
+<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
+
+```js
+const str1 = 'Hello, world!' // String literal
+const str2 = String('Hello, world!') // String primitive
+const str3 = new String('Hello, world!') // String object
+```
+
+String literals are character sequences enclosed in single quotes (`'...'`), double quotes (`"..."`) or backticks (`` `...` ``).
+
+Single quotes and double quotes support escape sequences, while backticks support [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) with interpolation and multi-line strings.
+
+> [!Warning]
+>
+> Call `String()` constructor function with `new` keyword is not recommended, we will explain it later in [object wrappers for primitive](#object-wrappers-for-primitive) section.
+
+For advanced string manipulation, see [the section below](#advanced-working-with-string).
+
+#### Number
+
+In JavaScript, there is only one number type, which is a double-precision 64-bit binary format IEEE 754 value. It can represent both integer and floating-point numbers.
+
+`number` can be created by number literals or `Number()` constructor function too:
+
+<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
+
+```js
+const num1 = 42 // Number literal
+const num2 = Number(42) // Number primitive
+const num3 = new Number(42) // Number object
+```
+
+You can use prefix `0b` for binary literals, `0o` for octal literals, and `0x` for hexadecimal literals:
+
+```js
+const binary = 0b1010 // Binary literal, equals to 10 in decimal
+const octal = 0o52 // Octal literal, equals to 42 in decimal
+const hexadecimal = 0x2A // Hexadecimal literal, equals to 42 in decimal
+```
+
+Underscore (`_`) can be used as a separator for numeric literals to improve readability:
+
+```js
+const million = 1_000_000 // Equals to 1000000
+const bytes = 0b1010_1011_1100_1101 // Equals to 43981 in decimal
+```
+
+The maximum safe integer in JavaScript is `Number.MAX_SAFE_INTEGER` (2^53 - 1), and the minimum safe integer is `Number.MIN_SAFE_INTEGER` (-(2^53 - 1)). Numbers outside this range may lose precision.
+
+> [!Warning]
+>
+> Call `Number()` constructor function with `new` keyword is not recommended, we will explain it [later](#object-wrappers-for-primitive) too.
+
+#### BigInt
+
+`bigint` is a new primitive type introduced in ECMAScript 2020, it can represent integers with **arbitrary precision**.
+
+`bigint` can be created by appending `n` to the end of an integer literal, or by using the `BigInt()` constructor function:
+
+```js
+const bigInt1 = 1234567890123456789012345678901234567890n // BigInt literal
+const bigInt2 = BigInt('1234567890123456789012345678901234567890') // BigInt constructor function
+```
+
+> [!Note]
+>
+> Different from `string` and `number`, you may found that we cannot use `BigInt()` constructor function with `new` keyword (It will throw a TypeError).
+>
+> This is because `bigint` is newly introduced to JavaScript, and JavaScript changes the standard of the behavior of primitive object wrapper constructor, it disables the disrecommended behavior from language level. We will explain it [later](#object-wrappers-for-primitive) too.
+
+#### Boolean
+
+`boolean` can be created by boolean literals or `Boolean()` constructor function:
+
+<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
+
+```js
+const bool1 = true // Boolean literal
+const bool2 = Boolean(true) // Boolean primitive
+const bool3 = new Boolean(true) // Boolean object
+```
+
+> [!Warning]
+>
+> Also, call `Boolean()` constructor function with `new` keyword is not recommended, we will explain it [later](#object-wrappers-for-primitive) too.
+
+#### Symbol
+
+`symbol` is a special data type in JavaScript introduced in ECMAScript 2015.
+
+A `symbol` is a data type that represents unique, unforgeable identifiers. They are sometimes called atoms.
+
+Because a `symbol` is unique and unforgeable, you can only read a property value associated with a symbol if you have a reference to the original identifier.
+
+`symbol` can created by `Symbol()` constructor function, or `Symbol.for()` [static method](#static-member).
+
+`Symbol()` constructor always returns a unique symbol every time it is called, this means this kind of `symbol` are not shareable, they called **non-registered symbols**:
+
+```js
+const sym1 = Symbol()
+const sym2 = Symbol('foo') // -> 'foo' is just a description for that symbol
+const sym3 = Symbol('foo')
+console.log(sym1 === sym2) // -> false
+console.log(sym2 === sym3) // -> false
+console.log(sym1 === sym3) // -> false
+```
+
+`Symbol.for(key)` static method returns a symbol from the global symbol registry with the given key. If there is no symbol with the given key, a new symbol will be created and registered with that key. This means this kind of `symbol` are shareable, they called **registered symbols**:
+
+```js
+const sym1 = Symbol.for('foo')
+const sym2 = Symbol.for('foo')
+console.log(sym1 === sym2) // -> true
+```
+
+JavaScript has many built-in symbols, such as `Symbol.iterator`, `Symbol.toStringTag`, `Symbol.toPrimitive`, etc. You can use them to customize the behavior of JavaScript built-in operations. We will cover them in the section of corresponding operation later.
+
+> [!Note]
+>
+> Just like `bigint`, it's newly introduced to JavaScript, we cannot use `Symbol()` constructor function with `new` keyword (It will throw a TypeError).
+
+#### Undefined and Null
+
+`undefined` is a primitive value that represents the absence of a value or an uninitialized variable. It is the default value of variables that have not been assigned a value.
+
+`null` is a primitive value that represents the **intentional** absence of any object value. It is often used to indicate that a variable should have no value.
+
+We can create `undefined` and `null` by using their literals:
+
+```js
+const undef = undefined
+const nul = null
+```
+
+Something should be noticed is comparsion with `undefined` and `null`, we will cover them in the section of [comparing with `null` and `undefined`](#comparing-with-null-and-undefined) later.
 
 ### Object
 
-Like other OOP languages, everything except primitive values in JavaScript is an object.
+In JavaScript, objects can be seen as a collection of [properties](#property).
+
+They can be created by **object literal syntax** or **constructor function**.
+
+An object literal is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces (`{}`).
+
+```js
+const objLiteral = {
+  name: 'Alice',
+  age: 30,
+  greet() {
+    console.log(`Hello, my name is ${this.name} and I'm ${this.age} years old.`)
+  },
+}
+```
+
+[Constructor function](#constructor-function) is a [function](#function) that is used to create objects, it is called with the `new` keyword, and it can have its own properties and methods.
+
+```js
+function Person(name, age) {
+  this.name = name
+  this.age = age
+}
+Person.prototype.greet = function () {
+  console.log(`Hello, my name is ${this.name} and I'm ${this.age} years old.`)
+}
+const person = new Person('Alice', 30)
+```
+
+Like other OOP languages, everything except [primitive](#primitive) in JavaScript are objects.
 
 ```js
 const obj = {}
@@ -255,99 +577,64 @@ function func() {}
 console.log(func instanceof Object) // -> true
 ```
 
-#### Property Accessing Under the Hood
+#### Property
 
-In JavaScript, there are two ways to access properties of an object: dot notation (`obj.prop`) and bracket notation (`obj['prop']`).
-
-Both notations will call the internal method `[[Get]]` to retrieve the property value, and `[[Set]]` to set the property value.
-
-These two internal method is implemented by the JavaScript engine, and the signatures looks like:
+Property is identified using key value pair:
 
 ```js
-// obj: the object
-// propName: the name of the property
-// receiver: the value of `this` inside getter/setter
-[[Get]](obj, propName, receiver)
+const obj = {
+  key: 'value',
+}
 ```
 
-```js
-// obj: the object
-// propName: the name of the property
-// value: the value to set
-// receiver: the value of `this` inside getter/setter
-[[Set]](obj, propName, value, receiver)
-```
+Property name can be a `string`, `symbol` or any other type that can be converted to `string`, while property value can be any JavaScript type, including `object`.
 
-The key difference between the two notations is how they pass the `propName` argument to the internal methods:
+#### Property Name
 
-- Dot notation:
-
-  It will call `[[Get]]` or `[[Set]]` with a string literal as the property name.
-
-  ```js
-  const obj = { name: 'Alice' }
-  obj.name
-  // => [[Get]](obj, 'name', obj)
-  ```
-
-- Bracket notation:
-
-  If the expression inside the brackets is a Symbol, it will call `[[Get]]` or `[[Set]]` with a Symbol as the property name. Otherwise, it will call them with the value of the expression converted to a string as the property name.
-
-  <!-- eslint-disable dot-notation -->
-
-  ```js
-  const obj = { name: 'Alice' }
-  obj['name']
-  // => [[Get]](obj, String('name'), obj)
-  //    => [[Get]](obj, 'name', obj)
-  obj[1]
-  // => [[Get]](obj, String(1), obj)
-  //    => [[Get]](obj, '1', obj)
-  obj[{ key: 'name' }]
-  // => [[Get]](obj, String({ key: 'name' }), obj)
-  //    => [[Get]](obj, '[object Object]', obj)
-  ```
-
-#### Keys (Property Names) of an Object
-
-In technical, keys of an object can be only `string`, `number`, or `Symbol`. But in practice, everything execpt `Symbol` will be implicitly converted to `string`:
+Property name can be a `string`, `symbol` or any other type that can be converted to `string`, everything execpt `Symbol` will be implicitly converted to `string`:
 
 <!-- eslint-disable dot-notation -->
 
 ```js
 const obj = {}
-obj[1] = 'one' // Key `1` is converted to string `'1'`
-obj[true] = 'true' // Key `true` is converted to string `'true'`
-obj[null] = 'null' // Key `null` is converted to string `'null'`
-obj[undefined] = 'undefined' // Key `undefined` is converted to string `'undefined'`
-console.log(obj) // -> { '1': 'one', 'true': 'true', 'null': 'null', 'undefined': 'undefined' }
+// Key `1` is converted to string `'1'`
+obj[1] = 'one'
+// Key `true` is converted to string `'true'`
+obj[true] = 'true'
+// Key `null` is converted to string `'null'`
+obj[null] = 'null'
+// Key `undefined` is converted to string `'undefined'`
+obj[undefined] = 'undefined'
+
+// -> { '1': 'one', 'true': 'true', 'null': 'null', 'undefined': 'undefined' }
+console.log(obj)
 ```
 
-So, if you want to define an dict object, you should pay more attention to the key type:
+So you should pay more attention when you are iterating an object defined with non-string keys, for example:
 
 ```js
 const StatusEnum = {
   // [!code highlight:1]
-  success: 1, // As values, still numbers
+  success: 1, // Use `1` as values, still `number`
   failure: 0,
 }
 
 const StatusDict = {
   // [!code highlight:1]
-  1: 'success', // As keys, will be converted to strings
+  1: 'success', // Use `1` as keys, will be converted to `string` implicitly
   0: 'failure',
 }
 
 const array = [
   // [!code highlight:2]
+  // `status` is `number`
   { status: 1, message: 'Operation succeeded', name: null },
   { status: 0, message: 'Operation failed', name: null },
 ]
 
 Object.entries(StatusEnum).forEach(([key, value]) => {
   // [!code highlight:3]
-  // `item.status` is a number, but `key` is a string,
+  // `item.status` is `number`, but `key` is actually `string`,
   // They will never be equal!
   const item = array.find(item => item.status === key)
   if (item) {
@@ -355,6 +642,7 @@ Object.entries(StatusEnum).forEach(([key, value]) => {
   }
 })
 
+// [!code highlight:9]
 console.log(array)
 /**
  * Get name from `StatusEnum` failed,
@@ -366,7 +654,11 @@ console.log(array)
  */
 ```
 
-#### Dynamic (Computed) Property Names
+You may interested that is this will break the access of properties with non-string keys? No, because of the non-string property names can only used with bracket notation, and they will be converted to string implicitly too.
+
+See [property accessing under the hood](#property-accessing-under-the-hood) section for more details.
+
+#### Dynamic (Computed) Property Name
 
 We can use `[]` to reference a variable to define a dynamic property name, this is called "computed property names".
 
@@ -387,7 +679,7 @@ console.log(bag.apple)
  */
 ```
 
-Essentially, that works the same as below, but looks better:
+This is equivalent to, but has better readability than:
 
 ```js
 const fruit = prompt('Which fruit to buy?', 'apple')
@@ -397,19 +689,136 @@ const bag = {}
 bag[fruit] = 5
 ```
 
-#### Accessor Properties
+#### Method
+
+A method is a [function](#function) which is a property of an object.
+
+There are two kinds of methods: **Instance methods** and **static methods**.
+
+- Instance methods are build-in tasks performed by the object instance
+- Static methods are tasks that are called directly on the object constructor
+
+```js
+function Person(name) {
+  this.name = name
+  this.instanceMethod = function () {
+    console.log(`Hello, my name is ${this.name}`)
+  }
+}
+Person.staticMethod = function () {
+  console.log('This is a static method')
+}
+
+const person = new Person('Alice')
+person.instanceMethod() // -> Hello, my name is Alice
+Person.staticMethod() // -> This is a static method
+```
+
+> [!Note]
+>
+> When we talk about `F` is a method of `O`, it means function `F` uses `O` as its [`this`](#this) binding.
+>
+> So, `this` inside method `F` is `O`:
+>
+> ```js
+> const O = {
+>   name: 'Object O',
+>   F() {
+>     console.log(this.name)
+>   },
+> }
+>
+> O.F() // -> Object O
+> ```
+>
+> We will talk about changing `this` binding of a function in the section of [change this](#change-this) later.
+
+#### Property Accessing Under the Hood
+
+In JavaScript, there are two ways to access properties of an object: **dot notation (`obj.prop`)** and **bracket notation (`obj['prop']`)**.
+
+Both notations will call the internal method `[[Get]]` to retrieve the property value, and `[[Set]]` to set the property value.
+
+These two internal method is implemented by the JavaScript engine, we cannot access them directly, and the signatures look like:
+
+```js
+/**
+ * @param obj That object
+ * @param propName The property name
+ * @param receiver The value of `this` inside getter
+ */
+[[Get]](obj, propName, receiver)
+```
+
+```js
+/**
+ * @param obj That object
+ * @param propName The property name
+ * @param value The value to set
+ * @param receiver The value of `this` inside setter
+ */
+[[Set]](obj, propName, value, receiver)
+```
+
+The key difference between the two notations is how they pass the `propName` argument to the internal methods:
+
+- Dot notation:
+
+  It will call `[[Get]]` or `[[Set]]` with a string literal as `propName`.
+
+  ```js
+  const obj = { name: 'Alice' }
+  obj.name
+  // => [[Get]](obj, 'name', obj)
+  ```
+
+- Bracket notation:
+
+  If the expression inside the brackets is a `symbol`, it will call `[[Get]]` or `[[Set]]` with as it as `propName`.
+
+  Otherwise, it will call them with the value of the expression converted to a string as `propName`.
+
+  <!-- eslint-disable dot-notation -->
+
+  ```js
+  const obj = { name: 'Alice' }
+  obj['name']
+  // => [[Get]](obj, String('name'), obj)
+  //    => [[Get]](obj, 'name', obj)
+  obj[1]
+  // => [[Get]](obj, String(1), obj)
+  //    => [[Get]](obj, '1', obj)
+  obj[{ key: 'name' }]
+  // => [[Get]](obj, String({ key: 'name' }), obj)
+  //    => [[Get]](obj, '[object Object]', obj)
+  ```
+
+  This is why after the property name is converted to string implicitly, we can still using the original one with bracket notation to access it:
+
+  ```js
+  const obj = {
+    1: 'one', // Key `1` is converted to string `'1'` implicitly
+    2: 'two'
+  }
+  console.log(obj[1]) // -> 'one'
+  console.log(obj['1']) // -> 'one'
+  console.log(obj[2]) // -> 'two'
+  console.log(obj['2']) // -> 'two'
+  ```
+
+#### Accessor Property
 
 Object has two kinds of properties: **data properties** and **accessor properties**.
 
-Data properties just store different types of values, we already know how to work with them.
+Data properties just store different types of data, what we have seen before is data properties.
 
-Accessor properties are essentially functions that execute on getting and setting a value, but look like regular properties to an external code.
+Accessor properties are essentially functions that execute on getting and setting a value, look like the custom version of internal `[[Get]]` and `[[Set]]` methods we can control ourselves:
 
 ```js
 const obj = {
   // [!code highlight:7]
   /**
-   * Getter, the code executed on getting `obj._propName`
+   * Getter, the code will be executed on getting `obj.propName`
    */
   get propName() {
     console.log('Getter called')
@@ -418,7 +827,7 @@ const obj = {
 
   // [!code highlight:7]
   /**
-   * Setter, the code executed on setting `obj._propName = value`
+   * Setter, the code will be executed on setting `obj.propName = value`
    */
   set propName(value) {
     console.log('Setter called')
@@ -441,9 +850,9 @@ const a = obj.propName // -> Getter called implicitly
 
 In JavaScript, the order of properties in an object is not guaranteed, but in practice, most JavaScript engines maintain the order of properties following the rules below:
 
-- Integer-like properties (properties whose name can be converted to a non-negative integer) are ordered in ascending order.
-- String properties (not integer-like properties) are ordered in the order they were added to the object, after all integer-like properties.
-- Symbol properties are ordered in the order they were added to the object, after all string properties. They can not iterated by `for...in` loop or `Object.keys()`, but can be iterated by `Object.getOwnPropertySymbols()` or `Reflect.ownKeys()`.
+- Properties with number-like name are ordered in ascending order.
+- Properties with string name are ordered in the order they were added to the object, after all properties with number-like name.
+- Properties with symbol name are ordered in the order they were added to the object, after all properties with string name.
 
 For example:
 
@@ -457,14 +866,19 @@ const obj = {
   'x0': 'test-0',
   3: 'test-3'
 }
+// Properties with symbol name can not iterated by `for...in` loop
+// or `Object.keys()`, but can be iterated by
+// `Object.getOwnPropertySymbols()` or `Reflect.ownKeys()`.
 console.log(Reflect.ownKeys(obj)) // -> [ '3', 'x1', 'x0', Symbol(sym1) ]
 ```
 
-#### Deep Clone an Object
+#### Clone an Object
 
-As we all know, primitive values are copied by value, assigning or passing them will create a copy of the value; Objects are copied by reference, assigning or passing them will create a reference to the original object.
+As we all know, primitive values are stored directly in the variable, assigning or passing them to functions will create a **copy of the value**.
 
-So, if we assign an object to a variable, any modification on that variable will affect the original object:
+Object values are different, the variable only stores the reference to them, assigning or passing them to functions will create a **copy of the reference**, so they are still pointing to the same object value.
+
+For example:
 
 ```js
 const prim1 = 1
@@ -480,9 +894,24 @@ console.log(obj1.a) // -> 2
 console.log(obj2.a) // -> 2
 ```
 
-So, if we want to create a copy of an object, we need to clone it, and if the object has nested objects, we need to deep clone it.
+So, if we want to create a copy of object value, we need to clone it. Specially, when the object has nested objects, we need to deep clone it.
 
-For objects **without functions**, you can use built-in global function `structuredClone()` to safely deep clone it:
+Object spread syntax (`{ ...obj }`) can be used to shallow clone an object, but not for deep cloning:
+
+```js
+const obj1 = { a: 1, b: { c: 2 } }
+const obj2 = { ...obj1 }
+obj1.a = 2
+obj1.b.c = 3
+
+console.log(obj1.a) // -> 2
+console.log(obj1.b.c) // -> 3
+
+console.log(obj2.a) // -> 1, not affected
+console.log(obj2.b.c) // -> 3, affected because of shallow clone
+```
+
+For deep cloning objects **without functions**, you can use built-in global function `structuredClone()` (ECMAScript 2021) to achieve this:
 
 ```js
 const obj1 = { a: 1, b: { c: 2 } }
@@ -492,10 +921,10 @@ console.log(obj1.b.c) // -> 2
 console.log(obj2.b.c) // -> 3
 ```
 
-For objects **with functions**, you can use a library like `lodash.clonedeep` to achieve this:
+For objects **with functions** or JavaScript runtime does not support ECMAScript 2021, you can use a third-party library like `es-toolkit` to achieve this:
 
 ```js
-import cloneDeep from 'lodash.clonedeep'
+import { cloneDeep } from 'es-toolkit/object'
 
 const obj1 = { a: 1, b: { c: 2 } }
 const obj2 = cloneDeep(obj1)
@@ -504,14 +933,14 @@ console.log(obj1.b.c) // -> 2
 console.log(obj2.b.c) // -> 3
 ```
 
-#### Transform an Object to Primitive Types
+#### Transform Object to Primitive
 
 The object-to-primitive conversion is called automatically by many built-in functions and operators that expect a primitive as a value.
 
 There are 3 types (hints) of it, as described in the [specification](https://tc39.github.io/ecma262/#sec-toprimitive):
 
 - "string" (for `console.log` and other operations that need a string)
-- "number" (for maths like `+`, `-`, `*`, `/`, etc)
+- "number" (for math operators like `+`, `-`, `*`, `/`, etc)
 - "default" (few operators, usually objects implement it the same way as "number", like `Date`)
 
 The conversion algorithm is:
@@ -534,51 +963,507 @@ const obj = {
 }
 ```
 
-#### Object Wrappers for Primitive Types
+#### Object Wrappers for Primitive
 
-JavaScript has three primitive types that have corresponding object wrappers:
+Primitives except `null` and `undefined` have their corresponding object wrappers:
 
 - `String` for `string`
 - `Number` for `number`
+- `BigInt` for `bigint`
 - `Boolean` for `boolean`
+- `Symbol` for `symbol`
 
-When you access a property or method on a primitive value, JavaScript automatically wraps the primitive in its corresponding object wrapper, allowing you to use methods and properties defined on the wrapper's prototype, and then it will be destroyed:
+They are used to provide methods and properties for primitive values, **without changing their primitive nature**.
+
+When you access a property or method on a primitive value, JavaScript automatically wraps the primitive in its corresponding object wrapper, allowing you to use methods and properties in the wrapper instance, and then it will be destroyed:
 
 ```js
 const str = 'hello'
-console.log(str.toUpperCase())
 /**
- * JavaScript will wrap `str` with `String` object temporarily, and then destroy it
  * -> 'HELLO'
+ *
+ * JavaScript will wrap `str` with `String` object temporarily,
+ * and then destroy it
  */
+console.log(str.toUpperCase())
 ```
 
-The most important thing to use "object wrappers" is to avoid using `new` keyword with them, because that will return an object instead of a primitive value, may cause unexpected behavior:
+> [!Caution]
+>
+> You can manually create some of them by their constructor function with `new` keyword:
+>
+> <!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
+>
+> ```js
+> const strObj = new String('hello')
+> const numObj = new Number(42)
+> const boolObj = new Boolean(true)
+> ```
+>
+> But this is not recommended, because it will break the primitive nature of the value, and cause unexpected behavior:
+>
+> <!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
+>
+> ```js
+> const num1 = Number(0) // This returns a number, not an object
+> const num2 = new Number(0) // This returns an object, not a number!
+>
+> // This will be logged, because `num1` is `0`, a falsy value
+> if (!num1) {
+>   console.log('num1 is falsy')
+> }
+>
+> // This will NOT be logged, because `num2` is an object, and all objects are truthy
+> if (!num2) {
+>   console.log('num2 is falsy')
+> }
+> ```
+>
+> For `bigint` and `symbol` which are newly introduced to JavaScript, the language disables the disrecommended behavior of using their constructor function with `new` keyword directly, and you will get a `TypeError` if you try to do that:
+>
+> <!-- eslint-disable no-new,no-new-native-nonconstructor,unicorn/new-for-builtins -->
+>
+> ```js
+> new BigInt(123) // TypeError: BigInt is not a constructor
+> new Symbol('sym') // TypeError: Symbol is not a constructor
+> ```
+>
+> To see the difference between calling a function with and without `new` keyword, please refer to [constructor function](#constructor-function) for more details.
 
-<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
+#### Built-in Object
+
+JavaScript provides many built-in objects that you can use to perform various tasks. Some commonly used built-in objects include:
+
+| Object                                      | Description                                         |
+| ------------------------------------------- | --------------------------------------------------- |
+| `Object`                                    | The base object from which all objects inherit.     |
+| [`Array`](#advanced-working-with-array)     | Used to create and manipulate arrays.               |
+| [`Map`](#advanced-working-with-map-and-set) | A collection of key-value pairs.                    |
+| [`Set`](#advanced-working-with-map-and-set) | A collection of unique values.                      |
+| `Date`                                      | Used to work with dates and times.                  |
+| `RegExp`                                    | Used for pattern matching with regular expressions. |
+| ...                                         | ...                                                 |
+
+### Function
+
+Functions are code snippets that can be called by other code or itself, or variables that refer to the function.
+
+There are two kinds of functions: **function declarations** and **function expressions**.
+
+Function declarations is the general way to create function which will be hoisted, while function expressions are used to share function as values, so we can assign them to variables, pass them as arguments to other functions, or return them from other functions:
+
+<!-- eslint-disable antfu/top-level-function -->
 
 ```js
-const num1 = Number(0) // This returns a number, not an object
-const num2 = new Number(0) // This returns an object, not a number!
-
-// This will be logged, because `num1` is `0`, a falsy value
-if (!num1) {
-  console.log('num1 is falsy')
+// Function declaration
+function fn(args) {
+  /* function body */
 }
 
-// This will NOT be logged, because `num2` is an object, and all objects are truthy
-if (!num2) {
-  console.log('num2 is falsy')
+// Function expression
+(function (args) {
+  /* function body */
+});
+(args) => { /* function body */ }
+
+// Function expression with variable assignment
+const fn1 = function (args) {
+  /* function body */
+}
+const fn2 = (args) => {
+  /* function body */
 }
 ```
 
-The reason is that call a constructor function with `new` and without `new` can have completely different behavior, see [constructor functions](#constructor-functions) for more details.
+Function in JavaScript is also `object`.
 
-### Strings
+#### Function Declaration
 
-#### Accessing Characters
+Function declaration will be hoisted to the top of the scope, so you can call it before its declaration, just like [variable declaration with `var`](#declaration-hoist):
 
-You can access characters in a string by index, just like accessing elements in an array:
+```js
+console.log(fn(1, 2)) // -> 3
+function fn(a, b) {
+  return a + b
+}
+```
+
+We shouldn't depend on this behavior, as it will make the code less readable.
+
+#### Function Expression
+
+A function expression is a way to define a function as a value. It's similar to a function declaration, but it's not hoisted.
+
+<!-- eslint-disable antfu/top-level-function -->
+
+```js
+const func = function (a, b) {
+  return a + b
+}
+console.log(func(1, 2)) // -> 3
+```
+
+There is also a special kind of function expression called **arrow function** which we will cover [later](#arrow-function).
+
+#### Anonymous Function
+
+Anonymous functions are functions without a name, only function expressions can be anonymous, because function declarations must have a name:
+
+```js
+// Function declaration, must have a name
+function declaredFunc() {}
+
+// Anonymous function expression
+(function () {});
+() => {}
+```
+
+#### Named Function Expression
+
+A named function expression is a function expression that has a name. The name is **only accessible within the function itself**.
+
+So why do we need it? For instance, when we want to create a recursive function expression:
+
+<!-- eslint-disable antfu/top-level-function -->
+
+```js
+const doFact = function fact(n) {
+  if (n <= 1)
+    return 1
+  return n * fact(n - 1) // Use `fact` to call itself
+}
+```
+
+You may think we can use `doFact` to call itself, but that will not work if we reassign `doFact` to other value:
+
+<!-- eslint-disable antfu/top-level-function -->
+
+```js
+let doFact = function fact(n) {
+  if (n <= 1)
+    return 1
+  return n * doFact(n - 1) // Use `doFact` to call itself
+}
+
+const anotherFact = doFact
+doFact = null // Reassign `doFact` to `null`
+
+console.log(anotherFact(5)) // -> TypeError: doFact is not a function
+```
+
+That happens because the function takes `doFact` from the [outer lexical environment](#closure), and it can be changed by other code. That's why we need named function expression.
+
+#### Arrow Function
+
+An arrow function is a special function expression that is defined with the `=>` syntax.
+
+```js
+const func = (a, b) => a + b
+console.log(func(1, 2)) // -> 3
+```
+
+Arrow functions is quite different from regular function and function expression: Arrow functions have no [`this`](#this), `arguments`, `super`, and `new.target`, it's always bound to the outer lexical environment where the arrow function was created.
+
+The most common use case of arrow functions is avoid the change of `this`, especially in callbacks:
+
+```js
+const obj = {
+  name: 'Alice',
+  greet() {
+    setTimeout(() => {
+      // `this` in arrow function is the same as `this` in greet method,
+      // which is `obj`, so we can access `obj.name` here.
+      console.log(`Hello, my name is ${this.name}`)
+    }, 1000)
+  },
+}
+obj.greet() // -> Hello, my name is Alice
+```
+
+#### Inner/Outer Function
+
+An inner function is a function inside another function, while the function containing a function is called outer function:
+
+```js
+function outer() {
+  let a = 1
+
+  function inner() {
+    return a++
+  }
+
+  return inner()
+}
+```
+
+#### IIFE (Immediately Invoked Function Expression)
+
+As it's name, we can immediately invoke a function expression after defining it, and we should wrap the function expression with parentheses (`()`):
+
+```js
+(function () {
+  console.log('This is an IIFE')
+})();
+
+(() => {
+  console.log('This is also an IIFE')
+})()
+```
+
+#### Constructor Function
+
+A constructor function is a regular function that is used to create objects. It's expected to be called with the `new` keyword.
+
+Calling a constructor function with `new` and without `new` can have completely different behavior:
+
+- With `new`: A new object is created, and `this` inside the constructor points to that new object. If the constructor does not explicitly return an object, the new object is returned by default.
+
+  In other words, `new MyConstructor(...)` does something like:
+
+  ```js
+  function MyConstructor() {
+    // this = {} (implicitly)
+
+    this.value = 42
+
+    // return this (implicitly)
+  }
+  const obj1 = new MyConstructor()
+  ```
+
+- Without `new`: The constructor function is called as a regular function, and `this` inside the function points to the global object (or `undefined` in strict mode). The return value of the function is returned directly.
+
+  In other words, `MyConstructor(...)` does something like:
+
+  ```js
+  function MyConstructor() {
+    this.value = 42
+
+    // return (implicitly)
+  }
+  const obj2 = MyConstructor() // obj2 === undefined
+  ```
+
+We can use `new.target` to determine whether a function is called with `new` or not, so that we can limit the usage of a our constructor functions:
+
+```js
+function MyConstructor() {
+  // If `new.target` is `undefined`, it means the function is called without `new`,
+  // otherwise, it is called with `new`.
+  if (!new.target) {
+    throw new Error('MyConstructor() must be called with new')
+  }
+  this.value = 42
+}
+```
+
+> [!Note]
+>
+> There is a special case called ["derived constructor"](#derived-constructor), which will not create a new object itself, but the "parent constructor".
+
+#### `this`
+
+`this` is a special variable that refers to the context of the function call, there is a summary of the behavior of `this` in different contexts we seen before:
+
+- For a regular function, `this` refers to the global object (or `undefined` in strict mode).
+- For a constructor function, `this` refers to the newly created object.
+- For a method, `this` refers to the object that the method is called on.
+- For an arrow function, `this` refers to the `this` of the outer lexical environment.
+
+#### Change `this`
+
+We can use `func.call()`, `func.apply()`, and `func.bind()` to change the `this` value of a function call.
+
+The only difference between `func.call` and `func.apply` is how to pass arguments to the function. `func.call` accepts arguments **as rest parameters**, while `func.apply` accepts arguments **as an array**.
+
+- `func.call(thisArg, arg1, arg2, ...)`
+- `func.apply(thisArg, [argsArray])`
+
+They can be used to change the `this` value of a function call for one-time:
+
+```js
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`)
+}
+
+const user1 = { name: 'John' }
+const user2 = { name: 'Jane' }
+greet.call(user1, 'Hello', '!') // -> Hello, John!
+greet.apply(user2, ['Hi', '.']) // -> Hi, Jane.
+```
+
+If you want to create a new function with a specific `this` value and arguments, you can use `func.bind`:
+
+- `func.bind(thisArg, arg1, arg2, ...)`
+
+For instance:
+
+```js
+function greet(greeting, punctuation) {
+  console.log(`${greeting}, ${this.name}${punctuation}`)
+}
+const user = { name: 'John' }
+
+// Create a new function with `this` set to `user` and first argument set to 'Hello',
+// Now, the new function only needs one argument.
+const greetUser = greet.bind(user, 'Hello')
+greetUser('!') // -> Hello, John!
+```
+
+If you want to create a function that is bound to a specific argument and left
+`this` unchanged, you can use this simple workaround:
+
+```js
+function partial(func, ...argsBound) {
+  return function (...args) { // This returns a new function, and passes `this` correctly
+    return func.call(this, ...argsBound, ...args)
+  }
+}
+
+const user = {
+  name: 'John',
+  greet(greeting, punctuation) {
+    console.log(`${greeting}, ${this.name}${punctuation}`)
+  }
+}
+user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
+user.greetHello('!') // -> Hello, John!
+```
+
+#### Function Overloading
+
+JavaScript does not support function overloading. The workaround is to create a general one that can handle all types of arguments, and then check the types of arguments inside the function body:
+
+```js
+function contact(a, b) {
+  if (typeof a === 'number' && typeof b === 'number') {
+    return `${a}${b}`
+  }
+  if (typeof a === 'string' && typeof b === 'string') {
+    return a + b
+  }
+  throw new Error('Invalid arguments')
+}
+```
+
+### Type Conversion
+
+#### Explicitly Converting to Number
+
+In JavaScript, we have three ways to convert a value to a number explicitly:
+
+- `Number.parseInt()`
+
+  `Number.parseInt()` will convert a value to a string first, then parse it to an integer number. It will ignore any trailing non-numeric characters:
+
+  ```js
+  console.log(Number.parseInt('42')) // -> 42
+  console.log(Number.parseInt('42px')) // -> 42
+  ```
+
+- `Number()`
+
+  `Number()` will convert a value to a number directly. It will return `NaN` if the value can not be converted to a number:
+
+  ```js
+  console.log(Number('42')) // -> 42
+  console.log(Number('42px')) // -> NaN
+  ```
+
+- Unary `+`
+
+  The unary `+` operator will also convert a value to a number directly, just like `Number()`, maybe a bit faster:
+
+  ```js
+  console.log(+'42') // -> 42
+  console.log(+'42px') // -> NaN
+  ```
+
+The only case you need to ignore trailing non-numeric characters is when you should use `Number.parseInt()`, otherwise, use `Number()` or unary `+` operator instead.
+
+For `Number()` or unary `+` operator, just follow your preference or your team's coding style. `Number()` is more explicit and human-readable, while unary `+` is more concise and maybe a bit faster.
+
+#### Implicit Type Conversion for Binary `+` Operator
+
+In JavaScript world, there are a bunch of implicit type conversions happening behind the scenes, that's the cost of its weakly typed nature.
+
+Binary `+` operator is one of the arithmetic operators in JavaScript.
+
+For different types of operands, the binary `+` operator will do implicit type conversion with the following rules:
+
+- If either operand is `string`, both operands will be converted to `string`, and then concatenated.
+- Otherwise, both operands will be converted to `number`, and then added.
+
+<!-- eslint-disable prefer-template -->
+
+```js
+console.log(1 + 2) // -> 3 (number)
+console.log(1 + []) // -> 0 (number)
+console.log(1 + true) // -> 2 (number)
+
+console.log('1' + 2) // -> '12' (string)
+console.log(1 + '2') // -> '12' (string)
+```
+
+> [!Note]
+>
+> The binary `+` operator is the only operator that does implicit type conversion to `string`.
+>
+> All other arithmetic operators (`-`, `*`, `/`, `%`, `**`) and unsafe comparison operators (`>`, `<`, `>=`, `<=`, `==`, `!=`) will always do implicit type conversion to `number`.
+>
+> That's why we can join strings with `+` operator!
+
+#### Implicit Type Conversion for Comparison Operators
+
+If you read through the note above, you must really know what will happen when you use unsafe comparison operators with different types of operands: They will be converted to `number` first, then compared.
+
+So there will be a funny consequence. It's possible that at the same time:
+
+- Two values are equal with `==`
+- One of them is `true` as a boolean and the other is `false` as a boolean
+
+For example:
+
+<!-- eslint-disable eqeqeq -->
+
+```js
+const a = 0
+console.log(Boolean(a)) // -> `false`, `0` is falsy
+
+const b = '0'
+console.log(Boolean(b)) // -> `true`, `'0'` is truthy
+
+console.log(a == b) // -> `true`! They are both converted to number `0`
+```
+
+#### Comparing with `null` and `undefined`
+
+`null` and `undefined` are still as it is in **unsafe equality comparisons** (`==`, `!=`) without any type conversion, and they are only equal to themselves and each other (`null == undefined` is `true`).
+
+But things are quite different in **relational comparisons** (`>`, `<`, `>=`, `<=`): `null` will be converted to `0`, while `undefined` will be converted to `NaN`.
+
+Because this, there is a strange result when comparing `null` and `undefined` with `0`:
+
+- `null` vs `0`:
+  - `null >= 0` is `true`, because `null` is converted to `0`.
+  - `null > 0` is `false`, because `null` is converted to `0`.
+  - `null == 0` is `false`, because `null` is left as it is, and it is really not equal to `0`. 😄
+- `undefined` vs `0`:
+  - `undefined > 0` is `false`, because `undefined` is converted to `NaN`.
+  - `undefined < 0` is `false`, because `undefined` is converted to `NaN`.
+  - `undefined == 0` is `false`, because `undefined` is left as it is, and it is really not equal to `0`. 😄
+
+The best practice is **NEVER to use relational comparisons with `null` or `undefined`**, but using unsafe equality comparisons with them is safe:
+
+I prefer to use `if (value == null)` instead of `if (value === null || value === undefined)`, because it's more concise and clear.
+
+I prefer to use `if (value == null)` instead of `if (value)`, because it's more secure.
+
+### Advanced Working with String
+
+#### Accessing Character
+
+You can access characters in a string by index, just like accessing elements in an array in other languages:
 
 ```js
 const str = 'hello'
@@ -600,10 +1485,10 @@ console.log(str.at(-1)) // -> 'o'
 >
 > You can use a polyfill like `core-js` to add support for it.
 
-#### Tagged Template Literals
+#### Tagged Template Literal
 
 JavaScript supports
-[tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates),
+[tagged template literal](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_templates),
 which allows you to create custom string processing functions:
 
 ```js
@@ -634,11 +1519,11 @@ const general = `
 `
 console.log(general)
 /**
- * The output looks like:
- *
- *   function test(x) {
- *     return x * x
- *   }
+ * ->
+ * ->   function test(x) {
+ * ->     return x * x
+ * ->   }
+ * ->
  */
 
 const unindented = unindent`
@@ -648,10 +1533,9 @@ const unindented = unindent`
 `
 console.log(unindented)
 /**
- * The output looks like:
- * function test(x) {
- *   return x * x
- * }
+ * -> function test(x) {
+ * ->   return x * x
+ * -> }
  */
 ```
 
@@ -666,15 +1550,17 @@ console.log(str1 > str2 ? 1 : -1) // -> 1 (in Unicode, 'ä' comes after 'z')
 console.log(str1.localeCompare(str2)) // -> -1 (in German, 'ä' comes before 'z')
 ```
 
-### Arrays
+This is helpful when you want to sort strings in a specific language.
 
-#### Accessing Elements
+### Advanced Working with Array
 
-The same as [strings](#accessing-characters).
+#### Accessing Element
+
+The same as [`string`](#accessing-character).
 
 #### Array Length Property
 
-`length` property of an array is writable. If you increase it manually, nothing interesting will happen. But if you decrease it manually, the array will be truncated. **The process is irreversible**:
+Contrary to your intuition, `length` property of an array is writable. If you increase it manually, nothing interesting will happen. But if you decrease it manually, the array will be truncated. **The process is irreversible**:
 
 ```js
 const arr = [1, 2, 3, 4, 5]
@@ -684,36 +1570,40 @@ arr.length = 3
 console.log(arr) // -> [1, 2, 3]
 ```
 
-So, the most simple way to clear an array is to set its `length` property to `0`. 😏
+So, the most simple and safe way to clear an array is to set its `length` property to `0`. 😏
 
-#### In-place array methods vs. non-mutating array methods
+#### In-place Array Methods vs. Non-mutating Array Methods
 
 Arrays have two kinds of methods: in-place methods and non-mutating methods. In-place methods modify the original array, while non-mutating methods return a new array without modifying the original one.
 
 In-place methods include:
 
-- `arr.push()`: Add elements to the end
-- `arr.pop()`: Remove the element from the end
-- `arr.unshift()`: Add elements to the beginning
-- `arr.shift()`: Remove the element from the beginning
-- `arr.splice()`: [Add, remove or replace elements](#arr-splice)
-- `arr.sort()`: Sort the array
-- `arr.reverse()`: Reverse the array
-- ...
+| Method          | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `arr.push()`    | Add elements to the end                        |
+| `arr.pop()`     | Remove the element from the end                |
+| `arr.unshift()` | Add elements to the beginning                  |
+| `arr.shift()`   | Remove the element from the beginning          |
+| `arr.splice()`  | [Add, remove or replace elements](#arr-splice) |
+| `arr.sort()`    | Sort the array                                 |
+| `arr.reverse()` | Reverse the array                              |
+| ...             | ...                                            |
 
 Non-mutating methods include:
 
-- `arr.toSpliced()`: No-mutating version of `arr.splice()`
-- `arr.toSorted()`: No-mutating version of `arr.sort()`
-- `arr.toReversed()`: No-mutating version of `arr.reverse()`
-- `arr.filter()`: Create a new array with all elements that pass the test implemented by the provided function
-- `arr.map()`: Create a new array with the results of calling a function on every element
-- `arr.reduce()`: Apply a function against an accumulator and each element to reduce it to a single value
-- `arr.flat()`: Flatten nested arrays
-- `arr.flatMap()`: Map each element and flatten the result
-- `arr.concat()`: Merge arrays
-- `arr.slice()`: Extract a section of an array and return a new array
-- ...
+| Method             | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| `arr.toSpliced()`  | No-mutating version of `arr.splice()`                                                        |
+| `arr.toSorted()`   | No-mutating version of `arr.sort()`                                                          |
+| `arr.toReversed()` | No-mutating version of `arr.reverse()`                                                       |
+| `arr.filter()`     | Create a new array with all elements that pass the test implemented by the provided function |
+| `arr.map()`        | Create a new array with the results of calling a function on                                 |
+| `arr.reduce()`     | Apply a function against an accumulator and each element to reduce it to a single value      |
+| `arr.flat()`       | Flatten nested arrays                                                                        |
+| `arr.flatMap()`    | Map each element and flatten the result                                                      |
+| `arr.concat()`     | Merge arrays                                                                                 |
+| `arr.slice()`      | Extract a section of an array and return a new array                                         |
+| ...                | ...                                                                                          |
 
 #### `arr.splice()`
 
@@ -747,9 +1637,9 @@ Non-mutating methods include:
   console.log(arr) // -> [1, 'a', 'b', 4, 5]
   ```
 
-#### Array-like Objects vs. Iterable Objects
+#### Array-like Object vs. Iterable Object
 
-An array-like object is an object that has:
+An array-like `object` is an object that has:
 
 1. a `length` property.
 2. indexed elements.
@@ -765,7 +1655,7 @@ const arrayLike = {
 }
 ```
 
-An iterable object is an object that implements the iterable protocol, which means it has a `Symbol.iterator` method that returns an iterator:
+An iterable `object` is an object that implements the iterable protocol, which means it has a `Symbol.iterator` method that returns an iterator (an object with a `next()` method):
 
 ```js
 const iterable = {
@@ -786,15 +1676,17 @@ const iterable = {
 
 So an array-like object is not necessarily iterable, and an iterable object is not necessarily array-like too.
 
-### `Map` and `Set`
+### Advanced Working with Map and Set
 
 #### `WeakMap` and `WeakSet`
 
-`WeakMap` and `WeakSet` are similar to `Map` and `Set`, but they only accept objects as keys (for `WeakMap`) or values (for `WeakSet`), and they do not prevent garbage collection of the objects used as keys or values.
+`WeakMap` and `WeakSet` are similar to `Map` and `Set`, but they only accept **objects** or **non-registered symbols** as keys (for `WeakMap`) or values (for `WeakSet`), and they does not create strong references to their keys (for `WeakMap`) or values (for `WeakSet`).
 
-What's more, they do not have methods to iterate over their elements, such as `keys()`, `values()`, `entries()`, or `forEach()`.
+That is, an object's presence as a key in a `WeakMap` or as a value in a `WeakSet` will not prevent that object from being garbage collected. Once that object is garbage collected, its entry in the `WeakMap` or `WeakSet` will become candidates for garbage collection as well (if they aren't strongly referred to elsewhere).
 
-They are designed to be used in scenarios where you want to **associate data with an object** without preventing that object from being garbage collected:
+However, they does not allow observing the liveness of their keys (for `WeakMap`) or values (for `WeakSet`), because of this, they do not have methods to get their size, such as `size` property; Also the methods to iterate over their elements, such as `keys()`, `values()`, `entries()`, or `forEach()`.
+
+They are designed to be used in scenarios where you want to **associate data with an object/store an object** without preventing that object from being garbage collected. Use `WeakMap` as an example:
 
 ```js
 const loggedInUsers = [
@@ -832,126 +1724,11 @@ function userLogout(user) {
 }
 ```
 
-## Type Conversion
+### Advanced Working with Object
 
-### Explicitly Converting Anything to Number
+#### Property Flag (So-called Property Descriptor)
 
-In JavaScript, we have three ways to convert a value to a number explicitly:
-
-- `Number.parseInt()`
-
-  `Number.parseInt()` will convert a value to a string first, then parse it to an integer number. It will ignore any trailing non-numeric characters:
-
-  ```js
-  console.log(Number.parseInt('42')) // -> 42
-  console.log(Number.parseInt('42px')) // -> 42
-  ```
-
-- `Number()`
-
-  `Number()` will convert a value to a number directly. It will return `NaN` if the value can not be converted to a number:
-
-  ```js
-  console.log(Number('42')) // -> 42
-  console.log(Number('42px')) // -> NaN
-  ```
-
-- Unary `+`
-
-  The unary `+` operator will also convert a value to a number directly, just like `Number()`, maybe a bit faster:
-
-  ```js
-  console.log(+'42') // -> 42
-  console.log(+'42px') // -> NaN
-  ```
-
-The only case you need to ignore trailing non-numeric characters is when you should use `Number.parseInt()`, otherwise, use `Number()` or unary `+` operator instead.
-
-For `Number()` or unary `+` operator, just follow your preference or your team's coding style. `Number()` is more explicit and human-readable, while unary `+` is more concise and maybe a bit faster.
-
-### Implicit Type Conversion
-
-#### For Binary `+` Operator
-
-Binary `+` operator is one of the arithmetic operators in JavaScript.
-
-For different types of operands, the binary `+` operator will do implicit type conversion with the following rules:
-
-- If either operand is a string, both operands will be converted to strings, and then concatenated.
-- Otherwise, both operands will be converted to numbers, and then added.
-
-<!-- eslint-disable prefer-template -->
-
-```js
-console.log(1 + 2) // -> 3 (number)
-console.log(1 + []) // -> 0 (number)
-console.log(1 + true) // -> 2 (number)
-
-console.log('1' + 2) // -> '12' (string)
-console.log(1 + '2') // -> '12' (string)
-```
-
-> [!Note]
->
-> The binary `+` operator is the only operator that does implicit type conversion to `string`.
->
-> All other arithmetic operators (`-`, `*`, `/`, `%`, `**`) and unsafe comparison operators (`>`, `<`, `>=`, `<=`, `==`, `!=`) will always do implicit type conversion to `number`.
->
-> That's why we can join strings with `+` operator!
-
-#### For Comparison Operators
-
-If you read through the note above, you must really know what will happen when you use unsafe comparison operators with different types of operands: They will be converted to `number` first, then compared.
-
-So there will be a funny consequence. It's possible that at the same time:
-
-- Two values are equal with `==`
-- One of them is `true` as a boolean and the other is `false` as a boolean
-
-For example:
-
-<!-- eslint-disable eqeqeq -->
-
-```js
-const a = 0
-console.log(Boolean(a)) // -> `false`, `0` is falsy
-
-const b = '0'
-console.log(Boolean(b)) // -> `true`, `'0'` is truthy
-
-console.log(a == b) // -> `true`! They are both converted to number `0`
-```
-
-> [!Note]
->
-> `null` and `undefined` are still as it is in **unsafe equality comparisons** (`==`, `!=`) without any type conversion, and they are only equal to themselves and each other (`null == undefined` is `true`).
->
-> But things are quite different in **relational comparisons** (`>`, `<`, `>=`, `<=`): `null` will be converted to `0`, while `undefined` will be converted to `NaN`.
->
-> Because this, there is a strange result when comparing `null` and `undefined` with `0`:
->
-> - `null` vs `0`:
->   - `null >= 0` is `true`, because `null` is converted to `0`.
->   - `null > 0` is `false`, because `null` is converted to `0`.
->   - `null == 0` is `false`, because `null` is left as it is, and it is really not equal to `0`. 😄
-> - `undefined` vs `0`:
->   - `undefined > 0` is `false`, because `undefined` is converted to `NaN`.
->   - `undefined < 0` is `false`, because `undefined` is converted to `NaN`.
->   - `undefined == 0` is `false`, because `undefined` is left as it is, and it is really not equal to `0`. 😄
->
-> The best practice is not to use relational comparisons with `null` or `undefined`, but using unsafe equality comparisons with them is safe:
->
-> I prefer to use `if (value == null)` instead of `if (value === null || value === undefined)`, because it's more concise and clear.
->
-> I prefer to use `if (value == null)` instead of `if (value)`, because it's more secure.
-
-## Advanced Working with Objects
-
-### Property Flags (So Called Descriptors)
-
-#### What are Property Flags?
-
-For [data properties](#accessor-properties), besides a value, have three special attributes (so-called "flags"):
+For [data properties](#accessor-property), besides a value, have three special attributes (so-called "flags"):
 
 - <details>
   <summary>`writable` – if `true`, the value can be changed, otherwise it’s read-only.</summary>
@@ -1054,7 +1831,7 @@ For [data properties](#accessor-properties), besides a value, have three special
 
   </details>
 
-For [accessor properties](#accessor-properties), they don't have `writable` flag, but instead have `get` and `set` functions:
+For [accessor properties](#accessor-property), they don't have `writable` flag, but instead have `get` and `set` functions:
 
 <!-- eslint-disable prefer-template -->
 
@@ -1135,11 +1912,11 @@ console.log(JSON.stringify(descriptor, null, 2))
 > }
 > ```
 
-#### Clone Properties with Flags
+#### Shallow Clone Property with Descriptor
 
-When we shallow clone an object with `Object.assign` or spread syntax `{ ...obj}`, only enumerable properties are copied, and the flags are not preserved (all flags will be `true` in the new object).
+When we shallow clone an object with `Object.assign` or spread syntax `{ ...obj}`, only enumerable properties are copied, and the property descriptors are not preserved (all property descriptors will be `true` in the new object).
 
-We can use `Object.getOwnPropertyDescriptors` to get all properties with their flags, and then use `Object.defineProperties` to clone them to a new object:
+We can use `Object.getOwnPropertyDescriptors` to get all properties with their descriptors, and then use `Object.defineProperties` to clone them to a new object:
 
 ```js
 const user = {}
@@ -1150,7 +1927,10 @@ Object.defineProperty(user, 'name', {
   configurable: false,
 })
 
-const clonedUser = Object.defineProperties({}, Object.getOwnPropertyDescriptors(user))
+const clonedUser = Object.defineProperties(
+  {},
+  Object.getOwnPropertyDescriptors(user)
+)
 
 const descriptor = Object.getOwnPropertyDescriptor(clonedUser, 'name')
 console.log(JSON.stringify(descriptor, null, 2))
@@ -1162,7 +1942,7 @@ console.log(JSON.stringify(descriptor, null, 2))
 } */
 ```
 
-#### Sealing an Object Globally
+#### Limiting Access to Object
 
 Property descriptors work at the level of individual properties.
 
@@ -1180,29 +1960,44 @@ And also there are tests for them:
 
 These methods are rarely used in practice, but good to know.
 
-### Prototypes, Inheritance
+#### Prototype, Inheritance
 
-#### What is Prototype?
+Like other OOP languages, there also the concept of inheritance in JavaScript.
 
-JavaScript uses prototype to express inheritance.
+The difference is JavaScript uses **prototype** to express inheritance.
 
-Every object has a hidden property `[[prototype]]` (which can be accessed by `__proto__` accessor property, or `Object.getPrototypeOf` & `Object.setPrototypeOf` method) finally referencing to `Object.prototype`, which is the top-level prototype.
+Every object has a hidden property `[[prototype]]` (which can be accessed by `__proto__` accessor property, or `Object.getPrototypeOf` & `Object.setPrototypeOf` method) finally referencing to `Object.prototype` (the top-level prototype for every object).
 
 > [!Note]
 >
-> `[[prototype]]` is internal and hidden property targetting to the prototype of an object;
->
-> `__proto__` is an accessor property (getter/setter) that exposes `[[prototype]]` to the user.
+> `[[prototype]]` is internal and hidden property targetting to the prototype of an object; `__proto__` is an accessor property (with getter/setter) that exposes `[[prototype]]` to the user.
 >
 > They have the same result, but they are quite different things.
+>
+> For modern JavaScript development, we shouldn't use `__proto__` to get or set the prototype of an object, they are in the Annex B of the ECMAScript specification, which means they are only for web browser compatibility.
+>
+> We can use the following standard methods to work with prototypes:
+>
+> - `Object.getPrototypeOf(obj)`: Get the prototype of `obj`.
+> - `Object.setPrototypeOf(obj, proto)`: Set the prototype of `obj` to `proto`.
+> - `Object.create(proto, [descriptors])`: Create a new object with the specified prototype (and property descriptors).
+>
+> Specially, for objects created by constructor functions, there is a convenient way to set their prototype, which will be covered in the [`prototype` property of a constructor function](#prototype-property-of-a-constructor-function) section.
 
-When we try to **get (only get)** a property of an object, if it doesn't exist in the object itself, JavaScript will look for it in the prototype, and then the prototype's prototype, and so on, until it finds the property or reaches the top-level prototype and returns `undefined`.
+When we try to **get (only get)** a property of an object, the JavaScript engine will:
 
-Through this way, an object can "inherit" properties from its prototype.
+1. Look for the property in the object itself.
+2. If not found, look for the property in the `[[prototype]]` of the object.
+3. If not found, look for the property in the `[[prototype]]` of the `[[prototype]]`, and so on until the final `[[prototype]]` reaches `null`.
+4. If still not found, return `undefined`.
+
+Through this way, an object can "inherit" properties from its prototype, and the prototype can also inherit properties from its prototype, and so on.
 
 > [!Note]
 >
 > Prototype can be only an object or `null`, set it to other types are not allowed and will be ignored.
+
+### Advanced Working with Function
 
 #### `prototype` Property of a Constructor Function
 
@@ -1216,11 +2011,23 @@ const user = new User('John')
 console.log(user.name) // -> 'John'
 ```
 
-So how can we change the prototype of the objects created by a constructor function?
+So is there any convenient way to set the prototype of the objects created by a constructor function? Yes!
 
-JavaScript uses a regular property named `prototype` of a function to determine the prototype of the objects created by it.
+JavaScript uses **a regular property named `prototype`** of a constructor function to determine the prototype of the objects created by it:
 
-Every function has the default `prototype` property even if we don't supply it.
+```js
+function User(name) {
+  this.name = name
+}
+User.prototype.sayHi = function () {
+  console.log(`Hi, I'm ${this.name}`)
+}
+
+const user = new User('John')
+user.sayHi() // -> Hi, I'm John
+```
+
+Actually, all functions (not only constructor functions, but also any function declaration, function expression, except arrow function) have the default `prototype` property even if we don't supply it.
 
 The default `prototype` is an object with only one property `constructor`, which points back to the function itself:
 
@@ -1248,7 +2055,7 @@ const newUser = new user.constructor()
 >
 > JavaScript does not ensure there is a `constructor` property in the prototype of a `Function`, it's not a standard.
 >
-> If we manually set `Func.prototype` to another object, the `constructor` property may be lost, so we shouldn't rely on it:
+> If we manually replace `Func.prototype` to another object, the `constructor` property may be lost, so we shouldn't rely on it:
 >
 > ```js
 > function User() {}
@@ -1276,98 +2083,87 @@ const newUser = new user.constructor()
 > console.log(user.constructor === User) // -> true
 > ```
 
-#### Native Prototypes
+#### Create Inheritance Chain with Constructor Functions
+
+Based on the `prototype` property of a constructor function, now we can create an inheritance chain **on instances** with constructor functions:
+
+```js
+function User(name) {
+  this.name = name
+}
+User.prototype.sayHi = function () {
+  console.log(`Hi, I'm ${this.name}`)
+}
+
+function Admin(name) {
+  // Call the parent constructor to initialize the properties
+  User.call(this, name)
+}
+// Set the prototype of Admin.prototype to User.prototype
+Object.setPrototypeOf(Admin.prototype, User.prototype)
+Admin.prototype.runAdminTask = function () {
+  console.log(`Admin ${this.name} is running admin task`)
+}
+
+const admin = new Admin('Alice')
+admin.sayHi() // -> Hi, I'm Alice
+admin.runAdminTask() // -> Admin Alice is running admin task
+```
+
+If you want to create an inheritance chain on the constructor functions too, you can set the prototype of the child constructor function to the parent constructor function:
+
+```js
+function User(name) {
+  this.name = name
+}
+User.logType = function () {
+  console.log('I am a user constructor')
+}
+User.prototype.sayHi = function () {
+  console.log(`Hi, I'm ${this.name}`)
+}
+
+function Admin(name) {
+  User.call(this, name)
+}
+Object.setPrototypeOf(Admin.prototype, User.prototype)
+Object.setPrototypeOf(Admin, User) // Set the prototype of Admin to User
+
+User.logType() // -> I am a user constructor
+Admin.logType() // -> I am a user constructor (inherited from User)
+```
+
+This works like [static member inheritance in class](#static-member).
+
+As you can see, these are a bit cumbersome, and that's why we have [`class`](#class) syntax in JavaScript.
+
+#### `prototype` Property for Built-in Constructor Function
 
 The `prototype` property is widely used by the core of JavaScript itself. All built-in constructor functions use it.
 
-For built-in constructor function `Object`, there is a property `Object.prototype` which is the prototype of objects created by `{}` or `new Object`.
-
-By specification, all of the built-in prototypes have `Object.prototype` on the top. That’s why some people say that "everything inherits from objects".
+For built-in constructor function `Object()`, there is `Object.prototype` which is the prototype of all objects (Unless you manually change their prototype). That’s why we say that "everything inherits from objects" in JavaScript.
 
 Other built-in constructor functions such as `Array`, `Date`, `Function` and others also keep methods in prototypes, we can access them through `Array.prototype`, `Date.prototype`, `Function.prototype` and so on.
 
 > [!Caution]
 >
-> These built-in prototypes can be modified, but change anything of them is a bad idea, can lead to hard-to-debug errors.
+> These built-in prototypes can be modified, but change anything of them is a bad idea, may break the built-in behaviors, and lead to hard-to-debug errors.
 
-#### How to Access Prototype?
-
-For modern JavaScript development, we shouldn't use `__proto__` to get or set the prototype of an object, they are in the Annex B of the ECMAScript specification, which means they are only for web browser compatibility.
-
-Now we have the following standard methods to work with prototypes:
-
-- `Object.getPrototypeOf(obj)` – returns the prototype of `obj`.
-- `Object.setPrototypeOf(obj, proto)` – sets the prototype of `obj` to `proto`.
-- `Object.create(proto, [descriptors])` – creates a new object with the specified prototype and property descriptors.
-
-## Advanced Working with Functions
-
-### Constructor Functions
-
-A constructor function is a regular function that is used to create objects. It should be called with the `new` keyword.
-
-Calling a constructor function with `new` and without `new` can have completely different behavior:
-
-- With `new`: A new object is created, and `this` inside the constructor points to that new object. If the constructor does not explicitly return an object, the new object is returned by default.
-
-  In other words, `new MyConstructor(...)` does something like:
-
-  ```js
-  function MyConstructor() {
-    // this = {} (implicitly)
-
-    this.value = 42
-
-    // return this (implicitly)
-  }
-  const obj1 = new MyConstructor()
-  ```
-
-- Without `new`: The constructor function is called as a regular function, and `this` inside the function points to the global object (or `undefined` in strict mode). The return value of the function is returned directly.
-
-  In other words, `MyConstructor(...)` does something like:
-
-  ```js
-  function MyConstructor() {
-    this.value = 42
-
-    // return (implicitly)
-  }
-  const obj2 = MyConstructor() // obj2 === undefined
-  ```
-
-We can use `new.target` to determine whether a function is called with `new` or not, so that we can limit the usage of a our functions:
-
-```js
-function MyConstructor() {
-  // If `new.target` is `undefined`, it means the function is called without `new`,
-  // otherwise, it is called with `new`.
-  if (!new.target) {
-    throw new Error('MyConstructor() must be called with new')
-  }
-  this.value = 42
-}
-```
-
-> [!Note]
->
-> There is a special case called "derived constructor", which will not create a new object itself, but the "parent constructor".
-
-### Closure
-
-#### What is Closure?
+#### Closure
 
 Closure is a function that remembers its outer variables (called **outer lexical environment**) and can access them even after the outer function has finished executing.
 
-In JavaScript, every function has a hidden property `[[Environment]]`, which is a reference to the lexical environment where the function was created (there is only one exception, it uses global lexical environment which is to be covered in [`new Function` syntax](#new-function-syntax-with-closure)), so we can say that all functions are closures in JavaScript.
+In JavaScript, every function has a hidden property `[[Environment]]`, which is a reference to the lexical environment where the function was created (there is only one exception, it uses global lexical environment which is to be covered in [outer lexical environment of `new Function` syntax](#outer-lexical-environment-of-new-function-syntax)), so we can say that all functions are closures in JavaScript.
 
 See https://javascript.info/closure for the theory and implementation details of closure in JavaScript.
 
-#### Garbage Collection
+#### Garbage Collection with Closure
 
 Usually, a lexical environment is removed from memory with all the variables after the function call finishes. That’s because there are no references to it. As any JavaScript object, it’s only kept in memory while it’s reachable.
 
 However, if there’s a nested function that is still reachable after the end of a function, then it has `[[Environment]]` property that references the lexical environment, so the lexical environment is still reachable even after the function call finishes.
+
+This is the mainly usecase of closure: **To keep the outer variables alive after the function call finishes, and avoid any outer access to them.**
 
 > [!Note]
 >
@@ -1380,7 +2176,9 @@ However, if there’s a nested function that is still reachable after the end of
 >   const value = Math.random()
 >
 >   function g() {
->     debugger // In console, after you typing `console.log(value)`, you will get `No such variable`!
+>     // In console, after you typing `console.log(value)`,
+>     // you will get `No such variable`!
+>     debugger
 >   }
 >
 >   return g
@@ -1392,105 +2190,7 @@ However, if there’s a nested function that is still reachable after the end of
 >
 > As you could see, there is no such variable! In theory, it should be accessible, but the engine optimized it out.
 
-### Function Expression
-
-A function expression is a way to define a function as a value. It's similar to a function declaration, but it's not hoisted.
-
-<!-- eslint-disable antfu/top-level-function -->
-
-```js
-const func = function (a, b) {
-  return a + b
-}
-console.log(func(1, 2)) // -> 3
-```
-
-### Named Function Expression
-
-A named function expression is a function expression that has a name. The name is **only accessible within the function itself**.
-
-So why do we need it? For instance, when we want to create a recursive function expression:
-
-<!-- eslint-disable antfu/top-level-function -->
-
-```js
-const doFact = function fact(n) {
-  if (n <= 1)
-    return 1
-  return n * fact(n - 1) // Use `fact` to call itself
-}
-```
-
-You may think we can use `doFact` to call itself, but that will not work if we reassign `doFact` to other value:
-
-<!-- eslint-disable antfu/top-level-function -->
-
-```js
-let doFact = function fact(n) {
-  if (n <= 1)
-    return 1
-  return n * doFact(n - 1) // Use `doFact` to call itself
-}
-
-const anotherFact = doFact
-doFact = null // Reassign `doFact` to `null`
-
-console.log(anotherFact(5)) // -> TypeError: doFact is not a function
-```
-
-That happens because the function takes `doFact` from the outer lexical environment, and it can be changed by other code. That's why we need named function expression.
-
-> [!Note]
->
-> This "internal name" features is only available for **function expressions**.
-
-### Arrow Functions
-
-An arrow function is a function expression that is defined with the `=>` syntax.
-
-```js
-const func = (a, b) => a + b
-console.log(func(1, 2)) // -> 3
-```
-
-Arrow functions is quite different from regular function and function expression: Arrow functions don't have `this`, `arguments`, `super`, and `new.target`, it's always bound to the outer lexical environment where the arrow function was created.
-
-So, if you want to use shareable constructor function, you should use function expression instead of arrow function.
-
-<!-- eslint-skip -->
-
-```js
-const Fun1 = function (value) {
-  if (new.target) {
-    return new Number(value)
-  }
-  else {
-    return value
-  }
-}
-const value1 = Fun1(1)
-console.log(typeof value1) // -> 'number'
-const value2 = new Fun1(1)
-console.log(typeof value2) // -> 'object'
-
-const Fun2 = (value) => {
-  // Error: `new.target` can only be used in functions or class properties.
-  if (new.target) {
-    return new Number(value)
-  }
-  else {
-    return value
-  }
-}
-const value3 = Fun2(1)
-console.log(typeof value3) // -> 'number'
-const value4 = new Fun2(1)
-console.log(typeof value4) // -> 'object'
-```
-
-### `new Function` Syntax
-
-#### What is `new Function`?
+#### `new Function` Syntax
 
 There’s one more way to create a function. It’s rarely used, and not recommended (because it use `eval` under the hood), but it's still good to know.
 
@@ -1519,7 +2219,7 @@ The last argument of `new Function` is the function body, and the previous argum
 >
 > But it's **really really really dangerous**, because the function body may contain malicious code, and it will be executed directly. So, never do this unless you really know what you are doing and you can trust the source of the function body.
 
-#### `new Function` Syntax with Closure
+#### Outer Lexical Environment of `new Function` Syntax
 
 Usually, a function remembers the lexical environment where it was created. But when a function is created with `new Function`, it always uses the global lexical environment as `[[Environment]]`. So it can’t access outer variables, only global ones.
 
@@ -1550,97 +2250,34 @@ _dist/script.min.js_
 const a=1;const b=new Function("console.log(value)");b(); // ReferenceError: value is not defined
 ```
 
-### `this` and `func.call/apply/bind`
+## Class
 
-As we all know, `this` is a special variable that refers to the context of the function call:
+Actually, `class` in JavaScript is just a kind of constructor function with better syntax and convenient features.
 
-- For a constructor function, `this` refers to the newly created object.
-- For a method, `this` refers to the object that the method is called on.
-- For a regular function, `this` refers to the global object (or `undefined` in strict mode).
-- For an arrow function, `this` refers to the `this` of the outer lexical environment.
-
-And we can use `func.call/apply/bind` to call a function with a specific `this` value and arguments.
-
-#### `func.call/apply`
-
-The only difference between `func.call` and `func.apply` is how to pass arguments to the function. `func.call` accepts arguments **as rest parameters**, while `func.apply` accepts arguments **as an array**.
-
-- `func.call(thisArg, arg1, arg2, ...)`
-- `func.apply(thisArg, [argsArray])`
-
-They can be used to change the `this` value of a function call for one-time:
+With `class`, you can define the structure of creating objects more like object literal syntax, for instance:
 
 ```js
-function greet(greeting, punctuation) {
-  console.log(`${greeting}, ${this.name}${punctuation}`)
+// Constructor function
+// Use `this` to assign properties
+function User1(name) {
+  this.name = name
 }
-
-const user1 = { name: 'John' }
-const user2 = { name: 'Jane' }
-greet.call(user1, 'Hello', '!') // -> Hello, John!
-greet.apply(user2, ['Hi', '.']) // -> Hi, Jane.
-```
-
-#### `func.bind`
-
-If you want to create a new function with a specific `this` value and arguments, you can use `func.bind`:
-
-- `func.bind(thisArg, arg1, arg2, ...)`
-
-For instance:
-
-```js
-function greet(greeting, punctuation) {
-  console.log(`${greeting}, ${this.name}${punctuation}`)
+// It's too cumbersome to add methods to the prototype of
+// a constructor function
+User1.prototype.sayHi = function () {
+  console.log(`Hello, ${this.name}!`)
 }
-const user = { name: 'John' }
+console.log(typeof User1) // -> 'function'
 
-// Create a new function with `this` set to `user` and first argument set to 'Hello',
-// Now, the new function only needs one argument.
-const greetUser = greet.bind(user, 'Hello')
-greetUser('!') // -> Hello, John!
-```
-
-If you want to create a function that is bound to a specific argument and left
-`this` unchanged, you can use this simple workaround:
-
-```js
-function partial(func, ...argsBound) {
-  return function (...args) { // This returns a new function, and passes `this` correctly
-    return func.call(this, ...argsBound, ...args)
-  }
-}
-
-const user = {
-  name: 'John',
-  greet(greeting, punctuation) {
-    console.log(`${greeting}, ${this.name}${punctuation}`)
-  }
-}
-user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
-user.greetHello('!') // -> Hello, John!
-```
-
-## Classes
-
-### What is Class?
-
-Actually, `class` in JavaScript is just a kind of `function`.
-
-For instance:
-
-```js
-class User {
-  constructor(name) {
-    this.name = name
-  }
-
+// Class
+class User2 {
+  // More like the object literal syntax, without `,` as property separator
+  name = 'John'
   sayHi() {
     console.log(`Hello, ${this.name}!`)
   }
 }
-
-console.log(typeof User) // -> 'function'
+console.log(typeof User2) // -> 'function', too
 ```
 
 What `class User { ... }` does is:
@@ -1649,24 +2286,13 @@ What `class User { ... }` does is:
 2. Store class methods, such as `sayHi`, in `User.prototype`.
 3. ...Something extra.
 
-So the example above is similar (not totally equivalent) to:
-
-```js
-function User(name) {
-  this.name = name
-}
-User.prototype.sayHi = function () {
-  console.log(`Hello, ${this.name}!`)
-}
-
-console.log(typeof User) // -> 'function'
-```
+So class `User2` defined in the example above is functionality equivalent to constructor function `User1` (Not totally equivalent).
 
 > [!Note]
 >
 > What extra things does `class` do are:
 >
-> 1. A function created by `class` labelled by a special internal property `[[IsClassConstructor]]: true`, JavaScript checks for this property in a variety of places:
+> 1. A function created by `class` will be labelled by a special internal property `[[IsClassConstructor]]: true`, JavaScript checks for this property in a variety of places:
 >
 >    ```js
 >    class User {}
@@ -1674,7 +2300,7 @@ console.log(typeof User) // -> 'function'
 >    User() // Error: Class constructor User cannot be invoked without 'new'
 >    ```
 >
->    Also, a string representation of a class constructor in most JavaScript engines starts with the "class...":
+>    Also, a string representation of a class constructor in most JavaScript engines will start with the "class...":
 >
 >    ```js
 >    class User {}
@@ -1682,12 +2308,12 @@ console.log(typeof User) // -> 'function'
 >    console.log(User.toString()) // -> class User { ... }
 >    ```
 >
-> 2. Class methods are non-enumerable by default. A class definition sets enumerable flag to `false` for all methods in the `prototype` property.
-> 3. Classes always use strict mode. All code inside the class is in strict mode. (Yeah, we said this before 👍)
+> 2. Instance methods are non-enumerable by default, a class definition will set enumerable flag to `false` for all methods in the `prototype` property.
+> 3. `class` always use strict mode, all code inside the class is in strict mode. (Yeah, we said this before 👍)
 
 ### Class Expression
 
-Just like functions, classes can be defined inside another expression, passed around, returned, assigned, etc.
+Just like `function`, `class` also has expressions, and they can be passed around, returned, assigned, etc.
 
 ```js
 const User = class {
@@ -1701,13 +2327,13 @@ const User = class {
 }
 ```
 
-Similar to [Named Function Expressions](#named-function-expression), class expressions may have a name, and it's visible inside the class only.
+Similar to [named function expression](#named-function-expression), class expressions may have a name, and it's visible inside the class only.
 
-### Getters/Setters and Dynamic Property Names
+### Getter/Setter and Dynamic Property Name
 
-Just like literal objects, classes may include [getters/setters](#accessor-properties), [dynamic property names](#dynamic-computed-property-names) etc.
+With the similar syntax to literal objects, `class` also has [getters/setters](#accessor-property) and [dynamic property name](#dynamic-computed-property-name).
 
-Example for getters/setters:
+Example for getter/setter:
 
 ```js
 class User {
@@ -1735,7 +2361,7 @@ console.log(user.name) // -> John
 user = new User('') // -> Name is too short.
 ```
 
-Example for dynamic property names:
+Example for dynamic property name:
 
 ```js
 const methodPrefix = 'say'
@@ -1748,11 +2374,11 @@ class User {
 new User().sayHi() // -> Hello
 ```
 
-### Class Fields
+### Class Field
 
-Class fields is a new feature added in ECMAScript 2022, which is a syntax that allows to add properties in simple way.
+Class fields is a new feature added in ECMAScript 2022, which is a syntax that allows us to add properties to instance more like object literal syntax.
 
-Previously, our classes only had methods, and properties were usually added in the constructor:
+Previously, our classes only had methods, and properties were usually added in the constructor, like how we do in constructor function:
 
 ```js
 class User {
@@ -1800,7 +2426,7 @@ console.log(user.name) // -> John
 
 > [!Note]
 >
-> If you want to create a property that is read-only in `Class`, you can use a private class field with a getter without a setter:
+> If you want to create a property that is read-only in `class`, you can use a [private class](#private-and-protected-member) field with a getter without a setter:
 >
 > ```js
 > class User {
@@ -1811,7 +2437,7 @@ console.log(user.name) // -> John
 > }
 > ```
 >
-> If you want to create a property that is not enumerable or configurable in `Class`, you still need to use `Object.defineProperty` in the constructor:
+> If you want to create a property that is not enumerable or configurable in `class`, you still need to use `Object.defineProperty` in the constructor:
 >
 > ```js
 > class User {
@@ -1825,12 +2451,22 @@ console.log(user.name) // -> John
 >   }
 > }
 > ```
+>
+> Of course, for some properties should get values from constructor parameters, they still need to be assigned in the constructor:
+>
+> ```js
+> class User {
+>   constructor(name) {
+>     this.name = name
+>   }
+> }
+> ```
 
 ### Class Inheritance
 
-Class inheritance is a way for one class to extend another class.
+Class inheritance also builds on top of prototypal inheritance, the principle is the same as [how we create inheritance chain with constructor functions](#create-inheritance-chain-with-constructor-functions), but with better syntax and convenient features.
 
-So we can create new functionality on top of the existing.
+Class inheritance uses `extends` keyword to do that:
 
 ```js
 class Animal {
@@ -1868,9 +2504,9 @@ Animal -- prototype --> Animal.prototype
                          dog = new Dog('Rex')
 ```
 
-We can see that `extends` keyword is used to set the `[[prototype]]` of the child class to the parent class.
+We can see that `extends` keyword is equivalent to `Object.setPrototypeOf(Dog.prototype, Animal.prototype)`.
 
-So that's how inheritance works in JavaScript (static inheritance will be explained [later](#static-members)).
+So that's how class inheritance works in JavaScript (static inheritance will be explained [later](#static-members)).
 
 For the example above, if we want to access `dog.move()`, JavaScript engine will:
 
@@ -1878,13 +2514,11 @@ For the example above, if we want to access `dog.move()`, JavaScript engine will
 2. Look for `move` in `dog.[[prototype]]`, which is `Dog.prototype` (not founded).
 3. Look for `move` in `Dog.prototype.[[prototype]]`, which is `Animal.prototype` (founded).
 
-As we can recall from the chapter [native prototypes](#native-prototypes), JavaScript itself uses prototypal inheritance for built-in objects. E.g. `Date.prototype.[[Prototype]]` is `Object.prototype`. That’s why dates have access to generic object methods.
-
 > [!Note]
 >
-> Class syntax allows to specify not just a class, but any expression after extends, it's because the theory of `extends` is set the `[[prototype]]` of the child class to the thing after `extends`.
+> Because the theory of `extends`, `class` allows to extend not just a class, but any expression evaluated to an object.
 >
-> For instance, a function call that generates the parent class:
+> For instance, a function call that generates a class expression (a kind of constructor function, also object) can be used as the right-hand side of `extends`:
 >
 > ```js
 > function GenerateClass(phrase) {
@@ -1902,7 +2536,75 @@ As we can recall from the chapter [native prototypes](#native-prototypes), JavaS
 >
 > That may be useful for advanced programming patterns when we use functions to generate classes depending on many conditions and can inherit from them.
 
-### Overriding Methods
+### Overriding Class Field
+
+For overriding class field, we can simply declare a field with the same name in the child class:
+
+```js
+class Animal {
+  name = 'animal'
+}
+
+class Rabbit extends Animal {
+  name = 'rabbit'
+}
+```
+
+But there’s a tricky behavior when we access an overridden field in parent constructor, quite different from most other programming languages.
+
+Consider this example:
+
+```js
+class Animal {
+  name = 'animal'
+
+  constructor() {
+    console.log(this.name)
+  }
+}
+
+class Rabbit extends Animal {
+  name = 'rabbit'
+}
+
+const animal = new Animal() // -> animal
+const rabbit = new Rabbit() // -> animal
+```
+
+Here, class `Rabbit` extends `Animal` and overrides the name field with its own value.
+
+What’s interesting is that in both cases: `new Animal()` and `new Rabbit()`, log `animal`.
+
+**In other words, the parent constructor always uses its own field value, not the overridden one.**
+
+The reason is the field initialization order. The class field is initialized:
+
+- For the base class, before constructor call.
+- For the derived class, immediately after `super()` call in constructor, but before the rest of the constructor code.
+
+In our case, calling `new Rabbit()` will call the `Animal` constructor first, and at that moment, the name field is initialized with the value of `animal`, and the overridden in `Rabbit` is not yet applied.
+
+Luckily, this behavior only reveals itself if an overridden field is used in the parent constructor.
+
+The best practice is to avoid to override the class field, if you want to change the value of a field inside the parent, you may pass it as a parameter to the parent constructor, and assign it in the parent constructor:
+
+<!-- eslint-disable no-useless-constructor -->
+
+```js
+class Animal {
+  constructor(name) {
+    this.name = name
+  }
+}
+
+class Rabbit extends Animal {
+  constructor(name) {
+    super(name) // Pass the name to the parent constructor
+  }
+}
+```
+
+### Overriding Method
 
 If we want to override a method of the parent class, we can simply declare it in the child class with the same name:
 
@@ -1927,11 +2629,13 @@ const dog = new Dog('Rex')
 dog.move() // -> Rex runs.
 ```
 
+This behaves the same as overriding a method with constructor function inheritance (Of course, we have not talked about this before).
+
 > [!Note]
 >
 > The `override` keyword is a TypeScript feature, it's not a JavaScript feature.
 
-If we want to call the parent method from the child method, classes provide "super" keyword for that:
+If we want to call the parent method from the child method, classes provide "super" keyword for that, this is one **quite different feature** from constructor function inheritance:
 
 - `super.method(...)` to call a parent method.
 - `super(...)` to call a parent constructor (inside our constructor only).
@@ -1964,9 +2668,40 @@ dog.move()
  */
 ```
 
-### Overriding Constructors
+> [!Note]
+>
+> For constructor function inheritance, we have to call the parent constructor with `ParentConstructor.call(this, ...)`, and parent function methods with `ParentConstructor.prototype.method.call(this, ...)`, which is quite cumbersome:
+>
+> ```js
+> function Animal(name) {
+>   this.name = name
+> }
+> Animal.prototype.move = function () {
+>   console.log(`${this.name} moves.`)
+> }
+>
+> function Dog(name) {
+>   // Call the parent constructor to initialize the properties
+>   Animal.call(this, name)
+> }
+> Object.setPrototypeOf(Dog.prototype, Animal.prototype)
+> Dog.prototype.move = function () {
+>   // Call the parent method `move`
+>   Animal.prototype.move.call(this)
+>   console.log(`${this.name} runs.`) // Override
+> }
+>
+> const dog = new Dog('Rex')
+> dog.move()
+> /**
+>  * -> Rex moves.
+>  * -> Rex runs.
+>  */
+> ```
 
-According to the [specification](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation), if a class extends another class and has no constructor, then the following "empty" constructor is generated:
+### Derived Constructor
+
+According to the [specification](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation), if a class extends another class and has no constructor, then the following "empty" **derived constructor** is generated:
 
 <!-- eslint-disable no-useless-constructor -->
 
@@ -2006,7 +2741,7 @@ class Rabbit extends Animal {
 const rabbit = new Rabbit('White Rabbit', 10) // Error: this is not defined.
 ```
 
-Whoops! We’ve got an error. We just missed to call `super(...)` in the child constructor. But why?
+Whoops! We’ve got an error, the runtime complains the missing of new object. We just missed to call `super(...)` in the child constructor. But why?
 
 In JavaScript, there’s a distinction between a constructor function of an inheriting class (so-called "derived constructor") and other functions. A derived constructor has a special internal property `[[ConstructorKind]]:"derived"`. That’s a special internal label.
 
@@ -2015,72 +2750,7 @@ That label affects its behavior with `new`.
 - When a regular constructor function is executed with `new`, it creates an empty object and assigns it to this.
 - But when a derived constructor runs, it doesn’t do this. It expects the parent constructor to do this job.
 
-So a derived constructor must call super in order to execute its parent (base) constructor, otherwise the object for this won’t be created. And we’ll get an error.
-
-### Overriding Class Fields
-
-We can override not only methods, but also class fields.
-
-Although, there’s a tricky behavior when we access an overridden field in parent constructor, quite different from most other programming languages.
-
-Consider this example:
-
-```js
-class Animal {
-  name = 'animal'
-
-  constructor() {
-    console.log(this.name)
-  }
-}
-
-class Rabbit extends Animal {
-  name = 'rabbit'
-}
-
-const animal = new Animal() // -> animal
-const rabbit = new Rabbit() // -> animal
-```
-
-Here, class `Rabbit` extends `Animal` and overrides the name field with its own value.
-
-What’s interesting is that in both cases: `new Animal()` and `new Rabbit()`, log `animal`.
-
-**In other words, the parent constructor always uses its own field value, not the overridden one.**
-
-Well, the reason is the field initialization order. The class field is initialized:
-
-- For the base class, before constructor call.
-- For the derived class, immediately after `super()` call in constructor.
-
-In our case, calling `new Rabbit()` will call the `Animal` constructor first, and at that moment, the name field is initialized with the value of `animal`, and the overridden in `Rabbit` is not yet applied.
-
-This subtle difference between fields and methods is specific to JavaScript.
-
-Luckily, this behavior only reveals itself if an overridden field is used in the parent constructor. Then it may be difficult to understand what’s going on, so we’re explaining it here.
-
-If it becomes a problem, one can fix it by using methods or getters/setters instead of fields.
-
-```js
-class Animal {
-  showName() { // instead of this.name = 'animal'
-    console.log('animal')
-  }
-
-  constructor() {
-    this.showName() // instead of console.log(this.name)
-  }
-}
-
-class Rabbit extends Animal {
-  showName() {
-    console.log('rabbit')
-  }
-}
-
-const animal = new Animal() // -> animal
-const rabbit = new Rabbit() // -> rabbit
-```
+So a **derived constructor must call super** in order to execute its parent (base) constructor to create the new object which is referenced by `this`.
 
 ### Super: Internals, `[[HomeObject]]`
 
@@ -2088,13 +2758,13 @@ It’s about the internal mechanisms behind inheritance and `super`.
 
 First to say, from all that we’ve learned till now, it’s impossible for super to work at all!
 
-Yeah, indeed, let’s ask ourselves, how it should technically work? When an object method runs, it gets the current object as `this`. If we call `super.method()` then, the engine needs to get the `method` from the prototype of the current object. But how?
+Yeah, indeed, let’s ask ourselves, how it should technically work? When an object method runs, it gets that object as `this`. If we call `super.method()` then, the engine needs to get the `method()` from the prototype of `this`, and **binding it with that `this`**.
 
-The task may seem simple, but it isn’t. The engine knows the current object `this`, so it could get the parent method as `Object.getPrototypeOf(this).method`. Unfortunately, such a "naive" solution won’t work.
+The task may seem simple, but it isn’t. Get the `method()` from `this` is easy, we can use `Object.getPrototypeOf(this).method`, but the problem is happens because `this` in the whole call chain is always that object, when we have a long inheritance chain, it will cause an infinite loop.
 
 Let’s demonstrate the problem. Without classes, using plain objects for the sake of simplicity.
 
-In the example below, `rabbit.__proto__ = animal`. Now let’s try: in `rabbit.eat()` we’ll call `animal.eat()`, using `Object.getPrototypeOf(this)`:
+In the example below, we only have a short inheritance chain, and everything works well:
 
 ```js
 const animal = {
@@ -2116,11 +2786,7 @@ const rabbit = {
 rabbit.eat() // Rabbit eats.
 ```
 
-At the line `(*)` we take `eat` from the prototype (`animal`) and call it in the context of the current object (`rabbit`).
-
-Please note that `call(this)` is important here, because a simple `Object.getPrototypeOf(this).eat()` would execute parent eat in the context of the prototype, not the current object.
-
-And in the code above it actually works as intended.
+At the line `(*)`, `this` is `rabbit`, and we take `eat` from the prototype (`animal`) and call it in the context of `rabbit`.
 
 Now let’s add one more object to the chain. We’ll see how things break:
 
@@ -2155,13 +2821,11 @@ The code doesn’t work anymore!
 
 It may be not that obvious, but if we trace `longEar.eat()` call, then we can see why:
 
-1. Inside `longEar.eat()`, the line `(**)` calls `rabbit.eat()` providing it with `this = longEar`.
-2. Then in the line `(*)` of `rabbit.eat`, we’d like to pass the call even higher in the chain, but `this = longEar`, so `Object.getPrototypeOf(this).eat` is again `rabbit.eat`!
+1. Inside `longEar.eat()`, `this` is `longEar`, the line `(**)` calls `rabbit.eat()` with the context of `longEar`.
+2. Then in the line `(*)` of `rabbit.eat`, `this` is still `longEar`, because this method is called with the context of `longEar`, so `Object.getPrototypeOf(this).eat` is still `rabbit.eat`!
 3. ...So `rabbit.eat` calls itself in the endless loop, because it can’t ascend any further.
 
-To solve the problem, we should not find the parent prototype from `this`, because `this` may be anything, depending on the user are calling this method on which object.
-
-JavaScript adds one more special internal property for methods, named `[[HomeObject]]`, it always references the object where the method is defined. Then `super` uses it to resolve the parent prototype and its methods.
+To solve the problem, we need another property on each instance method to track which object it belongs to, that is the internal property `[[HomeObject]]`, it always references the object where the method is defined. Then `super` uses it to resolve the parent prototype and its methods.
 
 > [!Note]
 >
@@ -2192,7 +2856,7 @@ By using `super`, our code works correctly again:
 const animal = {
   name: 'Animal',
   eat() {
-    // [[HomeObject]] == animal (implicitly)
+    // For this method, [[HomeObject]] === animal (implicitly)
     console.log(`${this.name} eats.`)
   }
 }
@@ -2201,8 +2865,8 @@ const rabbit = {
   __proto__: animal,
   name: 'Rabbit',
   eat() {
-    // [[HomeObject]] == rabbit (implicitly)
-    super.eat() // Just like: `[[HomeObject]].__proto__.eat.call(this)`
+    // For this method, [[HomeObject]] === rabbit (implicitly)
+    super.eat() // Just like: `Object.getPrototypeOf([[HomeObject]]).eat.call(this)`
   }
 }
 
@@ -2210,8 +2874,8 @@ const longEar = {
   __proto__: rabbit,
   name: 'Long Ear',
   eat() {
-    // [[HomeObject]] == longEar (implicitly)
-    super.eat() // Just like: `[[HomeObject]].__proto__.eat.call(this)`
+    // For this method, [[HomeObject]] === longEar (implicitly)
+    super.eat() // Just like: `Object.getPrototypeOf([[HomeObject]]).eat.call(this)`
   }
 }
 
@@ -2248,17 +2912,10 @@ longEar.eat() // -> Long Ear eats.
 > const rabbit = {
 >   __proto__: animal,
 >   sayHi() {
->     // [[HomeObject]] == rabbit (implicitly)
->     super.sayHi() // Will be resolved as: `[[HomeObject]].__proto__.sayHi.call(this)`
+>     // Totally equivalent to
+>     // `Object.getPrototypeOf(animal).sayHi.call(this)`
+>     super.sayHi()
 >   }
->   /**
->    * Because `[[HomeObject]] === rabbit`,
->    * and `super.sayHi()` is resolved as `[[HomeObject]].__proto__.sayHi.call(this)`,
->    * the method body looks like this:
->    * sayHi() {
->    *   rabbit.__proto__.sayHi.call(this)
->    * }
->    */
 > }
 >
 > const plant = {
@@ -2270,24 +2927,26 @@ longEar.eat() // -> Long Ear eats.
 > // tree inherits from plant
 > const tree = {
 >   __proto__: plant,
->   sayHi: rabbit.sayHi
 >   /**
->    * Here we copy `sayHi` from `rabbit` to `tree`, method body is the same as above:
+>    * Totally equivalent to:
 >    * sayHi() {
 >    *   rabbit.__proto__.sayHi.call(this)
 >    * }
 >    */
+>   sayHi: rabbit.sayHi
 > }
 >
 > tree.sayHi() // -> I'm an animal (?!)
 > ```
 
-### Static Members
+### Static Member
 
 Static methods are belong to class, not objects:
 
 ```js
 class Article {
+  static publisher = 'Ilya Kantor'
+
   constructor(title, date) {
     this.title = title
     this.date = date
@@ -2301,43 +2960,29 @@ class Article {
 
 const article = Article.createTodays()
 console.log(article.title) // -> Today's digest
+console.log(article.date) // -> current date
 
+console.log(article.publisher) // -> undefined
 article.createTodays() // Error: `article.createTodays` is not a function
 ```
 
-Because it's just like:
+Because static members are just **like properties of the constructor function** under the hood, it's more like:
 
 ```js
 function Article(title, date) {
   this.title = title
   this.date = date
 }
+Article.publisher = 'Ilya Kantor'
 Article.createTodays = function () {
   // Remember, this = Article
   return new this('Today\'s digest', new Date())
 }
 ```
 
-`createToDays` does not exist in `Article.prototype`, so objects created by `new Article` can’t access it.
+`publisher` and `createTodays` does not exist in `Article.prototype`, so objects created by `new Article` can’t access it.
 
-The same as static fields:
-
-```js
-class Article {
-  static publisher = 'Ilya Kantor'
-}
-
-console.log(Article.publisher) // -> Ilya Kantor
-```
-
-It's just like:
-
-```js
-function Article() {}
-Article.publisher = 'Ilya Kantor'
-```
-
-What's more, static methods and fields are inherited.
+And static members are also inherited **by default**.
 
 ```js
 class Animal {
@@ -2374,26 +3019,53 @@ Animal -- prototype --> Animal.prototype
  Dog -- prototype -----> Dog.prototype
 ```
 
-We know `Class` itself is just a kind of `function`, so they can also have their own `[[prototype]]`.
+You can see that, `extends` not only does `Object.setPrototypeOf(Dog.prototype, Animal.prototype)`, but also `Object.setPrototypeOf(Dog, Animal)`, so that static members of `Animal` are inherited by `Dog`.
 
-`extends` not only sets `Dog.prototype.[[prototype]]` to `Animal.prototype`, but also sets `Dog.[[prototype]]` to `Animal`.
+Some times we don't want properties of a class constructor to be inherited by another class constructor. For example, many JavaScript built-ins are only inherit non-static members from each other.
 
-The previous one is used to explain the inheritance of objects created by the `Dog` class, and the latter is used to explain the inheritance of the `Dog` class itself.
+- Both `Array.prototype` and `Date.prototype` inherit from `Object.prototype`
+- But `Array` and `Date` do not inherit from `Object` directly
 
-That's how static methods and fields are inherited.
+In this case, we may fallback to use constructor function inheritance to avoid this default behavior, or just manually set the prototype of the child constructor function to `null`:
 
-> [!Note]
->
-> Built-in classes are not simply inherited from each other by keyword `extends`, they only inherit non-static members from each other.
->
-> For example:
->
-> - Both `Array.prototype` and `Date.prototype` have `Object.prototype` as their `[[Prototype]]`, so their instances have methods from `Object.prototype`.
-> - But `Array.[[Prototype]]` and `Date.[[Prototype]]` do not reference `Object.prototype`, so there’s no, for example, `keys()` static method in `Array` and `Date` classes.
+```js
+// Using constructor function inheritance
+function User(name) {
+  this.name = name
+}
+User.staticMethod = function () {
+  console.log('I am a static method')
+}
 
-### Private and Protected Members
+function Admin(name) {
+  User.call(this, name)
+}
+Object.setPrototypeOf(Admin.prototype, User.prototype)
 
-In JavaScript, we can use naming conventions (prefixing with an underscore "\_") to define protected members.
+// Manually set the prototype of Admin to `null`
+class UserToo {
+  constructor(name) {
+    this.name = name
+  }
+
+  static staticMethod() {
+    console.log('I am a static method')
+  }
+}
+
+class AdminToo extends UserToo {
+  static staticMethod() {
+    console.log('I am a static method')
+  }
+}
+Object.setPrototypeOf(AdminToo, null)
+```
+
+### Private and Protected Member
+
+In JavaScript, there is also the concept of property visibility.
+
+We can use naming conventions (prefixing with an underscore "\_") to define **protected members**.
 
 ```js
 class CoffeeMachine {
@@ -2422,11 +3094,11 @@ const coffeeMachine = new CoffeeMachine(100)
 coffeeMachine.waterAmount = 10
 ```
 
-The same as protected methods and properties, private methods and properties are using naming conventions (prefixing with a hash "#"), which is included in ECMAScript 2022.
+The same as protected methods and properties, **private methods** and properties are using naming conventions (prefixing with a hash "#"), which is included in ECMAScript 2022.
 
-The same as other languages, protected members can be inherited, but private ones cannot.
+The same as other OOP languages, protected members can be inherited, but private ones cannot.
 
-The only special thing is that private ones can not be accessed from `this[variable]`, for security reasons:
+The only special thing is that private ones can not be accessed from `this[variable]`, for security reason:
 
 ```js
 class User {
@@ -2441,7 +3113,7 @@ class User {
 
 ### Check Class of Instance
 
-As we all know, we can use `typeof` operator to check the type of a variable:
+As we all know, we can use `typeof` operator to check the type of a variable (Alright, we have not mentioned this before, but now you know, right? 🥰):
 
 ```js
 console.log(typeof 123) // -> 'number'
@@ -2543,7 +3215,7 @@ But there are some special things in JavaScript:
    }
    ```
 
-### Custom Errors
+### Custom Error
 
 We can extends the built-in `Error` class to create custom error classes:
 
@@ -2611,8 +3283,8 @@ catch (err) {
 
 The essential parts are:
 
-1. We should call `super(message)` in the constructor to pass the error message to the parent class.
-2. We use `constructor.name` to set the `name` property of the error, so that it reflects the actual class name.
+1. We should call `super(message)` in the constructor to pass the error message to the parent `Error` class.
+2. We use `this.constructor.name` to set the `name` property of the error, so that it reflects the actual class name. (Of course, you should not to replace the default `prototype` property of the class, we mentioned this [before](#prototype-property-of-a-constructor-function)).
 3. We can change the constructor to accept any parameters we need and generate the message inside.
 
 ## Promises, Async/Await
@@ -2751,9 +3423,9 @@ new Promise((resolve, reject) => {
 >   - If the previous promise is `rejected`, the returned value is the result of the `onrejected` function.
 > - For `catch`:
 >   - If the previous promise is `rejected`, the returned value is the result of the `onrejected` function.
->   - If the previous promise is `fulfilled`, the returned value is the same as the previous promise.
+>   - If the previous promise is `fulfilled`, the returned value is the same as the return of previous promise.
 > - For `finally`:
->   - The returned value is the same as the previous promise.
+>   - The returned value is the same as the return of previous promise.
 >
 > If the returned value isn't a promise-like object, it will be wrapped in a promise resolved with that value:
 >
@@ -2851,9 +3523,29 @@ Please note that the order of the resulting array members is the same as in its 
 
 In ECMAScript 2020, `Promise.allSettled` was added to the language.
 
-Differently from `Promise.all`, it waits until all input promises are settled, regardless of whether they are fulfilled or rejected.
+Differently from `Promise.all`, it waits until all input promises are settled, regardless of whether they are fulfilled or rejected. Each result will wrapped in an object with `status` and `value` or `reason` properties, depending on the outcome of the promise.
 
 This is useful when we want to know the result of all operations, without failing fast on the first rejection.
+
+For example, migration from `Promise.all` to `Promise.allSettled`:
+
+```js
+// Before
+const [res1, res2, res3] = await Promise.all([
+  fetch('/api/data1').then(res => res.json()),
+  fetch('/api/data2').then(res => res.json()),
+  fetch('/api/data3').then(res => res.json())
+])
+console.log(res1, res2, res3)
+
+// After
+const [res4, res5, res6] = await Promise.allSettled([
+  fetch('/api/data1').then(res => res.json()),
+  fetch('/api/data2').then(res => res.json()),
+  fetch('/api/data3').then(res => res.json())
+])
+console.log(res4.value, res5.value, res6.value)
+```
 
 #### `Promise.race`
 
@@ -2885,9 +3577,7 @@ If you run it, you see code finished first, and then promise done!
 
 Why did the `then` trigger afterwards? What’s going on?
 
-That's because Node.js is single-threaded, it's asynchronous is powered by the **event loop**.
-
-Only when one synchronous code block is finished, the event loop checks the microtask queue for tasks to execute.
+That's because Node.js is single-threaded, it's asynchronous is powered by the **event loop**. All asynchronous tasks are put into a queue called **microtask queue**. Only when one synchronous code block is finished, the event loop checks the microtask queue for tasks to execute.
 
 In the case above, when `promise.then` is called, we are just putting the callback into the microtask queue, they are not executed yet. After `console.log('code finished')` is executed, the synchronous code block is finished, then the event loop checks the microtask queue, and executes the callback.
 
@@ -3019,7 +3709,7 @@ It's a better way to write promise-based code, making it look like synchronous.
 
 > [!Note]
 >
-> Top level `await` can only be used in `ESModules`. For `CommonJS` modules, you need to wrap the code into an async IIFE:
+> Top level `await` can only be used in `ES Module`. For `CommonJS`, you need to wrap the code into an async IIFE:
 >
 > ```js
 > (async () => {
@@ -3096,7 +3786,7 @@ Looks a lot nicer than calling `next().value`.
 
 But please note: The example above shows 1, then 2, and that’s all. **It doesn’t show 3!**
 
-It’s because `for..of` iteration ignores the last value, when `done: true`. So, if we want all results to be shown by `for..of`, we must return them with `yield`:
+It’s because `for..of` iteration ignores the last value, when `done: true`. So, if we want all results to be shown by `for..of`, we must return them with `yield` instead of `return`:
 
 ```js
 function* generateSequence() {
@@ -3113,6 +3803,8 @@ for (const value of generator) {
   console.log(value) // => 1, then 2, then 3
 }
 ```
+
+Actually, `return` is rarely used and optional, be cause we know function without explicit `return` returns `undefined` by default.
 
 ### Generator Composition
 
@@ -3230,7 +3922,7 @@ But it's good to know that it exists.
 
 For most practical applications, when we’d like to make an object that asynchronously generates a sequence of values, we can use an asynchronous generator.
 
-The syntax is simple: prepend `function*` with `async`. That makes the generator asynchronous.
+The syntax is simple: prepend `function*` with `async`, that makes the generator asynchronous. When using it, we need to use `for await...of` loop to iterate over its values.
 
 ```js
 // [!code highlight:1]
@@ -3250,7 +3942,7 @@ for await (const value of generator) {
 }
 ```
 
-As the generator is asynchronous, we can use await inside it, rely on promises, perform network requests and so on.
+As the generator is asynchronous, we can use `await` inside it, rely on promises, perform network requests and so on.
 
 Asynchronous iteration allow us to iterate over data that comes asynchronously, on-demand. Like, for instance, when we download something chunk-by-chunk over a network. And asynchronous generators make it even more convenient:
 

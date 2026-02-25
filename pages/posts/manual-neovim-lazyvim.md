@@ -1,7 +1,7 @@
 ---
-title: Neovim & LazyVim Manual
+title: Neovim and LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-02-09T11:54+08:00
+update: 2026-02-25T14:44+08:00
 lang: en
 duration: 23min
 type: note
@@ -20,10 +20,11 @@ LazyVim is a Neovim configuration framework that simplifies the setup and manage
 To install Neovim, I highly recommend using the package manager for your operating system. For example, on Windows, you can use `winget`:
 
 ```nu
-winget install --id Neovim.Neovim --scope machine
+# Command `sudo` is powered by gsudo
+sudo winget add -e --id Neovim.Neovim --scope machine
 ```
 
-To install LazyVim, check your system satisfies [the requirements](https://www.lazyvim.org/#%EF%B8%8F-requirements) first, then just simply follow [the official documentation](https://www.lazyvim.org/installation).
+To install LazyVim, make sure your system satisfies [the requirements](https://www.lazyvim.org/#%EF%B8%8F-requirements) first, then just simply follow [the official documentation](https://www.lazyvim.org/installation).
 
 ## Basic Usage
 
@@ -37,7 +38,7 @@ To launch Neovim and LazyVim, simply open your terminal and type:
 nvim
 ```
 
-Then you will see the LazyVim dashboard.
+Then you will see the LazyVim dashboard. The first time you open that dashboard, LazyVim will automatically setup the plugins for you, which may take a while. After that, you can start using Neovim and LazyVim.
 
 To launch Neovim with a specific file, use:
 
@@ -282,6 +283,10 @@ There are also some useful find/search motions for coding:
 | Block     | `<C-v>` | Normal | Start blockwise visual mode        |
 | Restore   | `gv`    | Normal | Reselect the last visual selection |
 
+> [!Note]
+>
+> For some modern terminals, like _Windows Terminal_, they may have the keybing from `<C-v>` to paste from clipboard by default, you can disable that keybinding in the terminal settings to use it for blockwise visual mode in Neovim.
+
 ### Editing
 
 #### Enter Insert Mode
@@ -296,7 +301,13 @@ There are also some useful find/search motions for coding:
 | New line | N `o`   | Normal | Open a new line below the current line, append text (N times)          |            |
 |          | N `O`   | Normal | Open a new line above the current line, insert text (N times)          |            |
 
-Use `<Esc>` to exit insert mode and return to normal mode.
+Use `<Esc>` or `<Ctrl-[>` to exit insert mode and return to normal mode.
+
+> [!Note]
+>
+> For some terminals like _Windows Terminal_, they may sand something different to what you actually pressed, for example, for `<Ctrl-[>`, it may send `\u001b[46;5u` instead.
+>
+> You need to use something like actions in _Windows Terminal_ to custom the sendings to fix this.
 
 #### Special Keys in Insert Mode
 

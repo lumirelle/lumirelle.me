@@ -1,7 +1,7 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-02-11T16:25+08:00
+update: 2026-02-25T17:38+08:00
 lang: en
 duration: 89min
 type: note
@@ -1044,6 +1044,17 @@ JavaScript provides many built-in objects that you can use to perform various ta
 | `RegExp`                                    | Used for pattern matching with regular expressions. |
 | ...                                         | ...                                                 |
 
+### Array
+
+An array is a special type of object that is used to store ordered collections of values.
+
+We can create an array using array literal syntax or the `Array()` constructor function:
+
+```js
+const arr1 = [1, 2, 3] // Array literal
+const arr2 = [1, 2, 3] // Array constructor function
+```
+
 ### Function
 
 Functions are code snippets that can be called by other code or itself, or variables that refer to the function.
@@ -1552,178 +1563,6 @@ console.log(str1.localeCompare(str2)) // -> -1 (in German, 'ä' comes before 'z'
 
 This is helpful when you want to sort strings in a specific language.
 
-### Advanced Working with Array
-
-#### Accessing Element
-
-The same as [`string`](#accessing-character).
-
-#### Array Length Property
-
-Contrary to your intuition, `length` property of an array is writable. If you increase it manually, nothing interesting will happen. But if you decrease it manually, the array will be truncated. **The process is irreversible**:
-
-```js
-const arr = [1, 2, 3, 4, 5]
-console.log(arr.length) // -> 5
-
-arr.length = 3
-console.log(arr) // -> [1, 2, 3]
-```
-
-So, the most simple and safe way to clear an array is to set its `length` property to `0`. 😏
-
-#### In-place Array Methods vs. Non-mutating Array Methods
-
-Arrays have two kinds of methods: in-place methods and non-mutating methods. In-place methods modify the original array, while non-mutating methods return a new array without modifying the original one.
-
-In-place methods include:
-
-| Method          | Description                                    |
-| --------------- | ---------------------------------------------- |
-| `arr.push()`    | Add elements to the end                        |
-| `arr.pop()`     | Remove the element from the end                |
-| `arr.unshift()` | Add elements to the beginning                  |
-| `arr.shift()`   | Remove the element from the beginning          |
-| `arr.splice()`  | [Add, remove or replace elements](#arr-splice) |
-| `arr.sort()`    | Sort the array                                 |
-| `arr.reverse()` | Reverse the array                              |
-| ...             | ...                                            |
-
-Non-mutating methods include:
-
-| Method             | Description                                                                                  |
-| ------------------ | -------------------------------------------------------------------------------------------- |
-| `arr.toSpliced()`  | No-mutating version of `arr.splice()`                                                        |
-| `arr.toSorted()`   | No-mutating version of `arr.sort()`                                                          |
-| `arr.toReversed()` | No-mutating version of `arr.reverse()`                                                       |
-| `arr.filter()`     | Create a new array with all elements that pass the test implemented by the provided function |
-| `arr.map()`        | Create a new array with the results of calling a function on                                 |
-| `arr.reduce()`     | Apply a function against an accumulator and each element to reduce it to a single value      |
-| `arr.flat()`       | Flatten nested arrays                                                                        |
-| `arr.flatMap()`    | Map each element and flatten the result                                                      |
-| `arr.concat()`     | Merge arrays                                                                                 |
-| `arr.slice()`      | Extract a section of an array and return a new array                                         |
-| ...                | ...                                                                                          |
-
-#### `arr.splice()`
-
-`arr.splice(start[, deleteCount, item1, ..., itemN])` method can be used to add, remove or replace elements in an array just in place.
-
-> [!Note]
->
-> `arr.splice()` method modifies the original array and returns an array containing the deleted elements.
-
-- To remove elements:
-
-  ```js
-  const arr = [1, 2, 3, 4, 5]
-  arr.splice(1, 2) // Remove 2 elements starting from index 1
-  console.log(arr) // -> [1, 4, 5]
-  ```
-
-- To add elements:
-
-  ```js
-  const arr = [1, 2, 3, 4, 5]
-  arr.splice(2, 0, 'a', 'b') // Add 'a' and 'b' at index 2
-  console.log(arr) // -> [1, 2, 'a', 'b', 3, 4, 5]
-  ```
-
-- To replace elements:
-
-  ```js
-  const arr = [1, 2, 3, 4, 5]
-  arr.splice(1, 2, 'a', 'b') // Replace 2 elements starting from index 1 with 'a' and 'b'
-  console.log(arr) // -> [1, 'a', 'b', 4, 5]
-  ```
-
-#### Array-like Object vs. Iterable Object
-
-An array-like `object` is an object that has:
-
-1. a `length` property.
-2. indexed elements.
-
-For instance:
-
-```js
-const arrayLike = {
-  0: 'a',
-  1: 'b',
-  2: 'c',
-  length: 3,
-}
-```
-
-An iterable `object` is an object that implements the iterable protocol, which means it has a `Symbol.iterator` method that returns an iterator (an object with a `next()` method):
-
-```js
-const iterable = {
-  items: ['a', 'b', 'c'],
-  [Symbol.iterator]() {
-    let index = 0
-    return {
-      next: () => {
-        if (index < this.items.length)
-          return { value: this.items[index++], done: false }
-        else
-          return { value: undefined, done: true }
-      },
-    }
-  },
-}
-```
-
-So an array-like object is not necessarily iterable, and an iterable object is not necessarily array-like too.
-
-### Advanced Working with Map and Set
-
-#### `WeakMap` and `WeakSet`
-
-`WeakMap` and `WeakSet` are similar to `Map` and `Set`, but they only accept **objects** or **non-registered symbols** as keys (for `WeakMap`) or values (for `WeakSet`), and they does not create strong references to their keys (for `WeakMap`) or values (for `WeakSet`).
-
-That is, an object's presence as a key in a `WeakMap` or as a value in a `WeakSet` will not prevent that object from being garbage collected. Once that object is garbage collected, its entry in the `WeakMap` or `WeakSet` will become candidates for garbage collection as well (if they aren't strongly referred to elsewhere).
-
-However, they does not allow observing the liveness of their keys (for `WeakMap`) or values (for `WeakSet`), because of this, they do not have methods to get their size, such as `size` property; Also the methods to iterate over their elements, such as `keys()`, `values()`, `entries()`, or `forEach()`.
-
-They are designed to be used in scenarios where you want to **associate data with an object/store an object** without preventing that object from being garbage collected. Use `WeakMap` as an example:
-
-```js
-const loggedInUsers = [
-  { name: 'Alice' },
-  { name: 'Bob' },
-]
-const userViewsMap = new WeakMap()
-
-/**
- * When the user views a page, we can record the number of views in the
- * `WeakMap`.
- *
- * @param {object} user - The user object in the loggedInUsers array
- * @returns {void}
- */
-function viewPage(user) {
-  const views = userViewsMap.get(user) ?? 0
-  userViewsMap.set(user, views + 1)
-  console.log(`${user.name} has viewed this page ${views + 1} times`)
-}
-
-/**
- * When the user logs out, we can remove the user object from the
- * `loggedInUsers` array, and if there are no other references to the user
- * object, it will be garbage collected, along with its entry in the `WeakMap`.
- *
- * @param {object} user - The user object in the loggedInUsers array
- * @returns {void}
- */
-function userLogout(user) {
-  const index = loggedInUsers.indexOf(user)
-  if (index !== -1) {
-    loggedInUsers.splice(index, 1)
-  }
-}
-```
-
 ### Advanced Working with Object
 
 #### Property Flag (So-called Property Descriptor)
@@ -1996,6 +1835,178 @@ Through this way, an object can "inherit" properties from its prototype, and the
 > [!Note]
 >
 > Prototype can be only an object or `null`, set it to other types are not allowed and will be ignored.
+
+### Advanced Working with Array
+
+#### Accessing Element
+
+The same as [`string`](#accessing-character).
+
+#### Array Length Property
+
+Contrary to your intuition, `length` property of an array is writable. If you increase it manually, nothing interesting will happen. But if you decrease it manually, the array will be truncated. **The process is irreversible**:
+
+```js
+const arr = [1, 2, 3, 4, 5]
+console.log(arr.length) // -> 5
+
+arr.length = 3
+console.log(arr) // -> [1, 2, 3]
+```
+
+So, the most simple and safe way to clear an array is to set its `length` property to `0`. 😏
+
+#### In-place Array Methods vs. Non-mutating Array Methods
+
+Arrays have two kinds of methods: in-place methods and non-mutating methods. In-place methods modify the original array, while non-mutating methods return a new array without modifying the original one.
+
+In-place methods include:
+
+| Method          | Description                                    |
+| --------------- | ---------------------------------------------- |
+| `arr.push()`    | Add elements to the end                        |
+| `arr.pop()`     | Remove the element from the end                |
+| `arr.unshift()` | Add elements to the beginning                  |
+| `arr.shift()`   | Remove the element from the beginning          |
+| `arr.splice()`  | [Add, remove or replace elements](#arr-splice) |
+| `arr.sort()`    | Sort the array                                 |
+| `arr.reverse()` | Reverse the array                              |
+| ...             | ...                                            |
+
+Non-mutating methods include:
+
+| Method             | Description                                                                                  |
+| ------------------ | -------------------------------------------------------------------------------------------- |
+| `arr.toSpliced()`  | No-mutating version of `arr.splice()`                                                        |
+| `arr.toSorted()`   | No-mutating version of `arr.sort()`                                                          |
+| `arr.toReversed()` | No-mutating version of `arr.reverse()`                                                       |
+| `arr.filter()`     | Create a new array with all elements that pass the test implemented by the provided function |
+| `arr.map()`        | Create a new array with the results of calling a function on                                 |
+| `arr.reduce()`     | Apply a function against an accumulator and each element to reduce it to a single value      |
+| `arr.flat()`       | Flatten nested arrays                                                                        |
+| `arr.flatMap()`    | Map each element and flatten the result                                                      |
+| `arr.concat()`     | Merge arrays                                                                                 |
+| `arr.slice()`      | Extract a section of an array and return a new array                                         |
+| ...                | ...                                                                                          |
+
+#### `arr.splice()`
+
+`arr.splice(start[, deleteCount, item1, ..., itemN])` method can be used to add, remove or replace elements in an array just in place.
+
+> [!Note]
+>
+> `arr.splice()` method modifies the original array and returns an array containing the deleted elements.
+
+- To remove elements:
+
+  ```js
+  const arr = [1, 2, 3, 4, 5]
+  arr.splice(1, 2) // Remove 2 elements starting from index 1
+  console.log(arr) // -> [1, 4, 5]
+  ```
+
+- To add elements:
+
+  ```js
+  const arr = [1, 2, 3, 4, 5]
+  arr.splice(2, 0, 'a', 'b') // Add 'a' and 'b' at index 2
+  console.log(arr) // -> [1, 2, 'a', 'b', 3, 4, 5]
+  ```
+
+- To replace elements:
+
+  ```js
+  const arr = [1, 2, 3, 4, 5]
+  arr.splice(1, 2, 'a', 'b') // Replace 2 elements starting from index 1 with 'a' and 'b'
+  console.log(arr) // -> [1, 'a', 'b', 4, 5]
+  ```
+
+#### Array-like Object vs. Iterable Object
+
+An array-like `object` is an object that has:
+
+1. a `length` property.
+2. indexed elements.
+
+For instance:
+
+```js
+const arrayLike = {
+  0: 'a',
+  1: 'b',
+  2: 'c',
+  length: 3,
+}
+```
+
+An iterable `object` is an object that implements the iterable protocol, which means it has a `Symbol.iterator` method that returns an iterator (an object with a `next()` method):
+
+```js
+const iterable = {
+  items: ['a', 'b', 'c'],
+  [Symbol.iterator]() {
+    let index = 0
+    return {
+      next: () => {
+        if (index < this.items.length)
+          return { value: this.items[index++], done: false }
+        else
+          return { value: undefined, done: true }
+      },
+    }
+  },
+}
+```
+
+So an array-like object is not necessarily iterable, and an iterable object is not necessarily array-like too.
+
+### Advanced Working with Map and Set
+
+#### `WeakMap` and `WeakSet`
+
+`WeakMap` and `WeakSet` are similar to `Map` and `Set`, but they only accept **objects** or **non-registered symbols** as keys (for `WeakMap`) or values (for `WeakSet`), and they does not create strong references to their keys (for `WeakMap`) or values (for `WeakSet`).
+
+That is, an object's presence as a key in a `WeakMap` or as a value in a `WeakSet` will not prevent that object from being garbage collected. Once that object is garbage collected, its entry in the `WeakMap` or `WeakSet` will become candidates for garbage collection as well (if they aren't strongly referred to elsewhere).
+
+However, they does not allow observing the liveness of their keys (for `WeakMap`) or values (for `WeakSet`), because of this, they do not have methods to get their size, such as `size` property; Also the methods to iterate over their elements, such as `keys()`, `values()`, `entries()`, or `forEach()`.
+
+They are designed to be used in scenarios where you want to **associate data with an object/store an object** without preventing that object from being garbage collected. Use `WeakMap` as an example:
+
+```js
+const loggedInUsers = [
+  { name: 'Alice' },
+  { name: 'Bob' },
+]
+const userViewsMap = new WeakMap()
+
+/**
+ * When the user views a page, we can record the number of views in the
+ * `WeakMap`.
+ *
+ * @param {object} user - The user object in the loggedInUsers array
+ * @returns {void}
+ */
+function viewPage(user) {
+  const views = userViewsMap.get(user) ?? 0
+  userViewsMap.set(user, views + 1)
+  console.log(`${user.name} has viewed this page ${views + 1} times`)
+}
+
+/**
+ * When the user logs out, we can remove the user object from the
+ * `loggedInUsers` array, and if there are no other references to the user
+ * object, it will be garbage collected, along with its entry in the `WeakMap`.
+ *
+ * @param {object} user - The user object in the loggedInUsers array
+ * @returns {void}
+ */
+function userLogout(user) {
+  const index = loggedInUsers.indexOf(user)
+  if (index !== -1) {
+    loggedInUsers.splice(index, 1)
+  }
+}
+```
 
 ### Advanced Working with Function
 

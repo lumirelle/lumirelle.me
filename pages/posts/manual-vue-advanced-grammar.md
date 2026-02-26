@@ -11,7 +11,7 @@ type: note
 
 > [!Note]
 >
-> This manual expects you have basic knowledge of Vue.js. If you see some use cases you are not familiar with, don't worry, just skip them first and the following chapters will explain them one by one.
+> This manual expects you already read through [JavaScript Advanced Grammar Manual](manual-js-advanced-grammar), and have basic knowledge of Vue.js. If you see some use cases you are not familiar with, don't worry, just skip them first and the following chapters will explain them one by one.
 >
 > This manual are mainly talking about Vue 3.x, Vue 2.x will only be mentioned when comparing the differences.
 >
@@ -3526,7 +3526,7 @@ const value = ref('someValue')
 </template>
 ```
 
-Too learn about the difference between attributes and properties, please refer to [HTML manual](/posts/manual/html-advanced-grammar-manual#attributes-vs-properties).
+Too learn about the difference between attributes and properties, please refer to [HTML manual](manual-html-advanced-grammar#attributes-vs-properties).
 
 #### `v-on` Directive
 

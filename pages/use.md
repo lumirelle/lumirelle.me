@@ -50,7 +50,7 @@ I'm really want to try MAC mini if I have chance in the future. ☺️
 
 Switched to [Brave](https://brave.com/) as Chrome is pushing hard on [Manifest V3](https://www.eff.org/deeplinks/2021/12/chrome-users-beware-manifest-v3-deceitful-and-threatening) without a good solution for AD blockers.
 
-See my [manuals](/posts/manual/windows-setup-manual#_5-brave-browser) for more details about my Brave setup.
+See my [manuals](/posts/manual-windows-setup#brave-browser) for more details about my Brave setup.
 
 ### Design / Social Media
 

@@ -148,7 +148,7 @@ console.log(e)
 >
 > You can see, **"TypeScript is a superset of JavaScript that adds static typing to the language"**. All of the behaviors of type should compatible with JavaScript.
 >
-> To solve this, TypeScript provides `as const` to mark whether the object properties is immutable or mutable, just like [`Object.freeze`](/posts/manual-js-advanced-grammar#limiting-access-to-object), but compile-time only, without runtime changes (with more compatibility).
+> To solve this, TypeScript provides `as const` to mark whether the object properties is immutable or mutable, just like [`Object.freeze`](manual-js-advanced-grammar#limiting-access-to-object), but compile-time only, without runtime changes (with more compatibility).
 >
 > (Array, [tuple](#advanced-working-with-array-and-tuple-type), function are the same, because they are objects under the hood 🙂)
 
@@ -178,7 +178,7 @@ type Greeting = `Hello ${World}, ${Name}!`
 
 ### Object Type Literal
 
-As you imagine, **object type literal** uses [JavaScript object literal syntax](/posts/manual-js-advanced-grammar#object) `{ ... }`, without "," as separator:
+As you imagine, **object type literal** uses [JavaScript object literal syntax](manual-js-advanced-grammar#object) `{ ... }`, without "," as separator:
 
 <!-- eslint-disable ts/method-signature-style -->
 
@@ -205,7 +205,7 @@ const obj: { // <- This is object type literal, no comma here
 
 ### Array Type Literal / Tuple Type
 
-As you imagine, **array type literal** simply uses [JavaScript array literal syntax](/posts/manual-js-advanced-grammar#array) `[ ... ]`:
+As you imagine, **array type literal** simply uses [JavaScript array literal syntax](manual-js-advanced-grammar#array) `[ ... ]`:
 
 ```ts
 const arr: [1, 2, 3] = [1, 2, 3]
@@ -1554,7 +1554,7 @@ type StrArrOrNumArr = ToArray<string | number>
 
 ### Mapped Type
 
-Mapped type is a way to create a new object type by transforming properties of existing object types, it based on object type, [**dynamic property names**](/posts/manual-js-advanced-grammar#dynamic-computed-property-names), [union type](#union-type) and `in` operator (to interator a union type), and also support [conditional types](#conditional-type).
+Mapped type is a way to create a new object type by transforming properties of existing object types, it based on object type, [**dynamic property names**](manual-js-advanced-grammar#dynamic-computed-property-names), [union type](#union-type) and `in` operator (to interator a union type), and also support [conditional types](#conditional-type).
 
 For example below, we use dynamic property names with `Key in Union` to iterate through the union of keys of the existing object type `T`, and use indexed access type `T[Key]` to get the value type of that property:
 

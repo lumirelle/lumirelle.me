@@ -491,7 +491,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
   ```
 
-To learn more about HTTP methods, please read the [computer network manual](/posts/manual/computer-network-manual.md#http-methods).
+To learn more about HTTP methods, please read the [computer network manual](manual-computer-network#http-methods).
 
 > [!Note]
 >

@@ -13,7 +13,7 @@ type: blog+note
 
 With the project size is growing up, we have to face the case of managing a large number of dependencies. `devDependencies` and `dependencies` are not enough to fit our needs.
 
-Thanks to the modern [JavaScript package managers](/posts/manual/js-pm-manual), we have "catalogs" to handle this situation: We can categorize them by why we use them: We have `test` dependencies which are meant to be used for testing, and `dev` dependencies which are used for development...
+Thanks to the modern [JavaScript package managers](/manual-js-pm), we have "catalogs" to handle this situation: We can categorize them by why we use them: We have `test` dependencies which are meant to be used for testing, and `dev` dependencies which are used for development...
 
 Here are two examples (using Bun):
 

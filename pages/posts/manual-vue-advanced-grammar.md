@@ -1,9 +1,9 @@
 ---
 title: Vue Advanced Grammar Manual
 date: 2026-01-28T11:47+08:00
-update: 2026-02-05T15:23+08:00
+update: 2026-02-26T18:14+08:00
 lang: en
-duration: 66min
+duration: 87min
 type: note
 ---
 
@@ -11,7 +11,7 @@ type: note
 
 > [!Note]
 >
-> This manual expects you already read through [JavaScript Advanced Grammar Manual](manual-js-advanced-grammar), and have basic knowledge of Vue.js. If you see some use cases you are not familiar with, don't worry, just skip them first and the following chapters will explain them one by one.
+> This manual expects you already read through [JavaScript Advanced Grammar Manual](manual-js-advanced-grammar), [TypeScript Advanced Grammar Manual](manual-ts-advanced-grammar), [HTML Advanced Grammar Manual](manual-html-advanced-grammar), and have basic knowledge of Vue.js. If you see some use cases you are not familiar with, don't worry, just skip them first and the following chapters will explain them one by one.
 >
 > This manual are mainly talking about Vue 3.x, Vue 2.x will only be mentioned when comparing the differences.
 >
@@ -39,7 +39,7 @@ The key features of Vue.js include:
 
 Why we say Vue.js is a progressive framework? This point can be fond in the way of creating a Vue application.
 
-Just imagine that, one day, you want to use Vue.js to implement the future requests for your existing native HTML + JavaScript + CSS project, how to do that? How could we create a Vue application in a native way?
+Just imagine that, one day, you want to use Vue.js to implement the future requests for your existing native HTML + JavaScript + CSS project, how to do that? How could we create a Vue application in a native way without any extra library?
 
 1. First step, include Vue.js library in the new page:
 
@@ -58,9 +58,11 @@ Just imagine that, one day, you want to use Vue.js to implement the future reque
    </html>
    ```
 
-2. Second step, use `createApp` to create a Vue application with the root component and let Vue take over the `#app` element. In the future, it will manage all the content inside that element for you base on the reactive data and the component logic.
+2. Second step, use exposed `createApp()` function to create the Vue application with a root component, then, let Vue take over the `#app` element.
 
-   The root component was created by `defineComponent`, with reactive data created by `ref`. We will explain these APIs in the corresponding chapters later.
+   In the future, it will manage all the content inside that element for you base on the reactive data and the component logic.
+
+   The root component was created by `defineComponent()`, with reactive data created by `ref()`. We will explain these APIs in the corresponding chapters later.
 
    _src/new-page.html_
 
@@ -109,7 +111,7 @@ Just imagine that, one day, you want to use Vue.js to implement the future reque
 
    ```js
    // Define a global variable `OtherComponent` to hold the component
-   // Use IIFE to avoid polluting the global namespace
+   // Use IIFE to create component to avoid polluting the global namespace
    const OtherComponent = (() => {
      const { defineComponent, ref } = Vue
      return defineComponent({
@@ -188,7 +190,7 @@ These few steps show us the key usage of Vue.js:
 
 ## Vue Component
 
-You may already know that components looks like the most basic building blocks in Vue.js applications: The Vue application are built on top of these components.
+You may already know that components looks like the most basic building blocks in Vue.js applications: **The Vue application are built on top of these components.**
 
 So what is a Vue component?
 
@@ -202,7 +204,7 @@ In the real applications, components are usually structured in a tree-like way, 
 
 ### Defining a Component
 
-You may already know how to define a basic JavaScript object Vue component in the browser environment:
+You may already know how to define a basic **JavaScript object Vue component** in the browser environment:
 
 ```js
 const { defineComponent } = Vue
@@ -220,15 +222,15 @@ const MyComponent = defineComponent({
 })
 ```
 
-`defineComponent` is a helper function provided by Vue to define a component, it only provides the type support and returns the same object we passed in.
+`defineComponent()` is a helper function provided by Vue to define a component, it only provides the type support and returns the same object we passed in.
 
-But when we are using build steps (like Vite, Webpack, etc. with Vue SFC Compiler), the most common way to define a Vue component is defining it in a single file with `.vue` extension, called Single File Component (SFC).
+But when we are using build steps (like _Vite_, _Webpack_, etc. with _Vue SFC Compiler_), the most common way to define a Vue component is defining it in a single file with `.vue` extension, called **Single File Component (SFC)**.
 
-There are two different syntax to define Vue SFC, and looks more different than JavaScript object component, but the underlying logic is the same -- They will be compiled to the corresponding JavaScript object component by Vue SFC Compiler.
+There are two different syntax to define Vue SFC: **general SFC syntax** and **`<script setup>` SFC syntax**. They looks more different than JavaScript object component, but the underlying logic is the same -- They will be compiled to the corresponding JavaScript object component by _Vue SFC Compiler_.
 
 > [!Note]
 >
-> Of course, these code below will executed in the standlone JavaScript runtime like Node.js or Bun with ESM support, so we can use `import` and `export` syntax there instead of `Vue` global variable.
+> Of course, these code below will executed in the standlone JavaScript runtime like Node.js or Bun with ESM support, so we can use `import` and `export` keywords there instead of `Vue` global variable.
 >
 > What's more, the real compiled output is more complex than this, for example, the `template` option will be futher compiled to a render function, etc. But anyway, to shows the core principles of SFC, this is enough. To learn about the real compiled output, you can try [Vue SFC Playground](https://sfc.vuejs.org/) and choose the "JS" output tab.
 
@@ -389,9 +391,9 @@ You can see that: JavaScript object component and SFC component are equivalent, 
 
 ### Composition API vs. Options API
 
-Until now, we are always using Vue composition API to define components: use a composed `setup()` function to complete all component setup logic.
+Until now, we are always using Vue **composition API** to define components: Use a composed `setup()` function to complete all component setup logic.
 
-There is still another API which is widely used in Vue 2.x: Options API.
+There is still another API which is widely used in Vue 2.x -- **options API**.
 
 For better comparison, we use JavaScript object component to show the differences between these two APIs:
 
@@ -481,8 +483,8 @@ export default defineComponent({
 
 In a word:
 
-- The composition API allows us to compose all the component setup logic in one `setup` function, we use standlone API functions like `ref`, `computed`, and `watch` to create reactive data, computed properties, and watchers
-- The options API separates these logic into different component object options like `data`, `methods`, `computed`, and `watch`, Vue will automatically process these options and create the corresponding reactive data, methods, computed properties, and watchers
+- The composition API allows us to **compose all the component setup logic in one `setup()` function**, we use standlone API functions like `ref()`, `computed()`, and `watch()` to create reactive data, computed properties, and watchers
+- The options API **separates logic into different component object members** like `data()`, `methods`, `computed`, and `watch`, Vue will automatically process these options and create the corresponding reactive data, methods, computed properties, and watchers
 
 > [!Note]
 >
@@ -490,9 +492,9 @@ In a word:
 
 > [!Note]
 >
-> As you can see, `<script setup>` syntax is only compatible with composition API as it uses `setup()` function under the hood, it cannot be used with options API.
+> As you can see, `<script setup>` syntax is only available in composition API as it's built on top of `setup()` function.
 
-### Register a Component
+### Register a Component Globally
 
 We already know how to register a component globally in the Vue application instance:
 
@@ -591,7 +593,7 @@ After that, any component in that Vue application can use `OtherComponent` witho
 
 Instead of registering a component globally, we can also use it locally in another component.
 
-In general SFC syntax with composition API, the way to use components locally is importing them and returning them from the `setup` function, then we correctly reference them in the `<template>` block (Yes, the same as JavaScript object component):
+In composition API general SFC syntax, the way to use components locally is importing them and returning them from the `setup` function, then we correctly reference them in the `<template>` block (Yes, the same as JavaScript object component):
 
 <table><tbody><tr><td width="500px" valign="top">
 
@@ -655,7 +657,7 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-Specially, **everything imported inside `<script setup>` will be returned automatically**. So if you are using `<script setup>`, you don't need to manually return the imported components from the `setup` function:
+Because **everything imported inside `<script setup>` will be returned automatically**, when you are using `<script setup>` SFC syntax, you don't need to manually return the imported components from the `setup()` function:
 
 <table><tbody><tr><td width="500px" valign="top">
 
@@ -773,6 +775,8 @@ export default __sfc__
 > It's recommended to use PascalCase in common cases for better readability, and kebab-case in in-DOM templates for better compatibility with HTML behavior (HTML is case-insensitive).
 >
 > BTW, until now, I haven't met any real case using in-DOM templates...
+>
+> What's more, when you need to work with web components who are only allowed to be used in kebab-case, using PascalCase for Vue components can easily distinguish them from web components in the template.
 
 ### Five Elements of a Component
 
@@ -869,7 +873,7 @@ We can define props by the `props` option of Vue components whatever composition
 
 <table><tbody><tr><td width="500px" valign="top">
 
-_src/ComponentWithPropsOptions.vue_
+_src/ComponentWithPropsOption.vue_
 
 ```vue
 <script>
@@ -912,7 +916,7 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-But when we using `<script setup>`, we cannot access the options of Vue components at all! How to deal with this case? Fortunately, Vue provides a macro helper called `defineProps`:
+But when we using `<script setup>` SFC syntax, we cannot access the options of Vue components at all! How to deal with this case? Fortunately, Vue provides a macro helper called `defineProps()`:
 
 <table><tbody><tr><td width="500px" valign="top">
 
@@ -957,13 +961,13 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-You can see that, **macros** in `<script setup>` syntax are just a workaround to configure the corresponding options of Vue components, they will be compiled to the equivalent options automatically. There are also other macros like `defineEmits`, which is corresponding to the `emits` option of Vue components...
+You can see that, **macros** in `<script setup>` SFC syntax are just a workaround to configure the corresponding options of Vue components, they will be compiled to the equivalent options automatically. For example, there are also other macros like `defineEmits`, which is corresponding to the `emits` option of Vue components...
 
 These two example will both create two props called `title` and `count`. `title` is an optional string prop, and `count` is an optional number prop with a default value of `0`. Vue will [validate the types of these props in runtime (development mode)](#props-and-events-with-validation).
 
-They are the same way in different syntax: They both define props by values.
+They are the same way in different syntax: **They both define props by values.**
 
-Another and better way to define props is using TypeScript types, Vue will compile them to the equivalent `props` option automatically:
+As Vue has excellent TypeScript support, there is another and better way to define props -- using TypeScript types. Vue will compile them to the equivalent `props` option automatically:
 
 <table><tbody><tr><td width="500px" valign="top">
 
@@ -1011,8 +1015,8 @@ This way is more concise and meaningful: use right tools to do right things, use
 
 Something you should notice is that there are some limitations:
 
-- You can only use one way to define props in one component, either using values syntax or using TypeScript types syntax.
-- Before Vue 3.3, the only way to assign default values to the props with types syntax is using another macro helper called `withDefaults`:
+- You can only use one way to define props in one component, either using values or using TypeScript types.
+- Before Vue 3.3, the only way to assign default values to the props defined by TypeScript types is using another macro helper called `withDefaults()`:
 
   <table><tbody><tr><td width="500px" valign="top">
 
@@ -1069,7 +1073,7 @@ Something you should notice is that there are some limitations:
 
   This may look a bit annoying.
 
-- After Vue 3.3, you can use destructuring assignment with default values, this is actually a grammar sugar, so you don't need to worry about [losing the reactivity of these props](#track-trigger-during-the-access-of-object-properties):
+  After Vue 3.3, you can use destructuring assignment with default values, this is actually a grammar sugar, so you don't need to worry about [losing the reactivity of these props](#track-trigger-during-the-access-of-object-properties):
 
   <table><tbody><tr><td width="500px" valign="top">
 
@@ -1123,18 +1127,9 @@ Something you should notice is that there are some limitations:
 
 ### Two Ways to Define Emits (Events)
 
-Emits are similar to props, it support both values syntax and types syntax:
+Emits are similar to props, it can also be defined by values or by TypeScript types.
 
 <table><tbody><tr><td width="500px" valign="top">
-
-_src/ComponentWithEmitsMacro.vue_
-
-```vue
-<script setup>
-// [!code highlight:1]
-defineEmits(['submit'])
-</script>
-```
 
 _src/ComponentWithEmitsOption.vue_
 
@@ -1144,6 +1139,15 @@ export default {
   // [!code highlight:1]
   emits: ['submit'],
 }
+</script>
+```
+
+_src/ComponentWithEmitsMacro.vue_
+
+```vue
+<script setup>
+// [!code highlight:1]
+defineEmits(['submit'])
 </script>
 ```
 
@@ -1157,6 +1161,7 @@ interface Emits {
 }
 // Or, Vue 3.3+ a shorter syntax:
 interface Emits {
+  // <event_name>: [<parameter_name>: <parameter_type>, ...]
   submit: [message: string]
 }
 defineEmits<Emits>()
@@ -1183,35 +1188,34 @@ The validation of props and emits are a kind of documentations for that componen
 
 <table><tbody><tr><td width="500px" valign="top">
 
-When we use values syntax, we can provide more detailed validation rules for props and emits **in runtime (development mode)** like this:
+When we define them by values, we can provide more detailed validation rules for props and emits, and they will take effect **in runtime (development mode)**, for example:
 
 ```vue
 <script setup>
-// [!code highlight:49]
+// [!code highlight:47]
 defineProps({
-  // A required string prop
+  // Required, must be string
   title: {
     type: String,
     required: true,
   },
-  // An optional string prop
+  // Optional, must be string
   description: String,
-  // An optional string prop too
+  // Optional, must be string too
   note: {
     type: String,
     required: false,
   },
-  // An optional number prop with a default value
+  // Optional, must be number, with default value `9`
   count: {
     type: Number,
     default: 9,
   },
-  // An optional string prop with default value
-  // and only allow specific values
+  // Optional, must be string, with default value `active`, and only
+  // allow specific values limited by `validator()`
   status: {
     type: String,
     default: 'active',
-    // Use validator function to limit the allowed values
     validator: (value) => {
       return [
         'active',
@@ -1223,14 +1227,13 @@ defineProps({
 })
 
 defineEmits({
-  // An emit event without payload
+  // An event cannot have payload
   close: (...args) => {
     if (args === undefined)
       return true
     return false
   },
-  // An emit event with a string payload, and returns
-  // a boolean to indicate whether the event is handled
+  // An event must with a string payload
   submit: (payload) => {
     if (typeof payload === 'string')
       return true
@@ -1240,7 +1243,7 @@ defineEmits({
 </script>
 ```
 
-A better way is to use TypeScript types to limit the props and emits, so that we no longer need to write extra configs. All the validation logic will done by TypeScript LSP and compiler **in compile-time**:
+A better way is to use TypeScript types, check the types **in compile-time** without any extra runtime cost:
 
 <!-- eslint-skip-->
 
@@ -1276,25 +1279,19 @@ _Corresponding Compiler Output_
 const __sfc__ = {
   // [!code highlight:48]
   props: {
-    // A required string prop
     title: {
       type: String,
       required: true,
     },
-    // An optional string prop
     description: String,
-    // An optional string prop too
     note: {
       type: String,
       required: false,
     },
-    // An optional number prop with a default value
     count: {
       type: Number,
       default: 9,
     },
-    // An optional string prop with default value
-    // and only allow specific values
     status: {
       type: String,
       default: 'active',
@@ -1309,14 +1306,11 @@ const __sfc__ = {
   },
 
   emits: {
-    // An emit event without payload
     close: (...args) => {
       if (args === undefined)
         return true
       return false
     },
-    // An emit event with a string payload, and returns
-    // a boolean to indicate whether the event is handled
     submit: (payload) => {
       if (typeof payload === 'string')
         return true
@@ -1363,7 +1357,7 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-All the validation are available in development mode only. In production mode, the compiler will omit all extra information to the simplest form for less bundle size. The example above will be compiled to:
+You may notice, all the validations only take effect in development mode only. In production mode, the compiler will omit all extra information to the simplest form for less bundle size and runtime cost. The example above will be compiled to:
 
 ```js
 const __sfc__ = {
@@ -1384,7 +1378,135 @@ const __sfc__ = {
 
 ### Model Value Binding
 
-From Vue 3.4, it's recommended to use `defineModel` macro to define model value binding for a `<script setup>` SFC.
+Props is a way to pass data from parent components to child components, but it's single-directional. When we need to pass data from child components to parent components, we can use with custom events:
+
+<table><tbody><tr><td width="500px" valign="top">
+
+_src/ComponentWithModel.vue_
+
+```vue
+<script setup lang="ts">
+// [!code highlight:6]
+const props = defineProps<{
+  modelValue: string
+}>()
+defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+</script>
+
+<template>
+  <div>
+    // [!code highlight:5]
+    <input
+      type="text"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    >
+  </div>
+</template>
+```
+
+Or with `useModel()` helper to create a model ref:
+
+_src/ComponentWithUseModel.vue_
+
+```vue
+<script setup lang="ts">
+// [!code highlight:9]
+import { useModel } from 'vue'
+
+const props = defineProps<{
+  modelValue: string
+}>()
+defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+const modelValue = useModel(props, 'modelValue')
+</script>
+
+<template>
+  <div>
+    // [!code highlight:5]
+    <input
+      type="text"
+      :value="modelValue"
+      @input="modelValue = $event.target.value"
+    >
+  </div>
+</template>
+```
+
+</td><td width="500px" valign="top">
+
+_Corresponding Compiler Output_
+
+<!-- eslint-skip -->
+
+```js
+const __sfc__ = {
+  // [!code highlight:17]
+  props: {
+    modelValue: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ['update:modelValue'],
+  template: `
+    <div>
+      // [!code highlight:5]
+      <input
+        type="text"
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)"
+      >
+    </div>
+  `,
+}
+```
+
+_Corresponding Compiler Output (With Use Model)_
+
+<!-- eslint-skip -->
+
+```js
+// [!code highlight:1]
+import { useModel } from 'vue'
+
+const __sfc__ = {
+  // [!code highlight:25]
+  props: {
+    modelValue: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ['update:modelValue'],
+  setup(__props) {
+    const props = __props
+    const modelValue = useModel(props, 'modelValue')
+    return {
+      props,
+      modelValue,
+    }
+  },
+  template: `
+    <div>
+      // [!code highlight:5]
+      <input
+        type="text"
+        :value="modelValue"
+        @input="modelValue = $event.target.value"
+      >
+    </div>
+  `,
+}
+```
+
+</td></tr></tbody></table>
+
+From Vue 3.4, it's recommended to use `defineModel()` macro for better readability and less boilerplate code:
 
 <table><tbody><tr><td width="500px" valign="top">
 
@@ -1429,66 +1551,13 @@ const __sfc__ = {
 
 </td></tr></tbody></table>
 
-But for users who are still using earlier versions, you may need manually define the `modelValue` prop and `update:modelValue` event, then use `useModel` helper function to create the model value binding:
-
-<table><tbody><tr><td width="500px" valign="top">
-
-_src/ComponentWithModel.vue_
-
-```vue
-<script setup lang="ts">
-// [!code highlight:9]
-import { useModel } from 'vue'
-
-const props = defineProps<{
-  modelValue: string
-}>()
-defineEmits<{
-  (e: 'update:modelValue', value: string): void
-}>()
-const modelValue = useModel(props, 'modelValue')
-</script>
-```
-
-</td><td width="500px" valign="top">
-
-_Corresponding Compiler Output_
-
-<!-- eslint-skip -->
-
-```js
-// [!code highlight:1]
-import { useModel } from 'vue'
-
-const __sfc__ = {
-  // [!code highlight:15]
-  props: {
-    modelValue: {
-      type: String,
-      required: true,
-    },
-  },
-  emits: ['update:modelValue'],
-  setup() {
-    const props = __props
-    const modelValue = useModel(props, 'modelValue')
-    return {
-      props,
-      modelValue,
-    }
-  },
-}
-```
-
-</td></tr></tbody></table>
-
 As you can see, so-called "v-model" binding is just a syntax sugar for passing a `modelValue` prop and listening to `update:modelValue` event.
 
 > [!Note]
 >
-> For general SFC syntax, you can refers to the _Corresponding Compiler Output_ section above, they are the same.
+> For general SFC syntax, you can refers to the _Corresponding Compiler Output_ above, they are similar.
 
-> [!Warning]
+> [!Caution]
 >
 > Be careful with setting default values for `modelValue`, see [`v-model` directive](#v-model-directive) for more details.
 
@@ -1496,7 +1565,7 @@ As you can see, so-called "v-model" binding is just a syntax sugar for passing a
 
 Sometimes, we may need to expose some methods or properties to a child component instance, so that the parent component can call these methods or access these properties directly.
 
-We can use `defineExpose` macro to define the public API of a component:
+We can use `defineExpose()` macro to define the public API of a component:
 
 <table><tbody><tr><td width="500px" valign="top">
 
@@ -1578,11 +1647,13 @@ function handleClick() {
 
 > [!Note]
 >
-> For general SFC syntax with composition API, you can refers to the _Corresponding Compiler Output_ section above, they are the same, while everything is exposed by default in options API components...
+> For composition API general SFC syntax, you can refers to the _Corresponding Compiler Output_ section above, they are similar.
+>
+> For options API, everything is exposed by default.
 
 ### Slots
 
-Slots are a way to pass content from parent components to child components, they are similar to props, but instead of passing data, we pass template content.
+Slots are the way to pass content from parent components to child components, they are similar to props, but instead of passing data, they pass template content.
 
 _src/ComponentWithSlots.vue_
 
@@ -1720,6 +1791,8 @@ const tabs = [
 
 <!-- TODO(Lumirelle): -->
 
+TODO...
+
 ### Component Lifecycle Hooks
 
 Every Vue component has its own lifecycle, from mounting, updating, to unmounting.
@@ -1840,11 +1913,19 @@ export default {
 
 ### Composables
 
-Composables are reusable functions that based on Vue composition API to encapsulate and share **stateful logic** between components.
+While the logic inside `setup()` function grows, it may become hard to manage and reuse. We have to separate them into smaller and more focused pieces.
+
+Composables are some of these pieces that based on Vue composition API to encapsulate and share **stateful logic** between components.
+
+> [!Note]
+>
+> Other stateless pieces are "utils".
 
 What's stateful and stateless logic?
 
 For example, utils like `formatDate()` or `calculateSum()` are stateless logic, they only take some input parameters and return the corresponding output values, without any internal state.
+
+<table><tbody><tr><td width="500px" valign="top">
 
 _utils/date.js_
 
@@ -1856,6 +1937,8 @@ export function formatDate(date, format) {
 }
 ```
 
+</td><td width="500px" valign="top">
+
 _Usage_
 
 ```js
@@ -1865,7 +1948,11 @@ const formattedDate = formatDate(new Date(), 'YYYY-MM-DD')
 console.log(formattedDate)
 ```
 
-Composables are different, they usually create and manage some reactive state internally, and expose them. For example, a `useMouse()` composable can create reactive data to track the mouse position, and expose them to the components who use this composable:
+</td></tr></tbody></table>
+
+Composables are different, they usually **create and manage some reactive state internally**, and expose them. For example, a `useMouse()` composable can create reactive data to track the mouse position, and expose them to the components who use this composable:
+
+<table><tbody><tr><td width="500px" valign="top">
 
 _composables/useMouse.js_
 
@@ -1882,12 +1969,18 @@ export function useMouse() {
     y.value = event.pageY
   }
 
-  // Automatically add and remove event listeners
+  // Automatically setup event listeners
   onMounted(() => {
-    window.addEventListener('mousemove', update)
+    window.addEventListener(
+      'mousemove',
+      update
+    )
   })
   onUnmounted(() => {
-    window.removeEventListener('mousemove', update)
+    window.removeEventListener(
+      'mousemove',
+      update
+    )
   })
 
   return {
@@ -1896,6 +1989,8 @@ export function useMouse() {
   }
 }
 ```
+
+</td><td width="500px" valign="top">
 
 _Usage_
 
@@ -1906,9 +2001,10 @@ export default defineComponent({
   setup() {
     const { x, y } = useMouse()
 
-    // When the mouse position changes, it will be logged automatically
+    // When the mouse position changes,
+    // it will be logged automatically
     watch([x, y], ([newX, newY]) => {
-      console.log(`Mouse position: (${newX}, ${newY})`)
+      console.log(`Mouse: (${newX}, ${newY})`)
     })
 
     return {
@@ -1918,6 +2014,8 @@ export default defineComponent({
   },
 })
 ```
+
+</td></tr></tbody></table>
 
 Futhermore, composables can also use other composables to build more complex stateful logic:
 
@@ -1962,7 +2060,7 @@ export function useMouseV2() {
 }
 ```
 
-As you can see, composables can contain Vue lifecycle hooks, so it's expected that composables are only used inside the `setup()` function of Vue components. That's also why we say composables are built on top of Vue composition API.
+As you can see, composables are expected only be used inside the `setup()` function of Vue components, so they can contain Vue lifecycle hooks. That's also why we say composables are built on top of Vue composition API.
 
 With composables, we can encapsulate and modularize related stateful logic, making it easier to manage and reuse, thus reduce the code inside a component. That's great for maintainability and scalability of a large Vue application.
 
@@ -1977,7 +2075,7 @@ If you are composable author, there are some best practices you should follow:
   }
   ```
 
-- The parameters should compatible with both plain value, refs and getter functions, it's recommended to use `toValue()` (Vue 3.3+) helper to handle these cases.
+- The parameters should compatible with both **plain value, refs and getter functions**, it's recommended to use `toValue()` (Vue 3.3+) helper to handle these cases.
 
   ```js
   import { toValue } from 'vue'
@@ -1989,7 +2087,7 @@ If you are composable author, there are some best practices you should follow:
   }
   ```
 
-- The return values should be an non-reactive object, containing refs, reactive objects and functions. This ensures the destructuring of the return values doesn't break reactivity.
+- The return values should be **an non-reactive object, containing refs, reactive objects and functions**. This ensures the destructuring of the return values doesn't break reactivity.
 
   ```js
   export function useXxx() {
@@ -2092,7 +2190,7 @@ const model = ref('Initial Model Value')
 </template>
 ```
 
-You may see something familiar and yet strange here:
+You may see something we haven't covered in the above example, like:
 
 - `ref` function is used to create a reactive data, it's belong to [Vue's reactivity system](#reactivity-system)
 - Some special attributes starting with `v-`, these are called [**directives**](#directives). `:` and `@` are shorthand syntax for `v-bind` and `v-on` directives respectively
@@ -2102,7 +2200,7 @@ Don't worry, we are now preparing to learn these concepts step by step!
 
 ### Built-in Components
 
-#### `Transition` & `TransitionGroup`
+#### `Transition` and `TransitionGroup`
 
 Vue provides two built-in components for applying transition effects based on reactive state changes:
 
@@ -2405,7 +2503,13 @@ For error handling, you can use `onErrorCaptured` lifecycle hook inside the pare
 
 > [!Note]
 >
-> Vue team separated the reactivity system implementation into a standalone package called [`@vue/reactivity`](https://www.npmjs.com/package/@vue/reactivity). You can use it standalone without Vue.js!
+> In Vue 2.x, without composition API, the reactivity data can only be created by defining data properties in `data()` function of Vue components, so there is no way to create reactive data manually.
+>
+> So, for Vue 2.x, only the principle sections are applicable; For Vue 3.x, both principle and API usage sections are applicable.
+
+> [!Note]
+>
+> Since Vue 3.+, Vue team separated the reactivity system implementation into a standalone package called [`@vue/reactivity`](https://www.npmjs.com/package/@vue/reactivity). You can use it standalone without Vue.js!
 
 The most important feature of Vue.js is its low invasive reactivity system, it manages data and states inside Vue components. So what does "reactivity" mean?
 
@@ -2434,7 +2538,7 @@ function update() {
 
 And then we need to define some terms:
 
-- We call the update on target data `C1` made by this `update()` function as a **side effect**, because this changes the state outside of the `update` function.
+- We call the update on target data `C1` made by this `update()` function as a **side effect**, because this changes the state outside of the function itself;
 
   > [!Note]
   >
@@ -2446,7 +2550,7 @@ And then we need to define some terms:
   > }
   > ```
 
-- The source variables `A1` and `B1` are **dependencies** of the `update()` function, because the value of them are used to make that side effect.
+- The source variables `A1` and `B1` are **dependencies** of the `update()` function, because the value of them are used to make that side effect;
 - This side effect can be called a **subscriber** of those dependencies. When any of the dependencies change, the subscriber should be notified to update.
 
 Then we need a magic function called `effect()`, it receive a update function, and should complete the following tasks:
@@ -2455,16 +2559,16 @@ Then we need a magic function called `effect()`, it receive a update function, a
 effect(update)
 ```
 
-- Call the `update()` function once to create the first side effect
-- Track a variable when it's accessed. For example, when we execute `A1 + B1`, it should know both `A1` and `B1` are accessed
-- When a variable is accessed during creating a side effect, it should register that side effect as a subscriber of that variable. For example, when `A1` and `B1` are accessed during the execution of `update()`, it should register `update()` as a subscriber of both `A1` and `B1`
-- Track the changes of a variable, when the variable is changed, should notify all of its subscriber. For example, when we assign a new value to `A1` or `B1`, it should know that the variable has changed, and "notify" `update()` function to re-execute
+- Call the `update()` function once to create the first side effect;
+- Track a variable when it's accessed. For example, when we execute `A1 + B1`, it should know both `A1` and `B1` are accessed;
+- When a variable is accessed during creating a side effect, it should register that side effect as a subscriber of that variable. For example, when `A1` and `B1` are accessed during the execution of `update()`, it should register `update()` as a subscriber of both `A1` and `B1`;
+- Track the changes of a variable, when the variable is changed, should notify all of its subscriber. For example, when we assign a new value to `A1` or `B1`, it should know that the variable has changed, and "notify" `update()` function to re-execute.
 
-Call the function once and create the side effect is easily, but how could we track/trigger when a variable is accessed?
+Call the function once and create the side effect is easily, we just need to call that `update()` function once, but how could we track/trigger when a variable is accessed?
 
 ### Track/Trigger during the Access of Object Properties
 
-For the variable access, there is no way in native JavaScript, for example:
+For the variable access, there is no way to do in native JavaScript, for example:
 
 ```js
 let v = 1
@@ -2504,7 +2608,7 @@ There are two ways to achieve this:
 
   > [!Note]
   >
-  > Because of the limitation of `Object.defineProperty`, Vue 2.x cannot detect the addition or deletion of properties on an object, so we have to use `Vue.set()` and `Vue.delete()` methods as a workaround.
+  > Because of the limitation of `Object.defineProperty`, Vue 2.x cannot detect the addition or deletion of properties on an object, also for arrays and sets, so we have to use `Vue.set()` and `Vue.delete()` methods as a workaround.
 
   > [!Note]
   >
@@ -2566,11 +2670,14 @@ There are two ways to achieve this:
       },
     })
   }
+
+  // Usage
+  const state = reactive({ A1: 1, B1: 2 })
   ```
 
   > [!Note]
   >
-  > With `Proxy`, Vue 3.x can detect the addition or deletion of properties on an object automatically.
+  > With `Proxy`, Vue 3.x can detect the addition or deletion of properties on an object automatically, also for arrays and sets.
 
   > [!Note]
   >
@@ -2742,7 +2849,9 @@ function track(target, key) {
 }
 ```
 
-We stored all subscribers in a global `WeakMap<target, Map<key, Set<effect>>>` structure, `getSubscribersForProperty()` function will find the correct `Set<effect>` for that target reactive object and property key, creating them if necessary. They are simple data structure operations, so we won't go into details here.
+> [!Note]
+>
+> We stored all subscribers in a global `WeakMap<target, Map<key, Set<effect>>>` structure, `getSubscribersForProperty()` function will find the correct `Set<effect>` for that target reactive object and property key, creating them if necessary. They are simple data structure operations, so we won't go into details here.
 
 Finally, implement `trigger()` function. Inside `trigger()` function, we will find all of the subscribers of that variable, and re-execute them:
 
@@ -2804,7 +2913,11 @@ function reactive(obj) {
 
 > [!Note]
 >
-> This is how `reactive()` and `effect()` functions works in `@vue/reactivity` package.
+> Without composition API, we cannot manipulate the reactive data manually in Vue 2.x, everything is done by itself internally. So there is also not such reactive APIs to talk about, for Vue 2.x users, this only helps you to understand the principle.
+
+> [!Note]
+>
+> This is also how `reactive()` and `effect()` functions works in `@vue/reactivity` package.
 >
 > If you don't want to make a deep reactive, you can use `shallowReactive()` function, which only makes the top-level properties reactive. This is useful to improve performance.
 
@@ -2812,36 +2925,11 @@ function reactive(obj) {
 >
 > Our simple implementation of reactivity system does not handle some edge cases, like circular references, array methods, [watcher stop](#watcher-stop), etc. The real implementation in Vue.js is more complex and robust.
 
-### Reactive Principle Summary
-
-In Vue.js, the track and trigger behaviors are **passive**, and attached to the access of reactive object (created by `reactive()` or `ref()`) properties. This means you don't need to track something actively, instead, just **create some reactive data as sources**.
-
-```js
-import { reactive } from '@vue/reactivity'
-
-// Create a reactive object as the source
-const source = reactive({
-  name: 'Alice',
-  age: 25,
-})
-```
-
-When you need something to do when the reactive data changes, just **create an effect**, and put the logic inside the effect function. Vue will automatically record the dependencies and re-execute the effect when any of the dependencies change.
-
-```js
-import { effect } from '@vue/reactivity'
-
-// Create an effect to do something when the source changes
-effect(() => {
-  console.log(`Name: ${source.name}, Age: ${source.age}`)
-})
-```
-
-Watchers, computed properties, template directives, etc. are all built on top of this simple principle.
-
 ### Reactive Primitives
 
-We know primitives has no properties, so is there no way to make primitive values reactive?
+As you imagine, Vue 2.x wraps all reactive data in the returned object of `data()` function, and there is no API for us creating reactive data manually. So there is no reactive primitives in Vue 2.x, and this section is only for Vue 3.x users.
+
+Now we know primitives has no properties, is there no way to make primitive values reactive in Vue 3.x?
 
 Yes, but we can use a workaround: wrap the primitive value in an object, and make that object reactive: Setting a single property `value` to hold the primitive value, and track the access of that property.
 
@@ -2877,7 +2965,96 @@ For object values, `ref()` still wraps them in this way, but also makes them rea
 >
 > Our simple implementation of `ref()` does not handle some edge cases too...
 
-### Unpack
+### `reactive()` vs `ref()`
+
+Vue community recommends users use `ref()` as much as possible, this is because:
+
+- `ref()` support any type of values, including primitives and objects, while `reactive()` only support objects;
+- Reactive data created by `ref()` can be totally replaced by re-assigning, while `reactive()` cannot;
+
+  ```ts
+  // ✔️ Fine
+  const a = ref({
+    name: 'Alice',
+  })
+  a.value = {
+    name: 'Bob',
+  }
+
+  // ❌ Cannot re-assign const
+  const b = reactive({
+    name: 'Alice',
+  })
+  b = {
+    name: 'Bob',
+  }
+
+  // ❌ Lose reactivity
+  let c = reactive({
+    name: 'Alice',
+  })
+  c = {
+    name: 'Bob',
+  }
+  ```
+
+- Reactive data created by `ref()` can only access from `value` property, this helps us to distinguish from normal data, avoid us to destructuring them or passing their properties to a function in accident.
+
+  <!-- eslint-skip -->
+
+  ```ts [twoslash]
+  // @noErrors
+  import { reactive, ref } from 'vue'
+
+  const a = ref({
+    name: 'Alice',
+  })
+  const b = reactive({
+    name: 'Alice',
+  })
+  // ---cut---
+  // We can see, `a` is a reactive data,
+  // because it has `value` and `RefSymbol` properties
+  console.log(a.  )
+  //            ^|
+
+  // ...
+
+  // But we have no idea what `b` is
+  console.log(b.  )
+  //            ^|
+
+  // ...
+  ```
+
+### Reactive Principle Summary
+
+In Vue.js, the track and trigger behaviors are **passive**, and attached to the access of reactive object properties. This means you don't need to track something actively, instead, just **create some reactive data as sources**.
+
+```js
+import { reactive } from '@vue/reactivity'
+
+// Create a reactive object as the source
+const source = reactive({
+  name: 'Alice',
+  age: 25,
+})
+```
+
+When you need something to do when the reactive data changes, just **create an effect**, and put the logic inside the effect function. Vue will automatically record the dependencies and re-execute the effect when any of the dependencies change.
+
+```js
+import { effect } from '@vue/reactivity'
+
+// Create an effect to do something when the source changes
+effect(() => {
+  console.log(`Name: ${source.name}, Age: ${source.age}`)
+})
+```
+
+Watchers, computed properties, template directives, etc. are all built on top of this simple principle.
+
+### Unpack for `ref()`
 
 For better usability, Vue.js provides an automatic unpacking feature for `ref()` values in some cases:
 
@@ -2979,7 +3156,9 @@ Notice that, unpack does not means removing the `ref()` wrapper, it's just a ext
 
 ### Watchers and Computed Properties
 
-With reactive data (`reactive()` and `ref()`) and effects (`ReactiveEffect`), we can build more powerful APIs on top of them, like watchers and computed properties.
+With reactive data and effects, now we can build more powerful APIs on top of them, like watchers and computed properties.
+
+Watchers are used to perform side effects when reactive data changes, just like effect, but with more options and features; Computed properties are used to create derived reactive data based on other reactive data, they maintain an internal effect to reduce the mental burden of users:
 
 ```js
 import { reactive, watch } from '@vue/reactivity'
@@ -3002,23 +3181,19 @@ const C1 = computed(() => state.A1 + state.B1)
 
 You can refer to the [source of `watch()` function](https://github.com/vuejs/core/blob/main/packages/reactivity/src/watch.ts#L120) and [source of `computed()` function](https://github.com/vuejs/core/blob/main/packages/reactivity/src/computed.ts#L198) for more details.
 
-### High-Level Reactive APIs
+### High-Level Watchers and Computed Properties
 
-> [!Note]
->
-> These high-level APIs are implemented in the Vue core, bundled with Vue.js.
-
-Vue.js provides more high-level APIs built on top of the reactivity system and Vue.js itself, to make it easier to use:
+Vue.js provides high-level watchers and computed properties built on top of the reactivity system and Vue.js itself, to make it easier to integrate with Vue component:
 
 - [Support cleanup](#watcher-cleanup)
 - [Support stop](#watcher-stop), bound the watcher lifecycle to component instance lifecycle
-- [Update trigger timing control](#watcher-trigger-timing)
+- [Update trigger timing control](#watcher-update-trigger-timing)
 - Better error handling
 - ...
 
-#### Watchers
+#### `watch()` and `watchEffect()`
 
-`watch()` in `vue` is a high-level version of `watch()` in `@vue/reactivity`:
+[`watch()`](https://github.com/vuejs/core/blob/main/packages/runtime-core/src/apiWatch.ts#L131) in `vue` is a high-level version of [`watch()`](https://github.com/vuejs/core/blob/main/packages/reactivity/src/watch.ts#L120) in `@vue/reactivity`:
 
 ```js
 import { reactive, watch } from 'vue'
@@ -3041,7 +3216,7 @@ state.A1 = 3 // -> C1 updated: 5
 state.B1 = 4 // -> C1 updated: 7
 ```
 
-`watchEffect()` is a variant which watches the effect itself, without specifying the source explicitly:
+[`watchEffect()`](https://github.com/vuejs/core/blob/main/packages/runtime-core/src/apiWatch.ts#L56) is a variant which watches the effect itself, without specifying the source explicitly:
 
 ```js
 import { reactive, watchEffect } from 'vue'
@@ -3088,9 +3263,42 @@ watchEffect((onCleanup) => {
 })
 ```
 
-From Vue 3.5+, there is a new API `onWatcherCleanup()`, it has more limitations, so for my opinion, it's better to use the above method.
+From Vue 3.5+, there is a new API `onWatcherCleanup()`, it must be called synchronous directly from the callback function, but **it's a standlone API, which means we can clean up side effect in nested functions without passing `onCleanup()` function level by level**, simplify the codebase:
 
-#### Watcher Trigger Timing
+```js
+import { onWatcherCleanup, watch, watchEffect } from 'vue'
+
+// ✔️ Good examples
+watch(id, (newId, oldId) => {
+  syncFunction(newId, oldId)
+  onWatcherCleanup(() => {
+    // Clean up logic
+  })
+})
+watch(name, (newName, oldName) => {
+  asyncFunction(newName, oldName)
+  onWatcherCleanup(() => {
+    // Clean up logic
+  })
+})
+watchEffect(() => {
+  syncFunctionToo()
+  onWatcherCleanup(() => {
+    // Clean up logic
+  })
+})
+
+// ❌ Bad examples
+watch(name, async (newName, oldName) => {
+  await asyncFunction(newName, oldName)
+  // Ops.. Call after `await`!
+  onWatcherCleanUp(() => {
+    // Clean up logic
+  })
+})
+```
+
+#### Watcher Update Trigger Timing
 
 When a reactive dependency is changed, both the Vue component template re-rendering and the watcher callback execution are triggered.
 
@@ -3098,31 +3306,29 @@ The high-level reactive APIs provide options to control the timing of watcher ca
 
 By default, the watcher callback is executed **after the parent component re-rendering** and **before the re-rendering of the component it belongs to**, but you can change this behavior by setting the `flush` option to one of the following values:
 
-- `pre` (default): The watcher callback is executed before the component it belongs to re-rendering.
+- `pre` (default): The watcher callback is executed **after the parent component re-rendering** and **before the component it belongs to re-rendering**.
   ```js
   watch(source, callback, { flush: 'pre' })
   ```
-- `post`: The watcher callback is executed after the component it belongs to re-rendering.
+- `post`: The watcher callback is executed **after the component it belongs to re-rendering**.
   ```js
   watch(source, callback, { flush: 'post' })
   ```
-- `sync`: The watcher callback is executed synchronously immediately after the dependency is changed, before any component re-rendering.
+- `sync`: The watcher callback is executed **synchronously immediately after the dependency is changed, before any component re-rendering**.
   ```js
   watch(source, callback, { flush: 'sync' })
   ```
   > [!Warning]
   >
-  > Like DOM updates, watchers are also batched by default to improve performance, except sync watchers.
-  >
-  > We should avoid using sync watchers on the source which may change frequently.
+  > Like DOM updates, watchers are also batched by default to improve performance, except sync watchers. So we should avoid to use sync watchers on the source who changes frequently.
 
 #### Watcher Stop
 
-The low-level reactive APIs do not provide a simple way to stop a watcher. If a watcher is no longer needed, it may cause memory leak if we don't stop it.
+The low-level watchers do not provide a simple way to stop. If a watcher is no longer needed, it may cause memory leak.
 
-Things is different in high-level reactive APIs. By default, watchers created by `watch()` and `watchEffect()` are bound to the host component instance, and will be destroyed automatically when the component is unmounted.
+Things are different in high-level wathers. By default, watchers created by `watch()` and `watchEffect()` are bound to the host component instance, and will be destroyed automatically when the component is unmounted.
 
-The exception is async watchers:
+Of course, there is only one exception -- async watchers:
 
 ```js
 import { watchEffect } from 'vue'
@@ -3157,7 +3363,7 @@ It's not recommended to use async watchers, you'd better find a way to avoid the
 
 #### Computed Properties
 
-`computed()` in `vue` is also a high-level version of `computed()` in `@vue/reactivity`:
+[`computed()`](https://github.com/vuejs/core/blob/main/packages/runtime-core/src/apiComputed.ts#L4) in `vue` is also a high-level version of [`computed()`](https://github.com/vuejs/core/blob/main/packages/reactivity/src/computed.ts#L198) in `@vue/reactivity`:
 
 ```js
 import { computed, reactive } from 'vue'
@@ -3195,7 +3401,7 @@ onRenderTriggered((e) => {
 </script>
 ```
 
-For `computed()` and `watch()`, you can use `onTrack` and `onTrigger` options to debug them:
+For high-level watchers and computed properties, you can use `onTrack` and `onTrigger` options to debug them:
 
 <!-- eslint-skip -->
 
@@ -3259,9 +3465,9 @@ We already saw some examples of template syntax in previous sections, now let's 
 
 ### Directives
 
-Directives are special attributes that start with `v-`, they provide special reactive behavior to the DOM elements, which means reactive data can update the DOM structure and attributes dynamically with these directives.
+Directives are special attributes that start with `v-`, they provide special reactive behavior to the DOM elements, which means reactive data can update the DOM structure and [attributes/properties](manual-html-advanced-grammar#attributes-vs-properties) dynamically with these directives.
 
-You may already know, they are built on top of the [reactivity system](#reactivity-system) we discussed before.
+They are built on top of the [reactivity system](#reactivity-system) we discussed before.
 
 The syntax of a directive is:
 
@@ -3269,7 +3475,7 @@ The syntax of a directive is:
 directive-name:parameter.modifier="value"
 ```
 
-See all Vue Directives in the [official documentation](https://vuejs.org/api/built-in-directives.html).
+See all Vue directives in the [official documentation](https://vuejs.org/api/built-in-directives.html).
 
 #### `v-if` Directive
 
@@ -3277,7 +3483,7 @@ See all Vue Directives in the [official documentation](https://vuejs.org/api/bui
 | --------- | -------- | ------------------------------- |
 | N/A       | N/A      | A JavaScript boolean expression |
 
-The `v-if` directive is used to conditionally render elements based on a boolean expression. If the expression evaluates to `true`, the element will be rendered; otherwise, it will not be included in the DOM.
+The `v-if` directive is used to conditionally render elements based on a boolean expression. If the expression evaluates to [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy), the element will be rendered; otherwise, it will not be included in the DOM.
 
 <!-- eslint-skip -->
 
@@ -3402,7 +3608,7 @@ const object = ref({ key1: 'value1', key2: 'value2' })
 </template>
 ```
 
-Different from JavaScript `for...in` loop, `v-for` directive iterates over both objects and arrays. It also use `()` to destructure multiple values instead `[]` array destructuring in JavaScript.
+Different from JavaScript `for...in` loop, `v-for` directive iterates over **both objects and arrays**. It also uses `()` to destructure multiple values instead `[]` array destructuring in JavaScript.
 
 By default, `v-for` uses the strategy of "in-place patch" when updating the elements, for example:
 
@@ -3463,9 +3669,9 @@ const items = ref(['A', 'B', 'C'])
 | ---------------- | -------- | ------------ |
 | Target attribute | N/A      | Target value |
 
-The `v-bind` directive is used to bind HTML attributes to data in the Vue instance. When the data changes, the attributes will be updated accordingly.
+The `v-bind` directive is used to bind HTML attributes / Vue component props to data. When the data is reactive, and it changes, the attributes / component props will be updated accordingly.
 
-This is a single-way binding from data to the attribute, which means changes to the attribute in the DOM will not affect the data in the Vue instance.
+This is a single-way binding from data to the attribute / component props, which means changes to the attribute in the DOM or props in the Vue component instance will not affect the source data.
 
 You can use it in the following ways:
 
@@ -3534,7 +3740,7 @@ Too learn about the difference between attributes and properties, please refer t
 | ------------ | ------------------------- | ------------- |
 | Target event | See the explanation below | Event handler |
 
-The `v-on` directive is used to listen to DOM events and execute some JavaScript when they are triggered. You can use it in the following ways:
+The `v-on` directive is used to listen to DOM events / Vue component emits and execute some JavaScript when they are triggered. You can use it in the following ways:
 
 <!-- eslint-skip -->
 
@@ -3596,14 +3802,14 @@ It supports many event modifiers:
 | ---------------- | ------------------------- | ------------- |
 | Target attribute | See the explanation below | Reactive data |
 
-The `v-model` directive is used for two-way data binding between form input elements / components and the Vue instance data.
+The `v-model` directive is used for two-way data binding between form input elements / [Vue components with `modelValue`](#model-value-binding) and reactive data.
 
 It can only be used on:
 
 - `<input>`
 - `<select>`
 - `<textarea>`
-- Components
+- Vue Components (with `modelValue` prop and `update:modelValue` event)
 
 It accpets different modifiers to customize its behavior:
 
@@ -3613,9 +3819,9 @@ It accpets different modifiers to customize its behavior:
 
 > [!Note]
 >
-> If you are using `v-model`, the default value set by the `value`, `checked`, or `selected` attributes will be ignored. Instead, you should set the initial value directly in the Vue instance data.
+> If you are using `v-model`, the default value set by the `value`, `checked`, or `selected` attributes will be ignored. Instead, you should set the initial value directly in that reactive data.
 
-> [!Warning]
+> [!Caution]
 >
 > When you define a model value in a component, you shouldn't to set the default value, it may cause the out of synchronization between the data in parent component and the model value in child component.
 >
@@ -3737,7 +3943,63 @@ import ChildComponent from './ChildComponent.vue'
 
 #### Custom Directives
 
-<!-- TODO(Lumirelle): -->
+A directive is just a special JavaScript object with some agreed hooks.
+
+For `<script setup>` SFC syntax, you can define an object with the variable name starts with `v` inside the `<script setup>` block, and it will be registered as directive automatically:
+
+```vue
+<script setup>
+// Enables v-highlight in templates
+const vHighlight = {
+  mounted: (el) => {
+    el.classList.add('is-highlight')
+  }
+}
+</script>
+
+<template>
+  <p v-highlight>
+    This sentence is important!
+  </p>
+</template>
+```
+
+For composition API with general SFC syntax, or options API, you need to define the directive object under `directives` option of the component:
+
+```vue
+<script>
+export default {
+  directives: {
+    highlight: {
+      mounted(el) {
+        el.classList.add('is-highlight')
+      }
+    }
+  }
+}
+</script>
+
+<template>
+  <p v-highlight>
+    This sentence is important!
+  </p>
+</template>
+```
+
+You can also register a global custom directive by calling `app.directive()` method:
+
+```js
+import { createApp } from 'vue'
+
+const app = createApp(App)
+app.directive('highlight', {
+  mounted(el) {
+    el.classList.add('is-highlight')
+  }
+})
+```
+
+To see all available hooks, please refers to [the documentation](https://vuejs.org/guide/reusability/custom-directives.html#directive-hooks).
 
 ### Data Binding
 
@@ -4032,9 +4294,9 @@ Vue.js provides special features for binding classes and styles to elements.
 
 ### Template Refs
 
-Although Vue.js handle most of the DOM manipulations for us, sometimes we may still need to access the raw DOM elements directly.
+Although Vue.js handle most of the DOM manipulations for us, sometimes we may still need to access the raw DOM elements / Vue component instances directly.
 
-We can use template refs to get the DOM elements in Vue applications.
+We can use template refs to get them.
 
 After Vue 3.5+ with composition API, better type support is provided by a new API `useTemplateRef()`:
 
@@ -4126,8 +4388,6 @@ export default {
   </SubComponent>
 </template>
 ```
-
-For DOM elements, the ref value will be the raw DOM element. For Vue components, the ref value will be the component instance.
 
 > [!Note]
 >
@@ -4234,11 +4494,394 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
 
   </td></tr></tbody></table>
 
+## Styles in Component
+
+Vue also provides some special features for styles in component, such as scoped styles, deep selector, slotted selector, etc.
+
+### Scoped Styles
+
+By default, styles defined in a Vue component are global, which means they will apply to all elements in the application. However, Vue provides a way to scope styles to a specific component using the `scoped` attribute on the `<style>` tag.
+
+When you add the `scoped` attribute to a `<style>` block, Vue will automatically generate unique data attributes for each element in that component and use them to scope the styles. This ensures that the styles only apply to elements within that component and do not affect other parts of the application.
+
+> [!Note]
+>
+> For child components, only the root element will be applied with it's parent's unique data attributes.
+
+<table><tbody><tr><td width="500px" valign="top">
+
+_src/pages/page-with-scoped-style.vue_
+
+```vue
+<template>
+  <div class="scoped-style">
+    1
+  </div>
+</template>
+
+<style scoped>
+.scoped-style {
+  color: red;
+}
+</style>
+```
+
+_src/pages/page-with-global-style.vue_
+
+```vue
+<template>
+  <div class="global-style">
+    2
+  </div>
+</template>
+
+<style>
+.global-style {
+  color: blue;
+}
+</style>
+```
+
+</td><td width="500px" valign="top">
+
+_dist/index.html_
+
+```html
+<html>
+  <head>
+    // [!code highlight:8]
+    <style>
+      .scoped-style[data-v-12345678] {
+        color: red;
+      }
+      .global-style {
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    // [!code highlight:2]
+    <div class="scoped-style" data-v-12345678>1</div>
+    <div class="global-style">2</div>
+  </body>
+</html>
+```
+
+</td></tr></tbody></table>
+
+#### Deep Selector
+
+As unique data attributes are only applied to the root element of child components, to apply styles to the inner elements of child components, we should use a special pesudo-class `:deep()` provided by Vue:
+
+<table><tbody><tr><td width="500px" valign="top">
+
+_src/components/ChildComponent.vue_
+
+```vue
+<template>
+  <div class="child">
+    <div class="child-inner">
+      <!-- ... -->
+    </div>
+  </div>
+</template>
+```
+
+_src/pages/page-with-deep-selector.vue_
+
+```vue
+<template>
+  <div class="parent">
+    <ChildComponent />
+  </div>
+</template>
+
+<style scoped>
+/* Works */
+.child :deep(.child-inner) {
+  color: blue;
+}
+/* No effect */
+.child .child-inner {
+  background-color: yellow;
+}
+</style>
+```
+
+</td><td width="500px" valign="top">
+
+_dist/index.html_
+
+```html
+<html>
+  <head>
+    // [!code highlight:10]
+    <style>
+      /* Works */
+      .child[data-v-12345678] .child-inner {
+        color: blue;
+      }
+      /* No effect */
+      .child[data-v-12345678] .child-inner[data-v-12345678] {
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    // [!code highlight:6]
+    <div class="parent" data-v-12345678>
+      <div class="child" data-v-12345678 data-v-87654321>
+        <div class="child-inner" data-v-87654321>
+          <!-- ... -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+</td></tr></tbody></table>
+
+#### Slotted Selector
+
+As we know, slotted content is belongs to the parent component, so they will be applied with the parent's unique data attributes. If the child component wants to apply styles to them, it should use another special pesudo-class `:slotted()` provided by Vue:
+
+<table><tbody><tr><td width="500px" valign="top">
+
+_src/components/ChildComponent.vue_
+
+```vue
+<template>
+  <div class="child">
+    <slot />
+  </div>
+</template>
+
+<style scoped>
+/* Works */
+.child :slotted(.slotted-content) {
+  color: blue;
+}
+/* No effect */
+.child .slotted-content {
+  background-color: yellow;
+}
+</style>
+```
+
+_src/pages/page-with-slotted-selector.vue_
+
+```vue
+<template>
+  <div class="parent">
+    <ChildComponent>
+      <div class="slotted-content">
+        1
+      </div>
+    </ChildComponent>
+  </div>
+</template>
+```
+
+</td><td width="500px" valign="top">
+
+_dist/index.html_
+
+```html
+<html>
+  <head>
+    // [!code highlight:10]
+    <style>
+      /* Works */
+      .child[data-v-87654321] .slotted-content[data-v-12345678] {
+        color: blue;
+      }
+      /* No effect */
+      .child[data-v-87654321] .slotted-content[data-v-87654321] {
+        background-color: yellow;
+      }
+    </style>
+  </head>
+  <body>
+    // [!code highlight:5]
+    <div class="parent" data-v-12345678>
+      <div class="child" data-v-12345678 data-v-87654321>
+        <div class="slotted-content" data-v-12345678>1</div>
+      </div>
+    </div>
+  </body>
+</html>
+```
+
+</td></tr></tbody></table>
+
+#### Global Selector
+
+To apply some styles back to the global scope, we can use the `:global()` pesudo-class provided by Vue:
+
+```vue
+<style scoped>
+:global(.global-class) {
+  color: red;
+}
+</style>
+```
+
+### CSS Modules
+
+A `<style module>` tag is compiled as [CSS Modules](https://github.com/css-modules/css-modules) and exposes the resulting CSS classes to the component as an object under the key of `$style`:
+
+```vue
+<template>
+  <p :class="$style.red">
+    This should be red
+  </p>
+</template>
+
+<style module>
+.red {
+  color: red;
+}
+</style>
+```
+
+The resulting classes are hashed to avoid collision, achieving the same effect of scoping the CSS to the current component only.
+
+Refer to the [CSS Modules spec](https://github.com/css-modules/css-modules) for more details such as [global exceptions](https://github.com/css-modules/css-modules/blob/master/docs/composition.md#exceptions) and [composition](https://github.com/css-modules/css-modules/blob/master/docs/composition.md#composition).
+
+You can also custom the inject name of the CSS Modules object by providing a value to the `module` attribute:
+
+```vue
+<template>
+  <p :class="classes.red">
+    red
+  </p>
+</template>
+
+<style module="classes">
+.red {
+  color: red;
+}
+</style>
+```
+
+For composition API, when you need to use these classes in `<script>`, you can use `useCssModule()` API. The first argument is the inject name provided by the `module` attribute of `<style>` block:
+
+```vue
+<script setup lang="ts">
+import { useCssModule } from 'vue'
+
+const classes = useCssModule('classes')
+</script>
+
+<template>
+  <p :class="classes.red">
+    red
+  </p>
+</template>
+
+<style module="classes">
+.red {
+  color: red;
+}
+</style>
+```
+
+For options API, you can use `this.$.type.__cssModules.$style.<inject-name>` to access the CSS Modules classes, but... Why not use composition API? :)
+
+```vue
+<script>
+export default {
+  mounted() {
+    console.log('Red class:', this.$.type.__cssModules.$style.classes.red)
+  },
+}
+</script>
+
+<template>
+  <p :class="classes.red">
+    red
+  </p>
+</template>
+
+<style module="classes">
+.red {
+  color: red;
+}
+</style>
+```
+
+### `v-bind()` in CSS
+
+SFC `<style>` blocks also support linking CSS values to reactive data using `v-bind()` function:
+
+<table><tbody><tr><td width="500px" valign="top">
+
+_src/pages/options-api.vue_
+
+```vue
+<script>
+export default {
+  data() {
+    return {
+      color: 'red'
+    }
+  }
+}
+</script>
+
+<template>
+  <div class="text">
+    hello
+  </div>
+</template>
+
+<style>
+.text {
+  color: v-bind(color);
+}
+</style>
+```
+
+</td><td width="500px" valign="top">
+
+_src/pages/composition-api.vue_
+
+```vue
+<script setup>
+import { ref } from 'vue'
+
+const theme = ref({
+  color: 'red',
+})
+</script>
+
+<template>
+  <p>hello</p>
+</template>
+
+<style scoped>
+p {
+  color: v-bind('theme.color');
+}
+</style>
+```
+
+</td></tr></tbody></table>
+
+> [!Note]
+>
+> JavaScript expressions must be quoted in `v-bind()` function.
+
+The actual value will be compiled into a hashed CSS custom property, so the CSS is still static. The custom property will be applied to the component's root element via inline styles and reactively updated if the source value changes.
+
+What's more, when you use `v-bind()` in CSS, Vue will automatically [add vendor prefixes](#automatically-vendor-prefixing-for-v-bind-in-css) for you.
+
 ## Compatibility
 
 As a modern front-end framework, Vue.js aims to provide better compatibility for different browsers and environments.
 
-### Style Vendor Prefixing
+### Automatically Vendor Prefixing for `v-bind` in CSS
 
 When you using `v-bind` to bind styles, Vue will automatically add vendor prefixes to the styles for better browser compatibility.
 
@@ -4247,3 +4890,13 @@ This is a runtime behavior. If the current browser does not support that style a
 ## Vue Plugins
 
 <!-- TODO(Lumirelle):  -->
+
+TODO...
+
+## With TypeScript
+
+See [the documentation](https://vuejs.org/guide/typescript/overview.html) for more details.
+
+### Generic Components
+
+See [the documentation](https://vuejs.org/api/sfc-script-setup.html#generics) for more details.

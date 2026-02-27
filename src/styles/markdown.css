@@ -1,3 +1,15 @@
+.shiki.has-focused .line:not(.focused) {
+  opacity: 0.4;
+  filter: blur(0.095rem);
+  transition:
+    filter 0.35s,
+    opacity 0.35s;
+}
+.shiki.has-focused:hover .line:not(.focused) {
+  opacity: 1;
+  filter: blur(0);
+}
+
 .dark .shiki,
 .dark .shiki span {
   color: var(--s-dark, inherit);

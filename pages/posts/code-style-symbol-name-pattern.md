@@ -11,6 +11,12 @@ type: blog+note
 
 ## Why We Need to Care About Symbol Name Patterns?
 
+> [!Note]
+>
+> Of course, name patterns are always the fallback options, [encapsulate and modularize](encapsulation-and-modularity.md) is the better way to improve the code readability and maintainability.
+>
+> The rule of thumb is: **single responsibility principle**, which means each module, class, function or variable should have only one reason to change.
+
 In a huge project, we may have thousands of symbols, likes variable names, function names etc. If we cannot encapsulate and modularize them (E.g., the project manager has pressed your working hours, or you don’t want to wipe the ass of the original developer), the only thing we can do is to use the better naming patterns to improve the code readability and maintainability.
 
 This article will introduce some naming patterns I preferred in my projects.
@@ -159,10 +165,6 @@ The commonly used state verbs are:
 - `has`: The possession state
 - `can`: The ability
 - `should`: The necessity
-
-> [!Note]
->
-> Of course, name patterns are always the fallback options, [encapsulate and modularize](encapsulation-and-modularity.md) is the better way to improve the code readability and maintainability.
 
 ## Function Names
 

@@ -141,8 +141,8 @@ ni @antfu/ni -D
     // nr <script>, whatever package manager this project is using
     "prerelease": "nr test:run && nr typecheck",
     "test:run": "vitest run",
-    "typecheck": "tsc --noEmit"
-  }
+    "typecheck": "tsc --noEmit",
+  },
 }
 ```
 
@@ -157,8 +157,8 @@ We can also run the commands by using `nlx`:
   "simple-git-hooks": {
     // `na exec` is equivalent to `nlx` here, but more recommended.
     // As PNPM and Bun support omit `exec` command, we can use `na lint-staged` directly for those two package managers.
-    "pre-commit": "nlx lint-staged"
-  }
+    "pre-commit": "nlx lint-staged",
+  },
 }
 ```
 

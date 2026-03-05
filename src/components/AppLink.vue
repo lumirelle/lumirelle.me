@@ -5,9 +5,7 @@ const props = defineProps<{
   to: string
 }>()
 
-const isExternalLink = computed(() => {
-  return typeof props.to === 'string' && props.to.startsWith('http')
-})
+const isExternalLink = computed(() => typeof props.to === 'string' && props.to.startsWith('http'))
 </script>
 
 <template>

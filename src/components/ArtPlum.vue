@@ -1,4 +1,4 @@
-<script setup lang='ts'>
+<script setup lang="ts">
 import type { Fn } from '@vueuse/core'
 
 const r180 = Math.PI
@@ -11,17 +11,32 @@ const el = ref<HTMLCanvasElement | null>(null)
 const { random } = Math
 const size = reactive(useWindowSize())
 
-const start = ref<Fn>(() => {})
+const start = ref<Fn>()
 const MIN_BRANCH = 30
 const len = ref(6)
 const stopped = ref(false)
 
-function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?: number) {
+function initCanvas(
+  canvas: HTMLCanvasElement,
+  width = 400,
+  height = 400,
+  _dpi?: number,
+): { ctx: CanvasRenderingContext2D; dpi: number } {
   const ctx = canvas.getContext('2d')!
 
   const dpr = window.devicePixelRatio || 1
-  // @ts-expect-error vendor
-  const bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1
+  const bsr =
+    // @ts-expect-error vendor
+    ctx.webkitBackingStorePixelRatio ||
+    // @ts-expect-error vendor
+    ctx.mozBackingStorePixelRatio ||
+    // @ts-expect-error vendor
+    ctx.msBackingStorePixelRatio ||
+    // @ts-expect-error vendor
+    ctx.oBackingStorePixelRatio ||
+    // @ts-expect-error vendor
+    ctx.backingStorePixelRatio ||
+    1
 
   const dpi = _dpi || dpr / bsr
 
@@ -34,7 +49,7 @@ function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?:
   return { ctx, dpi }
 }
 
-function polar2cart(x = 0, y = 0, r = 0, theta = 0) {
+function polar2cart(x = 0, y = 0, r = 0, theta = 0): [number, number] {
   const dx = r * Math.cos(theta)
   const dy = r * Math.sin(theta)
   return [x + dx, y + dy]
@@ -48,7 +63,13 @@ onMounted(async () => {
   let steps: Fn[] = []
   let prevSteps: Fn[] = []
 
-  const step = (x: number, y: number, rad: number, counter: { value: number } = { value: 0 }) => {
+  const step = (
+    x: number,
+    y: number,
+    rad: number,
+    // oxlint-disable-next-line unicorn/no-object-as-default-parameter
+    counter: { value: number } = { value: 0 },
+  ): void => {
     const length = random() * len.value
     counter.value += 1
 
@@ -63,71 +84,78 @@ onMounted(async () => {
     const rad2 = rad - random() * r15
 
     // out of bounds
-    if (nx < -100 || nx > size.width + 100 || ny < -100 || ny > size.height + 100)
+    if (nx < -100 || nx > size.width + 100 || ny < -100 || ny > size.height + 100) {
       return
+    }
 
-    const rate = counter.value <= MIN_BRANCH
-      ? 0.8
-      : 0.5
+    const rate = counter.value <= MIN_BRANCH ? 0.8 : 0.5
 
     // left branch
-    if (random() < rate)
+    if (random() < rate) {
       steps.push(() => step(nx, ny, rad1, counter))
+    }
 
     // right branch
-    if (random() < rate)
+    if (random() < rate) {
       steps.push(() => step(nx, ny, rad2, counter))
+    }
   }
 
   let lastTime = performance.now()
-  const interval = 1000 / 40 // 50fps
+  // 50fps
+  const interval = 1000 / 40
 
+  // oxlint-disable-next-line prefer-const
   let controls: ReturnType<typeof useRafFn>
 
-  const frame = () => {
-    if (performance.now() - lastTime < interval)
+  const frame = (): void => {
+    if (performance.now() - lastTime < interval) {
       return
+    }
 
     prevSteps = steps
     steps = []
     lastTime = performance.now()
 
-    if (!prevSteps.length) {
+    if (prevSteps.length === 0) {
       controls.pause()
       stopped.value = true
     }
 
-    // Execute all the steps from the previous frame
-    prevSteps.forEach((i) => {
+    // 50% chance to keep the step for the next fr
+    for (const i of prevSteps) {
       // 50% chance to keep the step for the next frame, to create a more organic look
-      if (random() < 0.5)
+      if (random() < 0.5) {
         steps.push(i)
-      else
+      } else {
         i()
-    })
+      }
+    }
   }
 
   controls = useRafFn(frame, { immediate: false })
 
   /**
    * 0.2 - 0.8
+   * @returns Random number between 0.2 and 0.8
    */
-  const randomMiddle = () => random() * 0.6 + 0.2
+  const randomMiddle = (): number => random() * 0.6 + 0.2
 
-  start.value = () => {
+  start.value = (): void => {
     controls.pause()
     ctx.clearRect(0, 0, width, height)
     ctx.lineWidth = 1
     ctx.strokeStyle = color
     prevSteps = []
     steps = [
-      () => step(randomMiddle() * size.width, -5, r90),
-      () => step(randomMiddle() * size.width, size.height + 5, -r90),
-      () => step(-5, randomMiddle() * size.height, 0),
-      () => step(size.width + 5, randomMiddle() * size.height, r180),
+      (): void => step(randomMiddle() * size.width, -5, r90),
+      (): void => step(randomMiddle() * size.width, size.height + 5, -r90),
+      (): void => step(-5, randomMiddle() * size.height, 0),
+      (): void => step(size.width + 5, randomMiddle() * size.height, r180),
     ]
-    if (size.width < 500)
+    if (size.width < 500) {
       steps = steps.slice(0, 2)
+    }
     controls.resume()
     stopped.value = false
   }

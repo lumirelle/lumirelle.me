@@ -2,7 +2,7 @@
 // use a custom implementation here
 import { remove } from 'diacritics'
 
-// eslint-disable-next-line no-control-regex
+// oxlint-disable-next-line no-control-regex
 const rControl = /[\u0000-\u001F]/g
 const rSpecial = /[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'<>,.?/]+/g
 
@@ -14,9 +14,9 @@ export function slugify(str: string): string {
       // Replace special characters
       .replace(rSpecial, '-')
       // Remove continuos separators
-      .replace(/-{2,}/g, '-')
+      .replaceAll(/-{2,}/g, '-')
       // Remove prefixing and trailing separtors
-      .replace(/^-+|-+$/g, '')
+      .replaceAll(/^-+|-+$/g, '')
       // ensure it doesn't start with a number (#121)
       .replace(/^(\d)/, '_$1')
       // lowercase

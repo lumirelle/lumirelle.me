@@ -160,7 +160,7 @@ Before we do these, we must pay attention to the **motivation and quality**.
   // The data flow is really a mess! 😵‍💫
   const {
     formData, // <-
-    formConfig
+    formConfig,
   } = useFormComponent({
     config: {
       columns: [
@@ -172,7 +172,7 @@ Before we do these, we must pay attention to the **motivation and quality**.
     selected, // <-
   })
   const {
-    selected // <-
+    selected, // <-
   } = useSelectorComponent({
     formData, // <-
   })
@@ -182,10 +182,7 @@ Before we do these, we must pay attention to the **motivation and quality**.
     <div>
       // [!code focus:2]
       <SelectorComponent v-model="selected" />
-      <FormComponent
-        v-model="formData"
-        :config="formConfig"
-      />
+      <FormComponent v-model="formData" :config="formConfig" />
     </div>
   </template>
   ```
@@ -199,11 +196,7 @@ Before we do these, we must pay attention to the **motivation and quality**.
   // imports ...
 
   // Combined them together...
-  const {
-    formData,
-    formConfig,
-    selected
-  } = useFormComponent({
+  const { formData, formConfig, selected } = useFormComponent({
     config: {
       columns: [
         { label: 'Name', props: 'name' },
@@ -220,10 +213,7 @@ Before we do these, we must pay attention to the **motivation and quality**.
   <template>
     <div>
       <!-- Combined -->
-      <FormComponent
-        v-model="formData"
-        :config="formConfig"
-      />
+      <FormComponent v-model="formData" :config="formConfig" />
     </div>
   </template>
   ```
@@ -236,16 +226,12 @@ Before we do these, we must pay attention to the **motivation and quality**.
   // [!code focus:6]
   // Separate `defaultValues` setting from `config`, which is meaningless
   // and makes the usage more complex and harder to understand.
-  export function useForm(
-    config: FormConfig,
-    defaultValues?: Record<string, any>
-  ) {
+  export function useForm(config: FormConfig, defaultValues?: Record<string, any>) {
     const formData = reactive<Record<string, any>>({})
 
     function resetForm() {
       for (const field of config.fields) {
-        formData[field.name]
-          = defaultValues?.[field.name] ?? field.defaultValue ?? null
+        formData[field.name] = defaultValues?.[field.name] ?? field.defaultValue ?? null
       }
     }
 
@@ -255,27 +241,19 @@ Before we do these, we must pay attention to the **motivation and quality**.
       formData,
       resetForm,
     }
-  // [!code focus:20]
+    // [!code focus:20]
   }
   // Usage
   useForm(
     {
-      fields: [
-        { name: 'username' },
-        { name: 'password' },
-      ],
+      fields: [{ name: 'username' }, { name: 'password' }],
     },
     { username: 'guest' },
   )
   // Expected
-  useForm(
-    {
-      fields: [
-        { name: 'username', defaultValue: 'guest' },
-        { name: 'password' },
-      ],
-    }
-  )
+  useForm({
+    fields: [{ name: 'username', defaultValue: 'guest' }, { name: 'password' }],
+  })
   ```
 
 Therefore, we need to find a balance point, to make our code works first:
@@ -296,7 +274,3 @@ Hope there will be some examples in the future...
 ## Antfu's Code Style
 
 [Antfu's code style](https://github.com/antfu/skills/blob/main/skills/antfu/SKILL.md) is a good reference for writing clean and maintainable code.
-
-```
-
-```

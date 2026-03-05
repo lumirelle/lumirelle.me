@@ -1,14 +1,31 @@
 <script setup lang="ts">
 import sponsors from '../data/sponsors-circles.json'
 
+interface Sponsor {
+  id: string
+  radius: number
+  position: {
+    x: number
+    y: number
+  }
+  name: string
+  login: string
+  avatar: string
+  amount: number
+  link: string
+  org: boolean
+}
+
 const lastHovered = ref<string[]>([])
 
-function push(id: string) {
-  if (lastHovered.value.includes(id))
-    lastHovered.value = lastHovered.value.filter(i => i !== id)
+function push(id: string): void {
+  if (lastHovered.value.includes(id)) {
+    lastHovered.value = lastHovered.value.filter((i) => i !== id)
+  }
   lastHovered.value.push(id)
-  if (lastHovered.value.length > 5)
+  if (lastHovered.value.length > 5) {
     lastHovered.value.unshift()
+  }
 }
 
 const scale = ref(1)
@@ -27,7 +44,9 @@ onMounted(() => {
 
 <template>
   <div
-    flex justify-center w-full
+    flex
+    justify-center
+    w-full
     :style="{
       height: `${550 * scale}px`,
     }"
@@ -36,12 +55,12 @@ onMounted(() => {
       class="relative w-500px h-500px group ma"
       :style="{
         'flex-shrink': 0,
-        'transform': `scale(${scale})`,
-        'transformOrigin': 'center center',
+        transform: `scale(${scale})`,
+        transformOrigin: 'center center',
       }"
     >
       <a
-        v-for="c in sponsors"
+        v-for="c in sponsors as Sponsor[]"
         :key="c.id"
         v-tooltip="[c.name, `@${c.login}`].filter(Boolean).join(' ')"
         :style="{
@@ -68,11 +87,8 @@ onMounted(() => {
         :title="c.name || c.login"
         @mouseenter="push(c.id)"
       >
-        <img v-if="c.avatar" :src="c.avatar" w-full h-full bg-base>
-        <div
-          v-else
-          class="w-full h-full bg-gray:50 flex"
-        >
+        <img v-if="c.avatar" :src="c.avatar" w-full h-full bg-base />
+        <div v-else class="w-full h-full bg-gray:50 flex">
           <div i-ph-user ma op75 class="w-50% h-50%" />
         </div>
       </a>

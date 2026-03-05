@@ -1,25 +1,34 @@
 <script lang="ts" setup>
-const props = withDefaults(defineProps<{
-  text?: string
-  preset?: 'purple' | 'amber' | 'blue' | 'green' | 'red'
-}>(), {
-  preset: 'blue',
-})
+const props = withDefaults(
+  defineProps<{
+    text?: string
+    preset?: 'purple' | 'amber' | 'blue' | 'green' | 'red'
+  }>(),
+  {
+    preset: 'blue',
+  },
+)
 
 const bgColor = computed(() => {
   switch (props.preset) {
-    case 'purple':
+    case 'purple': {
       return 'bg-purple'
-    case 'amber':
+    }
+    case 'amber': {
       return 'bg-amber'
-    case 'blue':
+    }
+    case 'blue': {
       return 'bg-blue'
-    case 'green':
+    }
+    case 'green': {
       return 'bg-green'
-    case 'red':
+    }
+    case 'red': {
       return 'bg-red'
-    default:
+    }
+    default: {
       return 'bg-transparent'
+    }
   }
 })
 
@@ -29,17 +38,26 @@ const textColor = computed(() => {
     case 'amber':
     case 'blue':
     case 'green':
-    case 'red':
+    case 'red': {
       return 'text-white'
-    default:
+    }
+    default: {
       return 'text-inherit'
+    }
   }
 })
 </script>
 
 <template>
   <span
-    inline-block mx-1 py-0.5 px-2 rounded-md text-sm font-medium
+    inline-block
+    mx-1
+    py-0.5
+    px-2
+    rounded-md
+    text-sm
+    font-medium
     :class="[bgColor, textColor]"
-  >{{ text }}</span>
+    >{{ text }}</span
+  >
 </template>

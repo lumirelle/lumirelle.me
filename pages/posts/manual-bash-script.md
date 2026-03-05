@@ -58,7 +58,7 @@ You can create and run your first Bash script by following steps:
 
 7. You should see the output:
 
-   ```
+   ```txt
    Hello, Bash!
    ```
 
@@ -1099,7 +1099,7 @@ esac
 
 The output will be:
 
-```
+```txt
 'a' is lower case.
 'a' is alphabetic.
 'a' is a visible character.

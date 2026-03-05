@@ -2,13 +2,14 @@ import fs from 'node:fs/promises'
 import { basename } from 'node:path'
 import { glob } from 'tinyglobby'
 
-async function run() {
+async function run(): Promise<void> {
   const files = await glob('temp/*.svg', {
     expandDirectories: false,
   })
 
-  for (const file of files)
+  for (const file of files) {
     await fs.copyFile(file, `public/${basename(file)}`)
+  }
 }
 
 await run()

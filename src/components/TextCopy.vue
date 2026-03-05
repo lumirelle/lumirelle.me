@@ -7,10 +7,8 @@ const props = defineProps<{
 const { copy: _copy, copied } = useClipboard()
 const el = ref<HTMLElement | null>(null)
 
-function copy() {
-  _copy(
-    props.text ?? (el.value?.textContent || '').trim().slice(...(props.slice || [0])),
-  )
+function copy(): void {
+  _copy(props.text ?? (el.value?.textContent || '').trim().slice(...(props.slice || [0])))
 }
 </script>
 
@@ -18,8 +16,15 @@ function copy() {
   <div ref="el" class="gap-1 items-center">
     <slot />
     <button
-      title="Copy" inline ml2 op30 hover:op100 text-sm transition
-      :class="copied ? 'i-carbon-checkmark text-green' : 'i-carbon-copy'" @click="copy()"
+      title="Copy"
+      inline
+      ml2
+      op30
+      hover:op100
+      text-sm
+      transition
+      :class="copied ? 'i-carbon-checkmark text-green' : 'i-carbon-copy'"
+      @click="copy()"
     />
   </div>
 </template>

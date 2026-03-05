@@ -65,14 +65,12 @@ console.log('Hello')[1]
 
 Use variable can avoid these problem:
 
-<!-- eslint-disable prefer-arrow-callback,antfu/top-level-function -->
-
 ```js
 // Example 1
 console.log('Hello')
 
 const arr = [1, 2, 3]
-arr.forEach(n => console.log(n))
+arr.forEach((n) => console.log(n))
 
 // Example 2
 const anonymousFunc = function () {
@@ -98,7 +96,7 @@ _src/counter.js_
 
 ```js
 // Without explicit declaration
-counter = await fetch('/api/counter').then(res => res.json())
+counter = await fetch('/api/counter').then((res) => res.json())
 
 // Omit 2000 lines of code...
 
@@ -120,7 +118,7 @@ Another example is global `this`, in non-strict mode, `this` in a regular functi
 
 ```js
 // In this case (non-strict mode), `this` is the global object `window` (browser) or `globalThis` (node.js)
-(function () {
+;(function () {
   console.log(this) // -> global object
 })()
 ```
@@ -187,8 +185,6 @@ You shouldn't use `var` in modern JavaScript development, but it's still importa
 
 `var` only has **global scope** and **function scope**, the **block scope** is missing, for instance:
 
-<!-- eslint-disable no-use-before-define,no-var,vars-on-top,block-scoped-var -->
-
 ```js
 /** A global scope `var` */
 var o = 1
@@ -214,10 +210,8 @@ console.log(y) // -> 1, `y` is still accessible here
 >
 > As there was only `var` in the old JavaScript, people used to use [IIFE (Immediately Invoked Function Expression)](#iife-immediately-invoked-function-expression) to avoid global scope pollution:
 >
-> <!-- eslint-disable no-var -->
->
 > ```js
-> (function () {
+> ;(function () {
 >   var x = 1 // `x` and `y` are scoped to this function, not global
 >   var y = 2
 >   console.log(x + y) // 3
@@ -233,8 +227,6 @@ console.log(y) // -> 1, `y` is still accessible here
 
 `var` declarations are implicitly hoisted to the top of their function or global scope. This means you can use a `var` variable before its explicit declaration in code without getting a `ReferenceError`:
 
-<!-- eslint-disable no-use-before-define,no-var,vars-on-top -->
-
 ```js
 // What a bullshit code,
 // but it really works 😅
@@ -246,8 +238,6 @@ console.log(a) // -> 3
 
 This is technically equivalent to:
 
-<!-- eslint-disable no-var -->
-
 ```js
 var a // This declaration is hoisted to the top of the scope
 a = 3
@@ -257,8 +247,6 @@ console.log(a) // 3
 
 Notice that, **declarations are hoisted, but assignments are not**:
 
-<!-- eslint-disable no-use-before-define,no-var,vars-on-top -->
-
 ```js
 console.log(a) // -> undefined
 
@@ -266,8 +254,6 @@ var a = 3
 ```
 
 This is technically equivalent to:
-
-<!-- eslint-disable no-var -->
 
 ```js
 var a // This declaration is hoisted to the top of the scope
@@ -280,8 +266,6 @@ a = 3
 #### Tolerate Redeclaration
 
 You can redeclare a variable using `var` without getting an error:
-
-<!-- eslint-disable no-var,no-redeclare -->
 
 ```js
 var b = 4
@@ -310,8 +294,6 @@ _src/index.html_
 
 _src/a.js_
 
-<!-- eslint-disable no-var -->
-
 ```js
 // Ha! We use formData to store the user input!
 var formData = {
@@ -334,8 +316,6 @@ $('#btn1').on('click', () => {
 ```
 
 _src/b.js_
-
-<!-- eslint-disable no-var -->
 
 ```js
 // Hints: This file is created by copy-pasting
@@ -388,8 +368,6 @@ There are 7 primitive types in JavaScript:
 
 `string` can be created by string literals or `String()` [constructor function](#constructor-function):
 
-<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
-
 ```js
 const str1 = 'Hello, world!' // String literal
 const str2 = String('Hello, world!') // String primitive
@@ -412,8 +390,6 @@ In JavaScript, there is only one number type, which is a double-precision 64-bit
 
 `number` can be created by number literals or `Number()` constructor function too:
 
-<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
-
 ```js
 const num1 = 42 // Number literal
 const num2 = Number(42) // Number primitive
@@ -425,7 +401,7 @@ You can use prefix `0b` for binary literals, `0o` for octal literals, and `0x` f
 ```js
 const binary = 0b1010 // Binary literal, equals to 10 in decimal
 const octal = 0o52 // Octal literal, equals to 42 in decimal
-const hexadecimal = 0x2A // Hexadecimal literal, equals to 42 in decimal
+const hexadecimal = 0x2a // Hexadecimal literal, equals to 42 in decimal
 ```
 
 Underscore (`_`) can be used as a separator for numeric literals to improve readability:
@@ -461,8 +437,6 @@ const bigInt2 = BigInt('1234567890123456789012345678901234567890') // BigInt con
 #### Boolean
 
 `boolean` can be created by boolean literals or `Boolean()` constructor function:
-
-<!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
 
 ```js
 const bool1 = true // Boolean literal
@@ -593,16 +567,14 @@ Property name can be a `string`, `symbol` or any other type that can be converte
 
 Property name can be a `string`, `symbol` or any other type that can be converted to `string`, everything execpt `Symbol` will be implicitly converted to `string`:
 
-<!-- eslint-disable dot-notation -->
-
 ```js
 const obj = {}
 // Key `1` is converted to string `'1'`
 obj[1] = 'one'
 // Key `true` is converted to string `'true'`
-obj[true] = 'true'
+obj.true = 'true'
 // Key `null` is converted to string `'null'`
-obj[null] = 'null'
+obj.null = 'null'
 // Key `undefined` is converted to string `'undefined'`
 obj[undefined] = 'undefined'
 
@@ -636,7 +608,7 @@ Object.entries(StatusEnum).forEach(([key, value]) => {
   // [!code highlight:3]
   // `item.status` is `number`, but `key` is actually `string`,
   // They will never be equal!
-  const item = array.find(item => item.status === key)
+  const item = array.find((item) => item.status === key)
   if (item) {
     item.name = key
   }
@@ -747,7 +719,7 @@ These two internal method is implemented by the JavaScript engine, we cannot acc
  * @param propName The property name
  * @param receiver The value of `this` inside getter
  */
-[[Get]](obj, propName, receiver)
+;[[Get]](obj, propName, receiver)
 ```
 
 ```js
@@ -757,7 +729,7 @@ These two internal method is implemented by the JavaScript engine, we cannot acc
  * @param value The value to set
  * @param receiver The value of `this` inside setter
  */
-[[Set]](obj, propName, value, receiver)
+;[[Set]](obj, propName, value, receiver)
 ```
 
 The key difference between the two notations is how they pass the `propName` argument to the internal methods:
@@ -778,11 +750,9 @@ The key difference between the two notations is how they pass the `propName` arg
 
   Otherwise, it will call them with the value of the expression converted to a string as `propName`.
 
-  <!-- eslint-disable dot-notation -->
-
   ```js
   const obj = { name: 'Alice' }
-  obj['name']
+  obj.name
   // => [[Get]](obj, String('name'), obj)
   //    => [[Get]](obj, 'name', obj)
   obj[1]
@@ -798,7 +768,7 @@ The key difference between the two notations is how they pass the `propName` arg
   ```js
   const obj = {
     1: 'one', // Key `1` is converted to string `'1'` implicitly
-    2: 'two'
+    2: 'two',
   }
   console.log(obj[1]) // -> 'one'
   console.log(obj['1']) // -> 'one'
@@ -832,7 +802,7 @@ const obj = {
   set propName(value) {
     console.log('Setter called')
     this._propName = value
-  }
+  },
 }
 
 // [!code highlight:2]
@@ -856,15 +826,13 @@ In JavaScript, the order of properties in an object is not guaranteed, but in pr
 
 For example:
 
-<!-- eslint-disable style/quote-props -->
-
 ```js
 const sym = Symbol('sym1')
 const obj = {
-  'x1': 'test-1',
+  x1: 'test-1',
   [sym]: 'tets-4',
-  'x0': 'test-0',
-  3: 'test-3'
+  x0: 'test-0',
+  3: 'test-3',
 }
 // Properties with symbol name can not iterated by `for...in` loop
 // or `Object.keys()`, but can be iterated by
@@ -956,8 +924,7 @@ const obj = {
   a: 1,
   b: 2,
   [Symbol.toPrimitive](hint) {
-    if (hint === 'string')
-      return `a=${this.a}, b=${this.b}`
+    if (hint === 'string') return `a=${this.a}, b=${this.b}`
     return this.a + this.b
   },
 }
@@ -992,8 +959,6 @@ console.log(str.toUpperCase())
 >
 > You can manually create some of them by their constructor function with `new` keyword:
 >
-> <!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
->
 > ```js
 > const strObj = new String('hello')
 > const numObj = new Number(42)
@@ -1001,8 +966,6 @@ console.log(str.toUpperCase())
 > ```
 >
 > But this is not recommended, because it will break the primitive nature of the value, and cause unexpected behavior:
->
-> <!-- eslint-disable no-new-wrappers,unicorn/new-for-builtins -->
 >
 > ```js
 > const num1 = Number(0) // This returns a number, not an object
@@ -1020,8 +983,6 @@ console.log(str.toUpperCase())
 > ```
 >
 > For `bigint` and `symbol` which are newly introduced to JavaScript, the language disables the disrecommended behavior of using their constructor function with `new` keyword directly, and you will get a `TypeError` if you try to do that:
->
-> <!-- eslint-disable no-new,no-new-native-nonconstructor,unicorn/new-for-builtins -->
 >
 > ```js
 > new BigInt(123) // TypeError: BigInt is not a constructor
@@ -1063,8 +1024,6 @@ There are two kinds of functions: **function declarations** and **function expre
 
 Function declarations is the general way to create function which will be hoisted, while function expressions are used to share function as values, so we can assign them to variables, pass them as arguments to other functions, or return them from other functions:
 
-<!-- eslint-disable antfu/top-level-function -->
-
 ```js
 // Function declaration
 function fn(args) {
@@ -1072,10 +1031,12 @@ function fn(args) {
 }
 
 // Function expression
-(function (args) {
+;(function (args) {
   /* function body */
-});
-(args) => { /* function body */ }
+})
+;(args) => {
+  /* function body */
+}
 
 // Function expression with variable assignment
 const fn1 = function (args) {
@@ -1105,8 +1066,6 @@ We shouldn't depend on this behavior, as it will make the code less readable.
 
 A function expression is a way to define a function as a value. It's similar to a function declaration, but it's not hoisted.
 
-<!-- eslint-disable antfu/top-level-function -->
-
 ```js
 const func = function (a, b) {
   return a + b
@@ -1125,8 +1084,8 @@ Anonymous functions are functions without a name, only function expressions can 
 function declaredFunc() {}
 
 // Anonymous function expression
-(function () {});
-() => {}
+;(function () {})
+;() => {}
 ```
 
 #### Named Function Expression
@@ -1135,24 +1094,18 @@ A named function expression is a function expression that has a name. The name i
 
 So why do we need it? For instance, when we want to create a recursive function expression:
 
-<!-- eslint-disable antfu/top-level-function -->
-
 ```js
 const doFact = function fact(n) {
-  if (n <= 1)
-    return 1
+  if (n <= 1) return 1
   return n * fact(n - 1) // Use `fact` to call itself
 }
 ```
 
 You may think we can use `doFact` to call itself, but that will not work if we reassign `doFact` to other value:
 
-<!-- eslint-disable antfu/top-level-function -->
-
 ```js
 let doFact = function fact(n) {
-  if (n <= 1)
-    return 1
+  if (n <= 1) return 1
   return n * doFact(n - 1) // Use `doFact` to call itself
 }
 
@@ -1212,11 +1165,10 @@ function outer() {
 As it's name, we can immediately invoke a function expression after defining it, and we should wrap the function expression with parentheses (`()`):
 
 ```js
-(function () {
+;(function () {
   console.log('This is an IIFE')
-})();
-
-(() => {
+})()
+;(() => {
   console.log('This is also an IIFE')
 })()
 ```
@@ -1326,7 +1278,8 @@ If you want to create a function that is bound to a specific argument and left
 
 ```js
 function partial(func, ...argsBound) {
-  return function (...args) { // This returns a new function, and passes `this` correctly
+  return function (...args) {
+    // This returns a new function, and passes `this` correctly
     return func.call(this, ...argsBound, ...args)
   }
 }
@@ -1335,7 +1288,7 @@ const user = {
   name: 'John',
   greet(greeting, punctuation) {
     console.log(`${greeting}, ${this.name}${punctuation}`)
-  }
+  },
 }
 user.greetHello = partial(user.greet, 'Hello') // `this` is still `user`
 user.greetHello('!') // -> Hello, John!
@@ -1405,8 +1358,6 @@ For different types of operands, the binary `+` operator will do implicit type c
 - If either operand is `string`, both operands will be converted to `string`, and then concatenated.
 - Otherwise, both operands will be converted to `number`, and then added.
 
-<!-- eslint-disable prefer-template -->
-
 ```js
 console.log(1 + 2) // -> 3 (number)
 console.log(1 + []) // -> 0 (number)
@@ -1434,8 +1385,6 @@ So there will be a funny consequence. It's possible that at the same time:
 - One of them is `true` as a boolean and the other is `false` as a boolean
 
 For example:
-
-<!-- eslint-disable eqeqeq -->
 
 ```js
 const a = 0
@@ -1672,8 +1621,6 @@ For [data properties](#accessor-property), besides a value, have three special a
 
 For [accessor properties](#accessor-property), they don't have `writable` flag, but instead have `get` and `set` functions:
 
-<!-- eslint-disable prefer-template -->
-
 ```js
 const user = {
   _name: 'John',
@@ -1747,7 +1694,7 @@ console.log(JSON.stringify(descriptor, null, 2))
 >   _name: 'John',
 >   get name() {
 >     return this._name
->   }
+>   },
 > }
 > ```
 
@@ -1766,10 +1713,7 @@ Object.defineProperty(user, 'name', {
   configurable: false,
 })
 
-const clonedUser = Object.defineProperties(
-  {},
-  Object.getOwnPropertyDescriptors(user)
-)
+const clonedUser = Object.defineProperties({}, Object.getOwnPropertyDescriptors(user))
 
 const descriptor = Object.getOwnPropertyDescriptor(clonedUser, 'name')
 console.log(JSON.stringify(descriptor, null, 2))
@@ -1889,7 +1833,7 @@ Non-mutating methods include:
 | `arr.slice()`      | Extract a section of an array and return a new array                                         |
 | ...                | ...                                                                                          |
 
-#### `arr.splice()`
+#### `arr.splice()` <a name="arr-splice"></a>
 
 `arr.splice(start[, deleteCount, item1, ..., itemN])` method can be used to add, remove or replace elements in an array just in place.
 
@@ -1948,10 +1892,8 @@ const iterable = {
     let index = 0
     return {
       next: () => {
-        if (index < this.items.length)
-          return { value: this.items[index++], done: false }
-        else
-          return { value: undefined, done: true }
+        if (index < this.items.length) return { value: this.items[index++], done: false }
+        else return { value: undefined, done: true }
       },
     }
   },
@@ -1973,10 +1915,7 @@ However, they does not allow observing the liveness of their keys (for `WeakMap`
 They are designed to be used in scenarios where you want to **associate data with an object/store an object** without preventing that object from being garbage collected. Use `WeakMap` as an example:
 
 ```js
-const loggedInUsers = [
-  { name: 'Alice' },
-  { name: 'Bob' },
-]
+const loggedInUsers = [{ name: 'Alice' }, { name: 'Bob' }]
 const userViewsMap = new WeakMap()
 
 /**
@@ -2074,7 +2013,7 @@ const newUser = new user.constructor()
 > User.prototype = {
 >   sayHi() {
 >     console.log('Hi')
->   }
+>   },
 > }
 >
 > const user = new User()
@@ -2180,8 +2119,6 @@ This is the mainly usecase of closure: **To keep the outer variables alive after
 >
 > An important side effect in V8 engine (Chrome, Edge, Opera...) is that such variable will be optimized while debugging:
 >
-> <!-- eslint-disable no-debugger -->
->
 > ```js
 > function f() {
 >   const value = Math.random()
@@ -2205,8 +2142,6 @@ This is the mainly usecase of closure: **To keep the outer variables alive after
 
 There’s one more way to create a function. It’s rarely used, and not recommended (because it use `eval` under the hood), but it's still good to know.
 
-<!-- eslint-disable no-new-func -->
-
 ```js
 // new Function ([arg1, arg2, ...argN], functionBody)
 const sum = new Function('a', 'b', 'return a + b')
@@ -2219,10 +2154,8 @@ The last argument of `new Function` is the function body, and the previous argum
 >
 > Through `new Function`, we can create functions dynamically, for instance, from a string received from a server:
 >
-> <!-- eslint-disable no-new-func -->
->
 > ```js
-> const res = await fetch('/api/function-body').then(res => res.text())
+> const res = await fetch('/api/function-body').then((res) => res.text())
 >
 > const func = new Function('a', 'b', res)
 > func(1, 2)
@@ -2242,8 +2175,6 @@ For instance, we have a source code like this:
 
 _src/script.js_
 
-<!-- eslint-disable no-new-func -->
-
 ```js
 const value = 1
 
@@ -2258,7 +2189,9 @@ _dist/script.min.js_
 <!-- eslint-skip -->
 
 ```js
-const a=1;const b=new Function("console.log(value)");b(); // ReferenceError: value is not defined
+const a = 1
+const b = new Function('console.log(value)')
+b() // ReferenceError: value is not defined
 ```
 
 ## Class
@@ -2501,7 +2434,7 @@ const dog = new Dog('Rex')
 
 Look at this inheritance diagram:
 
-```
+```txt
 Animal -- prototype --> Animal.prototype
                             ^
                             |
@@ -2517,7 +2450,7 @@ Animal -- prototype --> Animal.prototype
 
 We can see that `extends` keyword is equivalent to `Object.setPrototypeOf(Dog.prototype, Animal.prototype)`.
 
-So that's how class inheritance works in JavaScript (static inheritance will be explained [later](#static-members)).
+So that's how class inheritance works in JavaScript (static inheritance will be explained [later](#static-member)).
 
 For the example above, if we want to access `dog.move()`, JavaScript engine will:
 
@@ -2534,7 +2467,9 @@ For the example above, if we want to access `dog.move()`, JavaScript engine will
 > ```js
 > function GenerateClass(phrase) {
 >   return class {
->     sayHi() { console.log(phrase) }
+>     sayHi() {
+>       console.log(phrase)
+>     }
 >   }
 > }
 >
@@ -2598,8 +2533,6 @@ In our case, calling `new Rabbit()` will call the `Animal` constructor first, an
 Luckily, this behavior only reveals itself if an overridden field is used in the parent constructor.
 
 The best practice is to avoid to override the class field, if you want to change the value of a field inside the parent, you may pass it as a parameter to the parent constructor, and assign it in the parent constructor:
-
-<!-- eslint-disable no-useless-constructor -->
 
 ```js
 class Animal {
@@ -2714,8 +2647,6 @@ dog.move()
 
 According to the [specification](https://tc39.github.io/ecma262/#sec-runtime-semantics-classdefinitionevaluation), if a class extends another class and has no constructor, then the following "empty" **derived constructor** is generated:
 
-<!-- eslint-disable no-useless-constructor -->
-
 ```js
 class Rabbit extends Animal {
   // [!code highlight:3]
@@ -2726,8 +2657,6 @@ class Rabbit extends Animal {
 ```
 
 Now let’s add a custom constructor to `Rabbit`. It will specify the `earLength` in addition to `name`:
-
-<!-- eslint-disable constructor-super,no-this-before-super -->
 
 ```js
 class Animal {
@@ -2782,7 +2711,7 @@ const animal = {
   name: 'Animal',
   eat() {
     console.log(`${this.name} eats.`)
-  }
+  },
 }
 
 const rabbit = {
@@ -2791,7 +2720,7 @@ const rabbit = {
   eat() {
     // That's how super.eat() could presumably work
     Object.getPrototypeOf(this).eat.call(this) // (*)
-  }
+  },
 }
 
 rabbit.eat() // Rabbit eats.
@@ -2806,7 +2735,7 @@ const animal = {
   name: 'Animal',
   eat() {
     console.log(`${this.name} eats.`)
-  }
+  },
 }
 
 const rabbit = {
@@ -2814,7 +2743,7 @@ const rabbit = {
   eat() {
     // ...Bounce around rabbit-style and call parent (animal) method
     Object.getPrototypeOf(this).eat.call(this) // (*)
-  }
+  },
 }
 
 const longEar = {
@@ -2822,7 +2751,7 @@ const longEar = {
   eat() {
     // ...Do something with long ears and call parent (rabbit) method
     Object.getPrototypeOf(this).eat.call(this) // (**)
-  }
+  },
 }
 
 longEar.eat() // Error: Maximum call stack size exceeded
@@ -2869,7 +2798,7 @@ const animal = {
   eat() {
     // For this method, [[HomeObject]] === animal (implicitly)
     console.log(`${this.name} eats.`)
-  }
+  },
 }
 
 const rabbit = {
@@ -2878,7 +2807,7 @@ const rabbit = {
   eat() {
     // For this method, [[HomeObject]] === rabbit (implicitly)
     super.eat() // Just like: `Object.getPrototypeOf([[HomeObject]]).eat.call(this)`
-  }
+  },
 }
 
 const longEar = {
@@ -2887,7 +2816,7 @@ const longEar = {
   eat() {
     // For this method, [[HomeObject]] === longEar (implicitly)
     super.eat() // Just like: `Object.getPrototypeOf([[HomeObject]]).eat.call(this)`
-  }
+  },
 }
 
 // Works correctly again!
@@ -2900,7 +2829,9 @@ longEar.eat() // -> Long Ear eats.
 >
 > ```js
 > const animal = {
->   eat() { console.log(`${this.name} eats.`) }
+>   eat() {
+>     console.log(`${this.name} eats.`)
+>   },
 > }
 >
 > const rabbit = { name: 'Rabbit' }
@@ -2915,8 +2846,8 @@ longEar.eat() // -> Long Ear eats.
 > ```js
 > const animal = {
 >   sayHi() {
->     console.log('I\'m an animal')
->   }
+>     console.log("I'm an animal")
+>   },
 > }
 >
 > // rabbit inherits from animal
@@ -2926,13 +2857,13 @@ longEar.eat() // -> Long Ear eats.
 >     // Totally equivalent to
 >     // `Object.getPrototypeOf(animal).sayHi.call(this)`
 >     super.sayHi()
->   }
+>   },
 > }
 >
 > const plant = {
 >   sayHi() {
->     console.log('I\'m a plant')
->   }
+>     console.log("I'm a plant")
+>   },
 > }
 >
 > // tree inherits from plant
@@ -2944,7 +2875,7 @@ longEar.eat() // -> Long Ear eats.
 >    *   rabbit.__proto__.sayHi.call(this)
 >    * }
 >    */
->   sayHi: rabbit.sayHi
+>   sayHi: rabbit.sayHi,
 > }
 >
 > tree.sayHi() // -> I'm an animal (?!)
@@ -2965,7 +2896,7 @@ class Article {
 
   static createTodays() {
     // Remember, this = Article
-    return new this('Today\'s digest', new Date())
+    return new this("Today's digest", new Date())
   }
 }
 
@@ -2987,7 +2918,7 @@ function Article(title, date) {
 Article.publisher = 'Ilya Kantor'
 Article.createTodays = function () {
   // Remember, this = Article
-  return new this('Today\'s digest', new Date())
+  return new this("Today's digest", new Date())
 }
 ```
 
@@ -3021,7 +2952,7 @@ class Rabbit extends Animal {
 
 Look at this inheritance diagram:
 
-```
+```txt
 Animal -- prototype --> Animal.prototype
   ^                         ^
   |                         |
@@ -3094,7 +3025,8 @@ class CoffeeMachine {
     return this._waterAmount
   }
 
-  _getPower() { // Protected method
+  _getPower() {
+    // Protected method
     return this._power
   }
 }
@@ -3175,11 +3107,9 @@ Like other languages, JavaScript uses `try...catch...finally` statement to handl
 function func() {
   try {
     // Code that may throw an error
-  }
-  catch (err) {
+  } catch (err) {
     // Code to handle the error
-  }
-  finally {
+  } finally {
     // Code that will run regardless of the result above
   }
 }
@@ -3193,8 +3123,7 @@ But there are some special things in JavaScript:
    function func() {
      try {
        // Code that may throw an error
-     }
-     catch {
+     } catch {
        // Code to handle the error
      }
    }
@@ -3206,8 +3135,7 @@ But there are some special things in JavaScript:
    function func() {
      try {
        // Code that may throw an error
-     }
-     finally {
+     } finally {
        // Complete the finalization even if an error occurs above
      }
    }
@@ -3219,8 +3147,7 @@ But there are some special things in JavaScript:
    function func() {
      try {
        return 1
-     }
-     finally {
+     } finally {
        console.log('finally') // -> finally
      }
    }
@@ -3229,8 +3156,6 @@ But there are some special things in JavaScript:
 ### Custom Error
 
 We can extends the built-in `Error` class to create custom error classes:
-
-<!-- eslint-disable no-useless-constructor -->
 
 ```js
 class BaseError extends Error {
@@ -3247,14 +3172,17 @@ class JsonValidationError extends BaseError {
 }
 
 class JsonValidationRequireError extends JsonValidationError {
-  constructor(property) { // (3)
+  constructor(property) {
+    // (3)
     super(`Property "${property}" is missing`)
   }
 }
 
 class JsonValidationTypeError extends JsonValidationError {
   constructor(property, expectedType) {
-    super(`Type of property "${property}" is expected to be "${expectedType}", but got "${typeof property}"`)
+    super(
+      `Type of property "${property}" is expected to be "${expectedType}", but got "${typeof property}"`,
+    )
   }
 }
 
@@ -3276,8 +3204,7 @@ function readUser(json) {
 
 try {
   const user = readUser('{ "age": 25 }')
-}
-catch (err) {
+} catch (err) {
   if (err instanceof JsonValidationError) {
     console.log(err)
     /**
@@ -3285,8 +3212,7 @@ catch (err) {
      *   at readUser (...)
      *   at ...
      */
-  }
-  else {
+  } else {
     throw err // Unknown error, rethrow it (don't know how to handle it)
   }
 }
@@ -3327,17 +3253,17 @@ loadScript(
           },
           (error) => {
             console.error(error)
-          }
+          },
         )
       },
       (error) => {
         console.error(error)
-      }
+      },
     )
   },
   (error) => {
     console.error(error)
-  }
+  },
 )
 ```
 
@@ -3364,7 +3290,7 @@ loadScript('/my/script.js')
     },
     (error) => {
       console.error(error)
-    }
+    },
   )
   .then(
     (script) => {
@@ -3372,15 +3298,15 @@ loadScript('/my/script.js')
     },
     (error) => {
       console.error(error)
-    }
+    },
   )
   .then(
     (script) => {
-    // ...continue after all scripts are loaded
+      // ...continue after all scripts are loaded
     },
     (error) => {
       console.error(error)
-    }
+    },
   )
 ```
 
@@ -3418,7 +3344,10 @@ new Promise((resolve, reject) => {
   // runs when the promise is settled, doesn't matter successfully or not
   .finally(() => stopLoadingIndicator())
   // so the loading indicator is always stopped before we go on
-  .then(result => showResult(result), err => showError(err))
+  .then(
+    (result) => showResult(result),
+    (err) => showError(err),
+  )
 ```
 
 > [!Note]
@@ -3448,35 +3377,43 @@ We can call `then` method both **standalone** or **chained**, they are quite dif
 
 ```js
 // This call three times on the same promise
-const standalone = new Promise((resolve, reject) => { // sp0
+const standalone = new Promise((resolve, reject) => {
+  // sp0
   setTimeout(() => resolve(1), 1000)
 })
-standalone.then((result) => { // sp1
+standalone.then((result) => {
+  // sp1
   console.log(result) // -> 1
   return result * 2
 })
-standalone.then((result) => { // sp2
+standalone.then((result) => {
+  // sp2
   console.log(result) // -> 1
   return result * 2
 })
-standalone.then((result) => { // sp3
+standalone.then((result) => {
+  // sp3
   console.log(result) // -> 1
   return result * 2
 })
 
 // This call each time on the new promise returned by the previous `then`
-const chained = new Promise((resolve, reject) => { // cp0
+const chained = new Promise((resolve, reject) => {
+  // cp0
   setTimeout(() => resolve(1), 1000)
 })
-  .then((result) => { // cp1
+  .then((result) => {
+    // cp1
     console.log(result) // -> 1
     return result * 2
   })
-  .then((result) => { // cp2
+  .then((result) => {
+    // cp2
     console.log(result) // -> 2
     return result * 2
   })
-  .then((result) => { // cp3
+  .then((result) => {
+    // cp3
     console.log(result) // -> 4
     return result * 2
   })
@@ -3516,9 +3453,9 @@ It accepts an iterable (usually an array) of promises, and returns a new promise
 
 ```js
 Promise.all([
-  new Promise(resolve => setTimeout(() => resolve(1), 3000)), // 1
-  new Promise(resolve => setTimeout(() => resolve(2), 2000)), // 2
-  new Promise(resolve => setTimeout(() => resolve(3), 1000)) // 3
+  new Promise((resolve) => setTimeout(() => resolve(1), 3000)), // 1
+  new Promise((resolve) => setTimeout(() => resolve(2), 2000)), // 2
+  new Promise((resolve) => setTimeout(() => resolve(3), 1000)), // 3
 ]).then(console.log) // 1,2,3 when promises are ready: each promise contributes an array member
 ```
 
@@ -3543,17 +3480,17 @@ For example, migration from `Promise.all` to `Promise.allSettled`:
 ```js
 // Before
 const [res1, res2, res3] = await Promise.all([
-  fetch('/api/data1').then(res => res.json()),
-  fetch('/api/data2').then(res => res.json()),
-  fetch('/api/data3').then(res => res.json())
+  fetch('/api/data1').then((res) => res.json()),
+  fetch('/api/data2').then((res) => res.json()),
+  fetch('/api/data3').then((res) => res.json()),
 ])
 console.log(res1, res2, res3)
 
 // After
 const [res4, res5, res6] = await Promise.allSettled([
-  fetch('/api/data1').then(res => res.json()),
-  fetch('/api/data2').then(res => res.json()),
-  fetch('/api/data3').then(res => res.json())
+  fetch('/api/data1').then((res) => res.json()),
+  fetch('/api/data2').then((res) => res.json()),
+  fetch('/api/data3').then((res) => res.json()),
 ])
 console.log(res4.value, res5.value, res6.value)
 ```
@@ -3625,8 +3562,6 @@ If you create a promise that doesn't have a callback to handle the rejection, it
 
 For example:
 
-<!-- eslint-disable no-new -->
-
 ```js
 new Promise((resolve, reject) => {
   reject(new Error('Unhandled rejection'))
@@ -3671,7 +3606,7 @@ loadScript('/my/script.js')
     },
     (error) => {
       console.error(error)
-    }
+    },
   )
   .then(
     (script) => {
@@ -3679,15 +3614,15 @@ loadScript('/my/script.js')
     },
     (error) => {
       console.error(error)
-    }
+    },
   )
   .then(
     (script) => {
-    // ...continue after all scripts are loaded
+      // ...continue after all scripts are loaded
     },
     (error) => {
       console.error(error)
-    }
+    },
   )
 ```
 
@@ -3710,8 +3645,7 @@ try {
   await loadScript('/my/script2.js')
   await loadScript('/my/script3.js')
   // ...continue after all scripts are loaded
-}
-catch (error) {
+} catch (error) {
   console.error(error)
 }
 ```
@@ -3723,7 +3657,7 @@ It's a better way to write promise-based code, making it look like synchronous.
 > Top level `await` can only be used in `ES Module`. For `CommonJS`, you need to wrap the code into an async IIFE:
 >
 > ```js
-> (async () => {
+> ;(async () => {
 >   const response = await fetch('/article/promise-chaining/user.json')
 >   const user = await response.json()
 >   // ...
@@ -3892,8 +3826,7 @@ function* gen() {
     const result = yield '2 + 2 = ?'
     // [!code highlight:1]
     console.log('The execution does not reach here, because the exception is thrown above')
-  }
-  catch (e) {
+  } catch (e) {
     console.error(e) // shows the error
   }
 }
@@ -3940,7 +3873,7 @@ The syntax is simple: prepend `function*` with `async`, that makes the generator
 async function* generateSequence(start, end) {
   for (let i = start; i <= end; i++) {
     // Wow, can use await!
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000))
 
     yield i
   }
@@ -3972,14 +3905,12 @@ const range = {
 
       async next() {
         // Note: we can use "await" inside the async next:
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        if (this.current <= this.last)
-          return { done: false, value: this.current++ }
-        else
-          return { done: true }
-      }
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+        if (this.current <= this.last) return { done: false, value: this.current++ }
+        else return { done: true }
+      },
     }
-  }
+  },
 }
 
 for await (const value of range) {

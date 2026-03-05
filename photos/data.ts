@@ -14,9 +14,9 @@ const metaInfo = Object.entries(
     import: 'default',
   }),
 ).map(([name, data]) => {
-  name = name.replace(/\.\w+$/, '').replace(/^\.\//, '')
+  const processedName = name.replace(/\.\w+$/, '').replace(/^\.\//, '')
   return {
-    name,
+    name: processedName,
     data,
   }
 })
@@ -29,13 +29,13 @@ const photos = Object.entries(
   }),
 )
   .map(([name, url]): Photo => {
-    name = name.replace(/\.\w+$/, '').replace(/^\.\//, '')
+    const processedName = name.replace(/\.\w+$/, '').replace(/^\.\//, '')
     return {
-      ...metaInfo.find(info => info.name === name)?.data,
-      name,
+      ...metaInfo.find((info) => info.name === processedName)?.data,
+      name: processedName,
       url,
     }
   })
-  .sort((a, b) => b.name.localeCompare(a.name))
+  .toSorted((a, b) => b.name.localeCompare(a.name))
 
 export default photos

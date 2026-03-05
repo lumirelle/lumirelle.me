@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 
-async function run() {
+async function run(): Promise<void> {
   await fs.cp('public/assets/fonts', 'dist/assets/fonts', { recursive: true, force: true })
 }
 

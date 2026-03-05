@@ -414,7 +414,8 @@ See [REST Client documentation](https://github.com/Huachao/vscode-restclient/blo
 
 [^1]: IPv4 address, there is also IPv6 address which is a 128-bit (16 bytes) identifier, usually represented in hexadecimal format, separated by colons. For example, `2001:0db8:85a3:0000:0000:8a2e:0370:7334`.
 
-[^2]: By default, there are two special IP addresses in each subnet is reserved and cannot be assigned to any computer:
+[^2]:
+    By default, there are two special IP addresses in each subnet is reserved and cannot be assigned to any computer:
 
     - The first address (the network address) is used to identify the subnet itself. It is the lowest address in the subnet range.
     - The last address (the broadcast address) is used to send data to all hosts in the subnet. It is the highest address in the subnet range.

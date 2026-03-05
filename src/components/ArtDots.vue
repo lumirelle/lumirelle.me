@@ -15,25 +15,32 @@ const SPACING = 15
 const noise3d = createNoise3D()
 
 const existingPoints = new Set<string>()
-const points: { x: number, y: number, opacity: number, particle: Particle }[] = []
+const points: { x: number; y: number; opacity: number; particle: Particle }[] = []
 
-function getForceOnPoint(x: number, y: number, z: number) {
+function getForceOnPoint(x: number, y: number, z: number): number {
   return (noise3d(x / SCALE, y / SCALE, z) - 0.5) * 2 * Math.PI
 }
 
 const mountedScope = effectScope()
 
-function createDotTexture(app: Application) {
-  const g = new Graphics().circle(0, 0, 1).fill(0xCCCCCC)
+function createDotTexture(app: Application): Texture {
+  const g = new Graphics().circle(0, 0, 1).fill(0xcc_cc_cc)
   return app.renderer.generateTexture(g)
 }
 
-function addPoints({ dotTexture, particleContainer }: { dotTexture: Texture, particleContainer: ParticleContainer }) {
+function addPoints({
+  dotTexture,
+  particleContainer,
+}: {
+  dotTexture: Texture
+  particleContainer: ParticleContainer
+}): void {
   for (let x = -SPACING / 2; x < w + SPACING; x += SPACING) {
     for (let y = -SPACING / 2; y < h + SPACING; y += SPACING) {
       const id = `${x}-${y}`
-      if (existingPoints.has(id))
+      if (existingPoints.has(id)) {
         continue
+      }
       existingPoints.add(id)
 
       const particle = new Particle(dotTexture)
@@ -47,9 +54,10 @@ function addPoints({ dotTexture, particleContainer }: { dotTexture: Texture, par
   }
 }
 
-async function setup() {
-  if (el.value == null)
+async function setup(): Promise<void> {
+  if (el.value == null) {
     return
+  }
   const app = new Application()
   await app.init({
     background: '#ffffff',
@@ -59,16 +67,18 @@ async function setup() {
     eventMode: 'none',
     autoDensity: true,
   })
-  el.value.appendChild(app.canvas)
+  el.value.append(app.canvas)
 
-  const particleContainer = new ParticleContainer({ dynamicProperties: { position: true, alpha: true } })
+  const particleContainer = new ParticleContainer({
+    dynamicProperties: { position: true, alpha: true },
+  })
   app.stage.addChild(particleContainer)
 
   const dotTexture = createDotTexture(app)
   addPoints({ dotTexture, particleContainer })
 
   app.ticker.add(() => {
-    const t = Date.now() / 10000
+    const t = Date.now() / 10_000
 
     for (const p of points) {
       const { x, y, opacity, particle } = p
@@ -105,5 +115,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="el" z--1 fixed size-screen left-0 right-0 top-0 bottom-0 pointer-events-none dark:invert />
+  <div
+    ref="el"
+    z--1
+    fixed
+    size-screen
+    left-0
+    right-0
+    top-0
+    bottom-0
+    pointer-events-none
+    dark:invert
+  />
 </template>

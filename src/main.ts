@@ -39,10 +39,7 @@ export const createApp = ViteSSG(
           html(ctx) {
             // only do the sliding transition when the scroll position is not 0
             // Disable sliding transition on Dev Mode
-            if (ctx.savedPosition?.top || import.meta.hot)
-              html.classList.add('no-sliding')
-            else
-              html.classList.remove('no-sliding')
+            html.classList.toggle('no-sliding', ctx.savedPosition?.top !== 0 || import.meta.env.DEV)
             return true
           },
         },

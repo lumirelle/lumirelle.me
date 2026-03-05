@@ -127,7 +127,7 @@ export default {
           priority: 20,
         },
         // Extract common vendors into a separate chunk.
-        'vendor': {
+        vendor: {
           name: 'vendor',
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
@@ -135,7 +135,7 @@ export default {
         },
         // Extract common source code (used by more than 1 chunk) into a
         // separate chunk.
-        'default': {
+        default: {
           name: 'default',
           minChunks: 2,
           priority: -20,

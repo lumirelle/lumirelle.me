@@ -31,7 +31,7 @@ In TypeScript world, we can use JavaScript data types to define a TypeScript typ
 >
 > In the following examples, you can see how we set a type to the variable:
 >
-> ```
+> ```txt
 > (const|let|var) <variable_name>: <type> [= <value>]
 > ```
 
@@ -90,8 +90,6 @@ const func: object = function () {
 ## Type Literal
 
 We can also use JavaScript value literals to define a TypeScript type, we call it **type literal**.
-
-<!-- eslint-disable ts/prefer-as-const-->
 
 ```ts
 const value: 'hello' = 'hello'
@@ -180,16 +178,15 @@ type Greeting = `Hello ${World}, ${Name}!`
 
 As you imagine, **object type literal** uses [JavaScript object literal syntax](manual-js-advanced-grammar#object) `{ ... }`, without "," as separator:
 
-<!-- eslint-disable ts/method-signature-style -->
-
 ```ts
 // [!code highlight:7]
-const obj: { // <- This is object type literal, no comma here
+const obj: {
+  // <- This is object type literal, no comma here
   a: number
   b: string
   c: boolean
   d: () => void
-  e(): void
+  e: () => void
 } = {
   a: 1,
   b: 'hello',
@@ -227,8 +224,6 @@ const func: Func = function (a, b) {
 
 If the type starts with `new` keyword, it means this function can only be called with `new` keyword:
 
-<!-- eslint-disable no-new-wrappers,ts/no-wrapper-object-types,unicorn/new-for-builtins -->
-
 ```ts
 type ConstructorFunc = new (a: number, b: number) => Number
 const constructorFunc: ConstructorFunc = function (a, b) {
@@ -261,8 +256,7 @@ a = true
  */
 if (typeof a === 'number') {
   a.toFixed(2)
-}
-else if (typeof a === 'string') {
+} else if (typeof a === 'string') {
   a.toUpperCase()
 }
 ```
@@ -292,8 +286,7 @@ a.toFixed(2)
 
 if (typeof a === 'number') {
   a.toFixed(2)
-}
-else if (typeof a === 'string') {
+} else if (typeof a === 'string') {
   a.toUpperCase()
 }
 ```
@@ -301,8 +294,6 @@ else if (typeof a === 'string') {
 ### Intersection Type
 
 Intersection likes "and", it means **only the type who satisfies all of the given types is accepted**. You can use **`&` operator (intersect operator)** to create it:
-
-<!-- eslint-disable ts/consistent-type-definitions -->
 
 ```ts [twoslash]
 // @errors: 2322
@@ -331,7 +322,7 @@ type Type2 = {
 const a: Type1 & Type2 = {
   a: 1,
   b: 'hello',
-  c: true
+  c: true,
 }
 a.a = 2
 a.b = 'world'
@@ -350,8 +341,7 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
       // In this case, `a` is narrowed to `number` type
       return a + 1
       //     ^?
-    }
-    else {
+    } else {
       // In this case, `a` is narrowed to `string` type
       return Number(a) + 1
       //            ^?
@@ -360,8 +350,6 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
   ```
 
 - Conditional statements with `in` operator
-
-  <!-- eslint-disable ts/consistent-type-definitions -->
 
   ```ts [twoslash]
   type BasicConfig = {
@@ -385,8 +373,7 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
     if ('files' in a) {
       return { override: [a] }
       //                  ^?
-    }
-    else {
+    } else {
       return a
       //     ^?
     }
@@ -400,8 +387,7 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
     if (a instanceof Date) {
       return a.toISOString()
       //     ^?
-    }
-    else {
+    } else {
       return a
       //     ^?
     }
@@ -409,8 +395,6 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
   ```
 
 - Conditional statements with some other checks that can help TypeScript to infer the type
-
-  <!-- eslint-disable ts/consistent-type-definitions -->
 
   ```ts [twoslash]
   /**
@@ -434,12 +418,12 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
     switch (shape.kind) {
       case 'circle':
         return Math.PI * shape.radius ** 2
-        //               ^?
-        // ...
+      //               ^?
+      // ...
       case 'square':
         return shape.sideLength ** 2
-        //     ^?
-        // ...
+      //     ^?
+      // ...
       default: {
         const _exhaustiveCheck: never = shape
         //                              ^?
@@ -481,8 +465,7 @@ const a: any = 1
 if (isNumber(a)) {
   console.log(a)
   //          ^?
-}
-else {
+} else {
   console.log(a)
   //          ^?
 }
@@ -574,8 +557,6 @@ Sometimes you don’t know all the actually names of a object type literal prope
 
 In those cases you can use an index signature to describe these properties:
 
-<!-- eslint-disable ts/consistent-type-definitions -->
-
 ```ts [twoslash]
 // @errors: 2353 1337 7006
 type NumberObject = {
@@ -589,11 +570,7 @@ const n1: NumberObject = {
   2: 'c',
 }
 // Of course, array is also satisfy this limitation
-const n2: NumberObject = [
-  'a',
-  'b',
-  'c',
-]
+const n2: NumberObject = ['a', 'b', 'c']
 const n3: NumberObject = {
   a: 'a',
   b: 'b',
@@ -613,16 +590,14 @@ As some objects who are constructor functions can be called with or without `new
 
 Let's take a look at the built-in type definition of `String` in TypeScript for example:
 
-<!-- eslint-disable no-var, vars-on-top, ts/method-signature-style -->
-
 ```ts
 // @file: node_modules/typescript/lib/lib.es5.d.ts
 
 // ...
 
 interface String {
-  toString(): string
-  charAt(pos: number): string
+  toString: () => string
+  charAt: (pos: number) => string
 
   // ...
 
@@ -675,11 +650,11 @@ To overload a function in TypeScript, the only thing you need to do is to define
 ```ts [twoslash]
 function fn(x: number, y: number): number // -> Overload 1
 function fn(xy: string): number // -> Overload 2
-function fn(x: string | number, y: number = 0): number { // -> Implementation
+function fn(x: string | number, y: number = 0): number {
+  // -> Implementation
   if (typeof x === 'string') {
     return +x
-  }
-  else {
+  } else {
     return x + y
   }
 }
@@ -705,8 +680,7 @@ function fn(xy: string): string
 function fn(x: string | number, y: number = 0): number {
   if (typeof x === 'string') {
     return +x
-  }
-  else {
+  } else {
     return x + y
   }
 }
@@ -749,8 +723,6 @@ interface MyInterface {
   ```
 
   It also works between interface and class.
-
-  <!-- eslint-disable ts/no-unsafe-declaration-merging -->
 
   ```ts [twoslash]
   // Declaration merging also works between interface and class
@@ -929,18 +901,21 @@ Now that both [Decorators](https://github.com/tc39/proposal-decorators) and [Dec
 Using TypeScript interfaces for brevity and clarity, this is the general shape of the API:
 
 ```ts
-type Decorator = (value: Input, context: {
-  kind: string
-  name: string | symbol
-  access: {
-    get?: () => unknown
-    set?: (value: unknown) => void
-  }
-  private?: boolean
-  static?: boolean
-  metadata: Record<string | number | symbol, unknown>
-  addInitializer: (initializer: () => void) => void
-}) => Output | void
+type Decorator = (
+  value: Input,
+  context: {
+    kind: string
+    name: string | symbol
+    access: {
+      get?: () => unknown
+      set?: (value: unknown) => void
+    }
+    private?: boolean
+    static?: boolean
+    metadata: Record<string | number | symbol, unknown>
+    addInitializer: (initializer: () => void) => void
+  },
+) => Output | void
 ```
 
 The `Input` is determind by the target of the decorator, and if a decorator returns a value, it means replace the original `Input` on target with the returned one.
@@ -969,8 +944,7 @@ For example:
 import type { Constructor } from '@antfu/utils'
 
 function logClass(constructor: Constructor, { kind }: ClassDecoratorContext) {
-  if (kind !== 'class')
-    return
+  if (kind !== 'class') return
   console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
 }
 
@@ -991,9 +965,9 @@ A decorator factory is a function that returns a decorator, you can call it with
 
 ```ts
 function logClass(message: string) {
-  return function (constructor: Constructor, { kind }: ClassDecoratorContext) { // [!code highlight:6]
-    if (kind !== 'class')
-      return
+  return function (constructor: Constructor, { kind }: ClassDecoratorContext) {
+    // [!code highlight:6]
+    if (kind !== 'class') return
     console.log(message)
     console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
   }
@@ -1020,8 +994,7 @@ When the class constructor definition is loaded, the decorator will be called wi
 ```ts
 // [!code highlight:14]
 function sealed(constructor: Constructor, { kind, name }: ClassDecoratorContext) {
-  if (kind !== 'class')
-    return
+  if (kind !== 'class') return
 
   // You cannot seal the class constructor, or you will break the behavior
   // of decorators, e.g.:
@@ -1057,12 +1030,8 @@ When the class method definition is loaded, the decorator will be called with th
 
 ```ts
 // [!code highlight:15]
-function measureTime(
-  method: (...args: any[]) => any,
-  { kind, name }: ClassMethodDecoratorContext
-) {
-  if (kind !== 'method')
-    return
+function measureTime(method: (...args: any[]) => any, { kind, name }: ClassMethodDecoratorContext) {
+  if (kind !== 'method') return
   return function (...args: any[]) {
     const start = performance.now()
     // @ts-expect-error Missing type support
@@ -1077,8 +1046,10 @@ class DataProcessor {
   // [!code highlight:1]
   @measureTime
   processData(data: number[]): number[] {
-    for (let i = 0; i < 100000000; i++) { /* processing */ }
-    return data.map(x => x * 2)
+    for (let i = 0; i < 100000000; i++) {
+      /* processing */
+    }
+    return data.map((x) => x * 2)
   }
 }
 
@@ -1095,13 +1066,12 @@ We can use metadata to record information about the field, as in the following e
 
 ```ts
 // Runtime polyfill for environment that does not support metadata API
-(Symbol as { metadata: symbol }).metadata ??= Symbol('Symbol.metadata')
+;(Symbol as { metadata: symbol }).metadata ??= Symbol('Symbol.metadata')
 
 // [!code highlight:7]
 function format(formatString: string) {
   return function (_: undefined, { kind, metadata }: ClassFieldDecoratorContext) {
-    if (kind !== 'field')
-      return
+    if (kind !== 'field') return
     metadata.format = formatString
   }
 }
@@ -1117,7 +1087,7 @@ class Greeter {
 
   greet() {
     // [!code highlight:1]
-    const formatString = Greeter[Symbol.metadata]?.format as string ?? ''
+    const formatString = (Greeter[Symbol.metadata]?.format as string) ?? ''
     return formatString.replace('%s', this.greeting)
   }
 }
@@ -1131,19 +1101,20 @@ console.log(greeter.greeting) // -> world!
 
 When the class getter/setter definition is loaded, the decorator will be called with the getter/setter and the decorator context.
 
-<!-- eslint-disable accessor-pairs -->
-
 ```ts
 function logged<T extends (...args: any[]) => any>(
-  method: T, { kind, name }: ClassGetterDecoratorContext): T
-function logged<T extends (...args: any[]) => any>(
-  method: T, { kind, name }: ClassSetterDecoratorContext): T
+  method: T,
+  { kind, name }: ClassGetterDecoratorContext,
+): T
 function logged<T extends (...args: any[]) => any>(
   method: T,
-  { kind, name }: ClassGetterDecoratorContext | ClassSetterDecoratorContext
+  { kind, name }: ClassSetterDecoratorContext,
+): T
+function logged<T extends (...args: any[]) => any>(
+  method: T,
+  { kind, name }: ClassGetterDecoratorContext | ClassSetterDecoratorContext,
 ) {
-  if (kind !== 'getter' && kind !== 'setter')
-    return
+  if (kind !== 'getter' && kind !== 'setter') return
   return function (...args: any[]) {
     console.log(`Starting ${String(name)} with arguments ${args.join(', ')}`)
     const ret = method.call(this, ...args)
@@ -1192,7 +1163,7 @@ Decorators are also supported.
 ```ts
 function logged<T, V>(
   value: ClassAccessorDecoratorTarget<T, V>,
-  { name }: ClassAccessorDecoratorContext
+  { name }: ClassAccessorDecoratorContext,
 ): ClassAccessorDecoratorResult<T, V> {
   const { get, set } = value
   return {
@@ -1255,20 +1226,11 @@ import 'reflect-metadata'
 
 // [!code highlight:33]
 const requiredMetadataKey = Symbol('required')
-function required(
-  target: object,
-  propertyKey: string | symbol,
-  parameterIndex: number,
-) {
-  const requiredParameters: number[]
-    = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) ?? []
+function required(target: object, propertyKey: string | symbol, parameterIndex: number) {
+  const requiredParameters: number[] =
+    Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) ?? []
   requiredParameters.push(parameterIndex)
-  Reflect.defineMetadata(
-    requiredMetadataKey,
-    requiredParameters,
-    target,
-    propertyKey,
-  )
+  Reflect.defineMetadata(requiredMetadataKey, requiredParameters, target, propertyKey)
 }
 function validate(
   target: any,
@@ -1277,8 +1239,8 @@ function validate(
 ) {
   const method = descriptor.value!
   descriptor.value = function () {
-    const requiredParameters: number[]
-      = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName) ?? []
+    const requiredParameters: number[] =
+      Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName) ?? []
     for (const parameterIndex of requiredParameters) {
       if (parameterIndex >= arguments.length || arguments[parameterIndex] === undefined) {
         throw new Error('Missing required argument.')
@@ -1301,8 +1263,7 @@ class BugReport {
   print(@required verbose: boolean) {
     if (verbose) {
       return `type: ${this.type}\ntitle: ${this.title}`
-    }
-    else {
+    } else {
       return this.title
     }
   }
@@ -1334,8 +1295,6 @@ Before this, you already know a lot of different types in TypeScript, now you wi
 ### Type Alias
 
 You may already notice that, we can use `type` keyword to define a custom type (create a type alias), with union, intersection, mapped types and so on:
-
-<!-- eslint-disable ts/consistent-type-definitions -->
 
 ```ts
 type NumberOrString = number | string
@@ -1390,8 +1349,6 @@ let shouldContinue: typeof alert("Are you sure you want to continue?");
 
 The `keyof` operator is used to get **the union of all the keys of an object type**:
 
-<!-- eslint-disable ts/consistent-type-definitions -->
-
 ```ts [twoslash]
 type ObjectType = {
   a: number
@@ -1411,10 +1368,8 @@ type ObjectKeys = keyof ObjectType & {}
 
 We can use an indexed access type to look up a specific property on object type (Don't forget, array, tuple, and function are also object types 😄):
 
-<!-- eslint-disable ts/consistent-type-definitions -->
-
 ```ts [twoslash]
-type Person = { age: number, name: string, alive: boolean }
+type Person = { age: number; name: string; alive: boolean }
 type Age = Person['age']
 //   ^?
 // ...
@@ -1427,10 +1382,8 @@ type PersonsCount = Persons['length']
 
 The index itself is a type, so we can use unions, keyof, or other types entirely:
 
-<!-- eslint-disable ts/consistent-type-definitions -->
-
 ```ts [twoslash]
-type Person = { age: number, name: string, alive: boolean }
+type Person = { age: number; name: string; alive: boolean }
 // ---cut-before---
 type I1 = Person['age' | 'name']
 //   ^?
@@ -1455,7 +1408,7 @@ const MyArray = [
   { name: 'Eve', age: 38 },
 ]
 
-type Person = typeof MyArray[number]
+type Person = (typeof MyArray)[number]
 //   ^?
 
 // ...
@@ -1464,7 +1417,7 @@ type Person = typeof MyArray[number]
 
 // ...
 
-type Age = typeof MyArray[number]['age']
+type Age = (typeof MyArray)[number]['age']
 //   ^?
 // ...
 ```
@@ -1649,18 +1602,16 @@ type KindlessCircle = RemoveKindField<Circle>
 
 A example of advanced usage:
 
-<!-- eslint-disable ts/consistent-type-definitions -->
-
 ```ts [twoslash]
 type EventConfig<Events extends { kind: string }> = {
   // `Events` is a union type, we can iterate it,
   // then pick the `kind` property of each element,
   // using `as` operator
-  [E in Events as E['kind']]: (event: E) => void;
+  [E in Events as E['kind']]: (event: E) => void
 }
 
-type SquareEvent = { kind: 'square', x: number, y: number }
-type CircleEvent = { kind: 'circle', radius: number }
+type SquareEvent = { kind: 'square'; x: number; y: number }
+type CircleEvent = { kind: 'circle'; radius: number }
 
 type Config = EventConfig<SquareEvent | CircleEvent>
 //   ^?
@@ -1681,7 +1632,10 @@ This is very useful when we need to check the type of an immutable object, but w
 For an example without `satisfies` operator:
 
 ```ts [twoslash]
-interface Route { path: string, children?: Routes }
+interface Route {
+  path: string
+  children?: Routes
+}
 type Routes = Record<string, Route>
 
 const routes: Routes = {
@@ -1704,7 +1658,10 @@ With `satisfies` operator:
 
 ```ts [twoslash]
 // @errors: 2339
-interface Route { path: string, children?: Routes }
+interface Route {
+  path: string
+  children?: Routes
+}
 type Routes = Record<string, Route>
 // ---cut---
 const routes = {
@@ -1781,10 +1738,10 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
 
   ```ts [twoslash]
   enum A {
-    x = 1
+    x = 1,
   }
   enum A {
-    y = 2
+    y = 2,
   }
 
   console.log(A.x) // -> 1
@@ -1801,8 +1758,6 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
   > [!Caution]
   >
   > This is not recommended, we already explained this [before](#additional-feature-for-interface-type).
-
-  <!-- eslint-disable ts/no-unsafe-declaration-merging -->
 
   ```ts [twoslash]
   interface A {
@@ -1886,7 +1841,3 @@ Now, you are a successful TypeScript developer, congratulations! 🎉
 Please try to complete the [Type Challenges](https://github.com/type-challenges/type-challenges/blob/main/README.zh-CN.md) to test your skills.
 
 Good luck! 😊
-
-```
-
-```

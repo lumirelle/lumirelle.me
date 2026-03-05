@@ -4,7 +4,7 @@ import { media } from '../../data/media'
 
 const route = useRoute()
 
-const type = computed<MediaType>(() => route.query.type as MediaType || 'anime')
+const type = computed<MediaType>(() => (route.query.type as MediaType) || 'anime')
 </script>
 
 <template>

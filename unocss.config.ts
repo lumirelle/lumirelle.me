@@ -1,6 +1,4 @@
-import {
-  createLocalFontProcessor,
-} from '@unocss/preset-web-fonts/local'
+import { createLocalFontProcessor } from '@unocss/preset-web-fonts/local'
 import {
   defineConfig,
   presetAttributify,
@@ -17,26 +15,39 @@ export default defineConfig({
       'color-base': 'text-black dark:text-white',
       'border-base': 'border-[#8884]',
     },
-    [/^btn-(\w+)$/, ([_, color]) => `op50 px2.5 py1 transition-all duration-200 ease-out no-underline! hover:(op100 text-${color} bg-${color}/10) border border-base! rounded`],
+    [
+      /^btn-(\w+)$/,
+      ([_, color]): string =>
+        `op50 px2.5 py1 transition-all duration-200 ease-out no-underline! hover:(op100 text-${color} bg-${color}/10) border border-base! rounded`,
+    ],
   ],
   rules: [
-    [/^slide-enter-(\d+)$/, ([_, n]) => ({
-      '--enter-stage': n,
-    })],
-    ['font-50%em', {
-      'font-family': '\'M PLUS Code Latin\', \'Source Han Sans TC\'',
-    }],
-    ['font-60%em', {
-      'font-family': '\'Recursive\', \'Maple Mono CN\'',
-      'font-variation-settings': '"MONO" 1, "CASL" 0, "wght" 400, "slnt" 0, "CRSV" 0.5',
-    }],
+    [
+      /^slide-enter-(\d+)$/,
+      ([_, n]): Record<string, any> => ({
+        '--enter-stage': n,
+      }),
+    ],
+    [
+      'font-50%em',
+      {
+        'font-family': "'M PLUS Code Latin', 'Source Han Sans TC'",
+      },
+    ],
+    [
+      'font-60%em',
+      {
+        'font-family': "'Recursive', 'Maple Mono CN'",
+        'font-variation-settings': '"MONO" 1, "CASL" 0, "wght" 400, "slnt" 0, "CRSV" 0.5',
+      },
+    ],
   ],
   presets: [
     presetIcons({
       extraProperties: {
-        'display': 'inline-block',
-        'height': '1.2em',
-        'width': '1.2em',
+        display: 'inline-block',
+        height: '1.2em',
+        width: '1.2em',
         'vertical-align': 'text-bottom',
       },
     }),
@@ -50,15 +61,9 @@ export default defineConfig({
         wisper: 'Bad Script',
         mplus: 'M PLUS Code Latin',
       },
-      processors: [
-        createLocalFontProcessor(),
-      ],
+      processors: [createLocalFontProcessor()],
     }),
   ],
-  transformers: [
-    transformerDirectives(),
-  ],
-  safelist: [
-    'i-ri-menu-2-fill',
-  ],
+  transformers: [transformerDirectives()],
+  safelist: ['i-ri-menu-2-fill'],
 })

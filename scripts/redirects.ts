@@ -4,13 +4,11 @@ import { getStarsRankingUrl } from './stars-rank'
 
 const pages = 2
 
-async function run() {
-  const manual = await fs.readFile('_redirects', 'utf-8')
+async function run(): Promise<void> {
+  const manual = await fs.readFile('_redirects', 'utf8')
   const gh = new Octokit({ auth: process.env.GITHUB_TOKEN! })
 
-  const redirects: [string, string, number][] = []
-
-  redirects.push(['/stars-rank', getStarsRankingUrl(), 302])
+  const redirects: [string, string, number][] = [['/stars-rank', getStarsRankingUrl(), 302]]
 
   for (let i = 1; i <= pages; i++) {
     const { data: repos } = await gh.repos.listForUser({
@@ -21,16 +19,22 @@ async function run() {
     })
 
     for (const repo of repos) {
-      if (['test', 'static', 'repro', 'issue', 'resume', 'lumirelle'].some(i => repo.name.includes(i)))
+      if (
+        ['test', 'static', 'repro', 'issue', 'resume', 'lumirelle'].some((e) =>
+          repo.name.includes(e),
+        )
+      ) {
         continue
-      if (!repo.private && !repo.fork && !repo.archived)
+      }
+      if (!repo.private && !repo.fork && !repo.archived) {
         redirects.push([`/${repo.name}`, repo.html_url, 302])
+      }
     }
   }
 
-  const final = `${manual}\n${redirects.map(i => i.join('\t')).join('\n')}`
+  const final = `${manual}\n${redirects.map((i) => i.join('\t')).join('\n')}`
 
-  await fs.writeFile('_dist_redirects', final, 'utf-8')
+  await fs.writeFile('_dist_redirects', final, 'utf8')
 }
 
 await run()

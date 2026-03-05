@@ -1,8 +1,5 @@
 <template>
-  <p>
-    If you enjoy my work and find them useful,
-    consider sponsor me. Thank you!
-  </p>
+  <p>If you enjoy my work and find them useful, consider sponsor me. Thank you!</p>
 
   <p flex="~ gap-2 wrap">
     <a
@@ -13,7 +10,9 @@
       <div
         i-ph-heart-duotone
         group-hover="i-ph-heart-fill text-rose"
-        transition-all duration-200 ease-out
+        transition-all
+        duration-200
+        ease-out
       />
       Sponsor to support Lumirelle (Open Collective)
     </a>

@@ -1,27 +1,18 @@
 <script setup lang="ts">
 defineProps<{ projects: Record<string, any[]> }>()
 
-function slug(name: string) {
-  return name.toLowerCase().replace(/[\s\\/]+/g, '-')
+function slug(name: string): string {
+  return name.toLowerCase().replaceAll(/[\s\\/]+/g, '-')
 }
 </script>
 
 <template>
   <div class="max-w-300 mx-auto">
-    <p text-center mt--6 mb5 op50 text-lg italic>
-      Projects that I created or maintaining.
-    </p>
+    <p text-center mt--6 mb5 op50 text-lg italic>Projects that I created or maintaining.</p>
     <div class="prose pb5 mx-auto mt10 text-center">
       <div flex="~ gap-2 justify-center">
-        <a
-          href="https://github.com/lumirelle"
-          target="_blank"
-          class="group btn-blue inline-block"
-        >
-          <div
-            i-ph-github-logo-duotone
-            group-hover="i-ph-github-logo-fill text-blue"
-          />
+        <a href="https://github.com/lumirelle" target="_blank" class="group btn-blue inline-block">
+          <div i-ph-github-logo-duotone group-hover="i-ph-github-logo-fill text-blue" />
           GitHub
         </a>
         <a
@@ -29,10 +20,7 @@ function slug(name: string) {
           target="_blank"
           class="group btn-amber inline-block"
         >
-          <div
-            i-ph-rocket-launch-duotone
-            group-hover="i-ph-rocket-launch-fill text-amber"
-          />
+          <div i-ph-rocket-launch-duotone group-hover="i-ph-rocket-launch-fill text-amber" />
           Recent Releases
         </a>
         <!-- <a
@@ -47,28 +35,48 @@ function slug(name: string) {
           Yak Map
         </a> -->
       </div>
-      <hr>
+      <hr />
     </div>
     <div
-      v-for="key, cidx in Object.keys(projects)" :key="key" slide-enter
+      v-for="(key, cidx) in Object.keys(projects)"
+      :key="key"
+      slide-enter
       :style="{ '--enter-stage': cidx + 1 }"
     >
       <div
         :id="slug(key)"
-        select-none relative h18 mt5 pointer-events-none slide-enter
+        select-none
+        relative
+        h18
+        mt5
+        pointer-events-none
+        slide-enter
         :style="{
           '--enter-stage': cidx - 2,
           '--enter-step': '60ms',
         }"
       >
-        <span text-5em color-transparent absolute left--1rem top-0rem font-bold leading-1em text-stroke-1.5 text-stroke-hex-aaa op35 dark:op20>{{ key }}</span>
+        <span
+          text-5em
+          color-transparent
+          absolute
+          left--1rem
+          top-0rem
+          font-bold
+          leading-1em
+          text-stroke-1.5
+          text-stroke-hex-aaa
+          op35
+          dark:op20
+          >{{ key }}</span
+        >
       </div>
       <div
         class="project-grid py-2 max-w-500 w-max mx-auto"
         grid="~ cols-1 md:cols-2 gap-4 lg:cols-3"
       >
         <a
-          v-for="item, idx in projects[key]"
+          v-for="(item, idx) in projects[key]"
           :key="idx"
           class="item relative flex items-center"
           :href="item.link"
@@ -87,9 +95,11 @@ function slug(name: string) {
     </div>
     <div class="prose pb5 mx-auto mt10 text-center">
       <div block mt-5>
-        <a href="https://lumirelle.me/stars-rank" target="_blank" op50>All projects sort by Stars</a>
+        <a href="https://lumirelle.me/stars-rank" target="_blank" op50
+          >All projects sort by Stars</a
+        >
       </div>
-      <hr>
+      <hr />
       <SponsorButtons />
     </div>
   </div>

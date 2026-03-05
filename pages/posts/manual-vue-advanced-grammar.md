@@ -263,9 +263,7 @@ export default {
   // [!code highlight:6]
   <div>
     <p>Count: {{ count }}</p>
-    <button @click="increment">
-      Increment
-    </button>
+    <button @click="increment">Increment</button>
   </div>
 </template>
 ```
@@ -329,9 +327,7 @@ function increment() {
   // [!code highlight:6]
   <div>
     <p>Count: {{ count }}</p>
-    <button @click="increment">
-      Increment
-    </button>
+    <button @click="increment">Increment</button>
   </div>
 </template>
 ```
@@ -851,12 +847,8 @@ There are five main elements in a Vue component:
     <div>
       <p>{{ title }}</p>
       <p>Count: {{ count }}</p>
-      <button @click="increment">
-        Increment
-      </button>
-      <button @click="$emit('close')">
-        Close
-      </button>
+      <button @click="increment">Increment</button>
+      <button @click="$emit('close')">Close</button>
     </div>
   </template>
   ```
@@ -880,11 +872,13 @@ _src/ComponentWithPropsOption.vue_
 export default {
   // [!code highlight:9]
   props: {
-    title: { // required
+    title: {
+      // required
       type: String,
       required: true,
     },
-    count: { // optional
+    count: {
+      // optional
       type: Number,
       default: 0,
     },
@@ -901,11 +895,13 @@ _Corresponding Compiler Output_
 const __sfc__ = {
   // [!code highlight:9]
   props: {
-    title: { // required
+    title: {
+      // required
       type: String,
       required: true,
     },
-    count: { // optional
+    count: {
+      // optional
       type: Number,
       default: 0,
     },
@@ -926,11 +922,13 @@ _src/ComponentWithPropsMacro.vue_
 <script setup>
 // [!code highlight:9]
 defineProps({
-  title: { // required
+  title: {
+    // required
     type: String,
     required: true,
   },
-  count: { // optional
+  count: {
+    // optional
     type: Number,
     default: 0,
   },
@@ -946,11 +944,13 @@ _Corresponding Compiler Output_
 const __sfc__ = {
   // [!code highlight:9]
   props: {
-    title: { // required
+    title: {
+      // required
       type: String,
       required: true,
     },
-    count: { // optional
+    count: {
+      // optional
       type: Number,
       default: 0,
     },
@@ -963,7 +963,7 @@ export default __sfc__
 
 You can see that, **macros** in `<script setup>` SFC syntax are just a workaround to configure the corresponding options of Vue components, they will be compiled to the equivalent options automatically. For example, there are also other macros like `defineEmits`, which is corresponding to the `emits` option of Vue components...
 
-These two example will both create two props called `title` and `count`. `title` is an optional string prop, and `count` is an optional number prop with a default value of `0`. Vue will [validate the types of these props in runtime (development mode)](#props-and-events-with-validation).
+These two example will both create two props called `title` and `count`. `title` is an optional string prop, and `count` is an optional number prop with a default value of `0`. Vue will [validate the types of these props in runtime (development mode)](#props-and-emits-with-validation).
 
 They are the same way in different syntax: **They both define props by values.**
 
@@ -982,7 +982,7 @@ interface Props {
 }
 const {
   title,
-  count = 0 // Default value is `0`
+  count = 0, // Default value is `0`
 } = defineProps<Props>()
 </script>
 ```
@@ -995,11 +995,13 @@ _Corresponding Compiler Output_
 const __sfc__ = {
   // [!code highlight:11]
   props: {
-    title: { // required
+    title: {
+      // required
       type: String,
       required: true,
     },
-    count: { // optional
+    count: {
+      // optional
       type: Number,
       required: false,
       default: 0,
@@ -1025,15 +1027,17 @@ Something you should notice is that there are some limitations:
   ```vue
   <script setup lang="ts">
   // [!code highlight:11]
-  interface Props { // #0
+  interface Props {
+    // #0
     title: string
     count?: number
   }
-  const props = withDefaults( // #1
+  const props = withDefaults(
+    // #1
     defineProps<Props>(),
     {
       count: 0,
-    }
+    },
   )
   console.log(props.count) // #2
   </script>
@@ -1046,7 +1050,8 @@ Something you should notice is that there are some limitations:
   ```js
   const __sfc__ = {
     // [!code highlight:19]
-    props: { // #0
+    props: {
+      // #0
       title: {
         type: String,
         required: true,
@@ -1082,12 +1087,14 @@ Something you should notice is that there are some limitations:
   ```vue
   <script setup lang="ts">
   // [!code highlight:8]
-  interface Props { // #0
+  interface Props {
+    // #0
     title: string
     count?: number
   }
-  const { // #1
-    count = 0
+  const {
+    // #1
+    count = 0,
   } = defineProps<Props>()
   console.log(count) // #2
   </script>
@@ -1100,7 +1107,8 @@ Something you should notice is that there are some limitations:
   ```js
   const __sfc__ = {
     // [!code highlight:14]
-    props: { // #0
+    props: {
+      // #0
       title: {
         type: String,
         required: true,
@@ -1113,7 +1121,7 @@ Something you should notice is that there are some limitations:
     },
     setup(__props) {
       console.log(__props.count) // #2
-      return { }
+      return {}
     },
   }
   export default __sfc__
@@ -1217,11 +1225,7 @@ defineProps({
     type: String,
     default: 'active',
     validator: (value) => {
-      return [
-        'active',
-        'inactive',
-        'pending'
-      ].includes(value)
+      return ['active', 'inactive', 'pending'].includes(value)
     },
   },
 })
@@ -1229,14 +1233,12 @@ defineProps({
 defineEmits({
   // An event cannot have payload
   close: (...args) => {
-    if (args === undefined)
-      return true
+    if (args === undefined) return true
     return false
   },
   // An event must with a string payload
   submit: (payload) => {
-    if (typeof payload === 'string')
-      return true
+    if (typeof payload === 'string') return true
     return false
   },
 })
@@ -1258,10 +1260,7 @@ interface Props {
   // Use union type to limit the allowed values
   status?: 'active' | 'inactive' | 'pending'
 }
-const {
-  count = 9,
-  status = 'active',
-} = defineProps<Props>()
+const { count = 9, status = 'active' } = defineProps<Props>()
 
 interface Emits {
   close: []
@@ -1296,24 +1295,18 @@ const __sfc__ = {
       type: String,
       default: 'active',
       validator: (value) => {
-        return [
-          'active',
-          'inactive',
-          'pending'
-        ].includes(value)
+        return ['active', 'inactive', 'pending'].includes(value)
       },
     },
   },
 
   emits: {
     close: (...args) => {
-      if (args === undefined)
-        return true
+      if (args === undefined) return true
       return false
     },
     submit: (payload) => {
-      if (typeof payload === 'string')
-        return true
+      if (typeof payload === 'string') return true
       return false
     },
   },
@@ -1402,7 +1395,7 @@ defineEmits<{
       type="text"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-    >
+    />
   </div>
 </template>
 ```
@@ -1428,11 +1421,7 @@ const modelValue = useModel(props, 'modelValue')
 <template>
   <div>
     // [!code highlight:5]
-    <input
-      type="text"
-      :value="modelValue"
-      @input="modelValue = $event.target.value"
-    >
+    <input type="text" :value="modelValue" @input="modelValue = $event.target.value" />
   </div>
 </template>
 ```
@@ -1537,7 +1526,7 @@ const __sfc__ = {
       type: String,
       required: true,
     },
-    modelModifiers: {}
+    modelModifiers: {},
   },
   emits: ['update:modelValue'],
   setup() {
@@ -1607,7 +1596,7 @@ const __sfc__ = {
     return {
       count,
       increment,
-      ref
+      ref,
     }
   },
 }
@@ -1638,9 +1627,7 @@ function handleClick() {
   <div>
     // [!code highlight:1]
     <ComponentWithExpose ref="componentRef" />
-    <button @click="handleClick">
-      Increment from Parent
-    </button>
+    <button @click="handleClick">Increment from Parent</button>
   </div>
 </template>
 ```
@@ -1666,9 +1653,7 @@ const count = ref(0)
 
 <template>
   <div>
-    <button @click="count++">
-      Increment
-    </button>
+    <button @click="count++">Increment</button>
     // [!code highlight:11]
     <!-- 1. We define a slot by `<slot>` element, -->
     <!-- inside are its default content -->
@@ -1773,11 +1758,7 @@ import ComponentB from './ComponentB.vue'
 import ComponentC from './ComponentC.vue'
 
 const currentTabIndex = ref(0)
-const tabs = [
-  ComponentA,
-  ComponentB,
-  ComponentC,
-]
+const tabs = [ComponentA, ComponentB, ComponentC]
 </script>
 
 <template>
@@ -1865,9 +1846,11 @@ There are also some development-only lifecycle hook registers for debugging purp
 >
 > // [!code highlight:5]
 > onMounted(async () => {
->   await fetch('https://api.example.com/data').then(res => res.json()).then((data) => {
->     console.log('Fetched data on mounted:', data)
->   })
+>   await fetch('https://api.example.com/data')
+>     .then((res) => res.json())
+>     .then((data) => {
+>       console.log('Fetched data on mounted:', data)
+>     })
 > })
 > </script>
 > ```
@@ -1883,7 +1866,7 @@ export default {
     document.querySelector('#app').style.backgroundColor = 'lightblue'
   },
   unmounted() {
-  // Cleanup side effects here
+    // Cleanup side effects here
     window.removeEventListener('resize', handleResize)
   },
 }
@@ -1899,9 +1882,11 @@ export default {
 > export default {
 >   // [!code highlight:5]
 >   async mounted() {
->     await fetch('https://api.example.com/data').then(res => res.json()).then((data) => {
->       console.log('Fetched data on mounted:', data)
->     })
+>     await fetch('https://api.example.com/data')
+>       .then((res) => res.json())
+>       .then((data) => {
+>         console.log('Fetched data on mounted:', data)
+>       })
 >   },
 > }
 > </script>
@@ -1971,16 +1956,10 @@ export function useMouse() {
 
   // Automatically setup event listeners
   onMounted(() => {
-    window.addEventListener(
-      'mousemove',
-      update
-    )
+    window.addEventListener('mousemove', update)
   })
   onUnmounted(() => {
-    window.removeEventListener(
-      'mousemove',
-      update
-    )
+    window.removeEventListener('mousemove', update)
   })
 
   return {
@@ -2151,12 +2130,8 @@ onUnmounted(() => {
     <h1>{{ title }}</h1>
     <p>Count: {{ count }}</p>
     <p>Model Value: {{ modelValue }}</p>
-    <button @click="$emit('submit', 'Hello from component!')">
-      Submit
-    </button>
-    <button @click="$emit('close')">
-      Close
-    </button>
+    <button @click="$emit('submit', 'Hello from component!')">Submit</button>
+    <button @click="$emit('close')">Close</button>
     <slot :count="count">
       <p>The count is: {{ count }}</p>
     </slot>
@@ -2180,8 +2155,16 @@ const model = ref('Initial Model Value')
     v-model="model"
     title="My Component Title"
     :count="5"
-    @submit="(message) => { console.log(message) }"
-    @close="() => { console.log('Component closed') }"
+    @submit="
+      (message) => {
+        console.log(message)
+      }
+    "
+    @close="
+      () => {
+        console.log('Component closed')
+      }
+    "
   >
     <template #default="{ count }">
       <p>Custom count content: {{ count }}</p>
@@ -2221,22 +2204,15 @@ import { ref } from 'vue'
 import Counter from './Counter.vue'
 import InputBox from './InputBox.vue'
 
-const tabs = [
-  Counter,
-  InputBox,
-]
+const tabs = [Counter, InputBox]
 const currentTabIndex = ref(0)
 </script>
 
 <template>
   // [!code highlight:1]
   <component :is="tabs[currentTabIndex]" />
-  <button @click="currentTabIndex = 0">
-    Counter
-  </button>
-  <button @click="currentTabIndex = 1">
-    Input Box
-  </button>
+  <button @click="currentTabIndex = 0">Counter</button>
+  <button @click="currentTabIndex = 1">Input Box</button>
 </template>
 ```
 
@@ -2250,10 +2226,7 @@ import { ref } from 'vue'
 import Counter from './Counter.vue'
 import InputBox from './InputBox.vue'
 
-const tabs = [
-  Counter,
-  InputBox,
-]
+const tabs = [Counter, InputBox]
 const currentTabIndex = ref(0)
 </script>
 
@@ -2262,12 +2235,8 @@ const currentTabIndex = ref(0)
   <KeepAlive>
     <component :is="tabs[currentTabIndex]" />
   </KeepAlive>
-  <button @click="currentTabIndex = 0">
-    Counter
-  </button>
-  <button @click="currentTabIndex = 1">
-    Input Box
-  </button>
+  <button @click="currentTabIndex = 0">Counter</button>
+  <button @click="currentTabIndex = 1">Input Box</button>
 </template>
 ```
 
@@ -2362,15 +2331,11 @@ const open = ref(false)
 </script>
 
 <template>
-  <button @click="open = true">
-    Open Modal
-  </button>
+  <button @click="open = true">Open Modal</button>
 
   <div v-if="open" class="modal">
     <p>Hello from the modal!</p>
-    <button @click="open = false">
-      Close
-    </button>
+    <button @click="open = false">Close</button>
   </div>
 </template>
 
@@ -2403,17 +2368,13 @@ const open = ref(false)
 </script>
 
 <template>
-  <button @click="open = true">
-    Open Modal
-  </button>
+  <button @click="open = true">Open Modal</button>
 
   // [!code highlight:8]
   <Teleport to="body">
     <div v-if="open" class="modal">
       <p>Hello from the modal!</p>
-      <button @click="open = false">
-        Close
-      </button>
+      <button @click="open = false">Close</button>
     </div>
   </Teleport>
 </template>
@@ -2566,7 +2527,7 @@ effect(update)
 
 Call the function once and create the side effect is easily, we just need to call that `update()` function once, but how could we track/trigger when a variable is accessed?
 
-### Track/Trigger during the Access of Object Properties
+### Track/Trigger during the Access of Object Properties <a name="track-trigger-during-the-access-of-object-properties"></a>
 
 For the variable access, there is no way to do in native JavaScript, for example:
 
@@ -2638,18 +2599,15 @@ There are two ways to achieve this:
   >   <div>
   >     <div>
   >       // [!code highlight:1]
-  >       {{ state === original }} <!-- -> true -->
+  >       {{ state === original }}
+  >       <!-- -> true -->
   >     </div>
   >     // [!code highlight:2]
   >     <!-- Will trigger watcher -->
-  >     <button @click="state.A1 += 1">
-  >       Increment A1 from State
-  >     </button>
+  >     <button @click="state.A1 += 1">Increment A1 from State</button>
   >     // [!code highlight:2]
   >     <!-- Will also trigger watcher -->
-  >     <button @click="original.A1 += 1">
-  >       Increment A1 from Original
-  >     </button>
+  >     <button @click="original.A1 += 1">Increment A1 from Original</button>
   >   </div>
   > </template>
   > ```
@@ -2695,7 +2653,7 @@ There are two ways to achieve this:
   >   () => state,
   >   () => {
   >     console.log('state is accessed!')
-  >   }
+  >   },
   > )
   > </script>
   >
@@ -2703,18 +2661,15 @@ There are two ways to achieve this:
   >   <div>
   >     <div>
   >       // [!code highlight:1]
-  >       {{ state === original }} <!-- -> false -->
+  >       {{ state === original }}
+  >       <!-- -> false -->
   >     </div>
   >     // [!code highlight:2]
   >     <!-- Will trigger reactivity -->
-  >     <button @click="state.A1 += 1">
-  >       Increment A1 from State
-  >     </button>
+  >     <button @click="state.A1 += 1">Increment A1 from State</button>
   >     // [!code highlight:2]
   >     <!-- Will NOT trigger reactivity -->
-  >     <button @click="original.A1 += 1">
-  >       Increment A1 from Original
-  >     </button>
+  >     <button @click="original.A1 += 1">Increment A1 from Original</button>
   >   </div>
   > </template>
   > ```
@@ -2765,7 +2720,7 @@ const o2 = new Proxy(
     get(target, key) {
       return Math.random()
     },
-  }
+  },
 )
 
 console.log(o2.b) // -> 0.7079086265731991
@@ -2782,7 +2737,8 @@ console.log(b) // -> 0.966970116437479
 The same to pass the property instead of the whole object to a function, this will also lose the reactivity:
 
 ```js
-function printValue(value) { // This will create a new variable `value`...
+function printValue(value) {
+  // This will create a new variable `value`...
   console.log(value)
   value = 1
   console.log(value)
@@ -2858,7 +2814,7 @@ Finally, implement `trigger()` function. Inside `trigger()` function, we will fi
 ```js
 function trigger(target, key) {
   const effects = getSubscribersForProperty(target, key)
-  effects.forEach(effect => effect())
+  effects.forEach((effect) => effect())
 }
 ```
 
@@ -3076,11 +3032,13 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
   <template>
     // [!code highlight:2]
     <!-- topLevelRef is automatically unpacked -->
-    <div v-text="topLevelRef" /> <!-- -> 1 -->
+    <div v-text="topLevelRef" />
+    <!-- -> 1 -->
 
     // [!code highlight:2]
     <!-- nestedRef.inner is NOT automatically unpacked -->
-    <div v-text="nestedRef.inner.value" /> <!-- -> 2 -->
+    <div v-text="nestedRef.inner.value" />
+    <!-- -> 2 -->
   </template>
   ```
 
@@ -3100,11 +3058,13 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
   <template>
     // [!code highlight:2]
     <!-- topLevelRef is automatically unpacked -->
-    <div>{{ topLevelRef }}</div> <!-- -> 1 -->
+    <div>{{ topLevelRef }}</div>
+    <!-- -> 1 -->
 
     // [!code highlight:2]
     <!-- nestedRef.inner is automatically unpacked -->
-    <div>{{ nestedRef.inner }}</div> <!-- -> 2 -->
+    <div>{{ nestedRef.inner }}</div>
+    <!-- -> 2 -->
   </template>
   ```
 
@@ -3128,7 +3088,8 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
   <template>
     // [!code highlight:2]
     <!-- state.a is automatically unpacked -->
-    <div>{{ state.a }}</div> <!-- -> 1 -->
+    <div>{{ state.a }}</div>
+    <!-- -> 1 -->
   </template>
   ```
 
@@ -3148,7 +3109,8 @@ For better usability, Vue.js provides an automatic unpacking feature for `ref()`
   <template>
     // [!code highlight:2]
     <!-- state.[0] is NOT automatically unpacked -->
-    <div>{{ state[0].value }}</div> <!-- -> 1 -->
+    <div>{{ state[0].value }}</div>
+    <!-- -> 1 -->
   </template>
   ```
 
@@ -3173,7 +3135,7 @@ watch(
   () => {
     console.log('A1 or B1 updated:', state.A1, state.B1)
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 const C1 = computed(() => state.A1 + state.B1)
@@ -3207,11 +3169,7 @@ function update() {
   state.C1 = state.A1 + state.B1
   console.log('C1 updated:', state.C1)
 }
-watch(
-  () => [state.A1, state.B1],
-  update,
-  { immediate: true }
-) // -> C1 updated: 3
+watch(() => [state.A1, state.B1], update, { immediate: true }) // -> C1 updated: 3
 state.A1 = 3 // -> C1 updated: 5
 state.B1 = 4 // -> C1 updated: 7
 ```
@@ -3231,10 +3189,7 @@ function update() {
   console.log('C1 updated:', state.C1)
 }
 
-watchEffect(
-  update,
-  { immediate: true }
-) // -> C1 updated: 3
+watchEffect(update, { immediate: true }) // -> C1 updated: 3
 state.A1 = 3 // -> C1 updated: 5
 state.B1 = 4 // -> C1 updated: 7
 ```
@@ -3410,17 +3365,14 @@ For high-level watchers and computed properties, you can use `onTrack` and `onTr
 import { computed } from 'vue'
 
 const count = ref(0)
-const doubleCount = computed(
-  () => count.value * 2,
-  {
-    onTrack(e) {
-      debugger
-    },
-    onTrigger(e) {
-      debugger
-    },
-  }
-)
+const doubleCount = computed(() => count.value * 2, {
+  onTrack(e) {
+    debugger
+  },
+  onTrigger(e) {
+    debugger
+  },
+})
 
 watch(
   () => count.value,
@@ -3434,7 +3386,7 @@ watch(
     onTrigger(e) {
       debugger
     },
-  }
+  },
 )
 
 watchEffect(
@@ -3448,7 +3400,7 @@ watchEffect(
     onTrigger(e) {
       debugger
     },
-  }
+  },
 )
 </script>
 ```
@@ -3497,15 +3449,9 @@ const isVisible = ref(true)
 <template>
   <div>
     // [!code highlight:6]
-    <div v-if="isVisible">
-      This element is visible.
-    </div>
-    <div v-else>
-      This element is hidden.
-    </div>
-    <button @click="isVisible = !isVisible">
-      Toggle Visibility
-    </button>
+    <div v-if="isVisible">This element is visible.</div>
+    <div v-else>This element is hidden.</div>
+    <button @click="isVisible = !isVisible">Toggle Visibility</button>
   </div>
 </template>
 ```
@@ -3522,24 +3468,12 @@ const status = ref('active')
 <template>
   <div>
     // [!code highlight:9]
-    <div v-if="status === 'active'">
-      Status is active.
-    </div>
-    <div v-else-if="status === 'inactive'">
-      Status is inactive.
-    </div>
-    <div v-else>
-      Status is pending.
-    </div>
-    <button @click="status = 'active'">
-      Set Active
-    </button>
-    <button @click="status = 'inactive'">
-      Set Inactive
-    </button>
-    <button @click="status = 'pending'">
-      Set Pending
-    </button>
+    <div v-if="status === 'active'">Status is active.</div>
+    <div v-else-if="status === 'inactive'">Status is inactive.</div>
+    <div v-else>Status is pending.</div>
+    <button @click="status = 'active'">Set Active</button>
+    <button @click="status = 'inactive'">Set Inactive</button>
+    <button @click="status = 'pending'">Set Pending</button>
   </div>
 </template>
 ```
@@ -3564,12 +3498,8 @@ const isVisible = ref(true)
 <template>
   <div>
     // [!code highlight:6]
-    <div v-show="isVisible">
-      This element is visible.
-    </div>
-    <button @click="isVisible = !isVisible">
-      Toggle Visibility
-    </button>
+    <div v-show="isVisible">This element is visible.</div>
+    <button @click="isVisible = !isVisible">Toggle Visibility</button>
   </div>
 </template>
 ```
@@ -3632,9 +3562,7 @@ const items = ref(['A', 'B', 'C'])
     <!-- The second: B -> A -->
     <!-- The third: C -> B -->
     <!-- A new element created: C -->
-    <button @click="items.unshift('X')">
-      Add X at the beginning
-    </button>
+    <button @click="items.unshift('X')">Add X at the beginning</button>
   </div>
 </template>
 ```
@@ -3656,9 +3584,7 @@ const items = ref(['A', 'B', 'C'])
     </div>
     <!-- This will only create a new element for X -->
     <!-- Then sort the existing elements -->
-    <button @click="items.unshift('X')">
-      Add X at the beginning
-    </button>
+    <button @click="items.unshift('X')">Add X at the beginning</button>
   </div>
 </template>
 ```
@@ -3855,7 +3781,7 @@ It accpets different modifiers to customize its behavior:
 > </script>
 >
 > <template>
->   <input v-model="model" type="number">
+>   <input v-model="model" type="number" />
 > </template>
 > ```
 
@@ -3953,14 +3879,12 @@ For `<script setup>` SFC syntax, you can define an object with the variable name
 const vHighlight = {
   mounted: (el) => {
     el.classList.add('is-highlight')
-  }
+  },
 }
 </script>
 
 <template>
-  <p v-highlight>
-    This sentence is important!
-  </p>
+  <p v-highlight>This sentence is important!</p>
 </template>
 ```
 
@@ -3973,16 +3897,14 @@ export default {
     highlight: {
       mounted(el) {
         el.classList.add('is-highlight')
-      }
-    }
-  }
+      },
+    },
+  },
 }
 </script>
 
 <template>
-  <p v-highlight>
-    This sentence is important!
-  </p>
+  <p v-highlight>This sentence is important!</p>
 </template>
 ```
 
@@ -3995,7 +3917,7 @@ const app = createApp(App)
 app.directive('highlight', {
   mounted(el) {
     el.classList.add('is-highlight')
-  }
+  },
 })
 ```
 
@@ -4062,7 +3984,7 @@ const imageUrl = ref('https://example.com/image.png')
 <template>
   <div>
     <span>Sum: {{ a + b }}</span>
-    <img :src="`${imageUrl}?size=large`">
+    <img :src="`${imageUrl}?size=large`" />
   </div>
 </template>
 ```
@@ -4073,7 +3995,9 @@ const imageUrl = ref('https://example.com/image.png')
 >
 > ```vue
 > <script setup>
-> const items = [/* some data */]
+> const items = [
+>   /* some data */
+> ]
 >
 > function heavyComputation(item) {
 >   // some heavy computation
@@ -4096,7 +4020,9 @@ const imageUrl = ref('https://example.com/image.png')
 >
 > ```vue
 > <script setup>
-> const items = [/* some data */]
+> const items = [
+>   /* some data */
+> ]
 >
 > function heavyComputation(item) {
 >   // some heavy computation
@@ -4142,10 +4068,7 @@ Vue.js provides special features for binding classes and styles to elements.
 
   ```vue
   <template>
-    <div
-      class="static-class"
-      :class="['dynamic-class-value', 'another-class']"
-    ></div>
+    <div class="static-class" :class="['dynamic-class-value', 'another-class']"></div>
   </template>
   ```
 
@@ -4211,9 +4134,9 @@ Vue.js provides special features for binding classes and styles to elements.
       <div
         id="example-expression"
         class="static-class"
-        :class="[ 1 === 1 ? 'dynamic-class-value' : '', 'another-class' ]"
+        :class="[1 === 1 ? 'dynamic-class-value' : '', 'another-class']"
         style="color: blue; font-size: 12px"
-        :style="[ 'background-color: yellow', { ['mar' + 'gin']: `${4 + 1}px` } ]"
+        :style="['background-color: yellow', { ['mar' + 'gin']: `${4 + 1}px` }]"
       ></div>
     </div>
   </template>
@@ -4255,7 +4178,7 @@ Vue.js provides special features for binding classes and styles to elements.
   </div>
   ```
 
-- <a id="style-bindings-vendor-prefixes"></a>By default, Vue will [automatically add vendor prefixes to binding styles at runtime](#style-vendor-prefixing).
+- <a id="style-bindings-vendor-prefixes"></a>By default, Vue will [automatically add vendor prefixes to binding styles at runtime](#automatically-vendor-prefixing-for-v-bind-in-css).
 
   But sometimes, the feature of specify vendor prefixes is necessary, so there is a special syntax to support it, that is binding a object with array values for styles:
 
@@ -4266,9 +4189,7 @@ Vue.js provides special features for binding classes and styles to elements.
     <div
       id="example-vendor-prefixes"
       :style="{
-        display: [
-          '-webkit-box', '-ms-flexbox', 'flex',
-        ],
+        display: ['-webkit-box', '-ms-flexbox', 'flex'],
       }"
     />
   </template>
@@ -4318,13 +4239,9 @@ onMounted(() => {
 
 <template>
   // [!code highlight:1]
-  <div ref="myDiv">
-    This is my div element.
-  </div>
+  <div ref="myDiv">This is my div element.</div>
   // [!code highlight:1]
-  <SubComponent ref="mySubComponent">
-    This is my sub component.
-  </SubComponent>
+  <SubComponent ref="mySubComponent"> This is my sub component. </SubComponent>
 </template>
 ```
 
@@ -4349,13 +4266,9 @@ onMounted(() => {
   // [!code highlight:3]
   <!-- Must use the same name for the ref attribute -->
   <!-- and the ref variable -->
-  <div ref="myDivRef">
-    This is my div element.
-  </div>
+  <div ref="myDivRef">This is my div element.</div>
   // [!code highlight:1]
-  <SubComponent ref="mySubComponentRef">
-    This is my sub component.
-  </SubComponent>
+  <SubComponent ref="mySubComponentRef"> This is my sub component. </SubComponent>
 </template>
 ```
 
@@ -4379,13 +4292,9 @@ export default {
 
 <template>
   // [!code highlight:1]
-  <div ref="myDiv">
-    This is my div element.
-  </div>
+  <div ref="myDiv">This is my div element.</div>
   // [!code highlight:1]
-  <SubComponent ref="mySubComponent">
-    This is my sub component.
-  </SubComponent>
+  <SubComponent ref="mySubComponent"> This is my sub component. </SubComponent>
 </template>
 ```
 
@@ -4416,7 +4325,8 @@ export default {
 >     <div v-for="item in items" :key="item.id" :ref="itemsRef">
 >       {{ item.name }}
 >     </div>
->     {{ Array.isArray(itemsRef.value) }} <!-- -> true -->
+>     {{ Array.isArray(itemsRef.value) }}
+>     <!-- -> true -->
 >   </div>
 > </template>
 > ```
@@ -4441,7 +4351,8 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
 
   ```html
   <div>
-    <div />Hello!
+    <div />
+    Hello!
     <input id="my-input" />
   </div>
   ```
@@ -4455,7 +4366,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   ```html
   <div>
     <div>Hello!</div>
-    <input id="my-input">
+    <input id="my-input" />
   </div>
   ```
 
@@ -4472,7 +4383,8 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   ```vue
   <template>
     <div>
-      <div />Hello!
+      <div />
+      Hello!
       <input id="my-input" />
     </div>
   </template>
@@ -4488,7 +4400,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   <div>
     <div></div>
     Hello!
-    <input id="my-input">
+    <input id="my-input" />
   </div>
   ```
 
@@ -4514,9 +4426,7 @@ _src/pages/page-with-scoped-style.vue_
 
 ```vue
 <template>
-  <div class="scoped-style">
-    1
-  </div>
+  <div class="scoped-style">1</div>
 </template>
 
 <style scoped>
@@ -4530,9 +4440,7 @@ _src/pages/page-with-global-style.vue_
 
 ```vue
 <template>
-  <div class="global-style">
-    2
-  </div>
+  <div class="global-style">2</div>
 </template>
 
 <style>
@@ -4675,9 +4583,7 @@ _src/pages/page-with-slotted-selector.vue_
 <template>
   <div class="parent">
     <ChildComponent>
-      <div class="slotted-content">
-        1
-      </div>
+      <div class="slotted-content">1</div>
     </ChildComponent>
   </div>
 </template>
@@ -4733,9 +4639,7 @@ A `<style module>` tag is compiled as [CSS Modules](https://github.com/css-modul
 
 ```vue
 <template>
-  <p :class="$style.red">
-    This should be red
-  </p>
+  <p :class="$style.red">This should be red</p>
 </template>
 
 <style module>
@@ -4753,9 +4657,7 @@ You can also custom the inject name of the CSS Modules object by providing a val
 
 ```vue
 <template>
-  <p :class="classes.red">
-    red
-  </p>
+  <p :class="classes.red">red</p>
 </template>
 
 <style module="classes">
@@ -4775,9 +4677,7 @@ const classes = useCssModule('classes')
 </script>
 
 <template>
-  <p :class="classes.red">
-    red
-  </p>
+  <p :class="classes.red">red</p>
 </template>
 
 <style module="classes">
@@ -4799,9 +4699,7 @@ export default {
 </script>
 
 <template>
-  <p :class="classes.red">
-    red
-  </p>
+  <p :class="classes.red">red</p>
 </template>
 
 <style module="classes">
@@ -4824,16 +4722,14 @@ _src/pages/options-api.vue_
 export default {
   data() {
     return {
-      color: 'red'
+      color: 'red',
     }
-  }
+  },
 }
 </script>
 
 <template>
-  <div class="text">
-    hello
-  </div>
+  <div class="text">hello</div>
 </template>
 
 <style>

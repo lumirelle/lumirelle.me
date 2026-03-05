@@ -128,9 +128,7 @@ const formRef = useTemplateRef('form')
  * In this example, "Block" is "form", "Element" is "Type",
  * "Modifier" is "General".
  */
-const isFormTypeGeneral = computed(
-  () => formData.value.type === TypeEnum.GENERAL
-)
+const isFormTypeGeneral = computed(() => formData.value.type === TypeEnum.GENERAL)
 
 /**
  * "upsertFormRef" means the thing stored in this variable is a "ref",
@@ -293,9 +291,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   /**
    * List users by dynamic status.
    */
-  export async function listUsersByStatus(
-    status: Pick<User, 'status'>
-  ): Promise<User[]> {
+  export async function listUsersByStatus(status: Pick<User, 'status'>): Promise<User[]> {
     return await request.get('/users', { params: { status } })
   }
 
@@ -314,9 +310,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   /**
    * Query users with pagination.
    */
-  export async function queryUsers(
-    params: QueryParam<User>
-  ): Promise<Page<User>> {
+  export async function queryUsers(params: QueryParam<User>): Promise<Page<User>> {
     return await request.get('/users/query', { params })
   }
   ```
@@ -367,7 +361,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
    */
   export async function addUserToGroup(
     userId: Pick<User, 'id'>,
-    groupId: Pick<Group, 'id'>
+    groupId: Pick<Group, 'id'>,
   ): Promise<void> {
     return await request.post('/group/user', { data: { userId, groupId } })
   }
@@ -375,9 +369,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   /**
    * Register new user.
    */
-  export async function registerUser(
-    data: Partial<SensitiveUser>
-  ): Promise<User> {
+  export async function registerUser(data: Partial<SensitiveUser>): Promise<User> {
     return await request.post('/user/register', { data })
   }
 
@@ -386,7 +378,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
    */
   export async function loginUser(
     username: Pick<SensitiveUser, 'username'>,
-    password: Pick<SensitiveUser, 'password'>
+    password: Pick<SensitiveUser, 'password'>,
   ): Promise<{ token: string }> {
     return await request.post('/user/login', { data: { username, password } })
   }
@@ -394,10 +386,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   /**
    * Upload user avatar.
    */
-  export async function uploadUserAvatar(
-    userId: Pick<User, 'id'>,
-    file: File
-  ): Promise<string> {
+  export async function uploadUserAvatar(userId: Pick<User, 'id'>, file: File): Promise<string> {
     const formData = new FormData()
     formData.append('userId', userId)
     formData.append('file', file)
@@ -430,7 +419,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
    * Update (partially or fully) existing user.
    */
   export async function updateUser(
-    data: Pick<User, 'id'> & Partial<Omit<User, 'id'>>
+    data: Pick<User, 'id'> & Partial<Omit<User, 'id'>>,
   ): Promise<User> {
     return await request.put('/user', { data })
     // Or
@@ -442,7 +431,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
    */
   export async function patchUserStatus(
     id: Pick<User, 'id'>,
-    status: Pick<User, 'status'>
+    status: Pick<User, 'status'>,
   ): Promise<User> {
     return await request.patch('/user/status', { data: { id, status } })
   }
@@ -535,10 +524,7 @@ const user: User = {
  * "hasPermission" is used to check whether the user has the specific
  * permission. "StateVerb" is "has", "Element" is "Permission"
  */
-export function hasPermission(
-  user: User,
-  permission: Permission
-): boolean {
+export function hasPermission(user: User, permission: Permission): boolean {
   for (const role of user.roles) {
     const rolePermissions = rolePermissionsMap[role] || []
     if (rolePermissions.includes(permission)) {
@@ -657,10 +643,7 @@ const userInfo = ref<UserInfo | null>(null)
  * "beforeUserInfoChange" is trigger before user info changes.
  * "Event" is "UserInfoChange".
  */
-async function beforeUserInfoChange(
-  oldUserInfo: UserInfo | null,
-  newUserInfo: UserInfo | null
-) {
+async function beforeUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserInfo | null) {
   console.log('User info changed before:', oldUserInfo, newUserInfo)
 }
 
@@ -668,10 +651,7 @@ async function beforeUserInfoChange(
  * "onUserInfoChange" is trigger when user info changes.
  * "Event" is "UserInfoChange".
  */
-async function onUserInfoChange(
-  oldUserInfo: UserInfo | null,
-  newUserInfo: UserInfo | null
-) {
+async function onUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserInfo | null) {
   userInfo.value = newUserInfo
   console.log('User info changed:', oldUserInfo, newUserInfo)
 }
@@ -680,10 +660,7 @@ async function onUserInfoChange(
  * "afterUserInfoChange" is trigger after user info changes.
  * "Event" is "UserInfoChange".
  */
-async function afterUserInfoChange(
-  oldUserInfo: UserInfo | null,
-  newUserInfo: UserInfo | null
-) {
+async function afterUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserInfo | null) {
   console.log('User info changed after:', oldUserInfo, newUserInfo)
 }
 
@@ -720,10 +697,7 @@ A good example:
 /**
  * "calcDiscountedPrice" is used to calculate discounted price.
  */
-export function calcDiscountedPrice(
-  originalPrice: number,
-  discountRate: number
-): number {
+export function calcDiscountedPrice(originalPrice: number, discountRate: number): number {
   return originalPrice * (1 - discountRate)
 }
 ```
@@ -734,10 +708,7 @@ A bad example:
 /**
  * "calcPrice" is too general to express what price is calculated.
  */
-export function calcPrice(
-  originalPrice: number,
-  discountRate: number
-): number {
+export function calcPrice(originalPrice: number, discountRate: number): number {
   return originalPrice * (1 - discountRate)
 }
 ```

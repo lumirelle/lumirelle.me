@@ -32,13 +32,13 @@ _A Nuxt frontend project:_
         "echarts": "^6.0.0",
         "pinia": "^3.0.4",
         "vue": "^3.5.27",
-        "vue-echarts": "^8.0.1"
+        "vue-echarts": "^8.0.1",
       },
       // Extracted from "frontend", as we may have a lot of icons dependencies
       "icons": {
         "@iconify-json/carbon": "^1.2.18",
         "@iconify-json/twemoji": "^1.2.5",
-        "@iconify/utils": "^3.1.0"
+        "@iconify/utils": "^3.1.0",
       },
       "backend": {
         // ...
@@ -47,7 +47,7 @@ _A Nuxt frontend project:_
       "dev": {
         "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
         "typescript": "^5.9.3",
-        "vue-tsc": "^3.2.4"
+        "vue-tsc": "^3.2.4",
       },
 
       "types": {
@@ -76,14 +76,14 @@ _A Nuxt frontend project:_
         "nuxt-swiper": "^2.0.1",
         "nuxt-typed-router": "^4.0.2",
         "unocss": "^66.6.0",
-        "unplugin-vue-router": "^0.19.2"
+        "unplugin-vue-router": "^0.19.2",
       },
 
       "check": {
         "@antfu/eslint-config": "^7.2.0",
         "eslint": "^9.39.2",
         "eslint-plugin-format": "^1.3.1",
-        "lint-staged": "^16.2.7"
+        "lint-staged": "^16.2.7",
       },
 
       "test": {
@@ -92,10 +92,10 @@ _A Nuxt frontend project:_
         "happy-dom": "^20.3.9",
         "playwright-core": "^1.58.0",
         "std-env": "^3.10.0",
-        "vitest": "^4.0.18"
-      }
-    }
-  }
+        "vitest": "^4.0.18",
+      },
+    },
+  },
 
   // ...
 }

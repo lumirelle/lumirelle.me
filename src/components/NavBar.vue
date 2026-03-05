@@ -1,5 +1,5 @@
 <script setup lang="ts">
-function toTop() {
+function toTop(): void {
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
@@ -20,8 +20,18 @@ const { y: scroll } = useWindowScroll()
     </RouterLink>
     <button
       title="Scroll to top"
-      fixed right-3 bottom-3 w-10 h-10 hover:op100 rounded-full
-      hover-bg-hex-8883 transition duration-300 z-100 print:hidden
+      fixed
+      right-3
+      bottom-3
+      w-10
+      h-10
+      hover:op100
+      rounded-full
+      hover-bg-hex-8883
+      transition
+      duration-300
+      z-100
+      print:hidden
       :class="scroll > 300 ? 'op30' : 'op0! pointer-events-none'"
       @click="toTop()"
     >
@@ -52,7 +62,7 @@ const { y: scroll } = useWindowScroll()
           <div i-uil-github-alt />
         </a>
         <a href="/feed.xml" target="_blank" title="RSS" class="lt-md:hidden">
-          <div i-la-rss-square style="font-size:1.25rem; margin: 0 -0.125rem;" />
+          <div i-la-rss-square style="font-size: 1.25rem; margin: 0 -0.125rem" />
         </a>
         <ToggleTheme />
       </div>

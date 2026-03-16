@@ -5,20 +5,23 @@ import { remove } from 'diacritics'
 // oxlint-disable-next-line no-control-regex
 const rControl = /[\u0000-\u001F]/g
 const rSpecial = /[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'<>,.?/]+/g
+const rContinuos = /-{2,}/g
+const rTrim = /^-+|-+$/g
+const rStartNum = /^(\d)/
 
 export function slugify(str: string): string {
   return (
     remove(str)
       // Remove control characters
-      .replace(rControl, '')
+      .replaceAll(rControl, '')
       // Replace special characters
-      .replace(rSpecial, '-')
+      .replaceAll(rSpecial, '-')
       // Remove continuos separators
-      .replaceAll(/-{2,}/g, '-')
+      .replaceAll(rContinuos, '-')
       // Remove prefixing and trailing separtors
-      .replaceAll(/^-+|-+$/g, '')
+      .replaceAll(rTrim, '')
       // ensure it doesn't start with a number (#121)
-      .replace(/^(\d)/, '_$1')
+      .replace(rStartNum, '_$1')
       // lowercase
       .toLowerCase()
   )

@@ -22,8 +22,8 @@ function handleWheel(e: WheelEvent): void {
     return
   }
   if (
-    container.value.scrollLeft >= container.value.scrollWidth - container.value.clientWidth &&
-    e.deltaY > 0
+    container.value.scrollLeft >= container.value.scrollWidth - container.value.clientWidth
+    && e.deltaY > 0
   ) {
     return
   }
@@ -54,17 +54,10 @@ function handleWheel(e: WheelEvent): void {
         :alt="photo.text"
         :data-photo-index="idx"
         loading="lazy"
-        w-full
-        aspect-square
-        object-cover
-        w-80
-        h-80
-        max-w-80
-        max-h-80
-        min-w-80
-        min-h-80
-      />
-      <div text-sm op75 mt2>
+
+        aspect-square h-80 max-h-80 max-w-80 min-h-80 min-w-80 w-80 w-full object-cover
+      >
+      <div mt2 text-sm op75>
         {{ photo.text }}
       </div>
     </div>

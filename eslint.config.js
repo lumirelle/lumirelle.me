@@ -4,7 +4,7 @@ import oxlint from 'eslint-plugin-oxlint'
 
 export default antfu(
   {
-    stylistic: false,
+    unocss: true,
   },
   ...oxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 )
@@ -45,11 +45,4 @@ export default antfu(
     'ts/no-empty-object-type',
     'ts/no-invalid-this',
     'ts/no-unnecessary-type-constraint',
-
-    // ...
-    'unicorn/number-literal-case',
-    'vue/html-indent',
-    'vue/html-closing-bracket-newline',
-    'vue/html-self-closing',
-    'vue/singleline-html-element-content-newline',
   )

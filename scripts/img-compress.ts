@@ -78,7 +78,8 @@ export async function compressImages(files: string[]): Promise<void> {
             `[SKIP] ${bytesToHuman(size)} -> ${bytesToHuman(outSize)} ${(percent * 100).toFixed(1).padStart(5, ' ')}%  ${inFile}`,
           ),
         )
-      } else {
+      }
+      else {
         await fs.writeFile(outFile, outBuffer)
         console.log(
           `[COMP] ${bytesToHuman(size)} -> ${bytesToHuman(outSize)} ${styleText('green', `${(percent * 100).toFixed(1).padStart(5, ' ')}%`)}  ${inFile}`,

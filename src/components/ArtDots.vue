@@ -15,7 +15,7 @@ const SPACING = 15
 const noise3d = createNoise3D()
 
 const existingPoints = new Set<string>()
-const points: { x: number; y: number; opacity: number; particle: Particle }[] = []
+const points: { x: number, y: number, opacity: number, particle: Particle }[] = []
 
 function getForceOnPoint(x: number, y: number, z: number): number {
   return (noise3d(x / SCALE, y / SCALE, z) - 0.5) * 2 * Math.PI
@@ -24,7 +24,7 @@ function getForceOnPoint(x: number, y: number, z: number): number {
 const mountedScope = effectScope()
 
 function createDotTexture(app: Application): Texture {
-  const g = new Graphics().circle(0, 0, 1).fill(0xcc_cc_cc)
+  const g = new Graphics().circle(0, 0, 1).fill(0xCC_CC_CC)
   return app.renderer.generateTexture(g)
 }
 
@@ -117,14 +117,7 @@ onUnmounted(() => {
 <template>
   <div
     ref="el"
-    z--1
-    fixed
-    size-screen
-    left-0
-    right-0
-    top-0
-    bottom-0
-    pointer-events-none
-    dark:invert
+
+    pointer-events-none fixed bottom-0 left-0 right-0 top-0 z--1 size-screen dark:invert
   />
 </template>

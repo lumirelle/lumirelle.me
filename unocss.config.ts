@@ -31,13 +31,13 @@ export default defineConfig({
     [
       'font-50%em',
       {
-        'font-family': "'M PLUS Code Latin', 'Source Han Sans TC'",
+        'font-family': '\'M PLUS Code Latin\', \'Source Han Sans TC\'',
       },
     ],
     [
       'font-60%em',
       {
-        'font-family': "'Recursive', 'Maple Mono CN'",
+        'font-family': '\'Recursive\', \'Maple Mono CN\'',
         'font-variation-settings': '"MONO" 1, "CASL" 0, "wght" 400, "slnt" 0, "CRSV" 0.5',
       },
     ],
@@ -45,9 +45,9 @@ export default defineConfig({
   presets: [
     presetIcons({
       extraProperties: {
-        display: 'inline-block',
-        height: '1.2em',
-        width: '1.2em',
+        'display': 'inline-block',
+        'height': '1.2em',
+        'width': '1.2em',
         'vertical-align': 'text-bottom',
       },
     }),

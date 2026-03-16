@@ -39,6 +39,14 @@ const promises: Promise<any>[] = []
 
 const ogSVg = fs.readFileSync('./scripts/og-template.svg', 'utf8')
 
+const BREAK_REGEX = /(.{0,30})(?:\s|$)/g
+const SVG_PLACEHOLDER_REGEX = /\{\{([^}]+)\}\}/g
+const LINK_REGEX = /^https?:\/\//
+const FRONTMATTER_TITLE_REGEX = /\s-\s.*$/
+
+const OPEN_COLLECTIVE_VITE_REGEX = /opencollective\.com\/vite/
+const OPEN_COLLECTIVE_ELK_REGEX = /opencollective\.com\/elk/
+
 async function generateOg(title: string, output: string): Promise<void> {
   if (fs.existsSync(output)) {
     return
@@ -48,7 +56,7 @@ async function generateOg(title: string, output: string): Promise<void> {
   // breakline every 30 chars
   const lines = title
     .trim()
-    .split(/(.{0,30})(?:\s|$)/g)
+    .split(BREAK_REGEX)
     .filter(Boolean)
 
   const data: Record<string, string> = {
@@ -56,7 +64,7 @@ async function generateOg(title: string, output: string): Promise<void> {
     line2: lines[1],
     line3: lines[2],
   }
-  const svg = ogSVg.replaceAll(/\{\{([^}]+)\}\}/g, (_, name) => data[name] || '')
+  const svg = ogSVg.replaceAll(SVG_PLACEHOLDER_REGEX, (_, name) => data[name] || '')
 
   console.log(
     `Generating ${output}. Notice you should install "Commic Shanns" font in your system.`,
@@ -66,7 +74,8 @@ async function generateOg(title: string, output: string): Promise<void> {
       .resize(1200 * 1.1, 630 * 1.1)
       .png()
       .toFile(output)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to generate og image', error)
   }
 }
@@ -105,7 +114,7 @@ export default defineConfig({
     }),
 
     Markdown({
-      wrapperComponent: (id) => (id.includes('/demo/') ? 'WrapperDemo' : 'WrapperPost'),
+      wrapperComponent: id => (id.includes('/demo/') ? 'WrapperDemo' : 'WrapperPost'),
       wrapperClasses: (_, code) =>
         code.includes('@layout-full-width') ? '' : 'prose m-auto slide-enter-content',
       headEnabled: true,
@@ -146,7 +155,7 @@ export default defineConfig({
         })
 
         md.use(MarkdownItLinkAttributes, {
-          matcher: (link: string) => /^https?:\/\//.test(link),
+          matcher: (link: string) => LINK_REGEX.test(link),
           attrs: {
             target: '_blank',
             rel: 'noopener',
@@ -162,36 +171,36 @@ export default defineConfig({
 
         md.use(MarkdownItMagicLink, {
           linksMap: {
-            NuxtLabs: { link: 'https://nuxtlabs.com', imageUrl: 'https://nuxtlabs.com/nuxt.png' },
-            Vitest: 'https://github.com/vitest-dev/vitest',
-            Slidev: 'https://github.com/slidevjs/slidev',
-            VueUse: 'https://github.com/vueuse/vueuse',
-            UnoCSS: 'https://github.com/unocss/unocss',
-            Elk: 'https://github.com/elk-zone/elk',
+            'NuxtLabs': { link: 'https://nuxtlabs.com', imageUrl: 'https://nuxtlabs.com/nuxt.png' },
+            'Vitest': 'https://github.com/vitest-dev/vitest',
+            'Slidev': 'https://github.com/slidevjs/slidev',
+            'VueUse': 'https://github.com/vueuse/vueuse',
+            'UnoCSS': 'https://github.com/unocss/unocss',
+            'Elk': 'https://github.com/elk-zone/elk',
             'Type Challenges': 'https://github.com/type-challenges/type-challenges',
-            Vue: 'https://github.com/vuejs/core',
-            Nuxt: 'https://github.com/nuxt/nuxt',
-            Vite: 'https://github.com/vitejs/vite',
-            Shiki: 'https://github.com/shikijs/shiki',
-            Twoslash: 'https://github.com/twoslashes/twoslash',
+            'Vue': 'https://github.com/vuejs/core',
+            'Nuxt': 'https://github.com/nuxt/nuxt',
+            'Vite': 'https://github.com/vitejs/vite',
+            'Shiki': 'https://github.com/shikijs/shiki',
+            'Twoslash': 'https://github.com/twoslashes/twoslash',
             'ESLint Stylistic': 'https://github.com/eslint-stylistic/eslint-stylistic',
-            Unplugin: 'https://github.com/unplugin',
+            'Unplugin': 'https://github.com/unplugin',
             'Nuxt DevTools': 'https://github.com/nuxt/devtools',
             'Vite PWA': 'https://github.com/vite-pwa',
             'i18n Ally': 'https://github.com/lokalise/i18n-ally',
-            ESLint: 'https://github.com/eslint/eslint',
-            Astro: 'https://github.com/withastro/astro',
-            TwoSlash: 'https://github.com/twoslashes/twoslash',
+            'ESLint': 'https://github.com/eslint/eslint',
+            'Astro': 'https://github.com/withastro/astro',
+            'TwoSlash': 'https://github.com/twoslashes/twoslash',
             'Anthony Fu Collective': {
               link: 'https://opencollective.com/antfu',
               imageUrl: 'https://github.com/antfu-collective.png',
             },
-            Netlify: { link: 'https://netlify.com', imageUrl: 'https://github.com/netlify.png' },
-            Stackblitz: {
+            'Netlify': { link: 'https://netlify.com', imageUrl: 'https://github.com/netlify.png' },
+            'Stackblitz': {
               link: 'https://stackblitz.com',
               imageUrl: 'https://github.com/stackblitz.png',
             },
-            Vercel: { link: 'https://vercel.com', imageUrl: 'https://github.com/vercel.png' },
+            'Vercel': { link: 'https://vercel.com', imageUrl: 'https://github.com/vercel.png' },
           },
           imageOverrides: [
             ['https://github.com/vuejs/core', 'https://vuejs.org/logo.svg'],
@@ -200,8 +209,8 @@ export default defineConfig({
             ['https://github.com/sponsors', 'https://github.com/github.png'],
             ['https://github.com/sponsors/antfu', 'https://github.com/github.png'],
             ['https://nuxtlabs.com', 'https://github.com/nuxtlabs.png'],
-            [/opencollective\.com\/vite/, 'https://github.com/vitejs.png'],
-            [/opencollective\.com\/elk/, 'https://github.com/elk-zone.png'],
+            [OPEN_COLLECTIVE_VITE_REGEX, 'https://github.com/vitejs.png'],
+            [OPEN_COLLECTIVE_ELK_REGEX, 'https://github.com/elk-zone.png'],
           ],
         })
 
@@ -222,7 +231,7 @@ export default defineConfig({
           promises.push(
             fs.existsSync(`${id.slice(0, -3)}.png`)
               ? fs.promises.cp(`${id.slice(0, -3)}.png`, `public/${path}`)
-              : generateOg(frontmatter.title.replace(/\s-\s.*$/, '').trim(), `public/${path}`),
+              : generateOg(frontmatter.title.replace(FRONTMATTER_TITLE_REGEX, '').trim(), `public/${path}`),
           )
           frontmatter.image = `https://lumirelle.me/${path}`
         })()
@@ -269,7 +278,7 @@ export default defineConfig({
   ],
 
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       onwarn(warning, next) {
         if (warning.code !== 'UNUSED_EXTERNAL_IMPORT') {
           next(warning)

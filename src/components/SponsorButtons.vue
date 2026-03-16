@@ -5,7 +5,7 @@
     <a
       href="https://opencollective.com/lumirelle"
       target="_blank"
-      class="group btn-rose inline-block"
+      class="group inline-block btn-rose"
     >
       <div
         i-ph-heart-duotone

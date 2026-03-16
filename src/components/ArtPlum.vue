@@ -21,22 +21,22 @@ function initCanvas(
   width = 400,
   height = 400,
   _dpi?: number,
-): { ctx: CanvasRenderingContext2D; dpi: number } {
+): { ctx: CanvasRenderingContext2D, dpi: number } {
   const ctx = canvas.getContext('2d')!
 
   const dpr = window.devicePixelRatio || 1
-  const bsr =
+  const bsr
     // @ts-expect-error vendor
-    ctx.webkitBackingStorePixelRatio ||
+    = ctx.webkitBackingStorePixelRatio
     // @ts-expect-error vendor
-    ctx.mozBackingStorePixelRatio ||
+      || ctx.mozBackingStorePixelRatio
     // @ts-expect-error vendor
-    ctx.msBackingStorePixelRatio ||
+      || ctx.msBackingStorePixelRatio
     // @ts-expect-error vendor
-    ctx.oBackingStorePixelRatio ||
+      || ctx.oBackingStorePixelRatio
     // @ts-expect-error vendor
-    ctx.backingStorePixelRatio ||
-    1
+      || ctx.backingStorePixelRatio
+      || 1
 
   const dpi = _dpi || dpr / bsr
 
@@ -127,7 +127,8 @@ onMounted(async () => {
       // 50% chance to keep the step for the next frame, to create a more organic look
       if (random() < 0.5) {
         steps.push(i)
-      } else {
+      }
+      else {
         i()
       }
     }
@@ -167,7 +168,7 @@ const mask = computed(() => 'radial-gradient(circle, transparent, black);')
 
 <template>
   <div
-    class="fixed top-0 bottom-0 left-0 right-0 pointer-events-none print:hidden"
+    class="pointer-events-none fixed bottom-0 left-0 right-0 top-0 print:hidden"
     style="z-index: -1"
     :style="`mask-image: ${mask};--webkit-mask-image: ${mask};`"
   >

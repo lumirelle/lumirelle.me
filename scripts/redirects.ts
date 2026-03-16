@@ -20,7 +20,7 @@ async function run(): Promise<void> {
 
     for (const repo of repos) {
       if (
-        ['test', 'static', 'repro', 'issue', 'resume', 'lumirelle'].some((e) =>
+        ['test', 'static', 'repro', 'issue', 'resume', 'lumirelle'].some(e =>
           repo.name.includes(e),
         )
       ) {
@@ -32,7 +32,7 @@ async function run(): Promise<void> {
     }
   }
 
-  const final = `${manual}\n${redirects.map((i) => i.join('\t')).join('\n')}`
+  const final = `${manual}\n${redirects.map(i => i.join('\t')).join('\n')}`
 
   await fs.writeFile('_dist_redirects', final, 'utf8')
 }

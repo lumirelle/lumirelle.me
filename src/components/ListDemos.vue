@@ -15,7 +15,7 @@ const cols = computed(() => {
 })
 
 const parts = computed(() => {
-  const result = Array.from({ length: cols.value }, () => [] as typeof demoItems)
+  const result = Array.from({ length: cols.value }).fill([] as typeof demoItems)
   for (let i = 0; i < demoItems.length; i++) {
     const item = demoItems[i]
     result[i % cols.value].push(item)

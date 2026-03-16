@@ -23,7 +23,7 @@ const blueskyUrl = computed(
     `https://bsky.app/intent/compose?text=${encodeURIComponent(`Reading @lumirelle.me ${base}${route.path}\n\nI think...`)}`,
 )
 
-const navigate = (): boolean => {
+function navigate(): boolean {
   if (location.hash) {
     const el = document.querySelector(decodeURIComponent(location.hash))
     if (el) {
@@ -44,16 +44,16 @@ onMounted(() => {
     const link = event.target.closest('a')
 
     if (
-      !event.defaultPrevented &&
-      link &&
-      event.button === 0 &&
-      link.target !== '_blank' &&
-      link.rel !== 'external' &&
-      !link.download &&
-      !event.metaKey &&
-      !event.ctrlKey &&
-      !event.shiftKey &&
-      !event.altKey
+      !event.defaultPrevented
+      && link
+      && event.button === 0
+      && link.target !== '_blank'
+      && link.rel !== 'external'
+      && !link.download
+      && !event.metaKey
+      && !event.ctrlKey
+      && !event.shiftKey
+      && !event.altKey
     ) {
       const url = new URL(link.href)
       if (url.origin !== globalThis.location.origin) {
@@ -65,7 +65,8 @@ onMounted(() => {
       if (hash && (!pathname || pathname === location.pathname)) {
         globalThis.history.replaceState({}, '', hash)
         navigate()
-      } else {
+      }
+      else {
         router.push({ path: pathname, hash })
       }
     }
@@ -89,7 +90,8 @@ const ArtComponent = computed(() => {
   if (typeof globalThis !== 'undefined') {
     if (art === 'plum') {
       return defineAsyncComponent(() => import('./ArtPlum.vue'))
-    } else if (art === 'dots') {
+    }
+    else if (art === 'dots') {
       return defineAsyncComponent(() => import('./ArtDots.vue'))
     }
   }
@@ -110,11 +112,9 @@ const ArtComponent = computed(() => {
     <h1 class="mb-0 slide-enter-50">
       {{ frontmatter.display ?? frontmatter.title }}
     </h1>
-    <p v-if="frontmatter.date" class="opacity-50 !-mt-6 slide-enter-50">
+    <p v-if="frontmatter.date" class="opacity-50 slide-enter-50 !-mt-6">
       First post on {{ formatDate(frontmatter.date, false) }}
-      <span v-if="frontmatter.update"
-        >· Last edit on {{ formatDate(frontmatter.update, false) }}</span
-      >
+      <span v-if="frontmatter.update">· Last edit on {{ formatDate(frontmatter.update, false) }}</span>
       <span v-if="frontmatter.duration">· {{ frontmatter.duration }}</span>
     </p>
     <p v-if="frontmatter.place" class="mt--4!">
@@ -126,17 +126,16 @@ const ArtComponent = computed(() => {
         {{ frontmatter.place }}
       </span>
     </p>
-    <p v-if="frontmatter.subtitle" class="opacity-50 !-mt-6 italic slide-enter">
+    <p v-if="frontmatter.subtitle" class="slide-enter italic opacity-50 !-mt-6">
       {{ frontmatter.subtitle }}
     </p>
     <p
       v-if="frontmatter.draft"
       class="slide-enter"
-      bg-orange-4:10
-      text-orange-4
+
       border="l-3 orange-4"
-      px4
-      py2
+
+      bg-orange-4:10 px4 py2 text-orange-4
     >
       This is a draft post, the content may be incomplete. Please check back later.
     </p>
@@ -150,7 +149,7 @@ const ArtComponent = computed(() => {
   </article>
   <div
     v-if="route.path !== '/'"
-    class="prose m-auto mt-8 mb-8 slide-enter animate-delay-500 print:hidden"
+    class="prose slide-enter m-auto mb-8 mt-8 animate-delay-500 print:hidden"
   >
     <template v-if="false && frontmatter.duration">
       <span font-mono op50>> </span>
@@ -161,7 +160,7 @@ const ArtComponent = computed(() => {
       <span op25> / </span>
       <a :href="tweetUrl" target="_blank" op50>twitter</a>
     </template>
-    <br />
+    <br>
     <span font-mono op50>> </span>
     <RouterLink
       :to="route.path.split('/').slice(0, -1).join('/') || '/'"

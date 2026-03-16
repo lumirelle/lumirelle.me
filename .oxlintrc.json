@@ -38,6 +38,7 @@
     "eslint/max-statements": "off",
     "eslint/new-cap": "off",
     "eslint/no-await-in-loop": "off",
+    "eslint/no-console": ["error", { "allow": ["info", "warn", "error"] }],
     "eslint/no-continue": "off",
     "eslint/no-duplicate-imports": ["error", { "allowSeparateTypeImports": true }],
     "eslint/no-eq-null": "off",

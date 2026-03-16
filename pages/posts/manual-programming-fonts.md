@@ -239,7 +239,8 @@ export async function processConfig(
         } copied to ${highlight.important(`"${target}"`)}.`,
       )
     }
-  } else if (mode === 'symlink') {
+  }
+  else if (mode === 'symlink') {
     if (dryRun || (await _symlinkConfig(source, target, options))) {
       consola.success(
         `Configuration ${highlight.important(`"${target}"`)} ${
@@ -247,7 +248,8 @@ export async function processConfig(
         } symlinked to ${highlight.important(`"${source}"`)}.`,
       )
     }
-  } else {
+  }
+  else {
     throw new Error(`Unknown configure mode: ${mode}`)
   }
 }
@@ -331,7 +333,8 @@ export async function processConfig(
         } copied to ${highlight.important(`"${target}"`)}.`,
       )
     }
-  } else if (mode === 'symlink') {
+  }
+  else if (mode === 'symlink') {
     if (dryRun || (await _symlinkConfig(source, target, options))) {
       consola.success(
         `Configuration ${highlight.important(`"${target}"`)} ${
@@ -339,7 +342,8 @@ export async function processConfig(
         } symlinked to ${highlight.important(`"${source}"`)}.`,
       )
     }
-  } else {
+  }
+  else {
     throw new Error(`Unknown configure mode: ${mode}`)
   }
 }

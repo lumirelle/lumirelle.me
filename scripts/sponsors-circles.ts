@@ -11,12 +11,12 @@ interface Sponsor {
   org: boolean
 }
 
-const amountMax = Math.max(...(_sponsors as Sponsor[]).map((sponsor) => sponsor.amount))
+const amountMax = Math.max(...(_sponsors as Sponsor[]).map(sponsor => sponsor.amount))
 const RADIUS_MIN = 8
 const RADIUS_MAX = 300
 
 const sponsors = (_sponsors as Sponsor[])
-  .filter((sponsor) => sponsor.amount > 0)
+  .filter(sponsor => sponsor.amount > 0)
   .map((sponsor, idx) => ({
     id: `sponsor-${idx}`,
     radius: 0,
@@ -32,7 +32,7 @@ function lerp(a: number, b: number, t: number): number {
 }
 
 const root = hierarchy({ ...sponsors[0], children: sponsors, id: 'root' })
-  .sum((d) => 1 + lerp(RADIUS_MIN, RADIUS_MAX, (Math.max(0.1, d.amount) / amountMax) ** 0.9))
+  .sum(d => 1 + lerp(RADIUS_MIN, RADIUS_MAX, (Math.max(0.1, d.amount) / amountMax) ** 0.9))
   // oxlint-disable-next-line unicorn/no-array-sort
   .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
 
@@ -45,7 +45,7 @@ const circles = p(root as any)
 
 for (const circle of circles) {
   const { id } = circle.data
-  const sponsor = sponsors.find((s) => s.id === id)
+  const sponsor = sponsors.find(s => s.id === id)
   if (sponsor) {
     sponsor.position = { x: circle.x, y: circle.y }
     sponsor.radius = circle.r

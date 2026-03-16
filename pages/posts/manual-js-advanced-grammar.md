@@ -70,14 +70,14 @@ Use variable can avoid these problem:
 console.log('Hello')
 
 const arr = [1, 2, 3]
-arr.forEach((n) => console.log(n))
+arr.forEach(n => console.log(n))
 
 // Example 2
-const anonymousFunc = function () {
+function anonymousFunc() {
   console.log('This is an anonymous function')
 }
 
-const arrowFunc = () => {
+function arrowFunc() {
   console.log('This is an arrow function')
 }
 ```
@@ -96,7 +96,7 @@ _src/counter.js_
 
 ```js
 // Without explicit declaration
-counter = await fetch('/api/counter').then((res) => res.json())
+counter = await fetch('/api/counter').then(res => res.json())
 
 // Omit 2000 lines of code...
 
@@ -401,7 +401,7 @@ You can use prefix `0b` for binary literals, `0o` for octal literals, and `0x` f
 ```js
 const binary = 0b1010 // Binary literal, equals to 10 in decimal
 const octal = 0o52 // Octal literal, equals to 42 in decimal
-const hexadecimal = 0x2a // Hexadecimal literal, equals to 42 in decimal
+const hexadecimal = 0x2A // Hexadecimal literal, equals to 42 in decimal
 ```
 
 Underscore (`_`) can be used as a separator for numeric literals to improve readability:
@@ -608,7 +608,7 @@ Object.entries(StatusEnum).forEach(([key, value]) => {
   // [!code highlight:3]
   // `item.status` is `number`, but `key` is actually `string`,
   // They will never be equal!
-  const item = array.find((item) => item.status === key)
+  const item = array.find(item => item.status === key)
   if (item) {
     item.name = key
   }
@@ -924,7 +924,8 @@ const obj = {
   a: 1,
   b: 2,
   [Symbol.toPrimitive](hint) {
-    if (hint === 'string') return `a=${this.a}, b=${this.b}`
+    if (hint === 'string')
+      return `a=${this.a}, b=${this.b}`
     return this.a + this.b
   },
 }
@@ -1039,10 +1040,10 @@ function fn(args) {
 }
 
 // Function expression with variable assignment
-const fn1 = function (args) {
+function fn1(args) {
   /* function body */
 }
-const fn2 = (args) => {
+function fn2(args) {
   /* function body */
 }
 ```
@@ -1067,7 +1068,7 @@ We shouldn't depend on this behavior, as it will make the code less readable.
 A function expression is a way to define a function as a value. It's similar to a function declaration, but it's not hoisted.
 
 ```js
-const func = function (a, b) {
+function func(a, b) {
   return a + b
 }
 console.log(func(1, 2)) // -> 3
@@ -1095,8 +1096,9 @@ A named function expression is a function expression that has a name. The name i
 So why do we need it? For instance, when we want to create a recursive function expression:
 
 ```js
-const doFact = function fact(n) {
-  if (n <= 1) return 1
+function doFact(n) {
+  if (n <= 1)
+    return 1
   return n * fact(n - 1) // Use `fact` to call itself
 }
 ```
@@ -1105,7 +1107,8 @@ You may think we can use `doFact` to call itself, but that will not work if we r
 
 ```js
 let doFact = function fact(n) {
-  if (n <= 1) return 1
+  if (n <= 1)
+    return 1
   return n * doFact(n - 1) // Use `doFact` to call itself
 }
 
@@ -1428,7 +1431,7 @@ You can access characters in a string by index, just like accessing elements in 
 ```js
 const str = 'hello'
 console.log(str[0]) // -> 'h'
-console.log(str[str.length - 1]) // -> 'o'
+console.log(str.at(-1)) // -> 'o'
 ```
 
 If you need negative index support, you can use `str.at(index)` method:
@@ -1892,7 +1895,8 @@ const iterable = {
     let index = 0
     return {
       next: () => {
-        if (index < this.items.length) return { value: this.items[index++], done: false }
+        if (index < this.items.length)
+          return { value: this.items[index++], done: false }
         else return { value: undefined, done: true }
       },
     }
@@ -2155,7 +2159,7 @@ The last argument of `new Function` is the function body, and the previous argum
 > Through `new Function`, we can create functions dynamically, for instance, from a string received from a server:
 >
 > ```js
-> const res = await fetch('/api/function-body').then((res) => res.text())
+> const res = await fetch('/api/function-body').then(res => res.text())
 >
 > const func = new Function('a', 'b', res)
 > func(1, 2)
@@ -2846,7 +2850,7 @@ longEar.eat() // -> Long Ear eats.
 > ```js
 > const animal = {
 >   sayHi() {
->     console.log("I'm an animal")
+>     console.log('I\'m an animal')
 >   },
 > }
 >
@@ -2862,7 +2866,7 @@ longEar.eat() // -> Long Ear eats.
 >
 > const plant = {
 >   sayHi() {
->     console.log("I'm a plant")
+>     console.log('I\'m a plant')
 >   },
 > }
 >
@@ -2896,7 +2900,7 @@ class Article {
 
   static createTodays() {
     // Remember, this = Article
-    return new this("Today's digest", new Date())
+    return new this('Today\'s digest', new Date())
   }
 }
 
@@ -2918,7 +2922,7 @@ function Article(title, date) {
 Article.publisher = 'Ilya Kantor'
 Article.createTodays = function () {
   // Remember, this = Article
-  return new this("Today's digest", new Date())
+  return new this('Today\'s digest', new Date())
 }
 ```
 
@@ -3107,9 +3111,11 @@ Like other languages, JavaScript uses `try...catch...finally` statement to handl
 function func() {
   try {
     // Code that may throw an error
-  } catch (err) {
+  }
+  catch (err) {
     // Code to handle the error
-  } finally {
+  }
+  finally {
     // Code that will run regardless of the result above
   }
 }
@@ -3123,7 +3129,8 @@ But there are some special things in JavaScript:
    function func() {
      try {
        // Code that may throw an error
-     } catch {
+     }
+     catch {
        // Code to handle the error
      }
    }
@@ -3135,7 +3142,8 @@ But there are some special things in JavaScript:
    function func() {
      try {
        // Code that may throw an error
-     } finally {
+     }
+     finally {
        // Complete the finalization even if an error occurs above
      }
    }
@@ -3147,7 +3155,8 @@ But there are some special things in JavaScript:
    function func() {
      try {
        return 1
-     } finally {
+     }
+     finally {
        console.log('finally') // -> finally
      }
    }
@@ -3204,7 +3213,8 @@ function readUser(json) {
 
 try {
   const user = readUser('{ "age": 25 }')
-} catch (err) {
+}
+catch (err) {
   if (err instanceof JsonValidationError) {
     console.log(err)
     /**
@@ -3212,7 +3222,8 @@ try {
      *   at readUser (...)
      *   at ...
      */
-  } else {
+  }
+  else {
     throw err // Unknown error, rethrow it (don't know how to handle it)
   }
 }
@@ -3345,8 +3356,8 @@ new Promise((resolve, reject) => {
   .finally(() => stopLoadingIndicator())
   // so the loading indicator is always stopped before we go on
   .then(
-    (result) => showResult(result),
-    (err) => showError(err),
+    result => showResult(result),
+    err => showError(err),
   )
 ```
 
@@ -3379,7 +3390,7 @@ We can call `then` method both **standalone** or **chained**, they are quite dif
 // This call three times on the same promise
 const standalone = new Promise((resolve, reject) => {
   // sp0
-  setTimeout(() => resolve(1), 1000)
+  setTimeout(resolve, 1000, 1)
 })
 standalone.then((result) => {
   // sp1
@@ -3400,7 +3411,7 @@ standalone.then((result) => {
 // This call each time on the new promise returned by the previous `then`
 const chained = new Promise((resolve, reject) => {
   // cp0
-  setTimeout(() => resolve(1), 1000)
+  setTimeout(resolve, 1000, 1)
 })
   .then((result) => {
     // cp1
@@ -3453,9 +3464,9 @@ It accepts an iterable (usually an array) of promises, and returns a new promise
 
 ```js
 Promise.all([
-  new Promise((resolve) => setTimeout(() => resolve(1), 3000)), // 1
-  new Promise((resolve) => setTimeout(() => resolve(2), 2000)), // 2
-  new Promise((resolve) => setTimeout(() => resolve(3), 1000)), // 3
+  new Promise(resolve => setTimeout(resolve, 3000, 1)), // 1
+  new Promise(resolve => setTimeout(resolve, 2000, 2)), // 2
+  new Promise(resolve => setTimeout(resolve, 1000, 3)), // 3
 ]).then(console.log) // 1,2,3 when promises are ready: each promise contributes an array member
 ```
 
@@ -3480,17 +3491,17 @@ For example, migration from `Promise.all` to `Promise.allSettled`:
 ```js
 // Before
 const [res1, res2, res3] = await Promise.all([
-  fetch('/api/data1').then((res) => res.json()),
-  fetch('/api/data2').then((res) => res.json()),
-  fetch('/api/data3').then((res) => res.json()),
+  fetch('/api/data1').then(res => res.json()),
+  fetch('/api/data2').then(res => res.json()),
+  fetch('/api/data3').then(res => res.json()),
 ])
 console.log(res1, res2, res3)
 
 // After
 const [res4, res5, res6] = await Promise.allSettled([
-  fetch('/api/data1').then((res) => res.json()),
-  fetch('/api/data2').then((res) => res.json()),
-  fetch('/api/data3').then((res) => res.json()),
+  fetch('/api/data1').then(res => res.json()),
+  fetch('/api/data2').then(res => res.json()),
+  fetch('/api/data3').then(res => res.json()),
 ])
 console.log(res4.value, res5.value, res6.value)
 ```
@@ -3645,7 +3656,8 @@ try {
   await loadScript('/my/script2.js')
   await loadScript('/my/script3.js')
   // ...continue after all scripts are loaded
-} catch (error) {
+}
+catch (error) {
   console.error(error)
 }
 ```
@@ -3826,7 +3838,8 @@ function* gen() {
     const result = yield '2 + 2 = ?'
     // [!code highlight:1]
     console.log('The execution does not reach here, because the exception is thrown above')
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e) // shows the error
   }
 }
@@ -3873,7 +3886,7 @@ The syntax is simple: prepend `function*` with `async`, that makes the generator
 async function* generateSequence(start, end) {
   for (let i = start; i <= end; i++) {
     // Wow, can use await!
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
     yield i
   }
@@ -3905,8 +3918,9 @@ const range = {
 
       async next() {
         // Note: we can use "await" inside the async next:
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        if (this.current <= this.last) return { done: false, value: this.current++ }
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        if (this.current <= this.last)
+          return { done: false, value: this.current++ }
         else return { done: true }
       },
     }

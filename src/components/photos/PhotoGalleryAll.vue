@@ -15,7 +15,7 @@ const photos = computed(() => {
 </script>
 
 <template>
-  <div flex="~ gap-1 col items-center justify-center" absolute sm:fixed left-6 top-24>
+  <div flex="~ gap-1 col items-center justify-center" absolute left-6 top-24 sm:fixed>
     <button
       title="Switch to cover view"
       rounded-full

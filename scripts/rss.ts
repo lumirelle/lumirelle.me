@@ -35,6 +35,7 @@ async function writeFeed(name: string, options: FeedOptions, items: Item[]): Pro
   await fs.writeFile(`./dist/${name}.json`, feed.json1(), 'utf8')
 }
 
+const PAGES_REGEX = /^pages(.+)\.md$/
 async function buildBlogRSS(): Promise<void> {
   const files = await glob('pages/posts/*.md', {
     expandDirectories: false,
@@ -42,7 +43,7 @@ async function buildBlogRSS(): Promise<void> {
 
   const options = {
     title: 'Lumirelle',
-    description: "Lumirelle' Blog",
+    description: 'Lumirelle\' Blog',
     id: 'https://lumirelle.me/',
     link: 'https://lumirelle.me/',
     copyright: 'CC BY-NC-SA 4.0 2025 © Lumirelle',
@@ -55,7 +56,7 @@ async function buildBlogRSS(): Promise<void> {
   const posts: any[] = (
     await Promise.all(
       files
-        .filter((i) => !i.includes('index'))
+        .filter(i => !i.includes('index'))
         .map(async (i) => {
           const raw = await fs.readFile(i, 'utf8')
           const { data, content } = matter(raw)
@@ -76,7 +77,7 @@ async function buildBlogRSS(): Promise<void> {
             date: new Date(data.date),
             content: html,
             author: [AUTHOR],
-            link: DOMAIN + i.replace(/^pages(.+)\.md$/, '$1'),
+            link: DOMAIN + i.replace(PAGES_REGEX, '$1'),
           }
         }),
     )

@@ -28,14 +28,14 @@ useEventListener('click', async (e) => {
   if (first.classList.contains('no-preview')) {
     return
   }
-  if (path.some((el) => el instanceof HTMLElement && ['A', 'BUTTON'].includes(el.tagName))) {
+  if (path.some(el => el instanceof HTMLElement && ['A', 'BUTTON'].includes(el.tagName))) {
     return
   }
   if (
     !path.some(
-      (el) =>
-        el instanceof HTMLElement &&
-        (el.classList.contains('prose') || el.classList.contains('photos')),
+      el =>
+        el instanceof HTMLElement
+        && (el.classList.contains('prose') || el.classList.contains('photos')),
     )
   ) {
     return
@@ -97,45 +97,29 @@ onKeyStroke('Escape', (e) => {
 
 <template>
   <NavBar />
-  <main class="px-7 py-10 of-x-hidden">
+  <main class="of-x-hidden px-7 py-10">
     <RouterView />
     <Footer :key="route.path" />
   </main>
   <Transition name="fade">
     <div
       v-if="imageModel"
-      fixed
-      top-0
-      left-0
-      right-0
-      bottom-0
-      z-500
-      backdrop-blur-7
+
+      fixed bottom-0 left-0 right-0 top-0 z-500 backdrop-blur-7
       @click="imageModel = undefined"
     >
-      <div absolute top-0 left-0 right-0 bottom-0 bg-black:50 z--1 />
+      <div absolute bottom-0 left-0 right-0 top-0 z--1 bg-black:50 />
       <img
         :src="imageModel.src"
         :alt="imageModel.alt"
         :class="imageModel.className"
-        max-w-screen
-        max-h-screen
-        w-full
-        h-full
-        object-contain
-      />
+
+        h-full max-h-screen max-w-screen w-full object-contain
+      >
       <div
         v-if="imageAlt"
-        text-white
-        bg-black:50
-        absolute
-        right-5
-        bottom-5
-        px2
-        py1
-        flex
-        justify-center
-        items-center
+
+        absolute bottom-5 right-5 flex items-center justify-center bg-black:50 px2 py1 text-white
       >
         {{ imageAlt }}
       </div>

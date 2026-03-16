@@ -256,7 +256,8 @@ a = true
  */
 if (typeof a === 'number') {
   a.toFixed(2)
-} else if (typeof a === 'string') {
+}
+else if (typeof a === 'string') {
   a.toUpperCase()
 }
 ```
@@ -286,7 +287,8 @@ a.toFixed(2)
 
 if (typeof a === 'number') {
   a.toFixed(2)
-} else if (typeof a === 'string') {
+}
+else if (typeof a === 'string') {
   a.toUpperCase()
 }
 ```
@@ -341,7 +343,8 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
       // In this case, `a` is narrowed to `number` type
       return a + 1
       //     ^?
-    } else {
+    }
+    else {
       // In this case, `a` is narrowed to `string` type
       return Number(a) + 1
       //            ^?
@@ -373,7 +376,8 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
     if ('files' in a) {
       return { override: [a] }
       //                  ^?
-    } else {
+    }
+    else {
       return a
       //     ^?
     }
@@ -387,7 +391,8 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
     if (a instanceof Date) {
       return a.toISOString()
       //     ^?
-    } else {
+    }
+    else {
       return a
       //     ^?
     }
@@ -465,7 +470,8 @@ const a: any = 1
 if (isNumber(a)) {
   console.log(a)
   //          ^?
-} else {
+}
+else {
   console.log(a)
   //          ^?
 }
@@ -654,7 +660,8 @@ function fn(x: string | number, y: number = 0): number {
   // -> Implementation
   if (typeof x === 'string') {
     return +x
-  } else {
+  }
+  else {
     return x + y
   }
 }
@@ -680,7 +687,8 @@ function fn(xy: string): string
 function fn(x: string | number, y: number = 0): number {
   if (typeof x === 'string') {
     return +x
-  } else {
+  }
+  else {
     return x + y
   }
 }
@@ -944,7 +952,8 @@ For example:
 import type { Constructor } from '@antfu/utils'
 
 function logClass(constructor: Constructor, { kind }: ClassDecoratorContext) {
-  if (kind !== 'class') return
+  if (kind !== 'class')
+    return
   console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
 }
 
@@ -967,7 +976,8 @@ A decorator factory is a function that returns a decorator, you can call it with
 function logClass(message: string) {
   return function (constructor: Constructor, { kind }: ClassDecoratorContext) {
     // [!code highlight:6]
-    if (kind !== 'class') return
+    if (kind !== 'class')
+      return
     console.log(message)
     console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
   }
@@ -994,7 +1004,8 @@ When the class constructor definition is loaded, the decorator will be called wi
 ```ts
 // [!code highlight:14]
 function sealed(constructor: Constructor, { kind, name }: ClassDecoratorContext) {
-  if (kind !== 'class') return
+  if (kind !== 'class')
+    return
 
   // You cannot seal the class constructor, or you will break the behavior
   // of decorators, e.g.:
@@ -1031,7 +1042,8 @@ When the class method definition is loaded, the decorator will be called with th
 ```ts
 // [!code highlight:15]
 function measureTime(method: (...args: any[]) => any, { kind, name }: ClassMethodDecoratorContext) {
-  if (kind !== 'method') return
+  if (kind !== 'method')
+    return
   return function (...args: any[]) {
     const start = performance.now()
     // @ts-expect-error Missing type support
@@ -1049,7 +1061,7 @@ class DataProcessor {
     for (let i = 0; i < 100000000; i++) {
       /* processing */
     }
-    return data.map((x) => x * 2)
+    return data.map(x => x * 2)
   }
 }
 
@@ -1071,7 +1083,8 @@ We can use metadata to record information about the field, as in the following e
 // [!code highlight:7]
 function format(formatString: string) {
   return function (_: undefined, { kind, metadata }: ClassFieldDecoratorContext) {
-    if (kind !== 'field') return
+    if (kind !== 'field')
+      return
     metadata.format = formatString
   }
 }
@@ -1114,7 +1127,8 @@ function logged<T extends (...args: any[]) => any>(
   method: T,
   { kind, name }: ClassGetterDecoratorContext | ClassSetterDecoratorContext,
 ) {
-  if (kind !== 'getter' && kind !== 'setter') return
+  if (kind !== 'getter' && kind !== 'setter')
+    return
   return function (...args: any[]) {
     console.log(`Starting ${String(name)} with arguments ${args.join(', ')}`)
     const ret = method.call(this, ...args)
@@ -1227,8 +1241,8 @@ import 'reflect-metadata'
 // [!code highlight:33]
 const requiredMetadataKey = Symbol('required')
 function required(target: object, propertyKey: string | symbol, parameterIndex: number) {
-  const requiredParameters: number[] =
-    Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) ?? []
+  const requiredParameters: number[]
+    = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyKey) ?? []
   requiredParameters.push(parameterIndex)
   Reflect.defineMetadata(requiredMetadataKey, requiredParameters, target, propertyKey)
 }
@@ -1239,8 +1253,8 @@ function validate(
 ) {
   const method = descriptor.value!
   descriptor.value = function () {
-    const requiredParameters: number[] =
-      Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName) ?? []
+    const requiredParameters: number[]
+      = Reflect.getOwnMetadata(requiredMetadataKey, target, propertyName) ?? []
     for (const parameterIndex of requiredParameters) {
       if (parameterIndex >= arguments.length || arguments[parameterIndex] === undefined) {
         throw new Error('Missing required argument.')
@@ -1263,7 +1277,8 @@ class BugReport {
   print(@required verbose: boolean) {
     if (verbose) {
       return `type: ${this.type}\ntitle: ${this.title}`
-    } else {
+    }
+    else {
       return this.title
     }
   }
@@ -1369,7 +1384,7 @@ type ObjectKeys = keyof ObjectType & {}
 We can use an indexed access type to look up a specific property on object type (Don't forget, array, tuple, and function are also object types 😄):
 
 ```ts [twoslash]
-type Person = { age: number; name: string; alive: boolean }
+type Person = { age: number, name: string, alive: boolean }
 type Age = Person['age']
 //   ^?
 // ...
@@ -1383,7 +1398,7 @@ type PersonsCount = Persons['length']
 The index itself is a type, so we can use unions, keyof, or other types entirely:
 
 ```ts [twoslash]
-type Person = { age: number; name: string; alive: boolean }
+type Person = { age: number, name: string, alive: boolean }
 // ---cut-before---
 type I1 = Person['age' | 'name']
 //   ^?
@@ -1610,8 +1625,8 @@ type EventConfig<Events extends { kind: string }> = {
   [E in Events as E['kind']]: (event: E) => void
 }
 
-type SquareEvent = { kind: 'square'; x: number; y: number }
-type CircleEvent = { kind: 'circle'; radius: number }
+type SquareEvent = { kind: 'square', x: number, y: number }
+type CircleEvent = { kind: 'circle', radius: number }
 
 type Config = EventConfig<SquareEvent | CircleEvent>
 //   ^?

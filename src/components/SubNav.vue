@@ -10,7 +10,7 @@ const route = useRoute()
 
 <template>
   <div class="prose m-auto mb-8 select-none animate-none! op100!">
-    <button flex="~ gap1" items-center mb2 op30 text-sm @click="chineseOnly = !chineseOnly">
+    <button flex="~ gap1" mb2 items-center text-sm op30 @click="chineseOnly = !chineseOnly">
       <div :i="chineseOnly ? 'carbon-checkbox-checked' : 'carbon-checkbox'" />
       Chinese Only
     </button>

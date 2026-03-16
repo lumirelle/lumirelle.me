@@ -240,6 +240,8 @@ The general syntax looks similar to JavaScript object component:
 
 _src/ComponentSFC.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script>
 // [!code highlight:14]
@@ -263,7 +265,9 @@ export default {
   // [!code highlight:6]
   <div>
     <p>Count: {{ count }}</p>
-    <button @click="increment">Increment</button>
+    <button @click="increment">
+      Increment
+    </button>
   </div>
 </template>
 ```
@@ -312,6 +316,8 @@ While the `<script setup>` syntax looks like a grammar sugar for some convenienc
 
 _src/ComponentSFCScriptSetup.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 // [!code highlight:6]
@@ -327,7 +333,9 @@ function increment() {
   // [!code highlight:6]
   <div>
     <p>Count: {{ count }}</p>
-    <button @click="increment">Increment</button>
+    <button @click="increment">
+      Increment
+    </button>
   </div>
 </template>
 ```
@@ -595,6 +603,8 @@ In composition API general SFC syntax, the way to use components locally is impo
 
 _src/ParentComponentWithCompositionAPI.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script>
 // [!code highlight:2]
@@ -659,6 +669,8 @@ Because **everything imported inside `<script setup>` will be returned automatic
 
 _src/ParentComponentWithScriptSetup.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 // [!code highlight:2]
@@ -713,6 +725,8 @@ For option API components, we use the `components` option to register local comp
 <table><tbody><tr><td width="500px" valign="top">
 
 _src/ParentComponentWithOptionsAPI.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script>
@@ -782,6 +796,8 @@ There are five main elements in a Vue component:
 
 - Props: The input data passed from parent components to child components.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
   defineProps({
@@ -795,6 +811,8 @@ There are five main elements in a Vue component:
   ```
 
 - Events: The custom events emitted from child components to parent components.
+
+  <!-- eslint-skip -->
 
   ```vue
   <script setup>
@@ -811,6 +829,8 @@ There are five main elements in a Vue component:
   ```
 
 - Exposed public API: The public API of the component, which can be accessed by parent components via component instance/template refs.
+
+  <!-- eslint-skip -->
 
   ```vue
   <script setup>
@@ -829,6 +849,8 @@ There are five main elements in a Vue component:
 
 - Data & State: The internal reactive data and state of the component, with related methods to manipulate them.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
   import { ref } from 'vue'
@@ -842,13 +864,19 @@ There are five main elements in a Vue component:
 
 - Template: The HTML-like structure that defines the component's UI.
 
+  <!-- eslint-skip -->
+
   ```vue
   <template>
     <div>
       <p>{{ title }}</p>
       <p>Count: {{ count }}</p>
-      <button @click="increment">Increment</button>
-      <button @click="$emit('close')">Close</button>
+      <button @click="increment">
+        Increment
+      </button>
+      <button @click="$emit('close')">
+        Close
+      </button>
     </div>
   </template>
   ```
@@ -866,6 +894,8 @@ We can define props by the `props` option of Vue components whatever composition
 <table><tbody><tr><td width="500px" valign="top">
 
 _src/ComponentWithPropsOption.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script>
@@ -917,6 +947,8 @@ But when we using `<script setup>` SFC syntax, we cannot access the options of V
 <table><tbody><tr><td width="500px" valign="top">
 
 _src/ComponentWithPropsMacro.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -973,6 +1005,8 @@ As Vue has excellent TypeScript support, there is another and better way to defi
 
 _src/ComponentWithTypedPropsMacro.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup lang="ts">
 // [!code highlight:8]
@@ -1023,6 +1057,8 @@ Something you should notice is that there are some limitations:
   <table><tbody><tr><td width="500px" valign="top">
 
   _src/ComponentV3.3-.vue_
+
+  <!-- eslint-skip -->
 
   ```vue
   <script setup lang="ts">
@@ -1084,6 +1120,8 @@ Something you should notice is that there are some limitations:
 
   _src/ComponentV3.3+.vue_
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup lang="ts">
   // [!code highlight:8]
@@ -1141,6 +1179,8 @@ Emits are similar to props, it can also be defined by values or by TypeScript ty
 
 _src/ComponentWithEmitsOption.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script>
 export default {
@@ -1152,6 +1192,8 @@ export default {
 
 _src/ComponentWithEmitsMacro.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 // [!code highlight:1]
@@ -1160,6 +1202,8 @@ defineEmits(['submit'])
 ```
 
 _src/ComponentWithTypedEmitsMacro.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup lang="ts">
@@ -1198,6 +1242,8 @@ The validation of props and emits are a kind of documentations for that componen
 
 When we define them by values, we can provide more detailed validation rules for props and emits, and they will take effect **in runtime (development mode)**, for example:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 // [!code highlight:47]
@@ -1233,12 +1279,14 @@ defineProps({
 defineEmits({
   // An event cannot have payload
   close: (...args) => {
-    if (args === undefined) return true
+    if (args === undefined)
+      return true
     return false
   },
   // An event must with a string payload
   submit: (payload) => {
-    if (typeof payload === 'string') return true
+    if (typeof payload === 'string')
+      return true
     return false
   },
 })
@@ -1302,11 +1350,13 @@ const __sfc__ = {
 
   emits: {
     close: (...args) => {
-      if (args === undefined) return true
+      if (args === undefined)
+        return true
       return false
     },
     submit: (payload) => {
-      if (typeof payload === 'string') return true
+      if (typeof payload === 'string')
+        return true
       return false
     },
   },
@@ -1377,6 +1427,8 @@ Props is a way to pass data from parent components to child components, but it's
 
 _src/ComponentWithModel.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup lang="ts">
 // [!code highlight:6]
@@ -1395,7 +1447,7 @@ defineEmits<{
       type="text"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-    />
+    >
   </div>
 </template>
 ```
@@ -1403,6 +1455,8 @@ defineEmits<{
 Or with `useModel()` helper to create a model ref:
 
 _src/ComponentWithUseModel.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup lang="ts">
@@ -1421,7 +1475,7 @@ const modelValue = useModel(props, 'modelValue')
 <template>
   <div>
     // [!code highlight:5]
-    <input type="text" :value="modelValue" @input="modelValue = $event.target.value" />
+    <input type="text" :value="modelValue" @input="modelValue = $event.target.value">
   </div>
 </template>
 ```
@@ -1501,6 +1555,8 @@ From Vue 3.4, it's recommended to use `defineModel()` macro for better readabili
 
 _src/ComponentWithModel.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup lang="ts">
 // [!code highlight:2]
@@ -1560,6 +1616,8 @@ We can use `defineExpose()` macro to define the public API of a component:
 
 _src/ComponentWithExpose.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -1609,6 +1667,8 @@ And use them in the parent component via [template refs](#template-refs):
 
 _src/ParentComponent.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -1627,7 +1687,9 @@ function handleClick() {
   <div>
     // [!code highlight:1]
     <ComponentWithExpose ref="componentRef" />
-    <button @click="handleClick">Increment from Parent</button>
+    <button @click="handleClick">
+      Increment from Parent
+    </button>
   </div>
 </template>
 ```
@@ -1644,6 +1706,8 @@ Slots are the way to pass content from parent components to child components, th
 
 _src/ComponentWithSlots.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -1653,7 +1717,9 @@ const count = ref(0)
 
 <template>
   <div>
-    <button @click="count++">Increment</button>
+    <button @click="count++">
+      Increment
+    </button>
     // [!code highlight:11]
     <!-- 1. We define a slot by `<slot>` element, -->
     <!-- inside are its default content -->
@@ -1675,6 +1741,8 @@ const count = ref(0)
 With slots, you can create custom content:
 
 _src/ParentComponent.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -1698,6 +1766,8 @@ import ComponentWithSlots from './ComponentWithSlots.vue'
 ```
 
 Specially, everything put directly inside the component without specifying slot will be passed to the default slot automatically:
+
+<!-- eslint-skip -->
 
 ```vue
 <template>
@@ -1727,6 +1797,8 @@ Of course, we can use conditional rendering directives like [`v-if`/`v-else-if`/
 
 Use `v-if`/`v-else-if`/`v-else`:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -1749,6 +1821,8 @@ const currentTabIndex = ref(0)
 ```
 
 Use `component` element with `is` attribute to render dynamic components:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -1785,6 +1859,8 @@ Belows are the commonly used lifecycle hook registers:
 - `onBeforeMount`: Register a callback which will be called right before the component is mounted to the DOM.
 - `onMounted`: Register a callback which will be called after the component is mounted to the DOM. Useful for DOM-dependent operations.
 
+  <!-- eslint-skip -->
+
   ```vue
   <script setup>
   import { onMounted } from 'vue'
@@ -1799,6 +1875,8 @@ Belows are the commonly used lifecycle hook registers:
 
 - `onBeforeUnmount`: Register a callback which will be called right before the component is unmounted from the DOM.
 - `onUnmounted`: Register a callback which will be called after the component is unmounted from the DOM. Useful for cleanup side effects.
+
+  <!-- eslint-skip -->
 
   ```vue
   <script setup>
@@ -1840,6 +1918,8 @@ There are also some development-only lifecycle hook registers for debugging purp
 >
 > The callback functions can be async as your need.
 >
+> <!-- eslint-skip -->
+>
 > ```vue
 > <script setup>
 > import { onMounted } from 'vue'
@@ -1847,7 +1927,7 @@ There are also some development-only lifecycle hook registers for debugging purp
 > // [!code highlight:5]
 > onMounted(async () => {
 >   await fetch('https://api.example.com/data')
->     .then((res) => res.json())
+>     .then(res => res.json())
 >     .then((data) => {
 >       console.log('Fetched data on mounted:', data)
 >     })
@@ -1856,6 +1936,8 @@ There are also some development-only lifecycle hook registers for debugging purp
 > ```
 
 For **options API**, you should define these **lifecycle hook callbacks** directly as options of Vue components, without `on` prefix, like `mounted`, `unmounted`, etc.
+
+<!-- eslint-skip -->
 
 ```vue
 <script>
@@ -1877,13 +1959,15 @@ export default {
 >
 > Async callback is also supported in options API:
 >
+> <!-- eslint-skip -->
+>
 > ```vue
 > <script>
 > export default {
 >   // [!code highlight:5]
 >   async mounted() {
 >     await fetch('https://api.example.com/data')
->       .then((res) => res.json())
+>       .then(res => res.json())
 >       .then((data) => {
 >         console.log('Fetched data on mounted:', data)
 >       })
@@ -2090,6 +2174,8 @@ If you are composable author, there are some best practices you should follow:
 
 After learning all the above elements, now we can create a complete Vue component with props, events, slots, model value binding, etc.:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue'
@@ -2130,8 +2216,12 @@ onUnmounted(() => {
     <h1>{{ title }}</h1>
     <p>Count: {{ count }}</p>
     <p>Model Value: {{ modelValue }}</p>
-    <button @click="$emit('submit', 'Hello from component!')">Submit</button>
-    <button @click="$emit('close')">Close</button>
+    <button @click="$emit('submit', 'Hello from component!')">
+      Submit
+    </button>
+    <button @click="$emit('close')">
+      Close
+    </button>
     <slot :count="count">
       <p>The count is: {{ count }}</p>
     </slot>
@@ -2141,6 +2231,8 @@ onUnmounted(() => {
 ```
 
 How could we use this component? You know, globally register or use it locally! We use locally in this example:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup lang="ts">
@@ -2198,6 +2290,8 @@ See the [transition guide](https://vuejs.org/guide/built-ins/transition.html) an
 
 For example, in a component tab list, you may want to switch between different components:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -2211,14 +2305,20 @@ const currentTabIndex = ref(0)
 <template>
   // [!code highlight:1]
   <component :is="tabs[currentTabIndex]" />
-  <button @click="currentTabIndex = 0">Counter</button>
-  <button @click="currentTabIndex = 1">Input Box</button>
+  <button @click="currentTabIndex = 0">
+    Counter
+  </button>
+  <button @click="currentTabIndex = 1">
+    Input Box
+  </button>
 </template>
 ```
 
 When you switch between `Counter` and `InputBox` components, their states will be lost because they are unmounted and destroyed.
 
 With `KeepAlive`, you can cache the inactive component instances, so that their states are preserved when switching back:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -2235,12 +2335,18 @@ const currentTabIndex = ref(0)
   <KeepAlive>
     <component :is="tabs[currentTabIndex]" />
   </KeepAlive>
-  <button @click="currentTabIndex = 0">Counter</button>
-  <button @click="currentTabIndex = 1">Input Box</button>
+  <button @click="currentTabIndex = 0">
+    Counter
+  </button>
+  <button @click="currentTabIndex = 1">
+    Input Box
+  </button>
 </template>
 ```
 
 You can also use `include` and `exclude` props to control which components should be cached by their names:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -2283,6 +2389,8 @@ You can also use `include` and `exclude` props to control which components shoul
 
 You can also control the maximum number of component instances to be cached by `max` prop, and the least recently used (LRU) instances will be pruned when the limit is reached:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 // ...
@@ -2310,6 +2418,8 @@ Imagine the following structure:
 
 _src/components/Xxx.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
   <div class="outer">
@@ -2323,6 +2433,8 @@ _src/components/Xxx.vue_
 
 _src/components/MyModal.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -2331,11 +2443,15 @@ const open = ref(false)
 </script>
 
 <template>
-  <button @click="open = true">Open Modal</button>
+  <button @click="open = true">
+    Open Modal
+  </button>
 
   <div v-if="open" class="modal">
     <p>Hello from the modal!</p>
-    <button @click="open = false">Close</button>
+    <button @click="open = false">
+      Close
+    </button>
   </div>
 </template>
 
@@ -2360,6 +2476,8 @@ There will be some potential problems with them:
 
 _src/components/MyModal.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -2368,13 +2486,17 @@ const open = ref(false)
 </script>
 
 <template>
-  <button @click="open = true">Open Modal</button>
+  <button @click="open = true">
+    Open Modal
+  </button>
 
   // [!code highlight:8]
   <Teleport to="body">
     <div v-if="open" class="modal">
       <p>Hello from the modal!</p>
-      <button @click="open = false">Close</button>
+      <button @click="open = false">
+        Close
+      </button>
     </div>
   </Teleport>
 </template>
@@ -2383,6 +2505,8 @@ const open = ref(false)
 The `to` prop of `Teleport` component accepts a CSS selector string or a DOM element instance as the target.
 
 Of course, you may want to disable teleporting in some cases, for example, in mobile devices, you want to render the modal element inline for better performance. You can use `disabled` prop to control this behavior:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -2398,6 +2522,8 @@ Of course, you may want to disable teleporting in some cases, for example, in mo
 ```
 
 Above Vue 3.5, we can use `defer` prop to defer the target resolution until the end of microtask, this is useful when the target element may not be available during the initial render:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -2439,6 +2565,8 @@ Asynchornous dependencies have two different kinds:
 Both these two slots only accept **a single element**.
 
 When initial rendering, if there are no async dependencies, `Suspense` will enter completed state immediately and render the default slot. Otherwise, it will enter pending state and render the fallback slot, until all async dependencies are resolved, then it will switch to completed state and render the default slot.
+
+<!-- eslint-skip -->
 
 ```vue
 <template>
@@ -2575,6 +2703,8 @@ There are two ways to achieve this:
   >
   > Because of all the operations are done on the original object, the reactive object is equal to the original object in Vue 2.x:
   >
+  > <!-- eslint-skip -->
+  >
   > ```vue
   > <script>
   > // [!code highlight:1]
@@ -2604,10 +2734,14 @@ There are two ways to achieve this:
   >     </div>
   >     // [!code highlight:2]
   >     <!-- Will trigger watcher -->
-  >     <button @click="state.A1 += 1">Increment A1 from State</button>
+  >     <button @click="state.A1 += 1">
+  >       Increment A1 from State
+  >     </button>
   >     // [!code highlight:2]
   >     <!-- Will also trigger watcher -->
-  >     <button @click="original.A1 += 1">Increment A1 from Original</button>
+  >     <button @click="original.A1 += 1">
+  >       Increment A1 from Original
+  >     </button>
   >   </div>
   > </template>
   > ```
@@ -2641,6 +2775,8 @@ There are two ways to achieve this:
   >
   > Also caused by `Proxy`, the reactive object is no longer equal to the original object:
   >
+  > <!-- eslint-skip -->
+  >
   > ```vue
   > <script setup>
   > import { reactive, watch } from 'vue'
@@ -2666,10 +2802,14 @@ There are two ways to achieve this:
   >     </div>
   >     // [!code highlight:2]
   >     <!-- Will trigger reactivity -->
-  >     <button @click="state.A1 += 1">Increment A1 from State</button>
+  >     <button @click="state.A1 += 1">
+  >       Increment A1 from State
+  >     </button>
   >     // [!code highlight:2]
   >     <!-- Will NOT trigger reactivity -->
-  >     <button @click="original.A1 += 1">Increment A1 from Original</button>
+  >     <button @click="original.A1 += 1">
+  >       Increment A1 from Original
+  >     </button>
   >   </div>
   > </template>
   > ```
@@ -2814,7 +2954,7 @@ Finally, implement `trigger()` function. Inside `trigger()` function, we will fi
 ```js
 function trigger(target, key) {
   const effects = getSubscribersForProperty(target, key)
-  effects.forEach((effect) => effect())
+  effects.forEach(effect => effect())
 }
 ```
 
@@ -3458,6 +3598,8 @@ const isVisible = ref(true)
 
 Like JavaScript `if` statements, you can use `v-else-if` directive to chain multiple conditions:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -3468,12 +3610,24 @@ const status = ref('active')
 <template>
   <div>
     // [!code highlight:9]
-    <div v-if="status === 'active'">Status is active.</div>
-    <div v-else-if="status === 'inactive'">Status is inactive.</div>
-    <div v-else>Status is pending.</div>
-    <button @click="status = 'active'">Set Active</button>
-    <button @click="status = 'inactive'">Set Inactive</button>
-    <button @click="status = 'pending'">Set Pending</button>
+    <div v-if="status === 'active'">
+      Status is active.
+    </div>
+    <div v-else-if="status === 'inactive'">
+      Status is inactive.
+    </div>
+    <div v-else>
+      Status is pending.
+    </div>
+    <button @click="status = 'active'">
+      Set Active
+    </button>
+    <button @click="status = 'inactive'">
+      Set Inactive
+    </button>
+    <button @click="status = 'pending'">
+      Set Pending
+    </button>
   </div>
 </template>
 ```
@@ -3569,6 +3723,8 @@ const items = ref(['A', 'B', 'C'])
 
 To avoid this, you should provide a unique `key` attribute for each item, so that Vue can track each element properly, which may help to improve performance and avoid unnecessary re-renders:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -3584,7 +3740,9 @@ const items = ref(['A', 'B', 'C'])
     </div>
     <!-- This will only create a new element for X -->
     <!-- Then sort the existing elements -->
-    <button @click="items.unshift('X')">Add X at the beginning</button>
+    <button @click="items.unshift('X')">
+      Add X at the beginning
+    </button>
   </div>
 </template>
 ```
@@ -3757,6 +3915,8 @@ It accpets different modifiers to customize its behavior:
 >
 > _src/parent.vue_
 >
+> <!-- eslint-skip -->
+>
 > ```vue
 > <script setup>
 > import { ref } from 'vue'
@@ -3772,6 +3932,8 @@ It accpets different modifiers to customize its behavior:
 >
 > _src/ChildComponent.vue_
 >
+> <!-- eslint-skip -->
+>
 > ```vue
 > <script setup>
 > import { defineModel } from 'vue'
@@ -3781,7 +3943,7 @@ It accpets different modifiers to customize its behavior:
 > </script>
 >
 > <template>
->   <input v-model="model" type="number" />
+>   <input v-model="model" type="number">
 > </template>
 > ```
 
@@ -3873,6 +4035,8 @@ A directive is just a special JavaScript object with some agreed hooks.
 
 For `<script setup>` SFC syntax, you can define an object with the variable name starts with `v` inside the `<script setup>` block, and it will be registered as directive automatically:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 // Enables v-highlight in templates
@@ -3884,11 +4048,15 @@ const vHighlight = {
 </script>
 
 <template>
-  <p v-highlight>This sentence is important!</p>
+  <p v-highlight>
+    This sentence is important!
+  </p>
 </template>
 ```
 
 For composition API with general SFC syntax, or options API, you need to define the directive object under `directives` option of the component:
+
+<!-- eslint-skip -->
 
 ```vue
 <script>
@@ -3904,7 +4072,9 @@ export default {
 </script>
 
 <template>
-  <p v-highlight>This sentence is important!</p>
+  <p v-highlight>
+    This sentence is important!
+  </p>
 </template>
 ```
 
@@ -3929,6 +4099,8 @@ To see all available hooks, please refers to [the documentation](https://vuejs.o
 
 In Vue.js, templates support text interpolation using double curly braces `{{ }}`. This allows you to bind data from the Vue instance to the HTML.
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -3942,6 +4114,8 @@ const msg = ref('Hello, Vue!')
 ```
 
 But this cannot work in attributes, because double curly braces are not valid in HTML attributes. Instead, Vue provides the `v-bind` directive (or its shorthand `:`) to bind attributes to data.
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>
@@ -3972,6 +4146,8 @@ const id = ref('my-element')
 
 You can use JavaScript expressions inside the double curly braces for text interpolation and in the `v-bind` directive for attribute binding, just like:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup>
 import { ref } from 'vue'
@@ -3984,7 +4160,7 @@ const imageUrl = ref('https://example.com/image.png')
 <template>
   <div>
     <span>Sum: {{ a + b }}</span>
-    <img :src="`${imageUrl}?size=large`" />
+    <img :src="`${imageUrl}?size=large`">
   </div>
 </template>
 ```
@@ -3992,6 +4168,8 @@ const imageUrl = ref('https://example.com/image.png')
 > [!Caution]
 >
 > That expressions will be recalled on each re-render (even there is no data change), so avoid using heavy expressions or function calls in templates, especially inside `v-for` loops:
+>
+> <!-- eslint-skip -->
 >
 > ```vue
 > <script setup>
@@ -4017,6 +4195,8 @@ const imageUrl = ref('https://example.com/image.png')
 > ```
 >
 > Instead, consider using computed properties to handle complex logic.
+>
+> <!-- eslint-skip -->
 >
 > ```vue
 > <script setup>
@@ -4184,6 +4364,8 @@ Vue.js provides special features for binding classes and styles to elements.
 
   _src/index.vue_
 
+  <!-- eslint-skip -->
+
   ```vue
   <template>
     <div
@@ -4221,6 +4403,8 @@ We can use template refs to get them.
 
 After Vue 3.5+ with composition API, better type support is provided by a new API `useTemplateRef()`:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup lang="ts">
 import { onMounted, ref, useTemplateRef } from 'vue'
@@ -4239,13 +4423,19 @@ onMounted(() => {
 
 <template>
   // [!code highlight:1]
-  <div ref="myDiv">This is my div element.</div>
+  <div ref="myDiv">
+    This is my div element.
+  </div>
   // [!code highlight:1]
-  <SubComponent ref="mySubComponent"> This is my sub component. </SubComponent>
+  <SubComponent ref="mySubComponent">
+    This is my sub component.
+  </SubComponent>
 </template>
 ```
 
 Before Vue 3.5 with composition API:
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup lang="ts">
@@ -4266,13 +4456,19 @@ onMounted(() => {
   // [!code highlight:3]
   <!-- Must use the same name for the ref attribute -->
   <!-- and the ref variable -->
-  <div ref="myDivRef">This is my div element.</div>
+  <div ref="myDivRef">
+    This is my div element.
+  </div>
   // [!code highlight:1]
-  <SubComponent ref="mySubComponentRef"> This is my sub component. </SubComponent>
+  <SubComponent ref="mySubComponentRef">
+    This is my sub component.
+  </SubComponent>
 </template>
 ```
 
 For options API components, we can use `this.$refs` to access the template refs:
+
+<!-- eslint-skip -->
 
 ```vue
 <script>
@@ -4292,9 +4488,13 @@ export default {
 
 <template>
   // [!code highlight:1]
-  <div ref="myDiv">This is my div element.</div>
+  <div ref="myDiv">
+    This is my div element.
+  </div>
   // [!code highlight:1]
-  <SubComponent ref="mySubComponent"> This is my sub component. </SubComponent>
+  <SubComponent ref="mySubComponent">
+    This is my sub component.
+  </SubComponent>
 </template>
 ```
 
@@ -4307,6 +4507,8 @@ export default {
 > [!Note]
 >
 > For `v-for` loops, the ref value will be an array of DOM elements or component instances.
+>
+> <!-- eslint-skip -->
 >
 > ```vue
 > <script setup lang="ts">
@@ -4424,9 +4626,13 @@ When you add the `scoped` attribute to a `<style>` block, Vue will automatically
 
 _src/pages/page-with-scoped-style.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
-  <div class="scoped-style">1</div>
+  <div class="scoped-style">
+    1
+  </div>
 </template>
 
 <style scoped>
@@ -4438,9 +4644,13 @@ _src/pages/page-with-scoped-style.vue_
 
 _src/pages/page-with-global-style.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
-  <div class="global-style">2</div>
+  <div class="global-style">
+    2
+  </div>
 </template>
 
 <style>
@@ -4485,6 +4695,8 @@ As unique data attributes are only applied to the root element of child componen
 
 _src/components/ChildComponent.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
   <div class="child">
@@ -4496,6 +4708,8 @@ _src/components/ChildComponent.vue_
 ```
 
 _src/pages/page-with-deep-selector.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <template>
@@ -4558,6 +4772,7 @@ As we know, slotted content is belongs to the parent component, so they will be 
 
 _src/components/ChildComponent.vue_
 
+<!-- eslint-skip -->
 ```vue
 <template>
   <div class="child">
@@ -4579,11 +4794,15 @@ _src/components/ChildComponent.vue_
 
 _src/pages/page-with-slotted-selector.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
   <div class="parent">
     <ChildComponent>
-      <div class="slotted-content">1</div>
+      <div class="slotted-content">
+        1
+      </div>
     </ChildComponent>
   </div>
 </template>
@@ -4625,6 +4844,8 @@ _dist/index.html_
 
 To apply some styles back to the global scope, we can use the `:global()` pesudo-class provided by Vue:
 
+<!-- eslint-skip -->
+
 ```vue
 <style scoped>
 :global(.global-class) {
@@ -4637,9 +4858,13 @@ To apply some styles back to the global scope, we can use the `:global()` pesudo
 
 A `<style module>` tag is compiled as [CSS Modules](https://github.com/css-modules/css-modules) and exposes the resulting CSS classes to the component as an object under the key of `$style`:
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
-  <p :class="$style.red">This should be red</p>
+  <p :class="$style.red">
+    This should be red
+  </p>
 </template>
 
 <style module>
@@ -4655,9 +4880,13 @@ Refer to the [CSS Modules spec](https://github.com/css-modules/css-modules) for 
 
 You can also custom the inject name of the CSS Modules object by providing a value to the `module` attribute:
 
+<!-- eslint-skip -->
+
 ```vue
 <template>
-  <p :class="classes.red">red</p>
+  <p :class="classes.red">
+    red
+  </p>
 </template>
 
 <style module="classes">
@@ -4669,6 +4898,8 @@ You can also custom the inject name of the CSS Modules object by providing a val
 
 For composition API, when you need to use these classes in `<script>`, you can use `useCssModule()` API. The first argument is the inject name provided by the `module` attribute of `<style>` block:
 
+<!-- eslint-skip -->
+
 ```vue
 <script setup lang="ts">
 import { useCssModule } from 'vue'
@@ -4677,7 +4908,9 @@ const classes = useCssModule('classes')
 </script>
 
 <template>
-  <p :class="classes.red">red</p>
+  <p :class="classes.red">
+    red
+  </p>
 </template>
 
 <style module="classes">
@@ -4689,6 +4922,8 @@ const classes = useCssModule('classes')
 
 For options API, you can use `this.$.type.__cssModules.$style.<inject-name>` to access the CSS Modules classes, but... Why not use composition API? :)
 
+<!-- eslint-skip -->
+
 ```vue
 <script>
 export default {
@@ -4699,7 +4934,9 @@ export default {
 </script>
 
 <template>
-  <p :class="classes.red">red</p>
+  <p :class="classes.red">
+    red
+  </p>
 </template>
 
 <style module="classes">
@@ -4717,6 +4954,8 @@ SFC `<style>` blocks also support linking CSS values to reactive data using `v-b
 
 _src/pages/options-api.vue_
 
+<!-- eslint-skip -->
+
 ```vue
 <script>
 export default {
@@ -4729,7 +4968,9 @@ export default {
 </script>
 
 <template>
-  <div class="text">hello</div>
+  <div class="text">
+    hello
+  </div>
 </template>
 
 <style>
@@ -4742,6 +4983,8 @@ export default {
 </td><td width="500px" valign="top">
 
 _src/pages/composition-api.vue_
+
+<!-- eslint-skip -->
 
 ```vue
 <script setup>

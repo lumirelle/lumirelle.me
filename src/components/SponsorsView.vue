@@ -16,5 +16,5 @@ const showCircle = ref(true)
   </div>
 
   <SponsorsCircles v-if="showCircle" />
-  <SponsorsTiers v-else h-auto max-w-250 w-full mx-auto />
+  <SponsorsTiers v-else mx-auto h-auto max-w-250 w-full />
 </template>

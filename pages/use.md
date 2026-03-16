@@ -15,8 +15,8 @@ art: dots
 - PC:
   - MaxSun B760M Challenger
   - i5-13490F
-  - RTX 5060ti 16G x 2
-  - Aigo DDR4 3200/C12 16G
+  - RTX 5060ti 16G
+  - Aigo DDR4 3200/C12 16G x 2
   - Western Digital SN770 1TB
   - Lenovo R27qe 2K 27" 180Hz
   - **Windows 11**
@@ -39,11 +39,12 @@ I'm really want to try MAC mini if I have chance in the future. ☺️
   - [Neovim](https://neovim.io/) (For terminal lovers) with [LazyVim](https://www.lazyvim.org/) setup
 - Editor Settings & Extensions: [Configuration setup](#configuration-setup-helpers)
 - Fonts: See [programming fonts manual](posts/manual/programming-fonts-manual.md) for more details.
-- Theme: [Vitesse Theme](https://github.com/antfu/vscode-theme-vitesse)
-- Icons Theme: [Material Icon Theme](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+- Theme: [GitHub Theme](https://github.com/primer/github-vscode-theme)
+- Icons Theme: [Catppuccin Icon Theme](https://github.com/catppuccin/vscode-icons)
 - Product Icons: [Carbon Icons](https://github.com/antfu/vscode-icons-carbon)
 - Formatting & Linting:
-  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with [`@antfu/eslint-config`](https://github.com/antfu/eslint-config)
+  - [OxLint](https://marketplace.visualstudio.com/items?itemName=oxc.oxc.oxc-vscode) with [`@lumirelle/oxlint-config`](https://github.com/lumirelle/oxlint-config) first
+  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) least
   - ...some times [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) with [`@lumirelle/stylelint-config`](https://github.com/lumirelle/stylelint-config).
 
 ### Browser (Daily Use)
@@ -71,7 +72,6 @@ See my [manuals](/posts/manual-windows-setup#brave-browser) for more details abo
 ### General
 
 - [@sxzz/create](https://github.com/sxzz/create) - Create new projects from GitHub templates with ease (any language)
-- [czg](https://cz-git.qbb.sh/cli/) - Interactive CLI that generate standardized git commit messages
 - [hyperfine](https://github.com/sharkdp/hyperfine) - A command-line benchmarking tool
 
 ### C/C++
@@ -81,23 +81,23 @@ Build tools:
 - [Mingw-w64](https://github.com/niXman/mingw-builds-binaries/releases/latest) - GCC (GNU Compiler Collection) for **Windows**
 - [MSVC](https://visualstudio.microsoft.com/visual-cpp-build-tools/) - Microsoft Visual C++ Compiler Toolchain for **Windows**
 
-### Rust
+### Zig
 
 Build tools:
 
-- [Rust](https://rust-lang.org/tools/install/) - Rust development kits
+- [Zig](https://ziglang.org/learn/getting-started/) - Zig development kits
 
-### JavaScript/TypeScript
+### JavaScript / TypeScript
 
 Standalone runtimes:
 
-- [Bun](https://bun.sh/download) - Bun runtime (for development)
-- [Node.js](https://nodejs.org/en/download/) - Node.js runtime (for production and legacy projects)
+- [Bun](https://bun.sh/download) - A fast all-in-one JavaScript / TypeScript runtime, bundler, transpiler, and package manager, not stable enough for production yet but worth trying for new projects
+- [Node.js](https://nodejs.org/en/download/) - Legacy JavaScript / TypeScript runtime, still the best choice for stable production use
 
 Build tools:
 
-- [tsdown](https://github.com/rolldown/tsdown) - Build TypeScript library projects
-- [vite](https://github.com/vitejs/vite) - Build frontend projects
+- [Bunup](https://bunup.dev) - Build JavaScript / TypeScript library projects
+- [Vite](https://vite.dev/) - Build frontend projects
 
 Project management:
 
@@ -108,6 +108,8 @@ Project management:
 
 Code Quality:
 
+- [oxlint](https://oxc.rs/docs/guide/usage/linter.html) - A fast linter written in Rust, prepared to replace ESLint in the future
+  - Configuration: [lumirelle/oxlint-config](https://github.com/lumirelle/oxlint-config)
 - [eslint](https://eslint.org/) - Linter & Formatter
   - Configuration: [antfu/eslint-config](https://github.com/antfu/eslint-config)
 - [stylelint](https://stylelint.io/) - Linter & Formatter for styles
@@ -123,15 +125,9 @@ Runtime & Build tools:
 
 - [Graal VM](https://www.graalvm.org/downloads/) - JVM language's development kits
 
-### Python
-
-Runtime & Build tools:
-
-- [Python](https://www.python.org/downloads/)- Python development kits
-
 ## Project Starter Templates
 
-### Node.js (JavaScript/TypeScript)
+### JavaScript / TypeScript
 
 - [starter-ts](https://github.com/lumirelle/starter-ts) - TypeScript starter template
 - [starter-monorepo](https://github.com/lumirelle/starter-monorepo) - TypeScript starter template for monorepo

@@ -24,10 +24,11 @@
         "vue-router-better-scroller": "catalog:frontend",
       },
       "devDependencies": {
-        "@antfu/eslint-config": "catalog:dev",
+        "@antfu/eslint-config": "catalog:check",
         "@antfu/utils": "catalog:frontend",
         "@clack/prompts": "catalog:dev",
         "@iconify/json": "catalog:dev",
+        "@lumirelle/oxlint-config": "catalog:check",
         "@octokit/core": "catalog:dev",
         "@octokit/rest": "catalog:dev",
         "@shikijs/markdown-it": "catalog:build",
@@ -113,6 +114,8 @@
       "vite-svg-loader": "^5.1.1",
     },
     "check": {
+      "@antfu/eslint-config": "^7.7.2",
+      "@lumirelle/oxlint-config": "^0.0.5",
       "@unocss/eslint-plugin": "^66.6.6",
       "eslint": "^10.0.3",
       "eslint-plugin-oxlint": "^1.55.0",
@@ -122,7 +125,6 @@
       "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
     },
     "dev": {
-      "@antfu/eslint-config": "^7.7.2",
       "@clack/prompts": "^1.0.0",
       "@iconify/json": "^2.2.450",
       "@octokit/core": "^7.0.6",
@@ -331,6 +333,8 @@
     "@kwsites/file-exists": ["@kwsites/file-exists@1.1.1", "", { "dependencies": { "debug": "^4.1.1" } }, "sha512-m9/5YGR18lIwxSFDwfE3oA7bWuq9kdau6ugN4H2rJeyhFQZcG9AgSHkQtSD15a8WvTgfz9aikZMrKPHvbpqFiw=="],
 
     "@kwsites/promise-deferred": ["@kwsites/promise-deferred@1.1.1", "", {}, "sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw=="],
+
+    "@lumirelle/oxlint-config": ["@lumirelle/oxlint-config@0.0.5", "", {}, "sha512-b68gJv0iAmgxck2nW/BSGwwkx6raMEnRx8+gVAPGtVZSJHWK3hGUnN79in8iYNZfwYTHXPZNNVJI3OXBMsULaw=="],
 
     "@mdit-vue/plugin-component": ["@mdit-vue/plugin-component@3.0.2", "", { "dependencies": { "@types/markdown-it": "^14.1.2", "markdown-it": "^14.1.0" } }, "sha512-Fu53MajrZMOAjOIPGMTdTXgHLgGU9KwTqKtYc6WNYtFZNKw04euSfJ/zFg8eBY/2MlciVngkF7Gyc2IL7e8Bsw=="],
 

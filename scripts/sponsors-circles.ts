@@ -17,12 +17,7 @@ const RADIUS_MAX = 300
 
 const sponsors = (_sponsors as Sponsor[])
   .filter(sponsor => sponsor.amount > 0)
-  .map((sponsor, idx) => ({
-    id: `sponsor-${idx}`,
-    radius: 0,
-    position: { x: 0, y: 0 },
-    ...sponsor,
-  }))
+  .map((sponsor, idx) => ({ id: `sponsor-${idx}`, radius: 0, position: { x: 0, y: 0 }, ...sponsor }))
 
 function lerp(a: number, b: number, t: number): number {
   if (t < 0) {

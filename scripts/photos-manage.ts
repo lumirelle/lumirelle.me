@@ -33,7 +33,7 @@ for (const filepath of files) {
   const img = sharp(buffer)
   const exif = load(buffer)
 
-  let dateRaw = exif.DateTimeOriginal?.value ?? exif.DateTime?.value ?? exif.DateCreated.value
+  let dateRaw = exif.DateTimeOriginal?.value ?? exif.DateTime?.value ?? exif.DateCreated?.value
   dateRaw ||= new Date(await fs.stat(filepath).then(stat => stat.birthtime)).toISOString()
   if (Array.isArray(dateRaw)) {
     dateRaw = dateRaw[0] as string

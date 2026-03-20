@@ -34,7 +34,7 @@ const routes: Post[] = router
 
 const posts = computed(() =>
   [...(props.posts || routes), ...(props.extra || [])]
-    .toSorted((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))
+    .sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))
     .filter(i => !chineseOnly.value || !i.lang || i.lang === 'zh'),
 )
 

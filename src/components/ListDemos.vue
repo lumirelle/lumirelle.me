@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DemoItem } from '../../demo/data'
 import { breakpointsTailwind } from '@vueuse/core'
 import { demoItems } from '../../demo/data'
 
@@ -15,10 +16,10 @@ const cols = computed(() => {
 })
 
 const parts = computed(() => {
-  const result = Array.from({ length: cols.value }).fill([] as typeof demoItems)
+  const result = Array.from<DemoItem[]>({ length: cols.value }).fill([])
   for (let i = 0; i < demoItems.length; i++) {
-    const item = demoItems[i]
-    result[i % cols.value].push(item)
+    const item: DemoItem = demoItems[i] ?? {}
+    result[i % cols.value]?.push(item)
   }
   return result
 })

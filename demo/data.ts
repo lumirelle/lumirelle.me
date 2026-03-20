@@ -1,11 +1,17 @@
 import type { Component } from 'vue'
 
+export interface DemoItem {
+  date?: string
+  comp?: Component
+  video?: string
+}
+
 const video = import.meta.glob('./*.mp4', { eager: true, query: '?url' }) as any
 
-export const demoItems = Object.entries(import.meta.glob('./*.md', { eager: true }))
+export const demoItems: DemoItem[] = Object.entries(import.meta.glob('./*.md', { eager: true }))
   .map(([path, page]: any) => ({
     date: path.slice(2, -3) as string,
     comp: page.default as Component,
     video: video[`./${path.slice(2, -3)}.mp4`].default as string,
   }))
-  .toSorted((a, b) => b.date.localeCompare(a.date))
+  .sort((a, b) => b.date.localeCompare(a.date))

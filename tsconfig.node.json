@@ -3,6 +3,6 @@
   "compilerOptions": {
     "types": ["bun"]
   },
-  "include": ["demo/**/*", "photos/**/*", "scripts/**/*", "test/**/*"],
+  "include": ["scripts/**/*", "test/**/*"],
   "exclude": ["test/fixture/**/*"]
 }

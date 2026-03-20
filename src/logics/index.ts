@@ -29,7 +29,7 @@ export async function toggleDark(event: MouseEvent): Promise<void> {
   const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
   document.documentElement.animate(
     {
-      clipPath: isDark.value ? [...clipPath].toReversed() : clipPath,
+      clipPath: isDark.value ? [...clipPath].reverse() : clipPath,
     },
     {
       duration: 400,

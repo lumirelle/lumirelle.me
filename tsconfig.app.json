@@ -2,10 +2,10 @@
   "extends": "@lumirelle/tsconfig/vue",
   "compilerOptions": {
     "paths": {
-      "~": ["./"],
-      "~/*": ["./*"]
+      "~": ["./src"],
+      "~/*": ["./src/*"]
     },
     "types": ["vite/client"]
   },
-  "include": ["*.d.ts", "src/**/*"]
+  "include": ["*.d.ts", "vite.config.ts", "src/**/*", "demo/**/*", "data/**/*", "photos/**/*"]
 }

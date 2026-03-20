@@ -39,6 +39,6 @@ const photos = Object.entries(
       url,
     }
   })
-  .toSorted((a, b) => b.name.localeCompare(a.name))
+  .sort((a, b) => b.name.localeCompare(a.name))
 
 export default photos

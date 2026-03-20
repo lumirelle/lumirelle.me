@@ -27,7 +27,7 @@ function lerp(a: number, b: number, t: number): number {
 }
 
 const root = hierarchy({ ...sponsors[0], children: sponsors, id: 'root' })
-  .sum(d => 1 + lerp(RADIUS_MIN, RADIUS_MAX, (Math.max(0.1, d.amount) / amountMax) ** 0.9))
+  .sum(d => 1 + lerp(RADIUS_MIN, RADIUS_MAX, (Math.max(0.1, d.amount ?? 0) / amountMax) ** 0.9))
   // oxlint-disable-next-line unicorn/no-array-sort
   .sort((a, b) => (b.value ?? 0) - (a.value ?? 0))
 

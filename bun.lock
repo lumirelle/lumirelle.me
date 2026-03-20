@@ -29,6 +29,7 @@
         "@clack/prompts": "catalog:dev",
         "@iconify/json": "catalog:dev",
         "@lumirelle/oxlint-config": "catalog:check",
+        "@lumirelle/tsconfig": "catalog:dev",
         "@octokit/core": "catalog:dev",
         "@octokit/rest": "catalog:dev",
         "@shikijs/markdown-it": "catalog:build",
@@ -128,6 +129,7 @@
     "dev": {
       "@clack/prompts": "^1.1.0",
       "@iconify/json": "^2.2.451",
+      "@lumirelle/tsconfig": "^0.0.1",
       "@octokit/core": "^7.0.6",
       "@octokit/rest": "^22.0.1",
       "degit": "^2.8.4",
@@ -336,6 +338,8 @@
     "@kwsites/promise-deferred": ["@kwsites/promise-deferred@1.1.1", "", {}, "sha512-GaHYm+c0O9MjZRu0ongGBRbinu8gVAMd2UZjji6jVmqKtZluZnptXGWhz1E8j8D2HJ3f/yMxKAUC0b+57wncIw=="],
 
     "@lumirelle/oxlint-config": ["@lumirelle/oxlint-config@0.0.5", "", {}, "sha512-b68gJv0iAmgxck2nW/BSGwwkx6raMEnRx8+gVAPGtVZSJHWK3hGUnN79in8iYNZfwYTHXPZNNVJI3OXBMsULaw=="],
+
+    "@lumirelle/tsconfig": ["@lumirelle/tsconfig@0.0.1", "", {}, "sha512-gpWOwuYrg3+ON2zZMcGspmIrverj1Wyn3tnv4OxHk6vDAmxMCGRITPrrMdq4cGuQQNpq5VyyoCzj/3vEcJOVgg=="],
 
     "@mdit-vue/plugin-component": ["@mdit-vue/plugin-component@3.0.2", "", { "dependencies": { "@types/markdown-it": "^14.1.2", "markdown-it": "^14.1.0" } }, "sha512-Fu53MajrZMOAjOIPGMTdTXgHLgGU9KwTqKtYc6WNYtFZNKw04euSfJ/zFg8eBY/2MlciVngkF7Gyc2IL7e8Bsw=="],
 

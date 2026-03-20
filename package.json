@@ -47,6 +47,7 @@
       "dev": {
         "@clack/prompts": "^1.1.0",
         "@iconify/json": "^2.2.451",
+        "@lumirelle/tsconfig": "^0.0.1",
         "@octokit/core": "^7.0.6",
         "@octokit/rest": "^22.0.1",
         "degit": "^2.8.4",
@@ -129,6 +130,7 @@
     "@clack/prompts": "catalog:dev",
     "@iconify/json": "catalog:dev",
     "@lumirelle/oxlint-config": "catalog:check",
+    "@lumirelle/tsconfig": "catalog:dev",
     "@octokit/core": "catalog:dev",
     "@octokit/rest": "catalog:dev",
     "@shikijs/markdown-it": "catalog:build",

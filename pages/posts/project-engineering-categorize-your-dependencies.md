@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Categorize Your Dependencies'
 date: 2025-11-01T16:06+08:00
-update: 2026-01-27T09:51+08:00
+update: 2026-03-22T23:39+08:00
 lang: en
 duration: 3min
 type: blog+note
@@ -17,7 +17,7 @@ Thanks to the modern [JavaScript package managers](/manual-js-pm), we have "cata
 
 Here are two examples (using Bun):
 
-_A Nuxt frontend project:_
+_A Nuxt application project:_
 
 ```jsonc
 {
@@ -170,11 +170,11 @@ _A TypeScript library project:_
 
 The meaning of categorizing your dependencies is to simplify the dependency management, so we shouldn't spend a lot of time to categorize them clearly and exactly.
 
-For example, you don't need to categorize dev dependencies into `linter`, `formatter`, and other small pieces, just put them together in the `dev` catalog, and that's quit enough.
+For example, you don't need to categorize dev dependencies into `linter`, `formatter`, and other small pieces, just put them together in the `check` catalog, and that's quit enough.
 
 There are my personal opinions about the catalog names:
 
-| Catalog For                                          | Name For Frontend Projects | Name For Library Projects |
+| Catalog For                                          | Name For Application Projects | Name For Library Projects |
 | ---------------------------------------------------- | -------------------------- | ------------------------- |
 | production dependencies                              | `frontend` and `backend`   | `prod`                    |
 | inlined dependencies                                 | `frontend`                 | `inlined`                 |
@@ -185,12 +185,12 @@ There are my personal opinions about the catalog names:
 | testing libraries                                    | `test`                     | `test`                    |
 | documentation used dependencies                      | --                         | `docs`                    |
 
-The mainly difference between frontend projects and library packages are the following catalogs:
+The mainly difference between application projects and library packages are the following catalogs:
 
 - **production dependencies** and **inlined dependencies** are the ones who will be used in the production environment.
 
-  For frontend projects, **production dependencies** maybe used in `frontend` (browsers), or `backend` (servers), so we should divide them into two different catalogs to distinguish them.
+  For application projects, **production dependencies** maybe used in `frontend` (browsers), or `backend` (servers), so we should divide them into two different catalogs to distinguish them.
 
   For library packages, everything is used in `backend`, we can simply call them `prod`.
 
-- **documentation used dependencies** are library-specific dependencies. No one will write documentation for a frontend projects, right? 😄
+- **documentation used dependencies** are library-specific dependencies. No one will write documentation for a application projects, right? 😄

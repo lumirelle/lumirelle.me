@@ -5,9 +5,9 @@ image: https://lumirelle.me/og.png
 art: random
 ---
 
-Hey! I'm Lumirelle, a developer who wants to learn every kind of technology and share what I've learned with the world.
+Hey! I'm Lumirelle, a developer who wants to learn every kinds of technology and share what I've learned with the world.
 
-My dream is to become a full-stack developer who can build amazing applications from scratch and contribute to open-source projects.
+My dream is to become a full-stack developer who can build amazing libraries & applications from scratch and contribute to open-source projects.
 
 In my spare time, I enjoy exploring new programming languages, frameworks, and tools, find the [right ones](/use) for me to get faster and more efficient.
 

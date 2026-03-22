@@ -1,7 +1,7 @@
 ---
 title: Bun vs. Node.js
 date: 2026-01-27T17:46+08:00
-update: 2026-01-27T17:46+08:00
+update: 2026-03-22T23:08+08:00
 lang: en
 duration: 2min
 ---
@@ -54,7 +54,7 @@ Bun has much faster dependency installation speed, much shorter cold start time,
 
 Bun provides many built-in APIs that are not available in Node.js by default, such as a built-in HTTP server, WebSocket support, and more.
 
-You can [parse YAML files](https://bun.com/docs/runtime/yaml) like you parse JSON files in Node.js before:
+You can [parse YAML files](https://bun.com/docs/runtime/yaml) like how you parse JSON files in Node.js before:
 
 ```ts
 import { YAML } from 'bun'
@@ -94,6 +94,8 @@ See [Bun's Node.js compatibility documentation](https://bun.com/docs/runtime/nod
 As we all know, Bun is still a young project, and there are still some troubles and limitations when using Bun in real-world projects.
 
 For example, when you using Bun runtime with `vitest --coverage`, the missing support for `node:inspector` breaks the coverage feature.
+
+What's more, the compatibility on Windows is still very limited, due to Windows path syntax (Windows uses backslashes `\` instead of forward slashes `/`).
 
 However, the Bun team is actively working on improving compatibility and adding new features, so we can expect these issues to be resolved in the future.
 

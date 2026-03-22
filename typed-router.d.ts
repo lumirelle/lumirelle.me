@@ -17,7 +17,8 @@ import type {
 
 declare module 'vue-router' {
   interface TypesConfig {
-    ParamParsers: never
+    ParamParsers:
+      | never
   }
 }
 
@@ -92,6 +93,13 @@ declare module 'vue-router/auto-routes' {
     '/posts/code-style-symbol-name-pattern': RouteRecordInfo<
       '/posts/code-style-symbol-name-pattern',
       '/posts/code-style-symbol-name-pattern',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/code-style-title-capitalizing': RouteRecordInfo<
+      '/posts/code-style-title-capitalizing',
+      '/posts/code-style-title-capitalizing',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -313,6 +321,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/code-style-symbol-name-pattern.md': {
       routes:
         | '/posts/code-style-symbol-name-pattern'
+      views:
+        | never
+    }
+    'pages/posts/code-style-title-capitalizing.md': {
+      routes:
+        | '/posts/code-style-title-capitalizing'
       views:
         | never
     }

@@ -206,7 +206,7 @@ export async function listActiveUsers(): Promise<User[]> {
 }
 ```
 
-#### Endpoint Verbs based on HTTP Methods
+#### Endpoint Verbs Based on HTTP Methods
 
 > [!Note]
 >

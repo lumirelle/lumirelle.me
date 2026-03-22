@@ -9,7 +9,7 @@ type: note
 
 [[toc]]
 
-## What is Bash?
+## What Is Bash?
 
 **Bash (Bourne Again Shell)** is a widely used Unix shell and even a scripting language, it's also the default integrated shell for most Linux distributions and macOS.
 
@@ -182,7 +182,7 @@ echo "Hello, ${name}!"  # -> Hello, !
 
 Of course, [readonly variables](#work-with-declare-command) cannot be unset.
 
-### Work with `declare` command
+### Work with `declare` Command
 
 `declare` command can be used to **define variables with some special logic** or **print variables' information**.
 
@@ -259,7 +259,7 @@ To print variables' information:
 - `declare -F [variable_name]`: Print **function name(s)** of all/specific functions in the current shell.
 - ...
 
-### Work with `let` command
+### Work with `let` Command
 
 `let` command can be used to **define integer variables**, just like `declare -i`.
 
@@ -273,7 +273,7 @@ echo ${v1} # -> 15
 echo ${v2} # -> 20
 ```
 
-### Work with `readonly` command
+### Work with `readonly` Command
 
 `readonly` command can be used to **define readonly variables** or **print readonly variables' information**.
 
@@ -292,7 +292,7 @@ To print readonly variables' information:
 - `readonly -p`: Print the information of **all readonly variables** in the current shell.
 - ...
 
-### Work with `export` command
+### Work with `export` Command
 
 `export` command can be used to **define exported variables**, just like `declare -x`.
 

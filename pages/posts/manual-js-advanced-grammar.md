@@ -3796,7 +3796,7 @@ console.log(str) // -> 0..9A..Za..z
 
 The `yield*` directive delegates the execution to another generator. This term means that `yield* gen` iterates over the generator `gen` and transparently forwards its yields outside. As if the values were yielded by the outer generator.
 
-### `yield` is a Two-Way Street
+### `yield` Is a Two-Way Street
 
 `yield` is a two-way street: It not only returns the result to the outside, but also can pass the value inside the generator.
 

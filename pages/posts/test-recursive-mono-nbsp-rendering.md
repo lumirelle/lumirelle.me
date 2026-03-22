@@ -1,5 +1,5 @@
 ---
-title: Recursive Variable font (Mono) Non-Breaking Space Rendering Test
+title: Recursive Variable Font (Mono) Non-Breaking Space Rendering Test
 date: 2025-12-30T10:31+08:00
 update: 2025-12-30T22:02+08:00
 lang: en

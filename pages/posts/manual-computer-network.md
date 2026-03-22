@@ -233,7 +233,7 @@ The seven layers of computer network are:
 
 ### HTTP Protocol in Application Layer
 
-#### What is HTTP?
+#### What Is HTTP?
 
 HTTP is a **application protocol** used for defining how the hypertext from web server to client should be transferred, it uses TCP **transport protocol** and IP **Internet Protocol** under the hood (so-called TCP/IP protocol).
 

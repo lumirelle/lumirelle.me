@@ -32,7 +32,7 @@ const inputElement = document.querySelector('input')
 console.log(inputElement.value) // Accessing the 'value' property
 ```
 
-### Synchronization between Attributes and Properties
+### Synchronization Between Attributes and Properties
 
 By default, when an HTML element is created, the attributes are used to initialize the corresponding properties, for example:
 

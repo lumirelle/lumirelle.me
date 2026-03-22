@@ -9,7 +9,7 @@ type: blog+note
 
 [[toc]]
 
-## Why Encapsulation and Modularity are Necessary?
+## Why Encapsulation and Modularity Are Necessary?
 
 The only reason is **making the code separate**.
 
@@ -122,7 +122,7 @@ The worst code I had seen is one Vue page component **with more than 3000 lines 
 
 Oh yes, are you feeling hot and dry, are you eager to do encapsulation and modularity? Just wait a minute. 🥰
 
-## They are not Panaceas
+## They Are Not Panaceas
 
 Encapsulation and modularity are not panaceas, excessive encapsulation and modularity are "mud hills" too.
 

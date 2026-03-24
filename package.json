@@ -3,7 +3,7 @@
   "private": true,
   "packageManager": "bun@1.3.11",
   "scripts": {
-    "build": "bun run static && NODE_ENV=production vite-ssg build && bun run --parallel ./scripts/copy-fonts.ts ./scripts/rss.ts && ./scripts/copy-dist-redirects.ts",
+    "build": "bun run static && NODE_ENV=production vite-ssg build && bun run --parallel ./scripts/copy-fonts.ts ./scripts/rss.ts && bun run ./scripts/copy-dist-redirects.ts",
     "dev": "vite --port 3333 --open",
     "preview": "vite preview",
     "static": "premove temp && degit lumirelle/static temp --force && bun run ./scripts/copy-sponsors",

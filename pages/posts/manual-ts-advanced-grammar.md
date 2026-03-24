@@ -1,7 +1,7 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2026-02-26T12:36+08:00
+update: 2026-03-24T13:17+08:00
 lang: en
 duration: 35min
 type: note
@@ -423,11 +423,11 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
     switch (shape.kind) {
       case 'circle':
         return Math.PI * shape.radius ** 2
-      //               ^?
+      //                 ^?
       // ...
       case 'square':
         return shape.sideLength ** 2
-      //     ^?
+      //       ^?
       // ...
       default: {
         const _exhaustiveCheck: never = shape

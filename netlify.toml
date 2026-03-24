@@ -3,7 +3,7 @@ publish = "dist"
 command = "bun run build"
 
 [build.environment]
-BUN_VERSION = "1.3.9"
+BUN_VERSION = "1.3.11"
 
 [[headers]]
 for = "/assets/*"

@@ -13,58 +13,63 @@ type: note
 
 I know Windows is the best OS to play games, but the worst OS to develop.
 
-If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development.
+If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development. 🥰
 
-## First Step: Reinstall Clean Windows
+## First Step: Reinstall a Clean Windows
 
-We can use [Ventoy](https://www.ventoy.net/en/download.html) to make a bootable USB drive to reinstall Windows. This allows us to decide which versiona/edition of Windows to use.
+We can use [Ventoy](https://www.ventoy.net/en/download.html) with a Windows ISO file to make a bootable USB drive to reinstall Windows. This allows us to decide which versiona/edition of Windows to use.
 
 Before that, we need install and set up Ventoy in your USB flash drive with a Windows ISO file.
 
-### Install and Set up Ventoy
+### Install & Setup Ventoy
 
-Insert your USB flash driver, follow the steps in the [official document](https://www.ventoy.net/en/doc_start.html) to install and set up Ventoy.
+Insert your USB flash driver, then just follow the steps in [Ventoy official document](https://www.ventoy.net/en/doc_start.html).
 
 ### Download Windows ISO
 
-For developers, it's recommended to use the latest professional edition of Windows.
+> [!Note]
+>
+> I only show the links for Windows 11, because I only use Windows 11.
+>
+> If you want to use back Windows 10 / 7 / etc., you can also try to find them from [Microsoft official website](https://www.microsoft.com/en-us/software-download/) or [Mass Grave](https://massgrave.dev/) by yourself.
 
-From Microsoft (Official):
+For developers, it's recommended to use the latest **professional edition** of Windows.
 
-- [Windows 11 ISO > Download Windows 11 Disk Image (ISO) for xxx devices](https://www.microsoft.com/en-us/software-download/windows11)
+To download ISO from Microsoft (Official):
 
-From Mass Grave (Unofficial):
+- [Windows 11 ISO > Download Windows 11 Disk Image (ISO) for XXX devices](https://www.microsoft.com/en-us/software-download/windows11)
+
+To download ISO from Mass Grave (Unofficial):
 
 - [Windows 11 ISO](https://massgrave.dev/windows_11_links)
-- [Windows 10 ISO](https://massgrave.dev/windows_10_links)
 
 ### Make a Bootable USB Drive
 
-Move the downloaded Windows ISO file to the USB flash drive (any partition).
+First, move the downloaded Windows ISO file to the USB flash drive (any partition).
 
-> [!Note]
+> [!Caution]
 >
-> If you have multiple partitions on your USB flash drive, please remember the partition where Ventoy is installed, because you need to choose the right partition in the boot menu later.
+> If you have **multiple partitions** on your USB flash drive, please **remember the partition where Ventoy is installed**, because you need to choose the right partition in the boot menu later.
 
-Insert the USB flash drive, restart your computer and enter BIOS:
+Then, insert the USB flash drive, restart your computer and enter BIOS:
 
-1. Make sure you disable the "Secure Boot" option in BIOS, if not, you will be not allowed to boot Ventoy, and get an "security violation" error. You can enable it after the installation if you want;
-2. Choose your USB flash drive (with the right partition where Ventoy is installed if there are more than one) in the boot menu;
-3. After Ventoy starts up, choose the Windows ISO and just starts the reinstall process.
+1. Make sure you **disable the "Secure Boot" option** in BIOS, if not, you will be not allowed to boot Ventoy, and get an "security violation" error. You can re-enable it after the installation as your need;
+2. Choose your USB flash drive (**with the right partition** where Ventoy is installed if there are more than one) in the boot menu;
+3. After Ventoy starts up, just choose the Windows ISO to start the reinstall.
 
 Then, customize your Windows installation options and wait for the installation to complete.
 
-For my own case, I prefer to use Windows 11 Pro edition (without "N"), and create one and only one partition for each disk.
+For my own case, I prefer to use **Windows 11 Pro edition (without "N" mark)**, and **create one and only one partition for each disk**. Different pepole may have different preferences, I use them because: Pro edition has more out of box presets for developers, and for modern systems, make multiple partitions on one disk is really no reason and no benefit.
 
-What's more, for better Windows user account naming, I prefer to use local account instead Microsoft account to set up Windows (Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, **before you entering the account setup step**):
+What's more, for better Windows user account naming, I prefer to **use local account** to setup Windows, instead of Microsoft account. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, **before you entering the account setup step (If you have entered that step, please return to the previous one)**:
 
 ```cmd
 start ms-cxh:localonly
 ```
 
-## Second Step: Setting up System Preferences
+## Second Step: Setup System Preference
 
-Just follow the steps below, clean up the annoyed system bundled software, and install tools you preferred. 😍
+Just follow the steps below, clean up the annoyed system bundled softwares, and install the softwares you preferred. 😍
 
 ### Learn How to Use winget
 
@@ -122,7 +127,7 @@ Install with exact ID match:
 ```nu
 winget add --exact --id <PACKAGE_ID>
 # Or
-winget add -e -id <PACKAGE_ID>
+winget add -e --id <PACKAGE_ID>
 ```
 
 Install specific version (Default is latest version):
@@ -150,7 +155,7 @@ winget <command> -?
 
 ### Prerequisite Software
 
-These software are helpful for the next steps, you can install them first:
+These software are helpful for the next steps, you should install them first:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
@@ -165,6 +170,7 @@ These software are helpful for the next steps, you can install them first:
 | KeePassXC | [Official Website](https://keepassxc.org/download/) | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | [Official Website](https://www.internetdownloadmanager.com/download.html) | Download manager, for better download experience. |
 | Visual Studio Code | [Official Website](https://code.visualstudio.com/Download) | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
+| Zed | [Official Website](https://zed.dev/) | **Still experimental.** |
 | Rime | [Official Website](https://rime.im/download/) | Input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (We use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
 | Revo Uninstaller | [Official Website](https://www.revouninstaller.com/revo-uninstaller-free-download/) | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
@@ -226,7 +232,7 @@ Install the basic software below in order:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| Brave | [Official Website](https://brave.com/download/) | [Extensions](#brave-browser) |
+| Brave | [Official Website](https://brave.com/download/) | My daily use browser. See extensions setup [here](#daily-use). |
 | RayCast | [Microsoft Store](https://apps.microsoft.com/detail/9pfxxshc64h3) | Basic Extensions: _Installed Extensions_, _Google Translate_, _GitHub_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Visual Studio Code_, _Zed_, _Regex Tester_, _DevDocs_, _Svgl_, _Search MDN_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
 | Auto Dark Mode | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435) | Save my eyes! |
 | NanaZip | [Microsoft Store](https://apps.microsoft.com/detail/9n8g7tscl18r) | / |
@@ -245,7 +251,6 @@ Install the tool software below in order:
 | QQ | [Official Website](https://im.qq.com/pcqq/index.shtml) | / |
 | Telegram | [Official Website](https://desktop.telegram.org/) | / |
 | Cursor | [Official Website](https://www.cursor.com/downloads) | Better AI experience than _Visual Studio Code_, but low compatibility and slow performance in some case. |
-| Zed | [Official Website](https://zed.dev/) | **Still experimental.** |
 | ~~WPS Office~~ | ~~[Netdisk](https://www.123pan.com/s/sXtA-iLVEh.html)~~ | ~~/~~ |
 | ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~/~~ |
 | ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~/~~ |
@@ -254,11 +259,12 @@ Install the tool software below in order:
 | Epic Games | [Official Website](https://store.epicgames.com/download) | / |
 | OBS Studio | [Official Website](https://obsproject.com/download) | / |
 
-Install the dev software (WSL / SDK / IDE) below in order:
+Install the dev software (ENV / SDK / IDE / Testing) below in order:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
 | WSL | `wsl --install` | Requires reboot. |
+| Podman Desktop | [Official Website](https://podman-desktop.io/downloads/windows) | / |
 | Bun | `sudo winget add -e --id Oven-sh.Bun --scope machine` | A faster JavaScript runtime, bundler, and package manager all in one.<br><br>If you already install this before, you can skip this time. |
 | Node.js | [Official Website](https://nodejs.org/en/download/)<br><br>Setup: `npm i corepack@latest npm@latest esbuild -g`<br><br>Enable corepack: `corepack enable` | I prefer the **portable edition**. |
 | Zig | `sudo winget add -e --id zig.zig --scope machine` | I prefer this than _Rust_. |
@@ -270,8 +276,8 @@ Install the dev software (WSL / SDK / IDE) below in order:
 | JetBrains Toolbox | [Official Website](https://www.jetbrains.com/toolbox-app/) | / |
 | JetBrains IntelliJ IDEA | Install from JetBrains Toolbox. | / |
 | ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~ | / |
-| Podman Desktop | [Official Website](https://podman-desktop.io/downloads/windows) | / |
 | hyperfine | `sudo winget add -e --id sharkdp.hyperfine --scope machine` | Benchmarking. tool. |
+| Chromium | `sudo winget add -e --id Hibbiki.Chromium --scope machine` | Web app testing. See setup here [here](#development). |
 
 (Optional) Install other software below:
 
@@ -282,13 +288,13 @@ Install the dev software (WSL / SDK / IDE) below in order:
 | Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) |
 | PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) |
 
-### Brave Browser
+### Browser Setup
 
-I hate Chrome because it's too opinionated, I hate Edge because it's too heavy.
+#### Daily Use
 
-Though we have to use Chrome for development, and Edge is deeply bundled with Windows, so we have to suffer from them, but for daily use, I just want a Chromium based browser, who is tiny, clean and customizable.
+I hate _Chrome_ because it's too opinionated, I hate _Edge_ because it's too heavy.
 
-I choose Brave currently.
+For daily use, I just want a _Chromium_-based browser, who is tiny, clean and customizable. I choose _Brave_ currently.
 
 Useful extensions:
 
@@ -306,17 +312,25 @@ Useful extensions:
 | Immersive Translate | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh) | / |
 | Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen) | / |
 | Vimium C - All by Keyboard | [~](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, you should enable "Search in bookmarks or add new items", "Run on chrome://_/_ pages" and "Run on Chrome's native New Tab Page", with `#extensions-on-chrome-urls` browser flag (open new tab with url: `chrome://flags`) |
+| Refined Github | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | / |
+| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
+| Npmx redirect | [~](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Welcome Npmx! |
 
-Useful extensions for developers:
+#### Development
+
+> [!Note]
+>
+> Of course, _FireFox_ and _Edge_ are sometimes needed to test browser-specific problem.
+>
+> For _Safari_, maybe we really need a Mac computer...😇
+
+To get a clean environment for web development, I prefer to use a separate _Chromium_ browser with only the necessary extensions:
 
 | Extension | Source/Install Method | Note |
 | -- | -- | -- |
 | Vue.js Devtools (Community) | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases) | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
-| Npmx redirect | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Welcome Npmx! |
-| Cookie Editor | [~](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl) | / |
+| Cookie Editor | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl) | / |
 | SEO META in 1 CLICK | [~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc) | / |
-| Refined Github | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | / |
-| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
 
 ### Configure Windows Itself
 

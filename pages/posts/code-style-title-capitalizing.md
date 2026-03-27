@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Title Capitalizing'
 date: 2026-03-22T22:38+08:00
-update: 2026-03-22T22:38+08:00
+update: 2026-03-27T14:39+08:00
 lang: en
 duration: 1min
 type: blog+note
@@ -15,7 +15,7 @@ In English, there are different guidelines for capitalizing titles, such as [AP 
 
 To write English articles, we need to adopt a consistent title capitalization style.
 
-As my personal preference, I prefer to use Chicago Style.
+As my personal preference (also in [Vercel Design Guidelines](https://vercel.com/design/guidelines)), I prefer to use [Chicago Style](https://title.sh/).
 
 ## Basic Rules
 

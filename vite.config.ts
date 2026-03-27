@@ -13,12 +13,10 @@ import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
 import Vue from '@vitejs/plugin-vue'
 import matter from 'gray-matter'
 import MarkdownItAnchor from 'markdown-it-anchor'
-// @ts-expect-error missing types
 import MarkdownItFootNote from 'markdown-it-footnote'
 import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import MarkdownItMagicLink from 'markdown-it-magic-link'
-// @ts-expect-error missing types
 import MarkdownItTOC from 'markdown-it-table-of-contents'
 import sharp from 'sharp'
 import UnoCSS from 'unocss/vite'

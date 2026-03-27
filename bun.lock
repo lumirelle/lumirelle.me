@@ -40,6 +40,7 @@
         "@types/d3-shape": "catalog:types",
         "@types/degit": "catalog:types",
         "@types/diacritics": "catalog:types",
+        "@types/markdown-it-footnote": "catalog:types",
         "@types/markdown-it-link-attributes": "catalog:types",
         "@types/nprogress": "catalog:types",
         "@unocss/eslint-plugin": "catalog:check",
@@ -172,6 +173,7 @@
       "@types/d3-shape": "^3.1.8",
       "@types/degit": "^2.8.6",
       "@types/diacritics": "^1.3.3",
+      "@types/markdown-it-footnote": "^3.0.4",
       "@types/markdown-it-link-attributes": "^3.0.5",
       "@types/nprogress": "^0.2.3",
     },
@@ -564,6 +566,8 @@
     "@types/linkify-it": ["@types/linkify-it@5.0.0", "", {}, "sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q=="],
 
     "@types/markdown-it": ["markdown-exit@1.0.0-beta.9", "", { "dependencies": { "@types/linkify-it": "^5.0.0", "@types/mdurl": "^2.0.0", "entities": "^7.0.0", "linkify-it": "^5.0.0", "mdurl": "^2.0.0", "punycode.js": "^2.3.1", "uc.micro": "^2.1.0" } }, "sha512-5tzrMKMF367amyBly131vm6eGuWRL2DjBqWaFmPzPbLyuxP0XOmyyyroOAIXuBAMF/3kZbbfqOxvW/SotqKqbQ=="],
+
+    "@types/markdown-it-footnote": ["@types/markdown-it-footnote@3.0.4", "", { "dependencies": { "@types/markdown-it": "*" } }, "sha512-XJ6n+v+2u+2gmYLSHcxyoNT/YrgrKvHuDJQlykFjuxCQCr86P2/fx1V6/0lcKxv5cSIlCaJ6sUcNS3zDI7I+LA=="],
 
     "@types/markdown-it-link-attributes": ["@types/markdown-it-link-attributes@3.0.5", "", { "dependencies": { "@types/markdown-it": "*" } }, "sha512-VZ2BGN3ywUg7mBD8W6PwR8ChpOxaQSBDbLqPgvNI+uIra3zY2af1eG/3XzWTKjEraTWskMKnZqZd6m1fDF67Bg=="],
 

@@ -11,7 +11,7 @@
     "format": "oxfmt",
     "lint": "bun --parallel oxlint eslint",
     "lint:fix": "oxlint --fix && eslint --fix",
-    "typecheck": "vue-tsc -b --noEmit",
+    "typecheck": "vue-tsc --build --noEmit",
     "check": "bun run --parallel lint typecheck",
     "compress": "bun run ./scripts/img-compress-staged.ts",
     "photos": "bun run ./scripts/photos-manage.ts",

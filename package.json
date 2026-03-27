@@ -48,7 +48,7 @@
       "dev": {
         "@clack/prompts": "^1.1.0",
         "@iconify/json": "^2.2.455",
-        "@lumirelle/tsconfig": "^0.0.2",
+        "@lumirelle/tsconfig": "^0.1.0",
         "@octokit/core": "^7.0.6",
         "@octokit/rest": "^22.0.1",
         "degit": "^2.8.4",

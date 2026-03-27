@@ -2,7 +2,8 @@
   "extends": "@lumirelle/tsconfig/ts",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "types": ["bun", "vite-ssg"]
+    "types": ["bun", "vite-ssg"],
+    "allowJs": true
   },
   "include": ["scripts/**/*", "*.config.js", "*.config.ts", "shims-node.d.ts"]
 }

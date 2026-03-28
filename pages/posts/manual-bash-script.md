@@ -11,21 +11,34 @@ type: note
 
 ## What Is Bash?
 
-**Bash (Bourne Again Shell)** is a widely used Unix shell and even a scripting language, it's also the default integrated shell for most Linux distributions and macOS.
+**Bash (Bourne Again Shell)** is a widely used Unix **interactive shell** and even **a script language**, it's also the default integrated shell for most _Linux_ distributions and _macOS_.
 
-On Windows, you can use Bash through the **Windows Subsystem for Linux (WSL)** or **Git Bash**, this manual will use WSL as an example.
+Bash is a REPL (Read-Eval-Print Loop), which means we can execute commands directly, then wait for the output, then entering next command, and so on. It also allows us to write a bunch of predefined commands (even with enhanced control statements) in a plain text file, then execute this file directly, which is **"Bash script"**.
+
+> [!Note]
+>
+> On _Windows_, you can use Bash through **Windows Subsystem for Linux (WSL)** or **Git Bash**.
 
 ## First Bash Script
 
 > [!Note]
 >
-> Some Linux basic knowledge is required to understand this manual, like `chmod`, `ls`, `cd`, etc.
+> Some _Linux_ basic knowledges are required to understand this manual, like command `chmod`, `ls`, `cd`, etc.
 
-Bash scripts are plain text files containing a series of commands that can be executed by the Bash interpreter.
+Bash uses the `.sh` file extension.
 
 You can create and run your first Bash script by following steps:
 
-1. Open your WSL terminal (e.g., Ubuntu), it will open Bash by default.
+1. Open your terminal and ensure you are running Bash:
+
+    ```bash
+    bash
+    ```
+
+    > [!Note]
+    >
+    > "Terminal" and "shell" are different things, terminal is the interface for users to interact with the shell, and shell is the command-line interpreter that executes commands. So you can run Bash in different terminals, like _Terminal.app_ on macOS, _GNOME Terminal_ on Linux, or _Windows Terminal_ on Windows.
+
 2. Create a new file named `hello.sh` using a text editor like `vi`:
 
    ```bash
@@ -36,7 +49,7 @@ You can create and run your first Bash script by following steps:
 
    ```bash
    #!/bin/bash
-   echo "Hello, Bash!"
+   echo 'Hello, Bash!'
    ```
 
 4. Save and exit the editor (in `vi`, press `Esc`, type `:wq`, and hit `Enter`), come back to Bash.
@@ -68,133 +81,153 @@ You may have noticed the first line of the script:
 
 ```bash
 #!/bin/bash // [!code highlight]
-echo "Hello, Bash!"
+echo 'Hello, Bash!'
 ```
 
-This line is called a **shebang** (or hashbang), it tells the system which shell interpreter to use to execute the script, and it's syntaxed as `#!path_to_interpreter`.
+This line is called a **shebang** (or hashbang), it tells the system which **shell interpreter** to use to execute the script, and it's syntaxed as `#!<path_to_interpreter>`. Which means: you can execute your Bash script with other compatible shell interpreters, like `#!/bin/sh` or `#!/bin/zsh`.
 
-In this manual, we are talking about Bash scripts, so we will always use `#!/bin/bash` to specify the Bash interpreter.
+But anyway, running Bash script with Bash itself is the best choice. Most of people who love modern shells like _ZSh_, _Fish_, etc. are using them only as the interactive shell, and they still using Bash as the script interpreter, for best compatibility and stability.
 
-## Statement Separator
+## Statement
 
-In Bash, you can use the semicolon `;` to separate multiple commands on the same line, just like what JavaScript does, it can be omitted if each command is on a separate line:
+In bash, a statement can be a command call, variable declaration, etc.:
 
 ```bash
 #!/bin/bash
-echo "Hello"; echo "Bash!"
-echo "Welcome to Bash scripting."
+# Command call statement
+git commit -m 'Update README.md'
+# Variable declaration statement
+name='Bash'
+# ...
 ```
 
-## Variables
+### Statement Separator
 
-### Define Variables
-
-Like other scripting languages, you can also define variables in Bash to store data values.
-
-The syntax for defining a variable is **`variable_name=value`**, without spaces around the `=` sign:
+Bash allows you to write multiple statements in one line, and separate them with a semicolon `;`. It can be omitted if each command is on a separate line:
 
 ```bash
 #!/bin/bash
-name="World"
+echo 'Hello'; echo 'Bash!'
+echo 'Welcome to Bash scripting.'
 ```
 
-As usual, you cannot/shouldnot use keywords, special characters, space, or start with a number for variable names:
+## Variable
+
+### Define Variable
+
+Bash allows us to define variables in Bash to store values.
+
+The syntax for defining a variable is very simple: **`<variable_name>=<value>`**. Notice, any spaces around the `=` sign is not allowed:
 
 ```bash
 #!/bin/bash
-with_space = "World" # -> with_space: Command not found
-if=5                 # No error, but it's puzzling!
-var*name="Hello"     # -> var*name=Hello: Command not found
-var name="Hello"     # -> Command 'var' not found, but there are 24 similar ones.
-9var="Hello"         # -> 9var=Hello: Command not found
+# ✔️
+name='World'
+# ❌
+name_with_space = 'World'
 ```
 
-### Access Variables
-
-To access the value of a variable, you need to **prefix it with a `$`** sign:
+As usual, you cannot / shouldnot use Bash preserved keywords, commands, special characters, space, or start with a number for variable names:
 
 ```bash
 #!/bin/bash
-name="World"
+# Bash preserved keywords, no error, but it's puzzling!
+if=5
+# Commands, no error, but it's also puzzling!
+git='Hello'
+# Special characters, cause an error:
+# -> var*name=Hello: Command not found
+var*name='Hello'
+# Space, cause an error:
+# -> with_space: Command not found
+with_space = 'World'
+# Start with a number, cause an error:
+# -> 9var=Hello: Command not found
+9var='Hello'
+```
+
+### Access Variable
+
+To access the value of a variable, you need to **prefix it with a `$`** sign, this means **"evaluate"**:
+
+```bash
+#!/bin/bash
+name='World'
 echo "Hello, $name!"
 ```
 
-If there are some extra texts right after the variable, you should use curly braces `{}` to enclose the variable name, so that Bash can correctly identify it:
+If there are some extra texts right after the variable, you should use curly braces `{}` to enclose the variable name, so that Bash can correctly identify it's name:
 
 ```bash
 #!/bin/bash
-name="World"
+name='World'
 echo "Hello, ${name}s!"
 ```
 
-The best practice is **always using curly braces `{}` when accessing variables**, to avoid any potential ambiguity.
+### Access with Default Value
 
-That's it!
+You can also access a variable with default value using the following syntax:
 
-### Access With Default Values
-
-You can also access variables with default values using the following syntax:
-
-- `${variable:-default_value}`: If `value` is **unset or null**, return `default_value`, otherwise return the value of `variable`.
+- `${<variable>:-<default_value>}`: If `value` is **unset or null**, return `default_value`, otherwise return the value of `variable`.
 
   ```bash
   #!/bin/bash
-  name=${USER:-"Guest"}
-  echo "Hello, ${name}!"
+  name=${USER:-'Guest'}
+  echo "Hello, $name!"
   ```
 
-- `${variable:=default_value}`: If `value` is **unset or null**, assign `default_value` to `variable`, and then return the value of `variable`.
+- `${<variable>:=<default_value>}`: If `value` is **unset or null**, **assign** `default_value` to `variable`, and then return the value of `variable`.
 
   ```bash
   #!/bin/bash
-  name=${USER:="Guest"}
-  echo "Hello, ${name}!"
+  name=${USER:='Guest'}
+  echo "Hello, $name!"
   ```
 
-- `${variable:+alternate_value}`: If `value` is **set and not null**, return `alternate_value`, otherwise return empty value.
+- `${<variable>:+<alternate_value>}`: If `value` is **set and not null**, return `alternate_value`, otherwise return empty value.
 
   ```bash
   #!/bin/bash
-  name=${USER:+"Registered User"}
-  echo "Hello, ${name}!"
+  name=${USER:+'Registered User'}
+  echo "Hello, $name!"
   ```
 
-- `${variable:?error_message}`: If `value` is **unset or null**, print `error_message` and exit the script.
+- `${<variable>:?<error_message>}`: If `value` is **unset or null**, print `error_message` and exit the script.
 
   ```bash
   #!/bin/bash
-  name=${USER:?"Error: USER variable is not set!"}
-  echo "Hello, ${name}!"
+  name=${USER:?'Error: USER variable is not set!'}
+  echo "Hello, $name!"
   ```
 
-### Unset Variables
+### Unset Variable
 
 Bash allows you to unset (delete) a variable by using the `unset` command:
 
 ```bash
 #!/bin/bash
-name="World"
-echo "Hello, ${name}!"  # -> Hello, World!
+name='World'
+echo "Hello, $name!"  # -> Hello, World!
 
 unset name
-echo "Hello, ${name}!"  # -> Hello, !
+echo "Hello, $name!"  # -> Hello, !
 ```
 
-Of course, [readonly variables](#work-with-declare-command) cannot be unset.
+Of course, [readonly variable](#work-with-declare-command) cannot be unset.
 
 ### Work with `declare` Command
 
-`declare` command can be used to **define variables with some special logic** or **print variables' information**.
+`declare` command can be used to **define variables with some special logic (including changing data types)** or **print variables' information**.
 
-To define variables:
+To define special variables:
 
 - `declare -i <variable_name>=<value>`: Define an **integer** variable, so that you can apply arithmetic operations on them directly.
 
   ```bash
   #!/bin/bash
   declare -i count=10
-  count=${count}+5
-  echo ${count} # -> 15
+  count=$count+5
+  echo $count # -> 15
   # if you define `count` without `-i`, the result will be string concat: `10+5`
   ```
 
@@ -202,34 +235,34 @@ To define variables:
 
   ```bash
   #!/bin/bash
-  declare -l lname="HELLO"
-  echo ${lname} # -> hello
+  declare -l lname='HELLO'
+  echo $lname # -> hello
   ```
 
 - `declare -u <variable_name>=<value>`: Define an **uppercase** string variable, all assigned values will be converted to uppercase string.
 
   ```bash
   #!/bin/bash
-  declare -u uname="hello"
-  echo ${uname} # -> HELLO
+  declare -u uname='hello'
+  echo $uname # -> HELLO
   ```
 
-- `declare -a <variable_name>=<value>`: Define an [**indexed array**](#indexed-arrays) variable.
+- `declare -a <variable_name>=<value>`: Define an [**indexed array**](#indexed-array) variable.
 
   ```bash
   #!/bin/bash
-  declare -a fruits=("Apple" "Banana" "Blueberry")
+  declare -a fruits=('Apple' 'Banana' 'Blueberry')
   echo ${fruits[@]} # -> Apple Banana Blueberry
   ```
 
-- `declare -A <variable_name>=<value>`: Define an [**associative array**](#associative-arrays) variable.
+- `declare -A <variable_name>=<value>`: Define an [**associative array (object)**](#associative-array) variable.
 
   ```bash
   #!/bin/bash
   declare -A colors
-  colors["apple"]="red"
-  colors["banana"]="yellow"
-  colors["blueberry"]="blue"
+  colors['apple']='red'
+  colors['banana']='yellow'
+  colors['blueberry']='blue'
   echo ${colors[@]} # -> red blue yellow
   ```
 
@@ -245,7 +278,7 @@ To define variables:
 
   ```bash
   #!/bin/bash
-  declare -x MY_VAR="Hello"
+  declare -x MY_VAR='Hello'
   bash -c 'echo $MY_VAR' # -> Hello
   ```
 
@@ -255,13 +288,19 @@ To print variables' information:
 
 - `declare`: Print the information of all **variables and functions** in the current shell.
 - `declare -p <variable_name>`: Print the information of **specific variable**.
-- `declare -f [variable_name]`: Print the information of **all/specific function(s)** in the current shell.
-- `declare -F [variable_name]`: Print **function name(s)** of all/specific functions in the current shell.
+- `declare -f [variable_name]`: Print the information of **all / specific function(s)** in the current shell.
+- `declare -F [variable_name]`: Print **function name(s)** of all / specific functions in the current shell.
 - ...
 
 ### Work with `let` Command
 
-`let` command can be used to **define integer variables**, just like `declare -i`.
+`let` command can be used to **evaluate arithmetic expressions**:
+
+```bash
+#!/bin/bash
+let 'count = 5 + 1'
+echo $count # -> 6
+```
 
 And multiple operations can be performed in one `let` command by separating them with spaces:
 
@@ -269,9 +308,21 @@ And multiple operations can be performed in one `let` command by separating them
 #!/bin/bash
 let count=10
 let v1=count+5 v2=count*2
-echo ${v1} # -> 15
-echo ${v2} # -> 20
+echo $v1 # -> 15
+echo $v2 # -> 20
 ```
+
+> [!Caution]
+>
+> The variable defined by `let` command still in string type. If you applied arithmetic operations directly on them, maybe you will get unexpected results:
+>
+> ```bash
+> #!/bin/bash
+> let 'count = 5 + 1'
+> echo $count # -> 6
+> count=$count+2
+> echo $count # -> 6+2, not 8
+> ```
 
 ### Work with `readonly` Command
 
@@ -298,8 +349,8 @@ To print readonly variables' information:
 
 ```bash
 #!/bin/bash
-export MY_VAR="Hello"
-bash -c 'echo $MY_VAR' # -> Hello
+export MY_VAR='Hell'
+bash -c "echo $MY_VAR" # -> Hello
 ```
 
 ### Special Variables
@@ -315,21 +366,17 @@ In shell environment:
 - `$-`: The **current shell options**.
 - ...
 
-In script environment, including all above plus:
+In script environment, including all above, plus with:
 
 - `$0`: The **name of the script**.
 - `$1`, `$2`, ...: The first, second, ... **command-line arguments** passed to the script.
 
   > [!Note]
   >
-  > If the arguments are more than 9, you need to use `${10}`, `${11}`, ... to access them.
+  > If the arguments are more than 9, you need to bracket them like `${10}`, `${11}`.
 
 - `$#`: The **number of command-line arguments** passed to the script.
 - `$@`: All command-line arguments passed to the script as **separate words**.
-
-  ```bash
-  ./test.sh arg1 "arg two" arg3
-  ```
 
   ```bash
   #!/bin/bash
@@ -339,11 +386,11 @@ In script environment, including all above plus:
   #    @ 'arg3'
   ```
 
-- `$*`: All command-line arguments passed to the script as **a single word**.
-
   ```bash
-  ./test.sh arg1 "arg two" arg3
+  ./test.sh arg1 'arg two' arg3
   ```
+
+- `$*`: All command-line arguments passed to the script as **a single word**.
 
   ```bash
   #!/bin/bash
@@ -351,55 +398,60 @@ In script environment, including all above plus:
   # -> * 'arg1 arg two arg3'
   ```
 
+  ```bash
+  ./test.sh arg1 'arg two' arg3
+  ```
+
 - ...
 
-## Data Types
+## Data Type
 
-Likes JavaScript, Bash is dynamically typed, that's means a variable can hold values of different data types at different times during execution.
+Likes most of script languages, Bash is dynamically typed, that's means a common variable (not declared by `declare` or related commands, they will add special logic to the variable, we mentioned this before) can hold values of different data types at different times during execution.
 
 There are totally four data types in Bash: **string**, **integer**, **boolean** and **array**.
 
 ### String
 
-#### Plain Text Strings
+#### Plain Text String
 
-In Bash, a plain text will be treated as a string by default:
+In Bash, a plain text will be treated as a string by default, no need of quotes. What's more, the `+` operator for strings will concat them instead of doing arithmetic operations, even if the string looks like a number:
 
 ```bash
 #!/bin/bash
+# A plain text is treated as a string by default, no need of quotes
 str1=HelloWorld
-str1=${str1}+1
-echo ${str1} # -> HelloWorld+1
+str1=$str1+1
+echo $str1 # -> HelloWorld+1
 
+# Even if the string looks like a number, it will still be treated as a string,
+# and `+` operator will concat them instead of doing arithmetic operations
 str2=1
-str2=${str2}+1
-echo ${str2} # -> 1+1
+str2=$str2+1
+echo $str2 # -> 1+1
 ```
 
-> [!Note]
->
-> If you need to define a integer variable, you should use `declare -i` or `let` command, see [Work with `declare` command](#work-with-declare-command) and [Work with `let` command](#work-with-let-command) sections for more detail.
-
-If there are spaces in the text, you need to use quotes or double quotes to enclose it:
+Only if there are spaces in the text, you need to use quotes to enclose it:
 
 ```bash
 #!/bin/bash
-str="Hello World"
-echo ${str} # -> Hello World
+str='Hello World'
+echo $str # -> Hello World
 ```
 
 > [!Note]
 >
-> For my own opinion, surrounding strings with quotes as possible is the best practice in Bash scripting.
+> For my own opinion, surrounding strings with quotes as possible is the best practice in Bash scripting. This helps the code to get more readable and maintainable.
 
 #### Quotes vs Double Quotes
 
-- Using **Quotes**: Strings defined with quotes will treat **everything literally**, including special characters like `$`, `\`, and backticks `` ` ``.
+Bash allows us use both **quotes** and **double quotes** to enclose a string, but they behave differently when it comes to special characters:
+
+- Using **Single Quotes**: Strings defined with single quotes will treat **everything literally**, including special characters like `$`, `\`, and backticks `` ` ``.
 
   ```bash
   #!/bin/bash
   str='Hello, $USER! \n Today is `date`.'
-  echo -e ${str}  # -> Hello, $USER! \n Today is `date`.
+  echo -e $str  # -> Hello, $USER! \n Today is `date`.
   ```
 
 - Using **Double Quotes**: Strings defined with double quotes will **interpret** special characters like `$`, `\`, and backticks `` ` ``.
@@ -407,13 +459,13 @@ echo ${str} # -> Hello World
   ```bash
   #!/bin/bash
   str="Hello, $USER! \n Today is `date`."
-  echo -e ${str} # -> Hello, xxx!
-                 #    Today is Mon Dec 2 10:00:00 UTC 2025.
+  echo -e $str # -> Hello, xxx!
+               #    Today is Mon Dec 2 10:00:00 UTC 2025.
   ```
 
 #### Get Length of String
 
-Bash has a built-in way to get the length of a value: `${#variable_name}`, and it follows the rules below:
+Bash has a built-in way to get the length of a value, **not only string value**: `${#<variable_name>}`, and it follows the rules below:
 
 - If the value is a **string**, Bash will return the length of the string.
 - If the value is a **integer**, Bash will treat it as a **string**.
@@ -454,7 +506,7 @@ In this manual, if we talk about "arrays", it means both indexed arrays and asso
 
 Additionally, we can just treat a associative array as a string indexed array.
 
-#### Indexed Arrays
+#### Indexed Array
 
 Indexed arrays are the common arrays we often talk about:
 
@@ -493,7 +545,7 @@ declare -a fruits2=("Blueberry" [5]="Apple" "Banana")
 #    fruits[6]="Banana"
 ```
 
-#### Associative Arrays
+#### Associative Array
 
 Associative arrays are like dictionaries or maps in other programming languages, they use key-value pairs, can only create elements one by one:
 

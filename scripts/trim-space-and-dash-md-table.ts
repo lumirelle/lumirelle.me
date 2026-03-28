@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import { argv } from 'node:process'
 
-const p = argv[1]
+const p = argv[2]
 
 if (!p) {
   console.error('Usage: node trim-space-and-dash-md-table.ts <file>')
@@ -13,7 +13,7 @@ const regCell = /^:?-{2,}:?$/
 const s = fs.readFileSync(p, 'utf8')
 const out = s.split(/\r?\n/).map((line) => {
   const m = line.match(regSpace)
-  if (!m?.[1] || !m[2])
+  if (m?.[1] == null || !m[2])
     return line
   const indent = m[1]
   const cells = m[2].split('|').map(c => c.trim()).map((c) => {

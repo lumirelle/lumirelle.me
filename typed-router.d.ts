@@ -83,6 +83,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/code-style-directory-names': RouteRecordInfo<
+      '/posts/code-style-directory-names',
+      '/posts/code-style-directory-names',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/code-style-encapsulation-and-modularity': RouteRecordInfo<
       '/posts/code-style-encapsulation-and-modularity',
       '/posts/code-style-encapsulation-and-modularity',
@@ -309,6 +316,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/index.md': {
       routes:
         | '/posts/'
+      views:
+        | never
+    }
+    'pages/posts/code-style-directory-names.md': {
+      routes:
+        | '/posts/code-style-directory-names'
       views:
         | never
     }

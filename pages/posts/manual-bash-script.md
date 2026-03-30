@@ -1,9 +1,9 @@
 ---
 title: Bash Script Manual
 date: 2025-12-01T15:50+08:00
-update: 2025-12-03T10:29+08:00
+update: 2026-03-30T15:21+08:00
 lang: en
-duration: 25min
+duration: 30min
 type: note
 ---
 
@@ -221,7 +221,7 @@ Of course, [readonly variable](#work-with-declare-command) cannot be unset.
 
 To define special variables:
 
-- `declare -i <variable_name>=<value>`: Define an **integer** variable, so that you can apply arithmetic operations on them directly.
+- `declare -i <variable_name>=<value>`: Define an **integer** variable, all assigned values will be evaluated as arithmetic expressions:
 
   ```bash
   #!/bin/bash
@@ -408,7 +408,7 @@ In script environment, including all above, plus with:
 
 Likes most of script languages, Bash is dynamically typed, that's means a common variable (not declared by `declare` or related commands, they will add special logic to the variable, we mentioned this before) can hold values of different data types at different times during execution.
 
-There are totally four data types in Bash: **string**, **integer**, **boolean** and **array**.
+There are totally four data types in Bash: **string**, **number** and **array**.
 
 ### String
 
@@ -485,7 +485,7 @@ echo ${#str} # -> 13
 
 #### Substring Extraction
 
-To extract a substring from a string variable, you can use the syntax `${variable_name:position:[length]}`:
+To extract a substring from a string variable, you can use the syntax `${<variable_name>:<position>:[<length>]}`:
 
 > [!Note]
 >
@@ -498,13 +498,72 @@ echo ${str:7:5} # -> World
 echo ${str:7}   # -> World!
 ```
 
+#### Concat Strings
+
+To concat strings to a new variable, you can simply put them together:
+
+```bash
+str1='Hello'
+str2='World'
+
+str3=$str1$str2
+echo $str3 # -> HelloWorld
+```
+
+To concat another string to a existing string, you can use `+=` operator:
+
+```bash
+str1='Hello'
+str1+='World'
+echo $str1 # -> HelloWorld
+```
+
+### Number
+
+Number in Bash can be used for arithmetic operations. It can be produced by:
+
+1. Assign a arithmetic expression to a variable defined with `declare -i`:
+
+    ```bash
+    declare -i num1=5
+    num1=num1+10
+    echo $num1 # -> 15
+    ```
+
+2. Use `let` command to evaluate an arithmetic expression:
+
+    ```bash
+    let num2=5+10
+    echo $num2 # -> 15
+    ```
+
+3. Use `$(())` syntax to evaluate an arithmetic expansion:
+
+    ```bash
+    num3=$((5 + 10))
+    echo $num3 # -> 15
+    ```
+
+#### Evaluate Arithmetic Expression
+
+By default, Bash treat text as string, even if it looks like a number or a arithmetic expression. To evaluate an arithmetic expression, you have to use a special `$((...))` syntax:
+
+```bash
+#!/bin/bash
+echo '5 + 10' # -> 5 + 10
+echo $((5 + 10)) # -> 15
+
+echo '5 * 10' # -> 5 * 10
+echo $((5 * 10)) # -> 50
+```
+
 ### Array
 
-Bash has two kinds of array: **indexed arrays** and **associative arrays**.
+Bash has two kinds of array: **indexed array** and **associative array**.
 
-In this manual, if we talk about "arrays", it means both indexed arrays and associative arrays, unless otherwise specified.
+In this manual, if we talk about "arrays", it means both indexed array and associative array, unless otherwise specified.
 
-Additionally, we can just treat a associative array as a string indexed array.
+Additionally, we can just treat a associative array as a string indexed array, even a object (A OOP (Object-Oriented Programming) concept).
 
 #### Indexed Array
 
@@ -513,111 +572,92 @@ Indexed arrays are the common arrays we often talk about:
 ```bash
 #!/bin/bash
 declare -a fruits
-fruits[0]="Apple"
-fruits[1]="Banana"
-fruits[2]="Blueberry"
+fruits[0]='Apple'
+fruits[1]='Banana'
+fruits[2]='Blueberry'
 ```
 
 You can also define indexed arrays in a more concise way:
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 ```
 
 Even with custom element index:
 
 ```bash
 #!/bin/bash
-declare -a fruits1=([2]="Blueberry" [0]="Apple" [1]="Banana")
-# => fruits[0]="Apple"
-#    fruits[1]="Banana"
-#    fruits[2]="Blueberry"
-```
-
-Even with sparse indexes:
-
-```bash
-#!/bin/bash
-declare -a fruits2=("Blueberry" [5]="Apple" "Banana")
-# => fruits[0]="Blueberry"
-#    fruits[5]="Apple"
-#    fruits[6]="Banana"
+declare -a fruits1=([2]='Blueberry' [0]='Apple' [1]='Banana')
+# => fruits[0]='Apple'
+#    fruits[1]='Banana'
+#    fruits[2]='Blueberry'
+declare -a fruits2=('Blueberry' [5]='Apple' 'Banana')
+# => fruits[0]='Blueberry'
+#    fruits[5]='Apple'
+#    fruits[6]='Banana'
 ```
 
 #### Associative Array
 
-Associative arrays are like dictionaries or maps in other programming languages, they use key-value pairs, can only create elements one by one:
+Associative arrays are like dictionaries, maps or objects in other programming languages, they use key-value pairs, can only create elements one by one:
 
 ```bash
 #!/bin/bash
-# Define an associative array, use 'declare -A'
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
 ```
 
-#### Access Array Elements
+#### Access Array Element
 
-To access values in an indexed array, use the syntax `${array_name[index]}`:
+To access values in an indexed array, use the syntax `${<array_name>[<index>]}`:
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 echo ${fruits[0]}  # -> Apple
 echo ${fruits[1]}  # -> Banana
 echo ${fruits[2]}  # -> Blueberry
 ```
 
-To access values in an associative array, use the syntax `${array_name[key]}`:
+To access values in an associative array, use the syntax `${<array_name>[<key>]}`:
 
 ```bash
 #!/bin/bash
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
-echo ${colors["apple"]}   # -> red
-echo ${colors["banana"]}  # -> yellow
-echo ${colors["blueberry"]}  # -> blue
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
+echo ${colors['apple']}   # -> red
+echo ${colors['banana']}  # -> yellow
+echo ${colors['blueberry']}  # -> blue
 ```
 
-Specially, if you access the **indexed array** with it's variable name directly, it will return the value of the **first element**, but **associative arrays** will return **empty value**:
+Specially, if you access the **indexed array** with it's variable name directly, it will return the value of the **first element**, but **associative arrays** will return **empty value**, because this equivalent to `${colors[0]}`, and there is no element with index `0` in the associative array:
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 echo ${fruits}  # -> Apple
 
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
 echo ${colors}  # -> (empty value)
 ```
 
-`${array_name[@]}` and `${array_name[*]}` can be used to access **all values** in both indexed and associative arrays, they will expand the array into **a plain text with multiple words**:
+`${<array_name>[@]}` and `${<array_name>[*]}` can be used to access **all elements** in both indexed and associative arrays, just behaves like the special variables `$@` and `$*`. `${<array_name>[@]}` will treat each element as a separate word, while `${<array_name>[*]}` will treat all elements as a single word:
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
-echo ${fruits[@]}  # -> Apple Banana Blueberry
-echo ${fruits[*]}  # -> Apple Banana Blueberry
+declare -a fruits=('Apple Pie' 'Banana Split' 'Blueberry Muffin')
 
-declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
-echo ${colors[@]}  # -> red blue yellow
-echo ${colors[*]}  # -> red blue yellow
-```
-
-And quoted version `"${array_name[@]}"` and `"${array_name[*]}"` behave differently than unquoted versions `${fruits[@]}` when used in `for ... in ...` loops:
-
-```bash
-#!/bin/bash
-declare -a fruits=("Apple Pie" "Banana Split" "Blueberry Muffin")
+#             'Apple Pie' 'Banana Split' 'Blueberry Muffin'
+#             |
+#             V
 for fruit in "${fruits[@]}"; do
   echo $fruit
 done
@@ -625,8 +665,26 @@ done
 #    Banana Split
 #    Blueberry Muffin
 
+#             'Apple Pie Banana Split Blueberry Muffin'
+#             |
+#             V
+for fruit in "${fruits[*]}"; do
+  echo $fruit
+done
+# -> Apple Pie Banana Split Blueberry Muffin
+```
+
+What's more, **quote them with double quotes `"`** is required to **ensure the correct separation of result**:
+
+```bash
+#!/bin/bash
+declare -a fruits=('Apple Pie' 'Banana Split' 'Blueberry Muffin')
+
+#             Apple Pie Banana Split Blueberry Muffin
+#             |
+#             V
 for fruit in ${fruits[@]}; do
-    echo $fruit
+  echo $fruit
 done
 # -> Apple
 #    Pie
@@ -635,11 +693,9 @@ done
 #    Blueberry
 #    Muffin
 
-for fruit in "${fruits[*]}"; do
-  echo $fruit
-done
-# -> Apple Pie Banana Split Blueberry Muffin
-
+#             Apple Pie Banana Split Blueberry Muffin
+#             |
+#             V
 for fruit in ${fruits[*]}; do
   echo $fruit
 done
@@ -651,62 +707,22 @@ done
 #    Muffin
 ```
 
-That's because:
-
-```bash
-"${fruits[@]}"  # => "Apple Pie" "Banana Split" "Blueberry Muffin"
-
-${fruits[@]}    # => Apple Pie Banana Split Blueberry Muffin
-
-"${fruits[*]}"  # => "Apple Pie Banana Split Blueberry Muffin"
-
-${fruits[*]}    # => Apple Pie Banana Split Blueberry Muffin
-```
-
-And ([why?](#for--in--loops)):
-
-```bash
-for i in "Apple Pie" "Banana Split" "Blueberry Muffin"; do
-    echo $i
-done
-# -> Apple Pie
-#    Banana Split
-#    Blueberry Muffin
-
-for i in "Apple Pie Banana Split Blueberry Muffin"; do
-    echo $i
-done
-# -> Apple Pie Banana Split Blueberry Muffin
-
-for i in Apple Pie Banana Split Blueberry Muffin; do
-    echo $i
-done
-# -> Apple
-#    Pie
-#    Banana
-#    Split
-#    Blueberry
-#    Muffin
-```
-
-Smart you will found out that the special variables `$@` and `$*` are behaved the same as quoted versions!
-
 #### Get Length of Array
 
-For strings, you can simply use `${#variable_name}` to get the length of the string; However, for arrays, use the variable name directly will get the first element (for indexed arrays) or an empty value (for associative arrays), which is not what we want.
+For strings, you can simply use `${#<variable_name>}` to get the length of the string; However, for arrays, use the variable name directly will get the first element (for indexed arrays) or an empty value (for associative arrays), which is not what we want.
 
-So, to get the length of an array, you should use `${#array_name[@]}` or `${#array_name[*]}` instead:
+To get the length of an array, we need to access all of its elements: `${#<array_name>[@]}` or `${#<array_name>[*]}`.
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 echo ${#fruits[@]}  # -> 3
 echo ${#fruits[*]}  # -> 3
 
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
 echo ${#colors[@]}  # -> 3
 echo ${#colors[*]}  # -> 3
 ```
@@ -715,14 +731,14 @@ In advanced usage, you can also get the length of a specific element in an array
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 echo ${#fruits[0]}  # -> 5
 
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
-echo ${#colors["banana"]}  # -> 6
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
+echo ${#colors['banana']}  # -> 6
 ```
 
 #### Get Filled Indexes/Keys of Array
@@ -731,41 +747,41 @@ You can use `${!array_name[@]}` or `${!array_name[*]}` to get all **filled index
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 echo ${!fruits[@]}  # -> 0 1 2
 echo ${!fruits[*]}  # -> 0 1 2
 
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
 echo ${!colors[@]}  # -> apple banana blueberry
 echo ${!colors[*]}  # -> apple banana blueberry
 ```
 
 #### Remove Elements from Array
 
-Just like removing variables, you can use the `unset` command to remove elements from an array:
+Just like removing variables, you can use the `unset` command to remove elements from an array (no need of `$` sign):
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry')
 unset fruits[1]
 echo ${fruits[@]}  # -> Apple Blueberry
 echo ${!fruits[@]}  # -> 0 2
 
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
-unset colors["banana"]
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
+unset colors['banana']
 echo ${colors[@]}  # -> red blue
 echo ${!colors[@]}  # -> apple blueberry
 ```
 
-#### Array Values Extraction
+#### Array Element Extraction
 
-Like string, to extract a part of values from an array, you can use the syntax `${variable_name[@]:position:[length]}` or `${variable_name[*]:position:[length]}`:
+Like string, to extract a part of elements from an array, you can use the syntax `${<variable_name>[@]:<position>:[<length>]}` or `${<variable_name>[*]:<position>:[<length>]}`:
 
 > [!Note]
 >
@@ -773,36 +789,58 @@ Like string, to extract a part of values from an array, you can use the syntax `
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana" "Blueberry" "Durian" "Elderberry")
+declare -a fruits=('Apple' 'Banana' 'Blueberry' 'Durian' 'Elderberry')
 echo ${fruits[@]:2:2} # -> Blueberry Durian
 echo ${fruits[@]:2}   # -> Blueberry Durian Elderberry
 
 declare -A colors
-colors["apple"]="red"
-colors["banana"]="yellow"
-colors["blueberry"]="blue"
-colors["durian"]="green"
-colors["elderberry"]="purple"
+colors['apple']='red'
+colors['banana']='yellow'
+colors['blueberry']='blue'
+colors['durian']='green'
+colors['elderberry']='purple'
 echo ${colors[@]:2:2} # -> blue green
 echo ${colors[@]:2}   # -> blue green purple
 ```
 
-#### Append Elements to Indexed Array
+#### Concat Indexed Arrays
 
-To append elements to an **indexed array**, you can use `+=` operator:
+To concat indexed arrays, you can use the syntax `<new_array>=("${<array1>[@]}" "${<array2>[@]}")`:
 
 ```bash
 #!/bin/bash
-declare -a fruits=("Apple" "Banana")
-fruits+=("Blueberry" "Durian")
-echo ${fruits[@]}  # -> Apple Banana Blueberry Durian
+declare -a fruits=('Apple' 'Banana')
+declare -a more_fruits=('Blueberry' 'Durian')
+fruits=("${fruits[@]}" "${more_fruits[@]}")
+# -> @ Apple
+#    @ Banana
+#    @ Blueberry
+#    @ Durian
+for fruit in "${fruits[@]}"; do
+  echo "@ $fruit"
+done
 ```
 
-## Functions
+To concat another indexed array to an existing one, you can use `+=` operator:
+
+```bash
+#!/bin/bash
+declare -a fruits=('Apple' 'Banana')
+fruits+=('Blueberry' 'Durian')
+# -> @ Apple
+#    @ Banana
+#    @ Blueberry
+#    @ Durian
+for fruit in "${fruits[@]}"; do
+  echo "@ $fruit"
+done
+```
+
+## Function
 
 Bash allows you to define functions to organize your code into reusable blocks.
 
-### Define Functions
+### Define Function
 
 To define a function in Bash, the simplest syntax is:
 
@@ -810,7 +848,7 @@ To define a function in Bash, the simplest syntax is:
 #!/bin/bash
 greet() {
   echo "Hello, $1!"
-  echo "Welcome to Bash scripting."
+  echo 'Welcome to Bash scripting.'
 }
 ```
 
@@ -822,31 +860,31 @@ Just like variables, you can unset (delete) a function by using the `unset -f` c
 #!/bin/bash
 greet() {
   echo "Hello, $1!"
-  echo "Welcome to Bash scripting."
+  echo 'Welcome to Bash scripting.'
 }
-greet "Alice" # -> Hello, Alice!
+greet 'Alice' # -> Hello, Alice!
               #    Welcome to Bash scripting.
 unset -f greet
-greet "Bob"   # -> -bash: greet: command not found
+greet 'Bob'   # -> -bash: greet: command not found
 ```
 
 ### Parameters
 
-Just like scripts, functions can also accept command-line arguments, which can be accessed using special variables:
+Just like scripts, functions can also accept arguments, which we called **parameters**, and can be accessed using special context variables:
 
-- `$0`: The **name of the script**.
-- `$1`, `$2`, ...: The first, second, ... **arguments** passed to the function.
+- `$0`: The **name of the function**.
+- `$1`, `$2`, ...: The first, second, ... **parameters** passed to the function.
 
   > [!Note]
   >
-  > If the arguments are more than 9, you need to use `${10}`, `${11}`, ... to access them.
+  > If the parameters are more than 9, you need to use `${10}`, `${11}`, ... to access them.
 
-- `$#`: The **number of arguments** passed to the function.
-- `$@`: All arguments passed to the function as **separate words**.
-- `$*`: All arguments passed to the function as **a single word**.
+- `$#`: The **number of parameters** passed to the function.
+- `$@`: All parameters passed to the function as **separate words**.
+- `$*`: All parameters passed to the function as **a single word**.
 - ...
 
-### Call Functions
+### Call Function
 
 To call a function, just like to call a command, the arguments can be passed after the function name and should be separated by spaces:
 
@@ -854,31 +892,30 @@ To call a function, just like to call a command, the arguments can be passed aft
 #!/bin/bash
 greet() {
   echo "Hello, $1!"
-  echo "Welcome to Bash scripting."
+  echo 'Welcome to Bash scripting.'
 }
-greet "Alice"
+greet 'Alice'
 ```
 
-### Return Values
+### Return Value
 
 Just like other scripting languages, functions can also return values using the `return` statement:
 
 ```bash
 #!/bin/bash
 add() {
-  local sum=$(($1 + $2))
-  return $sum
+  return $(($1 + $2))
 }
 add 5 10
 result=$?
 echo "The sum is: $result"  # -> The sum is: 15
 ```
 
-### Variables Scope
+### Function Variable Scope
 
 By default, variables defined inside a function are **global**, which means they can be accessed and modified outside the function.
 
-To avoid this, you can use the `local` keyword to define **local variables** inside a function:
+To avoid this, you can use the `local` keyword to define **local variables**:
 
 ```bash
 #!/bin/bash
@@ -891,98 +928,32 @@ echo $local_var   # -> (empty value)
 echo $global_var  # -> I am global
 ```
 
-## Conditional Statements
+## Conditional Judgment & Statement
 
 ### `test` Command Judgment
 
-Bash provides a built-in command named `test` to evaluate conditional expressions:
+Bash provides a built-in command named `test` to evaluate conditional expressions, it has three different syntaxes:
 
 ```bash
-#!/bin/bash
-a=5
-b=10
-test $a -lt $b
-echo $?  # -> 0 (true)
-```
-
-Another syntax for `test` command is using square brackets `[` and `]`, which is more commonly used in Bash scripts:
-
-```bash
-#!/bin/bash
-a=5
-b=10
-[ $a -lt $b ]
-echo $?  # -> 0 (true)
+test <expression>
+[ <expression> ]
+[[ <expression> ]] # Modern choice, recommended!
 ```
 
 > [!Caution]
 >
-> The spaces after `[` and before `]` are required!
+> The spaces around `<expression>` are required!
 
-If you need regex support, you can use double square brackets `[[` and `]]`:
+Why we recommend `[[` over `[`?
 
-```bash
-#!/bin/bash
-str="Hello123"
-[[ $str =~ [A-Za-z]+[0-9]+ ]]
-echo $?  # -> 0 (true)
-```
+1. If one side of the expression expr evaluates to nothing (Null) then `[` will throw an error, `[[` will handle this automatically;
+2. To test variables you should quote the `"<variable_name>"` as they may undergo word splitting or globbing, with New test `[[` this is not necessary
 
-> [!Caution]
->
-> The spaces after `[[` and before `]]` are required too!
-
-#### Commonly Test Cases
-
-Here are some commonly test cases you may use in Bash scripts:
-
-File status:
-
-- `[ -e <file_name> ]`: File exists
-- `[ -f <file_name> ]`: File exists and is a regular file
-- `[ -d <file_name> ]`: File exists and is a directory
-- `[ -r <file_name> ]`: File is readable
-- `[ -w <file_name> ]`: File is writable
-- `[ -x <file_name> ]`: File is executable
-- `[ <file_1> -nt <file_2> ]`: File 1 is newer than File 2
-- `[ <file_1> -ot <file_2> ]`: File 1 is older than File 2
-- ...
-
-String comparison:
-
-- `[ -n <string> ]`: The length of string is greater than zero
-- `[ -z <string> ]`: The length of string is zero
-- `[ <string_1> == <string_2> ]`: String 1 is equal to String 2
-- `[ <string_1> != <string_2> ]`: String 1 is not equal to String 2
-- `[ <string_1> '<' <string_2> ]`: String 1 is less than String 2 (in ASCII order) (need to be quoted to avoid Bash treating `<` as redirection operator)
-- `[ <string_1> '>' <string_2> ]`: String 1 is greater than String 2 (in ASCII order) (need to be quoted to avoid Bash treating `>` as redirection operator)
-- ...
-
-Integer comparison:
-
-- `[ <integer_1> -eq <integer_2> ]`: Integer 1 is equal to Integer 2
-- `[ <integer_1> -ne <integer_2> ]`: Integer 1 is not equal to Integer 2
-- `[ <integer_1> -lt <integer_2> ]`: Integer 1 is less than Integer 2
-- `[ <integer_1> -le <integer_2> ]`: Integer 1 is less than or equal to Integer 2
-- `[ <integer_1> -gt <integer_2> ]`: Integer 1 is greater than Integer 2
-- `[ <integer_1> -ge <integer_2> ]`: Integer 1 is greater than or equal to Integer 2
-
-Regex match:
-
-- `[[ <string> =~ <regex_pattern> ]]`: String matches the regex pattern (another string, but treated as a regex pattern)
-
-#### Combine Test Cases
-
-You can combine multiple test cases using logical operators:
-
-- `[ ! <test_case> ]`: Logical NOT
-- `[ <test_case_1> ] && [ <test_case_2> ]`: Logical AND
-- `[ <test_case_1> ] || [ <test_case_2> ]`: Logical OR
-- ...
-
-> [!Caution]
->
-> All of the spaces above are required!
+    ```bash
+    [ "$DEMO" = 5 ]
+    [[ $DEMO == 10 ]]
+    ```
+3. Some other benefits, like support for pattern matching, etc...
 
 For example:
 
@@ -990,25 +961,147 @@ For example:
 #!/bin/bash
 a=5
 b=10
-if [ ! $a -gt $b ] && [ $a -ne 0 ]; then
-  echo "$a is not greater than $b and not zero"
-fi
+test $a -lt $b
+echo $?  # -> 0 (true)
+[ $a -lt $b ]
+echo $?  # -> 0 (true)
+[[ $a -lt $b ]]
+echo $?  # -> 0 (true)
 ```
 
-### Arithmetic Judgment
+In this manual, we always use `[[` for test cases, unless otherwise specified.
 
-If you unlike the syntax of using `test` on integers, for example:
+#### Commonly Tests
+
+Here are some commonly test cases you may use in Bash scripts:
+
+File type tests:
+
+- `-e <file>`: True if `<file>` exists
+- `-s <file> ]`: True if `<file>` exists and is not empty
+- `-d <file>`: True if `<file>` exists and is a directory
+- `-f <file>`: True if `<file>` exists and is a regular file
+- `-h <file>`: True if `<file>` exists and is a symbolic link
+- `-r <file>`: True if `<file>` is readable
+- `-w <file>`: True if `<file>` is writable
+- `-x <file>`: True if `<file>` is executable
+- ...
+
+File age tests:
+
+
+- `<file_1> -nt <file_2>`: True if `<file_1>` is newer than `<file_2>`
+- `<file_1> -ot <file_2>`: True if `<file_1>` is older than `<file_2>`
+- ...
+
+String tests:
+
+> [!Note]
+>
+> Comparisons using `[[` perform **pattern matching** against the string on the right hand side unless you quote the 'string' on the right. This prevents any characters with special meaning in pattern matching from taking effect.
+>
+> ```bash
+> #!/bin/bash
+> str='Hello, World!'
+> if [[ $str == Hello* ]]; then
+>   echo 'Matched!' # -> Matched!
+> fi
+> if [[ $str == 'Hello*' ]]; then
+>   echo 'Matched!' # -> (nothing)
+> fi
+> ```
+
+- `-z <string>`: True if the length of `<string>` is zero
+- `-n <string>`: True if the length of `<string>` is nonzero
+- `<string_1> = <string_2>`: True if `<string_1>` is equal to `<string_2>`
+- `<string_1> != <string_2>`: True if `<string_1>` is not equal to `<string_2>`
+- `<string_1> < <string_2>`: True if `<string_1>` is less than `<string_2>` (in ASCII order)
+- `<string_1> > <string_2>`: True if `<string_1>` is greater than `<string_2>` (in ASCII order)
+- ...
+
+Number tests:
+
+- `<integer_1> -eq <integer_2>`: True if `<integer_1>` is equal to `<integer_2>`
+- `<integer_1> -ne <integer_2>`: True if `<integer_1>` is not equal to `<integer_2>`
+- `<integer_1> -lt <integer_2>`: True if `<integer_1>` is less than `<integer_2>`
+- `<integer_1> -le <integer_2>`: True if `<integer_1>` is less than or equal to `<integer_2>`
+- `<integer_1> -gt <integer_2>`: True if `<integer_1>` is greater than `<integer_2>`
+- `<integer_1> -ge <integer_2>`: True if `<integer_1>` is greater than or equal to `<integer_2>`
+
+#### Regular Expression String Test
+
+> [!Note]
+>
+> **"Regular expression matching"** is different to to **"(glob) pattern matching"**!
+
+A regular expression is a pattern that describes a set of strings. For example, `^[0-9]+$` is a regular expression that matches any string that consists of one or more digits. The basic syntax of regular expressions in Bash is:
+
+- `^`: Matches the start of the string
+- `$`: Matches the end of the string
+- `?`: The preceding item is optional and will be matched at most once
+- `*`: The preceding item will be matched zero or more times
+- `+`: The preceding item will be matched one or more times
+- `{N}`: The preceding item will be matched exactly N times
+- `{N,}`: The preceding item will be matched at least N times
+- `{N,M}`: The preceding item will be matched at least N times, but not more than M times
+- `<regex_1>|<regex_2>`: Matches either `<regex_1>` or `<regex_2>`
+
+Some preset character classes:
+
+- `[[:alnum:]]`: Matches any alphanumeric character (equivalent to `[A-Za-z0-9]`)
+- `[[:alpha:]]`: Matches any alphabetic character (equivalent to `[A-Za-z]`)
+- `[[:upper:]]`: Matches any uppercase letter (equivalent to `[A-Z]`)
+- `[[:lower:]]`: Matches any lowercase letter (equivalent to `[a-z]`)
+- `[[:digit:]]`: Matches any digit character (equivalent to `[0-9]`)
+- `[[:space:]]`: Matches any whitespace character (equivalent to `[ \t\r\n\f]`)
+- ...
+
+`test` command can work string tests with regular expressions using `=~` operator:
 
 ```bash
 #!/bin/bash
-a=5
-b=10
-if [ $a -lt $b ]; then
-  echo "$a is less than $b"
+str='12345'
+if [[ $str =~ ^[0-9]+$ ]]; then
+  echo 'The string is a number.' # -> The string is a number.
+else
+  echo 'The string is not a number.'
 fi
 ```
 
-You can use arithmetic judgment with double parentheses `((` and `))`, it's more concise and easier to read:
+#### Combine Tests
+
+You can combine multiple tests like this:
+
+- `! <test_case>`: True if `<test_case>` is false
+- `( <test_case> )`: Returns the value of `<test_case>`. Useful to override the normal precedence of operators
+- `<test_case_1> && <test_case_2>`: True if both `<test_case_1>` and `<test_case_2>` are true
+- `<test_case_1> || <test_case_2>`: True if either `<test_case_1>` or `<test_case_2>` is true
+
+### Arithmetic Judgment
+
+You may notice we have to use `-gt`, `-lt`, etc. flags to compare numbers with `test` command judgement, this is because `>`, `<`, etc. signs are used for string comparison, which not totally compatible with number comparison, for example:
+
+```bash
+#!/bin/bash
+
+# -> 03 not greater than 2
+if [[ 03 > 2 ]]; then
+  echo '03 greater than 2'
+else
+  echo '03 not greater than 2'
+fi
+
+# -> 03 greater than 2
+if [[ 03 -gt 2 ]]; then
+  echo '03 greater than 2'
+else
+  echo '03 not greater than 2'
+fi
+```
+
+If you unlike the usage of those flags, prefer the usage of `>`, `<`, etc. signs, you can use `(( ... ))` syntax for arithmetic judgment:
+
+<!-- @unocss-ignore -->
 
 ```bash
 #!/bin/bash
@@ -1019,37 +1112,29 @@ if (( a < b )); then
 fi
 ```
 
-### `if` Statement
+### `if` Conditional Statement
 
 The fully syntax of an `if` statement in Bash is:
 
 ```bash
-if condition1; then
-  # commands to execute if condition1 is true
-elif condition2; then
-  # commands to execute if condition2 is true
+if <condition_expression1>; then
+  # commands to execute if <condition_expression1> is true
+elif <condition_expression2>; then
+  # commands to execute if <condition_expression2> is true
 else
   # commands to execute if none of the above conditions are true
 fi
 ```
 
-Just like other scripting languages, the `elif` and `else` parts are optional, and condition can be boolean value directly. For example:
-
-```bash
-if true; then
-  echo "This is true"
-fi
-```
-
-The different thing is the `if` statement in Bash does not support evaluate conditions natively, you need to combine it with the `test` command judgment (or its variants with square brackets) or arithmetic judgment to evaluate conditions. For example:
+The different thing is the `if` statement in Bash **does not support evaluate conditions natively**, you need to combine it with the conditional judgment to evaluate conditions. For example:
 
 ```bash
 #!/bin/bash
 a=5
 b=10
-if [ $a -lt $b ]; then
+if [[ $a -lt $b ]]; then
   echo "$a is less than $b"
-elif [ $a -eq $b ]; then
+elif [[ $a -eq $b ]]; then
   echo "$a is equal to $b"
 else
   echo "$a is greater than $b"
@@ -1064,16 +1149,16 @@ else
 fi
 ```
 
-### `case` Statement
+### `case` Conditional Statement
 
-Bash use `case` statement to execute commands based on pattern matching, like `switch` statement in other programming languages:
+Bash use `case` statement to execute commands based on [regular expression matching](#regular-expression-string-test), like `switch` statement in other programming languages but more powerful:
 
 ```bash
 case <variable> in
-  pattern1)
+  <pattern1>)
     # commands to execute if variable matches pattern1
     ;;
-  pattern2)
+  <pattern2>)
     # commands to execute if variable matches pattern2
     ;;
   *)
@@ -1082,57 +1167,9 @@ case <variable> in
 esac
 ```
 
-Patterns can receive a regex-like string, a special pattern or special pattern combinations:
-
-Regex-like string:
-
-- `*`: Match any string (including empty string)
-- `?`: Match any single character
-- ...
-
-Special patterns:
-
-- `[[:lower:]]`: Match any lowercase letter
-- `[[:upper:]]`: Match any uppercase letter
-- `[[:digit:]]`: Match any digit
-- `[[:alpha:]]`: Match any alphabetic character
-- ...
-
-Special pattern combinations:
-
-- `[[:lower:]] | [[:upper:]]`: Match any letter
-- ...
-
-For example:
-
-```bash
-#!/bin/bash
-fruit="Banana"
-case $fruit in
-  "Apple")
-    echo "You selected Apple."
-    ;;
-  "Banana")
-    echo "You selected Banana."
-    ;;
-  "Blueberry")
-    echo "You selected Blueberry."
-    ;;
-  [[:lower:]] | [[:upper:]])
-    echo "You selected a fruit unknown but it's name is in one word."
-    ;;
-  [0-9])
-    echo "That's a number, fool!"
-    ;;
-  *)
-    echo "Unknown fruit."
-    ;;
-esac
-```
-
 #### No Break `case` Statement
 
-After Bash 4.0, you can use `;;&` to create a no break `case` statement, which means after executing the commands of a matched pattern, it will continue to execute the commands of the next pattern without checking its condition:
+After Bash 4.0, you can use `;;&` to create a no break `case` statement, which means after one match, it will continue to match the patterns left:
 
 ```bash
 #!/bin/bash
@@ -1158,6 +1195,28 @@ The output will be:
 'a' is a hexadecimal digit.
 ```
 
+### `select` Conditional Statement
+
+`select` statement is a special kind of `case` statement that allows you to create a simple menu for user selection:
+
+```bash
+select selected in <list>; do
+  # commands to execute for the selected item
+done
+```
+
+For example:
+
+```bash
+#!/bin/bash
+PS3='Please select your favorite fruit (or <Ctrl+C> to quit): '
+select fruit in Apple Banana Blueberry Durian Elderberry; do
+  echo "You selected: $fruit"
+done
+```
+
+When you run the script, it will display a numbered menu for selection. You can enter the number corresponding to your choice. It will re-display the menu until the user press `Ctrl+C` or [`break` executes](#continue-and-break).
+
 ## Loops
 
 ### `for` Loops
@@ -1165,7 +1224,7 @@ The output will be:
 The syntax of a `for` loop in Bash looks like other scripting languages, but it use **[arithmetic judgment](#arithmetic-judgment)** to evaluate the loop expressions, so all expressions should follow the rules of arithmetic judgment:
 
 ```bash
-for (( initial_expression; condition_expression; step_expression )); do
+for (( <initial_expression>; <condition_expression>; <step_expression> )); do
   # commands to execute in each iteration
 done
 ```
@@ -1182,7 +1241,7 @@ done
 
 If `list` is omitted, it will iterate over the special variable `$@` (all command-line arguments passed to the script as separate words) by default, but you **shouldn't do this** in practice to avoid confusion.
 
-If `list` is **a plain text contains multiple words**, `for ... in ...` loop will iterate over each word separately, so if you want to iterate over items with spaces, you should quote the `list`:
+If `list` is **a unquoted text contains multiple words**, `for ... in ...` loop will iterate over each word separately, so if you want to iterate over items with spaces, you should quote them:
 
 ```bash
 #!/bin/bash
@@ -1196,12 +1255,17 @@ done
 #    Blueberry
 #    Muffin
 
-for fruit in "Apple Pie" "Banana Split" "Blueberry Muffin"; do
+for fruit in 'Apple Pie' 'Banana Split' 'Blueberry Muffin'; do
   echo $fruit
 done
 # -> Apple Pie
 #    Banana Split
 #    Blueberry Muffin
+
+for fruit in 'Apple Pie Banana Split Blueberry Muffin'; do
+  echo $fruit
+done
+# -> Apple Pie Banana Split Blueberry Muffin
 ```
 
 > [!Note]
@@ -1217,9 +1281,30 @@ done
 > echo "Total words: $word_count"
 > ```
 >
-> But the cost is you should pay more attention to [quoted and unquoted strings](#access-array-elements) when working with `for ... in ...` loops.
+> But the cost is you should **pay more attention to quoted and unquoted** strings when working with `for ... in ...` loops. Especially with [variables](#access-array-element):
+>
+> ```bash
+> #!/bin/bash
+> array=('Apple Pie' 'Banana Split' 'Blueberry Muffin')
+> for word in ${array[@]}; do
+>   echo $word
+> done
+> # -> Apple
+> #    Pie
+> #    Banana
+> #    Split
+> #    Blueberry
+> #    Muffin
+>
+> for word in "${array[@]}"; do
+>   echo $word
+> done
+> # -> Apple Pie
+> #    Banana Split
+> #    Blueberry Muffin
+> ```
 
-Regex-like strings can also be used in the `list`, additionally, it will **expand to the matched files from the current directory**:
+[Glob patterns](#globbing) can also be used in the `list`, additionally, it will **expand to the matched files from the current directory** before the loop starts:
 
 ```bash
 #!/bin/bash
@@ -1230,10 +1315,10 @@ done
 
 ### `while` Loop
 
-The syntax of a `while` loop is nothing special, but the condition expression should follow the same rules of [`if` statement](#if-statement):
+The syntax of a `while` loop is nothing special, but the condition expression should follow the same rules of [`if` statement](#if-conditional-statement):
 
 ```bash
-while condition; do
+while <condition>; do
   # commands to execute in each iteration
 done
 ```
@@ -1243,7 +1328,7 @@ done
 `until` loop is the opposite of `while` loop, it will keep executing the commands until the condition becomes true:
 
 ```bash
-until condition; do
+until <condition>; do
   # commands to execute in each iteration
 done
 ```
@@ -1255,31 +1340,37 @@ Bash also provides `continue` and `break` statements to control the flow of loop
 - `continue`: Skip the current iteration and move to the next iteration of the loop.
 - `break`: Exit the loop immediately.
 
-### `select` Loop
+## Globbing
 
-Just like `for ... in ...` loop, `select` loop also iterates over a list of items, but it provides a simple way to create a menu for user selection:
+In Bash, globs (short for global patterns) are special wildcard patterns **who are [plain text strings](#plain-text-string)** used for filename/pathname expansion:
 
-```bash
-select item in list; do
-  # commands to execute for the selected item
-done
-```
+- `*`: Matches any string, including the empty string
+- `?`: Matches any single character
+- `[abc]`: Matches any one of the characters `a`, `b`, or `c`
+- `[a-z]`: Matches any one character in the range `a` to `z`
+- `[^abc]` or `[!abc]`: Matches any one character that is not `a`, `b`, or `c`
+
+Advanced glob patterns (with `shopt -s extglob` enabled):
+
+- `?(pattern)`: Matches zero or one occurrence of the pattern
+- `*(pattern)`: Matches zero or more occurrences of the pattern
+- `+(pattern)`: Matches one or more occurrences of the pattern
+- `@(pattern)`: Matches exactly one occurrence of the pattern
+- `!(pattern)`: Matches anything that does not match the pattern
+
+> [!Note]
+>
+> 1. Globs do not match hidden files `(.*)` unless you explicitly include the dot: `.*` or `.[!.]*.`
+> 2. Globbing happens **before command execution**, so it’s purely a shell feature.
 
 For example:
 
 ```bash
 #!/bin/bash
-PS3="Please select your favorite fruit (or 'Ctrl+C' to quit): "
-select fruit in "Apple" "Banana" "Blueberry" "Durian" "Elderberry"; do
-  echo "You selected: $fruit"
-done
+echo *.sh  # -> hello.sh world.sh
+echo "*.sh" # -> *.sh
+echo '*.sh' # -> *.sh
 ```
-
-When you run the script, it will display a numbered menu for selection. You can enter the number corresponding to your choice, and the selected item will be stored in the variable `fruit`.
-
-If you enter with nothing, it will re-display the menu.
-
-To exit the menu, you can press `Ctrl+C`.
 
 ## Built-in Commands
 
@@ -1287,10 +1378,10 @@ To exit the menu, you can press `Ctrl+C`.
 
 `seq` command can be used to **generate a sequence of numbers**.
 
-The syntax of `seq` command is (`[x=y]` means the parameter `x` is optional, and has a default value of `y`):
+The syntax of `seq` command is:
 
 ```bash
-seq [options] [first=0] [step=1] <last>
+seq [<options>] [first=1] [step=1] <last>
 ```
 
 For example, to generate a sequence of numbers from 1 to 5:

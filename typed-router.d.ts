@@ -104,9 +104,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/code-style-title-capitalizing': RouteRecordInfo<
-      '/posts/code-style-title-capitalizing',
-      '/posts/code-style-title-capitalizing',
+    '/posts/code-style-title-case': RouteRecordInfo<
+      '/posts/code-style-title-case',
+      '/posts/code-style-title-case',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -337,9 +337,9 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/code-style-title-capitalizing.md': {
+    'pages/posts/code-style-title-case.md': {
       routes:
-        | '/posts/code-style-title-capitalizing'
+        | '/posts/code-style-title-case'
       views:
         | never
     }

@@ -247,20 +247,20 @@ There are also some useful find & search motions for coding, which require addit
 |  | `` `{A-Z} `` | Normal, Visual | Goto mark `{A-Z}` in **any file** |
 |  | `` `{0-9[]'"<>.} `` | Normal, Visual | Goto the mark `{0-9[]'"<>.}` |
 |  | `'{a-zA-Z0-9[]'"<>.}` | Normal, Visual | Same as `` `{a-zA-Z0-9[]'"<>.} ``,<br>but on the first non-blank character in the line |
-| Jump | N `Ctrl-O` | Normal | Goto Nth older position in jump list |
-|  | N `Ctrl-I` | Normal | Goto Nth newer position in jump list |
+| Jump | N `<C-o>` | Normal | Goto Nth older position in jump list |
+|  | N `<C-i>` | Normal | Goto Nth newer position in jump list |
 |  | `:ju[mps]` | Normal, Visual | Print the jump list |
 
 ### Scrolling
 
 | Group | Command | Mode | Description | Also |
 | -- | -- | -- | -- | -- |
-| Forward | N `<Ctrl-E>` | Normal, Visual | Window N lines forward (downward) |  |
-|  | N `<Ctrl-D>` | Normal, Visual | Window N half pages forward |  |
-|  | N `<Ctrl-F>` | Normal, Visual | Window N pages forward |  |
-| Backward | N `<Ctrl-Y>` | Normal, Visual | Window N lines backward (upward) |  |
-|  | N `<Ctrl-U>` | Normal, Visual | Window N half pages backward |  |
-|  | N `<Ctrl-B>` | Normal, Visual | Window N pages backward |  |
+| Forward | N `<C-e>` | Normal, Visual | Window N lines forward (downward) |  |
+|  | N `<C-d>` | Normal, Visual | Window N half pages forward |  |
+|  | N `<C-f>` | Normal, Visual | Window N pages forward |  |
+| Backward | N `<C-y>` | Normal, Visual | Window N lines backward (upward) |  |
+|  | N `<C-u>` | Normal, Visual | Window N half pages backward |  |
+|  | N `<C-b>` | Normal, Visual | Window N pages backward |  |
 | Current window | `zt` | Normal, Visual | Current line at top of window | `z<CR>` |
 |  | `zz` | Normal, Visual | Current line at center of window | `z.` |
 |  | `zb` | Normal, Visual | Current line at bottom of window | `z-` |
@@ -280,10 +280,10 @@ In Neovim, the term "window" is the same as "buffer".
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Window | `<Ctrl-H>` | Normal | Move to the left window |
-|  | `<Ctrl-J>` | Normal | Move to the window below |
-|  | `<Ctrl-K>` | Normal | Move to the window above |
-|  | `<Ctrl-L>` | Normal | Move to the right window |
+| Window | `<C-h>` | Normal | Move to the left window |
+|  | `<C-j>` | Normal | Move to the window below |
+|  | `<C-k>` | Normal | Move to the window above |
+|  | `<C-l>` | Normal | Move to the right window |
 
 #### Switch Tab
 
@@ -305,7 +305,7 @@ In Neovim, the term "window" is the same as "buffer".
 >
 > For some modern terminals, like _Windows Terminal_, they may have the keybing from `<C-v>` to paste from clipboard by default, you can disable that keybinding in the terminal settings to use it for blockwise visual mode in Neovim.
 >
-> To copy and paste, you can use `Ctrl-Insert` and `Shift-Insert` instead, this are the legacy keybindings which are supported by most of the terminals.
+> To copy and paste, you can use `<C-Insert>` and `<S-Insert>` instead, this are the legacy keybindings which are supported by most of the terminals.
 
 ### Edit
 
@@ -321,11 +321,11 @@ In Neovim, the term "window" is the same as "buffer".
 | New line | N `o` | Normal | Open a new line below the current line, append text (N times) |  |
 |  | N `O` | Normal | Open a new line above the current line, insert text (N times) |  |
 
-Use `<Esc>` or `<Ctrl-[>` to exit insert mode and return to normal mode.
+Use `<Esc>` or `<C-[>` to exit insert mode and return to normal mode.
 
 > [!Note]
 >
-> For some terminals like _Windows Terminal_, they may sand something different to what you actually pressed, for example, for `<Ctrl-[>`, it may send `\u001b[46;5u` instead.
+> For some terminals like _Windows Terminal_, they may sand something different to what you actually pressed, for example, for `<C-[>`, it may send `\u001b[46;5u` instead.
 >
 > You need to use something like actions in _Windows Terminal_ to custom the sendings to fix this.
 
@@ -333,15 +333,15 @@ Use `<Esc>` or `<Ctrl-[>` to exit insert mode and return to normal mode.
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Insert | `<Ctrl-A>` | Insert | Insert previously inserted text |
-|  | `<Ctrl-@>` | Insert | Insert previously inserted text and stop insert mode |
-|  | `<Ctrl-R>{register}` | Insert | Insert the contents of `{register}` |
-| Delete | `<Ctrl-W>` | Insert | Delete word before the cursor |
-|  | `<Ctrl-U>` | Insert | Delete all entered characters in the current line |
-| Indent | `<Ctrl-T>` | Insert | Indent in front of the line |
-|  | `<Ctrl-D>` | Insert | Unindent in front of the line |
-|  | 0 `<Ctrl-D>` | Insert | Delete all indent in the current line |
-|  | ^ `<Ctrl-D>` | Insert | Delete all indent in the current line,<br>restore indent in next line |
+| Insert | `<C-a>` | Insert | Insert previously inserted text |
+|  | `<C-@>` | Insert | Insert previously inserted text and stop insert mode |
+|  | `<C-r>{register}` | Insert | Insert the contents of `{register}` |
+| Delete | `<C-w>` | Insert | Delete word before the cursor |
+|  | `<C-u>` | Insert | Delete all entered characters in the current line |
+| Indent | `<C-t>` | Insert | Indent in front of the line |
+|  | `<C-d>` | Insert | Unindent in front of the line |
+|  | 0 `<C-d>` | Insert | Delete all indent in the current line |
+|  | ^ `<C-d>` | Insert | Delete all indent in the current line,<br>restore indent in next line |
 
 #### Delete
 
@@ -401,8 +401,8 @@ Use `<Esc>` or `<Ctrl-[>` to exit insert mode and return to normal mode.
 |  | `U` | Visual | Make the selected text uppercase |
 | Move | N `Alt-j` | Normal | Move the current line down N times |
 |  | N `Alt-k` | Normal | Move the current line up N times |
-| Number | N `<Ctrl-A>` | Normal | Add N to the number at or after the cursor |
-|  | N `<Ctrl-X>` | Normal | Subtract N from the number at or after the cursor |
+| Number | N `<C-a>` | Normal | Add N to the number at or after the cursor |
+|  | N `<C-x>` | Normal | Subtract N from the number at or after the cursor |
 | Indent | N `>{motion}` | Normal | Indent the lines that are moved over with `{motion}` |
 |  | N `>>` | Normal | Indent N lines |
 |  | N `<`{motion}` | Normal | Unindent the lines that are moved over with `{motion}` |
@@ -418,7 +418,7 @@ Use `<Esc>` or `<Ctrl-[>` to exit insert mode and return to normal mode.
 | -- | -- | -- | -- |
 | Undo | N `u` | Normal | Undo last N changes |
 |  | `U` | Normal | Undo last changed line |
-| Redo | N `<Ctrl-R>` | Normal | Redo last N undone changes |
+| Redo | N `<C-r>` | Normal | Redo last N undone changes |
 
 #### Multi Cursor
 

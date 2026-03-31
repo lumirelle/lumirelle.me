@@ -1,7 +1,7 @@
 ---
 title: Vite and Unbundled
 date: 2025-12-03T11:56+08:00
-update: 2025-12-03T11:56+08:00
+update: 2026-03-31T09:38+08:00
 lang: en
 duration: 2min
 ---
@@ -28,4 +28,8 @@ In short, unbundled mode is more likely a **workaround** to improve development 
 
 For now, **Rust** and **Rolldown** will help Vite get more performance improvements in bundled mode. So, I think it's really a good time to say goodbye to unbundled! 🖐️
 
-Let's look forward to the future of Vite! 🚀
+Let's look forward to the future of Vite!
+
+---
+
+Edit: Vite 8 is [here](https://vite.dev/guide/migration)! 🚀

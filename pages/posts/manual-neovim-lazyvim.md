@@ -1,7 +1,7 @@
 ---
 title: Neovim and LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-03-28T16:14+08:00
+update: 2026-03-31T15:29+08:00
 lang: en
 duration: 26min
 type: note
@@ -463,6 +463,12 @@ In Neovim, you can start multi cursor only from blockwise visual mode, with plug
 |  | `zM` | Normal | Fold all, set `'foldlevel'` to 0 |
 | Unfold level | `zr` | Normal | Unfold more, increase `'foldlevel'` (Neovim in VSCode does not support) |
 |  | `zR` | Normal | Unfold all, set `'foldlevel'` to max |
+
+### Terminal
+
+| Group | Command | Mode | Description |
+| -- | -- | -- | -- |
+| Terminal | N `<C-/>` | Normal, Terminal | Open a terminal N (it's number order) in root directory |
 
 ### Version Information
 

@@ -233,7 +233,7 @@ Install the basic software below in order:
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
 | Brave | [Official Website](https://brave.com/download/) | My daily use browser. See extensions setup [here](#daily-use). |
-| RayCast | [Microsoft Store](https://apps.microsoft.com/detail/9pfxxshc64h3) | Basic Extensions: _Installed Extensions_, _Google Translate_, _GitHub_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Visual Studio Code_, _Zed_, _Regex Tester_, _DevDocs_, _Svgl_, _Search MDN_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
+| RayCast | [Microsoft Store](https://apps.microsoft.com/detail/9pfxxshc64h3) | Basic Extensions: _Installed Extensions_, _GitHub_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Visual Studio Code_, _Zed_, _Regex Tester_, _DevDocs_, _Svgl_, _Search MDN_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
 | Auto Dark Mode | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435) | Save my eyes! |
 | NanaZip | [Microsoft Store](https://apps.microsoft.com/detail/9n8g7tscl18r) | / |
 | DeskPins | [Official Website](https://efotinis.neocities.org/deskpins/) | Pin any window to the desktop. |

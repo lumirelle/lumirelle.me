@@ -1,4 +1,3 @@
-// oxlint-disable no-console
 import { Buffer } from 'node:buffer'
 import fs from 'node:fs'
 import { basename, dirname, resolve } from 'node:path'

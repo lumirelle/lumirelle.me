@@ -71,7 +71,6 @@ async function buildBlogRSS(): Promise<void> {
             data.image = DOMAIN + data.image
           }
 
-          // oxlint-disable-next-line typescript/consistent-return
           return {
             ...data,
             date: new Date(data.date),

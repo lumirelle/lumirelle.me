@@ -67,7 +67,6 @@ onMounted(async () => {
     x: number,
     y: number,
     rad: number,
-    // oxlint-disable-next-line unicorn/no-object-as-default-parameter
     counter: { value: number } = { value: 0 },
   ): void => {
     const length = random() * len.value

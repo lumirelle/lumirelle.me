@@ -1,6 +1,3 @@
-// oxlint-disable unicorn/no-process-exit
-// oxlint-disable no-console
-
 import { confirm } from '@clack/prompts'
 import Git from 'simple-git'
 import { compressImages } from './img-compress'

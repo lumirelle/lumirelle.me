@@ -1,5 +1,3 @@
-// oxlint-disable no-console
-
 import fs from 'node:fs/promises'
 import { styleText } from 'node:util'
 import sharp from 'sharp'

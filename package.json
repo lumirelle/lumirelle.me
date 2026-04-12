@@ -20,7 +20,7 @@
   "workspaces": {
     "catalogs": {
       "build": {
-        "@shikijs/markdown-it": "^4.0.2",
+        "@shikijs/markdown-exit": "^4.0.2",
         "@shikijs/transformers": "^4.0.2",
         "@shikijs/twoslash": "^4.0.2",
         "@unocss/preset-web-fonts": "^66.6.8",
@@ -136,7 +136,7 @@
     "@lumirelle/tsconfig": "catalog:dev",
     "@octokit/core": "catalog:dev",
     "@octokit/rest": "catalog:dev",
-    "@shikijs/markdown-it": "catalog:build",
+    "@shikijs/markdown-exit": "catalog:build",
     "@shikijs/transformers": "catalog:build",
     "@shikijs/twoslash": "catalog:build",
     "@types/bun": "catalog:types",

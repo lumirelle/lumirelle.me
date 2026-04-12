@@ -55,7 +55,7 @@ html:not(.dark) .shiki span {
 }
 
 .prose .shiki {
-  font-family: 'DM Mono', 'Input Mono', 'Fira Code', monospace;
+  font-family: 'Drafting* Mono', 'Input Mono', 'Fira Code', monospace;
   font-size: 0.92em;
   line-height: 1.4;
   margin: 0.5em 0;
@@ -103,7 +103,7 @@ html:not(.dark) .shiki span {
 
 html.dark .prose {
   --fg-light: #888;
-  --fg: #bbb;
+  --fg: #ccc;
   --fg-deep: #ddd;
   --fg-deeper: #fff;
 }

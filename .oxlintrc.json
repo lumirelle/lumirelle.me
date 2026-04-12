@@ -9,5 +9,13 @@
     "es2026": true,
     "browser": true,
     "node": true
-  }
+  },
+  "overrides": [
+    {
+      "files": ["plugins/**/*"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }

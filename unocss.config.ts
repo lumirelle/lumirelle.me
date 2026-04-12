@@ -1,14 +1,8 @@
+import type { PresetWind3Theme } from 'unocss'
 import { createLocalFontProcessor } from '@unocss/preset-web-fonts/local'
-import {
-  defineConfig,
-  presetAttributify,
-  presetIcons,
-  presetWebFonts,
-  presetWind3,
-  transformerDirectives,
-} from 'unocss'
+import { defineConfig, presetAttributify, presetIcons, presetWebFonts, presetWind3, transformerDirectives } from 'unocss'
 
-export default defineConfig({
+export default defineConfig<PresetWind3Theme>({
   presets: [
     presetIcons({
       extraProperties: {
@@ -22,8 +16,7 @@ export default defineConfig({
     presetWind3(),
     presetWebFonts({
       fonts: {
-        sans: 'Inter',
-        mono: 'DM Mono',
+        sans: 'Caslon',
         condensed: 'Roboto Condensed',
         wisper: 'Bad Script',
         mplus: 'M PLUS Code Latin',
@@ -31,6 +24,13 @@ export default defineConfig({
       processors: [createLocalFontProcessor()],
     }),
   ],
+  theme: {
+    fontFamily: {
+      'mono': 'Drafting* Mono',
+      'source-hans': 'Source Han Sans TC',
+      'maple-mono': 'Maple Mono CN',
+    },
+  },
   transformers: [transformerDirectives()],
 
   rules: [

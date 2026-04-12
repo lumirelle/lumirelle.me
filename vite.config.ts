@@ -1,81 +1,18 @@
-import { Buffer } from 'node:buffer'
-import fs from 'node:fs'
-import { basename, dirname, resolve } from 'node:path'
-import MarkdownItShiki from '@shikijs/markdown-it'
-import {
-  transformerNotationDiff,
-  transformerNotationFocus,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from '@shikijs/transformers'
-import { rendererRich, transformerTwoslash } from '@shikijs/twoslash'
-import Vue from '@vitejs/plugin-vue'
-import matter from 'gray-matter'
-import MarkdownItAnchor from 'markdown-it-anchor'
-import MarkdownItFootNote from 'markdown-it-footnote'
-import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
-import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
-import MarkdownItMagicLink from 'markdown-it-magic-link'
-import MarkdownItTOC from 'markdown-it-table-of-contents'
-import sharp from 'sharp'
+import { resolve } from 'node:path'
 import UnoCSS from 'unocss/vite'
-import AutoImport from 'unplugin-auto-import/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-import Icons from 'unplugin-icons/vite'
-import Components from 'unplugin-vue-components/vite'
-import Markdown from 'unplugin-vue-markdown/vite'
 import { defineConfig } from 'vite'
 import Inspect from 'vite-plugin-inspect'
 import Exclude from 'vite-plugin-optimize-exclude'
-import SVG from 'vite-svg-loader'
-import { VueRouterAutoImports } from 'vue-router/unplugin'
-import VueRouter from 'vue-router/vite'
-import { slugify } from './scripts/slugify'
+import { AutoImports } from './plugins/auto-imports'
+import { Await } from './plugins/await'
+import { Components } from './plugins/components'
+import { Icon } from './plugins/icon'
+import { Markdown } from './plugins/markdown'
+import { Svg } from './plugins/svg'
+import { Vue } from './plugins/vue'
+import { VueRouter } from './plugins/vue-router'
 
 const promises: Promise<any>[] = []
-
-const ogSVg = fs.readFileSync('./scripts/og-template.svg', 'utf8')
-
-const BREAK_REGEX = /(.{0,30})(?:\s|$)/g
-const SVG_PLACEHOLDER_REGEX = /\{\{([^}]+)\}\}/g
-const LINK_REGEX = /^https?:\/\//
-const FRONTMATTER_TITLE_REGEX = /\s-\s.*$/
-
-const OPEN_COLLECTIVE_VITE_REGEX = /opencollective\.com\/vite/
-const OPEN_COLLECTIVE_ELK_REGEX = /opencollective\.com\/elk/
-
-async function generateOg(title: string, output: string): Promise<void> {
-  if (fs.existsSync(output)) {
-    return
-  }
-
-  await fs.promises.mkdir(dirname(output), { recursive: true })
-  // breakline every 30 chars
-  const lines = title
-    .trim()
-    .split(BREAK_REGEX)
-    .filter(Boolean)
-
-  const data: Record<string, string> = {
-    line1: lines[0] ?? '',
-    line2: lines[1] ?? '',
-    line3: lines[2] ?? '',
-  }
-  const svg = ogSVg.replaceAll(SVG_PLACEHOLDER_REGEX, (_, name) => data[name] || '')
-
-  console.log(
-    `Generating ${output}. Notice you should install "Commic Shanns" font in your system.`,
-  )
-  try {
-    await sharp(Buffer.from(svg))
-      .resize(1200 * 1.1, 630 * 1.1)
-      .png()
-      .toFile(output)
-  }
-  catch (error) {
-    console.error('Failed to generate og image', error)
-  }
-}
 
 export default defineConfig({
   resolve: {
@@ -86,192 +23,16 @@ export default defineConfig({
   },
   plugins: [
     UnoCSS(),
-
-    VueRouter({
-      extensions: ['.vue', '.md'],
-      routesFolder: 'pages',
-      // logs: true,
-      extendRoute(route) {
-        const path = route.components.get('default')
-        if (!path) {
-          return
-        }
-
-        if (!path.includes('projects.md') && path.endsWith('.md')) {
-          const { data } = matter(fs.readFileSync(path, 'utf8'))
-          route.addToMeta({
-            frontmatter: data,
-          })
-        }
-      },
-    }),
-
-    Vue({
-      include: [/\.vue$/, /\.md$/],
-    }),
-
-    Markdown({
-      wrapperComponent: id => (id.includes('/demo/') ? 'WrapperDemo' : 'WrapperPost'),
-      wrapperClasses: (_, code) =>
-        code.includes('@layout-full-width') ? '' : 'prose m-auto slide-enter-content',
-      headEnabled: true,
-      exportFrontmatter: false,
-      exposeFrontmatter: false,
-      exposeExcerpt: false,
-      markdownOptions: {
-        quotes: '""\'\'',
-      },
-      async markdownSetup(md) {
-        md.use(
-          await MarkdownItShiki({
-            themes: {
-              dark: 'vitesse-dark',
-              light: 'vitesse-light',
-            },
-            defaultColor: false,
-            cssVariablePrefix: '--s-',
-            transformers: [
-              transformerTwoslash({
-                explicitTrigger: true,
-                renderer: rendererRich(),
-              }),
-              transformerNotationDiff(),
-              transformerNotationHighlight(),
-              transformerNotationWordHighlight(),
-              transformerNotationFocus(),
-            ],
-          }),
-        )
-
-        md.use(MarkdownItAnchor, {
-          slugify,
-          permalink: MarkdownItAnchor.permalink.linkInsideHeader({
-            symbol: '#',
-            renderAttrs: () => ({ 'aria-hidden': 'true' }),
-          }),
-        })
-
-        md.use(MarkdownItLinkAttributes, {
-          matcher: (link: string) => LINK_REGEX.test(link),
-          attrs: {
-            target: '_blank',
-            rel: 'noopener',
-          },
-        })
-
-        md.use(MarkdownItTOC, {
-          includeLevel: [1, 2, 3, 4],
-          slugify,
-          containerHeaderHtml:
-            '<div class="table-of-contents-anchor"><div class="i-ri-menu-2-fill" /></div>',
-        })
-
-        md.use(MarkdownItMagicLink, {
-          linksMap: {
-            'NuxtLabs': { link: 'https://nuxtlabs.com', imageUrl: 'https://nuxtlabs.com/nuxt.png' },
-            'Vitest': 'https://github.com/vitest-dev/vitest',
-            'Slidev': 'https://github.com/slidevjs/slidev',
-            'VueUse': 'https://github.com/vueuse/vueuse',
-            'UnoCSS': 'https://github.com/unocss/unocss',
-            'Elk': 'https://github.com/elk-zone/elk',
-            'Type Challenges': 'https://github.com/type-challenges/type-challenges',
-            'Vue': 'https://github.com/vuejs/core',
-            'Nuxt': 'https://github.com/nuxt/nuxt',
-            'Vite': 'https://github.com/vitejs/vite',
-            'Shiki': 'https://github.com/shikijs/shiki',
-            'Twoslash': 'https://github.com/twoslashes/twoslash',
-            'ESLint Stylistic': 'https://github.com/eslint-stylistic/eslint-stylistic',
-            'Unplugin': 'https://github.com/unplugin',
-            'Nuxt DevTools': 'https://github.com/nuxt/devtools',
-            'Vite PWA': 'https://github.com/vite-pwa',
-            'i18n Ally': 'https://github.com/lokalise/i18n-ally',
-            'ESLint': 'https://github.com/eslint/eslint',
-            'Astro': 'https://github.com/withastro/astro',
-            'TwoSlash': 'https://github.com/twoslashes/twoslash',
-            'Anthony Fu Collective': {
-              link: 'https://opencollective.com/antfu',
-              imageUrl: 'https://github.com/antfu-collective.png',
-            },
-            'Netlify': { link: 'https://netlify.com', imageUrl: 'https://github.com/netlify.png' },
-            'Stackblitz': {
-              link: 'https://stackblitz.com',
-              imageUrl: 'https://github.com/stackblitz.png',
-            },
-            'Vercel': { link: 'https://vercel.com', imageUrl: 'https://github.com/vercel.png' },
-          },
-          imageOverrides: [
-            ['https://github.com/vuejs/core', 'https://vuejs.org/logo.svg'],
-            ['https://github.com/nuxt/nuxt', 'https://nuxt.com/assets/design-kit/icon-green.svg'],
-            ['https://github.com/vitejs/vite', 'https://vitejs.dev/logo.svg'],
-            ['https://github.com/sponsors', 'https://github.com/github.png'],
-            ['https://github.com/sponsors/antfu', 'https://github.com/github.png'],
-            ['https://nuxtlabs.com', 'https://github.com/nuxtlabs.png'],
-            [OPEN_COLLECTIVE_VITE_REGEX, 'https://github.com/vitejs.png'],
-            [OPEN_COLLECTIVE_ELK_REGEX, 'https://github.com/elk-zone.png'],
-          ],
-        })
-
-        md.use(MarkdownItGitHubAlerts)
-
-        md.use(MarkdownItFootNote)
-      },
-      frontmatterPreprocess(frontmatter, options, id, defaults) {
-        ;((): void => {
-          if (!id.endsWith('.md')) {
-            return
-          }
-          const route = basename(id, '.md')
-          if (route === 'index' || frontmatter.image || !frontmatter.title) {
-            return
-          }
-          const path = `og/${route}.png`
-          promises.push(
-            fs.existsSync(`${id.slice(0, -3)}.png`)
-              ? fs.promises.cp(`${id.slice(0, -3)}.png`, `public/${path}`)
-              : generateOg(frontmatter.title.replace(FRONTMATTER_TITLE_REGEX, '').trim(), `public/${path}`),
-          )
-          frontmatter.image = `https://lumirelle.me/${path}`
-        })()
-        const head = defaults(frontmatter, options)
-        return { head, frontmatter }
-      },
-    }),
-
-    AutoImport({
-      imports: ['vue', VueRouterAutoImports, '@vueuse/core'],
-    }),
-
-    Components({
-      extensions: ['vue', 'md'],
-      dts: true,
-      include: [/\.vue$/, /\.vue\?vue/, /\.md$/],
-      resolvers: [
-        IconsResolver({
-          componentPrefix: '',
-        }),
-      ],
-    }),
-
+    VueRouter(),
+    Vue(),
+    Markdown(promises),
+    AutoImports(),
+    Components(),
     Inspect(),
-
-    Icons({
-      defaultClass: 'inline',
-      defaultStyle: 'vertical-align: sub;',
-    }),
-
-    SVG({
-      svgo: false,
-      defaultImport: 'url',
-    }),
-
+    Icon(),
+    Svg(),
     Exclude(),
-
-    {
-      name: 'await',
-      async closeBundle(): Promise<void> {
-        await Promise.all(promises)
-      },
-    },
+    Await(promises),
   ],
 
   build: {

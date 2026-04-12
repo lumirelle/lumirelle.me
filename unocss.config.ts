@@ -9,39 +9,6 @@ import {
 } from 'unocss'
 
 export default defineConfig({
-  shortcuts: [
-    {
-      'bg-base': 'bg-white dark:bg-black',
-      'color-base': 'text-black dark:text-white',
-      'border-base': 'border-[#8884]',
-    },
-    [
-      /^btn-(\w+)$/,
-      ([_, color]): string =>
-        `op50 px2.5 py1 transition-all duration-200 ease-out no-underline! hover:(op100 text-${color} bg-${color}/10) border border-base! rounded`,
-    ],
-  ],
-  rules: [
-    [
-      /^slide-enter-(\d+)$/,
-      ([_, n]): Record<string, any> => ({
-        '--enter-stage': n,
-      }),
-    ],
-    [
-      'font-50%em',
-      {
-        'font-family': '\'M PLUS Code Latin\', \'Source Han Sans TC\'',
-      },
-    ],
-    [
-      'font-60%em',
-      {
-        'font-family': '\'Recursive\', \'Maple Mono CN\'',
-        'font-variation-settings': '"MONO" 1, "CASL" 0, "wght" 400, "slnt" 0, "CRSV" 0.5',
-      },
-    ],
-  ],
   presets: [
     presetIcons({
       extraProperties: {
@@ -65,5 +32,23 @@ export default defineConfig({
     }),
   ],
   transformers: [transformerDirectives()],
+
+  rules: [
+    [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
+    ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC"' }],
+    ['font-60%em', { 'font-family': '"Drafting* Mono", "Maple Mono CN"' }],
+  ],
   safelist: ['i-ri-menu-2-fill'],
+  shortcuts: [
+    {
+      'bg-base': 'bg-white dark:bg-black',
+      'color-base': 'text-black dark:text-white',
+      'border-base': 'border-[#8884]',
+    },
+    [
+      /^btn-(\w+)$/,
+      ([_, color]): string =>
+        `op50 px2.5 py1 transition-all duration-200 ease-out no-underline! hover:(op100 text-${color} bg-${color}/10) border border-base! rounded`,
+    ],
+  ],
 })

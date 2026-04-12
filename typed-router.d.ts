@@ -160,13 +160,6 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/manual-programming-fonts': RouteRecordInfo<
-      '/posts/manual-programming-fonts',
-      '/posts/manual-programming-fonts',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
     '/posts/manual-project-create': RouteRecordInfo<
       '/posts/manual-project-create',
       '/posts/manual-project-create',
@@ -205,6 +198,13 @@ declare module 'vue-router/auto-routes' {
     '/posts/misc-first-time-trying-roller-coaster': RouteRecordInfo<
       '/posts/misc-first-time-trying-roller-coaster',
       '/posts/misc-first-time-trying-roller-coaster',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/misc-programming-fonts': RouteRecordInfo<
+      '/posts/misc-programming-fonts',
+      '/posts/misc-programming-fonts',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -385,12 +385,6 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/manual-programming-fonts.md': {
-      routes:
-        | '/posts/manual-programming-fonts'
-      views:
-        | never
-    }
     'pages/posts/manual-project-create.md': {
       routes:
         | '/posts/manual-project-create'
@@ -424,6 +418,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/misc-first-time-trying-roller-coaster.md': {
       routes:
         | '/posts/misc-first-time-trying-roller-coaster'
+      views:
+        | never
+    }
+    'pages/posts/misc-programming-fonts.md': {
+      routes:
+        | '/posts/misc-programming-fonts'
       views:
         | never
     }

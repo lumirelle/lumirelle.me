@@ -1,9 +1,9 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2026-01-26T16:28+08:00
+update: 2026-04-12T23:28+08:00
 lang: en
-duration: 5min
+duration: 6min
 type: note
 ---
 
@@ -39,15 +39,18 @@ PNPM has many advantages over NPM, like:
 
 - Faster installation
 - Better dependency resolution
-- Avoid ghost dependencies
-- Monorepo support
+- Stronger monorepo support
+- Isolated `node_modules` structure, avoiding ghost dependencies
+- Ignore `postinstall` scripts by default, avoiding potential security risks
 - ...
 
 > [!Note]
 >
 > You can also use `bun` as the package manager for Node.js.
 >
-> But as Bun is still in active development, some features may not be stable enough than PNPM.
+> Although as Bun is still in active development, some features may not be stable enough than PNPM, the core features like isolated `node_modules` structure and ignoring `postinstall` scripts are already implemented and stable.
+>
+> The only thing to worry about is monorepo support....
 
 ## Handle the Case of Different Package Managers
 
@@ -55,7 +58,7 @@ If you are facing the case of using different package managers in different proj
 
 > [!Note]
 >
-> As bun and deno are also supported by this package, you can even use it to achieve cross-runtime package management.
+> As bun and deno are also supported by this package, you can even use it to achieve cross-runtime package manager management.
 
 If you are using multiple package managers in one project, make sure you know [the default detect strategy](https://github.com/antfu-collective/package-manager-detector/blob/main/src/detect.ts#L61) of `@antfu/ni` (uses `package-manager-detector` under the hood):
 
@@ -68,6 +71,8 @@ If you are using multiple package managers in one project, make sure you know [t
    6. `npm-shrinkwrap.json` -> NPM
 2. package.json `packageManager` field
 3. package.json `devEngines` field
+
+Below are some basic examples of using `@antfu/ni` for different use cases.
 
 ### Dependency Management
 
@@ -188,9 +193,11 @@ If you are developing your own packages, you may want to publish them to the pac
 
 > [!Note]
 >
-> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/). But for the first time, you still publish your package manually by command like: `npm login && na publish --tag latest`.
+> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/). But for the first time, you should still login manually by command: `npm login`. NPM CLI will automatically open the browser for you to login, and then you can publish your package using `na publish` command.
 >
-> After the first time publishing, as `bun publish` not supports trusted publishing currently, the workaround is to build the tarball using `bun pm pack --filename <filename>` and publish it using `bunx npm publish --access public`. See the example in [my workflow configs](https://github.com/lumirelle/workflows/blob/main/.github/workflows/release.yml).
+> After the first time publishing, as `bun publish` not supports trusted publishing currently, the workaround is to build the tarball using `bun pm pack --filename <filename>` and publish it using `npm publish --access public`. See the example in [my workflow configs](https://github.com/lumirelle/workflows/blob/main/.github/workflows/release.yml).
+>
+> Notice, do not call `npm publish` with `bunx`, `nlx` or any other agent, this may break the login state when we using them with trusted publising.
 
 ### Login to the Package Registry
 

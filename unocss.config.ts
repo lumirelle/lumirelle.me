@@ -26,9 +26,9 @@ export default defineConfig<PresetWind3Theme>({
   ],
   theme: {
     fontFamily: {
-      'mono': 'Drafting* Mono',
-      'source-hans': 'Source Han Sans TC',
-      'maple-mono': 'Maple Mono CN',
+      'mono': '"Drafting* Mono"',
+      'source-hans': '"Source Han Sans TC"',
+      'maple-mono': '"Maple Mono CN"',
     },
   },
   transformers: [transformerDirectives()],

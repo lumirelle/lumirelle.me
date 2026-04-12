@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Title Case'
 date: 2026-03-22T22:38+08:00
-update: 2026-03-30T17:52+08:00
+update: 2026-04-12T23:13+08:00
 lang: en
 duration: 1min
 type: blog+note
@@ -15,7 +15,7 @@ In English, there are different guidelines for Title Case, such as [AP Style](ht
 
 To write English articles, we need to adopt a consistent Title Case style.
 
-As my personal preference (also recommended by [Vercel Web Interface Guidelines](https://vercel.com/design/guidelines)), I uses [Chicago Style](https://title.sh/).
+As my personal preference, I uses [Chicago Style](https://title.sh/) (also recommended by [Vercel Web Interface Guidelines](https://vercel.com/design/guidelines)).
 
 ## Basic Rules
 

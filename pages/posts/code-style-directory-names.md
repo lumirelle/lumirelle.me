@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Directory Names'
 date: 2026-03-30T17:24+08:00
-update: 2026-03-30T17:24+08:00
+update: 2026-04-12T23:15+08:00
 lang: en
 duration: 1min
 type: blog+note
@@ -31,7 +31,7 @@ type: blog+note
 
     ```plaintext
     src/
-    ├── test/         # All files in this directory are for testing.
+    ├── test/         # All files in this directory are used to test.
     │   │             # Not only tests, but also setup and teardown files,
     │   │             # Sometimes, there are even fixtures and config files.
     │   ├── setup.js

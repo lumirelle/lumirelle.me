@@ -1,9 +1,9 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58+08:00
-update: 2026-02-09T22:44+08:00
+update: 2026-04-12T23:12+08:00
 lang: en
-duration: 14min
+duration: 15min
 type: blog+note
 ---
 
@@ -13,13 +13,13 @@ type: blog+note
 
 > [!Note]
 >
-> Of course, name patterns are always the fallback options, [encapsulate and modularize](encapsulation-and-modularity.md) is the better way to improve the code readability and maintainability.
->
-> The rule of thumb is: **single responsibility principle**, which means each module, class, function or variable should have only one reason to change.
+> Of course, name patterns are always the fallback options, [encapsulate and modularize](code-style-encapsulation-and-modularity) is the better way to improve the code readability and maintainability.
 
 In a huge project, we may have thousands of symbols, likes variable names, function names etc. If we cannot encapsulate and modularize them (E.g., the project manager has pressed your working hours, or you don’t want to wipe the ass of the original developer), the only thing we can do is to use the better naming patterns to improve the code readability and maintainability.
 
 This article will introduce some naming patterns I preferred in my projects.
+
+Anyway, in a word, the rule of thumb is: **single responsibility principle**, which means each thing the symbol targets should have only one reason to change, and this reason must be reflected in the symbol name.
 
 ## Variable Names
 
@@ -36,7 +36,8 @@ The recommended variable name pattern has the similar concept with BEM (Block El
  * - Who does the Element belong to? -> Block
  * - Is there any special characteristics? -> Modifier
  *
- * Notice, we think about the Element, then Block, finally Modifier,
+ * Notice, we always try to figure out these concepts in order,
+ * first Element, then Block, finally Modifier,
  * but we put the Modifier first, then Block, finally Element,
  * this is to fit the human reading habits.
  *
@@ -105,7 +106,7 @@ const DEFAULT_FORM_DATA = {
  *
  * Based on this, we know we should initialize it with "DEFAULT_FORM_DATA",
  * and user may use input, select or other form controls to change its value,
- * and we may finally use submit it to backend or do other things.
+ * and we may finally submit it to backend or do other things.
  *
  * In this example, "Block" is "form", "Element" is "Data".
  */
@@ -159,8 +160,8 @@ const tableColumnConfigs = ref([
 
 The commonly used state verbs are:
 
-- `is`, `been`, `will`: The current/past/future state
-- `has`: The possession state
+- `is/are`, `been`, `will`: The current/past/future state
+- `has/have`: The possession state
 - `can`: The ability
 - `should`: The necessity
 
@@ -168,38 +169,40 @@ The commonly used state verbs are:
 
 ### Endpoint Function
 
-The recommended endpoint function name pattern is similar:
+The recommended endpoint function name pattern is similar to variables:
 
 ```ts
 /**
  * Core concept:
  * - What operation does this endpoint function perform? -> EndpointVerb
  * - What is the main element this endpoint function operates on? -> Element
- * - Is there any special DYNAMIC conditions? -> Condition
+ * - Is there any special DYNAMIC conditions | operation target? -> Modifier
  *
- * Different from variable name pattern, we put the EndpointVerb first,
- * then Element, finally Condition, this is to fit the human reading habits.
+ * Now, we put the EndpointVerb first, then Element, finally Modifier,
+ * this is to fit the human reading habits too.
  */
-'(EndpointVerb)(Element)[Condition]'
+'(EndpointVerb)(Element)[Modifier]'
 ```
 
 For example:
 
 ```ts
 /**
- * "getUserById" is a "get" endpoint function, because it's used to get
- * single data. `Element` is "User", `Condition` (DYNAMIC) is "ById", which means we
- * need to provide user id to get the user.
+ * "fetchUserById" is a "fetch" endpoint function, because it's used to fetch
+ * single data. "Element" is "User", "Modifier" (DYNAMIC condition) is "ById",
+ * which means we need to provide user id to fetch the user.
  */
-export async function getUserById(id: Pick<User, 'id'>): Promise<User> {
+export async function fetchUserById(id: Pick<User, 'id'>): Promise<User> {
   return await request.get('/user', { params: { id } })
 }
 
 /**
  * "listActiveUsers" is a "list" endpoint function, because it's used to list
- * multiple data. `Element` is "ActiveUser".
+ * multiple data. "Element" is "ActiveUser".
  *
- * Notice, we recognize the static condition "Active" as part of the Element.
+ * Notice, we recognize the static condition "Active" as part of the Element,
+ * not a "Modifier", because such conditions should be put before "Element"
+ * as adjectives, for better readability.
  */
 export async function listActiveUsers(): Promise<User[]> {
   return await request.get('/users', { params: { status: 'active' } })
@@ -215,10 +218,10 @@ export async function listActiveUsers(): Promise<User[]> {
 Generally, we can know what operation an endpoint function performs by its HTTP method, so we can categorize endpoint functions by their HTTP methods, and then use different verbs for different HTTP methods.
 
 - `GET` method is used to read data, it's **safe[^1]** and **idempotent[^2]**. The acceptable verbs are:
-  - `get` for getting **single data**.
-  - `list` for getting **multiple data**.
-  - `search` for getting **multiple data** with **keyword matching**.
-  - `query` for getting **multiple data** with **pagination**.
+  - `fetch` for **single data**.
+  - `list` for **multiple data**.
+  - `search` for **multiple data** with **keyword matching**.
+  - `query` for **multiple data** with **pagination**.
 
   E.g.:
 
@@ -261,9 +264,9 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
 
   /**
-   * Get single user.
+   * Fetch single user.
    */
-  export async function getUser(id: Pick<User, 'id'>): Promise<User> {
+  export async function fetchUser(id: Pick<User, 'id'>): Promise<User> {
     return await request.get('/user', { params: { id } })
   }
 
@@ -273,21 +276,20 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   export async function listUsers(): Promise<User[]> {
     return await request.get('/users')
   }
-
   /**
-   * List active users. (Static conditions still use `list` as the verb.)
+   * List active users. (Static condition is not Modifier,
+   * but a part of the Element, so it is placed just before the Element,
+   * as an adjective)
    */
   export async function listActiveUsers(): Promise<User[]> {
     return await request.get('/users', { params: { status: 'active' } })
   }
-
   /**
    * List users with dynamic conditions.
    */
   export async function listUsersByConditions(params: Partial<User>): Promise<User[]> {
     return await request.get('/users', { params })
   }
-
   /**
    * List users by dynamic status.
    */
@@ -299,7 +301,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
    * Search users with keyword. This keyword maybe match multiple fields. For
    * example, name, email, phone, etc.
    *
-   * You can add "ByNameAndEmail" to the function name as the "Condition",
+   * You can add "ByNameAndEmail" to the function name as the "Modifier",
    * or just use comment to explain the keyword matching fields if
    * there are too many fields or the matching fields are changeable.
    */
@@ -316,9 +318,9 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   ```
 
 - `POST` method is used to create data, it's **not safe** and **not idempotent**. The acceptable verbs are:
-  - `create` for creating **new data**.
-  - `add` for adding **data to a collection**.
-  - ... For some special scenarios, you can also use `register`, `login`, `upload`, etc.
+  - `create` for **creating new data from nothing**.
+  - `add` for **adding data to a collection**.
+  - ... For some special scenarios, you can also use business verbs like `register`, `login`, `upload`, etc.
 
   E.g.:
 
@@ -358,6 +360,8 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
 
   /**
    * Add user to a group.
+   *
+   * "ToGroup" is the operation target, so it's a "Modifier" here.
    */
   export async function addUserToGroup(
     userId: Pick<User, 'id'>,
@@ -446,7 +450,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
 
 - `DELETE` method is used to delete data, it's **not safe** but **idempotent**. The acceptable verb is:
   - `delete` for deleting **existing data**.
-  - ... For some special scenarios, you can also use `revoke`, etc.
+  - ... For some special scenarios, you can also use business verbs like `revoke`, etc.
 
   E.g.:
 
@@ -465,7 +469,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
   ```
 
-- Upsert operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe** but **idempotent**, and it uses the verb `upsert`.
+- Upsert operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe** but **idempotent**, and it only uses the verb `upsert`.
 
   E.g.:
 
@@ -486,17 +490,17 @@ To learn more about HTTP methods, please read the [computer network manual](manu
 
 > [!Note]
 >
-> If you have try this rule in practice, you may find that it's more like a fantastic imagination, because when you work on a team, you cannot influence others' behavior:
+> If you have try this rule in practice, you may find that sometimes it's more like a unrealistic fantasies, because when you work on a team, you have no way to control others' behavior:
 >
-> You may receive a endpoint function used to query data but with `POST` method, and the instigator just tells you: "I feel lazy to create a standlone DTO for query params, so I use `POST` method directly. Just make some adjustments yourself!".
+> You may receive a endpoint function from endpoint developer, and that function can be used to query data but must request by `POST` method, and the instigator just tells you: "I feel lazy to create a standlone DTO for query params, so I use `POST` method directly. Just make some adjustments yourself!".
 >
-> Don't be discouraged, this is the time to show your professionalism: classify these annoying functions correctly based on your understanding of the business! 😀
+> Don't be discouraged, this is the time to show your professionalism: In this case, you can classify these annoying functions based on the business meaning of the function! 😀
 
-### Validation Function/Method
+### State Checking Function/Method
 
-Validation functions are used to check the state of something, so the recommended validation function name pattern is similar to the state variable name pattern:
+State checking functions are used to check the state of something, so the recommended state checking function name pattern is similar to the state variable name pattern:
 
-`(StateVerb)(Element)[Condition]`
+`[Block](StateVerb)(Element)[Modifier]`
 
 For example:
 
@@ -521,10 +525,10 @@ const user: User = {
 }
 
 /**
- * "hasPermission" is used to check whether the user has the specific
- * permission. "StateVerb" is "has", "Element" is "Permission"
+ * "userHasPermission" is used to check whether the user has the specific
+ * permission. "Block" is "user", "StateVerb" is "Has", "Element" is "Permission"
  */
-export function hasPermission(user: User, permission: Permission): boolean {
+export function userHasPermission(user: User, permission: Permission): boolean {
   for (const role of user.roles) {
     const rolePermissions = rolePermissionsMap[role] || []
     if (rolePermissions.includes(permission)) {
@@ -534,9 +538,9 @@ export function hasPermission(user: User, permission: Permission): boolean {
   return false
 }
 
-console.log(hasPermission(user, 'write')) // true
-console.log(hasPermission(user, 'delete')) // true
-console.log(hasPermission(user, 'execute')) // false
+console.log(userHasPermission(user, 'write')) // true
+console.log(userHasPermission(user, 'delete')) // true
+console.log(userHasPermission(user, 'execute')) // false
 
 /**
  * Notice, in this example, we have globally defined:
@@ -545,14 +549,17 @@ console.log(hasPermission(user, 'execute')) // false
  *   - rolePermissionsMap
  *   - User
  *   - user
- *   - hasPermission
+ *   - userHasPermission
  *
- * If there are also other validation functions, we will have more symbols,
+ * If there are also other state checking functions, we will have more symbols,
  * e.g., "canEdit", "isActive", etc...
+ *
+ * Also, for each state checking function whose "Block" is "user",
+ * we will always have a function name prefix "user".
  */
 ```
 
-**In practice, these functions should not be defined in the global scope, instead, they should be class methods or instance methods. In this way, we can avoid global function pollution. For example:**
+**In practice, these functions should not be defined in the global scope, instead, they should be class methods or instance methods. In this way, we can avoid global function pollution, also can omit the Block prefix. For example:**
 
 ```ts
 type Permission = 'read' | 'write' | 'delete'
@@ -580,7 +587,7 @@ class User implements UserLike {
   }
 
   /**
-   * Now we transform it to a method of User class
+   * Now we transform it to a method of User class, and omit the prefix "user"!
    */
   hasPermission(permission: Permission): boolean {
     for (const role of this.roles) {
@@ -607,22 +614,25 @@ console.log(user.hasPermission('execute')) // false
  *   - User
  *   - user
  *
- * Whatever how many validation methods we need, there are always these symbols.
+ * Whatever how many state checking methods we need, there are always these symbols.
+ *
+ * What's more, all of these state checking methods are now no need
+ * to be prefixed anymore!
  */
 ```
 
-These state verbs in validation function names mean:
+These state verbs in state checking function names mean:
 
-- `is`, `been`, `will`: Check the current/past/future state
-- `has`: Check the possession
+- `is/are`, `been`, `will`: Check the current/past/future state
+- `has/have`: Check the possession
 - `can`: Check the ability
 - `should`: Check the necessity
 
 ### Event Handler Function
 
-The event handler function name should start with verbs `on`, `after`, `before` to indicate the event handler type.
+The event handler function name should start with verbs `on`, `after`, `before` to indicate the execution timing compared to the happening time of the event.
 
-`(on|after|before)(Event)[Condition]`
+`(on|after|before)(Event)[Modifier]`
 
 For example:
 
@@ -666,7 +676,8 @@ async function afterUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: Us
 
 /**
  * "onAEventSuccess" is trigger when "an-event" is successful.
- * "Event" is "AnEvent", "Condition" is "Success".
+ * "Event" is "AnEvent", "Modifier" is "Success", means this event
+ * is triggered when "an-event" is successful.
  */
 async function onAnEventSuccess(result: any) {
   console.log('An event success:', result)

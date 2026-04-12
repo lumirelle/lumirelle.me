@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-03-24T11:28+08:00
+update: 2026-04-12T21:53+08:00
 lang: en
-duration: 12min
+duration: 13min
 type: note
 ---
 
@@ -197,6 +197,8 @@ bun i tree-sitter-cli -g
 
 # Install my personal preset manager
 bun i starship-butler -g
+# List available preset IDs:
+butler preset -l
 # Apply specific preset(s):
 butler preset -i <preset_id_pattern> [-i <preset_id_pattern> ...]
 # Or applay all presets and skip your existing configs:
@@ -210,21 +212,15 @@ butler preset -af
 
 1. Uninstall system bundled software (like _Microsoft One Drive_, _Outlook_...) you don't need at all;
 2. Close the UAC (User Account Control) as your need;
-3. **(Optional)** Close all of anti-virus features of _Windows Defender_, and use [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
+3. Close all of anti-virus features of _Windows Defender_, and use [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
 
    | Software | Source/Install Method |
    | -- | -- |
    | Huorong | [Huorong](https://www.huorong.cn/person) |
 
-   After that, use _Windows 11 Setting Easily_ (support Windows 10 too) to close _Windows Defender_ completely, and restart your computer. You will see there is only the _Windows Defender_ service exists at the end, that's means _Windows Defender_ is being disabled entirely.
-
-   | Software | Source/Install Method |
-   | -- | -- |
-   | Windows 11 Setting Easily | [Post on Bilibili](https://www.bilibili.com/opus/904672369138729017) |
-
    > [!Note]
    >
-   > You should close _Windows Defender_ first, because it will recognize _Windows 11 Setting Easily_ as a potential threat and clean it.
+   > You can choose the anti-virus software you like, except for _Windows Defender_.
 
 ### Useful Software
 

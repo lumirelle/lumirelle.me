@@ -5,5 +5,5 @@
     "types": ["bun", "vite-ssg"],
     "allowJs": true
   },
-  "include": ["scripts/**/*", "plugins/**/*", "*.config.js", "*.config.ts", "shims-node.d.ts"]
+  "include": ["scripts/**/*", "plugins/**/*", "*.config.js", "*.config.ts"]
 }

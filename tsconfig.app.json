@@ -9,5 +9,5 @@
     "types": ["vite/client", "vite-svg-loader"]
   },
   "include": ["src/**/*", "test/**/*", "demo/**/*", "data/**/*", "photos/**/*", "*.d.ts"],
-  "exclude": ["test/fixture/**/*", "shims-node.d.ts"]
+  "exclude": ["test/fixture/**/*"]
 }

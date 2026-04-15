@@ -16,6 +16,7 @@ import MarkdownItFootNote from 'markdown-it-footnote'
 import MarkdownItGitHubAlerts from 'markdown-it-github-alerts'
 import MarkdownItLinkAttributes from 'markdown-it-link-attributes'
 import MarkdownItMagicLink from 'markdown-it-magic-link'
+// @ts-expect-error no types
 import MarkdownItTOC from 'markdown-it-table-of-contents'
 import sharp from 'sharp'
 import _Markdown from 'unplugin-vue-markdown/vite'

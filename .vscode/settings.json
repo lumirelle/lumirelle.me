@@ -26,5 +26,9 @@
     "scss",
     "sass",
     "less"
+  ],
+
+  "js/ts.preferences.autoImportFileExcludePatterns": [
+    "**/node_modules/vue-router/dist/**"
   ]
 }

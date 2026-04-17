@@ -3,7 +3,7 @@ title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
 update: 2026-04-17T10:53+08:00
 lang: en
-duration: 13min
+duration: 15min
 type: note
 ---
 
@@ -156,6 +156,78 @@ winget <command> -?
 ### Prerequisite Software
 
 These software are helpful for the next steps, you should install them first in order:
+
+<details>
+  <summary>A fully one-time installing script here:</summary>
+
+  ```ps1
+  Set-StrictMode -Version Latest
+  $ErrorActionPreference = 'Stop'
+
+  function Test-IsAdministrator {
+      $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
+      $principal = New-Object Security.Principal.WindowsPrincipal($currentIdentity)
+      return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+  }
+
+  function Ensure-Command {
+      param(
+          [Parameter(Mandatory = $true)]
+          [string]$Name
+      )
+      if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
+          throw "Command not found: $Name"
+      }
+  }
+
+  if (-not (Test-IsAdministrator)) {
+      throw 'Please run this script in an elevated PowerShell terminal (Run as Administrator).'
+  }
+
+  Ensure-Command -Name 'winget'
+
+  $packages = @(
+      @{ Id = 'gerardog.gsudo'; Name = 'gsudo' }
+      @{ Id = 'ClashVergeRev.ClashVergeRev'; Name = 'Clash Verge Rev' }
+      @{ Id = 'Nushell.Nushell'; Name = 'Nushell' }
+      @{ Id = 'Starship.Starship'; Name = 'Starship' }
+      @{ Id = 'Git.Git'; Name = 'Git' }
+      @{ Id = 'Oven-sh.Bun'; Name = 'Bun' }
+      @{ Id = 'Nutstore.Nutstore'; Name = 'Nutstore' }
+      @{ Id = 'KeePassXCTeam.KeePassXC'; Name = 'KeePassXC' }
+      @{ Id = 'Tonec.InternetDownloadManager'; Name = 'Internet Download Manager' }
+      @{ Id = 'Microsoft.VisualStudioCode'; Name = 'Visual Studio Code' }
+      @{ Id = 'ZedIndustries.Zed'; Name = 'Zed' }
+      @{ Id = 'Rime.Weasel'; Name = 'Rime (Weasel)' }
+      @{ Id = 'RevoUninstaller.RevoUninstaller'; Name = 'Revo Uninstaller' }
+  )
+
+  Write-Host 'Installing prerequisite software via winget (machine scope)...' -ForegroundColor Cyan
+
+  foreach ($pkg in $packages) {
+      Write-Host "\n==> Installing $($pkg.Name) [$($pkg.Id)]" -ForegroundColor Yellow
+
+      winget install `
+          --exact `
+          --id $pkg.Id `
+          --scope machine `
+          --source winget `
+          --accept-package-agreements `
+          --accept-source-agreements `
+          --disable-interactivity
+
+      if ($LASTEXITCODE -ne 0) {
+          throw "Failed to install: $($pkg.Name) [$($pkg.Id)]"
+      }
+  }
+
+  Write-Host '\nAll prerequisite packages installed successfully.' -ForegroundColor Green
+  Write-Host 'Reminder: restart Windows after installation.' -ForegroundColor Green
+  Write-Host 'Reminder: put "C:\Program Files\WinGet\Links" at the front of system Path if needed.' -ForegroundColor Green
+  Write-Host 'Reminder: add "%USERPROFILE%\.bun\bin" to system Path for Bun.' -ForegroundColor Green
+  ```
+
+</details>
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |

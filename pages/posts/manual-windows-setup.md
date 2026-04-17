@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-04-17T19:32+08:00
+update: 2026-04-18T00:02+08:00
 lang: en
-duration: 15min
+duration: 17min
 type: note
 ---
 
@@ -29,7 +29,7 @@ Before that, we need install and set up Ventoy in your USB flash drive with a Wi
 
 First, insert your USB flash driver.
 
-If you want to store some additional files into that USB flash driver, like the necessary softwares (like [Clash Verge Rev](#prerequisite-software)), you can seperate this driver to two partitions, but **make sure you really remember that what partition stores Ventoy**: When you enter the BIOS, you must select the right one.
+If you want to store some additional files into that USB flash driver, like the necessary softwares (like [Clash Verge Rev](#prerequisite-software)), you can separate this driver to two partitions, but **make sure you really remember that what partition stores Ventoy**: When you enter the BIOS, you must select the right one.
 
 Finally, just follow the [Ventoy's official installation guide](https://www.ventoy.net/en/doc_start.html).
 
@@ -77,7 +77,7 @@ start ms-cxh:localonly
 >
 > It's a lesson in blood and tears...
 >
-> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, becuase it will download some useless components. So please don't reinstall Windows when you don't have time. You don't want your girlfriend to ask you to spend the night with the computer, right?
+> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, because it will download some useless components. So please don't reinstall Windows when you don't have time. You don't want your girlfriend to ask you to spend the night with the computer, right?
 
 ## Second Step: Setup System Preference
 
@@ -352,7 +352,7 @@ Install the tool software below as you need:
 | -- | -- | -- |
 | WeChat | `sudo winget add --scope machine --source winget --exact --id Tencent.WeChat.Universal` | / |
 | QQ | `sudo winget add --scope machine --source winget --exact --id Tencent.QQ.NT` | / |
-| WPS Office | `sudo winget add --scope user --source winget --exact --id Kingsoft.WPSOffice` | WPS Office has no machine scope installer... |
+| WPS Office | `sudo winget add --scope user --source winget --exact --id Kingsoft.WPSOffice` | WPS Office has no machine scope installer... To be honest, it's a piece of malware, but it's just so much better than Microsoft Office...<br><br>If I have to put up with it, I choose to turn off some of its annoying configurations: **Disable tasks "WpsExternal_xxx_xxx" in Task Schedular, disable "WPS Office Cloud Service" in Services, remove registry entries <span style="word-break: break-all;">"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace"</span> in Registry Editor...** |
 | ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~Do we need this?~~ |
 | ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~Do we need this?~~ |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |

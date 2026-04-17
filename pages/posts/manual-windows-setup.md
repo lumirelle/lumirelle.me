@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-04-17T10:53+08:00
+update: 2026-04-17T19:32+08:00
 lang: en
 duration: 15min
 type: note
@@ -11,25 +11,33 @@ type: note
 
 ## Foreword
 
+> [!Caution]
+>
+> Please don’t try to setup a fresh Windows when you don’t have time. You don’t want your girlfriend to ask you to spend the night with the computer, right?
+
 I know Windows is the best OS to play games, but the worst OS to develop.
 
 If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development. 🥰
 
 ## First Step: Reinstall a Clean Windows
 
-We can use [Ventoy](https://www.ventoy.net/en/download.html) with a Windows ISO file to make a bootable USB drive to reinstall Windows. This allows us to decide which versiona/edition of Windows to use.
+We can use [Ventoy](https://www.ventoy.net/en/download.html) with a Windows ISO file to make a bootable USB drive to reinstall Windows. This allows us to decide which edition & version of Windows to use.
 
 Before that, we need install and set up Ventoy in your USB flash drive with a Windows ISO file.
 
 ### Install & Setup Ventoy
 
-Insert your USB flash driver, then just follow the steps in [Ventoy official document](https://www.ventoy.net/en/doc_start.html).
+First, insert your USB flash driver.
+
+If you want to store some additional files into that USB flash driver, like the necessary softwares (like [Clash Verge Rev](#prerequisite-software)), you can seperate this driver to two partitions, but **make sure you really remember that what partition stores Ventoy**: When you enter the BIOS, you must select the right one.
+
+Finally, just follow the [Ventoy's official installation guide](https://www.ventoy.net/en/doc_start.html).
 
 ### Download Windows ISO
 
 > [!Note]
 >
-> I only show the links for Windows 11, because I only use Windows 11.
+> I only show the links for Windows 11, because I only use Windows 11 now.
 >
 > If you want to use back Windows 10 / 7 / etc., you can also try to find them from [Microsoft official website](https://www.microsoft.com/en-us/software-download/) or [Mass Grave](https://massgrave.dev/) by yourself.
 
@@ -45,27 +53,31 @@ To download ISO from Mass Grave (Unofficial):
 
 ### Make a Bootable USB Drive
 
-First, move the downloaded Windows ISO file to the USB flash drive (any partition).
+First, move the downloaded Windows ISO file to the USB flash drive (It's doesn't matter which partition you put it in).
 
-> [!Caution]
->
-> If you have **multiple partitions** on your USB flash drive, please **remember the partition where Ventoy is installed**, because you need to choose the right partition in the boot menu later.
+Then, restart your computer and enter BIOS (Quickly and non-stop clicking on `ESC` / `F11` / `F12` before the startup logo shows up, depends on your motherboard / computer model):
 
-Then, insert the USB flash drive, restart your computer and enter BIOS:
+1. Choose your USB flash drive (**with the right partition** where Ventoy is installed if there are more than one) in the boot menu;
+2. You may see the "Security Violation" error first time, please refer to [Ventoy guides](https://www.ventoy.net/en/doc_secure.html);
+3. After Ventoy starts up, just choose the Windows ISO to start the reinstallation process.
 
-1. Make sure you **disable the "Secure Boot" option** in BIOS, if not, you will be not allowed to boot Ventoy, and get an "security violation" error. You can re-enable it after the installation as your need;
-2. Choose your USB flash drive (**with the right partition** where Ventoy is installed if there are more than one) in the boot menu;
-3. After Ventoy starts up, just choose the Windows ISO to start the reinstall.
+Then, customize your Windows installation options and wait for the process to complete.
 
-Then, customize your Windows installation options and wait for the installation to complete.
+For my own case, I prefer to use **Windows 11 Pro edition (without "N" flag)**, and **create one and only one partition for each disk device**. Different pepole may have different preferences, I prefer them because: Pro edition has more out of box presets for developers & players, and for modern systems, make multiple partitions on one disk is really no reason and no benefit.
 
-For my own case, I prefer to use **Windows 11 Pro edition (without "N" mark)**, and **create one and only one partition for each disk**. Different pepole may have different preferences, I use them because: Pro edition has more out of box presets for developers, and for modern systems, make multiple partitions on one disk is really no reason and no benefit.
-
-What's more, for better Windows user account naming, I prefer to **use local account** to setup Windows, instead of Microsoft account. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, **before you entering the account setup step (If you have entered that step, please return to the previous one)**:
+What's more, for better Windows user account naming, I prefer to **use local account** to setup Windows, instead of Microsoft account. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, when you are stuck on the login page of Microsoft account:
 
 ```cmd
 start ms-cxh:localonly
 ```
+
+> [!Caution]
+>
+> My advice is not to use OOBE to bypass the networking updates, because you may be tempted to do someting else like disabling Windows Defender when you update later or even not to update any more, which may cause this fresh installed Windows to go wrong: Maybe some of drivers will be broken, or some of core system components will be broken, etc.
+>
+> It's a lesson in blood and tears...
+>
+> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, becuase it will download some useless components. So please don't reinstall Windows when you don't have time. You don't want your girlfriend to ask you to spend the night with the computer, right?
 
 ## Second Step: Setup System Preference
 
@@ -127,7 +139,7 @@ Install with exact ID match:
 ```nu
 winget add --exact --id <PACKAGE_ID>
 # Or
-winget add -e --id <PACKAGE_ID>
+winget add --exact --id <PACKAGE_ID>
 ```
 
 Install specific version (Default is latest version):
@@ -155,10 +167,17 @@ winget <command> -?
 
 ### Prerequisite Software
 
-These software are helpful for the next steps, you should install them first in order:
+(Optional) If your area has some "mysterious" network restrictions, you should prepare a proxy software before all of below steps:
+
+| Software | Source/Install Method | Note |
+| -- | -- | -- |
+| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You can prepare it before reinstallation. | Network proxy manager.<br><br>You can use your own profile with "Tun mode" (If you uses "System Proxy" mode, this will cause some software exit immediately.) to make it usable, we will futher configure it [later](#personal-preferences). |
+
+
+Then, below softwares are helpful for the future steps, you should install them first and in order:
 
 <details>
-  <summary>A fully one-time installing script here:</summary>
+  <summary>A fully one-time installing script here <strong>(beta)</strong>:</summary>
 
   ```ps1
   Set-StrictMode -Version Latest
@@ -188,7 +207,6 @@ These software are helpful for the next steps, you should install them first in 
 
   $packages = @(
       @{ Id = 'gerardog.gsudo'; Name = 'gsudo' }
-      @{ Id = 'ClashVergeRev.ClashVergeRev'; Name = 'Clash Verge Rev' }
       @{ Id = 'Nushell.Nushell'; Name = 'Nushell' }
       @{ Id = 'Starship.Starship'; Name = 'Starship' }
       @{ Id = 'Git.Git'; Name = 'Git' }
@@ -205,7 +223,7 @@ These software are helpful for the next steps, you should install them first in 
   Write-Host 'Installing prerequisite software via winget (machine scope)...' -ForegroundColor Cyan
 
   foreach ($pkg in $packages) {
-      Write-Host "\n==> Installing $($pkg.Name) [$($pkg.Id)]" -ForegroundColor Yellow
+      Write-Host "==> Installing $($pkg.Name) [$($pkg.Id)]" -ForegroundColor Yellow
 
       winget install `
           --exact `
@@ -217,14 +235,14 @@ These software are helpful for the next steps, you should install them first in 
           --disable-interactivity
 
       if ($LASTEXITCODE -ne 0) {
-          throw "Failed to install: $($pkg.Name) [$($pkg.Id)]"
+          Write-Host "Failed to install: $($pkg.Name) [$($pkg.Id)]" -ForegroundColor Red
       }
   }
 
-  Write-Host '\nAll prerequisite packages installed successfully.' -ForegroundColor Green
-  Write-Host 'Reminder: restart Windows after installation.' -ForegroundColor Green
-  Write-Host 'Reminder: put "C:\Program Files\WinGet\Links" at the front of system Path if needed.' -ForegroundColor Green
-  Write-Host 'Reminder: add "%USERPROFILE%\.bun\bin" to system Path for Bun.' -ForegroundColor Green
+  Write-Host 'All prerequisite packages installed successfully.' -ForegroundColor Green
+  Write-Host 'Reminder: Restart Windows after installation.' -ForegroundColor Green
+  Write-Host 'Reminder: Do not forget to put "C:\Program Files\WinGet\Links" at the front of system Path to override the system built-in "sudo" command.' -ForegroundColor Green
+  Write-Host 'Reminder: Add "%USERPROFILE%\.bun\bin" to system Path for Bun.' -ForegroundColor Green
   ```
 
 </details>
@@ -232,19 +250,18 @@ These software are helpful for the next steps, you should install them first in 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
 | Windows Terminal | System bundled | Simple, without so many lua configs... |
-| gsudo | `winget add -e --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
-| Clash Verge Rev | `sudo winget add -e --id ClashVergeRev.ClashVergeRev --scope machine` | Network proxy Manager.<br><br>You can use your own profile with "System proxy" mode to make it usable, we will futher configure it [later](#personal-preferences), or just skip this if you are in the area without network limitations.<br><br>You can also use your preferred one. |
-| Nushell | `sudo winget add -e --id Nushell.Nushell --scope machine` | Cross-platform shell powered by _Rust_.<br><br>Requires running the shell as admin too. |
-| Starship | `sudo winget add -e --id Starship.Starship --scope machine` | Shell prompt powered by _Rust_ too.<br><br>Requires running the shell as admin too. |
-| Git | `sudo winget add -e --id Git.Git --scope machine` | Nothing is more important that _Git_ for a developer, right?<br><br>Requires running the shell as admin too. |
-| Bun | `sudo winget add -e --id Oven-sh.Bun --scope machine` | A faster JavaScript runtime, bundler, and package manager all in one, alternative to _Node.js_ ecosystem.<br><br>Requires running the shell as admin too.<br><br>You can use your preferred one.<br><br>Don't forget to add `~/.bun/bin` to your system environment variable `Path` |
-| Nutstore | `sudo winget add -e --id Nutstore.Nutstore --scope machine` | WebDav. |
-| KeePassXC | `sudo winget add -e --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
-| Internet Download Manager | `sudo winget add -e --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience. |
-| Visual Studio Code | `sudo winget add -e --id Microsoft.VisualStudioCode --scope machine` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
-| Zed | `sudo winget add -e --id ZedIndustries.Zed --scope machine` | **Still experimental.** |
-| Rime | `sudo winget add -e --id Rime.Weasel --scope machine` | Input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (We use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
-| Revo Uninstaller | `sudo winget add -e --id RevoUninstaller.RevoUninstaller --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
+| gsudo | `winget add --scope machine --source winget --exact --id gerardog.gsudo` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
+| Nushell | `sudo winget add --scope machine --source winget --exact --id Nushell.Nushell` | Cross-platform shell powered by _Rust_.<br><br>Requires running the shell as admin too. |
+| Starship | `sudo winget add --scope machine --source winget --exact --id Starship.Starship` | Shell prompt powered by _Rust_ too.<br><br>Requires running the shell as admin too. |
+| Git | `sudo winget add --scope machine --source winget --exact --id Git.Git` | Nothing is more important that _Git_ for a developer, right?<br><br>Requires running the shell as admin too. |
+| Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster JavaScript runtime, bundler, and package manager all in one, alternative to _Node.js_ ecosystem.<br><br>Requires running the shell as admin too.<br><br>You can use your preferred one.<br><br>**Don't forget to add `~/.bun/bin` to your system environment variable `Path`** |
+| (Optional) Nutstore | `sudo winget add --scope machine --source winget --exact --id Nutstore.Nutstore` | WebDav. I use it to sync my KeePass database among multiple devices. **If you uses Clash Verge Rev with "System Proxy" mode, this will cause Nutstore exit immediately.** |
+| (Optional) KeePassXC | `sudo winget add --scope machine --source winget --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
+| Internet Download Manager | `sudo winget add --scope machine --source winget --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience. |
+| Visual Studio Code | `sudo winget add --scope machine --source winget --exact --id Microsoft.VisualStudioCode` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
+| Zed | `sudo winget add --scope machine --source winget --exact --id ZedIndustries.Zed` | **Still experimental.** |
+| (Optional) Rime | `sudo winget add --scope machine --source winget --exact --id Rime.Weasel` | Chinese input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
+| Revo Uninstaller | `sudo winget add --scope machine --source winget --exact --id RevoUninstaller.RevoUninstaller` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
 > [!Note]
 >
@@ -256,18 +273,18 @@ These software are helpful for the next steps, you should install them first in 
 >
 > This is the setting up of my personal preferences, if you does not interest in this, you can skip this part.
 
-Running the commands below in _Nushell_:
+Running the commands below in _Windows Terminal_ with _Nushell_:
 
 ```nu
-# Install useful global package
-# Package manager
+# (Optional) Install useful global package as your need
+# Package manager's manager & Package updater
 bun i @antfu/ni taze -g
 # Project manager
 bun i @sxzz/create -g
-# (Optional) Neovim prerequisite
+# Neovim prerequisite
 bun i tree-sitter-cli -g
 
-# Install my personal preset manager
+# (Optional) Install my personal preset manager
 bun i starship-butler -g
 # List available preset IDs:
 butler preset -l
@@ -278,33 +295,37 @@ butler preset -a
 # Or you want to override your existing configs,
 # recommended for fresh Windows installation:
 butler preset -af
+# Override without manually confirm, dangerous!
+butler preset -afy
 ```
 
 ### Configure Windows Itself
 
-(Optional, if your system is not activated yet) Firstly, use _HEU KMS Activator_ to activate Windows:
+First, **close all of anti-virus features of _Windows Defender_**, then use [Defender Control v2.1](https://www.sordum.org/9480/defender-control-v2-1/) to entirely disable it. I hate it, because it's always been a false positive, deleting my software...
+
+After that, I choose to install [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
+
+   | Software | Source/Install Method |
+   | -- | -- |
+   | Huorong | `sudo winget add --scope machine --source msstore --exact --id XPDDXVFRXCXK80` |
+
+   > [!Note]
+   >
+   > You can choose the anti-virus software you like, except for _Windows Defender_!!!
+
+Next, clean up the system bundled software, uninstall system bundled software by _Revo Uninstaller_ (like _Microsoft One Drive_, _Outlook_...) which you don't need at all.
+
+After that, adjust system settings with _Winutil_:
+
+| Software | Source/Install Method | Note |
+| -- | -- | -- |
+| Winutil | Use PowerShell to execute: `irm "https://christitus.com/win" \| iex` | Just to apply the recommended settings simply~ |
+
+(Optional) If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
 
 | Software | Source/Install Method |
 | -- | -- |
 | HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
-
-Next, clean up the system bundled software, uninstall system bundled software (like _Microsoft One Drive_, _Outlook_...) you don't need at all by _Revo Uninstaller_.
-
-After that, adjust system settings with _Winutil_:
-
-| Software | Source/Install Method |
-| -- | -- |
-| Winutil | `irm "https://christitus.com/win" \| iex` |
-
-Then, close all of anti-virus features of _Windows Defender_, and use [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
-
-   | Software | Source/Install Method |
-   | -- | -- |
-   | Huorong | [Huorong](https://www.huorong.cn/person) |
-
-   > [!Note]
-   >
-   > You can choose the anti-virus software you like, except for _Windows Defender_.
 
 (Optional) At the end, login Microsoft Account, sync the system data, adjust system settings.
 
@@ -314,49 +335,49 @@ Install the basic software below as you need:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| Brave | `sudo winget add -e --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#daily-use). |
-| RayCast | `sudo winget add -e --id 9PFXXSHC64H3 --scope machine --source msstore` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
-| Auto Dark Mode | `sudo winget add -e --id ArminOsaj.AutoDarkMode --scope machine` | Save my eyes! |
+| Brave | `sudo winget add --scope machine --source winget --exact --id Brave.Brave` | My daily use browser. See extensions setup [here](#daily-use). |
+| RayCast | `sudo winget add --scope machine --source msstore --exact --id 9PFXXSHC64H3` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
+| Auto Dark Mode | `sudo winget add --scope machine --source winget --exact --id ArminOsaj.AutoDarkMode` | Save my eyes! |
 | ~~NanaZip~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/9n8g7tscl18r)~~ | ~~It seems like the latest Windows 11 have built-in compression support~~ |
-| DeskPins | `sudo winget add -e --id EliasFotinis.DeskPins --scope machine` | Pin any window to the desktop. |
-| PixPin | `sudo winget add -e --id PixPin.PixPin --scope machine` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
+| DeskPins | `sudo winget add --scope machine --source winget --exact --id EliasFotinis.DeskPins` | Pin any window to the desktop. |
+| PixPin | `sudo winget add --scope machine --source winget --exact --id PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
-| Driver Store Explorer | `sudo winget add -e --id lostindark.DriverStoreExplorer --scope machine` | Clear unused/outdated device drivers. |
-| DISM++ | `sudo winget add -e --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
+| Driver Store Explorer | `sudo winget add --scope machine --source winget --exact --id lostindark.DriverStoreExplorer` | Clear unused/outdated device drivers. |
+| DISM++ | `sudo winget add --scope machine --source winget --exact --id ChuyuTeam.DISM++` | Clear disk. |
 
 Install the tool software below as you need:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| WeChat | `sudo winget add -e --id Tencent.WeChat.Universal --scope machine` | / |
-| QQ | `sudo winget add -e --id Tencent.QQ.NT --scope machine` | / |
-| WPS Office | `sudo winget add -e --id Kingsoft.WPSOffice --scope machine` | / |
+| WeChat | `sudo winget add --scope machine --source winget --exact --id Tencent.WeChat.Universal` | / |
+| QQ | `sudo winget add --scope machine --source winget --exact --id Tencent.QQ.NT` | / |
+| WPS Office | `sudo winget add --scope user --source winget --exact --id Kingsoft.WPSOffice` | WPS Office has no machine scope installer... |
 | ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~Do we need this?~~ |
 | ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~Do we need this?~~ |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
-| Steam | `sudo winget add -e --id Valve.Steam --scope machine` | / |
-| Epic Games | `sudo winget add -e --id EpicGames.EpicGamesLauncher --scope machine` | / |
-| OBS Studio | `sudo winget add -e --id OBSProject.OBSStudio --scope machine` | / |
+| Steam | `sudo winget add --scope machine --source winget --exact --id Valve.Steam` | / |
+| Epic Games | `sudo winget add --scope machine --source winget --exact --id EpicGames.EpicGamesLauncher` | / |
+| OBS Studio | `sudo winget add --scope machine --source winget --exact --id OBSProject.OBSStudio` | / |
 
 Install the dev software (ENV / SDK / IDE / Testing) below as you need (in order):
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
 | WSL | `wsl --install` | Requires reboot. |
-| Podman Desktop | `sudo winget add -e --id RedHat.Podman-Desktop --scope machine` | / |
-| Bun | `sudo winget add -e --id Oven-sh.Bun --scope machine` | A faster JavaScript runtime, bundler, and package manager all in one.<br><br>If you already install this before, you can skip this time. |
-| Node.js | `sudo winget add -e --id OpenJS.NodeJS.LTS --scope machine`<br><br>Setup: `npm i corepack@latest npm@latest esbuild -g`<br><br>Enable corepack: `corepack enable` | The legacy JavaScript runtime, which is the most stable one. |
-| Zig | `sudo winget add -e --id zig.zig --scope machine` | I prefer this than _Rust_. |
+| Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | / |
+| Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster JavaScript runtime, bundler, and package manager all in one.<br><br>If you already install this before, you can skip this time. |
+| Node.js | `sudo winget add --scope machine --source winget --exact --id OpenJS.NodeJS.LTS`<br><br>Setup: `npm i corepack@latest npm@latest esbuild -g`<br><br>Enable corepack: `corepack enable` | The legacy JavaScript runtime, which is the most stable one. |
+| Zig | `sudo winget add --scope machine --source winget --exact --id zig.zig` | I prefer this than _Rust_. |
 | GraalVM | [Official Website](https://www.graalvm.org/downloads/) | Alternative to _JVM_ with native support. |
 | Mingw-w64 | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** implementation on Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime**. |
-| Neovim | `sudo winget add -e --id Neovim.Neovim --scope machine` | / |
+| Neovim | `sudo winget add --scope machine --source winget --exact --id Neovim.Neovim` | / |
 | LazyVim | [Official Website](https://www.lazyvim.org/installation) | Requires **GCC**.<br /><br />With extras: _coding.mini-surround_, _vscode._ |
 | ~~Visual Studio~~ | ~~[Official Website](https://visualstudio.microsoft.com/downloads/)~~ | ~~Bundles **MSVC (Microsoft Visual C++) compiler**. Do we need this?~~ |
 | ~~JetBrains Toolbox~~ | ~~[Official Website](https://www.jetbrains.com/toolbox-app/)~~ | ~~Do we need this?~~ |
 | ~~JetBrains IntelliJ IDEA~~ | ~~Install from JetBrains Toolbox.~~ | ~~Do we need this?~~ |
 | ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~ | / |
-| hyperfine | `sudo winget add -e --id sharkdp.hyperfine --scope machine` | Benchmarking tool. |
+| hyperfine | `sudo winget add --scope machine --source winget --exact --id sharkdp.hyperfine` | Benchmarking tool. |
 | Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. Usually, we don't need to install this manually. |
 
 Some one-time use software:

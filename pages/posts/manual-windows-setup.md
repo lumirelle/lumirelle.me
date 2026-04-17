@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-04-12T21:53+08:00
+update: 2026-04-17T10:53+08:00
 lang: en
 duration: 13min
 type: note
@@ -155,24 +155,24 @@ winget <command> -?
 
 ### Prerequisite Software
 
-These software are helpful for the next steps, you should install them first:
+These software are helpful for the next steps, you should install them first in order:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| Windows Terminal | `winget add -e --id Microsoft.WindowsTerminal --scope machine` | Simple, without so many lua configs... |
-| Clash Verge Rev | [GitHub Releases](https://github.com/clash-verge-rev/clash-verge-rev/releases) | Network proxy Manager.<br><br>You can use your own profile with "System proxy" mode to make it usable, we will futher configure it [later](#personal-preferences), or just skip this if you are in the area without network limitations.<br><br>You can also use your preferred one. |
-| gsudo | `winget add -e --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest workaround is to open _Windows Terminal_, click the shells dropdown then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
-| Nushell | `winget add -e --id Nushell.Nushell --scope machine` | Cross-platform shell powered by _Rust_.<br><br>Requires running the shell as admin too. |
-| Starship | `winget add -e --id Starship.Starship --scope machine` | Shell prompt powered by _Rust_ too.<br><br>Requires running the shell as admin too. |
-| Git | `winget add -e --id Git.Git --scope machine` | Nothing is more important that _Git_ for a developer, right?<br><br>Requires running the shell as admin too. |
-| Bun | `winget add -e --id Oven-sh.Bun --scope machine` | A faster JavaScript runtime, bundler, and package manager all in one, alternative to _Node.js_ ecosystem.<br><br>Requires running the shell as admin too.<br><br>You can use your preferred one.<br><br>Don't forget to add `~/.bun/bin` to your system environment variable `Path` |
-| Jianguoyun | [Official Website](https://www.jianguoyun.com/s/downloads) | WebDav. |
-| KeePassXC | [Official Website](https://keepassxc.org/download/) | Password manager, you can replace with your preferred one. |
-| Internet Download Manager | [Official Website](https://www.internetdownloadmanager.com/download.html) | Download manager, for better download experience. |
-| Visual Studio Code | [Official Website](https://code.visualstudio.com/Download) | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
-| Zed | [Official Website](https://zed.dev/) | **Still experimental.** |
-| Rime | [Official Website](https://rime.im/download/) | Input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (We use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
-| Revo Uninstaller | [Official Website](https://www.revouninstaller.com/revo-uninstaller-free-download/) | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
+| Windows Terminal | System bundled | Simple, without so many lua configs... |
+| gsudo | `winget add -e --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
+| Clash Verge Rev | `sudo winget add -e --id ClashVergeRev.ClashVergeRev --scope machine` | Network proxy Manager.<br><br>You can use your own profile with "System proxy" mode to make it usable, we will futher configure it [later](#personal-preferences), or just skip this if you are in the area without network limitations.<br><br>You can also use your preferred one. |
+| Nushell | `sudo winget add -e --id Nushell.Nushell --scope machine` | Cross-platform shell powered by _Rust_.<br><br>Requires running the shell as admin too. |
+| Starship | `sudo winget add -e --id Starship.Starship --scope machine` | Shell prompt powered by _Rust_ too.<br><br>Requires running the shell as admin too. |
+| Git | `sudo winget add -e --id Git.Git --scope machine` | Nothing is more important that _Git_ for a developer, right?<br><br>Requires running the shell as admin too. |
+| Bun | `sudo winget add -e --id Oven-sh.Bun --scope machine` | A faster JavaScript runtime, bundler, and package manager all in one, alternative to _Node.js_ ecosystem.<br><br>Requires running the shell as admin too.<br><br>You can use your preferred one.<br><br>Don't forget to add `~/.bun/bin` to your system environment variable `Path` |
+| Nutstore | `sudo winget add -e --id Nutstore.Nutstore --scope machine` | WebDav. |
+| KeePassXC | `sudo winget add -e --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
+| Internet Download Manager | `sudo winget add -e --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience. |
+| Visual Studio Code | `sudo winget add -e --id Microsoft.VisualStudioCode --scope machine` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
+| Zed | `sudo winget add -e --id ZedIndustries.Zed --scope machine` | **Still experimental.** |
+| Rime | `sudo winget add -e --id Rime.Weasel --scope machine` | Input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (We use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
+| Revo Uninstaller | `sudo winget add -e --id RevoUninstaller.RevoUninstaller --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
 > [!Note]
 >
@@ -208,11 +208,23 @@ butler preset -a
 butler preset -af
 ```
 
-### Clean up Annoyed System Bundled Software
+### Configure Windows Itself
 
-1. Uninstall system bundled software (like _Microsoft One Drive_, _Outlook_...) you don't need at all;
-2. Close the UAC (User Account Control) as your need;
-3. Close all of anti-virus features of _Windows Defender_, and use [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
+(Optional, if your system is not activated yet) Firstly, use _HEU KMS Activator_ to activate Windows:
+
+| Software | Source/Install Method |
+| -- | -- |
+| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
+
+Next, clean up the system bundled software, uninstall system bundled software (like _Microsoft One Drive_, _Outlook_...) you don't need at all by _Revo Uninstaller_.
+
+After that, adjust system settings with _Winutil_:
+
+| Software | Source/Install Method |
+| -- | -- |
+| Winutil | `irm "https://christitus.com/win" \| iex` |
+
+Then, close all of anti-virus features of _Windows Defender_, and use [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
 
    | Software | Source/Install Method |
    | -- | -- |
@@ -222,65 +234,63 @@ butler preset -af
    >
    > You can choose the anti-virus software you like, except for _Windows Defender_.
 
+(Optional) At the end, login Microsoft Account, sync the system data, adjust system settings.
+
 ### Useful Software
 
-Install the basic software below in order:
+Install the basic software below as you need:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| Brave | [Official Website](https://brave.com/download/) | My daily use browser. See extensions setup [here](#daily-use). |
-| RayCast | [Microsoft Store](https://apps.microsoft.com/detail/9pfxxshc64h3) | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
-| Auto Dark Mode | [Microsoft Store](https://apps.microsoft.com/detail/xp8jk4hzbvf435) | Save my eyes! |
-| NanaZip | [Microsoft Store](https://apps.microsoft.com/detail/9n8g7tscl18r) | / |
-| DeskPins | [Official Website](https://efotinis.neocities.org/deskpins/) | Pin any window to the desktop. |
-| PixPin | [Microsoft Store](https://apps.microsoft.com/detail/xp89f3cgsrzhc7) | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
+| Brave | `sudo winget add -e --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#daily-use). |
+| RayCast | `sudo winget add -e --id 9PFXXSHC64H3 --scope machine --source msstore` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
+| Auto Dark Mode | `sudo winget add -e --id ArminOsaj.AutoDarkMode --scope machine` | Save my eyes! |
+| ~~NanaZip~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/9n8g7tscl18r)~~ | ~~It seems like the latest Windows 11 have built-in compression support~~ |
+| DeskPins | `sudo winget add -e --id EliasFotinis.DeskPins --scope machine` | Pin any window to the desktop. |
+| PixPin | `sudo winget add -e --id PixPin.PixPin --scope machine` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
-| Driver Store Explorer | [GitHub Releases](https://github.com/lostindark/DriverStoreExplorer/releases) | Clear unused/outdated device drivers. |
-| DISM++ | [GitHub Releases](https://github.com/Chuyu-Team/Dism-Multi-language/releases) | Clear disk. |
+| Driver Store Explorer | `sudo winget add -e --id lostindark.DriverStoreExplorer --scope machine` | Clear unused/outdated device drivers. |
+| DISM++ | `sudo winget add -e --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
 
-Install the tool software below in order:
+Install the tool software below as you need:
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| WeChat | [Official Website](https://pc.weixin.qq.com/?lang=en_US) | / |
-| QQ | [Official Website](https://im.qq.com/pcqq/index.shtml) | / |
-| Telegram | [Official Website](https://desktop.telegram.org/) | / |
-| Cursor | [Official Website](https://www.cursor.com/downloads) | Better AI experience than _Visual Studio Code_, but low compatibility and slow performance in some case. |
-| ~~WPS Office~~ | ~~[Netdisk](https://www.123pan.com/s/sXtA-iLVEh.html)~~ | ~~/~~ |
-| ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~/~~ |
-| ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~/~~ |
+| WeChat | `sudo winget add -e --id Tencent.WeChat.Universal --scope machine` | / |
+| QQ | `sudo winget add -e --id Tencent.QQ.NT --scope machine` | / |
+| WPS Office | `sudo winget add -e --id Kingsoft.WPSOffice --scope machine` | / |
+| ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~Do we need this?~~ |
+| ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~Do we need this?~~ |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
-| Steam | [Official Website](https://store.steampowered.com/about) | / |
-| Epic Games | [Official Website](https://store.epicgames.com/download) | / |
-| OBS Studio | [Official Website](https://obsproject.com/download) | / |
+| Steam | `sudo winget add -e --id Valve.Steam --scope machine` | / |
+| Epic Games | `sudo winget add -e --id EpicGames.EpicGamesLauncher --scope machine` | / |
+| OBS Studio | `sudo winget add -e --id OBSProject.OBSStudio --scope machine` | / |
 
-Install the dev software (ENV / SDK / IDE / Testing) below in order:
+Install the dev software (ENV / SDK / IDE / Testing) below as you need (in order):
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
 | WSL | `wsl --install` | Requires reboot. |
-| Podman Desktop | [Official Website](https://podman-desktop.io/downloads/windows) | / |
+| Podman Desktop | `sudo winget add -e --id RedHat.Podman-Desktop --scope machine` | / |
 | Bun | `sudo winget add -e --id Oven-sh.Bun --scope machine` | A faster JavaScript runtime, bundler, and package manager all in one.<br><br>If you already install this before, you can skip this time. |
-| Node.js | [Official Website](https://nodejs.org/en/download/)<br><br>Setup: `npm i corepack@latest npm@latest esbuild -g`<br><br>Enable corepack: `corepack enable` | I prefer the **portable edition**. |
+| Node.js | `sudo winget add -e --id OpenJS.NodeJS.LTS --scope machine`<br><br>Setup: `npm i corepack@latest npm@latest esbuild -g`<br><br>Enable corepack: `corepack enable` | The legacy JavaScript runtime, which is the most stable one. |
 | Zig | `sudo winget add -e --id zig.zig --scope machine` | I prefer this than _Rust_. |
 | GraalVM | [Official Website](https://www.graalvm.org/downloads/) | Alternative to _JVM_ with native support. |
 | Mingw-w64 | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** implementation on Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime**. |
 | Neovim | `sudo winget add -e --id Neovim.Neovim --scope machine` | / |
 | LazyVim | [Official Website](https://www.lazyvim.org/installation) | Requires **GCC**.<br /><br />With extras: _coding.mini-surround_, _vscode._ |
-| Visual Studio | [Official Website](https://visualstudio.microsoft.com/downloads/) | Bundles **MSVC (Microsoft Visual C++) compiler**. |
-| JetBrains Toolbox | [Official Website](https://www.jetbrains.com/toolbox-app/) | / |
-| JetBrains IntelliJ IDEA | Install from JetBrains Toolbox. | / |
+| ~~Visual Studio~~ | ~~[Official Website](https://visualstudio.microsoft.com/downloads/)~~ | ~~Bundles **MSVC (Microsoft Visual C++) compiler**. Do we need this?~~ |
+| ~~JetBrains Toolbox~~ | ~~[Official Website](https://www.jetbrains.com/toolbox-app/)~~ | ~~Do we need this?~~ |
+| ~~JetBrains IntelliJ IDEA~~ | ~~Install from JetBrains Toolbox.~~ | ~~Do we need this?~~ |
 | ~~Navicat Premium Lite~~ | ~~[Official Website](https://www.navicat.com/download/navicat-premium-lite)~~ | / |
-| hyperfine | `sudo winget add -e --id sharkdp.hyperfine --scope machine` | Benchmarking. tool. |
-| Chromium | `sudo winget add -e --id Hibbiki.Chromium --scope machine` | Web app testing. See setup here [here](#development). |
+| hyperfine | `sudo winget add -e --id sharkdp.hyperfine --scope machine` | Benchmarking tool. |
+| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. Usually, we don't need to install this manually. |
 
-(Optional) Install other software below:
+Some one-time use software:
 
 | Software | Source/Install Method |
 | -- | -- |
-| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) |
-| AIDE64 | / |
 | Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) |
 | PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) |
 
@@ -314,29 +324,19 @@ Useful extensions:
 
 #### Development
 
+Now I'm try to development with VSCode's integrated browser. If there are some features it does not support, I may choose my daily use browser as fallback.
+
 > [!Note]
 >
-> Of course, _FireFox_ and _Edge_ are sometimes needed to test browser-specific problem.
->
-> For _Safari_, maybe we really need a Mac computer...😇
+> These extensions are not necessary, but sometime useful.
 
-To get a clean environment for web development, I prefer to use a separate _Chromium_ browser with only the necessary extensions:
+As VSCode's integrated browser is powered by webview, which does not support browser extension,  I installed these extensions on my daily use browser:
 
 | Extension | Source/Install Method | Note |
 | -- | -- | -- |
 | Vue.js Devtools (Community) | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases) | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
-| Cookie Editor | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl) | / |
-| SEO META in 1 CLICK | [~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc) | / |
-
-### Configure Windows Itself
-
-(Optional) Use HEU KMS Activator to activate Windows
-
-| Software | Source/Install Method |
-| -- | -- |
-| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
-
-At the end, login Microsoft Account, sync the system data, adjust system settings.
+| ~~Cookie Editor~~ | ~~[Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl)~~ | ~~/~~ |
+| ~~SEO META in 1 CLICK~~ | ~~[~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc)~~ | ~~/~~ |
 
 ## Third Step: Maintain System
 
@@ -354,19 +354,19 @@ Programs should under:
 
 Projects should under:
 
-- `~/i/`: Personal projects, inspired by [antfu](https://github.com/antfu)
+- `~/dev/i/`: Personal projects
 
   Organize related projects into a workspace, for example:
 
-  - `~/i/oss/`: Open source projects.
+  - `~/dev/i/oss/`: Open source projects.
 
-- `~/u/`: Work projects.
+- `~/dev/x/`: Work projects.
 
   - ...
 
 > [!NOTE]
 >
-> Use a symlink to link the projects folder to `~/i/` is a bad behavior, it can cause problems when resolving the project path.
+> Use a symlink to link the projects folder to `~/dev/i/` is a bad behavior, it can cause problems when resolving the project path.
 
 Use Revo Uninstaller clean useless software at regular intervals.
 

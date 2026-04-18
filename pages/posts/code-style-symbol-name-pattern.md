@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Name Pattern'
 date: 2025-09-23T15:58+08:00
-update: 2026-04-12T23:12+08:00
+update: 2026-04-18T22:24+08:00
 lang: en
 duration: 15min
 type: blog+note
@@ -188,11 +188,11 @@ For example:
 
 ```ts
 /**
- * "fetchUserById" is a "fetch" endpoint function, because it's used to fetch
+ * "getUserById" is a "get" endpoint function, because it's used to get
  * single data. "Element" is "User", "Modifier" (DYNAMIC condition) is "ById",
- * which means we need to provide user id to fetch the user.
+ * which means we need to provide user id to get the user.
  */
-export async function fetchUserById(id: Pick<User, 'id'>): Promise<User> {
+export async function getUserById(id: Pick<User, 'id'>): Promise<User> {
   return await request.get('/user', { params: { id } })
 }
 
@@ -217,9 +217,13 @@ export async function listActiveUsers(): Promise<User[]> {
 
 Generally, we can know what operation an endpoint function performs by its HTTP method, so we can categorize endpoint functions by their HTTP methods, and then use different verbs for different HTTP methods.
 
-- `GET` method is used to read data, it's **safe[^1]** and **idempotent[^2]**. The acceptable verbs are:
-  - `fetch` for **single data**.
-  - `list` for **multiple data**.
+> [!Note]
+>
+> GET, PUT & PATCH method requests can be distinguished by the nature of that request, while other method requests often use business verbs.
+
+- `GET` method request is used to read data, it's **safe[^1]** and **idempotent[^2]**. They can be distinguished by the nature of the request:
+  - `get` for **single data**.
+  - `list` for **multiple data** (and that data are often used in dropdown).
   - `search` for **multiple data** with **keyword matching**.
   - `query` for **multiple data** with **pagination**.
 
@@ -264,9 +268,9 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
 
   /**
-   * Fetch single user.
+   * Get single user.
    */
-  export async function fetchUser(id: Pick<User, 'id'>): Promise<User> {
+  export async function getUser(id: Pick<User, 'id'>): Promise<User> {
     return await request.get('/user', { params: { id } })
   }
 
@@ -317,10 +321,10 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
   ```
 
-- `POST` method is used to create data, it's **not safe** and **not idempotent**. The acceptable verbs are:
-  - `create` for **creating new data from nothing**.
-  - `add` for **adding data to a collection**.
-  - ... For some special scenarios, you can also use business verbs like `register`, `login`, `upload`, etc.
+- `POST` method request is used to create data, it's **not safe** and **not idempotent**. The acceptable verbs are:
+  - `create` for **creating new data (from nothing)**.
+  - `add` for **adding data (to a collection)**.
+  - ... But more often to use business verbs like `register`, `login`, `upload`, etc.
 
   E.g.:
 
@@ -398,7 +402,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
   ```
 
-- `PUT` and `PATCH` method is used to update data, they're **not safe** but **idempotent**. The acceptable verbs are:
+- `PUT` and `PATCH` method requests are used to update data, they're **not safe** but **idempotent**. The acceptable verbs are:
   - `update` for updating **(partially or fully)** existing data.
   - `patch` for **emphasizing partially updating** existing data.
   - `replace` for **emphasizing fully updating** existing data.
@@ -448,9 +452,9 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
   ```
 
-- `DELETE` method is used to delete data, it's **not safe** but **idempotent**. The acceptable verb is:
+- `DELETE` method request is used to delete data, it's **not safe** but **idempotent**. The acceptable verb is:
   - `delete` for deleting **existing data**.
-  - ... For some special scenarios, you can also use business verbs like `revoke`, etc.
+  - ... But more often to use business verbs like `revoke`, etc.
 
   E.g.:
 
@@ -469,7 +473,7 @@ Generally, we can know what operation an endpoint function performs by its HTTP 
   }
   ```
 
-- Upsert operation means to create or update data, which can be implemented by `PUT` method, because it's **not safe** but **idempotent**, and it only uses the verb `upsert`.
+There is a special case we need to pay attention to: **Upsert (Update or insert)**, which means to create or update data, can be implemented by `PUT` method, because it's **not safe** but **idempotent**, and it should only uses the verb `upsert`.
 
   E.g.:
 

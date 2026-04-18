@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-04-18T00:02+08:00
+update: 2026-04-18T18:42+08:00
 lang: en
 duration: 17min
 type: note
@@ -352,7 +352,7 @@ Install the tool software below as you need:
 | -- | -- | -- |
 | WeChat | `sudo winget add --scope machine --source winget --exact --id Tencent.WeChat.Universal` | / |
 | QQ | `sudo winget add --scope machine --source winget --exact --id Tencent.QQ.NT` | / |
-| WPS Office | `sudo winget add --scope user --source winget --exact --id Kingsoft.WPSOffice` | WPS Office has no machine scope installer... To be honest, it's a piece of malware, but it's just so much better than Microsoft Office...<br><br>If I have to put up with it, I choose to turn off some of its annoying configurations: **Disable tasks "WpsExternal_xxx_xxx" in Task Schedular, disable "WPS Office Cloud Service" in Services, remove registry entries <span style="word-break: break-all;">"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace"</span> in Registry Editor...** |
+| WPS Office | `sudo winget add --scope user --source winget --exact --id Kingsoft.WPSOffice` | WPS Office has no machine scope installer... To be honest, it's a piece of malware, but it's just so much better than Microsoft Office...<br><br>If I have to put up with it, I choose to turn off some of its annoying configurations:<br>**&nbsp;&nbsp;1. Disable tasks "WpsExternal_xxx_xxx" in Task Schedular;<br>&nbsp;&nbsp;2. Disable "WPS Office Cloud Service" in Services;<br>&nbsp;&nbsp;3. Remove registry entries <span style="word-break: break-all;">"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace"</span> & <span style="word-break: break-all;">"Computer\HKEY_USERS\S-1-5-21-2752464909-2150961724-243656330-1001\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace"</span> in Registry Editor;<br>&nbsp;&nbsp;4. Remove <span style="word-break: break-all;">"%LOCALAPPDATA%\kingsoft\WPS Office\xxx\office6\wpscloudsvrimp.dll"</span>...** |
 | ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~Do we need this?~~ |
 | ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~Do we need this?~~ |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |

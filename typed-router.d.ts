@@ -111,6 +111,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/code-style-ts-endpoint-functions': RouteRecordInfo<
+      '/posts/code-style-ts-endpoint-functions',
+      '/posts/code-style-ts-endpoint-functions',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual-bash-script': RouteRecordInfo<
       '/posts/manual-bash-script',
       '/posts/manual-bash-script',
@@ -340,6 +347,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/code-style-title-case.md': {
       routes:
         | '/posts/code-style-title-case'
+      views:
+        | never
+    }
+    'pages/posts/code-style-ts-endpoint-functions.md': {
+      routes:
+        | '/posts/code-style-ts-endpoint-functions'
       views:
         | never
     }

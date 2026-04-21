@@ -69,6 +69,7 @@
         "sharp": "catalog:dev",
         "simple-git": "catalog:dev",
         "simple-git-hooks": "catalog:check",
+        "std-env": "catalog:dev",
         "tinyglobby": "catalog:dev",
         "typescript": "catalog:dev",
         "unocss": "catalog:build",
@@ -144,6 +145,7 @@
       "premove": "^4.0.0",
       "sharp": "^0.34.5",
       "simple-git": "^3.36.0",
+      "std-env": "^4.1.0",
       "tinyglobby": "^0.2.16",
       "typescript": "^6.0.2",
     },
@@ -1462,6 +1464,8 @@
     "speakingurl": ["speakingurl@14.0.1", "", {}, "sha512-1POYv7uv2gXoyGFpBCmpDVSNV74IfsWlDW216UPjbWufNf+bSU6GdbDsxdcxtfwb4xlI3yxzOTKClUosxARYrQ=="],
 
     "sprintf-js": ["sprintf-js@1.0.3", "", {}, "sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g=="],
+
+    "std-env": ["std-env@4.1.0", "", {}, "sha512-Rq7ybcX2RuC55r9oaPVEW7/xu3tj8u4GeBYHBWCychFtzMIr86A7e3PPEBPT37sHStKX3+TiX/Fr/ACmJLVlLQ=="],
 
     "stringify-entities": ["stringify-entities@4.0.4", "", { "dependencies": { "character-entities-html4": "^2.0.0", "character-entities-legacy": "^3.0.0" } }, "sha512-IwfBptatlO+QCJUo19AqvrPNqlVMpW9YEL2LIVY+Rpv2qsjCGxaDLNRgeGsQWJhfItebuJhsGSLjaBbNSQ+ieg=="],
 

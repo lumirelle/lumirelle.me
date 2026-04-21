@@ -35,6 +35,13 @@ export default defineConfig({
     Await(promises),
   ],
 
+  server: {
+    https: {
+      cert: resolve(import.meta.dirname, 'certs/localhost.pem'),
+      key: resolve(import.meta.dirname, 'certs/localhost-key.pem'),
+    },
+  },
+
   build: {
     rolldownOptions: {
       onwarn(warning, next) {

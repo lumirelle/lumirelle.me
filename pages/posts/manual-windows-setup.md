@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-04-18T18:42+08:00
+update: 2026-04-21T16:13+08:00
 lang: en
-duration: 17min
+duration: 18min
 type: note
 ---
 
@@ -13,31 +13,31 @@ type: note
 
 > [!Caution]
 >
-> Please don’t try to setup a fresh Windows when you don’t have time. You don’t want your girlfriend to ask you to spend the night with the computer, right?
+> Please never to reinstall Windows when you don’t have time. You certainly don't want your girlfriend to let you spend the night with your computer, right?
 
-I know Windows is the best OS to play games, but the worst OS to develop.
+I know Windows is the best OS for us to play games, but the worst OS to develop.
 
-If we have no choice, the only one thing we can do is trying our best to make Windows being better for our development. 🥰
+But if we have no choice, the only one thing we can do is trying our best to make Windows being better for our development. 🥰
 
 ## First Step: Reinstall a Clean Windows
 
-We can use [Ventoy](https://www.ventoy.net/en/download.html) with a Windows ISO file to make a bootable USB drive to reinstall Windows. This allows us to decide which edition & version of Windows to use.
+The only way to make everything clean and fresh in Windows is to reinstall it.
 
-Before that, we need install and set up Ventoy in your USB flash drive with a Windows ISO file.
+We can use [Ventoy](https://www.ventoy.net/en/download.html) with a Windows ISO file to make a bootable USB drive to reinstall Windows. This allows us to decide which edition & version of Windows to use.
 
 ### Install & Setup Ventoy
 
 First, insert your USB flash driver.
 
-If you want to store some additional files into that USB flash driver, like the necessary softwares (like [Clash Verge Rev](#prerequisite-software)), you can separate this driver to two partitions, but **make sure you really remember that what partition stores Ventoy**: When you enter the BIOS, you must select the right one.
+If you want to store some additional files into that USB flash driver, like the necessary softwares (like [Clash Verge Rev](#prerequisite-software)), you can separate this driver into two partitions, but **make sure you really remember that which partition stores Ventoy**: When you enter the BIOS, you will be asked to select the right one to start up Ventoy.
 
-Finally, just follow the [Ventoy's official installation guide](https://www.ventoy.net/en/doc_start.html).
+Finally, just follow the [Ventoy's official installation guide](https://www.ventoy.net/en/doc_start.html) to complete the installation of Ventoy into your USB flash driver.
 
 ### Download Windows ISO
 
 > [!Note]
 >
-> I only show the links for Windows 11, because I only use Windows 11 now.
+> I only list the links for Windows 11, because I only use Windows 11 now.
 >
 > If you want to use back Windows 10 / 7 / etc., you can also try to find them from [Microsoft official website](https://www.microsoft.com/en-us/software-download/) or [Mass Grave](https://massgrave.dev/) by yourself.
 
@@ -53,19 +53,25 @@ To download ISO from Mass Grave (Unofficial):
 
 ### Make a Bootable USB Drive
 
-First, move the downloaded Windows ISO file to the USB flash drive (It's doesn't matter which partition you put it in).
+Just move the downloaded Windows ISO file to the USB flash drive.
 
-Then, restart your computer and enter BIOS (Quickly and non-stop clicking on `ESC` / `F11` / `F12` before the startup logo shows up, depends on your motherboard / computer model):
+It's doesn't matter which partition you put it in, Ventoy can handle it.
+
+### Reinstall Windows
+
+First, restart your computer and enter BIOS. Just quickly and non-stop clicking on the appropriate key before the startup logo shows up, until you see the BIOS menu. The key depends on your motherboard / computer model, and usually is one of `ESC` / `F11` / `F12` / `Delete`.
+
+Next, start the reinstallation process with the steps below:
 
 1. Choose your USB flash drive (**with the right partition** where Ventoy is installed if there are more than one) in the boot menu;
-2. You may see the "Security Violation" error first time, please refer to [Ventoy guides](https://www.ventoy.net/en/doc_secure.html);
+2. If you see the **"Security Violation"** error first time you boot from it, don't worry, it's contrallable. Please refer to [Ventoy guides](https://www.ventoy.net/en/doc_secure.html) to enroll the Ventoy's secure boot key to solve this problem;
 3. After Ventoy starts up, just choose the Windows ISO to start the reinstallation process.
 
 Then, customize your Windows installation options and wait for the process to complete.
 
 For my own case, I prefer to use **Windows 11 Pro edition (without "N" flag)**, and **create one and only one partition for each disk device**. Different pepole may have different preferences, I prefer them because: Pro edition has more out of box presets for developers & players, and for modern systems, make multiple partitions on one disk is really no reason and no benefit.
 
-What's more, for better Windows user account naming, I prefer to **use local account** to setup Windows, instead of Microsoft account. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, when you are stuck on the login page of Microsoft account:
+What's more, for a cleaner Windows username, I prefer to **use local account** to setup Windows, instead of Microsoft account, which allows us to have a custom username. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, when you are stuck on the login page of Microsoft account:
 
 ```cmd
 start ms-cxh:localonly
@@ -73,17 +79,21 @@ start ms-cxh:localonly
 
 > [!Caution]
 >
-> My advice is not to use OOBE to bypass the networking updates, because you may be tempted to do someting else like disabling Windows Defender when you update later or even not to update any more, which may cause this fresh installed Windows to go wrong: Maybe some of drivers will be broken, or some of core system components will be broken, etc.
+> My advice is not to use OOBE to bypass Microsoft account login and the online updates, because you may forget to or even not to apply the necessary update any more after reinstalling, which may cause this fresh installed Windows to go wrong: Maybe some of drivers will be broken, or some of core system components will be broken, etc.
 >
 > It's a lesson in blood and tears...
 >
-> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, because it will download some useless components. So please don't reinstall Windows when you don't have time. You don't want your girlfriend to ask you to spend the night with the computer, right?
+> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, because it will download not only the necessary components, but also some useless components. Don't worry, we will remove them later.
+>
+> Believe me, all these choices are for best stability and cleaness of the system. 🥺
 
 ## Second Step: Setup System Preference
 
-Just follow the steps below, clean up the annoyed system bundled softwares, and install the softwares you preferred. 😍
+Just follow the steps below, clean up the annoyed / useless system bundled components / softwares, and install the components / softwares you preferred / need. 😍
 
 ### Learn How to Use winget
+
+I highly recommend you to use [winget](https://learn.microsoft.com/windows/package-manager/winget/) to manage your software, which is the official Windows package manager, and helps you to avoid fake or malicious software.
 
 Search:
 
@@ -99,11 +109,12 @@ winget search --id <QUERY>
 Install (User scope):
 
 ```nu
+winget install <QUERY>
 # `add` is an alias of command `install`
 winget add <QUERY>
 ```
 
-Install (Machine scope, requires admin permission):
+Install (Machine scope, requires admin privileges):
 
 ```nu
 # In windows, `sudo` command is powered by `gsudo`
@@ -139,7 +150,7 @@ Install with exact ID match:
 ```nu
 winget add --exact --id <PACKAGE_ID>
 # Or
-winget add --exact --id <PACKAGE_ID>
+winget add -e --id <PACKAGE_ID>
 ```
 
 Install specific version (Default is latest version):
@@ -153,6 +164,7 @@ winget add <QUERY> -v <VERSION>
 Uninstall:
 
 ```nu
+winget uninstall <QUERY>
 # `rm` is an alias of command `uninstall`
 winget rm <QUERY>
 ```
@@ -171,13 +183,12 @@ winget <command> -?
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You can prepare it before reinstallation. | Network proxy manager.<br><br>You can use your own profile with "Tun mode" (If you uses "System Proxy" mode, this will cause some software exit immediately.) to make it usable, we will futher configure it [later](#personal-preferences). |
+| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You'd better prepare it before reinstallation. | Network proxy manager.<br><br>You should use your own profile with "Tun mode" to make it usable. If you uses "System Proxy" mode, this will cause some softwares exit immediately.<br><br>We will futher configure it [later](#personal-preferences). |
 
-
-Then, below softwares are helpful for the future steps, you should install them first and in order:
+And below softwares are helpful for the future steps, you should install them first and in order:
 
 <details>
-  <summary>A fully one-time installing script here <strong>(beta)</strong>:</summary>
+  <summary>A fully one-time installing script (.ps1) here <strong>(beta)</strong>:</summary>
 
   ```ps1
   Set-StrictMode -Version Latest
@@ -249,17 +260,17 @@ Then, below softwares are helpful for the future steps, you should install them 
 
 | Software | Source/Install Method | Note |
 | -- | -- | -- |
-| Windows Terminal | System bundled | Simple, without so many lua configs... |
-| gsudo | `winget add --scope machine --source winget --exact --id gerardog.gsudo` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not useful. |
-| Nushell | `sudo winget add --scope machine --source winget --exact --id Nushell.Nushell` | Cross-platform shell powered by _Rust_.<br><br>Requires running the shell as admin too. |
-| Starship | `sudo winget add --scope machine --source winget --exact --id Starship.Starship` | Shell prompt powered by _Rust_ too.<br><br>Requires running the shell as admin too. |
-| Git | `sudo winget add --scope machine --source winget --exact --id Git.Git` | Nothing is more important that _Git_ for a developer, right?<br><br>Requires running the shell as admin too. |
-| Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster JavaScript runtime, bundler, and package manager all in one, alternative to _Node.js_ ecosystem.<br><br>Requires running the shell as admin too.<br><br>You can use your preferred one.<br><br>**Don't forget to add `~/.bun/bin` to your system environment variable `Path`** |
+| Windows Terminal | System bundled | Simple, useful, without so many lua configs... |
+| gsudo | `winget add --scope machine --source winget --exact --id gerardog.gsudo` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
+| Nushell | `sudo winget add --scope machine --source winget --exact --id Nushell.Nushell` | Cross-platform shell powered by _Rust_ to make the consistent experience. |
+| Starship | `sudo winget add --scope machine --source winget --exact --id Starship.Starship` | Cross-platform shell prompt powered by _Rust_ too. |
+| Git | `sudo winget add --scope machine --source winget --exact --id Git.Git` | Nothing is more important that _Git_ for a developer, right? |
+| Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster all in one JavaScript runtime, bundler, and package manager, alternative to _Node.js_ ecosystem.<br><br>You can use your preferred one.<br><br>**Don't forget to add `~/.bun/bin` to your system environment variable `Path`** |
 | (Optional) Nutstore | `sudo winget add --scope machine --source winget --exact --id Nutstore.Nutstore` | WebDav. I use it to sync my KeePass database among multiple devices. **If you uses Clash Verge Rev with "System Proxy" mode, this will cause Nutstore exit immediately.** |
 | (Optional) KeePassXC | `sudo winget add --scope machine --source winget --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `sudo winget add --scope machine --source winget --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience. |
 | Visual Studio Code | `sudo winget add --scope machine --source winget --exact --id Microsoft.VisualStudioCode` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
-| Zed | `sudo winget add --scope machine --source winget --exact --id ZedIndustries.Zed` | **Still experimental.** |
+| Zed | `sudo winget add --scope machine --source winget --exact --id ZedIndustries.Zed` | **Still experimental, but better performance than Visual Studio Code.** |
 | (Optional) Rime | `sudo winget add --scope machine --source winget --exact --id Rime.Weasel` | Chinese input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
 | Revo Uninstaller | `sudo winget add --scope machine --source winget --exact --id RevoUninstaller.RevoUninstaller` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
@@ -276,10 +287,10 @@ Then, below softwares are helpful for the future steps, you should install them 
 Running the commands below in _Windows Terminal_ with _Nushell_:
 
 ```nu
-# (Optional) Install useful global package as your need
+# (Optional) Install useful global Bun package as your need
 # Package manager's manager & Package updater
 bun i @antfu/ni taze -g
-# Project manager
+# Project scaffolding
 bun i @sxzz/create -g
 # Neovim prerequisite
 bun i tree-sitter-cli -g
@@ -290,7 +301,7 @@ bun i starship-butler -g
 butler preset -l
 # Apply specific preset(s):
 butler preset -i <preset_id_pattern> [-i <preset_id_pattern> ...]
-# Or applay all presets and skip your existing configs:
+# Or apply all presets and skip your existing configs:
 butler preset -a
 # Or you want to override your existing configs,
 # recommended for fresh Windows installation:
@@ -313,7 +324,7 @@ After that, I choose to install [Huorong](https://www.huorong.cn/person) instead
    >
    > You can choose the anti-virus software you like, except for _Windows Defender_!!!
 
-Next, clean up the system bundled software, uninstall system bundled software by _Revo Uninstaller_ (like _Microsoft One Drive_, _Outlook_...) which you don't need at all.
+Next, uninstall system bundled software by _Revo Uninstaller_ (like _Microsoft One Drive_, _Outlook_...) which you don't need at all.
 
 After that, adjust system settings with _Winutil_:
 

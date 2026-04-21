@@ -97,9 +97,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/code-style-symbol-name-pattern': RouteRecordInfo<
-      '/posts/code-style-symbol-name-pattern',
-      '/posts/code-style-symbol-name-pattern',
+    '/posts/code-style-symbol-naming-patterns': RouteRecordInfo<
+      '/posts/code-style-symbol-naming-patterns',
+      '/posts/code-style-symbol-naming-patterns',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -345,9 +345,9 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/code-style-symbol-name-pattern.md': {
+    'pages/posts/code-style-symbol-naming-patterns.md': {
       routes:
-        | '/posts/code-style-symbol-name-pattern'
+        | '/posts/code-style-symbol-naming-patterns'
       views:
         | never
     }

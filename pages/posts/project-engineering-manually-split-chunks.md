@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Manually Split Chunks'
 date: 2025-11-05T16:22+08:00
-update: 2026-03-31T13:21+08:00
+update: 2026-04-21T10:46+08:00
 lang: en
 duration: 7min
 type: blog+note
@@ -281,22 +281,26 @@ You can refer to my demo repository [here](https://github.com/lumirelle/demo-man
 
 ### Vite
 
-For Vite, you can enable the devtools by:
+For Vite, you can enable the devtools & inspect plugin by:
 
 ```bash
-npm install -D @vitejs/devtools
+npm install -D @vitejs/devtools vite-plugin-inspect
 ```
 
 ```ts
+import Inspect from 'vite-plugin-inspect'
+
 export default defineConfig({
   devtools: {
-    enabled: true,
     build: { withApp: true }
   },
+  plugins: [
+    Inspect(),
+  ],
 })
 ```
 
-And you can inspect the chunks in the "Chunks" tab of the devtools.
+And you can inspect the chunks in the "Chunks" tab of the opening website.
 
 ### Webpack
 

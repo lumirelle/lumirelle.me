@@ -223,6 +223,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/perf-network-protocal': RouteRecordInfo<
+      '/posts/perf-network-protocal',
+      '/posts/perf-network-protocal',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/project-engineering-categorize-your-dependencies': RouteRecordInfo<
       '/posts/project-engineering-categorize-your-dependencies',
       '/posts/project-engineering-categorize-your-dependencies',
@@ -443,6 +450,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/misc-vite-and-unbundled.md': {
       routes:
         | '/posts/misc-vite-and-unbundled'
+      views:
+        | never
+    }
+    'pages/posts/perf-network-protocal.md': {
+      routes:
+        | '/posts/perf-network-protocal'
       views:
         | never
     }

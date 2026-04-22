@@ -1,9 +1,9 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-02-10T12:03+08:00
+update: 2026-04-22T23:09+08:00
 lang: en
-duration: 2min
+duration: 1min
 type: note
 ---
 
@@ -55,7 +55,9 @@ This is a manual for how to create a new project with specific tech stack.
 
   </details>
 
-## JS/TS Library
+## TypeScript Library
+
+> TypeScript 6+
 
 Use `@sxzz/create` CLI tool:
 
@@ -67,7 +69,9 @@ And select the `Library` template in the startup prompt.
 
 <img src="/posts/project-create-manual.png" alt="project-create-manual" style="width: 40%; height: auto;" />
 
-## JS/TS Monorepo
+## TypeScript Monorepo
+
+> TypeScript 6+
 
 Use `@sxzz/create` CLI tool:
 
@@ -93,7 +97,9 @@ And select the `VS Code` template in the startup prompt.
 
 ## Vue
 
-### `create-vue` (Vue 3 + Vite + TypeScript)
+> Vue 3+, Vite 8+
+
+### `create-vue`
 
 Use the `create-vue` CLI tool:
 
@@ -101,15 +107,7 @@ Use the `create-vue` CLI tool:
 bun create vue <project-path>
 ```
 
-### `create-vue@legacy` (Vue 2 + Vite + JavaScript)
-
-Use the `create-vue` CLI tool:
-
-```bash
-bun create vue@legacy <project-path>
-```
-
-### Vitesse Lite (Vue 3 + Vite + TypeScript)
+### Vitesse Lite
 
 Use `@sxzz/create` CLI tool:
 
@@ -123,23 +121,15 @@ And select the `Vitesse Lite` template in the startup prompt.
 
 ## Nuxt
 
-### `nuxi` (Nuxt 4 + Vite + TypeScript)
+> Nuxt 4+
+
+### `create-nuxt`
 
 ```bash
-bun create nuxi <project-path>
+bun create nuxt <project-path>
 ```
 
-### `create-nuxt-app@^5` (Nuxt 2 + Webpack + JavaScript)
-
-> [!Note]
->
-> Since the version of 6, `create-nuxt-app` using `nuxi` under the hood, so it will create Nuxt 4 project not Nuxt 2 project!
-
-```bash
-bun create nuxt-app@^5 <project-path>
-```
-
-### Vitesse Nuxt (Nuxt 4 + Vite + TypeScript)
+### Vitesse Nuxt
 
 Use `@sxzz/create` CLI tool:
 

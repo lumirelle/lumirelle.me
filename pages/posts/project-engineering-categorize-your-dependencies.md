@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Categorize Your Dependencies'
 date: 2025-11-01T16:06+08:00
-update: 2026-03-22T23:39+08:00
+update: 2026-04-23T00:12+08:00
 lang: en
 duration: 3min
 type: blog+note
@@ -11,95 +11,13 @@ type: blog+note
 
 ## Introduction
 
-With the project size is growing up, we have to face the case of managing a large number of dependencies. `devDependencies` and `dependencies` are not enough to fit our needs.
+In Node.js world, we use `dependencies` to declare the dependencies which are required for running our package, and `devDependencies` to declare the dependencies which are only required for development.
 
-Thanks to the modern [JavaScript package managers](/manual-js-pm), we have "catalogs" to handle this situation: We can categorize them by why we use them: We have `test` dependencies which are meant to be used for testing, and `dev` dependencies which are used for development...
+With the project size is growing up, simple `devDependencies` and `dependencies` are not enough to fit our needs to categorize them.
 
-Here are two examples (using Bun):
+Thanks to the modern [JavaScript package managers](manual-js-pm), we have "catalogs" to handle this situation: We can categorize them by why we use them: We have `test` dependencies which are meant to be used for testing, and `dev` dependencies which are used for development...
 
-_A Nuxt application project:_
-
-```jsonc
-{
-  // ...
-
-  "workspaces": {
-    "catalogs": {
-      "frontend": {
-        "@antfu/utils": "^9.3.0",
-        "@vueuse/core": "^14.1.0",
-        "dayjs": "^1.11.19",
-        "echarts": "^6.0.0",
-        "pinia": "^3.0.4",
-        "vue": "^3.5.27",
-        "vue-echarts": "^8.0.1"
-      },
-      // Extracted from "frontend", as we may have a lot of icons dependencies
-      "icons": {
-        "@iconify-json/carbon": "^1.2.18",
-        "@iconify-json/twemoji": "^1.2.5",
-        "@iconify/utils": "^3.1.0"
-      },
-      "backend": {
-        // ...
-      },
-
-      "dev": {
-        "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
-        "typescript": "^5.9.3",
-        "vue-tsc": "^3.2.4"
-      },
-
-      "types": {
-        // ...
-      },
-
-      "build": {
-        "@nuxt/eslint": "^1.13.0",
-        "@nuxt/fonts": "^0.13.0",
-        "@nuxt/hints": "^1.0.0-alpha.5",
-        "@nuxt/image": "npm:@nuxt/image-nightly@2.0.1-20251225-125234-23b8cef",
-        "@nuxt/test-utils": "^3.23.0",
-        "@nuxtjs/color-mode": "^4.0.0",
-        "@nuxtjs/device": "^4.0.0",
-        "@nuxtjs/i18n": "^10.2.1",
-        "@nuxtjs/seo": "^3.3.0",
-        "@pinia/nuxt": "^0.11.3",
-        "@unocss/eslint-config": "^66.6.0",
-        "@unocss/nuxt": "^66.6.0",
-        "@vite-pwa/nuxt": "^1.1.0",
-        "@vueuse/nuxt": "^14.1.0",
-        "dayjs-nuxt": "^2.1.11",
-        "nuxt": "^4.3.0",
-        "nuxt-echarts": "^1.0.1",
-        "nuxt-qrcode": "^0.4.8",
-        "nuxt-swiper": "^2.0.1",
-        "nuxt-typed-router": "^4.0.2",
-        "unocss": "^66.6.0",
-        "unplugin-vue-router": "^0.19.2"
-      },
-
-      "check": {
-        "@antfu/eslint-config": "^7.2.0",
-        "eslint": "^9.39.2",
-        "eslint-plugin-format": "^1.3.1",
-        "lint-staged": "^16.2.7"
-      },
-
-      "test": {
-        "@vitest/coverage-v8": "^4.0.18",
-        "@vue/test-utils": "^2.4.6",
-        "happy-dom": "^20.3.9",
-        "playwright-core": "^1.58.0",
-        "std-env": "^3.10.0",
-        "vitest": "^4.0.18"
-      }
-    }
-  }
-
-  // ...
-}
-```
+Here are two examples (with Bun):
 
 _A TypeScript library project:_
 
@@ -109,6 +27,7 @@ _A TypeScript library project:_
 
   "workspaces": {
     "catalogs": {
+      // Production dependencies
       "prod": {
         // ...
       },
@@ -117,47 +36,132 @@ _A TypeScript library project:_
         "@antfu/utils": "^9.3.0"
       },
 
+      // Development dependencies
       "dev": {
-        "bumpp": "^10.4.0",
-        "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
-        "typescript": "^5.9.3"
+        "bumpp": "^11.0.1",
+        "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657"
       },
-
+      // Type system support
       "types": {
-        "@types/bun": "^1.3.6"
+        "@lumirelle/tsconfig": "^0.1.2",
+        "@types/node": "^25.6.0",
+        "bun-types": "^1.3.12",
+        "typescript": "^6.0.2"
       },
-
+      // Build tools
       "build": {
-        "bunup": "^0.16.20"
+        "bunup": "^0.16.31"
       },
-
+      // Code quality check tools
       "check": {
-        "@antfu/eslint-config": "^7.2.0",
+        "@antfu/eslint-config": "^8.2.0",
         "@arethetypeswrong/cli": "^0.18.2",
-        "eslint": "^9.39.2",
-        "eslint-plugin-format": "^1.3.1",
-        "knip": "^5.82.1",
-        "lint-staged": "^16.2.7",
-        "publint": "^0.3.17"
+        "@lumirelle/oxlint-config": "^0.2.2",
+        "eslint": "^10.2.0",
+        "eslint-plugin-oxlint": "^1.60.0",
+        "knip": "^6.4.1",
+        "nano-staged": "^1.0.2",
+        "oxlint": "^1.60.0",
+        "oxlint-tsgolint": "^0.21.0",
+        "publint": "^0.3.18"
       },
-
+      // Testing tools
       "test": {
-        "vitest-package-exports": "^1.1.2"
+        "tsnapi": "^0.2.0"
       },
 
+      // Documentation dependencies
       "docs": {
         "@iconify-json/svg-spinners": "^1.2.4",
-        "@shikijs/vitepress-twoslash": "^3.21.0",
-        "@unocss/reset": "^66.5.12",
-        "@vueuse/core": "^14.1.0",
+        "@shikijs/vitepress-twoslash": "^4.0.2",
+        "@unocss/reset": "^66.6.8",
+        "@vueuse/core": "^14.2.1",
         "floating-vue": "^5.2.2",
         "pinia": "^3.0.4",
-        "unocss": "^66.5.12",
-        "unplugin-vue-components": "^31.0.0",
-        "vite-tsconfig-paths": "^6.0.5",
-        "vitepress": "^2.0.0-alpha.15",
-        "vitepress-plugin-group-icons": "^1.7.1",
-        "vue": "^3.5.27"
+        "unocss": "^66.6.8",
+        "unplugin-vue-components": "^32.0.0",
+        "vite-tsconfig-paths": "^6.1.1",
+        "vitepress": "^2.0.0-alpha.17",
+        "vitepress-plugin-group-icons": "^1.7.5"
+      }
+    }
+  }
+
+  // ...
+}
+```
+
+_A Nuxt application project:_
+
+```jsonc
+{
+  // ...
+
+  "workspaces": {
+    "catalogs": {
+      // Production dependencies
+      // Used in browser, so we call it "frontend"
+      "frontend": {
+        "@antfu/utils": "^9.3.0",
+        "@takumi-rs/core": "^1.0.16",
+        "@vueuse/core": "^14.2.1",
+        "pinia": "^3.0.4"
+      },
+      // Icons...
+      "icons": {
+        "@iconify-json/carbon": "^1.2.20",
+        "@iconify-json/twemoji": "^1.2.5",
+        "@iconify/utils": "^3.1.0"
+      },
+
+      // Development dependencies
+      "dev": {
+        "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657"
+      },
+      // Type system support
+      "types": {
+        "typescript": "^6.0.3"
+      },
+      // Build tools & it's modules
+      "build": {
+        "@nuxt/a11y": "^1.0.0-alpha.1",
+        "@nuxt/eslint": "^1.15.2",
+        "@nuxt/fonts": "^0.14.0",
+        "@nuxt/hints": "^1.0.3",
+        "@nuxt/image": "npm:@nuxt/image-nightly@2.0.1-20260305-121439-fd87f7d",
+        "@nuxt/scripts": "^1.0.1",
+        "@nuxt/test-utils": "^4.0.2",
+        "@nuxtjs/color-mode": "^4.0.0",
+        "@nuxtjs/i18n": "^10.2.4",
+        "@nuxtjs/seo": "^5.1.3",
+        "@pinia/nuxt": "^0.11.3",
+        "@unocss/nuxt": "^66.6.8",
+        "@vite-pwa/nuxt": "^1.1.1",
+        "@vueuse/nuxt": "^14.2.1",
+        "nuxt": "npm:nuxt-nightly@4.4.3-29608489.ff42fe25",
+        "unocss": "^66.6.8"
+      },
+      // Code quality check tools
+      "check": {
+        "@antfu/eslint-config": "^8.2.0",
+        "@lumirelle/oxlint-config": "^0.2.2",
+        "@unocss/eslint-config": "^66.6.8",
+        "eslint": "^10.2.1",
+        "eslint-plugin-oxlint": "^1.61.0",
+        "knip": "^6.6.1",
+        "nano-staged": "^1.0.2",
+        "oxlint": "^1.61.0",
+        "oxlint-tsgolint": "^0.21.1",
+        "vue-tsc": "^3.2.7"
+      },
+      // Testing tools
+      "test": {
+        "@vitest/coverage-v8": "^4.1.5",
+        "@vue/test-utils": "^2.4.6",
+        "happy-dom": "^20.9.0",
+        "playwright-core": "^1.59.1",
+        "std-env": "^4.1.0",
+        "vitest": "^4.1.5"
       }
     }
   }
@@ -167,6 +171,8 @@ _A TypeScript library project:_
 ```
 
 ## What's the Best Practice?
+
+> Less is more.
 
 The meaning of categorizing your dependencies is to simplify the dependency management, so we shouldn't spend a lot of time to categorize them clearly and exactly.
 

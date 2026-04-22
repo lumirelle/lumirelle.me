@@ -223,6 +223,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/perf-manually-split-chunks': RouteRecordInfo<
+      '/posts/perf-manually-split-chunks',
+      '/posts/perf-manually-split-chunks',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/perf-network-protocal': RouteRecordInfo<
       '/posts/perf-network-protocal',
       '/posts/perf-network-protocal',
@@ -233,13 +240,6 @@ declare module 'vue-router/auto-routes' {
     '/posts/project-engineering-categorize-your-dependencies': RouteRecordInfo<
       '/posts/project-engineering-categorize-your-dependencies',
       '/posts/project-engineering-categorize-your-dependencies',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/project-engineering-manually-split-chunks': RouteRecordInfo<
-      '/posts/project-engineering-manually-split-chunks',
-      '/posts/project-engineering-manually-split-chunks',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -453,6 +453,12 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
+    'pages/posts/perf-manually-split-chunks.md': {
+      routes:
+        | '/posts/perf-manually-split-chunks'
+      views:
+        | never
+    }
     'pages/posts/perf-network-protocal.md': {
       routes:
         | '/posts/perf-network-protocal'
@@ -462,12 +468,6 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/project-engineering-categorize-your-dependencies.md': {
       routes:
         | '/posts/project-engineering-categorize-your-dependencies'
-      views:
-        | never
-    }
-    'pages/posts/project-engineering-manually-split-chunks.md': {
-      routes:
-        | '/posts/project-engineering-manually-split-chunks'
       views:
         | never
     }

@@ -1,13 +1,15 @@
 ---
 title: 'Performance Optimization: Network Protocols'
 date: 2026-04-21T10:48+08:00
-update: 2026-04-21T10:48+08:00
+update: 2026-04-23T00:23+08:00
 lang: en
 duration: 1min
 type: blog+note
 ---
 
 [[toc]]
+
+## Introduction
 
 Most people probably overlook the fact that network protocols actually have a significant impact on page loading performance.
 
@@ -21,3 +23,7 @@ In a word:
 - HTTP/3: **Based on QUIC**, which is a transport protocol built on top of UDP
 
 So, to deploy a modern web applications, you should use at least HTTP/2! 🥰
+
+## How to Enable HTTP/2?
+
+TODO...

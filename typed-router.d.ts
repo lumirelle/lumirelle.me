@@ -83,16 +83,16 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/code-style-directory-names': RouteRecordInfo<
-      '/posts/code-style-directory-names',
-      '/posts/code-style-directory-names',
+    '/posts/code-style-code-organization': RouteRecordInfo<
+      '/posts/code-style-code-organization',
+      '/posts/code-style-code-organization',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/code-style-encapsulation-and-modularity': RouteRecordInfo<
-      '/posts/code-style-encapsulation-and-modularity',
-      '/posts/code-style-encapsulation-and-modularity',
+    '/posts/code-style-directory-names': RouteRecordInfo<
+      '/posts/code-style-directory-names',
+      '/posts/code-style-directory-names',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -333,15 +333,15 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/code-style-directory-names.md': {
+    'pages/posts/code-style-code-organization.md': {
       routes:
-        | '/posts/code-style-directory-names'
+        | '/posts/code-style-code-organization'
       views:
         | never
     }
-    'pages/posts/code-style-encapsulation-and-modularity.md': {
+    'pages/posts/code-style-directory-names.md': {
       routes:
-        | '/posts/code-style-encapsulation-and-modularity'
+        | '/posts/code-style-directory-names'
       views:
         | never
     }

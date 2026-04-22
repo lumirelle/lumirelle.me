@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Naming Patterns'
 date: 2025-09-23T15:58+08:00
-update: 2026-04-21T19:09+08:00
+update: 2026-04-22T14:55+08:00
 lang: en
 duration: 14min
 type: blog+note
@@ -13,9 +13,9 @@ type: blog+note
 
 > [!Note]
 >
-> Of course, naming patterns are always the fallback options, [encapsulation and modularity](code-style-encapsulation-and-modularity) are the better ways to improve the code readability and maintainability.
+> Of course, naming patterns are always the fallback options, [code organization](code-style-code-organization) is the better way to improve the code readability and maintainability.
 
-In a huge project, we may have thousands of symbols, likes variable, function etc. If we cannot encapsulate and modularize them (E.g., the project manager has pressed your working hours, or you don’t want to wipe the ass of the original developer), the only thing we can do is to use the better naming patterns to improve the code readability and maintainability.
+In a huge project, we may have thousands of symbols, likes variable, function etc. If we cannot organize them (E.g., the project manager has pressed your working hours, or you don’t want to wipe the ass of the original developer), the only thing we can do is to use the better naming patterns to improve the code readability and maintainability.
 
 This article will introduce some naming patterns I preferred in my projects.
 

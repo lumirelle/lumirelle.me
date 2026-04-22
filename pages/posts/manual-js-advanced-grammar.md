@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-02-25T17:38+08:00
+update: 2026-04-22T14:55+08:00
 lang: en
-duration: 89min
+duration: 88min
 type: note
 ---
 
@@ -343,7 +343,7 @@ After user completing both two forms and click one of button... Ops! The endpoin
 Is there any other general code style? Yes:
 
 - [Symbol name pattern](./code-style-symbol-name-pattern), whatever the programming language you are using
-- [Encapsulation and modularity](./code-style-encapsulation-and-modularity), of course not only for JavaScript
+- [Code organization](./code-style-code-organization), of course not only for JavaScript
 - [Antfu's code style](https://github.com/antfu/skills/blob/main/skills/antfu/SKILL.md), highly recommended for JavaScript and TypeScript development
 
 Here is the most important piece of advice: **Don't get lost in finding best practices. They are born from practicing.**

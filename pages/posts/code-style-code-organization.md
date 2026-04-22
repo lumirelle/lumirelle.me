@@ -1,9 +1,9 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-04-12T22:26+08:00
+update: 2026-04-22T22:43+08:00
 lang: en
-duration: 6min
+duration: 9min
 type: blog+note
 ---
 
@@ -663,28 +663,31 @@ function isStrictFalse(value: unknown): value is false {
 
 </tbody></table>
 
-### Draft...
+### If Your Team Only Care About Deadlines But Not Code Quality...
 
-We need to find a balance point:
+As the saying goes, when in Rome, do as the Romans do; one must learn to be tactful in life.
+
+If your team only care about deadlines but not code quality, just follow them:
 
 > "Make it work, make it right, make it fast." -- Kent Beck
 
-First, just make our code work, fit the business requirements, without bugs.
+You just need ato make our code work, fit the business requirements, without bugs. That's all. Then, do organization only when you be happy to.
 
-Then, do encapsulation and modularity when it is necessary, not too early, not too late:
+Remember, you are the angel in these dirty world fulled with AI generated contents. Some of these contents are black boxes, no one knows how they work, because those AI's users do not care about can these contents work efficiently or not, they do not care about the future maintenance, and they even never review the content before applying: "Since we're using AI anyway, it won't complain about the bloat and maintainability of the code. If there's a bug, the tester will finder it; if AI cannot fix it, then let the developer fix it, so what if it's bloat and maintainable?"
 
-- If you should **reuse the old code now**, do encapsulation and modularity.
-- If you **made a code too large or too complex just before**, do encapsulation and modularity. Of course, you should pay attention to not to write codes with strong coupling in every day coding, this is your basic personal quality.
+I mean, in this shit-like world, the best practice is to make up for the situation only when it's getting troublesome. 😉
 
-I mean, the best practice is to make up for the situation only when it's getting troublesome. 😉
-
-> ❌ “亡羊补牢，为时未晚。” "It's never too late to mend the fence after the sheep are lost."
+> ~~“亡羊补牢，为时未晚。”~~
 >
-> ✔️ “既未亡羊，何必补牢？” "Why mend the fence when the sheep have not been lost?"
+> ~~"It's never too late to mend the fence after the sheep are lost."~~
+>
+> “既未亡羊，何必补牢？”
+>
+> "Why mend the fence when the sheep have not been lost?"
 
 ## Examples
 
-A simple example, when I found the `vite.config.ts` file is getting too large and complex, the root cause is that there are too many plugins with heavy logic. The solution is quite simple, just move each plugin (of course, only the plugins with additional logic are worth to be moved) into a separate file.
+A simple example, one day I found the `vite.config.ts` file in my project is getting too large and complex, the root cause is that there are too many plugins with heavy logic. The solution is quite simple, just move each plugin (of course, only the plugins with additional logic are worth to be moved) into a separate file.
 
 You can see that commit details [here](https://github.com/lumirelle/lumirelle.me/commit/7c1594db4c5cd5bd422659f1ea820da75e3f893c#diff-6a3b01ba97829c9566ef2d8dc466ffcffb4bdac08706d3d6319e42e0aa6890dd).
 

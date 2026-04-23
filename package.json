@@ -1,7 +1,7 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "bun@1.3.12",
+  "packageManager": "bun@1.3.13",
   "scripts": {
     "prepare": "bun run --parallel simple-git-hooks cert",
     "cert": "bun run ./scripts/cert.ts",
@@ -40,7 +40,7 @@
         "unplugin-vue-components": "^32.0.0",
         "unplugin-vue-markdown": "^30.0.0",
         "unplugin-vue-router": "^0.19.0",
-        "vite": "^8.0.8",
+        "vite": "^8.0.10",
         "vite-plugin-inspect": "^12.0.0-beta.1",
         "vite-plugin-optimize-exclude": "^0.0.1",
         "vite-ssg": "^28.3.0",
@@ -48,37 +48,37 @@
       },
       "dev": {
         "@clack/prompts": "^1.2.0",
-        "@iconify/json": "^2.2.463",
+        "@iconify/json": "^2.2.465",
         "@lumirelle/tsconfig": "^0.1.3",
         "@octokit/core": "^7.0.6",
         "@octokit/rest": "^22.0.1",
         "degit": "^2.8.4",
         "diacritics": "^1.3.0",
         "exifreader": "^4.38.1",
-        "feed": "^5.2.0",
+        "feed": "^5.2.1",
         "pathe": "^2.0.3",
         "premove": "^4.0.0",
         "sharp": "^0.34.5",
         "simple-git": "^3.36.0",
         "std-env": "^4.1.0",
         "tinyglobby": "^0.2.16",
-        "typescript": "^6.0.2"
+        "typescript": "^6.0.3"
       },
       "check": {
         "@antfu/eslint-config": "^8.2.0",
         "@lumirelle/oxlint-config": "^0.2.2",
         "@unocss/eslint-plugin": "^66.6.8",
-        "eslint": "^10.2.0",
-        "eslint-plugin-oxlint": "^1.60.0",
+        "eslint": "^10.2.1",
+        "eslint-plugin-oxlint": "^1.61.0",
         "nano-staged": "^1.0.2",
-        "oxlint": "^1.60.0",
-        "oxlint-tsgolint": "^0.21.0",
+        "oxlint": "^1.61.0",
+        "oxlint-tsgolint": "^0.21.1",
         "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
-        "vue-tsc": "^3.2.6"
+        "vue-tsc": "^3.2.7"
       },
       "frontend": {
         "@antfu/utils": "^9.3.0",
-        "@unhead/vue": "^3.0.4",
+        "@unhead/vue": "^3.0.5",
         "@unocss/reset": "^66.6.8",
         "@vueuse/core": "^14.2.1",
         "d3-hierarchy": "^3.1.2",
@@ -93,8 +93,8 @@
         "shiki": "^4.0.2",
         "shiki-magic-move": "^1.3.0",
         "simplex-noise": "^4.0.3",
-        "vue": "^3.5.32",
-        "vue-router": "^5.0.4",
+        "vue": "^3.5.33",
+        "vue-router": "^5.0.6",
         "vue-router-better-scroller": "^0.0.0"
       },
       "types": {
@@ -106,7 +106,7 @@
         "@types/markdown-it-link-attributes": "^3.0.5",
         "@types/node": "^25.6.0",
         "@types/nprogress": "^0.2.3",
-        "bun-types": "^1.3.12"
+        "bun-types": "^1.3.13"
       }
     }
   },
@@ -194,8 +194,8 @@
   "overrides": {
     "@types/markdown-it": "npm:markdown-exit@1.0.0-beta.9",
     "markdown-it": "npm:markdown-exit@1.0.0-beta.9",
-    "vite": "^8.0.8",
-    "vue-router": "^5.0.4"
+    "vite": "^8.0.10",
+    "vue-router": "^5.0.6"
   },
   "simple-git-hooks": {
     "pre-commit": "bunx nano-staged"

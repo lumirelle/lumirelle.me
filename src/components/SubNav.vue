@@ -21,6 +21,13 @@ const route = useRoute()
         class="!border-none"
         :class="route.path === '/posts' ? activeStyle : inactiveStyle"
       >
+        All Posts
+      </RouterLink>
+      <RouterLink
+        to="/blog"
+        class="!border-none"
+        :class="route.path === '/blog' ? activeStyle : inactiveStyle"
+      >
         Blog
       </RouterLink>
       <RouterLink
@@ -29,6 +36,13 @@ const route = useRoute()
         :class="route.path === '/notes' ? activeStyle : inactiveStyle"
       >
         Notes
+      </RouterLink>
+      <RouterLink
+        to="/manuals"
+        class="!border-none"
+        :class="route.path === '/manuals' ? activeStyle : inactiveStyle"
+      >
+        Manuals
       </RouterLink>
     </div>
   </div>

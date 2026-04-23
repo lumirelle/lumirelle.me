@@ -4,7 +4,7 @@ date: 2026-03-22T22:38+08:00
 update: 2026-04-12T23:13+08:00
 lang: en
 duration: 1min
-type: blog+note
+type: note
 ---
 
 [[toc]]

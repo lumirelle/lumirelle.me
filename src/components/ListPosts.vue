@@ -18,7 +18,7 @@ const routes: Post[] = router
   .filter(
     i =>
       !i.path.endsWith('.html')
-      && (i.meta.frontmatter.type || 'blog').split('+').includes(props.type),
+      && (!props.type || (i.meta.frontmatter.type || 'blog').split('+').includes(props.type)),
   )
   .map(i => ({
     path: i.meta.frontmatter.redirect || i.path,
@@ -68,7 +68,6 @@ function getGroupName(p: Post): number | string {
     <template v-for="(route, idx) in posts" :key="route.path">
       <div
         v-if="!isSameGroup(route, posts[idx - 1])"
-
         slide-enter pointer-events-none relative h20 select-none
         :style="{
           '--enter-stage': idx - 2,
@@ -106,16 +105,14 @@ function getGroupName(p: Post): number | string {
             <div class="title text-lg leading-1.2em" flex="~ gap-2 wrap">
               <span
                 v-if="route.lang === 'zh'"
-
                 flex-none align-middle
                 class="my-auto ml--12 mr2 hidden rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:block"
-              >中文</span>
+              >中文 / CN</span>
               <span
                 v-if="route.lang === 'en'"
-
                 flex-none align-middle
                 class="my-auto ml--15 mr2 hidden rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:block"
-              >英语</span>
+              >英语 / EN</span>
               <span align-middle>{{ route.title }}</span>
               <span
                 v-if="route.redirect"
@@ -128,19 +125,16 @@ function getGroupName(p: Post): number | string {
             <div flex="~ gap-2 items-center">
               <span
                 v-if="route.inperson"
-
                 i-ri:group-2-line flex-none align-middle op50
                 title="In person"
               />
               <span
                 v-if="route.recording || route.video"
-
                 i-ri:film-line flex-none align-middle op50
                 title="Provided in video"
               />
               <span
                 v-if="route.radio"
-
                 i-ri:radio-line flex-none align-middle op50
                 title="Provided in radio"
               />
@@ -153,16 +147,14 @@ function getGroupName(p: Post): number | string {
               <span v-if="route.place" ws-nowrap text-sm op40 md:hidden>· {{ route.place }}</span>
               <span
                 v-if="route.lang === 'zh'"
-
                 flex-none align-middle
                 class="my-auto rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:hidden"
-              >中文</span>
+              >中文 / CN</span>
               <span
                 v-if="route.lang === 'en'"
-
                 flex-none align-middle
                 class="my-auto rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:hidden"
-              >英语</span>
+              >英语 / EN</span>
             </div>
           </li>
           <div v-if="route.place" mt--2 hidden text-sm op50 md:block>

@@ -4,7 +4,7 @@ date: 2025-10-22T15:28+08:00
 update: 2026-04-12T23:28+08:00
 lang: en
 duration: 6min
-type: note
+type: manual
 ---
 
 [[toc]]

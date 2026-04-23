@@ -1,9 +1,9 @@
 ---
-title: Blog - Lumirelle
+title: Posts - Lumirelle
 display: ''
 art: plum
 ---
 
 <SubNav />
 
-<ListPosts only-date type="blog" />
+<ListPosts only-date />

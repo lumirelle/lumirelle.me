@@ -41,6 +41,13 @@ declare module 'vue-router/auto-routes' {
       { 404: ParamValue<false> },
       | never
     >,
+    '/blog': RouteRecordInfo<
+      '/blog',
+      '/blog',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/bookmarks': RouteRecordInfo<
       '/bookmarks',
       '/bookmarks',
@@ -51,6 +58,13 @@ declare module 'vue-router/auto-routes' {
     '/demos': RouteRecordInfo<
       '/demos',
       '/demos',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/manuals': RouteRecordInfo<
+      '/manuals',
+      '/manuals',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -297,6 +311,12 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
+    'pages/blog.md': {
+      routes:
+        | '/blog'
+      views:
+        | never
+    }
     'pages/bookmarks.md': {
       routes:
         | '/bookmarks'
@@ -306,6 +326,12 @@ declare module 'vue-router/auto-routes' {
     'pages/demos.md': {
       routes:
         | '/demos'
+      views:
+        | never
+    }
+    'pages/manuals.md': {
+      routes:
+        | '/manuals'
       views:
         | never
     }

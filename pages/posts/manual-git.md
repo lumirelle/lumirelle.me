@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-03-22T22:34+08:00
+update: 2026-04-23T18:33+08:00
 lang: en
-duration: 18min
+duration: 17min
 type: manual
 ---
 
@@ -71,7 +71,7 @@ Git is a distributed version control system, which is used to track changes in s
 >
 > This article is based on my own `.gitconfig` configuration.
 >
-> For more details about the changed default behavior and custom alias, please see [the source file](https://github.com/lumirelle/starship-butler/tree/main/packages/config-provider/assets/vcs/git/.gitconfig).
+> For more details about the changed default behavior and custom alias, please see [the source file](https://github.com/lumirelle/starship-butler/tree/main/packages/config-provider/assets/vcs/git/.gitconfig). You can also get help information of the custom alias usage by provide `--?` flag or `-?` flag.
 >
 > If you are interested in my configuration, you can try my configurations setting up tool: [`starship-butler`](https://github.com/lumirelle/starship-butler) or download the source file manually.
 
@@ -106,11 +106,14 @@ After that, you can make the initial commit:
 ```bash
 # Alias `cm` = `commitx-with-message`
 #           ~= `commitx --message`
-#            = enhanced version of `commit --message`
-git cm "feat: initial commit"
+#            = enhanced version of `commitx --message`
+git cm feat 'initial commit'
 
 # Or
+# `c -m`    = `commitx --message`
+#
 # Alias `c` = `commitx`
+#          ~= `commit`
 #           = enhanced version of `commit`
 git c -m "feat: initial commit"
 ```
@@ -130,13 +133,12 @@ You need to add a "remote", so that Git knows where the remote repository is loc
 To add a "remote", use the following command:
 
 ```bash
-# Alias `rn` = `remote-new`
-#            = enhanced version of `remote add`,
-#              when the remote name is not provided,
-#              it will use `origin` by default
+# `r -a`    = `remotex --add`
+#          ~= `remote add`
 #
-# Usage: git rn [<remote-name>|origin] <remote-url>
-git rn https://github.com/username/repo.git
+# Alias `r` = `remotex`
+#           = enhanced version of `remote`
+git r -a https://github.com/username/repo.git
 ```
 
 ### Pull and Push Commits
@@ -307,9 +309,9 @@ To add a new feature, you should create a new feature branch based on the `dev` 
 First, create `dev` branch from `main` branch if it does not exist:
 
 ```bash
-# Alias `w -c` = `switch --create`
+# `w -c`    = `switch --create`
 #
-# Usage: git w -c <new-branch-name> [<start-commit>]
+# Alias `w` = `switch`
 git w -c dev main
 ```
 
@@ -337,15 +339,13 @@ You can use the following command:
 # Alias `x` = `discard`
 #           = custom alias, will reset tracked files to HEAD,
 #             and remove untracked files based on specific paths
-#
-# Usage: git x <path...>
 git x index.html index.css
 ```
 
 To discard all changes:
 
 ```bash
-# `.` means the project root, of course, if you are in the project root.
+# `.` means the project root, of course, only if you are in the project root.
 git x .
 ```
 
@@ -356,8 +356,6 @@ If you have staged some changes by `git add`, you can also unstage them by `git 
 ```bash
 # Alias `ua` = `unadd`
 #            = Custom alias, will unstage the changes based on specific paths
-#
-# Usage: git ua <path...>
 git ua index.html index.css
 ```
 
@@ -392,16 +390,16 @@ git uc
 If you want to amend the last commit, more conveniently than drop the last commit and create a new one, you can do:
 
 ```bash
-# Alias `c -a` = `commitx --amend`
-#             ~= `commit --amend --no-edit`
+# `c -a` = `commitx --amend`
+#       ~= `commit --amend --no-edit`
 git c -a
 ```
 
 Or if you want to edit the last commit message:
 
 ```bash
-# Alias `c -e` = `commitx --edit`
-#            ~= `commit --amend`
+# `c -e` = `commitx --edit`
+#       ~= `commit --amend`
 # Git will open an editor because you have not provided
 # the new commit message yet.
 git c -e
@@ -430,9 +428,8 @@ For more safety choice, you can use `git revert` to create a new commit that und
 The cost is that the commit history will be more ugly, likes your "evidence of guilt", which will spread through the ages. 🫠
 
 ```bash
-# Alias `rv` = `revert`
-#
-# Usage: git rv <commit>
+# Alias `rv` = `revertx`
+#            = enhanced version of `revert`
 git rv HEAD
 ```
 
@@ -441,17 +438,12 @@ git rv HEAD
 Come back to general workflow from "error handling", after you completed your feature, you need to merge it back to the `dev` branch.
 
 ```bash
-# Alias `w` = `switch`
-#
-# Usage: git w <commit>
 git w dev
 
 # Alias `m` = `mergex`
 #           = enhanced version of `merge`, will merge the specified
 #             branch into the current branch with default message:
 #             "chore: merge $merge_branches into $current_branch"
-#
-# Usage: git m <branch...>
 git m feat/feature-name
 
 # Don't forget to push the `dev` branch to remote!
@@ -494,15 +486,9 @@ After a new release, we should create a version tag to mark this point on the `m
 ```bash
 git w main
 
-# Alias `t` = `tagx`\
+# Alias `t` = `tagx`
 #           = enhanced version of `tag`, will create a new tag
 #             with the specified name and message (if provided)
-#
-# Usage:
-# Use `<tag-name>` as `<tag-message>`:
-# git t <tag-name>
-# Use specific `<tag-message>`:
-# git t <tag-name> <tag-message>
 git t v1.0.0
 git t v1.0.0 "Release version 1.0.0"
 ```
@@ -518,8 +504,6 @@ Or if you want to delete a tag
 ```bash
 # Alias `tx` = `tag-delete`
 #            = Custom alias, will delete a specific tag with specific range
-#
-# Usage: git tx <tag-name> [-o, -origin] [-a, -all]
 git tx -a v1.0.0
 ```
 
@@ -530,9 +514,8 @@ When something changes been integrated into the `dev` branch, and you also want 
 ```bash
 git w feat/feature-name
 
-# Alias `n` = `rebase`
-#
-# Usage: git n <branch-name>
+# Alias `n` = `rebasex`
+#           = enhanced version of `rebase`
 git n dev
 ```
 
@@ -562,8 +545,6 @@ To delete a branch:
 ```bash
 # Alias `bx` = `branch-delete`
 #            = Custom alias, will delete a specific branch with specific range
-#
-# Usage: git bx <branch-name> [-o, --origin] [-a, --all] [-f, --force]
 git bx -a feat/feature-name
 git bx -a release/vx.x.x
 ```
@@ -573,9 +554,8 @@ git bx -a release/vx.x.x
 Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing the entire branch. In this case, you can use the `cherry-pick`:
 
 ```bash
-# Alias `cp` = `cherry-pick`
-#
-# Usage: git cp <commit>
+# Alias `cp` = `cherry-pickx`
+#            = enhanced version of `cherry-pick`
 git cp 1234567
 ```
 

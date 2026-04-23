@@ -111,9 +111,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/code-style-ts-endpoint-functions': RouteRecordInfo<
-      '/posts/code-style-ts-endpoint-functions',
-      '/posts/code-style-ts-endpoint-functions',
+    '/posts/example-ts-custom-fetch-function': RouteRecordInfo<
+      '/posts/example-ts-custom-fetch-function',
+      '/posts/example-ts-custom-fetch-function',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -357,9 +357,9 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/code-style-ts-endpoint-functions.md': {
+    'pages/posts/example-ts-custom-fetch-function.md': {
       routes:
-        | '/posts/code-style-ts-endpoint-functions'
+        | '/posts/example-ts-custom-fetch-function'
       views:
         | never
     }

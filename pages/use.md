@@ -12,15 +12,7 @@ art: dots
 
 ### Working & Gaming
 
-- PC:
-  - MaxSun B760M Challenger
-  - i5-13490F
-  - RTX 5060ti 16G
-  - Aigo DDR4 3200/C12 16G x 2
-  - Western Digital SN770 1TB
-  - Lenovo R27qe 2K 27" 180Hz
-  - **Windows 11**
-  - ...
+- PC: **Windows 11**
 
 I'm really want to try MAC mini if I have chance in the future. ☺️
 
@@ -34,24 +26,23 @@ I'm really want to try MAC mini if I have chance in the future. ☺️
 
 - Editors:
   - [VS Code](https://code.visualstudio.com/) (Basic choice)
-  - [Cursor](https://www.cursor.com/) (Better AI coding experience)
-  - [Zed](https://zed.dev/) (Look forward to the future)
+  - [Zed](https://zed.dev/) (Lightweight choice)
   - [Neovim](https://neovim.io/) (For terminal lovers) with [LazyVim](https://www.lazyvim.org/) setup
 - Editor Settings & Extensions: [Configuration setup](#configuration-setup-helpers)
-- Fonts: See [programming fonts manual](posts/manual/programming-fonts-manual.md) for more details.
-- Theme: [GitHub Theme](https://github.com/primer/github-vscode-theme)
+- Fonts: See [my programming font choices](posts/misc-programming-fonts) for more details.
+- Theme: [Vitesse Theme](https://github.com/antfu/vscode-theme-vitesse)
 - Icons Theme: [Catppuccin Icon Theme](https://github.com/catppuccin/vscode-icons)
 - Product Icons: [Carbon Icons](https://github.com/antfu/vscode-icons-carbon)
 - Formatting & Linting:
   - [OxLint](https://marketplace.visualstudio.com/items?itemName=oxc.oxc.oxc-vscode) with [`@lumirelle/oxlint-config`](https://github.com/lumirelle/oxlint-config) first
-  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) least
+  - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) fallback
   - ...some times [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) with [`@lumirelle/stylelint-config`](https://github.com/lumirelle/stylelint-config).
 
-### Browser (Daily Use)
+### Browser
 
 Switched to [Brave](https://brave.com/) as Chrome is pushing hard on [Manifest V3](https://www.eff.org/deeplinks/2021/12/chrome-users-beware-manifest-v3-deceitful-and-threatening) without a good solution for AD blockers.
 
-See my [manuals](posts/manual-windows-setup#brave-browser) for more details about my Brave setup.
+See my [manual](posts/manual-windows-setup#browser-setup) for more details about my Brave setup.
 
 ### Design / Social Media
 
@@ -71,25 +62,16 @@ See my [manuals](posts/manual-windows-setup#brave-browser) for more details abou
 
 ### General
 
-- [@sxzz/create](https://github.com/sxzz/create) - Create new projects from GitHub templates with ease (any language)
+- [@sxzz/create](https://github.com/sxzz/create) - Create new projects from GitHub templates with ease (any language & framework)
 - [hyperfine](https://github.com/sharkdp/hyperfine) - A command-line benchmarking tool
 
-### C/C++
-
-Build tools:
-
-- [Mingw-w64](https://github.com/niXman/mingw-builds-binaries/releases/latest) - GCC (GNU Compiler Collection) for **Windows**
-- [MSVC](https://visualstudio.microsoft.com/visual-cpp-build-tools/) - Microsoft Visual C++ Compiler Toolchain for **Windows**
-
 ### Zig
-
-Build tools:
 
 - [Zig](https://ziglang.org/learn/getting-started/) - Zig development kits
 
 ### JavaScript / TypeScript
 
-Standalone runtimes:
+Runtimes:
 
 - [Bun](https://bun.sh/download) - A fast all-in-one JavaScript / TypeScript runtime, bundler, transpiler, and package manager, not stable enough for production yet but worth trying for new projects
 - [Node.js](https://nodejs.org/en/download/) - Legacy JavaScript / TypeScript runtime, still the best choice for stable production use
@@ -104,7 +86,7 @@ Project management:
 - [@antfu/ni](https://github.com/antfu-collective/ni) - Aliasing package managers
 - [taze](https://github.com/antfu/taze) - Upgrade dependencies
 - [bumpp](https://github.com/antfu/bumpp) - Interactive CLI that bumps your version numbers and more
-- [node-modules-inspector](https://github.com/antfu/node-modules-inspector) - Visualize your node_modules, inspect dependencies, and more
+- [node-modules-inspector](https://github.com/antfu/node-modules-inspector) - Visualize your `node_modules`, inspect dependencies, and more
 
 Code Quality:
 
@@ -117,13 +99,11 @@ Code Quality:
 
 Useful libraries & frameworks:
 
-- [esbuild](https://esbuild.github.io/) - An extremely fast bundler and minifier, used to power [the import-cost VSCode extension](https://marketplace.visualstudio.com/items?itemName=hyrious.import-cost).
+- [esbuild](https://esbuild.github.io/) - An extremely fast bundler and minifier, used to power [Import Cost VSCode extension](https://marketplace.visualstudio.com/items?itemName=hyrious.import-cost).
 
-### JVM (Java/Kotlin/Scala...)
+### Java
 
-Runtime & Build tools:
-
-- [Graal VM](https://www.graalvm.org/downloads/) - JVM language's development kits
+- [Graal VM](https://www.graalvm.org/downloads/) - A high-performance runtime that provides support for Java and other languages, used for playing Minecraft. XD
 
 ## Project Starter Templates
 

@@ -237,16 +237,16 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/perf-manually-split-chunks': RouteRecordInfo<
-      '/posts/perf-manually-split-chunks',
-      '/posts/perf-manually-split-chunks',
+    '/posts/perf-http-versions': RouteRecordInfo<
+      '/posts/perf-http-versions',
+      '/posts/perf-http-versions',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/posts/perf-network-protocal': RouteRecordInfo<
-      '/posts/perf-network-protocal',
-      '/posts/perf-network-protocal',
+    '/posts/perf-manually-split-chunks': RouteRecordInfo<
+      '/posts/perf-manually-split-chunks',
+      '/posts/perf-manually-split-chunks',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -479,15 +479,15 @@ declare module 'vue-router/auto-routes' {
       views:
         | never
     }
-    'pages/posts/perf-manually-split-chunks.md': {
+    'pages/posts/perf-http-versions.md': {
       routes:
-        | '/posts/perf-manually-split-chunks'
+        | '/posts/perf-http-versions'
       views:
         | never
     }
-    'pages/posts/perf-network-protocal.md': {
+    'pages/posts/perf-manually-split-chunks.md': {
       routes:
-        | '/posts/perf-network-protocal'
+        | '/posts/perf-manually-split-chunks'
       views:
         | never
     }

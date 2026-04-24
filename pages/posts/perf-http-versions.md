@@ -1,5 +1,5 @@
 ---
-title: 'Performance Optimization: Network Protocols'
+title: 'Performance Optimization: HTTP Versions'
 date: 2026-04-21T10:48+08:00
 update: 2026-04-23T11:11+08:00
 lang: en
@@ -11,7 +11,7 @@ type: note
 
 ## Introduction
 
-Most people probably overlook the fact that network protocols actually have a significant impact on page loading performance.
+Most people probably overlook the fact that HTTP versions actually have a significant impact on page loading performance.
 
 Here is a blog comparing the differences between HTTP/1, HTTP/1.1, HTTP/2, and HTTP/3: https://www.debugbear.com/blog/http1-vs-http2
 

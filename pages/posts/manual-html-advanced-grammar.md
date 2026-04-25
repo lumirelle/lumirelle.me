@@ -1,9 +1,9 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-04-25T01:21+08:00
+update: 2026-04-25T23:20+08:00
 lang: en
-duration: 5min
+duration: 11min
 type: manual
 ---
 
@@ -50,9 +50,11 @@ HTML (HyperText Markup Language) is the standard markup language for creating we
 
 **Elements** are represented by **tags**: We write tags in HTML document, and the browser will parse them into elements. You can think of **elements as instances**, and **tags as their definitions**.
 
-### Common Tags
+For better consistency, we **use the term "element" to refer both the tag and the element**, except when we need to distinguish them.
 
-Container tags:
+### Common Elements
+
+#### Container Elements
 
 - `<div>`: A container element which only make content exclusive line;
 
@@ -99,7 +101,7 @@ Container tags:
 
   </tbody></table>
 
-- `<ul>` + `<li>`: Unordered list and list item elements, better than `<div>` to express the relationship between items and their container;
+- `<ul>` + `<li>`: An unordered list and list item elements, better than `<div>` to express the relationship between items and their container;
 
   <table><tbody>
 
@@ -127,7 +129,7 @@ Container tags:
 
   </tbody></table>
 
-- `<ol>` + `<li>`: Ordered list and list item elements, better than `<div>` to express the relationship between items and their container, but seldom used in practice than `<ul>`;
+- `<ol>` + `<li>`: An ordered list and list item elements, better than `<div>` to express the relationship between items and their container, but seldom used in practice than `<ul>`;
 
   <table><tbody>
 
@@ -155,7 +157,7 @@ Container tags:
 
   </tbody></table>
 
-Text tags:
+#### Text Elements
 
 - `<h1>` ~ `<h6>`: Heading elements, where `<h1>` is the most important and `<h6>` is the least important;
 
@@ -189,7 +191,7 @@ Text tags:
 
   </tbody></table>
 
-- `<p>`: Paragraph element, which will make content exclusive line and add some margin;
+- `<p>`: A paragraph element, which will make content exclusive line and add some margin;
 
   <table><tbody>
 
@@ -211,9 +213,9 @@ Text tags:
 
   </tbody></table>
 
-- `<a>`: Anchor element, which is used to create hyperlinks or anchor points;
+- `<a>`: An anchor element, which is used to create hyperlinks or anchor points;
 
-   <table><tbody>
+  <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
@@ -233,6 +235,412 @@ Text tags:
 
   </tbody></table>
 
+- `<strong>`: A strong importance element, which will make text bold, better than `<b>` in semantics;
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <strong>This text is important.</strong>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <strong>This text is important.</strong>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<em>`: An emphasis element, which will make text italic, better than `<i>` in semantics;
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <em>This text is emphasized.</em>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <em>This text is emphasized.</em>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<del>`: A deleted text element, which will make text with strikethrough, better than `<s>` or explicitly set CSS style `text-decoration: line-through` in semantics;
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <del>This text is deleted.</del>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <del>This text is deleted.</del>
+
+  </th></tr>
+
+  </tbody></table>
+
+#### Form & Control Elements
+
+- `<form>`: A form element, which is used to collect user input and submit it to a server;
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <form action="/submit" method="post">
+    <div>
+      <input type="text" name="username">
+    </div>
+    <div>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <form space-y-4 action="/submit" method="post">
+    <div>
+      <input type="text" name="username">
+    </div>
+    <div>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<input>`: An input element, which is used to create interactive controls for `<form>` fields to accept data from the user, so it often be placed inside a `<form>` element.
+
+  `<input>` has many types, such as `text`, `password`, `checkbox`, `radio`, etc, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input#input_types) for more details.
+
+  `<input>` uses `name` attribute to specify the form field name.
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <!-- Frequently Used Input Types -->
+  <div>
+    <input type="text" placeholder="Enter your name">
+  </div>
+  <div>
+    <input type="number" min="0" max="100">
+  </div>
+  <div>
+    <input type="password" placeholder="Enter your password">
+  </div>
+  <div>
+    <input type="date">
+  </div>
+  <div>
+    <input type="datetime-local">
+  </div>
+  <div>
+    <input type="checkbox" name="remember" value="day"> Remember me at least for a day
+  </div>
+  <div>
+    <input type="checkbox" name="remember" value="week"> Remember me at least for a week
+  </div>
+  <div>
+    <input type="radio" name="gender" value="male"> Male
+  </div>
+  <div>
+    <input type="radio" name="gender" value="female"> Female
+  </div>
+  <div>
+    <input type="color">
+  </div>
+  <div>
+    <input type="file">
+  </div>
+  <div>
+    <input type="range" min="0" max="100">
+  </div>
+  <div>
+    <input type="search">
+  </div>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <div space-y-4>
+    <div>
+      <input type="text" placeholder="Enter your name">
+    </div>
+    <div>
+      <input type="number" min="0" max="100">
+    </div>
+    <div>
+      <input type="password" placeholder="Enter your password">
+    </div>
+    <div>
+      <input type="date">
+    </div>
+    <div>
+      <input type="datetime-local">
+    </div>
+    <div>
+      <input type="checkbox" name="remember" value="day"> Remember me at least for a day
+    </div>
+    <div>
+      <input type="checkbox" name="remember" value="week"> Remember me at least for a week
+    </div>
+    <div>
+      <input type="radio" name="gender" value="male"> Male
+    </div>
+    <div>
+      <input type="radio" name="gender" value="female"> Female
+    </div>
+    <div>
+      <input type="color">
+    </div>
+    <div>
+      <input type="file">
+    </div>
+    <div>
+      <input type="range" min="0" max="100">
+    </div>
+    <div>
+      <input type="search">
+    </div>
+  </div>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<textarea>`: A textarea element, which is used to create a multi-line text input control, it often be placed inside a `<form>` element too.
+
+  `<textarea>` has attributes like `rows` and `cols` to specify the visible size of the textarea.
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <div>
+    <textarea rows="4" cols="50"></textarea>
+  </div>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <div>
+    <textarea rows="4" cols="50"></textarea>
+  </div>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<select>` + `<option>`: A select element and option element, which are used to create a drop-down list, they often be placed inside a `<form>` element too.
+
+  `<select>` can have `multiple` attribute to allow multiple selections, and each `<option>` can have `value` attribute to specify the value of the option.
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <div>
+    <select name="fruits">
+      <option value="apple">Apple</option>
+      <option value="banana">Banana</option>
+      <option value="orange">Orange</option>
+    </select>
+  </div>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <div>
+    <select name="fruits">
+      <option value="apple">Apple</option>
+      <option value="banana">Banana</option>
+      <option value="orange">Orange</option>
+    </select>
+  </div>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<label>`: A label element, which is used to define a label for an `<input>` element, it often be placed inside a `<form>` element too.
+
+  `<label>` can be associated with an `<input>` element through `for` attribute, and the value of `for` attribute should be the same as the `id` of the `<input>` element.
+
+  > [!Note]
+  >
+  > You can place the `<label>` element before or after the `<input>` element, but it's **not recommended to wrap the `<input>` element with `<label>` element**, because it will make the structure of the form more complex and less readable.
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <div>
+    <!-- `<label>` before `<input>` -->
+    <label for="username1">Username:</label>
+    <input id="username1" type="text" name="username">
+  </div>
+  <div>
+    <!-- `<input>` before `<label>` -->
+    <input id="username2" type="text" name="username">
+    <label for="username2">Username:</label>
+  </div>
+  <div>
+    <!-- NOT RECOMMENDED -->
+    <label>
+      Username:
+      <input type="text" name="username">
+    </label>
+  </div>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <div space-y-4>
+    <div>
+      <!-- `<label>` before `<input>` -->
+      <label for="username1">Username:</label>
+      <input id="username1" type="text" name="username">
+    </div>
+    <div>
+      <!-- `<input>` before `<label>` -->
+      <input id="username2" type="text" name="username">
+      <label for="username2">Username:</label>
+    </div>
+    <div>
+      <!-- NOT RECOMMENDED -->
+      <label>
+        Username:
+        <input type="text" name="username">
+      </label>
+    </div>
+  </div>
+
+  </th></tr>
+
+  </tbody></table>
+
+- `<button>`: A button element, which is used to create clickable buttons. It has three types: `submit`, `reset`, and `button`.
+
+  `submit` type will trigger form submission, `reset` type will reset the form to its initial state, these two types are often be placed inside a `<form>` element too, while `button` type has no default behavior, so it can be used anywhere.
+
+  > [!Note]
+  >
+  > `<input>` element has corresponding type as button, such as `<input type="submit">`, but `<button>` element supports inner content, so it's more flexible and recommended to use.
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  ```html
+  <div>
+    <button type="submit">Submit</button>
+  </div>
+  <div>
+    <button type="reset">Reset</button>
+  </div>
+  <div>
+    <button type="button" onclick="alert('Button clicked!')">Click Me</button>
+  </div>
+  ```
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  <div space-y-4>
+    <div>
+      <button type="submit">Submit</button>
+    </div>
+    <div>
+      <button type="reset">Reset</button>
+    </div>
+    <div>
+      <button type="button" onclick="alert('Button clicked!')">Click Me</button>
+    </div>
+  </div>
+
+  </th></tr>
+
+  </tbody></table>
+
+### Void Elements & Non-Void Elements
+
+In HTML, there are two types of elements: [**void elements**](https://developer.mozilla.org/en-US/docs/Glossary/Void_element) and **non-void elements**.
+
+Void elements have only a start tag and do not have an end tag, they cannot contain any content, for example:
+
+```html
+<img src="image.jpg">
+<input type="text">
+<br>
+<hr>
+```
+
+Non-void elements have both a start tag and an end tag, they can contain content, for example:
+
+```html
+<div>This is a div element.</div>
+<p>This is a paragraph element.</p>
+<a href="https://www.example.com">This is a link element.</a>
+```
+
+> [!Caution]
+>
+> There is no concept of **"self-closing tag"** in HTML, if you write a "self-closing tag" like `<img src="image.jpg" />`, what the browser does is just simply ignore the `/` character, and treat it as `<img src="image.jpg">`.
+
 ## Attributes vs. Properties
 
 In HTML, the most common confusion is between attributes and properties.
@@ -242,7 +650,7 @@ In HTML, the most common confusion is between attributes and properties.
 We know tags will be parsed into elements when browsers render the HTML document, and the attributes of the tags will be used to control the characteristics of the elements, for example:
 
 ```html
-<input type="text" value="Hello" />
+<input type="text" value="Hello">
 ```
 
 In this example, browsers will create an text `<input>` element with default value "Hello".
@@ -256,7 +664,7 @@ When the attributes change, the characteristics of the element will also change,
 Code
 
 ```html
-<input id="myInput" type="text" value="Hello" />
+<input id="myInput" type="text" value="Hello">
 <button onclick="document.querySelector('#myInput').setAttribute('type',Math.random()>0.5?'password':'text')">
   Change Type
 </button>
@@ -266,7 +674,7 @@ Code
 
 Preview
 
-<input id="myInput" type="text" value="Hello" />
+<input id="myInput" type="text" value="Hello">
 <button onclick="document.querySelector('#myInput').setAttribute('type',Math.random()>0.5?'password':'text')">
   Change Type
 </button>
@@ -289,7 +697,7 @@ console.log(inputElement.value) // Accessing the 'value' property
 By default, when an HTML element is created, the attributes are used to initialize the **corresponding (not necessary with the same name)** properties, for example:
 
 ```html
-<img id="myImage" src="image.jpg" />
+<img id="myImage" src="image.jpg">
 <script>
   const imageElement = document.querySelector('img')
   console.log(imageElement.getAttribute('src')) // -> image.jpg
@@ -338,7 +746,7 @@ After initialization, the synchronization between attributes and properties is n
   The `value` attribute of an `<input>` element corresponds to the `defaultValue` property, and the `defaultValue` property only applies to `value` property when the first time element has been initialized (or reset?):
 
   ```html
-  <input id="myInput" type="text" value="Initial Value" />
+  <input id="myInput" type="text" value="Initial Value">
   <script>
     const inputElement = document.querySelector('#myInput')
     console.log(inputElement.getAttribute('value')) // -> Initial Value

@@ -1,9 +1,9 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-04-25T23:20+08:00
+update: 2026-04-26T20:50+08:00
 lang: en
-duration: 11min
+duration: 15min
 type: manual
 ---
 
@@ -18,7 +18,7 @@ HTML (HyperText Markup Language) is the standard markup language for creating we
 - **Attributes**: Define the characteristics of an HTML element, specified within the opening tag.
 - **Properties**: Properties of HTML elements that can be accessed and manipulated through JavaScript, some of properties are [synchronized with attributes, but not all](#synchronization-between-attributes-and-properties).
 - **Content**: The text contained within an HTML element.
-- **Scripts and Styles**: Embedded or linked JavaScript and CSS code that adds interactivity and styling to the web page.
+- **External Resources**: External files that can be linked to an HTML document, such as CSS stylesheets, images, JavaScript files, etc.
 
 ## Doctypes
 
@@ -616,6 +616,60 @@ For better consistency, we **use the term "element" to refer both the tag and th
 
   </tbody></table>
 
+#### Script & Style & External Resource Elements <a name="script-style-external-resource-elements"></a>
+
+- `<script>`: A script element, which is used to embed or reference JavaScript code in the HTML document.
+
+  [Modern browsers](https://caniuse.com/es6-module) support ESM (ECMAScript Modules) in `<script>` element, so you can use `type="module"` attribute to enable module mode, and use `import` statement to import other modules.
+
+  Code
+
+  ```html
+  <!-- Embedding JavaScript code -->
+  <script>
+    console.log('Hello, World!');
+  </script>
+
+  <!-- Referencing external JavaScript file -->
+  <script src="script.js"></script>
+
+  <!-- Using ESM in script element -->
+  <script type="module">
+    import { myFunction } from './module.js';
+    myFunction();
+  </script>
+  ```
+
+- `<style>`: A style element, which is used to embed CSS styles in the HTML document.
+
+  Code
+
+  ```html
+  <style>
+    body {
+      background-color: lightblue;
+    }
+    h1 {
+      color: white;
+      text-align: center;
+    }
+  </style>
+  ```
+
+- `<link>`: A link element, which is used to reference external resources, such as CSS files, icons, etc.
+
+  `rel` attribute is used to specify the relationship between the current document and the linked resource, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel).
+
+  Code
+
+  ```html
+  <!-- Referencing external CSS file -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Referencing favicon -->
+  <link rel="icon" href="favicon.ico">
+  ```
+
 ### Void Elements & Non-Void Elements
 
 In HTML, there are two types of elements: [**void elements**](https://developer.mozilla.org/en-US/docs/Glossary/Void_element) and **non-void elements**.
@@ -776,3 +830,33 @@ After initialization, the synchronization between attributes and properties is n
     console.log(divElement.dataset.info) // -> someData
   </script>
   ```
+
+
+## How Browsers Parse HTML?
+
+### The Process of Parsing HTML
+
+1. After user entered URL in browser and start navigation, the browser process will notify the network process to request HTML document from the server.
+2. While receiving the HTML content from the network process, the browser process will entrust renderer process to **segment-by-segment steaming parse** the HTML content;
+3. When renderer process parses the HTML, it will parse the HTML content from top to bottom:
+    1. It will maintain two trees: **DOM (Document Object Model) tree** and **CSSOM (CSS Object Model) tree**, executes the parsing of DOM tree parsing and CSSOM tree **in an alternating manner**;
+    2. When it encounters **a normal HTML tag** while parsing DOM tree, it will create a corresponding DOM element based on the tag and attributes, and insert the element into the DOM tree;
+    3. When it encounters **a synchronous inlined `<script>` tag** while parsing DOM tree, it will pause the parsing and start to execute the JavaScript code, and then resume parsing after the script execution is completed. Because JavaScript can modify the DOM tree & CSSOM tree, should be executed directly.<br><br>For **a synchronous remote `<script src="...">` tag**, it will entrust network process to download the file, and pause the parsing until the external JavaScript file is both downloaded and executed;<br><br>For **a asynchronous `<script src="..." async>` tag**, it will no longer pause the parsing while downloading, but pause the parsing and executing the script as soon as it's downloaded;<br><br>For **a defer `<script src="..." defer>` tag**, it will not pause the parsing while downloading too, and only be executed after the parsing is completed (but before the `DOMContentLoaded` event is fired);
+    4. When it encounters **a inlined `<style>` tag or `style` attribute** while parsing DOM tree, it will change to parse all the CSS content into CSSOM one time and in place.
+    5. When it encounters **a [external resource](#script-style-external-resource-elements) referred by `<link>` tag**, it will entrust network process to download the resource, and never pause the parsing;<br><br>If the external resource is a CSS file, it will make time to parse CSS into CSSOM (CSS Object Model) in batches or all at once, after the CSS file is downloaded.
+    6. After DOM tree and CSSOM tree are both constructed, it will conjunct them **into a render tree**, and then **calculate the layout**, **paint the page** and **composite the layers**.
+4. After the page is rendered, the browser process will fire `DOMContentLoaded` event, then fire `load` event after all the resources are loaded, and display the page to users.
+
+### Why Browser Build Two Separate Trees for DOM and CSSOM?
+
+Why browsers build two separate trees for DOM and CSSOM, conjunct them later, instead of building a single tree that combines both DOM and CSSOM?
+
+The answer is the render process is parsing elements and CSS styles **in an alternating manner**. If we build a single tree, how can we deal with the situation when there are some additional elements with the same selector with the previous parsed CSS styles? Parse them again? What a waste of performance.
+
+### What Affects the Performance of Parsing HTML?
+
+1. **The size of the HTML document**: The larger the HTML document, the longer it takes to download;
+2. **The number / complexity of DOM elements**: The more / more complex DOM elements, the more time it takes to create and insert them into the DOM tree;
+3. **The number / complexity of synchronous `<script>` tags**: Each synchronous `<script>` tag will pause the parsing and (download if it's remote then) execute the JavaScript code, which can significantly affect the performance of parsing HTML, especially if the JavaScript code is large or complex;
+4. **The number / complexity of CSS rules**: Although CSS will not pause the DOM tree parsing, it still takes the time of render process to parse them into CSSOM tree. The more / more complex CSS rules, the more time it takes to parse them into CSSOM tree, the more time it takes to conjunct DOM tree and CSSOM tree, and the more time the whole parsing process takes.
+5. **The number / size of external resources**: Although external resources will not pause the parsing, they still take the download time and download bandwidth, which can affect the performance of download HTML document, remote scripts and CSS files, and the performance of parsing HTML indirectly.

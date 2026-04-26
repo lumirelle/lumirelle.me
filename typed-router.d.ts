@@ -146,6 +146,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/manual-css-advanced-grammar': RouteRecordInfo<
+      '/posts/manual-css-advanced-grammar',
+      '/posts/manual-css-advanced-grammar',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual-git': RouteRecordInfo<
       '/posts/manual-git',
       '/posts/manual-git',
@@ -398,6 +405,12 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/manual-computer-network.md': {
       routes:
         | '/posts/manual-computer-network'
+      views:
+        | never
+    }
+    'pages/posts/manual-css-advanced-grammar.md': {
+      routes:
+        | '/posts/manual-css-advanced-grammar'
       views:
         | never
     }

@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-04-22T14:55+08:00
+update: 2026-04-26T21:06+08:00
 lang: en
-duration: 88min
+duration: 89min
 type: manual
 ---
 
@@ -12,6 +12,18 @@ type: manual
 > [!Note]
 >
 > This manual hypothesizes that you have already know the basic of JavaScript or other programming languages.
+
+## Introduction
+
+JavaScript is a high-level, interpreted programming language that is widely used for web development. It is a versatile language that can be used for both client-side and server-side development. The core concepts of JavaScript are:
+
+- **Variables, Values & Data Types**: Define variables to store values in different data types;
+- **Classes & Objects**: An OOP (Object-Oriented Programming) concept, used to organize data and behavior into reusable structures;
+- **Functions & Methods**: Reusable blocks of code that can solve specific problems or perform specific tasks;
+- **Control Flow (Conditionals & Loops)**: Used to control the flow of execution in a program based on certain conditions or to repeat a block of code multiple times;
+- **Error Handling (try/catch/finally, throw, etc.)**: Used to handle errors and exceptions that may occur during the execution of a program;
+- **Asynchronous Programming (Promises, Async/Await, etc.)**: Used to handle asynchronous operations, such as network requests, timers, I/O operations, without blocking the main thread of execution;
+- **Generators & Iterators**: High-level APIs for better DX (Developer Experience) when working with iterables and asynchronous data streams;
 
 ## Code Style
 

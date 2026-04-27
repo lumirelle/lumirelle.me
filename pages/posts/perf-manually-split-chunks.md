@@ -1,9 +1,9 @@
 ---
 title: 'Performance Optimization: Manually Split Chunks'
 date: 2025-11-05T16:22+08:00
-update: 2026-04-23T00:20+08:00
+update: 2026-04-27T22:59+08:00
 lang: en
-duration: 7min
+duration: 10min
 type: note
 ---
 
@@ -178,9 +178,14 @@ Of course, for different bundlers / build tools, the ways to split chunks are di
 
 ### Default Chunks Splitting
 
-Modern bundlers / build tools have already provided a default split strategy preset for us as fallback: They will extract **async modules** from the bundle into independent chunks, and load them asynchronously when they are needed. These strategies are suitable for most of the cases, so we don't need to change these strategies at most of the time, except for some special cases:
+Modern bundlers / build tools have already provided a default split strategy preset for us as fallback:
 
-1. **Cache the vendor modules which is used everywhere**.
+- They will extract **async modules** from the bundle into independent chunks, and load them asynchronously when they are needed;
+- They will extract **shared modules** from the bundle into independent chunks, and load them synchronously or asynchronously when they are needed.
+
+These strategies are suitable for most of the cases, except for some special ones:
+
+1. Want to cache the vendor modules which is **used everywhere**.
 
     If you are familiar with the principle of the modern bundlers / build tools, you may know that they will attach file hash to each output file, so that we (actually, it's the browser) can identify the file version easily. CDN also uses these hash to identify the file version.
 
@@ -188,13 +193,15 @@ Modern bundlers / build tools have already provided a default split strategy pre
 
     In this case, we need to separate these chunks manually.
 
+2. Some of output chunks with default strategy are too large, we need to split them into smaller chunks manually.
+
 ### Vite
 
-From Vite 8, it uses _Rolldown_ as the low-level bundler, supporting more flexible configuration for chunks splitting, which is similar to Webpack.
+Since Vite 8, it uses _Rolldown_ as the low-level bundler, supporting more flexible configuration for chunks splitting, which is similar to _Webpack_.
 
-What's more, its "automatic code splitting" feature provides more intelligent default chunk splitting strategy, than Webpack: It will group the module dependencies within the same chunk group, without considering the constraints. See more details [here](https://rolldown.rs/in-depth/manual-code-splitting#why-does-the-group-contain-modules-that-don-t-satisfy-the-constraints).
+What's more, its **"automatic code splitting"** feature provides more intelligent default chunk splitting strategy, than Webpack: It will group **the module and its dependencies** within the same chunk group, without considering the constraints, which is what we expect in most cases. See more details [here](https://rolldown.rs/in-depth/manual-code-splitting#why-does-the-group-contain-modules-that-don-t-satisfy-the-constraints).
 
-BTW, Vite 8 called "chunk splitting" to "code splitting", we can use `build.rolldownOptions.output.codeSplitting` in the configuration (like `vite.config.ts`) to split chunks.
+BTW, Vite & Rolldown called chunk splitting to **"code splitting"**, we can use `build.rolldownOptions.output.codeSplitting` in the configuration (like `vite.config.ts`) to custom the behavior.
 
 _vite.config.ts_
 
@@ -203,55 +210,50 @@ export default defineConfig({
   build: {
     rolldownOptions: {
       output: {
-        // [!code highlight:54]
+        // [!code focus:48]
         codeSplitting: {
+          // Default Group options, which will be used
+          // to control the chunk size and other behaviors.
+          minSize: 100_000, // 100 KB
+          maxSize: 250_000, // 250 KB
+
           groups: [
-            // For vendor libraries who are base frameworks,
-            // group them into separate chunk groups,
-            // set `minSize` and `maxSize` to control the chunk size.
+            // For vendor libraries who are used in every page,
+            // we can group them into separate chunk groups.
             {
               // Group name, which will be used as the chunk name.
               name: 'vue',
-              // Group rules, which will be used to determine whether a module
-              // will be captured by this group.
-              test: /node_modules[\\/]vue/,
+              // Group rules, which will be used to determine
+              // whether a module will be captured by this group.
+              test: /node_modules[\\/]@?vue/,
               priority: 40,
-              // Group options, which will be used to control the chunk size
-              // and other behaviors.
-              minSize: 100_000, // 100 KB
-              maxSize: 250_000, // 250 KB
             },
 
-            // For large vendor libraries,
-            // group them into separate chunk group,
-            // set `minSize` and `maxSize` to control the chunk size.
+            // For business libraries, we only extract the
+            // commonly used ones into separate chunk groups.
             {
               name: 'echarts',
               test: /node_modules[\\/]echarts/,
+              minShareCount: 2,
               priority: 30,
-              minSize: 100_000, // 100 KB
-              maxSize: 500_000, // 500 KB
             },
             {
               name: 'element-plus',
               test: /node_modules[\\/]element-plus/,
-              minSize: 100_000, // 100 KB
-              maxSize: 500_000, // 500 KB
+              minShareCount: 2,
               priority: 20,
             },
-            // For other smaller vendor libraries,
-            // group them into one chunk group.
             {
               name: 'vendor',
               test: /node_modules/,
+              minShareCount: 2,
               priority: 10,
             },
-            // For source code, group them into one chunk group,
-            // set `minShareCount` to ensure that only modules
-            // shared by at least 2 chunks are captured by this group.
+
+            // For source code, we only extract the
+            // commonly used ones into separate chunk groups.
             {
               name: 'source',
-              minSize: 10_000,
               minShareCount: 2,
               priority: 5,
             }
@@ -265,7 +267,9 @@ export default defineConfig({
 
 ### Vite 7
 
-For Vite 7 and below, we can only use `build.rollupOptions.output.manualChunks` in the configuration (like `vite.config.ts`) to group chunks, due to the limitation of Rollup, which is much less flexible than Webpack.
+For Vite 7 and below, we can only use `build.rollupOptions.output.manualChunks` in the configuration (like `vite.config.ts`) to custom the chunks splitting behavior.
+
+Due to the limitation of Rollup, it is much less flexible than Vite 8 & Webpack: **Vite 7 just supports to cache the vendor modules into separate chunks.**
 
 _vite.config.ts_
 
@@ -274,23 +278,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        // [!code highlight:19]
+        // [!code focus:14]
+        // We only extract vendor libraries, who are used in every page,
+        // into separate chunks. Because:
+        // 1. Vite 7 (Rollup) only supports chunks grouping;
+        // 2. For business libraries, we may used different parts in
+        // different pages, if we group them together, we may get a full
+        // size chunk in each page, which reduces the performance.
         manualChunks: (id) => {
           // Extract vendor libraries who are base frameworks
           // into separate chunks.
-          if (/node_modules[\\/]vue/.test(id)) {
+          if (/node_modules[\\/]@?vue/.test(id)) {
             return 'vue'
-          }
-          // Extract large vendors into a separate chunk.
-          if (/node_modules[\\/]echarts/.test(id)) {
-            return 'echarts'
-          }
-          if (/node_modules[\\/]element-plus/.test(id)) {
-            return 'element-plus'
-          }
-          // Extract common vendors into a separate chunk.
-          if (/node_modules/.test(id)) {
-            return 'vendor'
           }
           return null
         },
@@ -304,14 +303,14 @@ export default defineConfig({
 
 For Webpack, we can use `optimization.splitChunks` in the configuration (like `webpack.config.js`) to split chunks.
 
-It has a default configuration, you can see it [here](https://webpack.js.org/plugins/split-chunks-plugin/#optimizationsplitchunks).
+It has a default configuration, you can refer [the document](https://webpack.js.org/plugins/split-chunks-plugin/#optimizationsplitchunks) for more details.
 
 _webpack.config.js_
 
 ```js
 export default {
   output: {
-    // [!code highlight:5]
+    // [!code focus:5]
     /**
      * Webpack does not attach hash to chunk files by default, so we should
      * configure it manually.
@@ -320,61 +319,57 @@ export default {
   },
 
   optimization: {
-    // [!code highlight:62]
+    // [!code focus:58]
     splitChunks: {
       /**
        * We want apply cache groups to both `async` and `initial` chunks,
-       * so we should use `chunks: 'all'`.
+       *  so we should use `chunks: 'all'`.
        */
       chunks: 'all',
+
+      // Default Group options, which will be used to control the chunk
+      // size and other behaviors.
+      minSize: 100_000, // 100 KB
+      maxSize: 250_000, // 250 KB
+
       cacheGroups: {
-        // For vendor libraries who are base frameworks,group them into separate
-        // chunk groups, set `minSize` and `maxSize` to control the chunk size.
+        // For vendor libraries who are used in every page, we can group
+        // them into separate chunk groups.
         vue: {
           // Group name, which will be used as the chunk name.
           name: 'vue',
-          // Group rules, which will be used to determine whether a module will
-          // be captured by this group.
-          test: /node_modules[\\/]vue/,
+          // Group rules, which will be used to determine whether a module
+          // will be captured by this group.
+          test: /node_modules[\\/]@?vue/,
           priority: 40,
-          // Group options, which will be used to control the chunk size and
-          // other behaviors.
-          minSize: 100_000, // 100 KB
-          maxSize: 250_000, // 250 KB
-          reuseExistingChunk: true,
         },
 
-        // For large vendor libraries, group them into separate chunk group,
-        // set `minSize` and `maxSize` to control the chunk size.
+        // For business libraries, we only extract the commonly used ones
+        // into separate chunk groups.
         echarts: {
           name: 'echarts',
           test: /node_modules[\\/]echarts/,
           priority: 30,
-          minSize: 100_000, // 100KB
-          maxSize: 250_000, // 250KB
+          minChunks: 2,
           reuseExistingChunk: true,
         },
         elementplus: {
           name: 'element-plus',
           test: /node_modules[\\/]element-plus/,
           priority: 20,
-          minSize: 100_000, // 100KB
-          maxSize: 250_000, // 250KB
+          minChunks: 2,
           reuseExistingChunk: true,
         },
-
-        // For other smaller vendor libraries, group them into one chunk group.
         defaultVendors: {
           name: 'vendor',
           test: /node_modules/,
           priority: 10,
+          minChunks: 2,
           reuseExistingChunk: true,
-          minSize: 20_000,
         },
 
-        // For source code, group them into one chunk group, set `minShareCount`
-        // to ensure that only modules shared by at least 2 chunks are captured
-        // by this group.
+        // For source code, we only extract the commonly used ones into
+        // separate chunk groups.
         default: {
           name: 'source',
           minChunks: 2,
@@ -404,15 +399,36 @@ import Inspect from 'vite-plugin-inspect'
 
 export default defineConfig({
   devtools: {
+    enabled: true,
     build: { withApp: true }
   },
   plugins: [
-    Inspect(),
+    Inspect({
+      build: true,
+    }),
   ],
 })
 ```
 
 And you can inspect the chunks in the "Chunks" tab of the opening website.
+
+### Vite 7
+
+For Vite 7 and below, you can use the Rollup plugin `rollup-plugin-visualizer` to analyze the output bundles and chunks.
+
+```bash
+npm install -D rollup-plugin-visualizer
+```
+
+```ts
+import { visualizer } from 'rollup-plugin-visualizer'
+
+export default defineConfig({
+  plugins: [
+    visualizer()
+  ]
+})
+```
 
 ### Webpack
 

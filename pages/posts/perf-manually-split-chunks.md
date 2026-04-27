@@ -11,10 +11,6 @@ type: note
 
 ## Introduction
 
-> [!Note]
->
-> In practice, you should not spend a lot of time to manually split chunks, because this cost more but may not bring much performance improvement.
-
 As a modern front-end developer, you may be very familiar with the word **"chunks splitting"**.
 
 But before this, we must understand the concepts of **"module", "bundle" and "chunk"**: They are the concepts from Webpack, but they are also widely used in other modern bundlers / build tools.
@@ -55,30 +51,142 @@ But before this, we must understand the concepts of **"module", "bundle" and "ch
   console.log(foo)
   ```
 
-- A "chunk" is **a part of a bundle, which can be loaded independently** (both asynchronously and synchronously).
+- A "chunk" is **a part of a bundle, which can be loaded independently** (asynchronously or synchronously).
 
 In a word: _"chunks splitting" is to split the large output bundles into smaller chunks, to improve the loading performance of first screen by parallel loading the chunks._
 
-The key point of using this technique is how to balance the **size of** the chunks and the **number of** chunks.
+## Background
 
-- If one of the **synchronous chunk is too large**, the total page loading time may become too long, especially with low network speed. This is because only all synchronous chunks have been fetched, then they can be loaded synchronously, the page can work normally, so any other synchronous chunk have to wait for the slowest one to be fetched;
-- If each chunk is too small, there will be **a large number of chunks** to fetch, which may cause the request waterfall;
-- Both of the above two edge cases will degrade the loading performance.
+> [!Note]
+>
+> This background is necessary for us to understand the motivation of manually splitting chunks, and how to split chunks.
 
-## Default Chunks Splitting
+**Since HTTP/2.0**, the browser can handle more requests in parallel than HTTP/1.1 (HTTP/1.1 can only handle 6 requests per connection), we can safely split the large output bundles into more smaller chunks. The recommended chunk size is around **100KiB ~ 250KiB** (recommended by [Rolldown](https://rolldown.rs/)).
 
-Modern bundlers / build tools have already provided a default split strategy preset for us as fallback: They will extract **async modules** from the bundle into independent chunks, and load them asynchronously when they are needed. These strategies are suitable for most of the cases, so we don't need to change these strategies at most of the time, except for some special cases:
+Also, with the popularization of **ESM**, **build-time tree shaking** becoming the standard optimization method for reducing bundle size, this presents a requirement for us when doing code splitting: **Do not mix one-time used modules with shared modules in the same chunk**, otherwise, the effect of tree shaking will be degraded.
 
-1. Some of the vendor libraries are too large. For example, `echarts`. In this case, we may need to specify `minSize` & `maxSize` to control the chunk size manually;
-2. If you are familiar with the principle of the modern bundlers / build tools, you may know that they will attach file hash to each output file, so that we (actually, it's the browser) can identify the file version easily. CDN also uses these hash to identify the file version.
+<details>
+<summary>Reason</summary>
 
-   If you put both the source code and the dependencies into the same chunk, every time you change the source code, the hash of this chunk will change, and user should re-fetch the whole chunk, even though a bunch of the code (from the dependencies) has not changed. This cause CDN cache invalidation, and hurts the website performance.
+Imagine that, you have a web application with two dynamic imported routes `/home` & `/about`:
 
-   In this case, we need to use `groups` to group the chunks manually.
+```ts
+const routes = [
+  {
+    name: 'home',
+    path: '/home',
+    component: () => import('./home.vue'),
+  },
+  {
+    name: 'about',
+    path: '/about',
+    component: () => import('./about.vue'),
+  },
+]
+```
+
+When you visit the `/home` route, it's expected that only the code related to the `/home` route will be loaded.
+
+Assume these two pages both use the same vendor library, for example, `loadash-es`, `/home` uses `debounce` function, while `/about` uses `throttle` function.
+
+_src/pages/home.vue_
+
+```vue
+<script setup lang="ts">
+import { debounce } from 'lodash-es'
+
+// ...
+</script>
+```
+
+_src/pages/about.vue_
+
+```vue
+<script setup lang="ts">
+import { throttle } from 'lodash-es'
+// ...
+</script>
+```
+
+Build-time tree shaking of ESM will result in the following output bundles:
+
+_dist/home.js_
+
+```js
+// lodash-es/debounce.js
+function debounce() {
+  // ...
+}
+// ...
+```
+
+_dist/about.js_
+
+```js
+// lodash-es/throttle.js
+function throttle() {
+  // ...
+}
+// ...
+```
+
+Every time you visit `/home`, only `debounce` function will be loaded; every time you visit `/about`, only `throttle` function will be loaded. So clean and efficient!
+
+What if you extract the whole vendor library `lodash-es` into a separate chunk? The output bundles will be like this:
+
+_dist/vendor.js_
+
+```js
+// lodash-es/debounce.js
+function debounce() {
+  // ...
+}
+// lodash-es/throttle.js
+function throttle() {
+  // ...
+}
+// ...
+```
+
+_dist/home.js_
+
+```js
+import { debounce } from './vendor.js'
+// ...
+```
+
+_dist/about.js_
+
+```js
+import { throttle } from './vendor.js'
+// ...
+```
+
+Oops, every time you visit each page, browser will always download the whole `vendor.js`! Although the tree shaking is still working: never used code still not be included in the chunks, but this cause unused code to be downloaded and executed in some cases, which degrades the loading performance of the first screen.
+
+</details>
 
 ## How to Split Chunks?
 
-For different bundlers / build tools, the ways to split chunks are different.
+The key point of using this technique is how to balance the **size of** the chunks, the **number of** chunks, and the **usage rate** of each chunk. The basic principles are:
+
+- If one of the **synchronous chunk is too large**, the total page loading time may become too long, especially with low network speed. This is because in browser, the parsing of HTML will be blocked until the synchronous chunk is loaded and executed. In this case, we need to specify **max chunk size** manually;
+- If each chunk is too small, there will be **a large number of chunks** to fetch, which may cause the request waterfall, increasing the cost of making requests, also hurt the website performance; In this case, we need to specify **min chunk size** manually;
+- If a separated chunk contains a lot of unused code, the downloading & executing of it is a waste of performance; In this case, we need to specify **min share chunks count** to ensure the separated chunks contain only shared code.
+
+Of course, for different bundlers / build tools, the ways to split chunks are different.
+
+### Default Chunks Splitting
+
+Modern bundlers / build tools have already provided a default split strategy preset for us as fallback: They will extract **async modules** from the bundle into independent chunks, and load them asynchronously when they are needed. These strategies are suitable for most of the cases, so we don't need to change these strategies at most of the time, except for some special cases:
+
+1. **Cache the vendor modules which is used everywhere**.
+
+    If you are familiar with the principle of the modern bundlers / build tools, you may know that they will attach file hash to each output file, so that we (actually, it's the browser) can identify the file version easily. CDN also uses these hash to identify the file version.
+
+    If you put both the source code and the dependencies into the same chunk, every time you change the source code, the hash of this chunk will change, and user should re-fetch the whole chunk, even though a bunch of the code (from the dependencies) has not changed. This cause CDN cache invalidation, and hurts the website performance.
+
+    In this case, we need to separate these chunks manually.
 
 ### Vite
 

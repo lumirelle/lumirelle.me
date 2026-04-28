@@ -1,9 +1,9 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-04-26T21:06+08:00
+update: 2026-04-28T10:20+08:00
 lang: en
-duration: 89min
+duration: 92min
 type: manual
 ---
 
@@ -23,7 +23,8 @@ JavaScript is a high-level, interpreted programming language that is widely used
 - **Control Flow (Conditionals & Loops)**: Used to control the flow of execution in a program based on certain conditions or to repeat a block of code multiple times;
 - **Error Handling (try/catch/finally, throw, etc.)**: Used to handle errors and exceptions that may occur during the execution of a program;
 - **Asynchronous Programming (Promises, Async/Await, etc.)**: Used to handle asynchronous operations, such as network requests, timers, I/O operations, without blocking the main thread of execution;
-- **Generators & Iterators**: High-level APIs for better DX (Developer Experience) when working with iterables and asynchronous data streams;
+- **Generators & Iterators**: High-level APIs for better DX (Developer Experience) when working with iterables and asynchronous data streams
+- **Module System (ES Modules, CommonJS, etc.)**;
 
 ## Code Style
 
@@ -139,7 +140,7 @@ Another example is global `this`, in non-strict mode, `this` in a regular functi
 
 #### How to `"use strict"`?
 
-For **CommonJS module** files, you need to explicitly enable it by adding `"use strict"` to the top of a file or a function:
+For [**CommonJS module**](#module-system) files, you need to explicitly enable it by adding `"use strict"` to the top of a file or a function:
 
 _src/commonjs.js_
 
@@ -159,7 +160,7 @@ function foo() {
 }
 ```
 
-For **ES module** files, everything is in strict mode:
+For [**ES module**](#module-system) files, everything is in strict mode:
 
 _src/es-module.js_
 
@@ -3951,3 +3952,98 @@ for await (const value of range) {
 > That’s natural, as it expects to find `Symbol.iterator`, not `Symbol.asyncIterator`.
 >
 > It’s also the case for `for..of`: the syntax without `await` needs `Symbol.iterator`.
+
+## Module System
+
+Before the official module system was introduced (ES Modules), all community module systems were stay on the runtime level, because they have no ability to change the grammar of JavaScript.
+
+The most popular community module system is CommonJS, which is used by Node.js.
+
+### CommonJS
+
+The principle of CommonJS is simple:
+
+- Abstract a `Module` constructor function, it contains the module information, and provides the ability to load and execute the module code;
+- Loading a module `Module._load(...)` means creating a `Module` instance, and executing the module code in the context of the module **(wrap the module code with a function and run that function)**. The context members are just function parameters;
+- `require` function used in module code is just a wrapper of `Module._load(...)`.
+
+You can see the mock implementation of CommonJS module system below:
+
+```js
+/** This constructor function will record the module information */
+function Module(id = '', parent) {
+  // Module ID
+  this.id = id
+  // Module path
+  this.path = path.dirname(id)
+  // IMPORTANT: This is the module's exports we familiar with
+  this.exports = {}
+  // Update the parent module's children list
+  updateChildren(parent, this, false)
+  // Module filename, it will be set when the module is loaded
+  this.filename = null
+  // Whether the module is loaded
+  this.loaded = false
+  // List of child modules
+  this.children = []
+}
+
+/** A helper function to wrap the module code */
+Module.wrap = function (script) {
+  return (
+    '(function (exports, require, module, __filename, __dirname) {'
+    + script
+    + '\n})'
+  )
+}
+
+/** The cache for storing all loaded modules */
+Module._cache = Object.create(null)
+
+/** Load a module by its ID */
+Module._load = function (request, parent) {
+  const filename = Module._resolveFilename(request, parent)
+
+  // Module cache logic
+  const cachedModule = Module._cache[filename]
+  if (cachedModule) {
+    return cachedModule.exports
+  }
+
+  const module = new Module(filename, parent)
+  Module._cache[filename] = module
+
+  // Wrap the module code and execute it in the context of the module
+  const content = fs.readFileSync(filename, 'utf8')
+  // Like `eval`, but more secure
+  runInThisContext(Module.wrap(content))(
+    module.exports, // -> exports
+    module.require, // -> require
+    module, // -> module
+    filename, // -> __filename
+    module.path // -> __dirname
+  )
+
+  module.loaded = true
+
+  return module.exports
+}
+
+Module.prototype.require = function (id) {
+  // ...
+  // Set `require` method on the module prototype,
+  // so that it can be used in the module code
+  return Module._load(id, this)
+}
+```
+
+You can see, all the CommonJS module system is built on top of the runtime, that is why it has no ability to perform static analysis, also **cannot perform tree shaking**: Although you only use a part of `module.exports`, the whole module will be loaded and executed, and all the code in the module will be included in the final bundle.
+
+### ES Module
+
+Since ES Module is a part of the language specification, it has the ability to change the grammar of JavaScript, and the module system works both in build-time and runtime:
+
+- `import` and `export` are keywords, cannot be used with runtime values, they can only be used in build-time;
+- Dynamic `import()` is another syntax for importing modules, which can be used in runtime;
+
+Because it can work in build-time, it can perform static analysis and **tree shaking**, which is a **great improvement** over CommonJS.

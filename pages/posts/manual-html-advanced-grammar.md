@@ -1,7 +1,7 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-04-26T20:50+08:00
+update: 2026-04-28T09:39+08:00
 lang: en
 duration: 15min
 type: manual
@@ -573,6 +573,10 @@ For better consistency, we **use the term "element" to refer both the tag and th
 - `<button>`: A button element, which is used to create clickable buttons. It has three types: `submit`, `reset`, and `button`.
 
   `submit` type will trigger form submission, `reset` type will reset the form to its initial state, these two types are often be placed inside a `<form>` element too, while `button` type has no default behavior, so it can be used anywhere.
+
+  > [!Caution]
+  >
+  > The default type of `<button>` element is `submit`, please never forget to explicitly set `type="button"` for `<button>` element if you don't want it to trigger form submission!
 
   > [!Note]
   >

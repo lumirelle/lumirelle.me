@@ -37,6 +37,8 @@ export default defineConfig<PresetWind3Theme>({
     [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC"' }],
     ['font-60%em', { 'font-family': '"Drafting* Mono", "Maple Mono CN"' }],
+    ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
+    ['font-recursive-without-mono', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
   ],
   safelist: ['i-ri-menu-2-fill'],
   shortcuts: [

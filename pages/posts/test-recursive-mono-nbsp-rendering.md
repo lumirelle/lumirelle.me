@@ -1,9 +1,9 @@
 ---
 title: 'Test: Recursive Variable Font (Mono) Non-Breaking Space Rendering'
 date: 2025-12-30T10:31+08:00
-update: 2025-12-30T22:02+08:00
+update: 2026-04-28T09:39+08:00
 lang: en
-duration: 2min
+duration: 1min
 ---
 
 [[toc]]
@@ -20,20 +20,28 @@ CSS used:
 
 /* ... */
 
-[font~='60%em'] {
-  font-family: 'Recursive', 'Maple Mono CN';
-  font-variation-settings:
-    'MONO' 1,
-    'CASL' 0,
-    'wght' 400,
-    'slnt' 0,
-    'CRSV' 0.5;
+.font-recursive, [font-recursive=""] {
+  font-family: "Recursive", "Maple Mono CN";
+  font-variation-settings: 'MONO' 1, 'CASL' 0, 'wght' 400, 'slnt' 0, 'CRSV' 0.5;
+}
+.font-recursive-without-mono, [font-recursive-without-mono=""] {
+  font-family: "Recursive", "Maple Mono CN";
+  font-variation-settings: 'CASL' 0, 'wght' 400, 'slnt' 0, 'CRSV' 0.5;
 }
 ```
 
 Preview:
 
-<div font="60%em" text="lg">
+_Case 1_
+
+<div font-recursive text-lg>
+  <div><span>" " & Max: This is normal space 这是一个普通空格</span></div>
+  <div><span>"&nbsp;" & Max: This is non-breaking space 这是一个不间断空格</span></div>
+</div>
+
+_Case 2: Without Mono_
+
+<div font-recursive-without-mono text-lg>
   <div><span>" " & Max: This is normal space 这是一个普通空格</span></div>
   <div><span>"&nbsp;" & Max: This is non-breaking space 这是一个不间断空格</span></div>
 </div>

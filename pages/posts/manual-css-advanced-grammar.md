@@ -1,9 +1,9 @@
 ---
 title: CSS Advanced Grammar Manual
 date: 2026-04-26T20:56+08:00
-update: 2026-04-26T20:56+08:00
+update: 2026-04-30T17:38+08:00
 lang: en
-duration: 0min
+duration: 20min
 type: manual
 ---
 
@@ -344,7 +344,7 @@ _align-content: center_
 
 </div>
 
-<a name="flex-items-alignment"></a> To control the alignment of **items** along **sub cross axis**, we can use the **`align-items` property** for the main axis.
+<a name="flex-items-alignment"></a> To control the alignment of **all the items** along **their own sub cross axis**, we can use the **`align-items` property**.
 
 > [!Note]
 > Because flex items have no sub main axis, `justify-items` property has no effect on them.
@@ -379,7 +379,7 @@ _align-items: center_
 > [!Note]
 > Because flex items have no sub main axis, `justify-self` property has no effect on them.
 
-_align-items: center_
+_align-self: end, block 1_
 
 <div m-auto flex flex-wrap items-center gap-4 w-100 h-100 bg-blue relative>
   <div w-25 h-25 p-4 shrink-0 self-end bg-red>1</div>
@@ -404,6 +404,8 @@ _align-items: center_
 
 <a name="flex-item-sizing"></a> There are also some properties can control the sizing of flex items, such as `flex-grow`, `flex-shrink` and `flex-basis` properties, and they will override the default sizing behavior of flex items.
 
+`flex-grow` & `flex-shrink` properties accept a weight value:
+
 _flex-grow: 1_
 
 <div m-auto flex flex-wrap gap-4 w-100 h-100 bg-blue relative>
@@ -421,10 +423,240 @@ _flex-shrink: 1_
   <div w-25 h-25 p-4 shrink-0 bg-red>4</div>
 </div>
 
+While `flex-basis` property accepts a length value:
+
 _flex-basis: 12.5rem, will override the default sizing_
 
 <div m-auto flex gap-4 w-100 h-100 bg-blue relative>
-  <div w-25 h-25 p-4 basis-50 shrink-0 bg-red>w-25 ❌; basis-50 ✔️</div>
+  <div w-25 h-25 p-4 basis-50 shrink-0 bg-red>w-25 ❌<br>basis-50 ✔️</div>
+</div>
+
+#### Tricks
+
+To implement a header navigation bar with logo on the left and other navigation items on the right, you can simply use `flex` layout with `justify-content: flex-end` property, and set `margin-left: auto` on the logo item to push it to the left:
+
+<div m-auto flex justify-end gap-4 w-150 h-100 bg-blue relative>
+  <div m-e-auto w-25 h-25 p-4 shrink-0 bg-red>1</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>2</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>3</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>4</div>
 </div>
 
 ### Grid
+
+Grid layout is a **two-dimensional** layout, helps us to arrange items in rows and columns. It has many similarities with [flex layout](#flex).
+
+It has two main components: **grid container** and **grid items**. The grid container is the parent element that has `display: grid` or `display: inline-grid`, and the grid items are the child elements of the grid container.
+
+#### Grid Container
+
+By default, when we have not specified how many the columns and rows are of the grid layout, it will create **auto-placed items** following the behavior controlled by a group of properties `grid-auto-*`.
+
+<a name="grid-auto-flow"></a> The `grid-auto-flow` property is used to control which direction the auto-placed items will be placed in, `row` or `column`:
+
+_grid-auto-flow: row, default, auto-placed items will be placed in rows_
+
+<div m-auto grid gap-4 w-100 h-100 bg-blue relative>
+  <div w-25 h-25 p-4 shrink-0 bg-red>1</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>2</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-auto-flow: column, auto-placed items will be placed in columns_
+
+<div m-auto grid grid-flow-col gap-4 w-100 h-100 bg-blue relative>
+  <div w-25 h-25 p-4 shrink-0 bg-red>1</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>2</div>
+  <div w-25 h-25 p-4 shrink-0 bg-red>3</div>
+</div>
+
+<a name="grid-auto-rows-columns"></a> To control the size of the implicitly created columns, we can use the `grid-auto-columns` property, and for rows, we can use the `grid-auto-rows` property.
+
+_grid-auto-rows: auto, as large as possible_
+
+<div m-auto grid gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-auto-rows: 6.25rem_
+
+<div m-auto grid auto-rows-25 gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-auto-cols: auto, as large as possible_
+
+<div m-auto grid grid-flow-col gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-auto-cols: 6.25rem_
+
+<div m-auto grid grid-flow-col auto-cols-25 gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+<a name="grid-template-rows-columns"></a> To specify the number of rows and columns (with their sizes) in the grid layout, we can use the `grid-template-columns` and `grid-template-rows` properties.
+
+_grid-template-columns: repeat(2, minmax(0, 1fr))_
+
+<div m-auto grid grid-cols-2 gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-template-columns: 100px_
+
+<div m-auto grid gap-4 w-100 h-100 bg-blue relative style="grid-template-columns: 100px;">
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-template-rows: repeat(2, minmax(0, 1fr))_
+
+<div m-auto grid grid-rows-2 grid-flow-col gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_grid-template-rows: 100px_
+
+<div m-auto grid grid-flow-col gap-4 w-100 h-100 bg-blue relative style="grid-template-rows: 100px;">
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+<a name="grid-content-alignment"></a> To control the alignment of **the content (treat all items as a whole)**, we can use the **`justify-content` property** for **inline direction**, and **`align-content` property** for **block direction**.
+
+_justify-content: start, default_
+
+<div m-auto grid gap-4 w-100 h-100 bg-blue relative style="grid-template-columns: 160px;">
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_justify-content: center_
+
+<div m-auto grid justify-center gap-4 w-100 h-100 bg-blue relative style="grid-template-columns: 160px;">
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_align-content: start, default_
+
+<div m-auto grid="~ flow-col" gap-4 w-100 h-100 bg-blue relative style="grid-template-rows: 160px;">
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_align-content: center_
+
+<div m-auto grid="~ flow-col"  content-center gap-4 w-100 h-100 bg-blue relative style="grid-template-rows: 160px;">
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+<a name="grid-items-alignment"></a> To control the alignment of **all the items**, we can use the **`justify-items` property** for **their own inline direction**, and **`align-items` property** for **their own block direction**.
+
+_justify-items: stretch, default_
+
+<div m-auto grid="~ rows-2 cols-2" gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_justify-items: center_
+
+<div m-auto grid="~ rows-2 cols-2" justify-items-center gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+
+_align-items: stretch, default_
+
+<div m-auto grid="~ rows-2 cols-2" gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_align-items: center_
+
+<div m-auto grid="~ rows-2 cols-2" items-center gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+<a name="grid-areas"></a> Instead of using number to specify the position of grid items, we can also use named grid areas defined by `grid-template-areas` property to control the layout of grid items, which is more maintainable and readable.
+
+<div m-auto grid gap-4 w-100 h-100 bg-blue relative style="grid-template-areas: 'header header' 'sidebar main' 'sidebar footer';">
+  <div p-4 shrink-0 bg-red style="grid-area: header;">header</div>
+  <div p-4 shrink-0 bg-red style="grid-area: sidebar;">sidebar</div>
+  <div p-4 shrink-0 bg-red style="grid-area: main;">main</div>
+  <div p-4 shrink-0 bg-red style="grid-area: footer;">footer</div>
+</div>
+
+#### Grid Items
+
+<a name="grid-item-alignment"></a> Of course, we can control the alignment of specific grid item by using `justify-self` and `align-self` properties, and they will override the `justify-items` and `align-items` properties defined in the parent container.
+
+_justify-self: center, block 1_
+
+<div m-auto grid="~ rows-2 cols-2" gap-4 w-100 h-100 bg-blue relative>
+  <div justify-self-center p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+_align-self: center, block 1_
+
+<div m-auto grid="~ rows-2 cols-2" gap-4 w-100 h-100 bg-blue relative>
+  <div self-center p-4 shrink-0 bg-red>1</div>
+  <div p-4 shrink-0 bg-red>2</div>
+  <div p-4 shrink-0 bg-red>3</div>
+</div>
+
+<a name="grid-item-position"></a> Because grid is a two-dimensional layout, we can easily control the position of each item by using `grid-row` and `grid-column` properties, and they will override the default auto-placement behavior of grid items.
+
+_Specific positioning, allow overlapping (support negative indices)_
+
+<div m-auto grid="~ rows-2 cols-2" gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 grid="row-1 col-[1/3]" shrink-0 bg-red op-80>First row<br>start from column 1 to 3</div>
+  <div p-4 grid="row-[1/3] col-2" shrink-0 bg-green op-80>Start from row 1 to 3<br>second column</div>
+</div>
+
+_With Span, smart typesetting_
+
+<div m-auto grid="~ rows-3 cols-3" gap-4 w-100 h-100 bg-blue relative>
+  <div p-4 grid="row-1 col-span-3" shrink-0 bg-red op-80>First row<br>spans 3 columns</div>
+  <div p-4 grid="row-span-2" shrink-0 bg-green op-80>Spans 2 rows<br>second column</div>
+</div>
+
+<a name="grid-area"></a> To specify the position of grid item by using named grid area, we can use `grid-area` property.
+
+<div m-auto grid gap-4 w-100 h-100 bg-blue relative style="grid-template-areas: 'header header' 'sidebar main' 'sidebar footer';">
+  <div p-4 shrink-0 bg-red style="grid-area: header;">header</div>
+  <div p-4 shrink-0 bg-red style="grid-area: sidebar;">sidebar</div>
+  <div p-4 shrink-0 bg-red style="grid-area: main;">main</div>
+  <div p-4 shrink-0 bg-red style="grid-area: footer;">footer</div>
+</div>

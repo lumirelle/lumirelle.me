@@ -1,8 +1,8 @@
-import type { PresetWind3Theme } from 'unocss'
+import type { PresetWind4Theme } from 'unocss'
 import { createLocalFontProcessor } from '@unocss/preset-web-fonts/local'
-import { defineConfig, presetAttributify, presetIcons, presetWebFonts, presetWind3, transformerDirectives } from 'unocss'
+import { defineConfig, presetAttributify, presetIcons, presetWebFonts, presetWind4, transformerDirectives } from 'unocss'
 
-export default defineConfig<PresetWind3Theme>({
+export default defineConfig<PresetWind4Theme>({
   presets: [
     presetIcons({
       extraProperties: {
@@ -13,7 +13,7 @@ export default defineConfig<PresetWind3Theme>({
       },
     }),
     presetAttributify(),
-    presetWind3(),
+    presetWind4(),
     presetWebFonts({
       fonts: {
         sans: 'Caslon',
@@ -25,7 +25,7 @@ export default defineConfig<PresetWind3Theme>({
     }),
   ],
   theme: {
-    fontFamily: {
+    font: {
       'mono': '"Drafting* Mono"',
       'source-hans': '"Source Han Sans TC"',
       'maple-mono': '"Maple Mono CN"',

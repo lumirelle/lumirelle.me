@@ -47,8 +47,8 @@
         "vite-svg-loader": "^5.1.1"
       },
       "dev": {
-        "@clack/prompts": "^1.2.0",
-        "@iconify/json": "^2.2.467",
+        "@clack/prompts": "^1.3.0",
+        "@iconify/json": "^2.2.469",
         "@lumirelle/tsconfig": "^0.1.3",
         "@octokit/core": "^7.0.6",
         "@octokit/rest": "^22.0.1",
@@ -68,7 +68,7 @@
         "@antfu/eslint-config": "^8.2.0",
         "@lumirelle/oxlint-config": "^0.2.2",
         "@unocss/eslint-plugin": "^66.6.8",
-        "eslint": "^10.2.1",
+        "eslint": "^10.3.0",
         "eslint-plugin-oxlint": "^1.62.0",
         "nano-staged": "^1.0.2",
         "oxlint": "^1.62.0",
@@ -80,7 +80,7 @@
         "@antfu/utils": "^9.3.0",
         "@unhead/vue": "^3.1.0",
         "@unocss/reset": "^66.6.8",
-        "@vueuse/core": "^14.2.1",
+        "@vueuse/core": "^14.3.0",
         "d3-hierarchy": "^3.1.2",
         "d3-shape": "^3.2.0",
         "dayjs": "^1.11.20",

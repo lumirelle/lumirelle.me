@@ -5,5 +5,5 @@
     "types": ["bun-types", "vite-ssg"],
     "allowJs": true
   },
-  "include": ["scripts/**/*", "plugins/**/*", "*.config.js", "*.config.ts"]
+  "include": ["scripts/**/*", "plugins/**/*", "*.js", "*.ts"]
 }

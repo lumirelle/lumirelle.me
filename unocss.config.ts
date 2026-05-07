@@ -15,8 +15,16 @@ export default defineConfig<PresetWind4Theme>({
     presetAttributify(),
     presetWind4(),
     presetWebFonts({
+      // Web fonts
       fonts: {
-        sans: 'Caslon',
+        sans: {
+          name: 'Comic Sans MS',
+          provider: 'none',
+        },
+        mono: {
+          name: 'Comic Mono',
+          provider: 'fontsource',
+        },
         condensed: 'Roboto Condensed',
         wisper: 'Bad Script',
         mplus: 'M PLUS Code Latin',
@@ -25,8 +33,8 @@ export default defineConfig<PresetWind4Theme>({
     }),
   ],
   theme: {
+    // Local fonts
     font: {
-      'mono': '"Drafting* Mono"',
       'source-hans': '"Source Han Sans TC"',
       'maple-mono': '"Maple Mono CN"',
     },
@@ -37,6 +45,7 @@ export default defineConfig<PresetWind4Theme>({
     [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC"' }],
     ['font-60%em', { 'font-family': '"Drafting* Mono", "Maple Mono CN"' }],
+    ['font-casual', { 'font-family': '"Comic Mono", "三极露融体"' }],
     ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
     ['font-recursive-without-mono', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
   ],

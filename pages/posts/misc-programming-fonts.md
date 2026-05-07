@@ -1,9 +1,9 @@
 ---
 title: Programming Fonts
 date: 2025-10-15T14:10+08:00
-update: 2026-04-12T19:12+08:00
+update: 2026-05-07T14:40+08:00
 lang: en
-duration: 11min
+duration: 13min
 ---
 
 [[toc]]
@@ -14,49 +14,55 @@ Monospace fonts are fonts in which each character occupies the same amount of ho
 
 Basically, we always use monospace fonts for programming, because they can align characters in a better way, which can improve readability and reduce eye strain.
 
-> [!Note]
->
-> As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get better development experience.
+## Test-Driven Comparison
 
-## Test Drive Comparison
-
-You can compare various programming fonts with test drive method in this [website](https://programmingfonts.org/).
+You can compare various programming fonts with test-driven method in this [website](https://programmingfonts.org/).
 
 ## My Preference
+
+> [!Note]
+>
+> ~~As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get better development experience.~~
+>
+> After a long time of testing, I found that it's not necessary to let the width of 2 Latin characters equal to 1 CJK character. We don't actually have this need because we basically use our native language only when we need to write comments and UI text.
+>
+> Alright, I admit, the true reason is finding a suitable and aesthetically pleasing matching font is just too difficult...
 
 My basic requirements for fonts are that:
 
 1. They must have at least two weights (Regular & Bold);
-2. They must include italics.
+2. They must have italic styles.
 
 All of fonts listed below are satisfy these requirements.
 
+### Strict 1 Latin Character = 1 CJK Character
+
 > [!Note]
 >
-> In CSS, `em` is base on the current font size. For example, if the font size is `16px`, then `1em` = `16px`.
+> In Web applications, `em` is base on the current font size. For example, if the font size is `16px`, then `1em` = `16px`. We can use this unit to describe the ratio of character width to font size.
+>
+> As some font families are variable, they may support custom character width, so I will use the default character width to categorize these fonts.
 
-I categorize the fonts I used into several groups by the **default character width (as some font families are variable, they may support custom character width) relative to the font size**, for example:
-
-- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), like "M PLUS Code Latin" and "Source Han Sans TC", etc.
-- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), like "Go Mono" and "Maple Font", etc.
 - **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), like "Monaspace Xenon Var", etc.
+- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), like "Go Mono" and "Maple Font", etc.
+- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), like "M PLUS Code Latin" and "Source Han Sans TC", etc.
 
-Also, this is a comparison table of the font weight aliases and the corresponding numeric values:
+<a name="font-weights"></a> Also, this is a comparison table of the font weight aliases and the corresponding numeric values:
 
 | Numeric Value	| Keyword Aliases |
 | -- | -- |
-| 100 |	thin, hairline |
-| 200 |	extra light, ultra light |
-| 300 |	light, demi, book |
-| 400 |	normal, regular, book, plain |
-| 500 |	medium |
-| 600 |	semibold, demibold |
-| 700 |	bold |
-| 800 |	extra bold, ultra bold, heavy |
-| 900 |	black, extra black, ultra black, poster, fat |
-| 950 |	(non-standard, supported by some variable fonts) |
+| 100 | thin, hairline |
+| 200 | extra light, ultra light |
+| 300 | light, demi, book |
+| 400 | normal, regular, book, plain |
+| 500 | medium |
+| 600 | semibold, demibold |
+| 700 | bold |
+| 800 | extra bold, ultra bold, heavy |
+| 900 | black, extra black, ultra black, poster, fat |
+| 950 | (non-standard, supported by some variable fonts) |
 
-### 62%em Group
+#### 62%em Group
 
 > [!Warning]
 >
@@ -84,11 +90,11 @@ Then, you can using these font like this:
 "'Symbols Nerd Font', 'Monaspace Xenon Var', monospace"
 ```
 
-### 60%em Group
+#### 60%em Group
 
 > [!Note]
 >
-> Most of Latin fonts are designed to be 60% width, but very few CJK fonts are.
+> Most of Latin fonts are designed to be 60%em width, but very few CJK fonts are.
 
 This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support.
 
@@ -183,11 +189,11 @@ Then, you can using these font like this:
 "'Symbols Nerd Font', 'Drafting* Mono', 'Maple Mono CN', monospace"
 ```
 
-### 50%em Group
+#### 50%em Group
 
 > [!Note]
 >
-> Most of CJK fonts are designed to be 50% width, but very few Latin fonts are.
+> Most of CJK fonts are designed to be 50%em width, but very few Latin fonts are.
 
 This group may look a bit narrow for most people, it uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK characters support.
 
@@ -232,11 +238,35 @@ Then, you can using these font like this:
 "'Symbols Nerd Font', 'M PLUS Code Latin', 'Source Han Sans TC', monospace"
 ```
 
+### Casual Choice
+
+If you're thinking, "Whatever!" then the "Comic" font family is perfect for you.
+
+This group uses ["三极露融体"](https://www.sjtype.com/new_product_show2.php?id=430&jiazu_id=754) for CJK characters support.
+
+And latin font family:
+
+- ⭐ [Comic Mono](https://dtinth.github.io/comic-mono-font/):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  A legible monospace font… the very typeface you’ve been trained to recognize since childhood.
+
+  <img src="/posts/misc-programming-fonts/comic-mono.png" alt="Comic Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can using this font like this:
+
+```json
+"'Symbols Nerd Font', 'Comic Mono', '三极露融体', monospace"
+```
+
 ## Font Preview
 
-### Latin vs. CJK
+### Strict Preview
 
-60%em Group:
+Latin vs. CJK
+
+60%em Group ("Drafting* Mono", "Maple Mono CN"):
 
 <div font="[&_code]:60%em!">
 
@@ -268,10 +298,9 @@ w
 
 </div>
 
-### Code
+Code
 
-
-60%em Group:
+60%em Group ("Drafting* Mono", "Maple Mono CN"):
 
 <div font="[&_code]:60%em!">
 
@@ -368,6 +397,122 @@ async function _symlinkConfig(
 50%em Group ("M PLUS Code Latin", "Source Han Sans TC"):
 
 <div font="[&_code]:50%em!">
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+### Casual Preview
+
+Latin vs. CJK
+
+"Comic Mono", "三极露融体":
+
+<div font="[&_code]:casual!">
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+</div>
+
+Code
+
+"Comic Mono", "三极露融体":
+
+<div font="[&_code]:casual!">
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'

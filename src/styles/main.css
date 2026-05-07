@@ -1,11 +1,30 @@
 /* Font Definitions */
 /* Basic */
 @font-face {
-  font-family: 'Caslon';
-  font-weight: 400;
-  src: url('/fonts/Caslon-Regular.otf') format("woff2")
+  font-family: 'Comic Sans MS';
+  font-weight: normal;
+  font-style: normal;
+  src: url('/fonts/comic.ttf');
 }
-/* 60%em Group */
+@font-face {
+  font-family: 'Comic Sans MS';
+  font-weight: bold;
+  font-style: normal;
+  src: url('/fonts/comicbd.ttf');
+}
+@font-face {
+  font-family: 'Comic Sans MS';
+  font-weight: normal;
+  font-style: italic;
+  src: url('/fonts/comici.ttf');
+}
+@font-face {
+  font-family: 'Comic Sans MS';
+  font-weight: bold;
+  font-style: italic;
+  src: url('/fonts/comicz.ttf');
+}
+/* Strict 60%em Group */
 @font-face {
   font-family: 'Maple Mono CN';
   src: url('/fonts/MapleMono-CN-Regular.ttf');
@@ -24,12 +43,17 @@
   font-weight: 300 1000;
   font-style: oblique 0deg 14deg;
 }
-/* 50%em Group */
+/* Strict 50%em Group */
 @font-face {
   font-family: 'Source Han Sans TC';
   src: url('/fonts/SourceHanSansTC-Normal.otf');
   font-weight: normal;
   font-style: normal;
+}
+/* Casual Group */
+@font-face {
+  font-family: '三极露融体';
+  src: url('/fonts/三极露融体.ttf');
 }
 
 /* Root Style */

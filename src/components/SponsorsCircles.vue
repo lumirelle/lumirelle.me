@@ -45,13 +45,13 @@ onMounted(() => {
 <template>
   <div
 
-    w-full flex justify-center
+    flex w-full justify-center
     :style="{
       height: `${550 * scale}px`,
     }"
   >
     <div
-      class="group relative ma h-500px w-500px"
+      class="group ma h-500px w-500px relative"
       :style="{
         'flex-shrink': 0,
         'transform': `scale(${scale})`,
@@ -69,7 +69,7 @@ onMounted(() => {
           top: `${c.position.y - c.radius}px`,
           zIndex: lastHovered.indexOf(c.id) + 1,
         }"
-        class="absolute of-hidden rounded-1/2 transition-all duration-500 hover:shadow-lg"
+        class="rounded-1/2 transition-all duration-500 absolute of-hidden hover:shadow-lg"
         :class="[
           c.org ? 'hover:rounded-xl' : '',
           c.radius < 10
@@ -86,8 +86,8 @@ onMounted(() => {
         :title="c.name || c.login"
         @mouseenter="push(c.id)"
       >
-        <img v-if="c.avatar" :src="c.avatar" h-full w-full bg-base>
-        <div v-else class="h-full w-full flex bg-gray:50">
+        <img v-if="c.avatar" :src="c.avatar" bg-base h-full w-full>
+        <div v-else class="bg-gray:50 flex h-full w-full">
           <div i-ph-user ma op75 class="h-50% w-50%" />
         </div>
       </a>

@@ -18,7 +18,7 @@ const { frontmatter, video, date } = defineProps<{
       class="group"
       hover="scale-101 shadow-xl z-10"
 
-      relative block of-hidden bg-base transition-all duration-500
+      bg-base block transition-all duration-500 relative of-hidden
       :href="frontmatter.link"
       target="_blank"
     >
@@ -26,7 +26,7 @@ const { frontmatter, video, date } = defineProps<{
 
       <div class="prose prose-sm m0 p4 pb3">
         <slot />
-        <div pt2 text-sm op50>{{ formatDate(date, false) }}</div>
+        <div text-sm pt2 op50>{{ formatDate(date, false) }}</div>
       </div>
     </a>
   </div>

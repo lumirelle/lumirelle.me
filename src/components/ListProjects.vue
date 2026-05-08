@@ -9,19 +9,19 @@ function slug(name: string): string {
 
 <template>
   <div class="mx-auto max-w-300">
-    <p mb5 mt--6 text-center text-lg italic op50>
+    <p text-lg mb5 mt--6 text-center op50 italic>
       Projects that I created or maintaining.
     </p>
     <div class="prose mx-auto mt10 pb5 text-center">
       <div flex="~ gap-2 justify-center">
-        <a href="https://github.com/lumirelle" target="_blank" class="group inline-block btn-blue">
+        <a href="https://github.com/lumirelle" target="_blank" class="group btn-blue inline-block">
           <div i-ph-github-logo-duotone group-hover="i-ph-github-logo-fill text-blue" />
           GitHub
         </a>
         <a
           href="https://releases.lumirelle.me"
           target="_blank"
-          class="group inline-block btn-amber"
+          class="group btn-amber inline-block"
         >
           <div i-ph-rocket-launch-duotone group-hover="i-ph-rocket-launch-fill text-amber" />
           Recent Releases
@@ -49,7 +49,7 @@ function slug(name: string): string {
       <div
         :id="slug(key)"
 
-        slide-enter pointer-events-none relative mt5 h18 select-none
+        slide-enter mt5 h18 pointer-events-none select-none relative
         :style="{
           '--enter-stage': cidx - 2,
           '--enter-step': '60ms',
@@ -57,17 +57,17 @@ function slug(name: string): string {
       >
         <span
 
-          absolute left--1rem top-0rem text-5em color-transparent font-bold leading-1em text-stroke-1.5 text-stroke-hex-aaa op35 dark:op20
+          text-5em color-transparent leading-1em font-bold text-stroke-1.5 text-stroke-hex-aaa op35 left--1rem top-0rem absolute dark:op20
         >{{ key }}</span>
       </div>
       <div
-        class="project-grid mx-auto max-w-500 w-max py-2"
+        class="project-grid mx-auto py-2 max-w-500 w-max"
         grid="~ cols-1 md:cols-2 gap-4 lg:cols-3"
       >
         <a
           v-for="(item, idx) in projects[key]"
           :key="idx"
-          class="item relative flex items-center"
+          class="item flex items-center relative"
           :href="item.link"
           target="_blank"
           :title="item.name"

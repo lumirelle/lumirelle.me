@@ -15,11 +15,11 @@ const photos = computed(() => {
 </script>
 
 <template>
-  <div flex="~ gap-1 col items-center justify-center" absolute left-6 top-24 sm:fixed>
+  <div flex="~ gap-1 col items-center justify-center" left-6 top-24 absolute sm:fixed>
     <button
       title="Switch to cover view"
-      rounded-full
-      p2
+
+      p2 rounded-full
       hover="op100 bg-#8881"
       :class="galleryView === 'cover' ? 'op40' : 'op20'"
       @click="galleryView = 'cover'"
@@ -28,8 +28,8 @@ const photos = computed(() => {
     </button>
     <button
       title="Switch to contain view"
-      rounded-full
-      p2
+
+      p2 rounded-full
       hover="op100 bg-#8881"
       :class="galleryView === 'contain' ? 'op40' : 'op20'"
       @click="galleryView = 'contain'"

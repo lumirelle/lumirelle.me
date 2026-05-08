@@ -97,7 +97,7 @@ onKeyStroke('Escape', (e) => {
 
 <template>
   <NavBar />
-  <main class="of-x-hidden px-7 py-10">
+  <main class="px-7 py-10 of-x-hidden">
     <RouterView />
     <Footer :key="route.path" />
   </main>
@@ -105,10 +105,10 @@ onKeyStroke('Escape', (e) => {
     <div
       v-if="imageModel"
 
-      fixed bottom-0 left-0 right-0 top-0 z-500 backdrop-blur-7
+      bottom-0 left-0 right-0 top-0 fixed z-500 backdrop-blur-7
       @click="imageModel = undefined"
     >
-      <div absolute bottom-0 left-0 right-0 top-0 z--1 bg-black:50 />
+      <div bg-black:50 bottom-0 left-0 right-0 top-0 absolute z--1 />
       <img
         :src="imageModel.src"
         :alt="imageModel.alt"
@@ -119,7 +119,7 @@ onKeyStroke('Escape', (e) => {
       <div
         v-if="imageAlt"
 
-        absolute bottom-5 right-5 flex items-center justify-center bg-black:50 px2 py1 text-white
+        text-white px2 py1 bg-black:50 flex items-center bottom-5 right-5 justify-center absolute
       >
         {{ imageAlt }}
       </div>

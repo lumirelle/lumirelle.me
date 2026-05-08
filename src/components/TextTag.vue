@@ -51,7 +51,7 @@ const textColor = computed(() => {
 <template>
   <span
 
-    mx-1 inline-block rounded-md px-2 py-0.5 text-sm font-medium
+    text-sm font-medium mx-1 px-2 py-0.5 rounded-md inline-block
     :class="[bgColor, textColor]"
   >{{ text }}</span>
 </template>

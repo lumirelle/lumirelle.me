@@ -12,7 +12,7 @@ const { y: scroll } = useWindowScroll()
 <template>
   <header class="header z-40">
     <RouterLink
-      class="absolute m-5 h-12 w-12 select-none outline-none xl:fixed"
+      class="m-5 outline-none h-12 w-12 select-none absolute xl:fixed"
       to="/"
       focusable="false"
     >
@@ -21,7 +21,7 @@ const { y: scroll } = useWindowScroll()
     <button
       title="Scroll to top"
 
-      fixed bottom-3 right-3 z-100 h-10 w-10 rounded-full transition duration-300 print:hidden hover-bg-hex-8883 hover:op100
+      rounded-full h-10 w-10 transition duration-300 bottom-3 right-3 fixed z-100 hover-bg-hex-8883 hover:op100 print:hidden
       :class="scroll > 300 ? 'op30' : 'op0! pointer-events-none'"
       @click="toTop()"
     >

@@ -38,7 +38,7 @@ function handleWheel(e: WheelEvent): void {
 <template>
   <div
     ref="container"
-    class="photos flex gap-4 py3"
+    class="photos py3 flex gap-4"
     w-screen
     of-x-auto
     style="
@@ -55,9 +55,9 @@ function handleWheel(e: WheelEvent): void {
         :data-photo-index="idx"
         loading="lazy"
 
-        aspect-square h-80 max-h-80 max-w-80 min-h-80 min-w-80 w-80 w-full object-cover
+        h-80 max-h-80 max-w-80 min-h-80 min-w-80 w-80 w-full aspect-square object-cover
       >
-      <div mt2 text-sm op75>
+      <div text-sm mt2 op75>
         {{ photo.text }}
       </div>
     </div>

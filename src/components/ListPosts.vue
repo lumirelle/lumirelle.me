@@ -68,7 +68,7 @@ function getGroupName(p: Post): number | string {
     <template v-for="(route, idx) in posts" :key="route.path">
       <div
         v-if="!isSameGroup(route, posts[idx - 1])"
-        slide-enter pointer-events-none relative h20 select-none
+        slide-enter h20 pointer-events-none select-none relative
         :style="{
           '--enter-stage': idx - 2,
           '--enter-step': '60ms',
@@ -76,7 +76,7 @@ function getGroupName(p: Post): number | string {
       >
         <span
 
-          absolute left--3rem top--2rem text-8em color-transparent font-bold text-stroke-2 text-stroke-hex-aaa op10
+          text-8em color-transparent font-bold text-stroke-2 text-stroke-hex-aaa op10 left--3rem top--2rem absolute
         >{{ getGroupName(route) }}</span>
       </div>
       <div
@@ -99,25 +99,25 @@ function getGroupName(p: Post): number | string {
                 to: route.path,
               }
           "
-          class="item mb-6 mt-2 block font-normal no-underline"
+          class="item font-normal mb-6 mt-2 no-underline block"
         >
           <li class="no-underline" flex="~ col md:row gap-2 md:items-center">
             <div class="title text-lg leading-1.2em" flex="~ gap-2 wrap">
               <span
                 v-if="route.lang === 'zh'"
-                flex-none align-middle
-                class="my-auto ml--12 mr2 hidden rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:block"
+                align-middle flex-none
+                class="text-zinc5 text-xs my-auto ml--12 mr2 px-1 py-0.5 rounded bg-zinc:15 hidden md:block"
               >中文 / CN</span>
               <span
                 v-if="route.lang === 'en'"
-                flex-none align-middle
-                class="my-auto ml--15 mr2 hidden rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:block"
+                align-middle flex-none
+                class="text-zinc5 text-xs my-auto ml--15 mr2 px-1 py-0.5 rounded bg-zinc:15 hidden md:block"
               >英语 / EN</span>
               <span align-middle>{{ route.title }}</span>
               <span
                 v-if="route.redirect"
 
-                i-carbon-arrow-up-right ml--1.5 flex-none align-middle text-xs op50
+                i-carbon-arrow-up-right text-xs ml--1.5 align-middle op50 flex-none
                 title="External"
               />
             </div>
@@ -125,39 +125,39 @@ function getGroupName(p: Post): number | string {
             <div flex="~ gap-2 items-center">
               <span
                 v-if="route.inperson"
-                i-ri:group-2-line flex-none align-middle op50
+                i-ri:group-2-line align-middle op50 flex-none
                 title="In person"
               />
               <span
                 v-if="route.recording || route.video"
-                i-ri:film-line flex-none align-middle op50
+                i-ri:film-line align-middle op50 flex-none
                 title="Provided in video"
               />
               <span
                 v-if="route.radio"
-                i-ri:radio-line flex-none align-middle op50
+                i-ri:radio-line align-middle op50 flex-none
                 title="Provided in radio"
               />
 
-              <span ws-nowrap text-sm op50>
+              <span text-sm op50 ws-nowrap>
                 {{ formatDate(route.date, true) }}
               </span>
-              <span v-if="route.duration" ws-nowrap text-sm op40>· {{ route.duration }}</span>
-              <span v-if="route.platform" ws-nowrap text-sm op40>· {{ route.platform }}</span>
-              <span v-if="route.place" ws-nowrap text-sm op40 md:hidden>· {{ route.place }}</span>
+              <span v-if="route.duration" text-sm op40 ws-nowrap>· {{ route.duration }}</span>
+              <span v-if="route.platform" text-sm op40 ws-nowrap>· {{ route.platform }}</span>
+              <span v-if="route.place" text-sm op40 ws-nowrap md:hidden>· {{ route.place }}</span>
               <span
                 v-if="route.lang === 'zh'"
-                flex-none align-middle
-                class="my-auto rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:hidden"
+                align-middle flex-none
+                class="text-zinc5 text-xs my-auto px-1 py-0.5 rounded bg-zinc:15 md:hidden"
               >中文 / CN</span>
               <span
                 v-if="route.lang === 'en'"
-                flex-none align-middle
-                class="my-auto rounded bg-zinc:15 px-1 py-0.5 text-xs text-zinc5 md:hidden"
+                align-middle flex-none
+                class="text-zinc5 text-xs my-auto px-1 py-0.5 rounded bg-zinc:15 md:hidden"
               >英语 / EN</span>
             </div>
           </li>
-          <div v-if="route.place" mt--2 hidden text-sm op50 md:block>
+          <div v-if="route.place" text-sm mt--2 op50 hidden md:block>
             {{ route.place }}
           </div>
         </component>

@@ -126,7 +126,7 @@ const ArtComponent = computed(() => {
         {{ frontmatter.place }}
       </span>
     </p>
-    <p v-if="frontmatter.subtitle" class="slide-enter italic opacity-50 !-mt-6">
+    <p v-if="frontmatter.subtitle" class="slide-enter opacity-50 italic !-mt-6">
       {{ frontmatter.subtitle }}
     </p>
     <p
@@ -135,7 +135,7 @@ const ArtComponent = computed(() => {
 
       border="l-3 orange-4"
 
-      bg-orange-4:10 px4 py2 text-orange-4
+      bg-orange-4:10 text-orange-4 px4 py2
     >
       This is a draft post, the content may be incomplete. Please check back later.
     </p>

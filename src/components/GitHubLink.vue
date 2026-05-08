@@ -8,7 +8,7 @@ defineProps<{
 <template>
   <span ws-nowrap>
     <CarbonLogoGithub class="inline-block" />
-    <a class="ml-1 font-mono opacity-70" :href="`https://github.com/${repo}`" target="_blank">{{
+    <a class="font-mono ml-1 opacity-70" :href="`https://github.com/${repo}`" target="_blank">{{
       name || (repo.startsWith('lumirelle/') ? repo.slice(8) : repo)
     }}</a>
   </span>

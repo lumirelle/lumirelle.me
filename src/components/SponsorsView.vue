@@ -5,7 +5,7 @@ const showCircle = ref(true)
 </script>
 
 <template>
-  <div flex="~ gap-2 items-center justify-center" z-100 mt-5>
+  <div flex="~ gap-2 items-center justify-center" mt-5 z-100>
     <button op50 hover:op100 :class="showCircle ? 'op75' : 'op50'" @click="showCircle = true">
       Sponsor Circles
     </button>

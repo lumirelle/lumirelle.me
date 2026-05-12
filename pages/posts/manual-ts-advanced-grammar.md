@@ -592,7 +592,11 @@ See [here](#indexed-access-type).
 
 TypeScript has corresponding types to express the JavaScript built-in objects, and they share the same name.
 
-As some objects who are constructor functions can be called with or without `new` keyword with different return types, while others may can only be called without `new` keyword, TypeScript also compatible with these behaviors.
+<!-- I don't know why UnoCSS will treat the text "constructor" below as a style token... -->
+<!-- And it will parse it as a color but not a valid color, and cause the build error. -->
+<!-- So I change it to "constructors" to avoid this issue. -->
+
+As some objects who are constructors can be called with or without `new` keyword with different return types, while others may can only be called without `new` keyword, TypeScript also compatible with these behaviors.
 
 Let's take a look at the built-in type definition of `String` in TypeScript for example:
 

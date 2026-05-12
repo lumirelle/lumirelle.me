@@ -50,11 +50,6 @@
   font-weight: normal;
   font-style: normal;
 }
-/* Casual Group */
-@font-face {
-  font-family: '三极露融体';
-  src: url('/fonts/三极露融体.ttf');
-}
 
 /* Root Style */
 :root {

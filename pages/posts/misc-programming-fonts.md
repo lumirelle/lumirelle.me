@@ -242,7 +242,7 @@ Then, you can using these font like this:
 
 If you're thinking, "Whatever!" then the "Comic" font family is perfect for you.
 
-This group uses ["三极露融体"](https://www.sjtype.com/new_product_show2.php?id=430&jiazu_id=754) for CJK characters support.
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support too.
 
 And latin font family:
 
@@ -257,7 +257,7 @@ And latin font family:
 Then, you can using this font like this:
 
 ```json
-"'Symbols Nerd Font', 'Comic Mono', '三极露融体', monospace"
+"'Symbols Nerd Font', 'Comic Mono', 'Maple Mono CN', monospace"
 ```
 
 ## Font Preview

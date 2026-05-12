@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-04-21T16:13+08:00
+update: 2026-05-12T09:28+08:00
 lang: en
 duration: 18min
 type: manual
@@ -269,8 +269,8 @@ And below softwares are helpful for the future steps, you should install them fi
 | (Optional) Nutstore | `sudo winget add --scope machine --source winget --exact --id Nutstore.Nutstore` | WebDav. I use it to sync my KeePass database among multiple devices. **If you uses Clash Verge Rev with "System Proxy" mode, this will cause Nutstore exit immediately.** |
 | (Optional) KeePassXC | `sudo winget add --scope machine --source winget --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `sudo winget add --scope machine --source winget --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience. |
-| Visual Studio Code | `sudo winget add --scope machine --source winget --exact --id Microsoft.VisualStudioCode` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
-| Zed | `sudo winget add --scope machine --source winget --exact --id ZedIndustries.Zed` | **Still experimental, but better performance than Visual Studio Code.** |
+| Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
+| Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
 | (Optional) Rime | `sudo winget add --scope machine --source winget --exact --id Rime.Weasel` | Chinese input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
 | Revo Uninstaller | `sudo winget add --scope machine --source winget --exact --id RevoUninstaller.RevoUninstaller` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 

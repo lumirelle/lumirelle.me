@@ -17,5 +17,8 @@
         "no-console": "off"
       }
     }
+  ],
+  "ignorePatterns": [
+    "public/userscripts/**/*"
   ]
 }

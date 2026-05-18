@@ -89,11 +89,39 @@ start ms-cxh:localonly
 
 ## Second Step: Setup System Preference
 
-Just follow the steps below, clean up the annoyed / useless system bundled components / softwares, and install the components / softwares you preferred / need. 😍
+### Configure Windows Itself
 
-### Learn How to Use winget
+First, **close all of anti-virus features of _Windows Defender_**, then use [Defender Control v2.1](https://www.sordum.org/9480/defender-control-v2-1/) to entirely disable it. I hate it, because it's always been a false positive, deleting my software...
 
-I highly recommend you to use [winget](https://learn.microsoft.com/windows/package-manager/winget/) to manage your software, which is the official Windows package manager, and helps you to avoid fake or malicious software.
+After that, I choose to install [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
+
+| Software | Source/Install Command |
+| -- | -- |
+| Huorong | [Official Website](https://www.huorong.cn/person) |
+
+> [!Note]
+>
+> You can choose the anti-virus software you like, except for _Windows Defender_!!!
+
+Next, uninstall system bundled software by _Revo Uninstaller_ (like _Microsoft One Drive_, _Outlook_...) which you don't need at all.
+
+After that, adjust system settings with _Winutil_:
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Winutil | PowerShell:<br>`irm "https://christitus.com/win" \| iex` | In "Tweaks" tab, just to apply the recommended settings simply, if you are not sure about those switches~<br><br>In "Config" tab, I will enable "Windows Subsystem fo Linux" feature;<br><br>  |
+
+(Optional) If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
+
+| Software | Source/Install Command |
+| -- | -- |
+| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
+
+(Optional) At the end, update the OS, login Microsoft Account & adjust system settings.
+
+### Learn How to Use WinGet
+
+I highly recommend you to use [WinGet](https://learn.microsoft.com/windows/package-manager/winget/) to manage your software, which is the official Windows package manager, and helps you to avoid fake or malicious software.
 
 Search:
 
@@ -181,102 +209,77 @@ winget <command> -?
 
 (Optional) If your area has some "mysterious" network restrictions, you should prepare a proxy software before all of below steps:
 
-| Software | Source/Install Method | Note |
+| Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You'd better prepare it before reinstallation. | Network proxy manager.<br><br>You should use your own profile with "Tun mode" to make it usable. If you uses "System Proxy" mode, this will cause some softwares exit immediately.<br><br>We will futher configure it [later](#personal-preferences). |
+| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You'd better prepare it before reinstallation. | Network proxy manager.<br><br>You should use your own profile with "Tun mode" & "System stack" to make it usable. If you uses "System Proxy mode" or "Tun mode" with other "stack", this will cause some softwares exit immediately.<br><br>We will futher configure it [later](#personal-preferences). |
 
 And below softwares are helpful for the future steps, you should install them first and in order:
 
-<details>
-  <summary>A fully one-time installing script (.ps1) here <strong>(beta)</strong>:</summary>
-
-  ```ps1
-  Set-StrictMode -Version Latest
-  $ErrorActionPreference = 'Stop'
-
-  function Test-IsAdministrator {
-      $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
-      $principal = New-Object Security.Principal.WindowsPrincipal($currentIdentity)
-      return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-  }
-
-  function Ensure-Command {
-      param(
-          [Parameter(Mandatory = $true)]
-          [string]$Name
-      )
-      if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
-          throw "Command not found: $Name"
-      }
-  }
-
-  if (-not (Test-IsAdministrator)) {
-      throw 'Please run this script in an elevated PowerShell terminal (Run as Administrator).'
-  }
-
-  Ensure-Command -Name 'winget'
-
-  $packages = @(
-      @{ Id = 'gerardog.gsudo'; Name = 'gsudo' }
-      @{ Id = 'Nushell.Nushell'; Name = 'Nushell' }
-      @{ Id = 'Starship.Starship'; Name = 'Starship' }
-      @{ Id = 'Git.Git'; Name = 'Git' }
-      @{ Id = 'Oven-sh.Bun'; Name = 'Bun' }
-      @{ Id = 'Nutstore.Nutstore'; Name = 'Nutstore' }
-      @{ Id = 'KeePassXCTeam.KeePassXC'; Name = 'KeePassXC' }
-      @{ Id = 'Tonec.InternetDownloadManager'; Name = 'Internet Download Manager' }
-      @{ Id = 'Microsoft.VisualStudioCode'; Name = 'Visual Studio Code' }
-      @{ Id = 'ZedIndustries.Zed'; Name = 'Zed' }
-      @{ Id = 'Rime.Weasel'; Name = 'Rime (Weasel)' }
-      @{ Id = 'RevoUninstaller.RevoUninstaller'; Name = 'Revo Uninstaller' }
-  )
-
-  Write-Host 'Installing prerequisite software via winget (machine scope)...' -ForegroundColor Cyan
-
-  foreach ($pkg in $packages) {
-      Write-Host "==> Installing $($pkg.Name) [$($pkg.Id)]" -ForegroundColor Yellow
-
-      winget install `
-          --exact `
-          --id $pkg.Id `
-          --scope machine `
-          --source winget `
-          --accept-package-agreements `
-          --accept-source-agreements `
-          --disable-interactivity
-
-      if ($LASTEXITCODE -ne 0) {
-          Write-Host "Failed to install: $($pkg.Name) [$($pkg.Id)]" -ForegroundColor Red
-      }
-  }
-
-  Write-Host 'All prerequisite packages installed successfully.' -ForegroundColor Green
-  Write-Host 'Reminder: Restart Windows after installation.' -ForegroundColor Green
-  Write-Host 'Reminder: Do not forget to put "C:\Program Files\WinGet\Links" at the front of system Path to override the system built-in "sudo" command.' -ForegroundColor Green
-  Write-Host 'Reminder: Add "%USERPROFILE%\.bun\bin" to system Path for Bun.' -ForegroundColor Green
-  ```
-
-</details>
-
-| Software | Source/Install Method | Note |
+| Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Windows Terminal | System bundled | Simple, useful, without so many lua configs... |
-| gsudo | `winget add --scope machine --source winget --exact --id gerardog.gsudo` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
-| Nushell | `sudo winget add --scope machine --source winget --exact --id Nushell.Nushell` | Cross-platform shell powered by _Rust_ to make the consistent experience. |
-| Starship | `sudo winget add --scope machine --source winget --exact --id Starship.Starship` | Cross-platform shell prompt powered by _Rust_ too. |
-| Git | `sudo winget add --scope machine --source winget --exact --id Git.Git` | Nothing is more important that _Git_ for a developer, right? |
-| Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster all in one JavaScript runtime, bundler, and package manager, alternative to _Node.js_ ecosystem.<br><br>You can use your preferred one.<br><br>**Don't forget to add `~/.bun/bin` to your system environment variable `Path`** |
-| (Optional) Nutstore | `sudo winget add --scope machine --source winget --exact --id Nutstore.Nutstore` | WebDav. I use it to sync my KeePass database among multiple devices. **If you uses Clash Verge Rev with "System Proxy" mode, this will cause Nutstore exit immediately.** |
-| (Optional) KeePassXC | `sudo winget add --scope machine --source winget --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
-| Internet Download Manager | `sudo winget add --scope machine --source winget --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience. |
+| gsudo | `winget add --source winget --exact --id gerardog.gsudo` | `sudo --scope machine` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
+| Nushell | `sudo winget add --source winget --exact --id Nushell.Nushell --scope machine` | Cross-platform shell powered by _Rust_ to make the consistent experience. |
+| Starship | `sudo winget add --source winget --exact --id Starship.Starship --scope machine` | Cross-platform shell prompt powered by _Rust_ too. |
+| Git | `sudo winget add --source winget --exact --id Git.Git --scope machine` | Nothing is more important that _Git_ for a developer, right? |
+| Bun | `sudo winget add --source winget --exact --id Oven-sh.Bun --scope machine` | A faster all in one JavaScript runtime, bundler, and package manager, alternative to _Node.js_ ecosystem.<br><br>You can use your preferred one.<br><br>**Don't forget to add `~/.bun/bin` to your system environment variable `Path`** |
+| (Optional) Nutstore | `sudo winget add--source winget --exact --id Nutstore.Nutstore --scope machine ` | WebDav. I use it to sync my KeePass database among multiple devices. **If you uses Clash Verge Rev with not "Tun mode" & "System stack", this will cause Nutstore exit immediately.** |
+| (Optional) KeePassXC | `sudo winget add --source winget --exact --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
+| Internet Download Manager | `sudo winget add --source winget --exact --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
 | Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
 | Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
-| (Optional) Rime | `sudo winget add --scope machine --source winget --exact --id Rime.Weasel` | Chinese input method, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
-| Revo Uninstaller | `sudo winget add --scope machine --source winget --exact --id RevoUninstaller.RevoUninstaller` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
+| (Optional) Rime | `sudo winget add --source winget --exact --id Rime.Weasel --scope machine` | Chinese input Command, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
+| Brave | `sudo winget add --source winget --exact --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#daily-use). |
+| RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
+| Revo Uninstaller | Free:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
 > [!Note]
 >
 > Don't forget to restart your computer to make this software work properly after installation!
+
+### Browser Setup
+
+#### Daily Use
+
+I hate _Chrome_ because it's too opinionated, I hate _Edge_ because it's too heavy.
+
+For daily use, I just want a _Chromium_-based browser, who is tiny, clean and customizable. I choose _Brave_ currently.
+
+Useful extensions:
+
+> [!NOTE]
+>
+> "Tampermonkey" extension requires you to open the develop mode to running external JavaScript.
+
+`~` in the below tables means the same as above.
+
+| Extension | Source/Install Command | Note |
+| -- | -- | -- |
+| Tampermonkey | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used scripts: [_Download VS Code Extension VSIX Packages_](https://greasyfork.org/en/scripts/530462-download-vs-code-extension-vsix-packages), [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
+| KeePassXC-Browser | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
+| Dark Reader | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes too!!! |
+| Immersive Translate | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh) | / |
+| Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen) | / |
+| Vimium C - All by Keyboard | [~](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, you should enable "Search in bookmarks or add new items", "Run on chrome://_/_ pages" and "Run on Chrome's native New Tab Page", with `#extensions-on-chrome-urls` browser flag (open new tab with url: `chrome://flags`) |
+| Refined Github | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | / |
+| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
+| Npmx redirect | [~](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Welcome Npmx! |
+
+#### Development
+
+Now I'm try to development with VSCode's integrated browser. If there are some features it does not support, I may choose my daily use browser as fallback.
+
+> [!Note]
+>
+> These extensions are not necessary, but sometime useful.
+
+As VSCode's integrated browser is powered by webview, which does not support browser extension,  I installed these extensions on my daily use browser:
+
+| Extension | Source/Install Command | Note |
+| -- | -- | -- |
+| Vue.js Devtools (Community) | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases) | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
+| ~~Cookie Editor~~ | ~~[Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl)~~ | ~~/~~ |
+| ~~SEO META in 1 CLICK~~ | ~~[~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc)~~ | ~~/~~ |
 
 ### Personal Preferences
 
@@ -310,62 +313,26 @@ butler preset -af
 butler preset -afy
 ```
 
-### Configure Windows Itself
-
-First, **close all of anti-virus features of _Windows Defender_**, then use [Defender Control v2.1](https://www.sordum.org/9480/defender-control-v2-1/) to entirely disable it. I hate it, because it's always been a false positive, deleting my software...
-
-After that, I choose to install [Huorong](https://www.huorong.cn/person) instead, which is much quieter and non-invasive:
-
-   | Software | Source/Install Method |
-   | -- | -- |
-   | Huorong | `sudo winget add --scope machine --source msstore --exact --id XPDDXVFRXCXK80` |
-
-   > [!Note]
-   >
-   > You can choose the anti-virus software you like, except for _Windows Defender_!!!
-
-Next, uninstall system bundled software by _Revo Uninstaller_ (like _Microsoft One Drive_, _Outlook_...) which you don't need at all.
-
-After that, adjust system settings with _Winutil_:
-
-| Software | Source/Install Method | Note |
-| -- | -- | -- |
-| Winutil | Use PowerShell to execute: `irm "https://christitus.com/win" \| iex` | Just to apply the recommended settings simply~ |
-
-(Optional) If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
-
-| Software | Source/Install Method |
-| -- | -- |
-| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
-
-(Optional) At the end, login Microsoft Account, sync the system data, adjust system settings.
-
 ### Useful Software
 
 Install the basic software below as you need:
 
-| Software | Source/Install Method | Note |
+| Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Brave | `sudo winget add --scope machine --source winget --exact --id Brave.Brave` | My daily use browser. See extensions setup [here](#daily-use). |
-| RayCast | `sudo winget add --scope machine --source msstore --exact --id 9PFXXSHC64H3` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
-| Auto Dark Mode | `sudo winget add --scope machine --source winget --exact --id ArminOsaj.AutoDarkMode` | Save my eyes! |
-| ~~NanaZip~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/9n8g7tscl18r)~~ | ~~It seems like the latest Windows 11 have built-in compression support~~ |
-| DeskPins | `sudo winget add --scope machine --source winget --exact --id EliasFotinis.DeskPins` | Pin any window to the desktop. |
-| PixPin | `sudo winget add --scope machine --source winget --exact --id PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
+| DeskPins | `sudo winget add --source winget --exact --id EliasFotinis.DeskPins --scope machine` | Pin any window to the desktop. |
+| PixPin | `sudo winget add --source winget --exact --id PixPin.PixPin --scope machine` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
-| Driver Store Explorer | `sudo winget add --scope machine --source winget --exact --id lostindark.DriverStoreExplorer` | Clear unused/outdated device drivers. |
-| DISM++ | `sudo winget add --scope machine --source winget --exact --id ChuyuTeam.DISM++` | Clear disk. |
+| Driver Store Explorer | `sudo winget add --source winget --exact --id lostindark.DriverStoreExplorer --scope machine` | Clear unused/outdated device drivers. |
+| DISM++ | `sudo winget add --source winget --exact --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
 
 Install the tool software below as you need:
 
-| Software | Source/Install Method | Note |
+| Software | Source/Install Command | Note |
 | -- | -- | -- |
-| WeChat | `sudo winget add --scope machine --source winget --exact --id Tencent.WeChat.Universal` | / |
-| QQ | `sudo winget add --scope machine --source winget --exact --id Tencent.QQ.NT` | / |
-| WPS Office | `sudo winget add --scope user --source winget --exact --id Kingsoft.WPSOffice` | WPS Office has no machine scope installer... To be honest, it's a piece of malware, but it's just so much better than Microsoft Office...<br><br>If I have to put up with it, I choose to turn off some of its annoying configurations:<br>**&nbsp;&nbsp;1. Disable tasks "WpsExternal_xxx_xxx" in Task Schedular;<br>&nbsp;&nbsp;2. Disable "WPS Office Cloud Service" in Services;<br>&nbsp;&nbsp;3. Remove registry entries <span style="word-break: break-all;">"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace"</span> & <span style="word-break: break-all;">"Computer\HKEY_USERS\S-1-5-21-2752464909-2150961724-243656330-1001\Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace"</span> in Registry Editor;<br>&nbsp;&nbsp;4. Remove <span style="word-break: break-all;">"%LOCALAPPDATA%\kingsoft\WPS Office\xxx\office6\wpscloudsvrimp.dll"</span>...** |
-| ~~LX Music Desktop~~ | ~~[GitHub Releases](https://github.com/lyswhut/lx-music-desktop/releases)~~ | ~~Do we need this?~~ |
-| ~~PotPlayer~~ | ~~[Microsoft Store](https://apps.microsoft.com/detail/xp8bsbgqw2dks0)~~ | ~~Do we need this?~~ |
+| WeChat | `sudo winget add --source winget --exact --id Tencent.WeChat.Universal --scope machine` | / |
+| QQ | `sudo winget add --source winget --exact --id Tencent.QQ.NT --scope machine` | / |
+| ~~Enterprise WPS~~ | ~~[Official Website](https://ep.wps.cn/download)~~ | ~~TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML~~ |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
 | Steam | `sudo winget add --scope machine --source winget --exact --id Valve.Steam` | / |
 | Epic Games | `sudo winget add --scope machine --source winget --exact --id EpicGames.EpicGamesLauncher` | / |
@@ -373,7 +340,7 @@ Install the tool software below as you need:
 
 Install the dev software (ENV / SDK / IDE / Testing) below as you need (in order):
 
-| Software | Source/Install Method | Note |
+| Software | Source/Install Command | Note |
 | -- | -- | -- |
 | WSL | `wsl --install` | Requires reboot. |
 | Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | / |
@@ -393,54 +360,10 @@ Install the dev software (ENV / SDK / IDE / Testing) below as you need (in order
 
 Some one-time use software:
 
-| Software | Source/Install Method |
+| Software | Source/Install Command |
 | -- | -- |
 | Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) |
 | PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) |
-
-### Browser Setup
-
-#### Daily Use
-
-I hate _Chrome_ because it's too opinionated, I hate _Edge_ because it's too heavy.
-
-For daily use, I just want a _Chromium_-based browser, who is tiny, clean and customizable. I choose _Brave_ currently.
-
-Useful extensions:
-
-> [!NOTE]
->
-> "Tampermonkey" extension requires you to open the develop mode to running external JavaScript.
-
-`~` in the below tables means the same as above.
-
-| Extension | Source/Install Method | Note |
-| -- | -- | -- |
-| Tampermonkey | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used scripts: [_Download VS Code Extension VSIX Packages_](https://greasyfork.org/en/scripts/530462-download-vs-code-extension-vsix-packages), [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
-| KeePassXC-Browser | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
-| Dark Reader | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes too!!! |
-| Immersive Translate | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh) | / |
-| Grammarly: AI Writing Assistant | [~](https://chromewebstore.google.com/detail/grammarly-ai-writing-assi/kbfnbcaeplbcioakkpcpgfkobkghlhen) | / |
-| Vimium C - All by Keyboard | [~](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, you should enable "Search in bookmarks or add new items", "Run on chrome://_/_ pages" and "Run on Chrome's native New Tab Page", with `#extensions-on-chrome-urls` browser flag (open new tab with url: `chrome://flags`) |
-| Refined Github | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | / |
-| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
-| Npmx redirect | [~](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Welcome Npmx! |
-
-#### Development
-
-Now I'm try to development with VSCode's integrated browser. If there are some features it does not support, I may choose my daily use browser as fallback.
-
-> [!Note]
->
-> These extensions are not necessary, but sometime useful.
-
-As VSCode's integrated browser is powered by webview, which does not support browser extension,  I installed these extensions on my daily use browser:
-
-| Extension | Source/Install Method | Note |
-| -- | -- | -- |
-| Vue.js Devtools (Community) | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases) | Used only for Vue 2 projects, Vue 3 projects should use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead of browser extension |
-| ~~Cookie Editor~~ | ~~[Chrome Extension Marketplace](https://chromewebstore.google.com/detail/cookie-editor/ookdjilphngeeeghgngjabigmpepanpl)~~ | ~~/~~ |
-| ~~SEO META in 1 CLICK~~ | ~~[~](https://chromewebstore.google.com/detail/seo-meta-in-1-click/bjogjfinolnhfhkbipphpdlldadpnmhc)~~ | ~~/~~ |
 
 ## Third Step: Maintain System
 

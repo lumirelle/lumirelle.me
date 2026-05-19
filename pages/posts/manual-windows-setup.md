@@ -234,7 +234,7 @@ Below softwares are highly recommended and helpful for the future steps, you can
 | -- | -- | -- |
 | Windows Terminal | System bundled | Simple, useful, without so many lua configs... |
 | gsudo | `winget add --source winget --exact --id gerardog.gsudo` | `sudo --scope machine` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
-| Brave | `sudo winget add --source winget --exact --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#daily-use). |
+| Brave | `sudo winget add --source winget --exact --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
 | Nushell | `sudo winget add --source winget --exact --id Nushell.Nushell --scope machine` | Cross-platform shell powered by _Rust_ to make the consistent experience. |
 | Starship | `sudo winget add --source winget --exact --id Starship.Starship --scope machine` | Cross-platform shell prompt powered by _Rust_ too. |
 | Git | `sudo winget add --source winget --exact --id Git.Git --scope machine` | Nothing is more important that _Git_ for a developer, right? |

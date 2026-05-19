@@ -26,10 +26,5 @@
     "scss",
     "sass",
     "less"
-  ],
-
-  // JavaScript / TypeScript
-  "js/ts.preferences.autoImportFileExcludePatterns": [
-    "**/node_modules/vue-router/dist/**"
   ]
 }

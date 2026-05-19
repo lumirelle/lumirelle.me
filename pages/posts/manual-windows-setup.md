@@ -306,7 +306,7 @@ Install the dev softwares below as you need **(in order)**:
 | WSL | `wsl --install` | Requires reboot. |
 | Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | / |
 | Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster JavaScript runtime, bundler, and package manager all in one.<br><br>If you already install this before, you can skip this time. |
-| Node.js | `sudo winget add --scope machine --source winget --exact --id OpenJS.NodeJS.LTS`<br><br>Setup: `npm i corepack@latest npm@latest esbuild -g`<br><br>Enable corepack: `corepack enable` | The legacy JavaScript runtime, which is the most stable one. |
+| Node.js | `sudo winget add --scope machine --source winget --exact --id OpenJS.NodeJS.LTS`<br><br>Setup: `npm i corepack@latest npm@latest esbuild tree-sitter-cli -g`<br><br>Enable corepack: `corepack enable` | The legacy JavaScript runtime, which is the most stable one. |
 | Zig | `sudo winget add --scope machine --source winget --exact --id zig.zig` | I prefer this than _Rust_. |
 | GraalVM | [Official Website](https://www.graalvm.org/downloads/) | Alternative to _JVM_ with native support. |
 | Mingw-w64 | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** implementation on Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime**. |
@@ -350,8 +350,6 @@ Running the commands below in the shell:
 bun i @antfu/ni taze -g
 # Project scaffolding
 bun i @sxzz/create -g
-# Neovim prerequisite
-bun i tree-sitter-cli -g
 
 # (Optional) Install my personal preset manager
 bun i starship-butler -g

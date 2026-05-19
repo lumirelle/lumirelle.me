@@ -293,7 +293,7 @@ Install the tool softwares below as you need:
 | DISM++ | `sudo winget add --source winget --exact --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
 | WeChat | `sudo winget add --source winget --exact --id Tencent.WeChat.Universal --scope machine` | / |
 | QQ | `sudo winget add --source winget --exact --id Tencent.QQ.NT --scope machine` | / |
-| ~~Enterprise WPS~~ | ~~[Official Website](https://ep.wps.cn/download)~~ | ~~TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML~~ |
+| Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
 | Steam | `sudo winget add --scope machine --source winget --exact --id Valve.Steam` | / |
 | Epic Games | `sudo winget add --scope machine --source winget --exact --id EpicGames.EpicGamesLauncher` | / |

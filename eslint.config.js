@@ -5,6 +5,7 @@ import oxlint from 'eslint-plugin-oxlint'
 export default antfu(
   {
     unocss: true,
+    vue: { a11y: true },
   },
   ...oxlint.buildFromOxlintConfigFile('.oxlintrc.json'),
 )

@@ -10,6 +10,7 @@ const { y: scroll } = useWindowScroll()
 </script>
 
 <template>
+  <!-- eslint-disable vue-a11y/anchor-has-content -->
   <header class="header z-40">
     <RouterLink
       class="m-5 outline-none h-12 w-12 select-none absolute xl:fixed"

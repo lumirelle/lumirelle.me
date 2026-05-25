@@ -9,17 +9,18 @@ export const galleryView = useLocalStorage<'cover' | 'contain'>('lumirelle-galle
  * @param event The mouse event
  * @see https://github.com/vuejs/vitepress/pull/2347
  */
-export async function toggleDark(event: MouseEvent): Promise<void> {
+export async function toggleDark(event: MouseEvent | KeyboardEvent): Promise<void> {
   const isAppearanceTransition
-    = 'startViewTransition' in document && !globalThis.matchMedia('(prefers-color-scheme)').matches
+    = 'startViewTransition' in document && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (!isAppearanceTransition) {
     isDark.value = !isDark.value
     return
   }
 
-  const x = event.clientX
-  const y = event.clientY
+  const x = 'clientX' in event ? event.clientX : 0
+  const y = 'clientY' in event ? event.clientY : 0
+
   const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
   const transition = document.startViewTransition(async () => {
     isDark.value = !isDark.value

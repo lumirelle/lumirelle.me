@@ -104,9 +104,11 @@ onKeyStroke('Escape', (e) => {
   <Transition name="fade">
     <div
       v-if="imageModel"
-
       bottom-0 left-0 right-0 top-0 fixed z-500 backdrop-blur-7
+      role="button"
+      tabindex="0"
       @click="imageModel = undefined"
+      @keydown="imageModel = undefined"
     >
       <div bg-black:50 bottom-0 left-0 right-0 top-0 absolute z--1 />
       <img

@@ -43,13 +43,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-
-    flex w-full justify-center
-    :style="{
-      height: `${550 * scale}px`,
-    }"
-  >
+  <!-- eslint-disable vue-a11y/anchor-has-content -->
+  <!-- eslint-disable vue-a11y/mouse-events-have-key-events -->
+  <div flex w-full justify-center :style="{ height: `${550 * scale}px` }">
     <div
       class="group ma h-500px w-500px relative"
       :style="{
@@ -86,7 +82,7 @@ onMounted(() => {
         :title="c.name || c.login"
         @mouseenter="push(c.id)"
       >
-        <img v-if="c.avatar" :src="c.avatar" bg-base h-full w-full>
+        <img v-if="c.avatar" :src="c.avatar" alt="Avatar" bg-base h-full w-full>
         <div v-else class="bg-gray:50 flex h-full w-full">
           <div i-ph-user ma op75 class="h-50% w-50%" />
         </div>

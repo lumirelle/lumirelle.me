@@ -6,8 +6,26 @@
 /sponsor https://github.com/sponsors/lumirelle 301
 /support https://github.com/sponsors/lumirelle 301
 
+/posts/code-style-encapsulation-and-modularity https://lumirelle.me/posts/code-style-code-organization 301
+/posts/code-style-symbol-name-pattern https://lumirelle.me/posts/code-style-symbol-naming-patterns 301
+
+/posts/project-engineering-manually-split-chunks https://lumirelle.me/posts/perf-manually-split-chunks 301
+
+/posts/test/recursive-mono-nbsp-rendering https://lumirelle.me/posts/test-recursive-mono-nbsp-rendering 301
+
 /stars-rank	https://github.com/search?l=&o=desc&s=stars&type=Repositories&q=user%3Alumirelle	302
+/.github	https://github.com/lumirelle/.github	302
 /android-killer	https://github.com/lumirelle/android-killer	302
-/euv	https://github.com/lumirelle/euv	302
-/impurities	https://github.com/lumirelle/impurities	302
+/contribute	https://github.com/lumirelle/contribute	302
+/demo-homework	https://github.com/lumirelle/demo-homework	302
+/demo-manually-split-chunks	https://github.com/lumirelle/demo-manually-split-chunks	302
+/demo-nuxt	https://github.com/lumirelle/demo-nuxt	302
+/demo-ui	https://github.com/lumirelle/demo-ui	302
+/demo-verify-deps-before-run	https://github.com/lumirelle/demo-verify-deps-before-run	302
+/demo-zig-helloworld	https://github.com/lumirelle/demo-zig-helloworld	302
+/dotfiles	https://github.com/lumirelle/dotfiles	302
 /learning-backup	https://github.com/lumirelle/learning-backup	302
+/oxlint-config	https://github.com/lumirelle/oxlint-config	302
+/stylelint-config	https://github.com/lumirelle/stylelint-config	302
+/tsconfig	https://github.com/lumirelle/tsconfig	302
+/workflows	https://github.com/lumirelle/workflows	302

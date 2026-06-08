@@ -8,6 +8,7 @@ export default {
     '@octokit/core',
     '@unhead/vue',
     'uno.css',
+    'vue-tsc',
   ],
   ignoreBinaries: ['localhost', 'mkcert'],
   ignoreUnresolved: [

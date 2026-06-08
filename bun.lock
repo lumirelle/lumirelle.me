@@ -5,6 +5,7 @@
     "": {
       "dependencies": {
         "@iconify/json": "catalog:icons",
+        "@shikijs/magic-move": "catalog:frontend",
         "@unhead/vue": "catalog:frontend",
         "@unocss/reset": "catalog:frontend",
         "@vueuse/core": "catalog:frontend",
@@ -14,7 +15,6 @@
         "pinia": "catalog:frontend",
         "pixi.js": "catalog:frontend",
         "shiki": "catalog:frontend",
-        "shiki-magic-move": "catalog:frontend",
         "simplex-noise": "catalog:frontend",
         "vue": "catalog:frontend",
         "vue-router": "catalog:frontend",
@@ -30,22 +30,20 @@
         "@shikijs/markdown-exit": "catalog:build",
         "@shikijs/transformers": "catalog:build",
         "@shikijs/twoslash": "catalog:build",
+        "@types/bun": "catalog:types",
         "@types/d3-hierarchy": "catalog:types",
         "@types/diacritics": "catalog:types",
         "@types/markdown-it-footnote": "catalog:types",
         "@types/markdown-it-link-attributes": "catalog:types",
-        "@types/node": "catalog:types",
         "@types/nprogress": "catalog:types",
         "@unocss/eslint-plugin": "catalog:check",
         "@unocss/preset-web-fonts": "catalog:build",
         "@vitejs/plugin-vue": "catalog:build",
-        "bun-types": "catalog:types",
         "d3-hierarchy": "catalog:dev",
-        "degit": "catalog:dev",
         "diacritics": "catalog:dev",
         "eslint": "catalog:check",
         "eslint-plugin-oxlint": "catalog:check",
-        "eslint-plugin-vuejs-accessibility": "^2.5.0",
+        "eslint-plugin-vuejs-accessibility": "catalog:check",
         "exifreader": "catalog:dev",
         "feed": "catalog:dev",
         "gray-matter": "catalog:build",
@@ -57,14 +55,11 @@
         "markdown-it-link-attributes": "catalog:build",
         "markdown-it-magic-link": "catalog:build",
         "markdown-it-table-of-contents": "catalog:build",
-        "nano-staged": "catalog:check",
         "oxlint": "catalog:check",
         "oxlint-tsgolint": "catalog:check",
         "pathe": "catalog:dev",
-        "premove": "catalog:dev",
         "sharp": "catalog:build",
         "simple-git": "catalog:dev",
-        "simple-git-hooks": "catalog:check",
         "std-env": "catalog:dev",
         "tinyglobby": "catalog:dev",
         "typescript": "catalog:types",
@@ -121,10 +116,9 @@
       "@unocss/eslint-plugin": "^66.6.8",
       "eslint": "^10.4.0",
       "eslint-plugin-oxlint": "^1.65.0",
-      "nano-staged": "^1.0.2",
+      "eslint-plugin-vuejs-accessibility": "^2.5.0",
       "oxlint": "^1.65.0",
       "oxlint-tsgolint": "^0.23.0",
-      "simple-git-hooks": "git+https://github.com/toplenboren/simple-git-hooks.git#7625657",
       "vue-tsc": "^3.3.0",
     },
     "dev": {
@@ -132,17 +126,16 @@
       "@octokit/core": "^7.0.6",
       "@octokit/rest": "^22.0.1",
       "d3-hierarchy": "^3.1.2",
-      "degit": "^2.8.4",
       "diacritics": "^1.3.0",
       "exifreader": "^4.39.0",
       "feed": "^5.2.1",
       "pathe": "^2.0.3",
-      "premove": "^4.0.0",
       "simple-git": "^3.36.0",
       "std-env": "^4.1.0",
       "tinyglobby": "^0.2.16",
     },
     "frontend": {
+      "@shikijs/magic-move": "^4.2.0",
       "@unhead/vue": "^3.1.0",
       "@unocss/reset": "^66.6.8",
       "@vueuse/core": "^14.3.0",
@@ -152,7 +145,6 @@
       "pinia": "^3.0.4",
       "pixi.js": "^8.18.1",
       "shiki": "^4.0.2",
-      "shiki-magic-move": "^1.3.0",
       "simplex-noise": "^4.0.3",
       "vue": "^3.5.34",
       "vue-router": "^5.0.7",
@@ -163,13 +155,12 @@
     },
     "types": {
       "@lumirelle/tsconfig": "^0.1.4",
+      "@types/bun": "^1.3.14",
       "@types/d3-hierarchy": "^3.1.7",
       "@types/diacritics": "^1.3.3",
       "@types/markdown-it-footnote": "^3.0.4",
       "@types/markdown-it-link-attributes": "^3.0.5",
-      "@types/node": "^25.9.0",
       "@types/nprogress": "^0.2.3",
-      "bun-types": "^1.3.14",
       "typescript": "^6.0.3",
     },
   },
@@ -556,6 +547,8 @@
 
     "@shikijs/langs": ["@shikijs/langs@4.0.2", "", { "dependencies": { "@shikijs/types": "4.0.2" } }, "sha512-KaXby5dvoeuZzN0rYQiPMjFoUrz4hgwIE+D6Du9owcHcl6/g16/yT5BQxSW5cGt2MZBz6Hl0YuRqf12omRfUUg=="],
 
+    "@shikijs/magic-move": ["@shikijs/magic-move@4.2.0", "", { "dependencies": { "diff-match-patch-es": "^1.0.1", "ohash": "^2.0.11" }, "peerDependencies": { "react": "^18.2.0 || ^19.0.0", "shiki": "^4.0.0", "solid-js": "^1.9.1", "svelte": "^5.0.0-0", "vue": "^3.4.0" }, "optionalPeers": ["react", "shiki", "solid-js", "svelte", "vue"] }, "sha512-KJBoKtpl04+ee6umjgt/qBveQPkCt+cMfaWJWbrRqqBtMCY8q0kufMPSjzJwLhNuSs2c0/D3BteOCOFAwg28rg=="],
+
     "@shikijs/markdown-exit": ["@shikijs/markdown-exit@4.0.2", "", { "dependencies": { "markdown-exit": "^1.0.0-beta.9", "shiki": "4.0.2" } }, "sha512-t0N6hP/gojJZGigmnm50IPkOLVeMSz4dn/baEaPIJ6uvOYoSZuha/BIs9NYTqRJb/cVUrgIeqnkcwMu/4/+3pA=="],
 
     "@shikijs/primitive": ["@shikijs/primitive@4.0.2", "", { "dependencies": { "@shikijs/types": "4.0.2", "@shikijs/vscode-textmate": "^10.0.2", "@types/hast": "^3.0.4" } }, "sha512-M6UMPrSa3fN5ayeJwFVl9qWofl273wtK1VG8ySDZ1mQBfhCpdd8nEx7nPZ/tk7k+TYcpqBZzj/AnwxT9lO+HJw=="],
@@ -579,6 +572,8 @@
     "@stylistic/eslint-plugin": ["@stylistic/eslint-plugin@5.10.0", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.9.1", "@typescript-eslint/types": "^8.56.0", "eslint-visitor-keys": "^4.2.1", "espree": "^10.4.0", "estraverse": "^5.3.0", "picomatch": "^4.0.3" }, "peerDependencies": { "eslint": "^9.0.0 || ^10.0.0" } }, "sha512-nPK52ZHvot8Ju/0A4ucSX1dcPV2/1clx0kLcH5wDmrE4naKso7TUC/voUyU1O9OTKTrR6MYip6LP0ogEMQ9jPQ=="],
 
     "@tybys/wasm-util": ["@tybys/wasm-util@0.10.2", "", { "dependencies": { "tslib": "^2.4.0" } }, "sha512-RoBvJ2X0wuKlWFIjrwffGw1IqZHKQqzIchKaadZZfnNpsAYp2mM0h36JtPCjNDAHGgYez/15uMBpfGwchhiMgg=="],
+
+    "@types/bun": ["@types/bun@1.3.14", "", { "dependencies": { "bun-types": "1.3.14" } }, "sha512-h1hFqFVcvAvD9j9K7ZW7vd82aSA+rTdznZa+5bwvCwqSB1jmmfLcbIWhOLx1/+boy/xmjgCs/OMUL8hRJSmnPw=="],
 
     "@types/d3-hierarchy": ["@types/d3-hierarchy@3.1.7", "", {}, "sha512-tJFtNoYBtRtkNysX1Xq4sxtjK8YgoWUNpIiUee0/jHGRwqvzYxkq0hGVbbOGSz+JgFxxRu4K8nb3YpG3CMARtg=="],
 
@@ -877,8 +872,6 @@
     "define-lazy-prop": ["define-lazy-prop@3.0.0", "", {}, "sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg=="],
 
     "defu": ["defu@6.1.7", "", {}, "sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ=="],
-
-    "degit": ["degit@2.8.4", "", { "bin": { "degit": "degit" } }, "sha512-vqYuzmSA5I50J882jd+AbAhQtgK6bdKUJIex1JNfEUPENCgYsxugzKVZlFyMwV4i06MmnV47/Iqi5Io86zf3Ng=="],
 
     "dequal": ["dequal@2.0.3", "", {}, "sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA=="],
 
@@ -1322,8 +1315,6 @@
 
     "muggle-string": ["muggle-string@0.4.1", "", {}, "sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ=="],
 
-    "nano-staged": ["nano-staged@1.0.2", "", { "bin": { "nano-staged": "lib/bin.js" } }, "sha512-Fytar3zHLY99nlMfqPPbraxZodqQAHPpdPRyYaplL+lB9DCR6pUrafxbG+Btz4+7fO5Rm/+DO4ZeDO/nLSUMhw=="],
-
     "nanoid": ["nanoid@3.3.12", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ=="],
 
     "natural-compare": ["natural-compare@1.4.0", "", {}, "sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw=="],
@@ -1418,8 +1409,6 @@
 
     "prelude-ls": ["prelude-ls@1.2.1", "", {}, "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="],
 
-    "premove": ["premove@4.0.0", "", { "bin": { "premove": "bin.js" } }, "sha512-zim/Hr4+FVdCIM7zL9b9Z0Wfd5Ya3mnKtiuDv7L5lzYzanSq6cOcVJ7EFcgK4I0pt28l8H0jX/x3nyog380XgQ=="],
-
     "property-information": ["property-information@7.1.0", "", {}, "sha512-TwEZ+X+yCJmYfL7TPUOcvBZ4QfoT5YenQiJuX//0th53DE6w0xxLEtfK3iyryQFddXuvkIk51EEgrJQ0WJkOmQ=="],
 
     "punycode": ["punycode@2.3.1", "", {}, "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="],
@@ -1480,11 +1469,7 @@
 
     "shiki": ["shiki@4.0.2", "", { "dependencies": { "@shikijs/core": "4.0.2", "@shikijs/engine-javascript": "4.0.2", "@shikijs/engine-oniguruma": "4.0.2", "@shikijs/langs": "4.0.2", "@shikijs/themes": "4.0.2", "@shikijs/types": "4.0.2", "@shikijs/vscode-textmate": "^10.0.2", "@types/hast": "^3.0.4" } }, "sha512-eAVKTMedR5ckPo4xne/PjYQYrU3qx78gtJZ+sHlXEg5IHhhoQhMfZVzetTYuaJS0L2Ef3AcCRzCHV8T0WI6nIQ=="],
 
-    "shiki-magic-move": ["shiki-magic-move@1.3.0", "", { "dependencies": { "diff-match-patch-es": "^1.0.1", "ohash": "^2.0.11" }, "peerDependencies": { "react": "^18.2.0 || ^19.0.0", "shiki": "^1.0.0 || ^2.0.0 || ^3.0.0", "solid-js": "^1.9.1", "svelte": "^5.0.0-0", "vue": "^3.4.0" }, "optionalPeers": ["react", "shiki", "solid-js", "svelte", "vue"] }, "sha512-QF3OmGtROCGI3HGaB5hAlB6GPnzrxblZg761wg1NhsWKqb79HCeeVVhJE6fZeU1x/6ZOh7S8o9dBWf6eJZYc6A=="],
-
     "simple-git": ["simple-git@3.36.0", "", { "dependencies": { "@kwsites/file-exists": "^1.1.1", "@kwsites/promise-deferred": "^1.1.1", "@simple-git/args-pathspec": "^1.0.3", "@simple-git/argv-parser": "^1.1.0", "debug": "^4.4.0" } }, "sha512-cGQjLjK8bxJw4QuYT7gxHw3/IouVESbhahSsHrX97MzCL1gu2u7oy38W6L2ZIGECEfIBG4BabsWDPjBxJENv9Q=="],
-
-    "simple-git-hooks": ["simple-git-hooks@github:toplenboren/simple-git-hooks#7625657", { "bin": "./cli.js" }, "toplenboren-simple-git-hooks-7625657", "sha512-ieh9K+1lhMSWZ4SsWAwosNmWjSyU5jafOkodU7GkGPm5nnnbIxFDAfzR9BEHBAqrnnJwrNGMTeHHsRTyi3WbhA=="],
 
     "simplex-noise": ["simplex-noise@4.0.3", "", {}, "sha512-qSE2I4AngLQG7BXqoZj51jokT4WUXe8mOBrvfOXpci8+6Yu44+/dD5zqDpOx3Ux792eamTd2lLcI8jqFntk/lg=="],
 

@@ -10,7 +10,7 @@ export default {
     'uno.css',
     'vue-tsc',
   ],
-  ignoreBinaries: ['localhost', 'mkcert'],
+  ignoreBinaries: ['which', 'localhost', 'mkcert'],
   ignoreUnresolved: [
     '~/types',
     '~/logics',

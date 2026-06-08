@@ -8,6 +8,17 @@ const CERT_FILE = join(CERTS_DIR, 'localhost.pem')
 const CERT_KEY_FILE = join(CERTS_DIR, 'localhost-key.pem')
 
 if (!isCI) {
+  try {
+    await $`which mkcert`
+  }
+  catch (error) {
+    if (error instanceof Error && 'stdout' in error && (await error.stdout as any).includes('not found')) {
+      console.warn('mkcert is not installed, skipping HTTPS setup. Please install mkcert to enable HTTPS in development.')
+      process.exit(0)
+    }
+    throw error
+  }
+
   const result = await $`mkcert -install`
   if (result.exitCode !== 0) {
     process.exit(result.exitCode)

@@ -1,3 +1,4 @@
+import { existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 import UnoCSS from 'unocss/vite'
 import { defineConfig } from 'vite'
@@ -13,6 +14,9 @@ import { Vue } from './plugins/vue'
 import { VueRouter } from './plugins/vue-router'
 
 const promises: Promise<any>[] = []
+
+const cert = resolve(import.meta.dirname, 'certs/localhost.pem')
+const key = resolve(import.meta.dirname, 'certs/localhost-key.pem')
 
 export default defineConfig({
   resolve: {
@@ -35,12 +39,9 @@ export default defineConfig({
     Await(promises),
   ],
 
-  server: {
-    https: {
-      cert: resolve(import.meta.dirname, 'certs/localhost.pem'),
-      key: resolve(import.meta.dirname, 'certs/localhost-key.pem'),
-    },
-  },
+  server: existsSync(cert) && existsSync(key)
+    ? { https: { cert, key } }
+    : undefined,
 
   build: {
     rolldownOptions: {

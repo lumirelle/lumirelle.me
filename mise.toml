@@ -10,7 +10,8 @@ hk = "latest"
 [hooks]
 enter = [
   "hk install",
-  { task = "prepare" }
+  { task = "prepare" },
+  "if [[ $NETLIFY == true ]]; then mise self-update --yes; fi"
 ]
 
 [deps.auto-aube]

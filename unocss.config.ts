@@ -17,32 +17,23 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       // Web fonts
       fonts: {
-        sans: {
-          name: 'Comic Sans MS',
-          provider: 'none',
-        },
+        title: 'Cormorant Garamond',
+        sans: 'Inter Tight',
         mono: {
           name: 'Comic Mono',
           provider: 'fontsource',
         },
         condensed: 'Roboto Condensed',
-        wisper: 'Bad Script',
-        mplus: 'M PLUS Code Latin',
       },
       processors: [createLocalFontProcessor()],
     }),
   ],
-  theme: {
-    // Local fonts
-    font: {
-      'source-hans': '"Source Han Sans TC"',
-      'maple-mono': '"Maple Mono CN"',
-    },
-  },
   transformers: [transformerDirectives()],
 
   rules: [
+    // Animation rules
     [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
+    // Font family rules
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC"' }],
     ['font-60%em', { 'font-family': '"Drafting* Mono", "Maple Mono CN"' }],
     ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN"' }],

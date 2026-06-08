@@ -1,9 +1,8 @@
 <template>
-  <!-- TODO: Replace with My Logo -->
   <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <title>shabbyacc@outlook.com</title>
+    <title>lumirelle.me</title>
     <path
-      d="M46.1438 41.1245C47.1438 32.6245 40.841 29.2545 33.341 38.0027C21.341 52 37.341 63 43.8251 46.6245C45.781 43.1245 46.1438 38.0027 46.1438 38.0027C45.5227 43.2757 44.3251 45.6045 44.3251 49.6245C44.3251 55.1245 46.8251 57.6245 51.8252 49.6245C57.8252 41.1245 67.9722 28.1245 69.8251 17.6245C71.3251 9.12447 68.3252 4.12447 62.3252 16.1245C56.3252 28.1245 48.3701 61.2691 50.3409 79.5C52.3409 98 61.8252 94.6245 59.8252 77.6245C58.2252 64.0245 49.6751 44.1245 45.1751 35.1245C47.5085 40.2911 53.3252 50.6245 62.3252 55.1245"
+      d="M10 64C12 66 14 70 17 74C20 74 24 70 30 62C34 54 40 46 43 44C46 42 40 40 34 42C32 44 30 50 33 58C36 66 40 74 44 76C46 76 50 58 54 58C54 58 58 58 62 76C62 76 66 58 70 58C70 58 74 58 78 76C84 76 90 75 94 74C96 74 98 76 96 76"
       stroke="black"
       stroke-width="2"
       stroke-linecap="round"
@@ -28,7 +27,7 @@
 @keyframes grow {
   0% {
     stroke-dashoffset: 1px;
-    stroke-dasharray: 0 350px;
+    stroke-dasharray: 0 208px;
     opacity: 0;
   }
   10% {
@@ -39,19 +38,19 @@
     transform: translate(0, 0);
   }
   40% {
-    stroke-dasharray: 350px 0;
+    stroke-dasharray: 208px 0;
   }
   85% {
-    stroke-dasharray: 350px 0;
+    stroke-dasharray: 208px 0;
   }
   95%,
   to {
-    stroke-dasharray: 0 350px;
+    stroke-dasharray: 0 208px;
   }
 }
 path {
   stroke-dashoffset: 1px;
-  stroke-dasharray: 350px 0;
+  stroke-dasharray: 208px 0;
   animation: grow 10s ease forwards infinite;
   transform-origin: center;
   stroke: #303030;

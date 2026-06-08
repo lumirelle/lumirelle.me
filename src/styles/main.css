@@ -1,29 +1,4 @@
 /* Font Definitions */
-/* Basic */
-@font-face {
-  font-family: 'Comic Sans MS';
-  font-weight: normal;
-  font-style: normal;
-  src: url('/fonts/comic.ttf');
-}
-@font-face {
-  font-family: 'Comic Sans MS';
-  font-weight: bold;
-  font-style: normal;
-  src: url('/fonts/comicbd.ttf');
-}
-@font-face {
-  font-family: 'Comic Sans MS';
-  font-weight: normal;
-  font-style: italic;
-  src: url('/fonts/comici.ttf');
-}
-@font-face {
-  font-family: 'Comic Sans MS';
-  font-weight: bold;
-  font-style: italic;
-  src: url('/fonts/comicz.ttf');
-}
 /* Strict 60%em Group */
 @font-face {
   font-family: 'Maple Mono CN';
@@ -56,6 +31,8 @@
   --c-bg: #fff;
   --c-scrollbar: #eee;
   --c-scrollbar-hover: #bbb;
+
+  --font-title: 'Cormorant Garamond';
 }
 html {
   background-color: var(--c-bg);

@@ -3,7 +3,8 @@ _.path = [ "./node_modules/.bin" ]
 
 [tools]
 bun = "latest"
-aube = "latest"
+# The default "aube" does not included in netlify's built-in mise registry
+"npm:@endevco/aube" = { version = "latest", depends = "bun" }
 pkl = "latest"
 hk = "latest"
 
@@ -11,7 +12,6 @@ hk = "latest"
 enter = [
   "hk install",
   { task = "prepare" },
-  "if [[ $NETLIFY == true ]]; then mise self-update --yes; fi"
 ]
 
 [deps.auto-aube]

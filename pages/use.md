@@ -18,21 +18,21 @@ I'm really want to try MAC mini if I have chance in the future. ☺️
 
 ## Software
 
-### Configuration Setup Helpers
+### Configuration Setup
 
-- My personal CLI tool for configuration setup: [lumirelle/starship-butler](https://github.com/lumirelle/starship-butler)
+- My personal configuration setup: [lumirelle/dotfiles](https://github.com/lumirelle/dotfiles)
 
 ### Editors
 
 - Editors:
+  - [Neovim](https://neovim.io/) (Fast, keyboard-driven) with [LazyVim](https://www.lazyvim.org/) setup
   - [VS Code](https://code.visualstudio.com/) (Basic choice)
   - [Zed](https://zed.dev/) (Lightweight choice)
-  - [Neovim](https://neovim.io/) (For terminal lovers) with [LazyVim](https://www.lazyvim.org/) setup
-- Editor Settings & Extensions: [Configuration setup](#configuration-setup-helpers)
+- Editor Settings & Extensions: [Configuration setup](#configuration-setup)
 - Fonts: See [my programming font choices](posts/misc-programming-fonts) for more details.
-- Theme: [Vitesse Theme](https://github.com/antfu/vscode-theme-vitesse)
-- Icons Theme: [Catppuccin Icon Theme](https://github.com/catppuccin/vscode-icons)
-- Product Icons: [Carbon Icons](https://github.com/antfu/vscode-icons-carbon)
+- Theme: [Ayu Theme](https://ayutheme.com/) &ndash; [VS Code](https://marketplace.visualstudio.com/items?itemName=teabyii.ayu) & [Neovim](https://github.com/ayu-theme/ayu-vim) & [Zed (Community, dark only)](https://github.com/k4yt3x/zed-theme-ayu-darker)
+- Icons Theme: [Catppuccin Icon Theme](https://catppuccin.com/) &ndash; [VS Code](https://github.com/catppuccin/vscode-icons) & [Neovim](https://github.com/catppuccin/nvim) & [Zed](https://github.com/catppuccin/zed-icons)
+- Product Icons: Carbon Icons &ndash; [VS Code Only](https://marketplace.visualstudio.com/items?itemName=antfu.icons-carbon)
 - Formatting & Linting:
   - [OxLint](https://marketplace.visualstudio.com/items?itemName=oxc.oxc.oxc-vscode) with [`@lumirelle/oxlint-config`](https://github.com/lumirelle/oxlint-config) first
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) with [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) fallback
@@ -52,16 +52,19 @@ See my [manual](posts/manual-windows-setup#browser-setup) for more details about
 ### Terminal & Shell & Shell Prompt
 
 - [Windows Terminal](https://learn.microsoft.com/en-us/windows/terminal/) - Terminal, **Windows Only**
-  - Configuration: [Configuration setup](#configuration-setup-helpers)
-- [Nushell](https://www.nushell.sh/) - Shell
-  - Configuration: [Configuration setup](#configuration-setup-helpers)
-- [Starship](https://starship.rs/) - Shell Prompt
-  - Configuration: [Configuration setup](#configuration-setup-helpers)
+  - Configuration: [Configuration setup](#configuration-setup)
+- [Nushell](https://www.nushell.sh/) - Shell, cross-platform
+  - Configuration: [Configuration setup](#configuration-setup)
+- [Starship](https://starship.rs/) - Shell Prompt, cross-platform
+  - Configuration: [Configuration setup](#configuration-setup)
 
 ## Development
 
 ### General
 
+- [Git](https://git-scm.com/downloads) - Version control system
+- [Chezmoi](https://www.chezmoi.io/) - Dotfiles manager
+- [Mise](https://mise.jdx.dev/) - Devtools manager
 - [@sxzz/create](https://github.com/sxzz/create) - Create new projects from GitHub templates with ease (any language & framework)
 - [hyperfine](https://github.com/sharkdp/hyperfine) - A command-line benchmarking tool
 
@@ -78,32 +81,33 @@ Runtimes:
 
 Build tools:
 
-- [Bunup](https://bunup.dev) - Build JavaScript / TypeScript library projects
+- [Tsdown](https://tsdown.dev) - Build JavaScript / TypeScript library projects
 - [Vite](https://vite.dev/) - Build frontend projects
+
+Testing:
+
+- [Vitest](https://vitest.dev/) - A blazing fast unit test framework powered by Vite
+- [Playwright](https://playwright.dev/) - End-to-end testing framework
 
 Project management:
 
-- [@antfu/ni](https://github.com/antfu-collective/ni) - Aliasing package managers
+- [aube](https://aube.en.dev/) - Fast, disk-save package manager, can run directly on projects using other major package managers (NPM, PNPM, Yarn and Bun), without any migration steps
 - [taze](https://github.com/antfu/taze) - Upgrade dependencies
-- [bumpp](https://github.com/antfu/bumpp) - Interactive CLI that bumps your version numbers and more
+- [bumpp](https://github.com/antfu/bumpp) - Interactive CLI that bumps your `package.json` version numbers and more
 - [node-modules-inspector](https://github.com/antfu/node-modules-inspector) - Visualize your `node_modules`, inspect dependencies, and more
 
 Code Quality:
 
-- [oxlint](https://oxc.rs/docs/guide/usage/linter.html) - A fast linter written in Rust, prepared to replace ESLint in the future
+- [OxLint](https://oxc.rs/docs/guide/usage/linter.html) - A fast linter written in Rust, prepared to replace ESLint in the future
   - Configuration: [lumirelle/oxlint-config](https://github.com/lumirelle/oxlint-config)
-- [eslint](https://eslint.org/) - Linter & Formatter
+- [ESLint](https://eslint.org/) - Linter & Formatter
   - Configuration: [antfu/eslint-config](https://github.com/antfu/eslint-config)
-- [stylelint](https://stylelint.io/) - Linter & Formatter for styles
+- [StyleLint](https://stylelint.io/) - Linter & Formatter for styles
   - Configuration: [lumirelle/stylelint-config](https://github.com/lumirelle/stylelint-config)
-
-Useful libraries & frameworks:
-
-- [esbuild](https://esbuild.github.io/) - An extremely fast bundler and minifier, used to power [Import Cost VSCode extension](https://marketplace.visualstudio.com/items?itemName=hyrious.import-cost).
 
 ### Java
 
-- [Graal VM](https://www.graalvm.org/downloads/) - A high-performance runtime that provides support for Java and other languages, used for playing Minecraft. XD
+- [Graal VM](https://www.graalvm.org/downloads/) - A high-performance runtime that provides support for Java and other languages, used for **playing Minecraft**. XD
 
 ## Project Starter Templates
 

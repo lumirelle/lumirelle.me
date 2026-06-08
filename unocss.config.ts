@@ -17,13 +17,15 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       // Web fonts
       fonts: {
-        title: 'Cormorant Garamond',
-        sans: 'Inter Tight',
-        mono: {
+        'title': 'Cormorant Garamond',
+        'sans': 'Inter Tight',
+        'mono': {
           name: 'Comic Mono',
           provider: 'fontsource',
         },
-        condensed: 'Roboto Condensed',
+        'condensed': 'Roboto Condensed',
+        'geist-mono': 'Geist Mono',
+        'm-plus': 'M PLUS Code Latin',
       },
       processors: [createLocalFontProcessor()],
     }),
@@ -35,7 +37,7 @@ export default defineConfig<PresetWind4Theme>({
     [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
     // Font family rules
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC"' }],
-    ['font-60%em', { 'font-family': '"Drafting* Mono", "Maple Mono CN"' }],
+    ['font-60%em', { 'font-family': '"Geist Mono", "Maple Mono CN"' }],
     ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN"' }],
     ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
     ['font-recursive-without-mono', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],

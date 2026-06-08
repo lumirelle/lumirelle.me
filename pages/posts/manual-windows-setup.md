@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-05-12T09:28+08:00
+update: 2026-06-09T03:23+08:00
 lang: en
-duration: 18min
+duration: 14min
 type: manual
 ---
 
@@ -97,7 +97,7 @@ start ms-cxh:localonly
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You'd better prepare it before reinstallation. | Network proxy manager.<br><br>We will futher configure it [later](#personal-preferences). |
+| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You'd better prepare it before reinstallation. | <TextTag text="Chezmoi-ed" /> Network proxy manager. |
 
 ### Configure Windows Itself
 
@@ -228,23 +228,47 @@ winget <command> -?
 
 #### Recommended Softwares
 
-Below softwares are highly recommended and helpful for the future steps, you can install them first and in order:
+Below softwares are highly recommended and helpful for the future steps, you can install them first and **in order**:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal | System bundled | Simple, useful, without so many lua configs... |
+| Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> Simple, useful, without so many lua configs... |
 | gsudo | `winget add --source winget --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
+| Nushell | `sudo winget add --source winget --exact --id Nushell.Nushell --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell powered by _Rust_ to make the consistent experience. |
+| Starship | `sudo winget add --source winget --exact --id Starship.Starship --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell prompt powered by _Rust_ too. |
+| Git | `sudo winget add --source winget --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
+| Chezmoi | `sudo winget add --source winget --exact --id twpayne.chezmoi --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices. |
+| Mise | `sudo winget add --scope machine --source winget --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+
+Then, my personal configuration setup:
+
+> [!Note]
+>
+> This is the setting up of my personal preferences, if you does not interest in this, you can skip this part.
+
+Running the commands below in the shell:
+
+```shell
+chezmoi init https://github.com/lumirelle/dotfiles
+
+# To see what configuration will be applied:
+chezmoi status
+
+chezmoi apply
+```
+
+Next, remaning useful softwares:
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
 | Brave | `sudo winget add --source winget --exact --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
-| Nushell | `sudo winget add --source winget --exact --id Nushell.Nushell --scope machine` | Cross-platform shell powered by _Rust_ to make the consistent experience. |
-| Starship | `sudo winget add --source winget --exact --id Starship.Starship --scope machine` | Cross-platform shell prompt powered by _Rust_ too. |
-| Git | `sudo winget add --source winget --exact --id Git.Git --scope machine` | Nothing is more important that _Git_ for a developer, right? |
-| Bun | `sudo winget add --source winget --exact --id Oven-sh.Bun --scope machine` | A faster all in one JavaScript runtime, bundler, and package manager, alternative to _Node.js_ ecosystem.<br><br>You can use your preferred one.<br><br>**Don't forget to add `~/.bun/bin` to your system environment variable `Path`** |
 | (Optional) Nutstore | `sudo winget add --source winget --exact --id Nutstore.Nutstore --scope machine ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
 | (Optional) KeePassXC | `sudo winget add --source winget --exact --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `sudo winget add --source winget --exact --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
-| Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
-| Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
-| (Optional) Rime | `sudo winget add --source winget --exact --id Rime.Weasel --scope machine` | Chinese input Command, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
+| Neovim | `sudo winget add --scope machine --source winget --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> / |
+| Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
+| Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
+| (Optional) Rime | `sudo winget add --source winget --exact --id Rime.Weasel --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Chinese input Command, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
 | RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
 | Revo Uninstaller | Free:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
@@ -299,24 +323,16 @@ Install the tool softwares below as you need:
 | Epic Games | `sudo winget add --scope machine --source winget --exact --id EpicGames.EpicGamesLauncher` | / |
 | OBS Studio | `sudo winget add --scope machine --source winget --exact --id OBSProject.OBSStudio` | / |
 
-Install the dev softwares below as you need **(in order)**:
+Install the dev softwares below as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | WSL | `wsl --install` | Requires reboot. |
 | Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | / |
-| Bun | `sudo winget add --scope machine --source winget --exact --id Oven-sh.Bun` | A faster JavaScript runtime, bundler, and package manager all in one.<br><br>If you already install this before, you can skip this time. |
-| Node.js | `sudo winget add --scope machine --source winget --exact --id OpenJS.NodeJS.LTS`<br><br>Setup: `npm i corepack@latest npm@latest esbuild tree-sitter-cli -g`<br><br>Enable corepack: `corepack enable` | The legacy JavaScript runtime, which is the most stable one. |
-| Zig | `sudo winget add --scope machine --source winget --exact --id zig.zig` | I prefer this than _Rust_. |
-| GraalVM | [Official Website](https://www.graalvm.org/downloads/) | Alternative to _JVM_ with native support. |
-| Mingw-w64 | [GitHub Releases](https://github.com/niXman/mingw-builds-binaries/releases/latest) | **GCC (GNU Compiler Collection)** implementation on Windows<br><br>I prefer to choose **Posix thread model** and **UC runtime**. |
-| Neovim | `sudo winget add --scope machine --source winget --exact --id Neovim.Neovim` | / |
-| LazyVim | [Official Website](https://www.lazyvim.org/installation) | Requires **GCC**.<br /><br />With extras: _coding.mini-surround_, _vscode._ |
 | ~~Visual Studio~~ | ~~[Official Website](https://visualstudio.microsoft.com/downloads/)~~ | ~~Bundles **MSVC (Microsoft Visual C++) compiler**. Do we need this?~~ |
 | ~~JetBrains Toolbox~~ | ~~[Official Website](https://www.jetbrains.com/toolbox-app/)~~ | ~~Do we need this?~~ |
 | ~~JetBrains IntelliJ IDEA~~ | ~~Install from JetBrains Toolbox.~~ | ~~Do we need this?~~ |
 | Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
-| hyperfine | `sudo winget add --scope machine --source winget --exact --id sharkdp.hyperfine` | Benchmarking tool. |
 | Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. Usually, we don't need to install this manually. |
 
 Some one-time use software:
@@ -332,60 +348,26 @@ Use _Revo Uninstaller_ to uninstall all the software you don't like!
 
 In particular, **"Windows Programs"** tab let you can completely uninstall system bundled softwares!
 
-### Personal Preferences
-
-> [!Note]
->
-> Don't forget to restart your computer to make the softwares work properly after the previous step!
-
-> [!Note]
->
-> This is the setting up of my personal preferences, if you does not interest in this, you can skip this part.
-
-Running the commands below in the shell:
-
-```shell
-# (Optional) Install useful global Bun package as your need
-# Package manager's manager & Package updater
-bun i @antfu/ni taze -g
-# Project scaffolding
-bun i @sxzz/create -g
-
-# (Optional) Install my personal preset manager
-bun i starship-butler -g
-# List available preset IDs:
-butler preset -l
-# Apply specific preset(s):
-butler preset -i <preset_id_pattern> [-i <preset_id_pattern> ...]
-# Or apply all presets and skip your existing configs:
-butler preset -a
-# Or you want to override your existing configs,
-# recommended for fresh Windows installation:
-butler preset -af
-# Override without manually confirm, dangerous!
-butler preset -afy
-```
-
 ## Third Step: Maintain System
 
 Programs should under:
 
-- User scope path - `$LOCALAPPDATA/Programs/`
-- Machine scope path
-  - Standard path
+- User scope - `$LOCALAPPDATA/Programs/`
+- Machine scope
+  - Standard
     - `<DRIVER>:/Program Files/`
     - `<DRIVER>:/Program Files (x86)/`
-  - No space path
+  - No space
     - `<DRIVER>:/ProgramData/`
-  - Portable path
+  - Portable
     - `<DRIVER>:/Program Files Portable/`
 
 Projects should under:
 
-- `~/dev/`: Non-work projects, for example:
+- `~/dev/`: My projects:
   - `~/dev/app/`: My application projects;
-  - `~/dev/lib/`: My library projects;
-  - `~/dev/oss/`: Open source projects;
+  - `~/dev/infra/`: My infrastructure projects;
+  - `~/dev/oss/`: Open source (softwares) projects;
   - ...
 - `~/work/`: Work projects.
   - ...

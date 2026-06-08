@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts
 date: 2025-10-15T14:10+08:00
-update: 2026-05-07T14:40+08:00
+update: 2026-06-09T03:33+08:00
 lang: en
 duration: 13min
 ---
@@ -31,7 +31,8 @@ You can compare various programming fonts with test-driven method in this [websi
 My basic requirements for fonts are that:
 
 1. They must have at least two weights (Regular & Bold);
-2. They must have italic styles.
+2. They must have italic styles;
+3. Save my eyes.
 
 All of fonts listed below are satisfy these requirements.
 
@@ -130,7 +131,7 @@ And Latin font have more choice:
 
   <img src="/posts/misc-programming-fonts/dm-mono.png" alt="DM Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- ⭐ [Drafting* Mono](https://indestructibletype.com/BuyDrafting.html):
+- [Drafting* Mono](https://indestructibletype.com/BuyDrafting.html):
 
   <TextTag text="static" preset="amber" /><TextTag text="serif" /><TextTag text="thin to bold, with italic" preset="green" />
 
@@ -138,7 +139,7 @@ And Latin font have more choice:
 
   <img src="/posts/misc-programming-fonts/drafting-mono.png" alt="Drafting Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- [Geist Mono](https://github.com/vercel/geist-font/releases):
+- ⭐ [Geist Mono](https://github.com/vercel/geist-font/releases):
 
   <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="thin to black, with italic" preset="green" />
 
@@ -185,8 +186,8 @@ And Latin font have more choice:
 Then, you can using these font like this:
 
 ```json
-// 'Drafting* Mono' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'Drafting* Mono', 'Maple Mono CN', monospace"
+// 'Geist Mono' can be replaced by any other Latin fonts listed above
+"'Symbols Nerd Font', 'Geist Mono', 'Maple Mono CN', monospace"
 ```
 
 #### 50%em Group
@@ -266,7 +267,9 @@ Then, you can using this font like this:
 
 Latin vs. CJK
 
-60%em Group ("Drafting* Mono", "Maple Mono CN"):
+#### 60%em Group
+
+"Geist Mono", "Maple Mono CN":
 
 <div font="[&_code]:60%em!">
 
@@ -282,7 +285,9 @@ w
 
 </div>
 
-50%em Group ("M PLUS Code Latin", "Source Han Sans TC"):
+#### 50%em Group
+
+"M PLUS Code Latin", "Source Han Sans TC":
 
 <div font="[&_code]:50%em!">
 
@@ -300,7 +305,9 @@ w
 
 Code
 
-60%em Group ("Drafting* Mono", "Maple Mono CN"):
+#### 60%em Group
+
+"Geist Mono", "Maple Mono CN":
 
 <div font="[&_code]:60%em!">
 
@@ -394,7 +401,9 @@ async function _symlinkConfig(
 
 </div>
 
-50%em Group ("M PLUS Code Latin", "Source Han Sans TC"):
+#### 50%em Group
+
+"M PLUS Code Latin", "Source Han Sans TC":
 
 <div font="[&_code]:50%em!">
 

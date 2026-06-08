@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-04-23T18:33+08:00
+update: 2026-06-09T03:45+08:00
 lang: en
-duration: 17min
+duration: 16min
 type: manual
 ---
 
@@ -97,25 +97,13 @@ touch index.html
 echo "Hello, Git!" > index.html
 
 # Stage the changes
-# Alias `a` = `add`
-git a .
+git add .
 ```
 
 After that, you can make the initial commit:
 
 ```bash
-# Alias `cm` = `commitx-with-message`
-#           ~= `commitx --message`
-#            = enhanced version of `commitx --message`
-git cm feat 'initial commit'
-
-# Or
-# `c -m`    = `commitx --message`
-#
-# Alias `c` = `commitx`
-#          ~= `commit`
-#           = enhanced version of `commit`
-git c -m "feat: initial commit"
+git commit --message "feat: initial commit"
 ```
 
 Every time you want to record some changes, you can make a commit like this.
@@ -133,12 +121,7 @@ You need to add a "remote", so that Git knows where the remote repository is loc
 To add a "remote", use the following command:
 
 ```bash
-# `r -a`    = `remotex --add`
-#          ~= `remote add`
-#
-# Alias `r` = `remotex`
-#           = enhanced version of `remote`
-git r -a https://github.com/username/repo.git
+git remote add origin https://github.com/username/repo.git
 ```
 
 ### Pull and Push Commits
@@ -148,15 +131,13 @@ To sync your local commit history with a remote repository, you can `pull` commi
 To pull latest commit history from the remote repository, you can use the following command:
 
 ```bash
-# Alias `l` = `pull`
-git l
+git pull
 ```
 
 To push your latest commit history to the remote repository:
 
 ```bash
-# Alias `p` = `push`
-git p
+git push
 ```
 
 ### Work with Branches (Git Workflow)
@@ -309,10 +290,7 @@ To add a new feature, you should create a new feature branch based on the `dev` 
 First, create `dev` branch from `main` branch if it does not exist:
 
 ```bash
-# `w -c`    = `switch --create`
-#
-# Alias `w` = `switch`
-git w -c dev main
+git switch --create dev main
 ```
 
 Then create a new feature branch from `dev` branch:
@@ -324,7 +302,7 @@ Then create a new feature branch from `dev` branch:
 > If you found that there is already a uncompleted/postponed feature branch merged to `dev` 😅, the simply workaround is to create you feature branch based on the specific commit before it or even the `main` branch.
 
 ```bash
-git w -c feat/feature-name dev
+git switch --create feat/feature-name dev
 ```
 
 Now, you can work on your feature branch, commit changes frequently, and push them to remote regularly.
@@ -336,17 +314,16 @@ When you work on your feature branch, you may want to discard the changes easily
 You can use the following command:
 
 ```bash
-# Alias `x` = `discard`
-#           = custom alias, will reset tracked files to HEAD,
-#             and remove untracked files based on specific paths
-git x index.html index.css
+# Alias `discard` = custom alias, will reset tracked files to HEAD,
+#                   and remove untracked files based on specific paths
+git discard index.html index.css
 ```
 
 To discard all changes:
 
 ```bash
 # `.` means the project root, of course, only if you are in the project root.
-git x .
+git discard .
 ```
 
 ### Unstage / Unadd Changes
@@ -354,15 +331,14 @@ git x .
 If you have staged some changes by `git add`, you can also unstage them by `git unadd` (my custom alias):
 
 ```bash
-# Alias `ua` = `unadd`
-#            = Custom alias, will unstage the changes based on specific paths
-git ua index.html index.css
+# Alias `disadd` = Custom alias, will unstage the changes based on specific paths
+git disadd index.html index.css
 ```
 
 To unstage all changes:
 
 ```bash
-git ua .
+git disadd .
 ```
 
 ### Undo Last Commit / Uncommit
@@ -370,9 +346,8 @@ git ua .
 When you commit some changes in accident, you can undo it by `git uncommit` (my custom alias too 😄):
 
 ```bash
-# Alias `uc` = `uncommit`
-#            = Custom alias, will undo the last commit
-git uc
+# Alias `uncommit` = Custom alias, will undo the last commit
+git uncommit
 ```
 
 > [!Caution]
@@ -380,7 +355,7 @@ git uc
 > If this commit has been pushed to remote, you need to perform force push to remote after undo it:
 >
 > ```bash
-> git p -f
+> git push --force
 > ```
 >
 > This may cause problems for other collaborators, please use it with caution 🙏.
@@ -390,23 +365,16 @@ git uc
 If you want to amend the last commit, more conveniently than drop the last commit and create a new one, you can do:
 
 ```bash
-# `c -a` = `commitx --amend`
-#       ~= `commit --amend --no-edit`
-git c -a
+git commit --amend --no-edit
 ```
 
 Or if you want to edit the last commit message:
 
 ```bash
-# `c -e` = `commitx --edit`
-#       ~= `commit --amend`
-# Git will open an editor because you have not provided
-# the new commit message yet.
-git c -e
+git commit --amend
 
 # Or with specific new commit message directly:
-git cm -e "fix: some bugs"
-git c -e -m "fix: some bugs"
+git commit --amend --message "fix: some bugs"
 ```
 
 > [!Caution]
@@ -414,7 +382,7 @@ git c -e -m "fix: some bugs"
 > If this commit has been pushed to remote, you need to perform force push to remote after undo it:
 >
 > ```bash
-> git p -f
+> git push --force
 > ```
 >
 > This may cause problems for other collaborators, so please use it with caution 🙏.
@@ -428,9 +396,7 @@ For more safety choice, you can use `git revert` to create a new commit that und
 The cost is that the commit history will be more ugly, likes your "evidence of guilt", which will spread through the ages. 🫠
 
 ```bash
-# Alias `rv` = `revertx`
-#            = enhanced version of `revert`
-git rv HEAD
+git revert HEAD
 ```
 
 ### Merge Branch
@@ -438,25 +404,21 @@ git rv HEAD
 Come back to general workflow from "error handling", after you completed your feature, you need to merge it back to the `dev` branch.
 
 ```bash
-git w dev
+git switch dev
 
-# Alias `m` = `mergex`
-#           = enhanced version of `merge`, will merge the specified
-#             branch into the current branch with default message:
-#             "chore: merge $merge_branches into $current_branch"
-git m feat/feature-name
+git merge feat/feature-name
 
 # Don't forget to push the `dev` branch to remote!
-git p
+git push
 ```
 
 When all features are merged into the `dev` branch, and ready for testing, you should create a new `release` branch to prepare for testing, bug fixing and releasing:
 
 ```bash
-git w dev
+git switch dev
 # vx.x.x is the version number of the next release, e.g. v1.0.0.
-git w -c release/vx.x.x dev
-git p
+git switch --create release/vx.x.x dev
+git push
 ```
 
 > [!CAUTION]
@@ -469,14 +431,14 @@ When your test team finds some bugs during testing, you can commit the bug fixes
 
 ```bash
 # Merge `release` branch to `main` branch to create a new release
-git w main
-git m release/vx.x.x
-git p
+git switch main
+git merge release/vx.x.x
+git push
 
 # Merge `release` branch back to `dev` branch to integrate the bug fixes
-git w dev
-git m release/vx.x.x
-git p
+git switch dev
+git merge release/vx.x.x
+git push
 ```
 
 ### Manage Tag
@@ -484,27 +446,22 @@ git p
 After a new release, we should create a version tag to mark this point on the `main` branch, and push it to remote.
 
 ```bash
-git w main
+git switch main
 
-# Alias `t` = `tagx`
-#           = enhanced version of `tag`, will create a new tag
-#             with the specified name and message (if provided)
-git t v1.0.0
-git t v1.0.0 "Release version 1.0.0"
+git tag v1.0.0
+git tag --annotate v1.0.0 --message "Release version 1.0.0"
 ```
 
 Then push the tag to remote:
 
 ```bash
-git p
+git push
 ```
 
 Or if you want to delete a tag
 
 ```bash
-# Alias `tx` = `tag-delete`
-#            = Custom alias, will delete a specific tag with specific range
-git tx -a v1.0.0
+git tag --delete v1.0.0
 ```
 
 ### Rebase Branch
@@ -512,11 +469,9 @@ git tx -a v1.0.0
 When something changes been integrated into the `dev` branch, and you also want to integrate these changes into your **local** feature branch, you can rebase your feature branch onto the latest `dev` branch.
 
 ```bash
-git w feat/feature-name
+git switch feat/feature-name
 
-# Alias `n` = `rebasex`
-#           = enhanced version of `rebase`
-git n dev
+git rebase dev
 ```
 
 > [!Caution]
@@ -543,10 +498,8 @@ When you complete your testing, bug fixing and releasing tasks on a `release` br
 To delete a branch:
 
 ```bash
-# Alias `bx` = `branch-delete`
-#            = Custom alias, will delete a specific branch with specific range
-git bx -a feat/feature-name
-git bx -a release/vx.x.x
+git branch --delete feat/feature-name
+git branch --delete release/vx.x.x
 ```
 
 ### Cherry-Pick Commit
@@ -554,9 +507,7 @@ git bx -a release/vx.x.x
 Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing the entire branch. In this case, you can use the `cherry-pick`:
 
 ```bash
-# Alias `cp` = `cherry-pickx`
-#            = enhanced version of `cherry-pick`
-git cp 1234567
+git cherry-pick 1234567
 ```
 
 ### Git Configuration
@@ -574,7 +525,7 @@ email = your.email@example.com
 editor = nvim
 ```
 
-To get full configuration example, please refer to my [`.gitconfig`](https://github.com/lumirelle/starship-butler/blob/main/packages/config-provider/assets/vcs/git/.gitconfig) file.
+To get full configuration example, please refer to my [`.gitconfig`](https://github.com/lumirelle/dotfiles/blob/main/dot_gitconfig) file.
 
 #### `.gitignore`
 
@@ -591,3 +542,5 @@ To solve this problem, you can create a `.git-blame-ignore-revs` file in the roo
 > [!Note]
 >
 > If this does not work, you may need to try `git blame --ignore-revs-file .git-blame-ignore-revs` to specify the ignore revs file explicitly.
+>
+> For VSCode users, I highly recommend the [eamodio.gitlens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) extension to show the Git blame information, other than the built-in Git extension, because it respects the `.git-blame-ignore-revs` file by default, while the built-in one does not.

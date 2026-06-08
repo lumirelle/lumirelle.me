@@ -1,7 +1,7 @@
 ---
 title: Neovim and LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-03-31T15:29+08:00
+update: 2026-06-09T03:52+08:00
 lang: en
 duration: 26min
 type: manual
@@ -26,6 +26,8 @@ sudo winget add -e --id Neovim.Neovim --scope machine
 
 To install LazyVim, make sure your system satisfies [the requirements](https://www.lazyvim.org/#%EF%B8%8F-requirements) first, then just simply follow [the official documentation](https://www.lazyvim.org/installation).
 
+Or just try [my configuration setup](https://github.com/lumirelle/dotfiles), powered by [Chezmoi](https://github.com/twpayne/chezmoi).
+
 ## Basic Usage
 
 [Neovim Quick Reference](https://neovim.io/doc/user/quickref.html).
@@ -47,6 +49,8 @@ nvim path/to/your/file
 ```
 
 Then you will see a editor buffer with the file opened.
+
+If you have entered Neovim, you can also try command `:e path/to/your/file` to open a file in the current buffer, or `:tabnew path/to/your/file` to open a file in a new tab.
 
 ### Modes
 
@@ -422,19 +426,12 @@ Use `<Esc>` or `<C-[>` to exit insert mode and return to normal mode.
 
 #### Multi Cursor
 
-In Neovim, you can start multi cursor only from blockwise visual mode, with plugin `multicursor.nvim`, we can accomplish this in any visual mode:
+In Neovim, you can start multi cursor from blockwise visual mode:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Match | `<C-n>` | Normal | Create multi cursor at the next occurrence of the current selection |
-| Insert | `I` | Visual | Create multi cursor at the beginning of each selected line, enter insert mode |
-| Append | `A` | Visual | Create multi cursor at the end of each selected line, enter insert mode |
-
-> [!Note]
->
-> For Neovim in VSCode, there is a better plugin called `vscode-neovim-multicursor`, which can trigger VSCode's native multi cursor feature, so we use it instead of `multicursor.nvim` in VSCode environment.
->
-> They two have different behaviors and default keybindings (Although we will remap them to be the most similar as possible), you can check their documentation for more details.
+| Insert | `I` | Visual block | Create multi cursor at the beginning of each selected line, enter insert mode |
+| Append | `A` | Visual block | Create multi cursor at the end of each selected line, enter insert mode |
 
 ### Repeat Command
 
@@ -459,9 +456,9 @@ In Neovim, you can start multi cursor only from blockwise visual mode, with plug
 |  | `zO` | Normal | Open all folds under the cursor |
 | Toggle | `za` | Normal | Toggle fold under the cursor |
 |  | `zA` | Normal | Toggle all folds under the cursor |
-| Fold level | `zm` | Normal | Fold more, decrease `'foldlevel'` (Neovim in VSCode does not support) |
+| Fold level | `zm` | Normal | Fold more, decrease `'foldlevel'` |
 |  | `zM` | Normal | Fold all, set `'foldlevel'` to 0 |
-| Unfold level | `zr` | Normal | Unfold more, increase `'foldlevel'` (Neovim in VSCode does not support) |
+| Unfold level | `zr` | Normal | Unfold more, increase `'foldlevel'` |
 |  | `zR` | Normal | Unfold all, set `'foldlevel'` to max |
 
 ### Terminal

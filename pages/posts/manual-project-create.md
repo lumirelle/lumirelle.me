@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-04-22T23:09+08:00
+update: 2026-06-09T03:37+08:00
 lang: en
 duration: 1min
 type: manual
@@ -15,45 +15,8 @@ This is a manual for how to create a new project with specific tech stack.
 
 ## Prerequisites
 
-- [Bun](https://bun.sh/) latest installed.
-- <details>
-  <summary>`@sxzz/create` CLI tool (if capable)</summary>
-
-  Install:
-
-  ```bash
-  bun install -g @sxzz/create
-  ```
-
-  Configuration (_~/create.config.yml_):
-
-  ```yaml
-  git:
-    add: true
-  templates:
-    - name: Library
-      url: lumirelle/starter-ts
-      git:
-        init: false
-    - name: Monorepo
-      url: lumirelle/starter-monorepo
-      git:
-        init: false
-    - name: VS Code
-      url: antfu/starter-vscode
-      git:
-        init: false
-    - name: Vitesse Lite
-      url: antfu-collective/vitesse-lite
-      git:
-        init: false
-    - name: Vitesse Nuxt
-      url: lumirelle/starter-vitesse-nuxt
-      git:
-        init: false
-  ```
-
-  </details>
+- [Bun](https://bun.sh/) latest or [Node.js](https://nodejs.org/) LTS installed;
+- `@sxzz/create` CLI tool with [configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/create.config.yml).
 
 ## TypeScript Library
 

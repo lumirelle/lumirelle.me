@@ -1,16 +1,31 @@
 /* Font Definitions */
+/* Strict 62%em Group */
+@font-face {
+  font-family: 'Maple Mono WD CN';
+  src: url('/fonts/MapleMonoWD-CN-Regular.ttf');
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Italic.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Bold.woff2') format('woff2');
+  font-weight: bold;
+}
 /* Strict 60%em Group */
 @font-face {
   font-family: 'Maple Mono CN';
   src: url('/fonts/MapleMono-CN-Regular.ttf');
-  font-weight: normal;
-  font-style: normal;
 }
 @font-face {
   font-family: 'Drafting* Mono';
   src: url('/fonts/DraftingMono-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
 }
 @font-face {
   font-family: 'Recursive';
@@ -22,8 +37,6 @@
 @font-face {
   font-family: 'Source Han Sans TC';
   src: url('/fonts/SourceHanSansTC-Normal.otf');
-  font-weight: normal;
-  font-style: normal;
 }
 
 /* Root Style */
@@ -31,8 +44,6 @@
   --c-bg: #fff;
   --c-scrollbar: #eee;
   --c-scrollbar-hover: #bbb;
-
-  --font-title: 'Cormorant Garamond';
 }
 html {
   background-color: var(--c-bg);
@@ -103,13 +114,6 @@ html.dark {
   transform: translateY(8px);
 }
 
-/* Custom Prose */
-h2 + p > em:first-child {
-  opacity: 0.5;
-  display: block;
-  margin-top: -20px;
-  font-size: 0.9em;
-}
 
 /* Image Visibility */
 .dark [img-light] {

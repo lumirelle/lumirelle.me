@@ -17,15 +17,37 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       // Web fonts
       fonts: {
-        'title': 'Cormorant Garamond',
+        // Standards
+        'serif': 'Cormorant Garamond',
         'sans': 'Inter Tight',
         'mono': {
-          name: 'Comic Mono',
-          provider: 'fontsource',
+          name: '"0xProto"',
+          provider: 'none',
         },
-        'condensed': 'Roboto Condensed',
+
+        // Custom
+        'maple-mono-cn': {
+          name: '"Maple Mono CN"',
+          provider: 'none',
+        },
+        'maple-mono-wd-cn': {
+          name: '"Maple Mono WD CN"',
+          provider: 'none',
+        },
+        'drafting-mono': {
+          name: '"Drafting* Mono"',
+          provider: 'none',
+        },
+        'recursive': {
+          name: '"Recursive"',
+          provider: 'none',
+        },
+        'source-han-sans-tc': {
+          name: '"Source Han Sans TC"',
+          provider: 'none',
+        },
         'geist-mono': 'Geist Mono',
-        'm-plus': 'M PLUS Code Latin',
+        'm-plus-code-latin': 'M PLUS Code Latin',
       },
       processors: [createLocalFontProcessor()],
     }),
@@ -33,14 +55,15 @@ export default defineConfig<PresetWind4Theme>({
   transformers: [transformerDirectives()],
 
   rules: [
-    // Animation rules
-    [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
     // Font family rules
-    ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC"' }],
-    ['font-60%em', { 'font-family': '"Geist Mono", "Maple Mono CN"' }],
-    ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN"' }],
+    ['font-62%em', { 'font-family': '"0xProto", "Maple Mono WD CN", monospace' }],
+    ['font-60%em', { 'font-family': '"Geist Mono", "Maple Mono CN", monospace' }],
+    ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC", monospace' }],
+    ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN", monospace' }],
     ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
     ['font-recursive-without-mono', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
+    // Animation rules
+    [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
   ],
   safelist: ['i-ri-menu-2-fill'],
   shortcuts: [

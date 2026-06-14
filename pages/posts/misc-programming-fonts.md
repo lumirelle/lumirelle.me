@@ -1,9 +1,9 @@
 ---
 title: Programming Fonts
 date: 2025-10-15T14:10+08:00
-update: 2026-06-09T03:33+08:00
+update: 2026-06-14T18:54+08:00
 lang: en
-duration: 13min
+duration: 15min
 ---
 
 [[toc]]
@@ -65,11 +65,21 @@ All of fonts listed below are satisfy these requirements.
 
 #### 62%em Group
 
-> [!Warning]
+> [!Note]
 >
-> This group is currently Latin-only.
+> It seems like impossible to find a CJK font with 62%em width, 😇
 
-- [0xProto](https://github.com/0xType/0xProto/releases): <a name="0xProto"></a>
+This group uses my custom build &ndash; ["Maple Mono WD CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK characters support, via bellow command:
+
+```nu
+python build.py --width wide --cn --no-nf
+```
+
+> [!Note]
+>
+> `--width wide` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most of them.
+
+- ⭐ [0xProto](https://github.com/0xType/0xProto/releases): <a name="0xProto"></a>
 
   <TextTag text="static" preset="amber" /><TextTag text="sans-serif" preset="blue" /><TextTag text="regular, bold, with italic" preset="green" />
 
@@ -77,7 +87,7 @@ All of fonts listed below are satisfy these requirements.
 
   <img src="/posts/misc-programming-fonts/0xproto.png" alt="0xProto" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- ⭐ [Monaspace Xenon Var](https://github.com/githubnext/monaspace/releases):
+- [Monaspace Xenon Var](https://github.com/githubnext/monaspace/releases):
 
   <TextTag text="variable" preset="amber" /><TextTag text="serif" preset="blue" /><TextTag text="extralight to extrabold, with italic" preset="green" />
 
@@ -88,7 +98,7 @@ All of fonts listed below are satisfy these requirements.
 Then, you can using these font like this:
 
 ```json
-"'Symbols Nerd Font', 'Monaspace Xenon Var', monospace"
+"'Symbols Nerd Font', '0xProto', monospace"
 ```
 
 #### 60%em Group
@@ -265,11 +275,30 @@ Then, you can using this font like this:
 
 ### Strict Preview
 
-Latin vs. CJK
+#### Latin vs. CJK
 
-#### 60%em Group
+##### 62%em Group
 
-"Geist Mono", "Maple Mono CN":
+"0xProto", "Maple Mono WD CN", monospace:
+
+<div font="[&_code]:62%em!">
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+</div>
+
+
+##### 60%em Group
+
+"Geist Mono", "Maple Mono CN", monospace:
 
 <div font="[&_code]:60%em!">
 
@@ -285,9 +314,9 @@ w
 
 </div>
 
-#### 50%em Group
+##### 50%em Group
 
-"M PLUS Code Latin", "Source Han Sans TC":
+"M PLUS Code Latin", "Source Han Sans TC", monospace:
 
 <div font="[&_code]:50%em!">
 
@@ -303,11 +332,107 @@ w
 
 </div>
 
-Code
+#### Code
 
-#### 60%em Group
+##### 62%em Group
 
-"Geist Mono", "Maple Mono CN":
+"0xProto", "Maple Mono WD CN", monospace:
+
+<div font="[&_code]:62%em!">
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+##### 60%em Group
+
+"Geist Mono", "Maple Mono CN", monospace:
 
 <div font="[&_code]:60%em!">
 
@@ -401,9 +526,9 @@ async function _symlinkConfig(
 
 </div>
 
-#### 50%em Group
+##### 50%em Group
 
-"M PLUS Code Latin", "Source Han Sans TC":
+"M PLUS Code Latin", "Source Han Sans TC", monospace:
 
 <div font="[&_code]:50%em!">
 
@@ -499,9 +624,9 @@ async function _symlinkConfig(
 
 ### Casual Preview
 
-Latin vs. CJK
+#### Latin vs. CJK
 
-"Comic Mono", "三极露融体":
+"Comic Mono", "Maple Mono CN", monospace:
 
 <div font="[&_code]:casual!">
 
@@ -517,9 +642,9 @@ w
 
 </div>
 
-Code
+#### Code
 
-"Comic Mono", "三极露融体":
+"Comic Mono", "Maple Mono CN", monospace:
 
 <div font="[&_code]:casual!">
 

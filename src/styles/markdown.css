@@ -47,74 +47,12 @@ html:not(.dark) .shiki span {
   transform: translate(0, 1.6em);
 }
 
-/* Prose */
-.prose pre:not(.shiki) {
-  padding: 0;
-  margin: 0;
-  background: transparent;
-}
-
-.prose .shiki {
-  font-family: 'Comic Mono', monospace;
-  font-size: 0.92em;
-  line-height: 1.4;
-  margin: 0.5em 0;
-}
-
-.prose img {
-  width: 100%;
-}
-
-.prose p > img {
-  width: 100%;
-  --uno: shadow rounded-lg;
-  transform: scale(1.05);
-  margin: 2.6em 0;
-}
-
-.prose {
-  --fg-light: #888;
-  --fg: #555;
-  --fg-deep: #222;
-  --fg-deeper: #000;
-
-  color: var(--fg);
-}
-
-.prose a {
-  font-weight: inherit;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(125, 125, 125, 0.3);
-  transition: border 0.3s ease-in-out;
-}
-
-.prose a:hover {
-  border-bottom: 1px solid var(--fg);
-}
-
-.prose a code {
-  color: inherit;
-}
-
-.prose hr {
-  width: 50px;
-  margin: 2em auto;
-}
-
-html.dark .prose {
-  --fg-light: #888;
-  --fg: #ccc;
-  --fg-deep: #ddd;
-  --fg-deeper: #fff;
-}
-
 a.item {
   transition: 0.2s all ease-out;
   text-decoration: none;
   border-bottom: none !important;
   opacity: 0.6;
 }
-
 a.item:hover {
   opacity: 1;
 }
@@ -148,44 +86,6 @@ h5:focus .header-anchor,
 h6:hover .header-anchor,
 h6:focus .header-anchor {
   opacity: 0.5;
-}
-
-.prose blockquote {
-  font-weight: normal;
-  font-style: normal;
-  line-height: 1.6em;
-  padding: 0.5em 1em;
-  margin-left: -1.1em;
-}
-
-.prose blockquote > * {
-  opacity: 0.7;
-}
-
-.prose blockquote > :first-child {
-  margin-top: 0;
-}
-
-.prose blockquote > :last-child {
-  margin-bottom: 0;
-}
-
-.prose blockquote p:first-of-type::before {
-  content: none;
-}
-
-.prose blockquote p:first-of-type::after {
-  content: none;
-}
-
-.prose s {
-  opacity: 0.5;
-}
-
-.prose em {
-  --uno: font-serif;
-  color: var(--fg-deep);
-  font-size: 1.05em;
 }
 
 .table-of-contents {
@@ -248,7 +148,7 @@ h6:focus .header-anchor {
   transform: translateY(3px);
   line-height: 100%;
   color: var(--fg-light) !important;
-  --uno: gap-1 transition rounded px1.5 py1 important-border-0 font-condensed;
+  --uno: gap-1 transition rounded px1.5 py1 important-border-0;
 }
 
 .markdown-magic-link:hover {
@@ -275,26 +175,4 @@ h6:focus .header-anchor {
   height: 1.6em;
   width: 1.6em;
   border-radius: 50%;
-}
-
-/* Shiki Transformers */
-.prose code .highlighted {
-  background-color: #8881;
-  width: calc(100% + 48px);
-  display: inline-block;
-  transition: background-color 0.5s;
-  margin: 0px -24px;
-  padding: 0px 24px;
-}
-
-.prose .shiki.has-highlighted .line:not(.highlighted) {
-  opacity: 0.75;
-}
-
-.prose .highlighted-word {
-  background-color: #8881;
-  border: 1px solid #8885;
-  padding: 1px 3px;
-  margin: -1px -3px;
-  border-radius: 4px;
 }

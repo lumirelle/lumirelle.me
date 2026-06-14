@@ -120,6 +120,23 @@ Next, we can choose a quieter anti-virus software instead. I recommend [_Huorong
 >
 > You can choose the anti-virus software you like, except for _Windows Defender_!!!
 
+#### Disable App Execution Aliases
+
+Some versions of Windows have a feature called "App Execution Aliases", which is enabled by default.
+
+With this feature enabled, Windows will automatically create a stub executable in `~/AppData/Local/Microsoft/WindowsApps/`, like `python.exe`, even you have not installed the corresponding application.
+
+What's more, the Windows app path `~/AppData/Local/Microsoft/WindowsApps/` is placed in the very front of the system environment variable `Path` by default, which means that if you install Python not via that stub executable, but via your preferred way, the system will still execute the stub executable instead of the real one, which is really annoying.
+
+Before disabling this feature, let's say together: **"Fuck you, Windows!"**
+
+To disable this feature for Python:
+
+1. Open "Settings > Apps > Advanced app settings > App execution aliases";
+2. Find "App Installer (python.exe)" & "App Installer (python3.exe)", and turn off the switch.
+
+The same for other applications.
+
 #### Adjust System Settings
 
 First, adjust system settings with _Winutil_:

@@ -278,7 +278,7 @@ Next, remaning useful softwares:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Brave | `sudo winget add --source winget --exact --id Brave.Brave --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
+| Firefox | `sudo winget add --source winget --exact --id Mozilla.Firefox --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
 | (Optional) Nutstore | `sudo winget add --source winget --exact --id Nutstore.Nutstore --scope machine ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
 | (Optional) KeePassXC | `sudo winget add --source winget --exact --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `sudo winget add --source winget --exact --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
@@ -293,9 +293,9 @@ Next, remaning useful softwares:
 
 I hate _Chrome_ because it's too opinionated, I hate _Edge_ because it's too heavy.
 
-For daily use, I just want a _Chromium_-based browser, who is tiny, clean and customizable. I choose _Brave_ currently.
+I preferred _Firefox_ & _Brave_ currently. Firefox is my daily use browser, while Brave is my secondary browser for some special cases which require _Chromium_ engine.
 
-Daily use extensions:
+My browser extensions:
 
 > [!NOTE]
 >
@@ -305,14 +305,15 @@ Daily use extensions:
 
 | Extension | Source/Install Command | Note |
 | -- | -- | -- |
-| Tampermonkey | [Chrome Extension Marketplace](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used user scripts: [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
-| KeePassXC-Browser | [~](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
-| Dark Reader | [~](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes!!! |
-| Immersive Translate | [~](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh) | / |
-| Vimium C - All by Keyboard | [~](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled |
-| Refined Github | [~](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | Requires your GitHub access token. |
-| File Icons for GitHub and GitLab | [~](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
-| Npmx redirect | [~](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Fuck Npm! |
+| Tampermonkey | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) & [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used user scripts: [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
+| KeePassXC-Browser | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) & [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
+| Dark Reader | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) & [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes!!! |
+| Immersive Translate | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/immersive-translate/) & [Chromium](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh) | / |
+| Vimium C - All by Keyboard | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) & [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled |
+| Refined Github | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) & [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | Requires your GitHub access token. |
+| File Icons for GitHub and GitLab | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) & [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
+| Npmx redirect | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) & [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Fuck Npm! |
+| CSS Stacking Context inspector | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) & [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) | / |
 
 Sometime useful extensions:
 

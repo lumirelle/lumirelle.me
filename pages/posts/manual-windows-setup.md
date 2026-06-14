@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-06-09T03:23+08:00
+update: 2026-06-14T21:37+08:00
 lang: en
-duration: 14min
+duration: 15min
 type: manual
 ---
 

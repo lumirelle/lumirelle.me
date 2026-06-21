@@ -35,6 +35,7 @@ async function run(): Promise<void> {
   const final = `${manual}\n${redirects.map(i => i.join('\t')).join('\n')}`
 
   await fs.writeFile('_dist_redirects', final, 'utf8')
+  console.info('Generate _dist_redirects success!')
 }
 
 await run()

@@ -2,6 +2,7 @@ import type { KnipConfig } from 'knip'
 
 export default {
   entry: ['*.d.ts', 'data/**/*', 'demo/**/*', 'photos/**/*', 'scripts/**/*', 'src/**/*'],
+  ignoreFiles: ['taze.config.ts'],
   ignoreDependencies: [
     '@iconify/json',
     '@lumirelle/oxlint-config',
@@ -9,8 +10,8 @@ export default {
     '@unhead/vue',
     'uno.css',
     'vue-tsc',
+    'taze',
   ],
-  ignoreBinaries: ['which', 'localhost', 'mkcert'],
   ignoreUnresolved: [
     '~/types',
     '~/logics',

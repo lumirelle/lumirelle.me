@@ -62,6 +62,10 @@ run = [
 
 [tasks.redirects]
 run = "bun run ./scripts/redirects.ts"
+depends_post = "copy-dist-redirects"
+
+[tasks.copy-dist-redirects]
+run = "bun run ./scripts/copy-dist-redirects.ts"
 
 [tasks.compress]
 run = "bun run ./scripts/img-compress-staged.ts"

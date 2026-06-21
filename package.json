@@ -98,6 +98,7 @@
     "pixi.js": "catalog:frontend",
     "shiki": "catalog:frontend",
     "simplex-noise": "catalog:frontend",
+    "taze": "^19.14.1",
     "vue": "catalog:frontend",
     "vue-router": "catalog:frontend",
     "vue-router-better-scroller": "catalog:frontend"

@@ -17,3 +17,8 @@ from = "https://lumirelle.netlify.app/*"
 to = "https://lumirelle.me/:splat"
 status = 302
 force = true
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

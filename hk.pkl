@@ -2,40 +2,69 @@ amends "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Config.
 import "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
-    ["oxlint"] = (Builtins.ox_lint) {
-      glob = List("**/*")
-      check = "oxlint --config .oxlintrc.json --no-error-on-unmatched-pattern --deny-warnings {{ files }}"
-      fix = "oxlint --config .oxlintrc.json --no-error-on-unmatched-pattern --deny-warnings --fix {{ files }}"
-    }
-    ["eslint"] = (Builtins.eslint) {
-      batch = false
-      glob = List("**/*")
-      check = "eslint --no-warn-ignored {{ files }}"
-      fix = "eslint --no-warn-ignored --fix {{ files }}"
-      depends = List("oxlint")
-    }
+  // JS & TS & ...
+  ["oxlint"] = Builtins.ox_lint
+  ["eslint"] = (Builtins.eslint) {
+    batch = false
+    glob =
+      List(
+        // JS & TS
+        "*.js",
+        "*.mjs",
+        "*.cjs",
+        "*.jsx",
+        "*.ts",
+        "*.mts",
+        "*.cts",
+        "*.tsx",
+        // Markdown
+        "*.md",
+        "*.mdc",
+        "*.mdx",
+        // JSON
+        "*.json",
+        "*.jsonc",
+        // YAML
+        "*.yaml",
+        "*.yml",
+        // TOML
+        "*.toml",
+        // Vue
+        "*.vue",
+      )
+    depends = List("oxlint")
+  }
+  ["tsc"] = Builtins.tsc
 
-    ["tsc"] = (Builtins.tsc) {
-      check = "vue-tsc --build --noEmit"
-    }
+  // Configurations
+  ["pkl"] = (Builtins.pkl) {
+    glob = List("**/*.pkl")
+    check = "pkl eval {{files}}"
+  }
+  ["pkl-format"] {
+    glob = List("**/*.pkl")
+    check = "pkl format --diff-name-only {{ files }}"
+    fix = "pkl format --write {{ files }}"
+  }
 
-    ["knip"] = (Builtins.knip) {
-      check = "knip-bun --no-progress --directory {{workspace}}"
-      fix = "knip-bun --fix --no-progress --directory {{workspace}}"
-    }
+  // Unused
+  ["knip"] = (Builtins.knip) {
+    check = "knip-bun --no-progress --directory {{workspace}}"
+    fix = "knip-bun --fix --no-progress --directory {{workspace}}"
+  }
 }
 
 hooks {
-    ["pre-commit"] {
-        fix = true
-        stash = "git"
-        steps = linters
-    }
-    ["fix"] {
-        fix = true
-        steps = linters
-    }
-    ["check"] {
-        steps = linters
-    }
+  ["pre-commit"] {
+    fix = true
+    stash = "git"
+    steps = linters
+  }
+  ["fix"] {
+    fix = true
+    steps = linters
+  }
+  ["check"] {
+    steps = linters
+  }
 }

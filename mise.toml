@@ -1,20 +1,23 @@
 [env]
 _.path = [ "./node_modules/.bin" ]
 
+[hooks]
+# Only running self-update on Netlify,
+# to update mise before installing tools,
+# because Netlify's built-in mise is outdated.
+preinstall = "bun run ./scripts/self-update-if-netlify.sh"
+
 [tools]
+# Environments
 bun = "latest"
-# The default "aube" does not included in netlify's built-in mise registry
-"npm:@endevco/aube" = { version = "latest", depends = "bun" }
+aube = "latest"
+# Linters & Formatters
 pkl = "latest"
 hk = "latest"
+# Build tools
+"npm:premove" = "latest"
 
-[hooks]
-enter = [
-  "hk install",
-  { task = "prepare" },
-]
-
-[deps.auto-aube]
+[deps.bun-aube]
 sources = [
   "package.json",
   "bun.lock"
@@ -24,12 +27,6 @@ outputs = [ "node_modules/" ]
 # we use `bun install --lockfile-only` to generate a lockfile
 run = "bun install --lockfile-only && aube install"
 auto = true
-
-[tasks.pre-commit]
-run = "hk run pre-commit"
-
-[tasks.prepare]
-run = "bun run ./scripts/cert.ts"
 
 [tasks.dev]
 run = "vite --port 3333 --open"
@@ -54,8 +51,9 @@ run = "bun run ./scripts/rss.ts"
 
 [tasks.static]
 run = [
-  "aubx premove temp",
-  "aubx degit lumirelle/static temp --force",
+  "premove temp",
+  "git clone https://github.com/lumirelle/static temp",
+  "premove temp/.git",
   "bun run ./scripts/copy-sponsors.ts"
 ]
 
@@ -69,7 +67,7 @@ run = "bun run ./scripts/img-compress-staged.ts"
 run = "bun run ./scripts/photos-manage.ts"
 
 [tasks.start]
-depends = "vite preview"
+run = "vite preview"
 
 [tasks.check]
 run = "hk check --all"

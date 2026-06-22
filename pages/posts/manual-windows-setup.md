@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-06-14T21:37+08:00
+update: 2026-06-22T11:35+08:00
 lang: en
 duration: 15min
 type: manual
@@ -285,7 +285,6 @@ Next, remaning useful softwares:
 | Neovim | `sudo winget add --scope machine --source winget --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> / |
 | Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
 | Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
-| (Optional) Rime | `sudo winget add --source winget --exact --id Rime.Weasel --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Chinese input Command, with [wanxiang schema](https://github.com/amzxyz/rime_wanxiang/releases) (I use `rime-wanxiang-base.zip` and `wanxiang-lts-zh-hans.gram`).<br><br>If you are not using Chinese, you can skip it. |
 | RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
 | Revo Uninstaller | Free:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
@@ -308,7 +307,7 @@ My browser extensions:
 | Tampermonkey | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) & [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | Used user scripts: [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
 | KeePassXC-Browser | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) & [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
 | Dark Reader | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) & [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes!!! |
-| Immersive Translate | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/immersive-translate/) & [Chromium](https://chromewebstore.google.com/detail/immersive-translate-trans/bpoadfkcbjbfhfodiogcnhhhpibjhbnh) | / |
+| Read Frog | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/read-frog-open-ai-translator/) & [Chromium](https://chromewebstore.google.com/detail/read-frog-translate-learn/modkelfkcfjpgbfmnbnllalkiogfofhb) | / |
 | Vimium C - All by Keyboard | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) & [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled |
 | Refined Github | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) & [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | Requires your GitHub access token. |
 | File Icons for GitHub and GitLab | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) & [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
@@ -335,6 +334,7 @@ Install the tool softwares below as you need:
 | DISM++ | `sudo winget add --source winget --exact --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
 | WeChat | `sudo winget add --source winget --exact --id Tencent.WeChat.Universal --scope machine` | / |
 | QQ | `sudo winget add --source winget --exact --id Tencent.QQ.NT --scope machine` | / |
+| Thunderbird | `sudo winget add --source winget --exact --id Mozilla.Thunderbird --scope machine` | / |
 | Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
 | Steam | `sudo winget add --scope machine --source winget --exact --id Valve.Steam` | / |
@@ -346,12 +346,9 @@ Install the dev softwares below as you need:
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | WSL | `wsl --install` | Requires reboot. |
-| Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | / |
-| ~~Visual Studio~~ | ~~[Official Website](https://visualstudio.microsoft.com/downloads/)~~ | ~~Bundles **MSVC (Microsoft Visual C++) compiler**. Do we need this?~~ |
-| ~~JetBrains Toolbox~~ | ~~[Official Website](https://www.jetbrains.com/toolbox-app/)~~ | ~~Do we need this?~~ |
-| ~~JetBrains IntelliJ IDEA~~ | ~~Install from JetBrains Toolbox.~~ | ~~Do we need this?~~ |
+| Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
 | Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
-| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. Usually, we don't need to install this manually. |
+| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
 
 Some one-time use software:
 

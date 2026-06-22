@@ -20,9 +20,9 @@ import type {
 
 declare module 'vue-router' {
   interface TypesConfig {
-    ParamParsers:
-      | never
+    _ParamParsers: {}
     RouteNamedMap: import('vue-router/auto-routes').RouteNamedMap
+    _RouteFileInfoMap: import('vue-router/auto-routes')._RouteFileInfoMap
   }
 }
 
@@ -315,17 +315,23 @@ declare module 'vue-router/auto-routes' {
         | '/'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/[...404].md': {
       routes:
         | '/[...404]'
       views:
         | never
+      pathParamNames:
+        | '404'
     }
     'pages/blog.md': {
       routes:
         | '/blog'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/bookmarks.md': {
@@ -333,11 +339,15 @@ declare module 'vue-router/auto-routes' {
         | '/bookmarks'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/demos.md': {
       routes:
         | '/demos'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/manuals.md': {
@@ -345,11 +355,15 @@ declare module 'vue-router/auto-routes' {
         | '/manuals'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/media.md': {
       routes:
         | '/media'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/notes.md': {
@@ -357,11 +371,15 @@ declare module 'vue-router/auto-routes' {
         | '/notes'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/photos.md': {
       routes:
         | '/photos'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/index.md': {
@@ -369,11 +387,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/code-style-code-organization.md': {
       routes:
         | '/posts/code-style-code-organization'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/code-style-directory-names.md': {
@@ -381,11 +403,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/code-style-directory-names'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/code-style-symbol-naming-patterns.md': {
       routes:
         | '/posts/code-style-symbol-naming-patterns'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/code-style-title-case.md': {
@@ -393,11 +419,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/code-style-title-case'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/example-ts-custom-fetch-function.md': {
       routes:
         | '/posts/example-ts-custom-fetch-function'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/manual-bash-script.md': {
@@ -405,11 +435,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/manual-bash-script'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/manual-computer-network.md': {
       routes:
         | '/posts/manual-computer-network'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/manual-css-advanced-grammar.md': {
@@ -417,11 +451,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/manual-css-advanced-grammar'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/manual-git.md': {
       routes:
         | '/posts/manual-git'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/manual-html-advanced-grammar.md': {
@@ -429,11 +467,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/manual-html-advanced-grammar'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/manual-js-advanced-grammar.md': {
       routes:
         | '/posts/manual-js-advanced-grammar'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/manual-js-pm.md': {
@@ -441,11 +483,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/manual-js-pm'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/manual-neovim-lazyvim.md': {
       routes:
         | '/posts/manual-neovim-lazyvim'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/manual-project-create.md': {
@@ -453,11 +499,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/manual-project-create'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/manual-ts-advanced-grammar.md': {
       routes:
         | '/posts/manual-ts-advanced-grammar'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/manual-vue-advanced-grammar.md': {
@@ -465,11 +515,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/manual-vue-advanced-grammar'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/manual-windows-setup.md': {
       routes:
         | '/posts/manual-windows-setup'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/misc-bun-vs-nodejs.md': {
@@ -477,11 +531,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/misc-bun-vs-nodejs'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/misc-first-time-trying-roller-coaster.md': {
       routes:
         | '/posts/misc-first-time-trying-roller-coaster'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/misc-programming-fonts.md': {
@@ -489,11 +547,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/misc-programming-fonts'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/misc-vite-and-unbundled.md': {
       routes:
         | '/posts/misc-vite-and-unbundled'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/perf-http-versions.md': {
@@ -501,11 +563,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/perf-http-versions'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/perf-manually-split-chunks.md': {
       routes:
         | '/posts/perf-manually-split-chunks'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/posts/project-engineering-categorize-your-dependencies.md': {
@@ -513,11 +579,15 @@ declare module 'vue-router/auto-routes' {
         | '/posts/project-engineering-categorize-your-dependencies'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/posts/test-recursive-mono-nbsp-rendering.md': {
       routes:
         | '/posts/test-recursive-mono-nbsp-rendering'
       views:
+        | never
+      pathParamNames:
         | never
     }
     'pages/projects.md': {
@@ -525,17 +595,23 @@ declare module 'vue-router/auto-routes' {
         | '/projects'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/sponsors-list.md': {
       routes:
         | '/sponsors-list'
       views:
         | never
+      pathParamNames:
+        | never
     }
     'pages/use.md': {
       routes:
         | '/use'
       views:
+        | never
+      pathParamNames:
         | never
     }
   }

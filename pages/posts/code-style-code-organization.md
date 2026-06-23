@@ -1,9 +1,9 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-04-22T22:43+08:00
+update: 2026-06-23T23:34+08:00
 lang: en
-duration: 9min
+duration: 13min
 type: note
 ---
 
@@ -387,9 +387,9 @@ Of course, code organization is not a panacea, excessive code organization can c
 
 Before we do these, we must pay attention to the **motivation and quality**.
 
-### Do Not Separate Child from Parent
+### Do Not Separate Related Codes
 
-Heavily dependent codes should not be separated to different files, otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
+Heavily dependent codes should not be separated to different places, otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
 
 > [!Note]
 >
@@ -398,6 +398,8 @@ Heavily dependent codes should not be separated to different files, otherwise it
 <table><tbody>
 
 <tr><th valign="top">
+
+Bad Example:
 
 _src/composables/use-form-component.ts_
 
@@ -538,6 +540,8 @@ const {
 
 </th><th valign="top">
 
+Good Example:
+
 _src/composables/use-form-and-selector-component.ts_
 
 ```ts
@@ -663,6 +667,327 @@ function isStrictFalse(value: unknown): value is false {
 
 </tbody></table>
 
+### Do Extract But Not Separate for Unreusable but Heavy Codes
+
+If a code is heavy and reusable, we can extract it to a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-related-codes). But if a code is unreusable, for example, it's a specific page's logic, we can still extract them to a composed big function in the same file.
+
+<table><tbody>
+
+<tr><th valign="top">
+
+Bad Example (Not Extracted):
+
+_src/views/bad-page.vue_
+
+```vue
+<script setup lang="ts">
+// [!code focus:57]
+// imports ...
+
+// Too many top-level codes,
+// and we cannot see the
+// structure of the page clearly.
+
+interface PageModule {
+  id: string
+  name: string
+  payload: Record<string, any>
+}
+
+const pageModules = useFetch(
+  '/api/page-modules',
+  { key: 'page-modules' }
+)
+
+function parseHead(modules: PageModule[]) {
+  let title = ''
+  let description = ''
+  let keywords: string[] = []
+  // ...
+  return {
+    title,
+    description,
+    keywords,
+  }
+}
+const head = computed(
+  () => parseHead(pageModules.value)
+)
+useHead(head)
+
+const COMPONENT_MAP = {
+  'comp-1': () => {
+    return import('~/components/Comp1.vue')
+  },
+  'comp-2': () => {
+    return import('~/components/Comp2.vue')
+  },
+  // ...
+}
+const pageComponents = computed(() => {
+  return pageModules.value.map((module) => {
+    const component = COMPONENT_MAP[module.name]
+    if (!component) {
+      throw new Error(
+        `Component ${module.name} not found`
+      )
+    }
+    return {
+      id: module.id,
+      component,
+      payload: module.payload,
+    }
+  })
+})
+</script>
+
+<template>
+  // [!code focus:11]
+  <div>
+    <template
+      v-for="module in pageComponents"
+      :key="module.id"
+    >
+      <component
+        :is="module.component"
+        v-bind="module.payload"
+      />
+    </template>
+  </div>
+</template>
+```
+
+</th><th valign="top">
+
+Bad Example (Extracted to a separate file but unreusable):
+
+_src/composables/useTemplatePage.ts_
+
+```ts
+// imports ...
+
+// A one time use composable...
+
+interface PageModule {
+  id: string
+  name: string
+  payload: Record<string, any>
+}
+
+export function useTemplatePage() {
+  const pageModules = useFetch(
+    '/api/page-modules',
+    { key: 'page-modules' }
+  )
+
+  function parseHead(modules: PageModule[]) {
+    let title = ''
+    let description = ''
+    let keywords: string[] = []
+    // ...
+    return {
+      title,
+      description,
+      keywords,
+    }
+  }
+  const head = computed(
+    () => parseHead(pageModules.value)
+  )
+  useHead(head)
+
+  const COMPONENT_MAP = {
+    'comp-1': () => {
+      return import('~/components/Comp1.vue')
+    },
+    'comp-2': () => {
+      return import('~/components/Comp2.vue')
+    },
+  // ...
+  }
+  const pageComponents = computed(() => {
+    return pageModules.value.map((module) => {
+      const component = COMPONENT_MAP[module.name]
+      if (!component) {
+        throw new Error(
+          `Component ${module.name} not found`
+        )
+      }
+      return {
+        id: module.id,
+        component,
+        payload: module.payload,
+      }
+    })
+  })
+
+  return {
+    pageComponents,
+  }
+}
+```
+
+_src/views/bad-page.vue_
+
+```vue
+<script setup lang="ts">
+// [!code focus:1]
+const { pageComponents } = useTemplatePage()
+</script>
+
+<template>
+  // [!code focus:11]
+  <div>
+    <template
+      v-for="module in pageComponents"
+      :key="module.id"
+    >
+      <component
+        :is="module.component"
+        v-bind="module.payload"
+      />
+    </template>
+  </div>
+</template>
+```
+
+</th></tr>
+
+</tbody></table>
+
+The only right code looks like:
+
+_src/views/good-page.vue_
+
+```vue
+<script setup lang="ts">
+// [!code focus:11]
+// imports ...
+
+interface PageModule {
+  id: string
+  name: string
+  payload: Record<string, any>
+}
+
+const { pageComponents } = useTemplatePage()
+
+// --- Main logic above, details below ! ---
+
+function useTemplatePage() {
+  const pageModules = useFetch(
+    '/api/page-modules',
+    { key: 'page-modules' }
+  )
+
+  function parseHead(modules: PageModule[]) {
+    let title = ''
+    let description = ''
+    let keywords: string[] = []
+    // ...
+    return {
+      title,
+      description,
+      keywords,
+    }
+  }
+  const head = computed(
+    () => parseHead(pageModules.value)
+  )
+  useHead(head)
+
+  const COMPONENT_MAP = {
+    'comp-1': () => {
+      return import('~/components/Comp1.vue')
+    },
+    'comp-2': () => {
+      return import('~/components/Comp2.vue')
+    },
+  // ...
+  }
+  const pageComponents = computed(() => {
+    return pageModules.value.map((module) => {
+      const component = COMPONENT_MAP[module.name]
+      if (!component) {
+        throw new Error(
+          `Component ${module.name} not found`
+        )
+      }
+      return {
+        id: module.id,
+        component,
+        payload: module.payload,
+      }
+    })
+  })
+
+  return {
+    pageComponents,
+  }
+}
+</script>
+
+<template>
+  // [!code focus:11]
+  <div>
+    <template
+      v-for="module in pageComponents"
+      :key="module.id"
+    >
+      <component
+        :is="module.component"
+        v-bind="module.payload"
+      />
+    </template>
+  </div>
+</template>
+```
+
+For plain JavaScript / TypeScript, we can still achieve this by using a big composed function with nested functions:
+
+_src/utils/complex-logic.ts_
+
+```ts
+// [!code focus:7]
+export function complexLogic() {
+  const context = createContext()
+  setup(context)
+  process(context)
+  teardown(context)
+
+  // --- Main logic above, details below ! ---
+
+  function createContext() {
+    // ...
+  }
+
+  function setup(ctx) {
+    // ...
+  }
+
+  function process(ctx) {
+    // ...
+  }
+
+  function teardown(ctx) {
+    // ...
+  }
+// [!code focus:1]
+}
+```
+
+_src/index.ts_
+
+```ts
+import { complexLogic } from './utils/complex-logic'
+
+// ...
+
+complexLogic()
+
+// ...
+```
+
 ### If Your Team Only Care About Deadlines But Not Code Quality...
 
 As the saying goes, when in Rome, do as the Romans do; one must learn to be tactful in life.
@@ -687,10 +1012,14 @@ I mean, in this shit-like world, the best practice is to make up for the situati
 
 ## Examples
 
+### Example: Per File, Per Focus
+
 A simple example, one day I found the `vite.config.ts` file in my project is getting too large and complex, the root cause is that there are too many plugins with heavy logic. The solution is quite simple, just move each plugin (of course, only the plugins with additional logic are worth to be moved) into a separate file.
 
 You can see that commit details [here](https://github.com/lumirelle/lumirelle.me/commit/7c1594db4c5cd5bd422659f1ea820da75e3f893c#diff-6a3b01ba97829c9566ef2d8dc466ffcffb4bdac08706d3d6319e42e0aa6890dd).
 
-## Antfu's Code Style
+## References
+
+### Antfu's Code Style
 
 [Antfu's code style](https://github.com/antfu/skills/blob/main/skills/antfu/SKILL.md) is a good reference for writing clean and maintainable code.

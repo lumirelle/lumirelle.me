@@ -1,5 +1,5 @@
 export type MediaType = 'anime' | 'book' | 'movie' | 'drama' | 'game' | 'song'
-export type MediaState = 'done' | 'doing' | 'todo'
+type MediaState = 'done' | 'doing' | 'todo'
 
 export interface MediaRecord {
   name: string
@@ -10,17 +10,17 @@ export interface MediaRecord {
   lang?: string
 }
 
-export const anime: MediaRecord[] = []
+const anime: MediaRecord[] = []
 
-export const book: MediaRecord[] = []
+const book: MediaRecord[] = []
 
-export const movie: MediaRecord[] = []
+const movie: MediaRecord[] = []
 
-export const drama: MediaRecord[] = []
+const drama: MediaRecord[] = []
 
-export const game: MediaRecord[] = []
+const game: MediaRecord[] = []
 
-export const song = []
+const song: MediaRecord[] = []
 
 export const media: Record<MediaType, MediaRecord[]> = {
   anime,

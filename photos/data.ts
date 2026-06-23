@@ -1,4 +1,4 @@
-export interface PhotoMate {
+interface PhotoMate {
   text?: string
   lang?: string
 }

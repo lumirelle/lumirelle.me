@@ -2,7 +2,7 @@
 experimental = true
 
 [env]
-_.path = [ "./node_modules/.bin" ]
+_.path = ["./node_modules/.bin"]
 
 [hooks]
 # Only running self-update on Netlify,
@@ -12,20 +12,16 @@ preinstall = "bun run ./scripts/self-update-if-netlify.sh"
 
 [tools]
 # Environments
-bun = "latest"
-aube = "latest"
+bun = "1.3.14"
+aube = "1.22.0"
 # Linters & Formatters
-pkl = "latest"
-hk = "latest"
-# Build tools
-"npm:premove" = "latest"
+hk = "1.48.0"
+pkl = "0.31.1"
+stylua = "2.5.2"
 
 [deps.bun-aube]
-sources = [
-  "package.json",
-  "bun.lock"
-]
-outputs = [ "node_modules/" ]
+sources = ["package.json", "bun.lock"]
+outputs = ["node_modules/"]
 # Because aube's output lockfile has bugs,
 # we use `bun install --lockfile-only` to generate a lockfile
 run = "bun install --lockfile-only && aube install"
@@ -41,7 +37,7 @@ run = [
   "vite-ssg build",
   { tasks = [
     "copy-fonts",
-    "rss"
+    "rss",
   ] },
   { task = "redirects" },
 ]
@@ -57,7 +53,7 @@ run = [
   "premove temp",
   "git clone https://github.com/lumirelle/static temp",
   "premove temp/.git",
-  "bun run ./scripts/copy-sponsors.ts"
+  "bun run ./scripts/copy-sponsors.ts",
 ]
 
 [tasks.redirects]

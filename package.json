@@ -1,7 +1,7 @@
 {
   "type": "module",
   "private": true,
-  "packageManager": "aube@1.17.1",
+  "packageManager": "aube@1.22.0",
   "workspaces": {
     "packages": [],
     "catalogs": {
@@ -18,7 +18,7 @@
         "tinyglobby": "^0.2.17"
       },
       "types": {
-        "@lumirelle/tsconfig": "^0.1.4",
+        "@lumirelle/tsconfig": "^0.1.5",
         "@types/bun": "^1.3.14",
         "@types/d3-hierarchy": "^3.1.7",
         "@types/diacritics": "^1.3.3",
@@ -41,13 +41,14 @@
         "markdown-it-link-attributes": "^4.0.1",
         "markdown-it-magic-link": "^0.1.4",
         "markdown-it-table-of-contents": "^1.2.0",
+        "premove": "^4.0.0",
         "sharp": "^0.35.2",
         "unocss": "^66.7.2",
         "unplugin-auto-import": "^21.0.0",
         "unplugin-icons": "^23.0.1",
         "unplugin-vue-components": "^32.1.0",
         "unplugin-vue-markdown": "^32.0.0",
-        "vite": "^8.0.16",
+        "vite": "^8.1.0",
         "vite-plugin-inspect": "^12.0.0-beta.3",
         "vite-plugin-optimize-exclude": "^0.0.1",
         "vite-ssg": "^28.3.0",
@@ -70,16 +71,16 @@
         "vue-router-better-scroller": "^0.0.0"
       },
       "icons": {
-        "@iconify/json": "^2.2.488"
+        "@iconify/json": "^2.2.489"
       },
       "check": {
         "@antfu/eslint-config": "^9.0.0",
-        "@lumirelle/oxlint-config": "^0.9.1",
+        "@lumirelle/oxlint-config": "^0.10.1",
         "@unocss/eslint-plugin": "^66.7.2",
         "eslint": "^10.5.0",
-        "eslint-plugin-oxlint": "^1.70.0",
+        "eslint-plugin-oxlint": "^1.71.0",
         "eslint-plugin-vuejs-accessibility": "^2.5.0",
-        "oxlint": "^1.70.0",
+        "oxlint": "^1.71.0",
         "oxlint-tsgolint": "^0.23.0",
         "vue-tsc": "^3.3.5"
       }
@@ -130,7 +131,7 @@
     "exifreader": "catalog:dev",
     "feed": "catalog:dev",
     "gray-matter": "catalog:build",
-    "knip": "^6.17.1",
+    "knip": "^6.18.0",
     "markdown-exit": "catalog:build",
     "markdown-it-anchor": "catalog:build",
     "markdown-it-footnote": "catalog:build",
@@ -141,6 +142,7 @@
     "oxlint": "catalog:check",
     "oxlint-tsgolint": "catalog:check",
     "pathe": "catalog:dev",
+    "premove": "catalog:build",
     "sharp": "catalog:build",
     "simple-git": "catalog:dev",
     "tinyglobby": "catalog:dev",
@@ -158,8 +160,9 @@
     "vue-tsc": "catalog:check"
   },
   "overrides": {
-    "@types/markdown-it": "npm:markdown-exit@1.0.0-beta.9",
-    "markdown-it": "npm:markdown-exit@1.0.0-beta.9",
+    "@types/markdown-it": "npm:markdown-exit@1.1.0-beta.2",
+    "markdown-exit": "catalog:build",
+    "markdown-it": "npm:markdown-exit@1.1.0-beta.2",
     "vite": "catalog:build",
     "vue-router": "catalog:frontend"
   }

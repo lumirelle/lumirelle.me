@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 
-export const isDark = useDark()
+const isDark = useDark()
+
 export const chineseOnly = useLocalStorage('lumirelle-chinese-only', false)
 export const galleryView = useLocalStorage<'cover' | 'contain'>('lumirelle-gallery-view', 'cover')
 

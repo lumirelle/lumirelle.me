@@ -1,3 +1,4 @@
+import type { Sharp } from 'sharp'
 import fs from 'node:fs/promises'
 import { styleText } from 'node:util'
 import sharp from 'sharp'
@@ -5,7 +6,7 @@ import sharp from 'sharp'
 const maxSize = 1440
 
 interface CompressSharpReturn {
-  image: sharp.Sharp
+  image: Sharp
   outBuffer: Buffer
   size: number
   outSize: number
@@ -15,7 +16,7 @@ interface CompressSharpReturn {
 }
 
 export async function compressSharp(
-  image: sharp.Sharp,
+  image: Sharp,
   inBuffer: Buffer,
   inFile: string,
   outFile: string,

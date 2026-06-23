@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Naming Patterns'
 date: 2025-09-23T15:58+08:00
-update: 2026-04-22T14:55+08:00
+update: 2026-06-23T22:57+08:00
 lang: en
 duration: 14min
 type: note
@@ -21,13 +21,15 @@ This article will introduce some naming patterns I preferred in my projects.
 
 In a word, the rule of thumb is: **single responsibility principle**, which means each thing the symbol targets to should have only one reason to change, and this reason must be reflected in the symbol name.
 
-> "Respond to all changes with constancy." -- My elementary school math teacher
+> "Respond to all changes with never changing." -- My elementary school math teacher
 
 To find a consistent way to handle most of cases, here we borrow the [BEM naming pattern](https://getbem.com/), and assign Block, Element, Modifier with different meanings based on the actual context. All of below naming patterns are based on BEM naming pattern.
 
+But, in general, **Element** is the main target of the variable, **Block** shows the scope of the main target, **Modifier** may be the extra description or qualifier, just like the general meaning of BEM.
+
 ## Variable Naming Pattern
 
-For variables, the naming pattern is based on the stored data.
+For variables, the naming pattern is based on the stored data, so it's Element.
 
 TL&DR: **Element is a subject shows what can we call this data, Block is a scope property shows who does the Element belong to, Modifier is a descriptive property shows what special characteristics this data has.**
 
@@ -173,9 +175,9 @@ const tableColumnConfigs = ref([
 
 ## Function Naming Pattern
 
-For functions, the naming pattern is based on the use.
+For functions, the naming pattern is based on the use, so it's Element.
 
-TL&DR: **Block is a predicate shows what the functions does, Element is a object (antonyms of the subject) with its properties shows what the function returns / calls with, Modifier is a property shows what special characteristics this function has.**
+TL&DR: **Element is a predicate shows what the functions does, Block is a object (antonyms of the subject) which may has additional descriptive properties shows what the function returns / calls with, Modifier is a descriptive property shows what special characteristics this function has.**
 
 A more precise statements are:
 
@@ -183,22 +185,22 @@ A more precise statements are:
 
   ```ts
   // "add" is a predicate,
-  // so we recognize "add" as a Block.
+  // so we recognize "add" as a Element.
   declare function add(a: number, b: number): number
   ```
 
-- For required **object (antonyms of the subject) with its properties**, we recognize it as **Element**, which shows **what the function returns / calls with**. It can be omitted **only if** the Element can be easily inferred from the context, for better readability;
+- For required **object (antonyms of the subject) which may has additional descriptive properties**, we recognize it as **Block**, which shows **what the function returns / calls with**. It can be omitted **only if** the Block can be easily inferred from the context, for better readability;
 
   ```ts
   // "Number" is the object of this function,
-  // so we recognize "add" as a Block, "Number" as an Element.
+  // so we recognize "Number" as an Block, "add" as a Element.
   declare function addNumber(a: number, b: number): number
 
   declare const MathUtils: {
     // "add" is a verb, "Number" is the object of this function,
     // because it's a method of "MathUtils",
-    // we can easily infer the Element is "Number",
-    // so we can omit the Element for better readability.
+    // we can easily infer the Block is "Number",
+    // so we can omit the Block for better readability.
     add: (a: number, b: number) => number
   }
 
@@ -207,11 +209,11 @@ A more precise statements are:
   declare function countUserPosts(userId: string): number
   ```
 
-- For optional **properties**, we recognize them as **Modifier**. It's **required if** there are similar functions with the same Block and Element but different characteristics.
+- For optional **descriptive properties**, we recognize them as **Modifier**. It's **required if** there are similar functions with the same Block and Element but different characteristics.
 
   ```ts
   // "ById" is a property of this function,
-  // so we recognize "ById" as a Modifier, "get" as a Block, "User" as an Element.
+  // so we recognize "ById" as a Modifier, "User" as an Block, "get" as a Element.
   declare function getUserById(id: string): User
   ```
 
@@ -224,7 +226,7 @@ For some basic examples:
 ```ts
 // [!code focus:4]
 /**
- * Block is "get", Element is "User", Modifier is "ById".
+ * Block is "User", Element is "get", Modifier is "ById".
  */
 export async function getUserById(id: Pick<User, 'id'>): Promise<User> {
   return await request.get('/user', { params: { id } })
@@ -232,7 +234,7 @@ export async function getUserById(id: Pick<User, 'id'>): Promise<User> {
 
 // [!code focus:4]
 /**
- * "Block" is "list", "Element" is "ActiveUsers".
+ * "Block" is "ActiveUsers", "Element" is "list".
  */
 export async function listActiveUsers(): Promise<User[]> {
   return await request.get('/users', { params: { status: 'active' } })
@@ -262,7 +264,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Get single user.
    *
-   * Block is "get", Element is "User".
+   * Block is "User", Element is "get".
    */
   export async function getUser(id: Pick<User, 'id'>): Promise<User> {
     return await request.get('/user', { params: { id } })
@@ -272,7 +274,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * List multiple users without any conditions.
    *
-   * Block is "list", Element is "Users".
+   * Block is "Users", Element is "list".
    */
   export async function listUsers(): Promise<User[]> {
     return await request.get('/users')
@@ -281,7 +283,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * List active users.
    *
-   * Block is "list", Element is "ActiveUsers".
+   * Block is "ActiveUsers", Element is "list".
    */
   export async function listActiveUsers(): Promise<User[]> {
     return await request.get('/users', { params: { status: 'active' } })
@@ -290,7 +292,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * List users with dynamic conditions.
    *
-   * Block is "list", Element is "Users", Modifier is "ByConditions".
+   * Block is "Users", Element is "list", Modifier is "ByConditions".
    */
   export async function listUsersByConditions(params: Partial<User>): Promise<User[]> {
     return await request.get('/users', { params })
@@ -299,7 +301,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * List users by dynamic status.
    *
-   * Block is "list", Element is "Users", Modifier is "ByStatus".
+   * Block is "Users", Element is "list", Modifier is "ByStatus".
    */
   export async function listUsersByStatus(status: Pick<User, 'status'>): Promise<User[]> {
     return await request.get('/users', { params: { status } })
@@ -310,7 +312,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
    * Search users with keyword. This keyword maybe match multiple fields. For
    * example, name, email, phone, etc.
    *
-   * Block is "search", Element is "Users", Modifier is "ByKeyword".
+   * Block is "Users", Element is "search", Modifier is "ByKeyword".
    */
   export async function searchUsers(keyword: string): Promise<User[]> {
     return await request.get('/users/search', { params: { q: keyword } })
@@ -320,7 +322,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Query users with pagination.
    *
-   * Block is "query", Element is "Users".
+   * Block is "Users", Element is "query".
    */
   export async function queryUsers(params: QueryParam<User>): Promise<Page<User>> {
     return await request.get('/users/query', { params })
@@ -339,7 +341,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Create new user.
    *
-   * Block is "create", Element is "User".
+   * Block is "User", Element is "create".
    */
   export async function createUser(data: Partial<User>): Promise<User> {
     return await request.post('/user', { data })
@@ -349,7 +351,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Add user to a group.
    *
-   * Block is "add", Element is "User", Modifier is "ToGroup".
+   * Block is "User", Element is "add", Modifier is "ToGroup".
    */
   export async function addUserToGroup(
     userId: Pick<User, 'id'>,
@@ -362,7 +364,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Register new user.
    *
-   * Block is "register", Element is "User".
+   * Block is "User", Element is "register".
    */
   export async function registerUser(data: Partial<SensitiveUser>): Promise<User> {
     return await request.post('/user/register', { data })
@@ -372,7 +374,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Login user.
    *
-   * Block is "login", Element is "User".
+   * Block is "User", Element is "login".
    */
   export async function loginUser(
     username: Pick<SensitiveUser, 'username'>,
@@ -385,7 +387,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Upload user avatar.
    *
-   * Block is "upload", Element is "UserAvatar".
+   * Block is "UserAvatar", Element is "upload".
    */
   export async function uploadUserAvatar(userId: Pick<User, 'id'>, file: File): Promise<string> {
     const formData = new FormData()
@@ -407,7 +409,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Update (partially or fully) existing user.
    *
-   * Block is "update", Element is "User".
+   * Block is "User", Element is "update".
    */
   export async function updateUser(
     data: Pick<User, 'id'> & Partial<Omit<User, 'id'>>,
@@ -421,7 +423,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Patch (partially update) existing user.
    *
-   * Block is "patch", Element is "User".
+   * Block is "User", Element is "patch".
    */
   export async function patchUserStatus(
     id: Pick<User, 'id'>,
@@ -434,7 +436,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Replace (fully update) existing user.
    *
-   * Block is "replace", Element is "User".
+   * Block is "User", Element is "replace".
    */
   export async function replaceUser(data: User): Promise<User> {
     return await request.put('/user/replace', { data })
@@ -452,7 +454,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Delete existing user.
    *
-   * Block is "delete", Element is "User".
+   * Block is "User", Element is "delete".
    */
   export async function deleteUser(id: Pick<User, 'id'>): Promise<void> {
     return await request.delete('/user', { data: { id } })
@@ -462,7 +464,7 @@ Of course, with endpoint functions, we can futher induction some common Blocks (
   /**
    * Revoke user access.
    *
-   * Block is "revoke", Element is "UserAccess".
+   * Block is "UserAccess", Element is "revoke".
    */
   export async function revokeUserAccess(id: Pick<User, 'id'>): Promise<void> {
     return await request.delete('/user/access', { data: { id } })
@@ -478,7 +480,7 @@ There is a special case we need to pay attention to: **Upsert (Update or insert)
   /**
    * Upsert (update or insert) existing user.
    *
-   * Block is "upsert", Element is "User".
+   * Block is "User", Element is "upsert".
    */
   export async function upsertUser(data: User): Promise<User> {
     return await request.put('/user/upsert', { data })
@@ -502,7 +504,7 @@ For some basic examples:
 ```ts
 // [!code focus:4]
 /**
- * Block is "Has", Element is "Permission", Modifier is "user".
+ * Block is "Permission", Element is "Has", Modifier is "user".
  */
 export function userHasPermission(user: User, permission: Permission): boolean {
   for (const role of user.roles) {
@@ -515,7 +517,7 @@ export function userHasPermission(user: User, permission: Permission): boolean {
 }
 // [!code focus:4]
 /**
- * Block is "Is", Element is "VIP", Modifier is "user".
+ * Block is "VIP", Element is "Is", Modifier is "user".
  */
 export function userIsVIP(user: User): boolean {
   return user.roles.includes('vip')
@@ -572,7 +574,7 @@ For some basic examples:
 <script setup lang="ts">
 // [!code focus:4]
 /**
- * Block is "before", Element is "UserInfoChange".
+ * Block is "UserInfoChange", Element is "before".
  */
 async function beforeUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserInfo | null) {
   console.log('User info changed before:', oldUserInfo, newUserInfo)
@@ -580,7 +582,7 @@ async function beforeUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: U
 
 // [!code focus:4]
 /**
- * Block is "on", Element is "UserInfoChange".
+ * Block is "UserInfoChange", Element is "on".
  */
 async function onUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserInfo | null) {
   userInfo.value = newUserInfo
@@ -589,7 +591,7 @@ async function onUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserI
 
 // [!code focus:4]
 /**
- * Block is "after", Element is "UserInfoChange".
+ * Block is "UserInfoChange", Element is "after".
  */
 async function afterUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: UserInfo | null) {
   console.log('User info changed after:', oldUserInfo, newUserInfo)
@@ -597,7 +599,7 @@ async function afterUserInfoChange(oldUserInfo: UserInfo | null, newUserInfo: Us
 
 // [!code focus:4]
 /**
- * Block is "on", Element is "AnEvent", Modifier is "Success".
+ * Block is "AnEvent", Element is "on", Modifier is "Success".
  */
 async function onAnEventSuccess(result: any) {
   console.log('An event success:', result)

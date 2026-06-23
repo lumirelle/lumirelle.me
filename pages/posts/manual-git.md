@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-06-09T03:45+08:00
+update: 2026-06-23T23:43+08:00
 lang: en
-duration: 16min
+duration: 17min
 type: manual
 ---
 
@@ -544,3 +544,15 @@ To solve this problem, you can create a `.git-blame-ignore-revs` file in the roo
 > If this does not work, you may need to try `git blame --ignore-revs-file .git-blame-ignore-revs` to specify the ignore revs file explicitly.
 >
 > For VSCode users, I highly recommend the [eamodio.gitlens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) extension to show the Git blame information, other than the built-in Git extension, because it respects the `.git-blame-ignore-revs` file by default, while the built-in one does not.
+
+## LazyGit
+
+https://github.com/jesseduffield/lazygit
+
+Simple terminal UI for git commands, I highly recommend it for everyone.
+
+Why? If you have used VSCode or other IDEs quite a long time, with their Git GUI, you may find that: You have to wait several seconds for each GUI operation, wait for the GUI to update. That's quite annoying, especially with a large project, when the IDE takes a lot of CPU and memory resources, the Git GUI will be even slower.
+
+The truth is: The raw Git commands are already completed, but the GUI is still rendering and updating, which means 80% of the time you spend on the Git GUI is wasted on GUI itself!
+
+So, why not just use a terminal UI for Git commands? Both fast and visual!

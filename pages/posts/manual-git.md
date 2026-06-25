@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-06-23T23:43+08:00
+update: 2026-06-25T14:59+08:00
 lang: en
 duration: 17min
 type: manual
@@ -406,7 +406,9 @@ Come back to general workflow from "error handling", after you completed your fe
 ```bash
 git switch dev
 
-git merge feat/feature-name
+# Alias `justmerge` = Custom alias, will merge the specific branch to current branch,
+#                      with predefined commit message
+git justmerge feat/feature-name
 
 # Don't forget to push the `dev` branch to remote!
 git push
@@ -432,12 +434,12 @@ When your test team finds some bugs during testing, you can commit the bug fixes
 ```bash
 # Merge `release` branch to `main` branch to create a new release
 git switch main
-git merge release/vx.x.x
+git justmerge release/vx.x.x
 git push
 
 # Merge `release` branch back to `dev` branch to integrate the bug fixes
 git switch dev
-git merge release/vx.x.x
+git justmerge release/vx.x.x
 git push
 ```
 

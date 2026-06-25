@@ -1,7 +1,7 @@
 ---
 title: Vite and Unbundled
 date: 2025-12-03T11:56+08:00
-update: 2026-03-31T09:38+08:00
+update: 2026-06-25T10:42+08:00
 lang: en
 duration: 2min
 ---
@@ -33,3 +33,7 @@ Let's look forward to the future of Vite!
 ---
 
 Edit: Vite 8 is [here](https://vite.dev/guide/migration)! 🚀
+
+---
+
+Edit: Full bundled mode is now experimental in [Vite 8.1.0](https://vite.dev/blog/announcing-vite8-1#experimental-bundled-dev-mode)! ✨ Please enjoy the [discussion](https://github.com/vitejs/vite/discussions/22747) about this feature.

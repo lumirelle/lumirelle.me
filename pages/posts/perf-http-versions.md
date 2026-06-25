@@ -1,9 +1,9 @@
 ---
 title: 'Performance Optimization: HTTP Versions'
 date: 2026-04-21T10:48+08:00
-update: 2026-04-23T11:11+08:00
+update: 2026-06-25T14:48+08:00
 lang: en
-duration: 2min
+duration: 3min
 type: note
 ---
 
@@ -17,17 +17,32 @@ Here is a blog comparing the differences between HTTP/1, HTTP/1.1, HTTP/2, and H
 
 In a word:
 
-- HTTP/1: **Per request per connection**;
-- HTTP/1.1: **Multiple requests per connection** to reduce the cost of opening a new connection, and the **requests are processed serially**;
-- HTTP/2: Multiple requests per connection, **multiplexing and parallel** to reduce the cost of waiting for the previous request to complete;
-- HTTP/3: **Based on QUIC**, which is a transport protocol built on top of UDP
+- HTTP/1.x: One request per connection at a time, up to 6 connections per domain (in practice) to achieve parallelism;
+  - HTTP/1.0: The connection will be closed after the request is completed;
+  - HTTP/1.1: The connection can be reused by next request;
+- HTTP/2: Multiple request per connection at a time, no need to open multiple connections for same domain, with header compression, based on TCP;
+- HTTP/3: **Based on QUIC**, which is a transport protocol built on top of UDP, packet loss no longer block the queue.
+
+  <details>
+    <summary>More details about queue blocking</summary>
+
+    TCP protocol enforces in-order delivery, in HTTP/2, if a packet of request A is lost, all the other requests in the same connection B, C, D... should wait for the retransmission of request A, we call this phenomenon "head-of-line blocking".
+
+    In HTTP/3, since it is based on QUIC, which is built on top of UDP who does not enforce in-order delivery, packet loss no longer block the queue, so the performance is better than HTTP/2.
+  </details>
 
 So, to deploy a modern web applications, you should use at least HTTP/2! 🥰
 
+## Enable High HTTP Versions
 
-## How to Enable HTTP/2?
+High HTTP versions are only supported in HTTPS protocol, so you need to prepare your SSL certificate first.
 
-In remote environment, you need to configure your web server to support HTTP/2. For example, if you are using Nginx, you can add the following configuration to enable HTTP/2:
+> [!Note]
+> In local environment, you can use [mkcert](https://github.com/FiloSottile/mkcert) to generate a local CA and certificates to enable HTTPS.
+
+### Enable HTTP/2
+
+With Nginx:
 
 ```nginx
 server {
@@ -45,7 +60,7 @@ server {
 }
 ```
 
-In local environment, you need to use [mkcert](https://github.com/FiloSottile/mkcert) to generate a local CA and certificates to enable HTTPS first, and then configure your local server to support HTTP/2. For example, if you are using [Vite](https://vitejs.dev/), you can add the following configuration in `vite.config.ts`, Vite will automatically use HTTP/2 when possible:
+With Vite:
 
 ```ts
 export default defineConfig({
@@ -62,9 +77,9 @@ export default defineConfig({
 })
 ```
 
-## How to Enable HTTP/3?
+### Enable HTTP/3
 
-In remote environment, you need to configure your web server to support HTTP/3. For example, if you are using Nginx, you need to check if your Nginx version supports HTTP/3:
+With Nginx, you need to check if your Nginx version supports HTTP/3:
 
 > Version of nginx for Windows uses the native Win32 API (not the Cygwin emulation layer). Only the select() and poll() (1.15.9) connection processing methods are currently used, so high performance and scalability should not be expected. Due to this and some other known issues version of nginx for Windows is considered to be a beta version. -- https://nginx.org/en/docs/windows.html
 >
@@ -96,16 +111,18 @@ server {
 }
 ```
 
-In local environment, it seems that most local servers do not fully support HTTP/3 yet...
+With Vite:
 
-## Implementations
+It seems that Vite does not natively support HTTP/3 yet...
 
-### HTTP/2
+## Who Supports High HTTP Versions
+
+### Support for HTTP/2
 
 - [Wiki: Server Implementation](https://en.wikipedia.org/wiki/HTTP/2#Server-side_support);
 
 - [GitHub Wiki: Other Implementations](https://github.com/httpwg/http2-spec/wiki/Implementations).
 
-### HTTP/3
+### Support for HTTP/3
 
 - [Wiki: Client & Library & Server Implementations](https://en.wikipedia.org/wiki/HTTP/3#Implementations).

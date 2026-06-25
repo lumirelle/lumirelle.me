@@ -1,9 +1,9 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-04-28T09:39+08:00
+update: 2026-06-25T14:14+08:00
 lang: en
-duration: 15min
+duration: 17min
 type: manual
 ---
 
@@ -836,31 +836,58 @@ After initialization, the synchronization between attributes and properties is n
   ```
 
 
-## How Browsers Parse HTML?
+## How Browsers Render HTML?
 
-### The Process of Parsing HTML
+### The Process of Rendering HTML
 
-1. After user entered URL in browser and start navigation, the browser process will notify the network process to request HTML document from the server.
-2. While receiving the HTML content from the network process, the browser process will entrust renderer process to **segment-by-segment steaming parse** the HTML content;
-3. When renderer process parses the HTML, it will parse the HTML content from top to bottom:
-    1. It will maintain two trees: **DOM (Document Object Model) tree** and **CSSOM (CSS Object Model) tree**, executes the parsing of DOM tree parsing and CSSOM tree **in an alternating manner**;
-    2. When it encounters **a normal HTML tag** while parsing DOM tree, it will create a corresponding DOM element based on the tag and attributes, and insert the element into the DOM tree;
-    3. When it encounters **a synchronous inlined `<script>` tag** while parsing DOM tree, it will pause the parsing and start to execute the JavaScript code, and then resume parsing after the script execution is completed. Because JavaScript can modify the DOM tree & CSSOM tree, should be executed directly.<br><br>For **a synchronous remote `<script src="...">` tag**, it will entrust network process to download the file, and pause the parsing until the external JavaScript file is both downloaded and executed;<br><br>For **a asynchronous `<script src="..." async>` tag**, it will no longer pause the parsing while downloading, but pause the parsing and executing the script as soon as it's downloaded;<br><br>For **a defer `<script src="..." defer>` tag**, it will not pause the parsing while downloading too, and only be executed after the parsing is completed (but before the `DOMContentLoaded` event is fired);
-    4. When it encounters **a inlined `<style>` tag or `style` attribute** while parsing DOM tree, it will change to parse all the CSS content into CSSOM one time and in place.
-    5. When it encounters **a [external resource](#script-style-external-resource-elements) referred by `<link>` tag**, it will entrust network process to download the resource, and never pause the parsing;<br><br>If the external resource is a CSS file, it will make time to parse CSS into CSSOM (CSS Object Model) in batches or all at once, after the CSS file is downloaded.
-    6. After DOM tree and CSSOM tree are both constructed, it will conjunct them **into a render tree**, and then **calculate the layout**, **paint the page** and **composite the layers**.
-4. After the page is rendered, the browser process will fire `DOMContentLoaded` event, then fire `load` event after all the resources are loaded, and display the page to users.
+1.  After user entered URL in browser and start navigation, the browser process will notify the network process to request HTML document from the server.
+2.  While receiving the HTML content from the network process, the browser process will entrust renderer process to **steaming parse** the HTML content **segment-by-segment and incrementally**;
+3.  When renderer process parses the HTML, it will parse the HTML content from top to bottom:
+    1.  It will maintain two trees: **DOM (Document Object Model) tree** and **CSSOM (CSS Object Model) tree**;
+    2.  When it encounters **a normal HTML tag** while parsing HTML, it will create a corresponding DOM element based on the tag and attributes, and insert the element into the DOM tree;
+    3.  When it encounters **a synchronous inlined `<script>` tag** while parsing HTML, it will pause the parsing and start to execute the JavaScript code, and then resume parsing after the script execution is completed. Because JavaScript can modify the DOM tree & CSSOM tree, should be executed directly.
+
+        For **a synchronous remote `<script src="...">` tag**, it will entrust network process to download the file, and pause the parsing until the external JavaScript file is both downloaded and executed (unless it's dynamically inserted by JavaScript code, then it will be treated as asynchronous script);
+
+        For **a asynchronous `<script src="..." async>` tag**, it will no longer pause the parsing while downloading, but pause the parsing and executing the script as soon as it's downloaded;
+
+        For **a defer `<script src="..." defer>` tag**, it will not pause the parsing while downloading too, and only be executed after the parsing is completed (but before the `DOMContentLoaded` event is fired);
+
+        For **a module `<script type="module" src="...">` tag**, it will behave like a defer script by default.
+    4.  When it encounters **a inlined `<style>` tag** while parsing HTML, it will change to parse all the CSS content into CSSOM one time and in place.
+    5.  When it encounters **a [external resource](#script-style-external-resource-elements) referred by `<link>` tag**, it will entrust network process to download the resource, and never pause the parsing;
+
+        If the external resource is a CSS file `<link rel="stylesheet" href="...">`, it will change to parse CSS into CSSOM (CSS Object Model) after the CSS file is downloaded.
+    6.  When there is no more render-blocking tasks: No not downloaded `<link rel="stylesheet">` tags, or downloaded but not parsed `<link rel="stylesheet">` tags, it will conjunct them into a **render tree**, and then **calculate the layout**, **paint the page** and **composite the layers**.
+
+        The first painting was so-called **First Contentful Paint (FCP)**. After that, if there are any changes in the DOM tree or CSSOM tree, the browser will do **redraw and reflow**.
+4.  After the whole HTML parsed (also, **all deferred scripts are downloaded and executed**), the browser process will fire `DOMContentLoaded` event, then fire `load` event after all the resources are loaded, and display the page to users.
 
 ### Why Browser Build Two Separate Trees for DOM and CSSOM?
 
 Why browsers build two separate trees for DOM and CSSOM, conjunct them later, instead of building a single tree that combines both DOM and CSSOM?
 
-The answer is the render process is parsing elements and CSS styles **in an alternating manner**. If we build a single tree, how can we deal with the situation when there are some additional elements with the same selector with the previous parsed CSS styles? Parse them again? What a waste of performance.
+1. They have different structures, DOM tree is a parent-child tree, while CSSOM tree is more like a flat list. If you build them together, that means you may need to maintain many copies of CSS styles for different DOM elements.
+2. What's worse, if you do not build them separately, it will be hard to reuse information when the browser wants to redraw and reflow the page. For example, if we build a single tree, how can we deal with the situation when there are some additional elements with the same selector with the previous parsed CSS styles? Parse them again? What a waste of performance.
 
-### What Affects the Performance of Parsing HTML?
+### Performance of Rendering HTML
 
-1. **The size of the HTML document**: The larger the HTML document, the longer it takes to download;
-2. **The number / complexity of DOM elements**: The more / more complex DOM elements, the more time it takes to create and insert them into the DOM tree;
-3. **The number / complexity of synchronous `<script>` tags**: Each synchronous `<script>` tag will pause the parsing and (download if it's remote then) execute the JavaScript code, which can significantly affect the performance of parsing HTML, especially if the JavaScript code is large or complex;
-4. **The number / complexity of CSS rules**: Although CSS will not pause the DOM tree parsing, it still takes the time of render process to parse them into CSSOM tree. The more / more complex CSS rules, the more time it takes to parse them into CSSOM tree, the more time it takes to conjunct DOM tree and CSSOM tree, and the more time the whole parsing process takes.
-5. **The number / size of external resources**: Although external resources will not pause the parsing, they still take the download time and download bandwidth, which can affect the performance of download HTML document, remote scripts and CSS files, and the performance of parsing HTML indirectly.
+What affects the performance of rendering HTML?
+
+1. **The size of the HTML document**: The larger the HTML document, the **more time it takes todownload**;
+2. **The number / complexity of DOM elements**: The more / more complex DOM elements, the **more time it takes to parse** HTML (create and insert elements into the DOM tree);
+3. **The number / complexity of synchronous `<script>` tags**: Each synchronous `<script>` tag will **pause the parsing** and (**download if it's remote**) execute the JavaScript code, which can significantly affect the performance of parsing HTML, especially if the JavaScript code is large or complex;
+4. **The number / complexity of external `<link rel="stylesheet">` tags**: Each external CSS file will **pause the parsing** and (**download**) parse the CSS code into CSSOM tree, which can significantly affect the performance of parsing HTML, especially if the CSS code is large or complex;
+5. **The number / complexity of CSS rules**: The task of parsing CSS is also done by the rendering process. The more / more complex CSS rules, the **more time it takes on rendering process** (to parse them into CSSOM tree), the more time it takes to conjunct DOM tree and CSSOM tree, and the more time the whole parsing process takes.
+6. **The number / size of other external resources**: Although external resources will not pause the parsing, they still **take the download time and download bandwidth**, which can affect the performance of download HTML document, remote scripts and CSS files, and the performance of parsing HTML indirectly.
+
+What's the best practice?
+
+1. [**14 KiB rule**](https://medium.com/@techworldthink/the-14-kb-rule-optimizing-the-critical-rendering-path-for-faster-websites-cd6d9e93b186): Keep the HTML document under 14 KiB;
+2. **Keep everything as simple as possible**:
+   1. Reduce the usage of unnecessary wrapper elements, such as `<div>` and `<span>`;
+   2. Reduce the usage of `<script>`, remove if unused, `async` if possible, `defer` if it can be async but still depends on the DOM tree;
+   3. Reduce the usage of `<link rel="stylesheet">`, remove if unused, `media` if possible, and combine them into a single file if possible (increase the stability when downloading);
+   4. Reduce the usage of CSS rules, remove if unused, and keep them as simple as possible **(please try atomic CSS framework!!!)**;
+   5. Reduce the usage of external resources, remove if unused, apply compression and caching if possible.
+3. ...

@@ -1,7 +1,7 @@
 ---
 title: 'Example: TypeScript Custom Fetch Function'
 date: 2026-04-18T22:28+08:00
-update: 2026-04-18T22:28+08:00
+update: 2026-06-25T14:57+08:00
 lang: en
 duration: 1min
 type: note
@@ -9,15 +9,23 @@ type: note
 
 [[toc]]
 
-There are several targets of a modern fetch function:
+## Introduction
 
-1. It should be type-safe;
-2. It should has error handling;
-3. ... Also, it need to follow the [symbol naming patterns code style](code-style-symbol-naming-patterns).
+There are several requirements of a modern fetch function:
 
-So, things are quite clear. We use [ofetch](https://github.com/unjs/ofetch) under the hood to simplify the implementation:
+1. Type-safe;
+2. Error handling;
+3. Cross-environment compatibility;
+4. Customizable;
+5. ... Other features, such as caching, retry, etc.
 
-_src/utils/request.ts_
+I highly recommended to use [ofetch](https://github.com/unjs/ofetch) to achieve these requirements. You can use the pre-created `ofetch` function, or just create your own [custom fetch function](#custom-fetch-function) via `ofetch.create()`.
+
+## Examples
+
+### Custom Fetch Function
+
+_src/utils/fetch.ts_
 
 ```ts
 import { ofetch } from 'ofetch'
@@ -51,4 +59,35 @@ export const $fetch = ofetch.create({
     }
   },
 })
+
+// Make the custom fetch function globally available, if you want to do so
+globalThis.$fetch = $fetch
+// Also do not forget to type it
+declare global {
+  var $fetch: typeof $fetch
+}
+```
+
+### Usage
+
+_src/repositories/user.ts_
+
+```ts
+export function userRepository() {
+  return {
+    async get() {
+      return await $fetch('/user')
+    },
+    // ...
+  }
+}
+```
+
+_src/pages/index.tsx_
+
+```ts
+import { userRepository } from '~/repositories/user'
+
+const userRepo = userRepository()
+const user = await userRepo.get()
 ```

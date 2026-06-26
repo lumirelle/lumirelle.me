@@ -7,6 +7,13 @@ duration: 15min
 type: manual
 ---
 
+<style>
+.prose table tr {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+}
+</style>
+
 [[toc]]
 
 ## Foreword
@@ -285,7 +292,7 @@ Next, remaning useful softwares:
 | Neovim | `sudo winget add --scope machine --source winget --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> / |
 | Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
 | Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
-| RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | Basic Extensions: _Installed Extensions_, _MyIP_, _Speedtest_, _Kill Process_, _Port Manager_.<br><br>Dev Extensions: _Shell_, _Visual Studio Code_, _Zed_, _Regex Tester_, _GitHub_, _Svgl_, _Search MDN_, _Tailwind CSS_, _Search npm Packages_, _Random Data Generator_, _Json2TS_. |
+| RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. Todo List (todo)_;<br><br>_2. Browser Bookmarks_;<br>_3. Hacker News_;<br>_4. GitHub_;<br>_5. Git Repos_;<br>_6. MyIP (ip)_;<br>_7. Port Manager (port)_;<br>_8. Kill Process (kill)_;<br>_9. Speedtest_;<br><br>_10. Shell_;<br>_11. Visual Studio Code_;<br>_12. Zed_;<br><br>_13. Skills_;<br>_14. Search npm Packages (npm)_;<br>_15. Can I Use_;<br>_16. Svgl_;<br><br>_17. Regex Tester_;<br>_19. Random Data Generator_;<br>_19. Json2TS_;<br>_20. Format JSON_;<br>_21. Word Count_<br><br>_22. Raycast Explorer_. </details> |
 | Revo Uninstaller | Free:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
 #### Browser Setup

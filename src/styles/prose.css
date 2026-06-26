@@ -426,13 +426,14 @@ html.dark .prose {
 }
 
 .prose table {
-  width: 100%;
+  display: block;
   table-layout: auto;
   text-align: left;
   margin-top: 2em;
   margin-bottom: 2em;
   font-size: 0.875em;
   line-height: 1.7142857;
+  overflow-x: auto;
 }
 .prose thead {
   color: var(--fg-deep);

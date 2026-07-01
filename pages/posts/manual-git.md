@@ -17,53 +17,55 @@ Git is a distributed version control system, which is used to track changes in s
 
 - **Repository (Repo)**:
 
-  A repository is be composed of two parts. First part is the **commit history tree**, another part is the **working directory**.
+  Repository contains all the information about your project.
 
-  Repository can be local (on your computer), remote (on a server like GitHub) or both.
+  In concept, a repository is be composed of three parts: Git's configuration (in `.git`), the **commit history** (in `.git`), and the **working directory** (tracked files).
+
+  Repository can be stored in local (on your computer), remote (on a server like GitHub) or both.
 
 - **Commit**:
 
-  A commit is a diff record than the previous one. Each commit has a unique ID and contains information about the changes made.
+  A commit is a diff record than the previous one, except for the initial commit, it stores the initial state of your project.
 
-  If different commits are based on the same previous commit, this will form a fork, and forks form a tree, that is **commit history tree**.
+  Each commit is named with a **unique ID** (SHA-1 until now).
 
-  For the first commit who is made based on empty working directory, we call it the **initial commit**.
+  What's more, two different commits can base on the same previous commit. Through this, we can build **forks (branches)** on top of commit history. That's why the commit history looks like a **tree**.
+
+- **Pointer**:
+
+  A pointer is a reference to a specific commit node, which can be used to identify the commit node & the branch it belongs to (branch name).
+
+  Pointers can move to another commit node.
+
+  **HEAD** is a special pointer, the **working directory** is always based on the commit node referenced by HEAD. If HEAD moves to another commit node, the working directory will also change immediately to reflect the state of that commit node.
 
 - **Branch**:
 
-  A branch is not a biological sense "branch": **It not only includes the fork start from the nearest public commit, but starts from the initial commit, and ends with leaf one (it's more like a combination of "trunk" and "branch")**.
+  A branch starts from a shared commit node with other branches (for the initial branch, it starts from the initial commit node), so we can say: branches are a bunch of changes made on top of that shared commit node.
 
   ```txt
-             +- biological sense branch -+
-             v                           v
-             +===========================>
+                                         (feat/feature-name)
+                                         v
+             +===========================+=>
              |
-  o----------+--------------------------->
-
-  ...
-
-  +------------- Git branch -------------+
-  |                                      v
-  |          +===========================>
-  v          |
-  o==========+--------------------------->
+  o==========+=> (main)
   ```
 
-  We usually use `main` or `master` as the default branch. You can create new branches based on the default branch to work on features without affecting it.
+  We usually named the initial branch to `main` or `master`.
 
-  Branches are one of the most important concepts in collaborative development.
+  The branch name is just a pointer to a specific commit node, which shows the end of the branch. When a new commit is made on this branch, the pointer will move to the new commit node.
+
+  When you switch / checkout to a branch, it's just move the HEAD pointer to the commit node referenced by that branch name pointer.
 
 - **Working Directory**:
 
-  The working directory is **the current state** of your project files **on your machine**. It is based on the commit node you are currently on, with your uncommitted changes.
+  The working directory shows **the current state of your project**. It is always based on the commit node you are currently on (referenced by HEAD), with your uncommitted changes.
+
+  When HEAD points move to another commit node, the working directory will also change to reflect the state of that commit node.
 
 - **Staging Area**:
 
   The staging area is a place where you can stage changes before committing them.
-
-- **HEAD**:
-
-  HEAD is that pointer which indicates your working directory is based on which commit node (and branch). When the HEAD changes, the working directory will also change accordingly.
 
 ## Basic Usage of Git
 
@@ -71,13 +73,11 @@ Git is a distributed version control system, which is used to track changes in s
 >
 > This article is based on my own `.gitconfig` configuration.
 >
-> For more details about the changed default behavior and custom alias, please see [the source file](https://github.com/lumirelle/starship-butler/tree/main/packages/config-provider/assets/vcs/git/.gitconfig). You can also get help information of the custom alias usage by provide `--?` flag or `-?` flag.
->
-> If you are interested in my configuration, you can try my configurations setting up tool: [`starship-butler`](https://github.com/lumirelle/starship-butler) or download the source file manually.
+> For more details about the changed default behavior and custom alias, please see [the source file](https://github.com/lumirelle/dotfiles/blob/main/dot_gitconfig). You can also get help information of the custom alias usage by provide `--?` flag or `-?` flag.
 
 ### Initialize Git Repository
 
-To initialize a new Git repository with none commit, open your project in the terminal and run:
+To initialize a fresh Git repository, open your project in the terminal and run:
 
 ```bash
 git init
@@ -85,19 +85,20 @@ git init
 
 Then, Git will create a hidden `.git`, which contains all the Git metadata for your project.
 
-### Make Commit
+At that time, there is no any commit in your repository, and the working directory is empty.
 
-After initializing, you can start making commits to track your changes.
+### Make Changes and Commit
 
-First, you need to make some changes, and stage them:
+After initializing, you can start making changes and then commit them.
+
+First, you need to make some changes to the working directory, and then stage them to the staging area:
 
 ```bash
-# Make some changes..
-touch index.html
-echo "Hello, Git!" > index.html
+# Make some changes to the working directory...
+echo "Hello, Git!" > index.js
 
-# Stage the changes
-git add .
+# Stage the changes to the staging area...
+git add index.js
 ```
 
 After that, you can make the initial commit:
@@ -108,7 +109,7 @@ git commit --message "feat: initial commit"
 
 Every time you want to record some changes, you can make a commit like this.
 
-Commit will record the changes you made, and creates a new node in the commit history tree based on the previous node. Each node is like a snapshot version of your project at a specific time, so that you can "checkout" to it at any time later.
+Making a commit will record the changes you made than the previous commit (or the initial state), also creates a new commit node in the commit history tree based on the previous node.
 
 This is the most basic version control usecase.
 
@@ -116,9 +117,9 @@ This is the most basic version control usecase.
 
 As a distributed version control system, Git allows you to collaborate with others by syncing your local repository with a remote repository. You can use services like GitHub, GitLab, or Bitbucket to host your remote repositories.
 
-You need to add a "remote", so that Git knows where the remote repository is located, and how to sync with it.
+You need to add a remote, so that Git knows where the remote repository is located, and how to sync with it.
 
-To add a "remote", use the following command:
+To add a remote, use the following command:
 
 ```bash
 git remote add origin https://github.com/username/repo.git
@@ -140,172 +141,117 @@ To push your latest commit history to the remote repository:
 git push
 ```
 
-### Work with Branches (Git Workflow)
+### Work with Branches
 
 Branches are one of the most important concepts in collaborative development.
 
-With branches, you can create a temporary fork with the "main version" of your project, and work on it independently. After the task is done, you can apply your works back to "main version" by merging.
+With branches, you can `checkout` a temporary fork with a specific state, and work on it independently. Through this, you can do anything you want without affecting the existing codebase.
 
-Through this, you can keep the "main version" always the stable and reliable one of your project.
+After the tasks are done on those branches, you can apply them back by **pull request**.
 
-Is there some standard workflow for branches? Yes:
+> [!Note]
+> I highly recommend you always to use **pull request** instead of `merge` to apply review and approval process.
+>
+> `merge` should only be used in cases of:
+>
+> 1.  Merge multiple feature branches into one big feature branch, caused by the changes of requirements or else;
+> 2.  Merge upstream changes (for example, changes on the main branch) to feature branch. (In this case, `rebase` is a better choice than `merge`)
 
-- **Centralized workflow**:
+#### Branch Management Workflow
 
-  Everything works on the main branch, uses tags to mark the version numbers. Release new version periodically or randomly.
+To keep things controlled and organized, there are several common branch management workflows:
 
-  _Only for personal projects._
+- [**Single branch workflow:**](#single-branch-workflow) <i id="single-branch-workflow"></i>
 
-- **Feature branch workflow**:
+  <TextTag>Personal</TextTag><TextTag preset="red">Not recommended</TextTag>
 
-  Create a new branch for each feature, and merge it back to the main branch after the task is done. One or more merges make a new version release. Tags on the main branch are used to mark the version numbers too.
+  Everything are committed to the `main` branch directly.
 
-  _Suitable for small projects or personal projects._
+  One or more commits make a new version release. Tags on the `main` branch are used to mark the version numbers.
 
-- **Git flow workflow**:
+- [**Single major version workflow:**](#single-major-version-workflow) <i id="single-major-version-workflow"></i>
 
-  With some long-term branches like `main`, `dev`, and some temporary assistant branch groups like `release`, `hotfix/hotfeat`, `feat`.
+  <TextTag>Personal / Team</TextTag><TextTag preset="green">Single version</TextTag>
 
-  _Suitable for medium to large projects._
+  Create a new branch for each feature (`feat/xxx`) or hotfix (`hotfix/xxx`) from the `main` branch, apply it back to the `main` branch by **pull request** after the development is done.
 
-  - `main` branch is always the **stable version**, each merge (should only comes from `release` branch group) to `main` branch should make a new release, and tags on the `main` branch are used to mark the version numbers;
-  - `dev` branch used to hold **completed new features** (Who merged the uncompleted features to `dev` branch? Fuck you! 😅) for next version;
-  - `release` branch group is a group of branches, who are used to **apply testing, bug fixes and prepare releasing** before making a new version release. When the developments on `dev` / `hotfix/hotfeat` branches are done, you should create the corresponding `release` branch from them first, then deploy your application to test environment for testing use this branch, then apply the bug fixes, finally release the new version...
-  - `hotfix/hotfeat` branch group is a group of branches, who are used to **make a hotfix or hotfeat** to a released version (usually created from `main` branch directly), of course, they should be tested too before merging back to `main` branch.
-  - `feat` branch group is a group of branches, who are used to **develop new features**. When a feature completed, we will merge it into `dev` branch. When all features for the next version are completed, that means the development on `dev` branch also ends.
-  - ... Maybe some custom branches / branch groups for your project, as your need.
+  One or more pull requests make a new version release. Tags on the `main` branch are used to mark the version numbers too.
 
-  Let's take a look at the workflow of this Git flow workflow more clearly:
+- [**Multiple major versions workflow:**](#multiple-major-versions-workflow) <i id="multiple-major-versions-workflow"></i>
 
-  When a version iteration starts, for each feature, we should create a new feature branch from `dev` branch, and merge them back to `dev` branch after the development is done. For example:
+  <TextTag>Personal / Team</TextTag><TextTag preset="green">Multiple versions</TextTag>
 
-  | Iteration | Features       | Branch Name |
-  | --------- | -------------- | ----------- |
-  | v1.1.0    | New product: A | feat/a      |
-  |           | New product: B | feat/b      |
-  |           | New product: C | feat/c      |
+  Based on the [single major version workflow](#single-major-version-workflow), with multiple long-term branches for different major versions.
 
-  After one iteration development completed (all features merged to `dev`), we should create a new `release` branch from `dev` to prepare for testing (also bug fixes) and releasing, and vacate the `dev` branch for the next iteration development.
+  - `main` branch is for **the next major version**;
+  - `v{version}` branch group is for the released major versions, e.g. `v1.x`, `v2.x`, etc.
+  - `feat/xxx` branch is for new feature, created from the `main` branch, also will be applied back to the `main` branch by **pull request** after the development is done.
 
-  After the test & release tasks (including bug fixes, changelog updates, etc.) are done, should merge the `release` branch back to `main` to create a new release, and `dev` to integrate the changes.
+    If this feature need to be **backported** to the released major versions, you should use `cherry-pick` to pick the merge commit node to the appropriate `v{version}` branch ([example](https://github.com/nuxt/nuxt)).
+  - `hotfix/xxx` branch is for hotfix, created from the first included `v{version}` branch, and will be applied back to the appropriate `v{version}` branch by **pull request** after the development is done.
 
-  The final branch graph will be like this:
+    If this hotfix need to be **forwardported** to the later versions, you can use `merge` to apply it back to the later `v{version}` & `main` branches ([example](https://github.com/symfony/symfony)).
 
-  `*` means a node of the branch
-
-  `o` means the first node of the branch
-
-  `x` means the last node of the branch
-
-  `+` means a merge node of the branch
-
-  `@` means a iteration start node for that long-term branch
-
-  `$` means a iteration end node for that long-term branch
-
-  `@&$` means both the iteration start and end node for that long-term branch
-
-  `~` means working on that branch, contains a bunch of nodes
-
-  `...` means other iteration
+  A simple comparison with single major version workflow:
 
   ```txt
-         (v1.0.0)                             (v1.1.0)
-          ^                                    ^
-  o- ... -*-----------------------------------@&$- ... -> (main)
-  |                                            ^
-  |                                            |
-  |                                    o~~~~~~~x (release/v1.1.0)
-  |      (after create release/v1.0.0) ^       |
-  v       ^                            |       v
-  o- ... -@------+----------+----------$- ... -+- ... -> (dev)
-          |      ^          ^          ^
-          |      |          |          |
-          o~~~~~~x (feat/a) |          |
-          |                 |          |
-          |                 |          |
-          o~~~~~~~~~~~~~~~~~x (feat/b) |
-          |                            |
-          V                            |
-          o~~~~~~~~~~~~~~~~~~~~~~~~~~~~x (feat/c)
+  Single Major Version Workflow:
+  o- ... -o- ... ... ... ... ... -o- ... ... ... ... ... -> (main)
+          (tag v1.0.0)            (tag v2.0.0)
+
+  Multiple Major Versions Workflow:
+  o- ... -o- ... ... ... ... ... -o- ... ... ... ... ... -> (main)
+          |                       |
+          o- ... -> (v1.x)        o- ... -> (v2.x)
   ```
 
-  For hotfix and hotfeat, should create a new `hotfix/hotfeat` branch from `main`, and create a new `release` branch for testing and releasing after the development is done. After the tasks are done too, merge the `hotfix/hotfeat` branch back to `main` to create a new release, and `dev` to integrate the changes.
+- [**Multiple Environment Workflow:**](#multiple-environment-workflow) <i id="multiple-environment-workflow"></i>
 
-  For example:
+  <TextTag>Personal / Team</TextTag><TextTag preset="green">Multiple environments</TextTag>
 
-  | Current Main Version | Hotfix/Hotfeat | Branch Name |
-  | -------------------- | -------------- | ----------- |
-  | v1.1.0               | Hotfix: A      | hotfix/a    |
-  |                      | Hotfeat: B     | hotfeat/b   |
+  Based on the [single major version workflow](#single-major-version-workflow), with multiple long-term branches for different environments.
 
-  And the branch graph will be like this:
-
-  ```txt
-         (v1.1.0)    (v1.1.1)                   (v1.1.2)
-          ^           ^                          ^
-  o- ... -*-----------+--------------------------+- ... -> (main)
-  |       |           ^                          ^
-  |       |           |                          |
-  |       |   +~~~~~~~x (release/v1.1.1) +~~~~~~~x (release/v1.1.2)
-  |       |   ^       |                  |       |
-  |       |   |       v                  |       V
-  o- ... -|---|-------+------------------|-------+- ... -> (dev)
-          |   |                          |
-          o~~~x (hotfix/a)               |
-          |                              |
-          |                              |
-          o~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~x (hotfeat/b)
-  ```
-
-  > [!Caution]
-  >
-  > 1. Never merge a uncompleted/postponed feature branch to the `dev` branch, we mentioned this before.
-  > 2. If you want to integrate some changes on `dev` branch to your feature branch, use `rebase` please 🙏.
-
-- **Open source workflow**:
-
-  A variant of feature branch workflow, with only `main` branch, `feat` branch group and optional `v{version}` branch group.
-
-  _Suitable for open source projects._
-
-  - `main` branch is for **the latest major version**, tags on this branch are used to mark the version numbers, e.g. `v8.0.0`, `v8.1.0`, etc.
-  - `v{version}` branch group is for the old released major versions, e.g. `v1.0`, `v2.0`, etc. Tags on these branches are used to mark the version numbers too, e.g. `v1.0.0`, `v2.0.0`, etc.
-  - `feat` branch group is for new features, which will be merged to `main` or `v{version}` branch after the development is done.
-
-  For **participants who are not the maintainers** of the repository, they can only fork this repository and create a new feature branch in their fork, and make a **pull request** to `main` or `v{version}` branch of the original repository after the development is done.
-
-  Pull request likes merge, but need to be reviewed and approved by the maintainers of the original repository before merging. This is a common workflow for open source projects, which can help to maintain the quality of the codebase.
+  - `main` branch is for **production environment**;
+  - `uat` branch is for **UAT environment**;
+  - `test` branch is for **testing environment**;
+  - `dev` branch is for **development environment**;
+  - `feat/xxx` branch is for new feature, created from the `main` branch, which will be applied back to `dev`, `test`, `uat`, `release` branch by **pull request**, based on the feature's development process.
+  - `hotfix/xxx` branch is for hotfix, created from the `main` branch, which will be applied back to `dev`, `test`, `uat`, `release` branch by **pull request**, based on the hotfix's development process.
 
 You can choose one of the workflows above based on your project's size, type, complexity or your preference.
 
 > [!Note]
 >
-> This article will use the most complex Git flow workflow as an example.
+> This article will use the most complex [**multiple major versions workflow**](#multiple-major-versions-workflow) as an example.
 
 ### Create a New Feature Branch
 
-To add a new feature, you should create a new feature branch based on the `dev` branch first, and then work on this feature branch independently.
+> [!Note]
+> Basically, we only start a new feature development on the next major version branch, which is the `main` branch in this case.
+>
+> If other versions need this feature, we can backport it.
+>
+> That's to say, we will never develop a new feature for a specific released version but not for the next major version.
 
-First, create `dev` branch from `main` branch if it does not exist:
+To add a new feature, you should create a new feature branch based from `main` branch first.
 
 ```bash
-git switch --create dev main
+git switch --create feat/feature-name main
 ```
 
-Then create a new feature branch from `dev` branch:
-
-> [!Caution]
->
-> Although we say **"NOT TO MERGE UNCOMPLETED/POSTPONED FEATURE BRANCH TO DEV"**, but you cannot affect other's behavior.
->
-> If you found that there is already a uncompleted/postponed feature branch merged to `dev` 😅, the simply workaround is to create you feature branch based on the specific commit before it or even the `main` branch.
+Then, you can work on your feature branch, commit changes frequently, and push them to remote regularly:
 
 ```bash
-git switch --create feat/feature-name dev
-```
+echo "Hello, Git!" > index.js
+git add index.js
+git commit --message "feat: add index.js"
 
-Now, you can work on your feature branch, commit changes frequently, and push them to remote regularly.
+echo "Hello, Git!" > second.js
+git add second.js
+git commit --message "feat: add second.js"
+
+# ...
+```
 
 ### Drop Changes / Reset to HEAD
 

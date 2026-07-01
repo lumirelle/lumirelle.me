@@ -49,9 +49,5 @@ const textColor = computed(() => {
 </script>
 
 <template>
-  <span
-
-    text-sm font-medium mx-1 px-2 py-0.5 rounded-md inline-block
-    :class="[bgColor, textColor]"
-  >{{ text }}</span>
+  <span text-sm font-medium mx-1 px-2 py-0.5 rounded-md inline-block :class="[bgColor, textColor]"><slot>{{ text }}</slot></span>
 </template>

@@ -1,9 +1,9 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-06-25T14:59+08:00
+update: 2026-07-02T10:36+08:00
 lang: en
-duration: 17min
+duration: 15min
 type: manual
 ---
 
@@ -224,7 +224,9 @@ You can choose one of the workflows above based on your project's size, type, co
 >
 > This article will use the most complex [**multiple major versions workflow**](#multiple-major-versions-workflow) as an example.
 
-### Create a New Feature Branch
+### Create a New Branch
+
+#### Feature Branch
 
 > [!Note]
 > Basically, we only start a new feature development on the next major version branch, which is the `main` branch in this case.
@@ -253,7 +255,25 @@ git commit --message "feat: add second.js"
 # ...
 ```
 
-### Drop Changes / Reset to HEAD
+#### Hotfix Branch
+
+To add a hotfix, you should create a new hotfix branch based from the first included released version branch. For example, if the bug appears in the `v1.x` branch to the next major version:
+
+```bash
+git switch --create hotfix/bug-name v1.x
+```
+
+Then, you can work on your hotfix branch, commit changes frequently, and push them to remote regularly:
+
+```bash
+echo "Fix the bug!" >> index.js
+git add index.js
+git commit --message "hotfix: fix the bug"
+
+# ...
+```
+
+### Discard Changes
 
 When you work on your feature branch, you may want to discard the changes easily:
 
@@ -272,9 +292,9 @@ To discard all changes:
 git discard .
 ```
 
-### Unstage / Unadd Changes
+### Unstage (Disadd Changes)
 
-If you have staged some changes by `git add`, you can also unstage them by `git unadd` (my custom alias):
+If you have staged some changes by `git add`, you can also unstage them by `git disadd` (my custom alias):
 
 ```bash
 # Alias `disadd` = Custom alias, will unstage the changes based on specific paths
@@ -287,7 +307,7 @@ To unstage all changes:
 git disadd .
 ```
 
-### Undo Last Commit / Uncommit
+### Undo Last Commit (Uncommit)
 
 When you commit some changes in accident, you can undo it by `git uncommit` (my custom alias too 😄):
 
@@ -297,7 +317,6 @@ git uncommit
 ```
 
 > [!Caution]
->
 > If this commit has been pushed to remote, you need to perform force push to remote after undo it:
 >
 > ```bash
@@ -324,7 +343,6 @@ git commit --amend --message "fix: some bugs"
 ```
 
 > [!Caution]
->
 > If this commit has been pushed to remote, you need to perform force push to remote after undo it:
 >
 > ```bash
@@ -345,65 +363,96 @@ The cost is that the commit history will be more ugly, likes your "evidence of g
 git revert HEAD
 ```
 
-### Merge Branch
+### Rebase Branch
 
-Come back to general workflow from "error handling", after you completed your feature, you need to merge it back to the `dev` branch.
+When you want to integrate some changes in the upstream branch to your branch, you can rebase your branch onto it.
 
 ```bash
-git switch dev
+git switch {your-branch}
+git rebase {upstream-branch}
+# Use --force with caution!!!
+git push --force
+```
+
+> [!Caution]
+> Do not rebase a branch which is **cooperated with others**.
+>
+> This may cause problems for other collaborators, so please use it with caution 🙏.
+
+### Integrate Changes
+
+#### Pull Request
+
+I highly recommend you always to use **pull request** to perform code review and approval process before integrate changes from a branch to another branch.
+
+All the operations are simple:
+
+1. Open a pull request on the remote hosting service (like GitHub, GitLab, Bitbucket, etc.), from your branch to the target branch;
+2. Perform code review and approval process;
+3. Then, accept the pull request.
+
+#### Merge Branch (Not Recommended)
+
+```bash
+git switch {target-branch}
 
 # Alias `justmerge` = Custom alias, will merge the specific branch to current branch,
 #                      with predefined commit message
+git justmerge {your-branch}
+
+# Don't forget to push the target branch to remote!
+git push
+```
+
+#### Integrate Changes Example
+
+> [!Note]
+> This example uses `merge` to shows the flow of integrating changes, but I still recommend you to use **pull request** instead.
+
+Feature branch development flow:
+
+```bash
+# Create a new feature branch from main
+git switch --create feat/feature-name main
+
+# ...Make some changes
+
+# Integrate changes
+git switch main
 git justmerge feat/feature-name
-
-# Don't forget to push the `dev` branch to remote!
-git push
 ```
 
-When all features are merged into the `dev` branch, and ready for testing, you should create a new `release` branch to prepare for testing, bug fixing and releasing:
+Hotfix branch development flow:
 
 ```bash
-git switch dev
-# vx.x.x is the version number of the next release, e.g. v1.0.0.
-git switch --create release/vx.x.x dev
-git push
+# Create a new hotfix branch from the first included released version branch
+git switch --create hotfix/bug-name v1.x
+
+# ...Make some changes
+
+# Integrate changes
+git switch v1.x
+git justmerge hotfix/bug-name
 ```
 
-> [!CAUTION]
->
-> Before you create a new `release` branch, you should really think twice is there **any uncompleted features** already been merged into the `dev` branch. 😅 🙏
+### Manage Tags & Create Released Major Version Branch
 
-After that, your next tasks now can be performed on the `release` branch.
-
-When your test team finds some bugs during testing, you can commit the bug fixes directly on the `release` branch. After all tasks done, you can finally create a new release by merging the `release` branch back to the `main` branch, and then merge the `release` branch back to the `dev` branch again to integrate the bug fixes:
+When you want to release a new version, after completing the necessary changes (changelogs, bumping version...), you should create a version tag to mark this point on the `main` branch, and push it to remote.
 
 ```bash
-# Merge `release` branch to `main` branch to create a new release
+# Complete the necessary changes...
 git switch main
-git justmerge release/vx.x.x
-git push
-
-# Merge `release` branch back to `dev` branch to integrate the bug fixes
-git switch dev
-git justmerge release/vx.x.x
-git push
-```
-
-### Manage Tag
-
-After a new release, we should create a version tag to mark this point on the `main` branch, and push it to remote.
-
-```bash
-git switch main
+echo "- v1.0.0: ..." >> CHANGELOG.md
+bumpversion 1.0.0
 
 git tag v1.0.0
-git tag --annotate v1.0.0 --message "Release version 1.0.0"
+git tag --annotate v1.0.0 --message v1.0.0
 ```
 
 Then push the tag to remote:
 
 ```bash
-git push
+git push --tags
 ```
 
 Or if you want to delete a tag
@@ -412,57 +461,64 @@ Or if you want to delete a tag
 git tag --delete v1.0.0
 ```
 
-### Rebase Branch
-
-When something changes been integrated into the `dev` branch, and you also want to integrate these changes into your **local** feature branch, you can rebase your feature branch onto the latest `dev` branch.
+After that, you should create a new branch for this released major version.
 
 ```bash
-git switch feat/feature-name
-
-git rebase dev
+# TODO: Can we use tag v1.0.0 instead of main?
+git switch --create v1.x main
 ```
-
-> [!Caution]
->
-> Do not rebase a branch which has been **pushed to remote and shared with others**. Like force push, this also can cause problems for other collaborators, so please use it with caution 🙏.
 
 ### Delete Branch
 
-Now, you already have some branches in your repository: `main`, `dev`, and multiple `release` and `feature` branches. The `main`, `dev` branches are long-lived branches, which will stay in the repository for a long time (I mean forever). But the `release` and `feature` branches are not.
+After every time you have integrated the changes from feature / hotfix branch to the target branch, you can delete them, if they are no longer needed.
 
-When you complete your feature development on a `feat` branch and merged it back to the `dev` branch, you can delete your `feat` branch, because it's mission is accomplished.
-
-When you complete your testing, bug fixing and releasing tasks on a `release` branch and merged it back to the `main` and `dev` branches, you can delete your `release` branch, because it's mission is accomplished too.
-
-> [!Note]
->
-> After a branch's mission is accomplished, everything you want to do with it should targeting the later branches. A simple example, after new version release, any bug fix should be performed on the `hotfix` branch or `feature` branch for next version.
-
-
-> [!Caution]
->
-> It’s hard to collect the water after it's spilled~ / 覆水难收~
-
-To delete a branch:
+This helps to keep your branch list clean and organized.
 
 ```bash
 git branch --delete feat/feature-name
-git branch --delete release/vx.x.x
+git push origin --delete feat/feature-name
+
+git branch --delete hotfix/bug-name
+git push origin --delete hotfix/bug-name
 ```
 
-### Cherry-Pick Commit
+### Backport Feature (Cherry-pick)
 
-Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing the entire branch. In this case, you can use the `cherry-pick`:
+Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing the entire branch. In this case, you can use the `cherry-pick`.
+
+The most common usecase is to backport a feature to the released major version branch. For example, you want to backport the feature in `main` branch, which is introduced by the merging of `feat/xxx`, the only few things you need to do is:
+
+1.  Find the merge commit hash of `feat/xxx` in the `main` branch, for example, `1234567`;
+2.  Cherry-pick this commit to the released major version branch `v1.x`:
 
 ```bash
+git switch v1.x
 git cherry-pick 1234567
+git push
+```
+
+### Forwardport Bugfix (Merge)
+
+When you want to apply a bugfix from a released major version branch to the later versions, just do as what you do in [integrate changes](#integrate-changes) section:
+
+> [!Note]
+> Of course, **pull request** is still recommended than `merge`.
+
+```bash
+git switch v2.x
+git justmerge v1.x
+git push
+
+git switch main
+git justmerge v1.x
+git push
 ```
 
 ### Git Configuration
 
 #### `.gitconfig`
 
-To configure Git, you can create a `.gitconfig` file in your system home directory and add your configuration settings there. Here is an example of a basic `.gitconfig` file:
+To configure Git's behavior, you can create a `.gitconfig` file in your system **home directory** and add your configuration settings there. Here is an example of a basic `.gitconfig` file:
 
 ```ini
 [user]
@@ -479,7 +535,10 @@ To get full configuration example, please refer to my [`.gitconfig`](https://git
 
 To ignore certain files or directories in your Git repository.
 
-I prefer to use the template from VSCode extension [`codezombiech.gitignore`](https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore).
+I prefer to use the templates from [github/gitignore](https://github.com/github/gitignore). There are some extensions for different editor to generate `.gitignore` file based on those templates with ease:
+
+- Neovim: [`gitignore.nvim`](https://github.com/wintermute-cell/gitignore.nvim)
+- VSCode: [`codezombiech.gitignore`](https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore).
 
 #### `.git-blame-ignore-revs`
 
@@ -489,9 +548,12 @@ To solve this problem, you can create a `.git-blame-ignore-revs` file in the roo
 
 > [!Note]
 >
-> If this does not work, you may need to try `git blame --ignore-revs-file .git-blame-ignore-revs` to specify the ignore revs file explicitly.
+> Git does not respect `.git-blame-ignore-revs` by default, you need to configure it in your `.gitconfig` file:
 >
-> For VSCode users, I highly recommend the [eamodio.gitlens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) extension to show the Git blame information, other than the built-in Git extension, because it respects the `.git-blame-ignore-revs` file by default, while the built-in one does not.
+> ```ini
+> [blame]
+> ignoreRevsFile = :(optional).git-blame-ignore-revs
+> ```
 
 ## LazyGit
 

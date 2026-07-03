@@ -26,7 +26,7 @@ Find me on
   <a href="https://space.bilibili.com/552355730" target="_blank"><span op75 i-simple-icons-bilibili /> 哔哩哔哩</a>
 </p>
 
-Or mail me at <span font-mono>shabbyacc<span i-carbon-at/>outlook.com</span>
+Or mail me at shabbyacc@outlook.com
 
 ---
 

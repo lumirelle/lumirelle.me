@@ -18,7 +18,7 @@ export default defineConfig<PresetWind4Theme>({
       // Web fonts
       fonts: {
         // Standards
-        'serif': 'Cormorant Garamond',
+        'serif': 'Fraunces',
         'sans': 'Inter Tight',
         'mono': {
           name: '"0xProto"',

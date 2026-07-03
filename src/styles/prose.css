@@ -246,9 +246,6 @@ html.dark .prose {
   padding-left: 1.1111111em;
 }
 
-.prose h1, .prose h2, .prose h3, .prose h4 {
-  --uno: font-serif;
-}
 .prose h1 {
   color: var(--fg-deeper);
   font-weight: 800;
@@ -577,7 +574,6 @@ html.dark .prose {
   opacity: 0.5;
 }
 .prose em {
-  --uno: font-serif;
   color: var(--fg-deep);
   font-size: 1.05em;
 }

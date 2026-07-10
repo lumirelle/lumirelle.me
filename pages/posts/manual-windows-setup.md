@@ -1,16 +1,22 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-06-27T10:42+08:00
+update: 2026-07-10T18:13+08:00
 lang: en
-duration: 15min
+duration: 16min
 type: manual
 ---
 
 <style>
+.prose table thead, .prose table tbody {
+  display: block;
+}
 .prose table tr {
   display: grid;
   grid-template-columns: 1fr 2fr 2fr;
+}
+.prose table td {
+  overflow-x: auto;
 }
 </style>
 
@@ -96,11 +102,11 @@ start ms-cxh:localonly
 >
 > Believe me, all these choices are for best stability and cleaness of the system. 🥺
 
-## Second Step: Setup System Preferences
+## Second Step: Setup Daily Use Environment
 
 ### Prerequisite Software
 
-(Optional) If your area has some "mysterious" network restrictions, you should prepare a proxy software before all of below steps:
+(Optional) If your area has some **"mysterious"** network restrictions, you should prepare a proxy software before all of below steps:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
@@ -125,24 +131,7 @@ Next, we can choose a quieter anti-virus software instead. I recommend [_Huorong
 
 > [!Note]
 >
-> You can choose the anti-virus software you like, except for _Windows Defender_!!!
-
-#### Disable App Execution Aliases
-
-Some versions of Windows have a feature called "App Execution Aliases", which is enabled by default.
-
-With this feature enabled, Windows will automatically create a stub executable in `~/AppData/Local/Microsoft/WindowsApps/`, like `python.exe`, even you have not installed the corresponding application.
-
-What's more, the Windows app path `~/AppData/Local/Microsoft/WindowsApps/` is placed in the very front of the system environment variable `Path` by default, which means that if you install Python not via that stub executable, but via your preferred way, the system will still execute the stub executable instead of the real one, which is really annoying.
-
-Before disabling this feature, let's say together: **"Fuck you, Windows!"**
-
-To disable this feature for Python:
-
-1. Open "Settings > Apps > Advanced app settings > App execution aliases";
-2. Find "App Installer (python.exe)" & "App Installer (python3.exe)", and turn off the switch.
-
-The same for other applications.
+> You can choose any other anti-virus software you like, except for _Windows Defender_!!!
 
 #### Adjust System Settings
 
@@ -162,7 +151,8 @@ First, adjust system settings with _Winutil_:
 
 ### Setup Softwares
 
-Don't forget to restart your computer to make these softwares work properly after the end of this step!
+> [!Note]
+> Don't forget to restart your computer to make these softwares work properly after the end of this step!
 
 #### Learn How to Use WinGet
 
@@ -172,128 +162,114 @@ Search:
 
 ```nu
 # Search both name and ID
-winget search <QUERY>
+winget search {QUERY}
 # Search name only
-winget search --name <QUERY>
+winget search --name {QUERY}
 # Search ID only
-winget search --id <QUERY>
+winget search --id {QUERY}
 ```
 
 Install (User scope):
 
 ```nu
-winget install <QUERY>
+winget install {QUERY}
 # `add` is an alias of command `install`
-winget add <QUERY>
+winget add {QUERY}
 ```
 
 Install (Machine scope, requires admin privileges):
 
 ```nu
 # In windows, `sudo` command is powered by `gsudo`
-sudo winget add <QUERY> --scope machine
+sudo winget add {QUERY} --scope machine
 ```
 
 Install on specific location:
 
 ```nu
-winget add <QUERY> --location '/PATH/YOU/LIKE'
+winget add {QUERY} --location '/PATH/YOU/LIKE'
 # Or
-winget add <QUERY> -l '/PATH/YOU/LIKE'
+winget add {QUERY} -l '/PATH/YOU/LIKE'
 ```
 
 Install with interactive mode (Default is non-interactive mode):
 
 ```nu
-winget add <QUERY> --interactive
+winget add {QUERY} --interactive
 # Or
-winget add <QUERY> -i
+winget add {QUERY} -i
 ```
 
 Install with no UI mode (Default is UI mode):
 
 ```nu
-winget add <QUERY> --silent
+winget add {QUERY} --silent
 # Or
-winget add <QUERY> -h
+winget add {QUERY} -h
 ```
 
 Install with exact ID match:
 
 ```nu
-winget add --exact --id <PACKAGE_ID>
+winget add --exact --id {PACKAGE_ID}
 # Or
-winget add -e --id <PACKAGE_ID>
+winget add -e --id {PACKAGE_ID}
 ```
 
 Install specific version (Default is latest version):
 
 ```nu
-winget add <QUERY> --version <VERSION>
+winget add {QUERY} --version {VERSION}
 # Or
-winget add <QUERY> -v <VERSION>
+winget add {QUERY} -v {VERSION}
 ```
 
 Uninstall:
 
 ```nu
-winget uninstall <QUERY>
+winget uninstall {QUERY}
 # `rm` is an alias of command `uninstall`
-winget rm <QUERY>
+winget rm {QUERY}
 ```
 
 For more information:
 
 ```nu
-winget <command> --help
+winget {command} --help
 # Or
-winget <command> -?
+winget {command} -?
 ```
 
 #### Recommended Softwares
 
-Below softwares are highly recommended and helpful for the future steps, you can install them first and **in order**:
+Below softwares are highly recommended and helpful for the daily use with Windows, you should install them **in order** as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> Simple, useful, without so many lua configs... |
-| gsudo | `winget add --source winget --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
-| Nushell | `sudo winget add --source winget --exact --id Nushell.Nushell --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell powered by _Rust_ to make the consistent experience. |
-| Starship | `sudo winget add --source winget --exact --id Starship.Starship --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell prompt powered by _Rust_ too. |
-| Git | `sudo winget add --source winget --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
-| Chezmoi | `sudo winget add --source winget --exact --id twpayne.chezmoi --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices. |
-| Mise | `sudo winget add --scope machine --source winget --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
+| gsudo | `winget add --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
+| Nushell | `sudo winget add --exact --id Nushell.Nushell --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell powered by _Rust_ to make the consistent experience. |
+| Starship | `sudo winget add --exact --id Starship.Starship --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell prompt powered by _Rust_ too. |
+| Git | `sudo winget add --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
+| Chezmoi | `sudo winget add --exact --id twpayne.chezmoi --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
+| Mise | `sudo winget add --scope machine --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| WSL | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
 
-Then, my personal configuration setup:
-
-> [!Note]
->
-> This is the setting up of my personal preferences, if you does not interest in this, you can skip this part.
-
-Running the commands below in the shell:
-
-```shell
-chezmoi init https://github.com/lumirelle/dotfiles
-
-# To see what configuration will be applied:
-chezmoi status
-
-chezmoi apply
-```
-
-Next, remaning useful softwares:
+Next, remaining useful softwares:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Firefox | `sudo winget add --source winget --exact --id Mozilla.Firefox --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
-| (Optional) Nutstore | `sudo winget add --source winget --exact --id Nutstore.Nutstore --scope machine ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
-| (Optional) KeePassXC | `sudo winget add --source winget --exact --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
-| Internet Download Manager | `sudo winget add --source winget --exact --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
-| Neovim | `sudo winget add --scope machine --source winget --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> / |
-| Visual Studio Code | `sudo winget add --source winget --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
-| Zed | `sudo winget add --source winget --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too. |
+| Firefox | `sudo winget add --exact --id Mozilla.Firefox --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
+| (Optional) Nutstore | `sudo winget add --exact --id Nutstore.Nutstore --scope machine ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
+| (Optional) KeePassXC | `sudo winget add --exact --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
+| Internet Download Manager | `sudo winget add --exact --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
+| Neovim | `sudo winget add --scope machine --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Visual Studio Code | `sudo winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
+| ~~Zed~~ | ~~`sudo winget add --exact --id ZedIndustries.Zed`~~ | ~~<TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too.~~<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
+| Open Code Desktop | `sudo winget add --exact --id SST.OpenCodeDesktop --scope machine` | Just vibe! |
+| Open Code CLI | `sudo winget add --exact --id SST.opencode --scope machine` | Just vibe! |
 | RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Todo List](raycast://extensions/maggie/todo-list?source=webstore) (todo)_;<br><br>_2. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_3. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_4. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_5. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_6. [MyIP](raycast://extensions/Kang/myip?source=webstore) (ip)_;<br>_7. [Port Manager](raycast://extensions/dleteliers_/ports?source=webstore) (port)_;<br>_8. [Kill Process](raycast://extensions/rolandleth/kill-process?source=webstore) (kill)_;<br>_9. [Speedtest](raycast://extensions/tonka3000/speedtest?source=webstore)_;<br><br>_10. [Shell](raycast://extensions/asubbotin/shell?source=webstore)_;<br>_11. [Visual Studio Code](raycast://extensions/thomas/visual-studio-code?source=webstore)_;<br>_12. [Zed](raycast://extensions/ewgenius/zed-recent-projects?source=webstore)_;<br><br>_13. [Skills](raycast://extensions/keito4/skills?source=webstore)_;<br>_14. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_15. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_16. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_17. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_19. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_19. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_20. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_21. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_22. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
-| Revo Uninstaller | Free:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --source winget --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
+| Revo Uninstaller | Free:<br>`sudo winget add --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
 #### Browser Setup
 
@@ -333,36 +309,35 @@ Install the tool softwares below as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| DeskPins | `sudo winget add --source winget --exact --id EliasFotinis.DeskPins --scope machine` | Pin any window to the desktop. |
-| PixPin | `sudo winget add --source winget --exact --id PixPin.PixPin --scope machine` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
+| DeskPins | `sudo winget add --exact --id EliasFotinis.DeskPins --scope machine` | Pin any window to the desktop. |
+| PixPin | `sudo winget add --exact --id PixPin.PixPin --scope machine` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
-| Driver Store Explorer | `sudo winget add --source winget --exact --id lostindark.DriverStoreExplorer --scope machine` | Clear unused/outdated device drivers. |
-| DISM++ | `sudo winget add --source winget --exact --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
-| WeChat | `sudo winget add --source winget --exact --id Tencent.WeChat.Universal --scope machine` | / |
-| QQ | `sudo winget add --source winget --exact --id Tencent.QQ.NT --scope machine` | / |
-| Thunderbird | `sudo winget add --source winget --exact --id Mozilla.Thunderbird --scope machine` | / |
+| Driver Store Explorer | `sudo winget add --exact --id lostindark.DriverStoreExplorer --scope machine` | Clear unused/outdated device drivers. |
+| DISM++ | `sudo winget add --exact --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
+| WeChat | `sudo winget add --exact --id Tencent.WeChat.Universal --scope machine` | / |
+| QQ | `sudo winget add --exact --id Tencent.QQ.NT --scope machine` | / |
+| Thunderbird | `sudo winget add --exact --id Mozilla.Thunderbird --scope machine` | / |
 | Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
-| Steam | `sudo winget add --scope machine --source winget --exact --id Valve.Steam` | / |
-| Epic Games | `sudo winget add --scope machine --source winget --exact --id EpicGames.EpicGamesLauncher` | / |
-| OBS Studio | `sudo winget add --scope machine --source winget --exact --id OBSProject.OBSStudio` | / |
+| Steam | `sudo winget add --scope machine --exact --id Valve.Steam` | / |
+| Epic Games | `sudo winget add --scope machine --exact --id EpicGames.EpicGamesLauncher` | / |
+| OBS Studio | `sudo winget add --scope machine --exact --id OBSProject.OBSStudio` | / |
 
 Install the dev softwares below as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| WSL | `wsl --install` | Requires reboot. |
-| Podman Desktop | `sudo winget add --scope machine --source winget --exact --id RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
+| Podman Desktop | `sudo winget add --scope machine --exact --id RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
 | Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
 | Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
 
 Some one-time use software:
 
-| Software | Source/Install Command |
-| -- | -- |
-| Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) |
-| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) |
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | / |
+| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | / |
 
 #### Uninstall Unnecessary Softwares
 
@@ -370,7 +345,32 @@ Use _Revo Uninstaller_ to uninstall all the software you don't like!
 
 In particular, **"Windows Programs"** tab let you can completely uninstall system bundled softwares!
 
-## Third Step: Maintain System
+## Third Step: Setup Development Environment
+
+Firstly, you should ensure you have the latest WSL installation:
+
+```nu
+wsl --update
+```
+
+Then, choose your favorite Linux distribution to install, I recommend _Ubuntu_ for its popularity and stability:
+
+```nu
+wsl --install -d Ubuntu --location /PATH/YOU/LIKE
+```
+
+### Recommended Linux Softwares
+
+Below softwares are highly recommended and helpful for the development use with Linux, you should install them **in order** as you need:
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Chezmoi | `sh -c "$(curl -fsLS https://get.chezmoi.io)"` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
+| Nix | `curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install \| sh -s -- --daemon` | Consistent experience for installing packages via different Linux distributions.<br><br>**After the installation script is completed, please follow the on-screen instructions to complete the setup.**<br><br>I prefer to use **"Declarative Dependency Management"** powered by [_Home Manager_](https://github.com/nix-community/home-manager), so the list of all the other softwares can be found in my [home-manager configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/home-manager/home.nix). |
+
+## Forth Step: Maintain System
+
+### Windows
 
 Programs should under:
 
@@ -384,22 +384,45 @@ Programs should under:
   - Portable
     - `<DRIVER>:/Program Files Portable/`
 
-Projects should under:
-
-- `~/dev/`: My projects:
-  - `~/dev/app/`: My application projects;
-  - `~/dev/infra/`: My infrastructure projects;
-  - `~/dev/oss/`: Open source (softwares) projects;
-  - ...
-- `~/work/`: Work projects.
-  - ...
-
-> [!Caution]
->
-> Use a symlink to link the projects folder to `~/dev/i/` is a bad behavior, it can cause problems when resolving the project path.
-
 Use Revo Uninstaller clean useless software at regular intervals.
 
 Use DISM++ clean system at regular intervals.
 
 Shut down and restart at regular intervals.
+
+### WSL
+
+Projects should under:
+
+- `~/my/`: My projects:
+  - `~/my/app/`: My application projects;
+  - `~/my/infra/`: My infrastructure projects;
+  - `~/my/oss/`: Open source (softwares) projects;
+  - ...
+- `~/workon/`: Work projects.
+  - ...
+
+> [!Caution]
+>
+> Use a symlink to link the projects folder is a bad behavior, it can cause problems when some devtools are resolving the project path.
+
+## Optional Step: Without WSL-based Development Environment
+
+If you prefer to use Windows itself as your development environment, or you are not allowed to use WSL for some reasons,you can follow the steps below to setup your development environment.
+
+### Disable App Execution Aliases
+
+Some versions of Windows have a feature called "App Execution Aliases", which is enabled by default.
+
+With this feature enabled, Windows will automatically create a stub executable in `~/AppData/Local/Microsoft/WindowsApps/`, like `python.exe`, even you have not installed the corresponding application.
+
+What's more, the Windows app path `~/AppData/Local/Microsoft/WindowsApps/` is placed in the very front of the system environment variable `Path` by default, which means that if you install Python not via that stub executable, but via your preferred way, the system will still execute the stub executable instead of the real one, which is really annoying.
+
+Before disabling this feature, let's say together: **"Fuck you, Windows!"**
+
+To disable this feature for Python:
+
+1. Open "Settings > Apps > Advanced app settings > App execution aliases";
+2. Find "App Installer (python.exe)" & "App Installer (python3.exe)", and turn off the switch.
+
+The same for other applications.

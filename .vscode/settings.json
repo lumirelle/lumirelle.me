@@ -26,5 +26,9 @@
     "scss",
     "sass",
     "less"
+  ],
+  "cSpell.words": [
+    "DISM",
+    "workon"
   ]
 }

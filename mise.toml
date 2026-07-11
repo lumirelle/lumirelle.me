@@ -12,12 +12,13 @@ preinstall = "bun run ./scripts/self-update-if-netlify.sh"
 
 [tools]
 # Environments
-bun = "1.3.14"
-aube = "1.22.0"
+bun = "latest"
+node = "24"
+aube = "latest"
 # Linters & Formatters
-hk = "1.48.0"
-pkl = "0.31.1"
-stylua = "2.5.2"
+hk = "latest"
+pkl = "latest"
+stylua = "latest"
 
 [deps.bun-aube]
 sources = ["package.json", "bun.lock"]

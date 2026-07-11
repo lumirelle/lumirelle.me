@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-07-10T18:13+08:00
+update: 2026-07-11T20:29+08:00
 lang: en
 duration: 16min
 type: manual
@@ -364,7 +364,7 @@ Below softwares are highly recommended and helpful for the development use with 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Chezmoi | `sh -c "$(curl -fsLS https://get.chezmoi.io)"` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
-| Mise | `sudo apt install mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Mise | `sudo apt install -y extrepo`<br><br>`sudo extrepo enable mise`<br><br>`sudo apt update`<br><br>`sudo apt install -y mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 
 Next, remaining useful softwares:
 

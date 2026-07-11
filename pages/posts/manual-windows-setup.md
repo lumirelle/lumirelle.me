@@ -250,6 +250,8 @@ Below softwares are highly recommended and helpful for the daily use with Window
 | gsudo | `winget add --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
 | Git | `sudo winget add --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
 | Chezmoi | `sudo winget add --exact --id twpayne.chezmoi --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
+| Nushell | `sudo winget add --exact --id Nushell.Nushell --scope machine` | A rust-powered shell. |
+| Starship | `sudo winget add ---exact --id Starship.Starship --scope machine` | A rust-powered shell prompt. |
 | Mise | `sudo winget add --scope machine --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | WSL | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
 
@@ -364,7 +366,10 @@ Below softwares are highly recommended and helpful for the development use with 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Chezmoi | `sh -c "$(curl -fsLS https://get.chezmoi.io)"` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
-| Mise | `sudo apt install -y extrepo`<br><br>`sudo extrepo enable mise`<br><br>`sudo apt update`<br><br>`sudo apt install -y mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Extrepo | `sudo apt install -y extrepo` | Manage external repositories (softwares). |
+| Nushell | `sudo extrepo enable nushell`<br><br>`sudo apt update`<br><br>`sudo apt install -y nushell` | A rust-powered shell. |
+| Starship | `sudo apt install -y starship` | A rust-powered shell prompt. |
+| Mise | `sudo extrepo enable mise`<br><br>`sudo apt update`<br><br>`sudo apt install -y mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 
 Next, remaining useful softwares:
 

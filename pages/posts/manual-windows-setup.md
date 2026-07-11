@@ -248,8 +248,6 @@ Below softwares are highly recommended and helpful for the daily use with Window
 | -- | -- | -- |
 | Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
 | gsudo | `winget add --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
-| Nushell | `sudo winget add --exact --id Nushell.Nushell --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell powered by _Rust_ to make the consistent experience. |
-| Starship | `sudo winget add --exact --id Starship.Starship --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Cross-platform shell prompt powered by _Rust_ too. |
 | Git | `sudo winget add --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
 | Chezmoi | `sudo winget add --exact --id twpayne.chezmoi --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
 | Mise | `sudo winget add --scope machine --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
@@ -366,7 +364,14 @@ Below softwares are highly recommended and helpful for the development use with 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Chezmoi | `sh -c "$(curl -fsLS https://get.chezmoi.io)"` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
-| Nix | `curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install \| sh -s -- --daemon` | Consistent experience for installing packages via different Linux distributions.<br><br>**After the installation script is completed, please follow the on-screen instructions to complete the setup.**<br><br>I prefer to use **"Declarative Dependency Management"** powered by [_Home Manager_](https://github.com/nix-community/home-manager), so the list of all the other softwares can be found in my [home-manager configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/home-manager/home.nix). |
+| Mise | `sudo apt install mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+
+Next, remaining useful softwares:
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Neovim | `sudo apt install neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Open Code CLI | `curl -fsSL https://opencode.ai/install \| bash` | Just vibe! |
 
 ## Forth Step: Maintain System
 

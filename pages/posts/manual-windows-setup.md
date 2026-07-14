@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-07-11T20:29+08:00
+update: 2026-07-14T13:35+08:00
 lang: en
 duration: 16min
 type: manual
@@ -249,11 +249,7 @@ Below softwares are highly recommended and helpful for the daily use with Window
 | Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
 | gsudo | `winget add --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
 | Git | `sudo winget add --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
-| Chezmoi | `sudo winget add --exact --id twpayne.chezmoi --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
-| Nushell | `sudo winget add --exact --id Nushell.Nushell --scope machine` | A rust-powered shell. |
-| Starship | `sudo winget add ---exact --id Starship.Starship --scope machine` | A rust-powered shell prompt. |
 | Mise | `sudo winget add --exact --id jdx.mise --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
-| Zoxide | `sudo winget add --exact --id ajeetdsouza.zoxide --scope machine` | / |
 | WSL | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
 
 Next, remaining useful softwares:
@@ -268,7 +264,6 @@ Next, remaining useful softwares:
 | Visual Studio Code | `sudo winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
 | ~~Zed~~ | ~~`sudo winget add --exact --id ZedIndustries.Zed`~~ | ~~<TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too.~~<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
 | Open Code Desktop | `sudo winget add --exact --id SST.OpenCodeDesktop --scope machine` | Just vibe! |
-| Open Code CLI | `sudo winget add --exact --id SST.opencode --scope machine` | Just vibe! |
 | RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Todo List](raycast://extensions/maggie/todo-list?source=webstore) (todo)_;<br><br>_2. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_3. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_4. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_5. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_6. [MyIP](raycast://extensions/Kang/myip?source=webstore) (ip)_;<br>_7. [Port Manager](raycast://extensions/dleteliers_/ports?source=webstore) (port)_;<br>_8. [Kill Process](raycast://extensions/rolandleth/kill-process?source=webstore) (kill)_;<br>_9. [Speedtest](raycast://extensions/tonka3000/speedtest?source=webstore)_;<br><br>_10. [Shell](raycast://extensions/asubbotin/shell?source=webstore)_;<br>_11. [Visual Studio Code](raycast://extensions/thomas/visual-studio-code?source=webstore)_;<br>_12. [Zed](raycast://extensions/ewgenius/zed-recent-projects?source=webstore)_;<br><br>_13. [Skills](raycast://extensions/keito4/skills?source=webstore)_;<br>_14. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_15. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_16. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_17. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_19. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_19. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_20. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_21. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_22. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
 | Revo Uninstaller | Free:<br>`sudo winget add --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
@@ -366,11 +361,7 @@ Below softwares are highly recommended and helpful for the development use with 
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Chezmoi | `sh -c "$(curl -fsLS https://get.chezmoi.io)"` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles manager, to make your configuration files portable and consistent among multiple devices.<br><br>(Below is the setting up of my personal preferences, if you does not interest in this, you can skip this part) Init with my setup:<br><br>`chezmoi init https://github.com/lumirelle/dotfiles`<br><br>To see what configuration will be applied:<br><br>`chezmoi status`<br><br>Then apply:<br><br>`chezmoi apply` |
 | Extrepo | `sudo apt install -y extrepo` | Manage external repositories (softwares). |
-| Nushell | `sudo extrepo enable nushell`<br><br>`sudo apt update`<br><br>`sudo apt install -y nushell` | A rust-powered shell. |
-| Starship | `sudo apt install -y starship` | A rust-powered shell prompt. |
-| Zoxide | `sudo apt install -y zoxide` | / |
 | Mise | `sudo extrepo enable mise`<br><br>`sudo apt update`<br><br>`sudo apt install -y mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 
 Next, remaining useful softwares:

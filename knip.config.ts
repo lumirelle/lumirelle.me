@@ -14,6 +14,7 @@ export default {
     '*.d.ts',
   ],
   ignoreFiles: [
+    'temp/**',
     'taze.config.ts',
   ],
   ignoreDependencies: [
@@ -28,7 +29,7 @@ export default {
 
     // Check tools
     '@lumirelle/oxlint-config',
-    'vue-tsc',
+    '@seepine/vue-tsc',
 
     // Dependencies manager
     'taze',

@@ -7,3 +7,7 @@ my personal website, inspired by [antfu.me](https://antfu.me)
 <br>
 
 <samp>code is licensed under <a href='./LICENSE'>MIT</a>,<br> words and images are licensed under <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/'>CC BY-NC-SA 4.0</a></samp>.
+
+## Known Issues
+
+- [ ] Due to the [compatibility issues](https://github.com/volarjs/volar.js/pull/310) of `vue-tsc` with Bun, I switch to [`@seepine/vue-tsc`](https://github.com/seepine/vue-tsc) as a temporary workaround.

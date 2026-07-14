@@ -76,13 +76,13 @@
       "check": {
         "@antfu/eslint-config": "^9.0.0",
         "@lumirelle/oxlint-config": "^0.10.1",
+        "@seepine/vue-tsc": "^0.1.0",
         "@unocss/eslint-plugin": "^66.7.2",
         "eslint": "^10.5.0",
         "eslint-plugin-oxlint": "^1.71.0",
         "eslint-plugin-vuejs-accessibility": "^2.5.0",
         "oxlint": "^1.71.0",
-        "oxlint-tsgolint": "^0.23.0",
-        "vue-tsc": "^3.3.5"
+        "oxlint-tsgolint": "^0.23.0"
       }
     }
   },
@@ -111,6 +111,7 @@
     "@lumirelle/tsconfig": "catalog:types",
     "@octokit/core": "catalog:dev",
     "@octokit/rest": "catalog:dev",
+    "@seepine/vue-tsc": "catalog:check",
     "@shikijs/markdown-exit": "catalog:build",
     "@shikijs/transformers": "catalog:build",
     "@shikijs/twoslash": "catalog:build",
@@ -156,8 +157,7 @@
     "vite-plugin-inspect": "catalog:build",
     "vite-plugin-optimize-exclude": "catalog:build",
     "vite-ssg": "catalog:build",
-    "vite-svg-loader": "catalog:build",
-    "vue-tsc": "catalog:check"
+    "vite-svg-loader": "catalog:build"
   },
   "overrides": {
     "@types/markdown-it": "npm:markdown-exit@1.1.0-beta.2",

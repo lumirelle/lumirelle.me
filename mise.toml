@@ -2,7 +2,7 @@
 experimental = true
 
 [env]
-_.path = ["./node_modules/.bin"]
+_.path = ["{{config_root}}/node_modules/.bin"]
 
 [hooks]
 # Only running self-update on Netlify,
@@ -13,7 +13,6 @@ preinstall = "bun run ./scripts/self-update-if-netlify.sh"
 [tools]
 # Environments
 bun = "latest"
-node = "24"
 aube = "latest"
 # Linters & Formatters
 hk = "latest"
@@ -29,13 +28,13 @@ run = "bun install --lockfile-only && aube install"
 auto = true
 
 [tasks.dev]
-run = "vite --port 3333 --open"
+run = "bun run vite --port 3333 --open"
 
 [tasks.build]
 env = { NODE_ENV = "production" }
 run = [
   { task = "static" },
-  "vite-ssg build",
+  "bun run vite-ssg build",
   { tasks = [
     "copy-fonts",
     "rss",
@@ -51,9 +50,9 @@ run = "bun run ./scripts/rss.ts"
 
 [tasks.static]
 run = [
-  "premove temp",
+  "bun run premove temp",
   "git clone https://github.com/lumirelle/static temp",
-  "premove temp/.git",
+  "bun run premove temp/.git",
   "bun run ./scripts/copy-sponsors.ts",
 ]
 
@@ -71,7 +70,7 @@ run = "bun run ./scripts/img-compress-staged.ts"
 run = "bun run ./scripts/photos-manage.ts"
 
 [tasks.start]
-run = "vite preview"
+run = "bun run vite preview"
 
 [tasks.check]
 run = "hk check --all"

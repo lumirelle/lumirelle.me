@@ -1,4 +1,5 @@
 amends "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Config.pkl"
+
 import "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
@@ -8,17 +9,18 @@ local linters = new Mapping<String, Step> {
   }
   ["pkl"] = (Builtins.pkl) {
     glob = List("**/*.pkl")
-    check = "pkl eval {{files}}"
   }
   ["pkl-format"] = (Builtins.pkl_format) {
     glob = List("**/*.pkl")
     shell = null
-    check_list_files = "pkl format --diff-name-only {{ files }}"
     fix = "pkl format --write {{ files }}"
   }
 
   // Source code
-  ["oxlint"] = Builtins.ox_lint
+  ["oxlint"] = (Builtins.ox_lint) {
+    check = "bun run oxlint --deny-warnings {{ files }}"
+    fix = "bun run oxlint --deny-warnings --fix {{ files }}"
+  }
   ["eslint"] = (Builtins.eslint) {
     batch = false
     glob =
@@ -47,15 +49,17 @@ local linters = new Mapping<String, Step> {
         // Vue
         "*.vue",
       )
+    check = "bun run eslint {{ files }}"
+    fix = "bun run eslint --fix {{ files }}"
     depends = List("oxlint")
   }
-  ["tsc"] {
-    check = "vue-tsc --build --noEmit"
+  ["tsc"] = (Builtins.tsc) {
+    check = "bun run vue-tsc --build --noEmit"
   }
 
   // Unused
   ["knip"] = (Builtins.knip) {
-    check = "knip-bun --no-progress --directory {{workspace}}"
+    check = "bun run knip-bun --no-progress --directory {{workspace}}"
     // Disable knip auto-fix, because it's dangerous
     fix = null
   }

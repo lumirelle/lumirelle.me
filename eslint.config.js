@@ -6,31 +6,6 @@ export default antfu(
   {
     unocss: true,
     vue: { a11y: true },
-    perfectionist: {
-      overrides: {
-        'perfectionist/sort-imports': [
-          'error',
-          {
-            environment: 'bun',
-            groups: [
-              'type-import',
-              ['type-parent', 'type-sibling', 'type-index', 'type-internal'],
-              'value-builtin',
-              'value-external',
-              'value-internal',
-              ['value-parent', 'value-sibling', 'value-index'],
-              'side-effect',
-              'ts-equals-import',
-              'unknown',
-            ],
-            newlinesBetween: 'ignore',
-            newlinesInside: 'ignore',
-            order: 'asc',
-            type: 'natural',
-          },
-        ],
-      },
-    },
     toml: {
       overrides: {
         'toml/array-element-newline': ['error', 'consistent'],

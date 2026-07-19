@@ -1,31 +1,15 @@
-amends "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v1.51.0/hk@1.51.0#/Config.pkl"
 
-import "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Builtins.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.51.0/hk@1.51.0#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
-  // Configurations
-  ["stylua"] = (Builtins.stylua) {
-    glob = List("**/*.lua")
-  }
-  ["pkl"] = (Builtins.pkl) {
-    glob = List("**/*.pkl")
-  }
-  ["pkl-format"] = (Builtins.pkl_format) {
-    glob = List("**/*.pkl")
-    shell = null
-    fix = "pkl format --write {{ files }}"
-  }
-
-  // Source code
-  ["oxlint"] = (Builtins.ox_lint) {
-    check = "bun run oxlint --deny-warnings {{ files }}"
-    fix = "bun run oxlint --deny-warnings --fix {{ files }}"
-  }
+  // Code
+  ["oxlint"] = Builtins.ox_lint
   ["eslint"] = (Builtins.eslint) {
     batch = false
     glob =
       List(
-        // JS & TS
+        // Code
         "*.js",
         "*.mjs",
         "*.cjs",
@@ -34,34 +18,54 @@ local linters = new Mapping<String, Step> {
         "*.mts",
         "*.cts",
         "*.tsx",
-        // Markdown
+        "*.vue",
+        "*.css",
+        // Configurations
+        "*.json",
+        "*.jsonc",
+        "*.yaml",
+        "*.yml",
+        "*.toml",
+        // Documentations
         "*.md",
         "*.mdc",
         "*.mdx",
-        // JSON
-        "*.json",
-        "*.jsonc",
-        // YAML
-        "*.yaml",
-        "*.yml",
-        // TOML
-        "*.toml",
-        // Vue
-        "*.vue",
       )
-    check = "bun run eslint {{ files }}"
-    fix = "bun run eslint --fix {{ files }}"
     depends = List("oxlint")
   }
   ["tsc"] = (Builtins.tsc) {
-    check = "bun run vue-tsc --build --noEmit"
+    check = new Config.Command {
+      List("vue-tsc", "--build", "--noEmit")
+    }
   }
+  // Unused code
+  // Disabled as not ready.
+  //["knip"] = (Builtins.knip) {
+  //  check = new Config.Command {
+  //    argv = List("knip", "--no-progress", "--directory", "{{workspace}}")
+  //  }
+  //  // Disable knip auto-fix, because it's dangerous
+  //  fix = null
+  //}
 
-  // Unused
-  ["knip"] = (Builtins.knip) {
-    check = "bun run knip-bun --no-progress --directory {{workspace}}"
-    // Disable knip auto-fix, because it's dangerous
-    fix = null
+  // Configurations
+  ["stylua"] = (Builtins.stylua) {
+    glob = List("**/*.lua")
+  }
+  ["hk"] {
+    glob = List("hk.pkl")
+    check = new Config.Command {
+      argv = List("hk", "validate")
+    }
+  }
+  ["pkl-format"] {
+    glob = List("hk.pkl")
+    check_list_files = new Config.Command {
+      argv = List("pkl", "format", "--diff-name-only", "{{ files }}")
+    }
+    fix = new Config.Command {
+      argv = List("pkl", "format", "--write", "{{ files }}")
+    }
   }
 }
 

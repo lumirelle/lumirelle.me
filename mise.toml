@@ -1,40 +1,44 @@
 [settings]
 experimental = true
 
+[tools]
+# Environments
+node = 'latest'
+'github:nubjs/nub' = { version = 'latest', postinstall = 'nub pm pin' }
+# Linters & Formatters
+hk = 'latest'
+stylua = 'latest'
+pkl = 'latest'
+
+[deps.nub]
+description = 'Automatically install Node.js dependencies via nub.'
+sources = ['package.json', 'nub.lock']
+outputs = ['node_modules/']
+run = 'nub install'
+auto = true
+
 [env]
-_.path = ["{{config_root}}/node_modules/.bin"]
+_.path = ['{{config_root}}/node_modules/.bin']
+
+# See https://github.com/webpro-nl/knip/issues/1813 & https://github.com/oxc-project/oxc/issues/11834
+KNIP_DISABLE_RAW_TRANSFER = 1
 
 [hooks]
 # Only running self-update on Netlify,
 # to update mise before installing tools,
 # because Netlify's built-in mise is outdated.
-preinstall = "bun run ./scripts/self-update-if-netlify.sh"
-
-[tools]
-# Environments
-bun = "latest"
-aube = "latest"
-# Linters & Formatters
-hk = "latest"
-pkl = "latest"
-stylua = "latest"
-
-[deps.bun-aube]
-sources = ["package.json", "bun.lock"]
-outputs = ["node_modules/"]
-# Because aube's output lockfile has bugs,
-# we use `bun install --lockfile-only` to generate a lockfile
-run = "bun install --lockfile-only && aube install"
-auto = true
+preinstall = '''
+test $NETLIFY && mise self-update
+'''
 
 [tasks.dev]
-run = "bun run vite --port 3333 --open"
+run = "vite --port 3333 --open"
 
 [tasks.build]
 env = { NODE_ENV = "production" }
 run = [
   { task = "static" },
-  "bun run vite-ssg build",
+  "vite-ssg build",
   { tasks = [
     "copy-fonts",
     "rss",
@@ -43,37 +47,51 @@ run = [
 ]
 
 [tasks.copy-fonts]
-run = "bun run ./scripts/copy-fonts.ts"
+run = "nub ./scripts/copy-fonts.ts"
 
 [tasks.rss]
-run = "bun run ./scripts/rss.ts"
+run = "nub ./scripts/rss.ts"
 
 [tasks.static]
 run = [
-  "bun run premove temp",
+  "premove temp",
   "git clone https://github.com/lumirelle/static temp",
-  "bun run premove temp/.git",
-  "bun run ./scripts/copy-sponsors.ts",
+  "premove temp/.git",
+  "nub ./scripts/copy-sponsors.ts",
 ]
 
 [tasks.redirects]
-run = "bun run ./scripts/redirects.ts"
+run = "nub ./scripts/redirects.ts"
 depends_post = "copy-dist-redirects"
 
 [tasks.copy-dist-redirects]
-run = "bun run ./scripts/copy-dist-redirects.ts"
+run = "nub ./scripts/copy-dist-redirects.ts"
 
 [tasks.compress]
-run = "bun run ./scripts/img-compress-staged.ts"
+run = "nub ./scripts/img-compress-staged.ts"
 
 [tasks.photos]
-run = "bun run ./scripts/photos-manage.ts"
+run = "nub ./scripts/photos-manage.ts"
 
 [tasks.start]
-run = "bun run vite preview"
+run = "vite preview"
 
 [tasks.check]
-run = "hk check --all"
+description = 'Run all checks.'
+usage = '''
+flag "-s --staged" help="Run on staged files only without stashing unstaged changes"
+arg "[rest]" var=#true help="Additional arguments to pass to the test runner"
+'''
+run = '''
+hk check {{ "--staged" if usage.staged else "--all" }} {{ usage.rest | join(sep=' ') if usage.rest else '' }}
+'''
 
 [tasks.fix]
-run = "hk fix --all"
+description = 'Fix all check issues.'
+usage = '''
+flag "-s --staged" help="Run on staged files only without stashing unstaged changes"
+arg "[rest]" var=#true help="Additional arguments to pass to the test runner"
+'''
+run = '''
+hk fix {{ "--staged" if usage.staged else "--all" }} {{ usage.rest | join(sep=' ') if usage.rest else '' }}
+'''

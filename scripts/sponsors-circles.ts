@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import { hierarchy, pack } from 'd3-hierarchy'
-import _sponsors from '../temp/sponsors.json'
+import _sponsors from '../temp/sponsors.json' with { type: 'json' }
 
 interface Sponsor {
   name: string

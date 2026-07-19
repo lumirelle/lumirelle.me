@@ -1,24 +1,22 @@
 -- ESLint as formatter
 local eslint_support_filetypes = {
-  -- JS & TS
+  -- Code
   "javascript",
   "javascriptreact",
   "typescript",
   "typescriptreact",
-  -- Markdown
-  "markdown",
-  -- JSON
+  "vue",
+  "css",
+  -- Configurations
   "json",
   "jsonc",
-  -- YAML
   "yaml",
-  -- TOML
   "toml",
-  -- Vue
-  "vue",
+  -- Documentations
+  "markdown",
 }
 local eslint_support_file_patterns = {
-  -- JS & TS
+  -- Code
   "*.js",
   "*.mjs",
   "*.cjs",
@@ -27,20 +25,18 @@ local eslint_support_file_patterns = {
   "*.mts",
   "*.cts",
   "*.tsx",
-  -- Markdown
+  "*.vue",
+  "*.css",
+  -- Configurations
+  "*.json",
+  "*.jsonc",
+  "*.yaml",
+  "*.yml",
+  "*.toml",
+  -- Documentations
   "*.md",
   "*.mdc",
   "*.mdx",
-  -- JSON
-  "*.json",
-  "*.jsonc",
-  -- YAML
-  "*.yaml",
-  "*.yml",
-  -- TOML
-  "*.toml",
-  -- Vue
-  "*.vue",
 }
 -- Disable other formatter conflict with ESLint
 require("snacks").util.lsp.on(function(_, client)

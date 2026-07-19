@@ -1,0 +1,25 @@
+{
+  "entry": [
+    "scripts/copy-fonts.ts",
+    "scripts/rss.ts",
+    "scripts/copy-sponsors.ts",
+    "scripts/redirects.ts",
+    "scripts/copy-dist-redirects.ts",
+    "scripts/img-compress-staged.ts",
+    "scripts/photos-manage.ts"
+  ],
+  "ignoreDependencies": [
+    // Build tools
+    "premove",
+    // Frontend libraries
+    "@iconify/json",
+    "@octokit/core",
+    "@unhead/vue",
+    "uno.css",
+    // Quality
+    "@lumirelle/oxlint-config",
+    "@seepine/vue-tsc",
+    // Node.js dependencies manager
+    "taze"
+  ]
+}

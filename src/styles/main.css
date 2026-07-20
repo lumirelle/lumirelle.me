@@ -1,4 +1,29 @@
 /* Font Definitions */
+/* Strict 62.5%em Group */
+@font-face {
+  font-family: 'Maple Mono WR CN';
+  src: url('/fonts/MapleMonoWR-CN-Regular.ttf');
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Regular_Italic.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Bold.woff2') format('woff2');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Bold_Italic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+}
 /* Strict 62%em Group */
 @font-face {
   font-family: 'Maple Mono WD CN';

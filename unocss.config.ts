@@ -15,25 +15,38 @@ export default defineConfig<PresetWind4Theme>({
     presetAttributify(),
     presetWind4(),
     presetWebFonts({
-      // Web fonts
       fonts: {
         // Standards
         'serif': 'Fraunces',
         'sans': 'Inter Tight',
         'mono': {
-          name: '"0xProto"',
+          name: '"Annotation Mono"',
           provider: 'none',
         },
-
-        // Custom
-        'maple-mono-cn': {
-          name: '"Maple Mono CN"',
+        // Strict 62.5%em Group
+        'maple-mono-wr-cn': {
+          name: '"Maple Mono WR CN"',
           provider: 'none',
         },
+        'annotation-mono': {
+          name: '"Annotation Mono"',
+          provider: 'none',
+        },
+        // Strict 62%em Group
         'maple-mono-wd-cn': {
           name: '"Maple Mono WD CN"',
           provider: 'none',
         },
+        '0xproto': {
+          name: '"0xProto"',
+          provider: 'none',
+        },
+        // Strict 60%em Group
+        'maple-mono-cn': {
+          name: '"Maple Mono CN"',
+          provider: 'none',
+        },
+        'geist-mono': 'Geist Mono',
         'drafting-mono': {
           name: '"Drafting* Mono"',
           provider: 'none',
@@ -42,11 +55,11 @@ export default defineConfig<PresetWind4Theme>({
           name: '"Recursive"',
           provider: 'none',
         },
+        // Strict 50%em Group
         'source-han-sans-tc': {
           name: '"Source Han Sans TC"',
           provider: 'none',
         },
-        'geist-mono': 'Geist Mono',
         'm-plus-code-latin': 'M PLUS Code Latin',
       },
       processors: [createLocalFontProcessor()],
@@ -55,7 +68,8 @@ export default defineConfig<PresetWind4Theme>({
   transformers: [transformerDirectives()],
 
   rules: [
-    // Font family rules
+    // Font family rules, without nerd symbols
+    ['font-62.5%em', { 'font-family': '"Annotation Mono", "Maple Mono WR CN", monospace' }],
     ['font-62%em', { 'font-family': '"0xProto", "Maple Mono WD CN", monospace' }],
     ['font-60%em', { 'font-family': '"Geist Mono", "Maple Mono CN", monospace' }],
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC", monospace' }],

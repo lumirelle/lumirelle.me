@@ -32,7 +32,7 @@ My basic requirements for fonts are that:
 
 1. They must have at least two weights (Regular & Bold);
 2. They must have italic styles;
-3. Save my eyes.
+3. Save my eyes but not serious.
 
 All of fonts listed below are satisfy these requirements.
 
@@ -40,13 +40,14 @@ All of fonts listed below are satisfy these requirements.
 
 > [!Note]
 >
-> In Web applications, `em` is base on the current font size. For example, if the font size is `16px`, then `1em` = `16px`. We can use this unit to describe the ratio of character width to font size.
+> In Web development, `em` is base on the current font size. For example, if the font size is `16px`, then `1em` = `16px`. We can use this unit to describe the ratio of character width to font size.
 >
 > As some font families are variable, they may support custom character width, so I will use the default character width to categorize these fonts.
 
-- **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), like "Monaspace Xenon Var", etc.
-- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), like "Go Mono" and "Maple Font", etc.
-- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), like "M PLUS Code Latin" and "Source Han Sans TC", etc.
+- **62.5%em group**: If the font size is 16px, one Latin character will be 10px (62.5%em), and one CJK character will be 20px (62.5% \* 2 = 125%em), like "Annotation Mono", etc
+- **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), like "Monaspace Xenon Var", etc
+- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), like "Go Mono" and "Maple Font", etc
+- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), like "M PLUS Code Latin" and "Source Han Sans TC", etc
 
 <a name="font-weights"></a> Also, this is a comparison table of the font weight aliases and the corresponding numeric values:
 
@@ -63,11 +64,41 @@ All of fonts listed below are satisfy these requirements.
 | 900 | black, extra black, ultra black, poster, fat |
 | 950 | (non-standard, supported by some variable fonts) |
 
+#### 62.5%em Group
+
+> [!Note]
+>
+> It seems like impossible to find a CJK font with 62%em width, so I decide to may a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+
+This group uses my custom build &ndash; ["Maple Mono WR CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK characters support, via bellow command:
+
+```nu
+python build.py --width wider --cn --no-nf
+```
+
+> [!Note]
+>
+> `--width wider` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most of them.
+
+- ⭐ [Annotation Mono](https://qwerasd205.github.io/AnnotationMono/): <a name="Annotation Mono"></a>
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" preset="blue" /><TextTag text="thin to 1000, with italic" preset="green" />
+
+  A lovingly crafted handwriting-style monospace font.
+
+  <img src="/posts/misc-programming-fonts/AnnotationMono.png" alt="AnnotationMono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can using these font like this:
+
+```json
+"'Symbols Nerd Font', 'Annotation Mono', 'Maple Mono WR CN', monospace"
+```
+
 #### 62%em Group
 
 > [!Note]
 >
-> It seems like impossible to find a CJK font with 62%em width, 😇
+> It seems like impossible to find a CJK font with 62%em width, so I decide to may a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
 
 This group uses my custom build &ndash; ["Maple Mono WD CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK characters support, via bellow command:
 
@@ -98,7 +129,7 @@ python build.py --width wide --cn --no-nf
 Then, you can using these font like this:
 
 ```json
-"'Symbols Nerd Font', '0xProto', monospace"
+"'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
 ```
 
 #### 60%em Group
@@ -179,7 +210,7 @@ And Latin font have more choice:
   >
   > Variable version has some rendering issues about non-breaking space in Chromium-based applications (like Chrome, VSCode, etc.), please track the [issue #472245780](https://issues.chromium.org/issues/472245780).
 
-  <TextTag text="variable" preset="amber" /><TextTag text="serif" /><TextTag text="light to 1000, with italic" preset="green" />
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="light to 1000, with italic" preset="green" />
 
   Built to maximize versatility, control, and performance, Recursive is a five-axis variable font.
 
@@ -275,13 +306,13 @@ Then, you can using this font like this:
 
 ### Strict Preview
 
-#### Latin vs. CJK
+#### 62.5%em Group
 
-##### 62%em Group
+<div font="[&_code]:62.5%em!">
 
-"0xProto", "Maple Mono WD CN", monospace:
-
-<div font="[&_code]:62%em!">
+```json
+"'Symbols Nerd Font', 'Annotation Mono', 'Maple Mono WR CN', monospace"
+```
 
 ```js
 console.log('Holly shit!')
@@ -292,53 +323,6 @@ console.log('我的娘亲嘞!')
 我
 w
 ```
-
-</div>
-
-
-##### 60%em Group
-
-"Geist Mono", "Maple Mono CN", monospace:
-
-<div font="[&_code]:60%em!">
-
-```js
-console.log('Holly shit!')
-console.log('我的娘亲嘞!')
-
-// |wo|!-|so|+=0o|lI|
-// |我|的|天|……哪|！|
-我
-w
-```
-
-</div>
-
-##### 50%em Group
-
-"M PLUS Code Latin", "Source Han Sans TC", monospace:
-
-<div font="[&_code]:50%em!">
-
-```js
-console.log('Holly shit!')
-console.log('我的娘亲嘞!')
-
-// |wo|!-|so|+=0o|lI|
-// |我|的|天|……哪|！|
-我
-w
-```
-
-</div>
-
-#### Code
-
-##### 62%em Group
-
-"0xProto", "Maple Mono WD CN", monospace:
-
-<div font="[&_code]:62%em!">
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'
@@ -430,11 +414,24 @@ async function _symlinkConfig(
 
 </div>
 
-##### 60%em Group
 
-"Geist Mono", "Maple Mono CN", monospace:
+#### 62%em Group
 
-<div font="[&_code]:60%em!">
+<div font="[&_code]:62%em!">
+
+```json
+"'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'
@@ -526,11 +523,131 @@ async function _symlinkConfig(
 
 </div>
 
-##### 50%em Group
+#### 60%em Group
 
-"M PLUS Code Latin", "Source Han Sans TC", monospace:
+<div font="[&_code]:60%em!">
+
+```json
+"'Symbols Nerd Font', 'Geist Mono', 'Maple Mono CN', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+#### 50%em Group
 
 <div font="[&_code]:50%em!">
+
+```json
+"'Symbols Nerd Font', 'M PLUS Code Latin', 'Source Han Sans TC', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'
@@ -624,11 +741,11 @@ async function _symlinkConfig(
 
 ### Casual Preview
 
-#### Latin vs. CJK
-
-"Comic Mono", "Maple Mono CN", monospace:
-
 <div font="[&_code]:casual!">
+
+```json
+"'Symbols Nerd Font', 'Comic Mono', 'Maple Mono CN', monospace"
+```
 
 ```js
 console.log('Holly shit!')
@@ -639,14 +756,6 @@ console.log('我的娘亲嘞!')
 我
 w
 ```
-
-</div>
-
-#### Code
-
-"Comic Mono", "Maple Mono CN", monospace:
-
-<div font="[&_code]:casual!">
 
 ```ts
 import type { ProcessConfigOptions } from '../../types'

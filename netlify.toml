@@ -3,9 +3,6 @@ base = "trick-netlify/"
 publish = "../dist"
 command = "cd ../ && mise run build"
 
-[build.environment]
-NODE_VERSION = "26.5.0"
-
 [[headers]]
 for = "/assets/*"
 

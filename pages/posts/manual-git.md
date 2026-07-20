@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-07-02T10:36+08:00
+update: 2026-07-20T11:37+08:00
 lang: en
 duration: 15min
 type: manual
@@ -552,7 +552,7 @@ To solve this problem, you can create a `.git-blame-ignore-revs` file in the roo
 >
 > ```ini
 > [blame]
-> ignoreRevsFile = :(optional).git-blame-ignore-revs
+> ignoreRevsFile = ":(optional).git-blame-ignore-revs"
 > ```
 
 ## LazyGit

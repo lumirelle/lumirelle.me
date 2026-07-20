@@ -1,7 +1,7 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2026-06-09T03:56+08:00
+update: 2026-07-20T10:27+08:00
 lang: en
 duration: 2min
 type: manual
@@ -18,15 +18,18 @@ JavaScript has two kind of runtime environments:
 
 For the server-side, we have `node_modules` with plenty of packages which can run on our device. There are also many package managers, like:
 
-- [NPM](https://www.npmjs.com/)
+- [NPM](https://www.npmjs.com/): Built-in package manager of _Node.js_;
 - [PNPM](https://pnpm.io/)
 - [Yarn](https://yarnpkg.com/)
-- [Bun](https://bun.sh/)
-- [Deno](https://deno.com/)
-- ⭐ [Aube](https://aube.en.dev/)
+- [Bun](https://bun.sh/): Built-in package manager of _Bun_;
+- [Deno](https://deno.com/): Built-in package manager of _Deno_;
+- [Aube](https://aube.en.dev/)
+- ⭐ [Nub](https://nubjs.com/): Powered by _Aube_;
 - ...
 
-### Why Aube?
+### Why Nub?
+
+As a package manager, nub has follwing advantegers:
 
 - Faster installation
 - Disk space efficient
@@ -37,46 +40,44 @@ For the server-side, we have `node_modules` with plenty of packages which can ru
 - Ignore `postinstall` scripts by default, avoiding potential security risks
 - ...
 
+On the other hand, it is a powerful tool to make _Node.js_ run TypeScript file out-of-box.
+
 ## Manage Your Own Packages
 
 If you are developing your own packages, you may want to publish them to the package registry.
 
 > [!Note]
 >
-> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/). But for the first time, you should still login manually by command: `npm login`. NPM CLI will automatically open the browser for you to login, and then you can publish your package using `na publish` command.
+> As NPM classical tokens is already revoked, it's recommended to publish your packages using workflows. See [the related blog](https://github.blog/changelog/2025-12-09-npm-classic-tokens-revoked-session-based-auth-and-cli-token-management-now-available/).
 >
-> After the first time publishing, as `bun publish` not supports trusted publishing currently, the workaround is to build the tarball using `bun pm pack --filename <filename>` and publish it using `npm publish --access public`. See the example in [my workflow configs](https://github.com/lumirelle/workflows/blob/main/.github/workflows/release.yml).
->
-> Notice, do not call `npm publish` with `bunx`, `nlx` or any other agent, this may break the login state when we using them with trusted publising.
+> For the first release, you should still login manually by command: `npm login`. NPM CLI will automatically open the browser for you to login, and then you can publish your package using `nub publish` command.
 
 ### Login to the Package Registry
 
 ```sh
-na login
-  -> npm login
-  -> pnpm login
-  -> aube login
-  -> ...
+npm login
 ```
 
 ### Publish Your Package
 
 ```sh
-na publish
-  -> npm publish
-  -> pnpm publish
-  -> aube publish
-  -> ...
+nub publish
+# Or
+pnpm publish
+# Or
+npm publish
+# ...
 ```
 
 ### Unpublish Your Package
 
 ```sh
-na unpublish <package-name>
-  -> npm unpublish <package-name>
-  -> pnpm unpublish <package-name>
-  -> aube unpublish <package-name>
-  -> ...
+nub unpublish <package-name>
+# Or
+pnpm unpublish <package-name>
+# Or
+npm unpublish <package-name>
+# ...
 ```
 
 ### Manage Package Version Tags
@@ -84,21 +85,21 @@ na unpublish <package-name>
 Remove a version tag from a package:
 
 ```sh
-na dist-tag rm <package-name> <tag>
-  -> npm dist-tag rm <package-name> <tag>
-  -> pnpm dist-tag rm <package-name> <tag>
-  -> aube dist-tag rm <package-name> <tag>
-  # The same as login, you should use `npm dist-tag rm`
-  # to remove version tags for your packages published by Bun
-  -> ...
+nub dist-tag rm <package-name> <tag>
+# Or
+npm dist-tag rm <package-name> <tag>
+# Or
+pnpm dist-tag rm <package-name> <tag>
+# ...
 ```
 
 For example, if you want to remove the `beta` version tag from `@test/package`:
 
 ```sh
-na dist-tag rm @test/package beta
-  -> npm dist-tag rm @test/package beta
-  -> pnpm dist-tag rm @test/package beta
-  -> aube dist-tag rm @test/package beta
-  -> ...
+nub dist-tag rm @test/package beta
+# Or
+npm dist-tag rm @test/package beta
+# Or
+pnpm dist-tag rm @test/package beta
+# ...
 ```

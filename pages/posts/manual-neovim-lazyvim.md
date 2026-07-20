@@ -1,11 +1,24 @@
 ---
 title: Neovim and LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-06-09T03:52+08:00
+update: 2026-07-20T10:30+08:00
 lang: en
 duration: 26min
 type: manual
 ---
+
+<style>
+.prose table thead, .prose table tbody {
+  display: block;
+}
+.prose table tr {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr 2fr;
+}
+.prose table td {
+  overflow-x: auto;
+}
+</style>
 
 [[toc]]
 

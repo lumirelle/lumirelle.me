@@ -262,9 +262,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/project-engineering-categorize-your-dependencies': RouteRecordInfo<
-      '/posts/project-engineering-categorize-your-dependencies',
-      '/posts/project-engineering-categorize-your-dependencies',
+    '/posts/project-engineering-monorepo-deps-mgmt': RouteRecordInfo<
+      '/posts/project-engineering-monorepo-deps-mgmt',
+      '/posts/project-engineering-monorepo-deps-mgmt',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -574,9 +574,9 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'pages/posts/project-engineering-categorize-your-dependencies.md': {
+    'pages/posts/project-engineering-monorepo-deps-mgmt.md': {
       routes:
-        | '/posts/project-engineering-categorize-your-dependencies'
+        | '/posts/project-engineering-monorepo-deps-mgmt'
       views:
         | never
       pathParamNames:

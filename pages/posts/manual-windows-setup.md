@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-07-20T10:03+08:00
+update: 2026-07-27T16:08+08:00
 lang: en
 duration: 16min
 type: manual
@@ -296,12 +296,24 @@ My browser extensions:
 | File Icons for GitHub and GitLab | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) & [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
 | Npmx redirect | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) & [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Fuck Npm! |
 | CSS Stacking Context inspector | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) & [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) | / |
+| Grammar and Spell Checker | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/languagetool/) & [Chromium](https://chromewebstore.google.com/detail/ai-grammar-checker-paraph/oldceeleldhonbafppcapldpdifcinji) | / |
 
 Sometime useful extensions:
 
 | Extension | Source/Install Command | Note |
 | -- | -- | -- |
 | Vue.js Devtools (Community) | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases) | Used only for Vue 2 projects, Vue 3 projects are recommended to use [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) instead. |
+
+I also like to customize the default browser fonts:
+
+1.  Go to [about:preferences#accessibility](about:preferences#accessibility).
+2.  Click "Advanced settings".
+3.  Fonts for "Latin", I prefer "Fraunces 9pt" (A serif font) as both Serif & Sans-serif font, "Annotation Mono" as Monospace font.
+4.  Fonts for "Simplified Chinese", I prefer "Resource Han Rounded SC" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+4.  Fonts for "Traditional Chinese (Taiwan)", I prefer "Resource Han Rounded TW" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+4.  Fonts for "Traditional Chinese (Hong Kong)", I prefer "Resource Han Rounded HK" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+
+To customize font-family of Firefox Devtools, you can refer to my [GitHub gist](https://gist.github.com/lumirelle/919722d43a643b2a8f2f2ce8db697eda).
 
 #### Additional Softwares
 

@@ -2,6 +2,7 @@
 base = "trick-netlify/"
 publish = "../dist"
 command = "cd ../ && mise run build"
+ignore = "false"
 
 [[headers]]
 for = "/assets/*"

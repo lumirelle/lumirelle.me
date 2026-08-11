@@ -21,5 +21,9 @@
     "toml",
     // Documentations
     "markdown"
+  ],
+  "cSpell.words": [
+    "DISM",
+    "Snipaste"
   ]
 }

@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-07-28T09:53+08:00
+update: 2026-08-11T17:50+08:00
 lang: en
-duration: 16min
+duration: 17min
 type: manual
 ---
 
@@ -161,10 +161,10 @@ I highly recommend you to use [WinGet](https://learn.microsoft.com/windows/packa
 > [!Note]
 > `{{xxx}}` means a placeholder, `xxx` is the description text.
 
-Search:
+Search package:
 
 ```nu
-# Search both name and ID
+# Search via name or ID
 winget search {{query}}
 # Search name only
 winget search --name {{query}}
@@ -172,22 +172,22 @@ winget search --name {{query}}
 winget search --id {{query}}
 ```
 
-Install (User scope):
+Add package:
 
 ```nu
-winget install {{query}}
-# `add` is an alias of command `install`
 winget add {{query}}
 ```
 
-Install (Machine scope, requires admin privileges):
+Add package (Machine scope, **not recommended**, requires admin privileges):
 
 ```nu
-# In windows, `sudo` command is powered by `gsudo`
-sudo winget add {{query}} --scope machine
+# Windows system built-in `sudo`
+sudo winget add {{query}}
+# gsudo, https://github.com/gerardog/gsudo
+gsudo winget add {{query}}
 ```
 
-Install on specific location:
+Add package to specific location:
 
 ```nu
 winget add {{query}} --location /path/you/like/
@@ -195,7 +195,7 @@ winget add {{query}} --location /path/you/like/
 winget add {{query}} -l /path/you/like/
 ```
 
-Install with interactive mode (Default is non-interactive mode):
+Add package with interactive mode (Default is non-interactive mode):
 
 ```nu
 winget add {{query}} --interactive
@@ -203,7 +203,7 @@ winget add {{query}} --interactive
 winget add {{query}} -i
 ```
 
-Install with no UI mode (Default is UI mode):
+Add package with no UI mode (Default is UI mode):
 
 ```nu
 winget add {{query}} --silent
@@ -211,7 +211,7 @@ winget add {{query}} --silent
 winget add {{query}} -h
 ```
 
-Install with exact ID match:
+Add package with exact ID match:
 
 ```nu
 winget add --exact --id {{id}}
@@ -219,7 +219,7 @@ winget add --exact --id {{id}}
 winget add -e --id {{id}}
 ```
 
-Install specific version (Default is latest version):
+Add specific version (Default is latest version):
 
 ```nu
 winget add {{query}} --version {{version}}
@@ -227,11 +227,9 @@ winget add {{query}} --version {{version}}
 winget add {{query}} -v {{version}}
 ```
 
-Uninstall:
+Remove package:
 
 ```nu
-winget uninstall {{query}}
-# `rm` is an alias of command `uninstall`
 winget rm {{query}}
 ```
 
@@ -250,37 +248,41 @@ Below softwares are highly recommended and helpful for the daily use with Window
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
-| gsudo | `winget add --exact --id gerardog.gsudo --scope machine` | `sudo` for Windows.<br><br>This installation itself requires running the shell as admin.<br><br>The simplest way to running as admin is to open _Windows Terminal_, click the shells dropdown icon, then right-click on the target shell, you can see the option "Run as administrator".<br><br>If you are using Windows 11, make sure you already put `C:\Program Files\WinGet\Links` in the very front of system environment variable `Path` to avoid being covered by built-in `sudo` command under `C:\Windows\system32` which is not so useful. |
-| Git | `sudo winget add --exact --id Git.Git --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right? |
-| WinLibs | `sudo winget add --exact --id BrechtSanders.WinLibs.POSIX.UCRT --scope machine` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows. |
-| Mise | `sudo winget add --exact --id jdx.mise --scope machine` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
-| WSL | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
+| gsudo | `winget add --exact --id gerardog.gsudo` | `sudo` for Windows.<br><br><strong>If you are using Windows 11 and want to hijack system built-in `sudo` command, you should put the installation path to gsudo (default to `C:\Program Files\gsudo\Current`) in the very front of "system environment variable" `Path`.</strong><br><br><strong>Until now (2026/8/11), it's still the superior alternative to the system's built-in `sudo` command.</strong> |
+| Nushell | `winget add --exact --id Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | `winget add --exact --id Starship.Starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
+| Zoxide | `winget add --exact --id ajeetdsouza.zoxide` | Fuzzy-match `cd`. |
+| Git | `winget add --exact --id Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| Chezmoi | `winget add --exact --id twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
+| WinLibs | `winget add --exact --id BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows. |
+| Mise | `winget add --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
+| WSL UI | `winget add --source msstore --exact --id 9P8548KNJ2M9` | Enhanced experience with WSL. |
 
 Next, remaining useful softwares:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Firefox | `sudo winget add --exact --id Mozilla.Firefox --scope machine` | My daily use browser. See extensions setup [here](#browser-setup). |
-| (Optional) Nutstore | `sudo winget add --exact --id Nutstore.Nutstore --scope machine ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
-| (Optional) KeePassXC | `sudo winget add --exact --id KeePassXCTeam.KeePassXC --scope machine` | Password manager, you can replace with your preferred one. |
-| Internet Download Manager | `sudo winget add --exact --id Tonec.InternetDownloadManager --scope machine` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
-| Neovim | `sudo winget add --scope machine --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Visual Studio Code | `sudo winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>...<br><br>It's recommended to **use user scope** installation. |
-| ~~Zed~~ | ~~`sudo winget add --exact --id ZedIndustries.Zed`~~ | ~~<TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>It's recommended to **use user scope** installation too.~~<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
-| ZCode | `sudo winget add --exact --id ZhipuAI.ZCode --scope machine` | Just vibe! |
-| RayCast | `sudo winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Todo List](raycast://extensions/maggie/todo-list?source=webstore) (todo)_;<br><br>_2. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_3. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_4. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_5. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_6. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_7. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_8. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_9. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_10. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_11. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_12. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_13. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_14. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
-| Revo Uninstaller | Free:<br>`sudo winget add --exact --id RevoUninstaller.RevoUninstaller --scope machine`<br><br>Pro:<br>`sudo winget add --exact --id RevoUninstaller.RevoUninstallerPro --scope machine` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
+| Firefox | `winget add --exact --id Mozilla.Firefox` | My daily use browser. See extensions setup [here](#browser-setup). |
+| (Optional) Nutstore | `winget add --exact --id Nutstore.Nutstore ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
+| (Optional) KeePassXC | `winget add --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
+| Internet Download Manager | `winget add --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
+| Neovim | `winget add --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Visual Studio Code | `winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
+| Zed | `winget add --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
+| ZCode | `winget add --exact --id ZhipuAI.ZCode` | Just vibe! |
+| RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Todo List](raycast://extensions/maggie/todo-list?source=webstore) (todo)_;<br><br>_2. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_3. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_4. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_5. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_6. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_7. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_8. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_9. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_10. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_11. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_12. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_13. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_14. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
+| Revo Uninstaller | Free:<br>`winget add --exact --id RevoUninstaller.RevoUninstaller`<br><br>Pro:<br>`winget add --exact --id RevoUninstaller.RevoUninstallerPro` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 
 #### Browser Setup
 
 I hate _Chrome_ because it's too opinionated, I hate _Edge_ because it's too heavy.
 
-I preferred _Firefox_ & _Brave_ currently. Firefox is my daily use browser, while Brave is my secondary browser for some special cases which require _Chromium_ engine.
+I preferred _Firefox_ currently. Firefox is my daily use browser, while system bundled _Edge_ is my secondary browser for some special cases which require _Chromium_ engine.
 
 My browser extensions:
 
 > [!NOTE]
->
 > "Tampermonkey" extension requires you to open the develop mode to running user scripts (JavaScript).
 
 `~` in the below tables means the same as above.
@@ -310,8 +312,8 @@ I also like to customize the default browser fonts:
 2.  Click "Advanced settings".
 3.  Fonts for "Latin", I prefer "Fraunces 9pt" (A serif font) as both Serif & Sans-serif font, "Annotation Mono" as Monospace font.
 4.  Fonts for "Simplified Chinese", I prefer "Resource Han Rounded SC" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
-4.  Fonts for "Traditional Chinese (Taiwan)", I prefer "Resource Han Rounded TW" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
-4.  Fonts for "Traditional Chinese (Hong Kong)", I prefer "Resource Han Rounded HK" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+5.  Fonts for "Traditional Chinese (Taiwan)", I prefer "Resource Han Rounded TW" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+6.  Fonts for "Traditional Chinese (Hong Kong)", I prefer "Resource Han Rounded HK" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
 
 To customize font-family of Firefox Devtools, you can refer to my [GitHub gist](https://gist.github.com/lumirelle/919722d43a643b2a8f2f2ce8db697eda).
 
@@ -321,26 +323,25 @@ Install the tool softwares below as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| DeskPins | `sudo winget add --exact --id EliasFotinis.DeskPins --scope machine` | Pin any window to the desktop. |
-| PixPin | `sudo winget add --exact --id PixPin.PixPin --scope machine` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
+| PixPin | `winget add --exact --id PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
-| Driver Store Explorer | `sudo winget add --exact --id lostindark.DriverStoreExplorer --scope machine` | Clear unused/outdated device drivers. |
-| DISM++ | `sudo winget add --exact --id ChuyuTeam.DISM++ --scope machine` | Clear disk. |
-| WeChat | `sudo winget add --exact --id Tencent.WeChat.Universal --scope machine` | / |
-| QQ | `sudo winget add --exact --id Tencent.QQ.NT --scope machine` | / |
-| Thunderbird | `sudo winget add --exact --id Mozilla.Thunderbird --scope machine` | / |
+| Driver Store Explorer | `winget add --exact --id lostindark.DriverStoreExplorer` | Clear unused/outdated device drivers. |
+| DISM++ | `winget add --exact --id ChuyuTeam.DISM++` | Clear disk. |
+| WeChat | `winget add --exact --id Tencent.WeChat.Universal` | / |
+| QQ | `winget add --exact --id Tencent.QQ.NT` | / |
+| Thunderbird | `winget add --exact --id Mozilla.Thunderbird` | / |
 | Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
 | NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
-| Steam | `sudo winget add --scope machine --exact --id Valve.Steam` | / |
-| Epic Games | `sudo winget add --scope machine --exact --id EpicGames.EpicGamesLauncher` | / |
-| OBS Studio | `sudo winget add --scope machine --exact --id OBSProject.OBSStudio` | / |
+| Steam | `winget add --exact --id Valve.Steam` | / |
+| Epic Games | `winget add --exact --id EpicGames.EpicGamesLauncher` | / |
+| OBS Studio | `winget add --exact --id OBSProject.OBSStudio` | / |
 
 Install the dev softwares below as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Podman Desktop | `sudo winget add --scope machine --exact --id RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
+| Podman Desktop | `winget add --exact --id RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
 | Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
 | Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
 
@@ -365,27 +366,32 @@ Firstly, you should ensure you have the latest WSL installation:
 wsl --update
 ```
 
-Then, choose your favorite Linux distribution to install, I recommend _Ubuntu_ for its popularity and stability:
-
-```nu
-wsl --install -d Ubuntu --location /path/you/like/
-```
+Then, open _WSL UI_ and choose your favorite Linux distribution to install, I recommend _Alpine_ for its tiny and cleanliness, _Ubuntu_ for its popularity and stability.
 
 ### Recommended Linux Softwares
+
+> [!Note]
+> Below commands use _Alpine_ distribution & it's package manager `apk` as examples.
 
 Below softwares are highly recommended and helpful for the development use with Linux, you should install them **in order** as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
+| Nushell | `apk add nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | `apk add starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
+| Zoxide | `apk add zoxide` | Fuzzy-match `cd`. |
 | Extrepo | `sudo apt install -y extrepo` | Manage external repositories (softwares). |
-| Build Essential | `sudo apt install -y build-essential` | Contains _GCC (GNU Compiler Collection)_ and its dependencies. |
-| Mise | `sudo extrepo enable mise`<br><br>`sudo apt update`<br><br>`sudo apt install -y mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Chezmoi | `apk add chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
+| Git | `apk add git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| OpenSSH | `apk add openssh` | / |
+| Build Base | `apk add build-base` | Contains _GCC (GNU Compiler Collection)_ and its dependencies. |
+| Mise | `apk add mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 
 Next, remaining useful softwares:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Neovim | `sudo apt install neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Neovim | `apk add neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 
 ## Forth Step: Maintain System
 
@@ -415,8 +421,10 @@ Projects should under:
 
 - `~/my/`: My projects:
   - `~/my/infra/`: My infrastructure projects;
+  - `~/my/demo/`: My demo projects;
   - `~/my/prod/`: My production projects;
   - `~/my/contrib/`: Open source projects I contribute to;
+  - `~/my/docs/`: My docs;
   - ...
 - `~/workon/`: Projects I work on;
   - ...

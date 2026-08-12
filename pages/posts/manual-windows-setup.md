@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-11T17:50+08:00
+update: 2026-08-12T11:48+08:00
 lang: en
 duration: 17min
 type: manual
@@ -257,7 +257,6 @@ Below softwares are highly recommended and helpful for the daily use with Window
 | WinLibs | `winget add --exact --id BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows. |
 | Mise | `winget add --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
-| WSL UI | `winget add --source msstore --exact --id 9P8548KNJ2M9` | Enhanced experience with WSL. |
 
 Next, remaining useful softwares:
 
@@ -267,6 +266,7 @@ Next, remaining useful softwares:
 | (Optional) Nutstore | `winget add --exact --id Nutstore.Nutstore ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
 | (Optional) KeePassXC | `winget add --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `winget add --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
+| Tree Sitter CLI | `winget add --exact --id tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Neovim | `winget add --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Visual Studio Code | `winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
 | Zed | `winget add --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
@@ -366,32 +366,39 @@ Firstly, you should ensure you have the latest WSL installation:
 wsl --update
 ```
 
-Then, open _WSL UI_ and choose your favorite Linux distribution to install, I recommend _Alpine_ for its tiny and cleanliness, _Ubuntu_ for its popularity and stability.
+Then, choose your favorite Linux distribution to install, I recommend _Arch_ for its newest packages, _Debain_ for its popularity and stability:
+
+```nu
+# Arch
+wsl --install archlinux --location {{install_location_you_prefer}}
+# Debain
+wsl --install Debain --location {{install_location_you_prefer}}
+```
 
 ### Recommended Linux Softwares
 
 > [!Note]
-> Below commands use _Alpine_ distribution & it's package manager `apk` as examples.
+> Below commands use _Arch_ distribution & it's package manager `pacman` as examples.
 
 Below softwares are highly recommended and helpful for the development use with Linux, you should install them **in order** as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Nushell | `apk add nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Starship | `apk add starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
-| Zoxide | `apk add zoxide` | Fuzzy-match `cd`. |
-| Extrepo | `sudo apt install -y extrepo` | Manage external repositories (softwares). |
-| Chezmoi | `apk add chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
-| Git | `apk add git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
-| OpenSSH | `apk add openssh` | / |
-| Build Base | `apk add build-base` | Contains _GCC (GNU Compiler Collection)_ and its dependencies. |
-| Mise | `apk add mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Base Devel | `pacman -S base-devel` | Basic dev dependencies. |
+| Nushell | `pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | `pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
+| Zoxide | `pacman -S zoxide` | Fuzzy-match `cd`. |
+| Chezmoi | `pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
+| Git | `pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| OpenSSH | `pacman -S openssh` | / |
+| Mise | `pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 
 Next, remaining useful softwares:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Neovim | `apk add neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Tree Sitter CLI | `pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
+| Neovim | `pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 
 ## Forth Step: Maintain System
 

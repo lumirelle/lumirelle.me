@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-07-20T11:37+08:00
+update: 2026-08-18T14:14+08:00
 lang: en
 duration: 15min
 type: manual
@@ -73,7 +73,7 @@ Git is a distributed version control system, which is used to track changes in s
 >
 > This article is based on my own `.gitconfig` configuration.
 >
-> For more details about the changed default behavior and custom alias, please see [the source file](https://github.com/lumirelle/dotfiles/blob/main/dot_gitconfig). You can also get help information of the custom alias usage by provide `--?` flag or `-?` flag.
+> For more details about the changed default behavior, please see [the source file](https://github.com/lumirelle/dotfiles/blob/main/dot_gitconfig).
 
 ### Initialize Git Repository
 
@@ -184,13 +184,13 @@ To keep things controlled and organized, there are several common branch managem
   Based on the [single major version workflow](#single-major-version-workflow), with multiple long-term branches for different major versions.
 
   - `main` branch is for **the next major version**;
-  - `v{version}` branch group is for the released major versions, e.g. `v1.x`, `v2.x`, etc.
+  - `v{{version}}` branch group is for the released major versions, e.g. `v1.x`, `v2.x`, etc.
   - `feat/xxx` branch is for new feature, created from the `main` branch, also will be applied back to the `main` branch by **pull request** after the development is done.
 
-    If this feature need to be **backported** to the released major versions, you should use `cherry-pick` to pick the merge commit node to the appropriate `v{version}` branch ([example](https://github.com/nuxt/nuxt)).
-  - `hotfix/xxx` branch is for hotfix, created from the first included `v{version}` branch, and will be applied back to the appropriate `v{version}` branch by **pull request** after the development is done.
+    If this feature need to be **backported** to the released major versions, you should use `cherry-pick` to pick the merge commit node to the appropriate `v{{version}}` branch ([example](https://github.com/nuxt/nuxt)).
+  - `hotfix/xxx` branch is for hotfix, created from the first included `v{{version}}` branch, and will be applied back to the appropriate `v{{version}}` branch by **pull request** after the development is done.
 
-    If this hotfix need to be **forwardported** to the later versions, you can use `merge` to apply it back to the later `v{version}` & `main` branches ([example](https://github.com/symfony/symfony)).
+    If this hotfix need to be **forwardported** to the later versions, you can use `merge` to apply it back to the later `v{{version}}` & `main` branches ([example](https://github.com/symfony/symfony)).
 
   A simple comparison with single major version workflow:
 
@@ -275,45 +275,53 @@ git commit --message "hotfix: fix the bug"
 
 ### Discard Changes
 
-When you work on your feature branch, you may want to discard the changes easily:
+When you work on your feature branch, you may want to discard the changes (in workspace).
 
-You can use the following command:
+You can use the following command to restore specific tracked files:
 
 ```bash
-# Alias `discard` = custom alias, will reset tracked files to HEAD,
-#                   and remove untracked files based on specific paths
-git discard index.html index.css
+git restore index.html index.css
 ```
 
-To discard all changes:
+To restore all files:
 
 ```bash
 # `.` means the project root, of course, only if you are in the project root.
-git discard .
+git restore .
 ```
 
-### Unstage (Disadd Changes)
-
-If you have staged some changes by `git add`, you can also unstage them by `git disadd` (my custom alias):
+To clean untracked files:
 
 ```bash
-# Alias `disadd` = Custom alias, will unstage the changes based on specific paths
-git disadd index.html index.css
+git clean --force index.ts
 ```
 
-To unstage all changes:
+To clean untracked directories & files:
 
 ```bash
-git disadd .
+git clean --force -d .
 ```
 
-### Undo Last Commit (Uncommit)
+### Disadd Changes
 
-When you commit some changes in accident, you can undo it by `git uncommit` (my custom alias too 😄):
+If you have staged some changes by `git add`, you can also disadd them by `git reset`:
 
 ```bash
-# Alias `uncommit` = Custom alias, will undo the last commit
-git uncommit
+git reset index.html index.css
+```
+
+To disadd all changes:
+
+```bash
+git reset .
+```
+
+### Undo Last Commit
+
+When you commit some changes in accident, you can undo it by `git reset HEAD^`:
+
+```bash
+git reset HEAD^
 ```
 
 > [!Caution]
@@ -368,8 +376,8 @@ git revert HEAD
 When you want to integrate some changes in the upstream branch to your branch, you can rebase your branch onto it.
 
 ```bash
-git switch {your-branch}
-git rebase {upstream-branch}
+git switch {{your-branch}}
+git rebase {{upstream-branch}}
 # Use --force with caution!!!
 git push --force
 ```
@@ -394,11 +402,9 @@ All the operations are simple:
 #### Merge Branch (Not Recommended)
 
 ```bash
-git switch {target-branch}
+git switch {{target-branch}}
 
-# Alias `justmerge` = Custom alias, will merge the specific branch to current branch,
-#                      with predefined commit message
-git justmerge {your-branch}
+git merge {{your-branch}}
 
 # Don't forget to push the target branch to remote!
 git push

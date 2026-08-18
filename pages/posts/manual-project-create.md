@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-07-20T10:16+08:00
+update: 2026-08-18T14:22+08:00
 lang: en
 duration: 1min
 type: manual
@@ -13,52 +13,46 @@ type: manual
 
 This is a manual for how to create a new project with specific tech stack.
 
+## Prerequisites
+
+A [Nushell alias `degit`](https://github.com/lumirelle/dotfiles/blob/main/dot_config/shared/nushell/aliases/degit.nu) instead of [`degit` CLI](https://npmx.dev/package/degit).
+
 ## TypeScript Library
 
-> TypeScript 6+
+> TypeScript 7+
 
 ```nu
-git clone --depth=1 git@github.com:lumirelle/starter-ts.git {{project-path}}
-rm -rf {{project-path}}/.git
+degit git@github.com:lumirelle/starter-ts.git {{project-path}}
 ```
 
 ## TypeScript Monorepo
 
-> TypeScript 6+
+> TypeScript 7+
 
 ```nu
-git clone --depth=1 git@github.com:lumirelle/starter-monorepo.git {{project-path}}
-rm -rf {{project-path}}/.git
+degit git@github.com:lumirelle/starter-monorepo.git {{project-path}}
 ```
 
 ## VS Code Extension
 
 ```nu
-git clone --depth=1 git@github.com:antfu/starter-vscode.git {{project-path}}
-rm -rf {{project-path}}/.git
+degit git@github.com:antfu/starter-vscode.git {{project-path}}
 ```
 
 ## Vue
 
-> Vue 3+, Vite 8+
+> Vue 3+, Vite 7, TypeScript 5
 
 Use the `create-vue` CLI tool:
 
 ```bash
-# If you are using mise just like me:
-mise exec github:nubjs/nub -- nub create vue {{project-path}}
-# Or you are using nub directly:
-nub create vue {{project-path}}
-# PNPM:
-pnpm create vue {{project-path}}
-# NPM:
-npm create vue {{project-path}}
-# ...
+degit https://github.com/antfu-collective/vitesse-lite {{project-path}}
 ```
 
 ## Nuxt
 
+> Vue 3+, Vite 8+, TypeScript 7+
+
 ```nu
-git clone --depth=1 git@github.com:lumirelle/starter-vitesse-nuxt.git {{project-path}}
-rm -rf {{project-path}}/.git
+degit git@github.com:lumirelle/starter-vitesse-nuxt.git {{project-path}}
 ```

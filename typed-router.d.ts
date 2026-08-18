@@ -136,13 +136,6 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/manual-bash-script': RouteRecordInfo<
-      '/posts/manual-bash-script',
-      '/posts/manual-bash-script',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
     '/posts/manual-computer-network': RouteRecordInfo<
       '/posts/manual-computer-network',
       '/posts/manual-computer-network',
@@ -188,6 +181,13 @@ declare module 'vue-router/auto-routes' {
     '/posts/manual-neovim-lazyvim': RouteRecordInfo<
       '/posts/manual-neovim-lazyvim',
       '/posts/manual-neovim-lazyvim',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/manual-posix-shell-script': RouteRecordInfo<
+      '/posts/manual-posix-shell-script',
+      '/posts/manual-posix-shell-script',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -430,14 +430,6 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'pages/posts/manual-bash-script.md': {
-      routes:
-        | '/posts/manual-bash-script'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
     'pages/posts/manual-computer-network.md': {
       routes:
         | '/posts/manual-computer-network'
@@ -489,6 +481,14 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/manual-neovim-lazyvim.md': {
       routes:
         | '/posts/manual-neovim-lazyvim'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/manual-posix-shell-script.md': {
+      routes:
+        | '/posts/manual-posix-shell-script'
       views:
         | never
       pathParamNames:

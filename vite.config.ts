@@ -35,6 +35,10 @@ export default defineConfig({
     Await(promises),
   ],
 
+  server: {
+    host: '0.0.0.0',
+  },
+
   build: {
     rolldownOptions: {
       onwarn(warning, next) {

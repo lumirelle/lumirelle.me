@@ -1,6 +1,6 @@
-amends "package://github.com/jdx/hk/releases/download/v1.51.0/hk@1.51.0#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v1.55.0/hk@1.55.0#/Config.pkl"
 
-import "package://github.com/jdx/hk/releases/download/v1.51.0/hk@1.51.0#/Builtins.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.55.0/hk@1.55.0#/Builtins.pkl"
 
 local linters = new Mapping<String, Step> {
   // Code
@@ -31,42 +31,43 @@ local linters = new Mapping<String, Step> {
         "*.mdc",
         "*.mdx",
       )
+    check = new Config.CommandSpec {
+      command = new Config.Command { argv = List("eslint", "--no-warn-ignored", "{{files}}") }
+      effect = "read"
+    }
+    fix = new Config.CommandSpec {
+      command = new Config.Command {
+        argv = List("eslint", "--no-warn-ignored", "--fix", "{{files}}")
+      }
+      effect = "write"
+    }
     depends = List("oxlint")
   }
   ["tsc"] = (Builtins.tsc) {
-    check = new Config.Command {
-      List("vue-tsc", "--build", "--noEmit")
+    check = new Config.CommandSpec {
+      command = new Config.Command {
+        List("vue-tsc", "--build", "--noEmit")
+      }
+      effect = "write"
     }
   }
   // Unused code
   // Disabled as not ready.
   //["knip"] = (Builtins.knip) {
-  //  check = new Config.Command {
-  //    argv = List("knip", "--no-progress", "--directory", "{{workspace}}")
-  //  }
   //  // Disable knip auto-fix, because it's dangerous
   //  fix = null
   //}
 
   // Configurations
-  ["stylua"] = (Builtins.stylua) {
-    glob = List("**/*.lua")
-  }
+  ["stylua"] = Builtins.stylua
   ["hk"] {
     glob = List("hk.pkl")
-    check = new Config.Command {
-      argv = List("hk", "validate")
+    check = new Config.CommandSpec {
+      command = new Config.Command { argv = List("hk", "validate") }
+      effect = "read"
     }
   }
-  ["pkl-format"] {
-    glob = List("hk.pkl")
-    check_list_files = new Config.Command {
-      argv = List("pkl", "format", "--diff-name-only", "{{ files }}")
-    }
-    fix = new Config.Command {
-      argv = List("pkl", "format", "--write", "{{ files }}")
-    }
-  }
+  ["pkl-format"] = Builtins.pkl_format
 }
 
 hooks {

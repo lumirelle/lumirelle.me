@@ -30,11 +30,18 @@ const routes: Post[] = router
     upcoming: i.meta.frontmatter.upcoming,
     redirect: i.meta.frontmatter.redirect,
     place: i.meta.frontmatter.place,
+    group: i.meta.frontmatter.group,
+    order: i.meta.frontmatter.order,
   }))
 
 const posts = computed(() =>
   [...(props.posts || routes), ...(props.extra || [])]
-    .sort((a, b) => Number(new Date(b.date)) - Number(new Date(a.date)))
+    .sort((a, b) => {
+      if (props.type === 'manual')
+        return (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
+      else
+        return Number(new Date(b.date)) - Number(new Date(a.date))
+    })
     .filter(i => !chineseOnly.value || !i.lang || i.lang === 'zh'),
 )
 
@@ -46,14 +53,16 @@ function isSameYear(a?: Date | string | number, b?: Date | string | number): boo
   return a !== undefined && b !== undefined && getYear(a) === getYear(b)
 }
 function isSameGroup(a: Post, b?: Post): boolean {
-  return isFuture(a.date) === isFuture(b?.date) && isSameYear(a.date, b?.date)
+  if (props.type === 'manual')
+    return b != null && a.group === b?.group
+  else
+    return isFuture(a.date) === isFuture(b?.date) && isSameYear(a.date, b?.date)
 }
-
 function getGroupName(p: Post): number | string {
-  if (isFuture(p.date)) {
-    return 'Upcoming'
-  }
-  return getYear(p.date)
+  if (props.type === 'manual')
+    return p.group || 'Other'
+  else
+    return isFuture(p.date) ? 'Upcoming' : getYear(p.date)
 }
 </script>
 
@@ -113,6 +122,7 @@ function getGroupName(p: Post): number | string {
                 align-middle flex-none
                 class="text-zinc5 text-xs my-auto ml--15 mr2 px-1 py-0.5 rounded bg-zinc:15 hidden md:block"
               >英语 / EN</span>
+              <span v-if="type === 'manual'">STEP {{ idx + 1 }}. </span>
               <span align-middle>{{ route.title }}</span>
               <span
                 v-if="route.redirect"

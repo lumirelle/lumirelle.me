@@ -5,6 +5,8 @@ update: 2026-04-24T18:34+08:00
 lang: en
 duration: 21min
 type: manual
+group: Computer
+order: 2
 ---
 
 [[toc]]

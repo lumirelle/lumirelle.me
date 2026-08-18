@@ -5,6 +5,8 @@ update: 2026-03-30T15:21+08:00
 lang: en
 duration: 30min
 type: manual
+group: Shell
+order: 3
 ---
 
 [[toc]]

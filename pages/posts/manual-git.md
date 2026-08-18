@@ -5,6 +5,8 @@ update: 2026-08-18T14:14+08:00
 lang: en
 duration: 15min
 type: manual
+group: VCS
+order: 5
 ---
 
 [[toc]]

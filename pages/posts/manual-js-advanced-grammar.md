@@ -5,6 +5,8 @@ update: 2026-04-28T10:20+08:00
 lang: en
 duration: 92min
 type: manual
+group: Web
+order: 8
 ---
 
 [[toc]]

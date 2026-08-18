@@ -12,4 +12,6 @@ export interface Post {
   video?: boolean
   inperson?: boolean
   redirect?: string
+  group?: string
+  order?: number
 }

@@ -5,6 +5,8 @@ update: 2026-08-12T11:48+08:00
 lang: en
 duration: 17min
 type: manual
+group: Computer
+order: 1
 ---
 
 <style>

@@ -5,6 +5,8 @@ update: 2026-07-20T10:30+08:00
 lang: en
 duration: 26min
 type: manual
+group: Editor
+order: 4
 ---
 
 <style>

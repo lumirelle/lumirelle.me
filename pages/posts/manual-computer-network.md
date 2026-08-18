@@ -1,9 +1,9 @@
 ---
 title: Computer Network Manual
 date: 2025-09-30T22:30+08:00
-update: 2026-04-24T18:34+08:00
+update: 2026-08-18T15:45+08:00
 lang: en
-duration: 21min
+duration: 22min
 type: manual
 group: Computer
 order: 2
@@ -175,15 +175,32 @@ But, there is still a problem: In the case above, `Switch1` has 4 ports, called 
 | 55:55:55:55:55:55 (PC5) | s1p4      |
 | 66:66:66:66:66:66 (PC6) | s1p4      |
 
-You may notice that, `s1p4` is connected to `Switch2`, so all MAC addresses of computers connected to `Switch2` are associated with `s1p4`.
+You may notice that, `s1p4` is connected to `Switch2`, so all MAC addresses of computers connected to `Switch2` are associated with `s1p4`: In Switch world, MAC address records will be propagated and duplicated.
 
-If there are more switches? A port of a switch may match up to hundreds of MAC addresses!
+Network is a huge tree structure. If there are more switches? The table of MAC addresses of each Switch may contains tens of thousands records; A port of a switch may match up to thousands of MAC addresses!
+
+```txt
+     s1 o
+       /|\
+      / | \
+     o  o  o
+     s2 s3 s4
+    /|\            (The MAC address table of s1, stores s2 ~ sN(*)!)
+   / | \
+  o  o  o ... ...
+  s5 s6 s7           (The port linked to s2 also linked to s5 ~ sN(linked with 2)!)
+
+
+... ... ... ... ...
+```
 
 To solve this problem, you need another thing to identify devices other than MAC addresses, that is **IP address (Internet Protocol Address)**.
 
 IP address is a 32-bit (4 bytes) identifier[^1], usually represented in decimal format, separated by dots. For example, `192.168.1.1`. IP address uses a part of its bits to identify the sub-network it created and the router it self **(called network part)**, another part to identify the computers connected to it **(called host part)**. IP address also uses **subnet mask** to dynamically determine how many bits is the network part and how many bits is the host part.
 
-For example, for sub-network with IP address from `192.168.1.0` to `192.168.1.255` and subnet mask `255.255.255.0`:
+Difference to MAC address, IP address is designed for **routing**: MAC address only contains device identifier information, but IP address (with mask) can reflect which level the device is in the network tree. With IP address, we no longer need records all of devices connected to, but only the router and devices in the same sub-network.
+
+How mask works? Let's take a look at an example. For sub-network with IP address from `192.168.1.0` to `192.168.1.255` and subnet mask `255.255.255.0`:
 
 The subnet mask in binary is `11111111.11111111.11111111.00000000`, has 24 bits of `1`, so the first 24 bits (the first 3 bytes) of IP address is the network part, the last 8 bits (the last byte) is the host part. That's to say, the network part is `192.168.1`, the host part is from `0` to `255`, so this sub-network can have up to 254 IP addresses.
 

@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-06-23T23:34+08:00
+update: 2026-08-18T13:52+08:00
 lang: en
 duration: 13min
 type: note
@@ -38,20 +38,34 @@ export const UserStatus = {
   Inactive: 0,
   Active: 1,
   Banned: 2,
-}
+} as const
+
 export const UserStatusLabels = {
   [UserStatus.Inactive]: 'Inactive',
   [UserStatus.Active]: 'Active',
   [UserStatus.Banned]: 'Banned',
-}
-// `Object.values()` has better
-// performance than `Object.entries()`
-export const UserStatusOptions = Object
-  .values(UserStatus)
-  .map(status => ({
-    label: UserStatusLabels[status],
-    value: status,
-  }))
+} as const
+
+export const UserStatusOptions = [
+  {
+    label: UserStatusLabels[
+      UserStatus.Inactive
+    ],
+    value: UserStatus.Inactive
+  },
+  {
+    label: UserStatusLabels[
+      UserStatus.Active
+    ],
+    value: UserStatus.Active
+  },
+  {
+    label: UserStatusLabels[
+      UserStatus.Banned
+    ],
+    value: UserStatus.Banned
+  },
+] as const
 ```
 
 _src/form.ts_
@@ -74,7 +88,7 @@ export const FORM_FIELDS = [
   // we will call it when we create fields,
   // and cache the options in the field instance.
   { name: 'group', options: listUserGroups },
-]
+] as const
 
 function listUserGroups() {
   // ...
@@ -96,7 +110,7 @@ const TABLE_COLUMNS = [
       UserStatusLabels[values.status]
     )
   }
-]
+] as const
 ```
 
 </th><th valign="top">
@@ -110,20 +124,34 @@ export const UserStatus = {
   Inactive: 0,
   Active: 1,
   Banned: 2,
-}
+} as const
 
 export const UserStatusLabels = {
   [UserStatus.Inactive]: 'Inactive',
   [UserStatus.Active]: 'Active',
   [UserStatus.Banned]: 'Banned',
-}
+} as const
 
-export const UserStatusOptions = Object
-  .values(UserStatus)
-  .map(status => ({
-    label: UserStatusLabels[status],
-    value: status,
-  }))
+export const UserStatusOptions = [
+  {
+    label: UserStatusLabels[
+      UserStatus.Inactive
+    ],
+    value: UserStatus.Inactive
+  },
+  {
+    label: UserStatusLabels[
+      UserStatus.Active
+    ],
+    value: UserStatus.Active
+  },
+  {
+    label: UserStatusLabels[
+      UserStatus.Banned
+    ],
+    value: UserStatus.Banned
+  },
+] as const
 
 export const FORM_FIELDS = [
   { name: 'username', defaultValue: 'guest' },
@@ -134,7 +162,7 @@ export const FORM_FIELDS = [
     options: UserStatusOptions,
   },
   { name: 'group', options: listUserGroups },
-]
+] as const
 
 function listUserGroups() {
   // ...
@@ -150,7 +178,7 @@ const TABLE_COLUMNS = [
       UserStatusLabels[values.status]
     )
   }
-]
+] as const
 ```
 
 </th></tr>

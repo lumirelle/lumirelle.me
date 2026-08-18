@@ -20,7 +20,7 @@ import MarkdownItMagicLink from 'markdown-it-magic-link'
 import MarkdownItTOC from 'markdown-it-table-of-contents'
 import sharp from 'sharp'
 import _Markdown from 'unplugin-vue-markdown/vite'
-import { slugify } from '../scripts/slugify'
+import { slugify } from '../scripts/slugify.ts'
 
 const ogSVg = readFileSync('./scripts/og-template.svg', 'utf8')
 

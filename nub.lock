@@ -82,9 +82,6 @@ importers:
       '@octokit/rest':
         specifier: ^22.0.1
         version: 22.0.1
-      '@seepine/vue-tsc':
-        specifier: ^0.1.0
-        version: 0.1.0(typescript@6.0.3-bridge.13.tsgo.7.0.2)
       '@shikijs/markdown-exit':
         specifier: ^4.4.3
         version: 4.4.3
@@ -223,6 +220,9 @@ importers:
       vite-svg-loader:
         specifier: ^5.1.1
         version: 5.1.1(vue@3.5.41)
+      vue-tsc:
+        specifier: ^3.3.10
+        version: 3.3.10(typescript@6.0.3-bridge.13.tsgo.7.0.2)
 
 packages:
 
@@ -1480,13 +1480,6 @@ packages:
   '@rolldown/pluginutils@1.0.1':
     resolution: {integrity: sha512-2j9bGt5Jh8hj+vPtgzPtl72j0yRxHAyumoo6TNfAjsLB04UtpSvPbPcDcBMxz7n+9CYB0c1GxQFxYRg2jimqGw==}
 
-  '@seepine/vue-tsc@0.1.0':
-    resolution: {integrity: sha512-KZSz7HV/8N9+esIqa1jwH1om3gwaBZRQJTWhLaFstOtK8pijIWYd5C5ehHsl7uGtuY26M2MpA1UFSq7GpDywoQ==}
-    engines: {node: '>=24.0.0'}
-    hasBin: true
-    peerDependencies:
-      typescript: '*'
-
   '@shikijs/core@4.4.3':
     resolution: {integrity: sha512-QCR4q2ZO/ILJEuwiBMel4wdcTDb1JGwfjKTxPDF6x8ixOaluPrVqIn06C99AcRPhmYlBR56d/Fb+GN58GzExpg==}
     engines: {node: '>=20'}
@@ -1893,17 +1886,14 @@ packages:
       vitest:
         optional: true
 
-  '@volar/language-core@2.4.11':
-    resolution: {integrity: sha512-lN2C1+ByfW9/JRPpqScuZt/4OrUUse57GLI6TbLgTIqBVemdl1wNcZ1qYGEo2+Gw8coYLgCy7SuKqn6IrQcQgg==}
-
   '@volar/language-core@2.4.28':
     resolution: {integrity: sha512-w4qhIJ8ZSitgLAkVay6AbcnC7gP3glYM3fYwKV3srj8m494E3xtrCv6E+bWviiK/8hs6e6t1ij1s2Endql7vzQ==}
 
-  '@volar/source-map@2.4.11':
-    resolution: {integrity: sha512-ZQpmafIGvaZMn/8iuvCFGrW3smeqkq/IIh9F1SdSx9aUl0J4Iurzd6/FhmjNO5g2ejF3rT45dKskgXWiofqlZQ==}
-
   '@volar/source-map@2.4.28':
     resolution: {integrity: sha512-yX2BDBqJkRXfKw8my8VarTyjv48QwxdJtvRgUpNE5erCsgEUdI2DsLbpa+rOQVAJYshY99szEcRDmyHbF10ggQ==}
+
+  '@volar/typescript@2.4.28':
+    resolution: {integrity: sha512-Ja6yvWrbis2QtN4ClAKreeUZPVYMARDYZl9LMEv1iQ1QdepB6wn0jTRxA9MftYmYa4DQ4k/DaSZpFPUfxl8giw==}
 
   '@vue-macros/common@3.1.4':
     resolution: {integrity: sha512-/5Fv+6DgIcM9ajY05ZmKBv+LMX1M9A0X+IUwDRVdt67ciw8OV9bvG2r34p3RiEadlsQybjhKPRKNXDC8Bp23cw==}
@@ -4029,6 +4019,9 @@ packages:
       yaml:
         optional: true
 
+  vscode-uri@3.1.0:
+    resolution: {integrity: sha512-/BpdSx+yCQGnCvecbyXdxHDkuk55/G3xwnC0GqY4gmQ3j+A+g8kzzgB4Nk/SINjqn6+waqw3EgbVF2QKExkRxQ==}
+
   vue-eslint-parser@10.4.1:
     resolution: {integrity: sha512-Gk6gRDj0n/fkRa3C3l0bBheoBckUq/Rs0F/TvMWIS6nzzx67amAViMe9CkNgsP2tXyQONvGiHQESHwFtZ3aYDA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -4063,6 +4056,12 @@ packages:
         optional: true
       vite:
         optional: true
+
+  vue-tsc@3.3.10:
+    resolution: {integrity: sha512-YaDVxcW+CGtaOt3pZahMG5jYPx0hsUTxyEoPOTSMebcGUXP9lIBabQ14vfKMORb2CqqK5CxsNo/d1d+4IQwiKg==}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=5.0.0'
 
   vue@3.5.41:
     resolution: {integrity: sha512-2laE0p+aK+/AOPG/XL/WepOs/GlK755LJ1XECi9kDUrz1FKNw8rb2Xzlw9JS1rqEV55nb0ttsKxVlTCcd+R5cg==}
@@ -5063,12 +5062,6 @@ snapshots:
 
   '@rolldown/pluginutils@1.0.1': {}
 
-  '@seepine/vue-tsc@0.1.0(typescript@6.0.3-bridge.13.tsgo.7.0.2)':
-    dependencies:
-      '@volar/language-core': 2.4.11
-      '@vue/language-core': 3.3.10
-      typescript: 6.0.3-bridge.13.tsgo.7.0.2
-
   '@shikijs/core@4.4.3':
     dependencies:
       '@shikijs/primitive': 4.4.3
@@ -5568,17 +5561,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@volar/language-core@2.4.11':
-    dependencies:
-      '@volar/source-map': 2.4.11
-
   '@volar/language-core@2.4.28':
     dependencies:
       '@volar/source-map': 2.4.28
 
-  '@volar/source-map@2.4.11': {}
-
   '@volar/source-map@2.4.28': {}
+
+  '@volar/typescript@2.4.28':
+    dependencies:
+      '@volar/language-core': 2.4.28
+      path-browserify: 1.0.1
+      vscode-uri: 3.1.0
 
   '@vue-macros/common@3.1.4(vue@3.5.41)':
     dependencies:
@@ -8042,6 +8035,8 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
+  vscode-uri@3.1.0: {}
+
   vue-eslint-parser@10.4.1(eslint@10.8.1(jiti@2.7.0)):
     dependencies:
       debug: 4.4.3
@@ -8096,6 +8091,12 @@ snapshots:
       - rollup
       - unloader
       - webpack
+
+  vue-tsc@3.3.10(typescript@6.0.3-bridge.13.tsgo.7.0.2):
+    dependencies:
+      '@volar/typescript': 2.4.28
+      '@vue/language-core': 3.3.10
+      typescript: 6.0.3-bridge.13.tsgo.7.0.2
 
   vue@3.5.41:
     dependencies:

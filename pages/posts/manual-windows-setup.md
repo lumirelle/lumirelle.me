@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-12T11:48+08:00
+update: 2026-08-19T11:11+08:00
 lang: en
 duration: 17min
 type: manual
@@ -389,6 +389,7 @@ Below softwares are highly recommended and helpful for the development use with 
 | -- | -- | -- |
 | Base Devel | `pacman -S base-devel` | Basic dev dependencies. |
 | Unzip | `pacman -S unzip` | / |
+| Fontconfig | `pacman -S fontconfig` | / |
 | Nushell | `pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Starship | `pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
 | Zoxide | `pacman -S zoxide` | Fuzzy-match `cd`. |

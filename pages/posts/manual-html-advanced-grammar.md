@@ -1,32 +1,47 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-06-25T14:14+08:00
+update: 2026-08-19T18:21+08:00
 lang: en
-duration: 17min
+duration: 29min
 type: manual
 group: Web
 order: 6
 ---
 
+<style>
+.prose table thead, .prose table tbody {
+  display: block;
+}
+.prose table tr {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.prose table th, .prose table td {
+  overflow-x: auto;
+}
+</style>
+
 [[toc]]
 
 ## Introduction
 
-HTML (HyperText Markup Language) is the standard markup language for creating web pages. It consists of:
+**HTML (HyperText Markup Language)** is the standard markup language for creating web pages. It consists of:
 
 - **Doctypes**: Declarations that specify the HTML version being used, placed at the beginning of the document.
-- **Elements**: The building blocks of HTML, represented by **tags** (e.g., `<div>`, `<p>`, `<a>`).
-- **Attributes**: Define the characteristics of an HTML element, specified within the opening tag.
-- **Properties**: Properties of HTML elements that can be accessed and manipulated through JavaScript, some of properties are [synchronized with attributes, but not all](#synchronization-between-attributes-and-properties).
-- **Content**: The text contained within an HTML element.
-- **External Resources**: External files that can be linked to an HTML document, such as CSS stylesheets, images, JavaScript files, etc.
+- **Tags**: Writting in HTML source file, used to represent corresponding elements.
+- **Attributes**: Specified within the opening tag, define the characteristics of element that tag represents.
+- **DOM**: An **API** to represents and interacts with HTML documents.
+- **Elements**: Interactive instance for tags, a part of DOM API.
+- **Properties**: Properties of elements that can be accessed and manipulated through DOM API, some of properties are [initialized by or even synchronized with attributes](#synchronization-between-attributes-and-properties).
+- **Content**: The text contained within an element.
+- **External Resources**: Files outside the current HTML document. They are referenced via elements / attributes. Common types include CSS stylesheets, JavaScript files, images, fonts, icons, and media files.
 
 ## Doctypes
 
 **Doctypes** are used to specify **the version of HTML** being used in the document. Since HTML 5 was introduced in 2014, there is no reason for us to use older versions (like HTML 4.01, XHTML 1.1, etc.).
 
-- HTML 5 (Modern and recommended):
+- **HTML 5 (Modern and recommended)**:
 
   ```html
   <!DOCTYPE html>
@@ -48,68 +63,83 @@ HTML (HyperText Markup Language) is the standard markup language for creating we
 >
 > Thoughs the doctype declaration is not case-sensitive, it's still recommended to use uppercase for the `DOCTYPE` keyword, it's a kind of agreed convention in the ecosystem.
 
-## Elements
+## Tags
 
-**Elements** are represented by **tags**: We write tags in HTML document, and the browser will parse them into elements. You can think of **elements as instances**, and **tags as their definitions**.
+### Common Tags
 
-For better consistency, we **use the term "element" to refer both the tag and the element**, except when we need to distinguish them.
+#### Container Tags
 
-### Common Elements
-
-#### Container Elements
-
-- `<div>`: A container element which only make content exclusive line;
+- `<div>`: A container tag which just make content on its own line:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
-
-  ```html
-  <div>123</div><div>123</div>
-  ```
 
   </th><th flex-1 valign="top">
 
   Preview
 
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <div>123</div><div>123</div>
+  ```
+
+  </td><td valign="top">
+
   <div>123</div><div>123</div>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-
-- `<span>`: A container element without any function, the content will still be inline;
+- `<span>`: A container tag without any function:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
-
-  ```html
-  <span>123</span><span>123</span>
-  ```
 
   </th><th flex-1 valign="top">
 
   Preview
 
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <span>123</span><span>123</span>
+  ```
+
+  </td><td valign="top">
+
   <span>123</span><span>123</span>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<ul>` + `<li>`: An unordered list and list item elements, better than `<div>` to express the relationship between items and their container;
+- `<ul>` + `<li>`: An unordered list and list item container tags, better than `<div>` to express the relationship between items and their container:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <ul>
@@ -118,26 +148,32 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </ul>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <ul>
     <li>Item 1</li>
     <li>Item 2</li>
   </ul>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<ol>` + `<li>`: An ordered list and list item elements, better than `<div>` to express the relationship between items and their container, but seldom used in practice than `<ul>`;
+- `<ol>` + `<li>`: An ordered list and list item container tags, better than `<div>` to express the relationship between items and their container, but seldom used in practice than `<ul>`:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <ol>
@@ -146,28 +182,467 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </ol>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <ol>
     <li>Item 1</li>
     <li>Item 2</li>
   </ol>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-#### Text Elements
+There are some sematic tags new introduced in HTML 5:
 
-- `<h1>` ~ `<h6>`: Heading elements, where `<h1>` is the most important and `<h6>` is the least important;
+- `<header>`: A container tag which represents introductory content of the **whole document** or **a section**, may contain some heading elements but also a logo, a search form, an author name, and other elements:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <!-- Header of the whole document -->
+  <!-- Direct child of `<body>` -->
+  <header>
+    <a href="#">Cute Puppies Express!</a>
+  </header>
+
+  <article>
+    <!-- Header of the article -->
+    <!-- Direct child of `<article>` -->
+    <header>
+      <h1>Beagles</h1>
+      <time>08.12.2014</time>
+    </header>
+    <p>
+      ...
+    </p>
+  </article>
+  ```
+
+  </td><td valign="top">
+
+  <header>
+    <a href="#">Cute Puppies Express!</a>
+  </header>
+
+  <article>
+    <header>
+      <h1>Beagles</h1>
+      <time>08.12.2014</time>
+    </header>
+    <p>
+      ...
+    </p>
+  </article>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<main>`: A container tag which represents the dominant content of the **whole document**.
+
+  The content of a `<main>` element should be unique, content that is repeated across different documents or document sections such as headers, sidebars, footers, etc. shouldn't be included:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <header>Gecko facts</header>
+  <!-- Dominant content of the whole document -->
+  <!-- Direct child of `<body>` -->
+  <main>
+    <p>
+      Geckos are a group of usually small, usually nocturnal lizards. They are
+      found on every continent except Antarctica.
+    </p>
+    <p>
+      Many species of gecko have adhesive toe pads which enable them to climb
+      walls and even windows.
+    </p>
+  </main>
+  ```
+
+  </td><td valign="top">
+
+  <header>Gecko facts</header>
+  <main>
+    <p>
+      Geckos are a group of usually small, usually nocturnal lizards. They are
+      found on every continent except Antarctica.
+    </p>
+    <p>
+      Many species of gecko have adhesive toe pads which enable them to climb
+      walls and even windows.
+    </p>
+  </main>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<aside>`: A container tag which represents indirectly related content against then main content:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <header>Gecko facts</header>
+  <div style="display: flex; gap: 16px">
+    <!-- Aside of whole `<main>` content -->
+    <aside style="min-width: 20%">
+      <nav>
+        <ul>
+          <li>...</li>
+          <li>...</li>
+          <li>...</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <p>
+        Geckos are a group of usually small, usually nocturnal lizards. They are
+        found on every continent except Antarctica.
+      </p>
+      <!-- Aside of the a part of `<main>` content -->
+      <aside style="float: right">
+        <p>
+          <a href="https://en.wikipedia.org/wiki/Gecko">Wiki</a> of Gecko.
+        </p>
+      </aside>
+      <p>
+        Many species of gecko have adhesive toe pads which enable them to climb
+        walls and even windows.
+      </p>
+    </main>
+  </div>
+  ```
+
+  </td><td valign="top">
+
+    <header>Gecko facts</header>
+  <div style="display: flex; gap: 16px">
+    <!-- Aside of whole `<main>` content -->
+    <aside style="min-width: 20%">
+      <nav>
+        <ul>
+          <li>...</li>
+          <li>...</li>
+          <li>...</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <p>
+        Geckos are a group of usually small, usually nocturnal lizards. They are
+        found on every continent except Antarctica.
+      </p>
+      <!-- Aside of the a part of `<main>` content -->
+      <aside style="float: right">
+        <p>
+          <a href="https://en.wikipedia.org/wiki/Gecko">Wiki</a> of Gecko.
+        </p>
+      </aside>
+      <p>
+        Many species of gecko have adhesive toe pads which enable them to climb
+        walls and even windows.
+      </p>
+    </main>
+  </div>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<footer>`: A container tag which represents a footer of the **whole document** or **a section**, typically contains information about the author, copyright or links related:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <header>Wizard</header>
+
+  <article>
+    <header>How to be a wizard</header>
+    <ol>
+      <li>Grow a long, majestic beard.</li>
+      <li>Wear a tall, pointed hat.</li>
+      <li>Have I mentioned the beard?</li>
+    </ol>
+    <!-- Footer of the article -->
+    <footer>
+      <p>— Gandalf</p>
+    </footer>
+  </article>
+
+  <!-- Footer of the whole document -->
+  <footer>
+    <p>© 2018 Gandalf www.example.com</p>
+  </footer>
+  ```
+
+  </td><td valign="top">
+
+  <header>Wizard</header>
+
+  <article>
+    <header>How to be a wizard</header>
+    <ol>
+      <li>Grow a long, majestic beard.</li>
+      <li>Wear a tall, pointed hat.</li>
+      <li>Have I mentioned the beard?</li>
+    </ol>
+    <footer>
+      <p>— Gandalf</p>
+    </footer>
+  </article>
+
+  <footer>
+    <p>© 2018 Gandalf www.example.com</p>
+  </footer>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<nav>`: A container tag which represents a section of a page whose purpose is to provide navigation links.
+
+  It's not necessary for all links to be contained in a `<nav>` element. `<nav>` is intended only for **a major block of navigation links**; typically the `<footer>` element often has a list of links that don't need to be in a `<nav>` element.
+
+  A document may have several `<nav>` elements, for example, one for **site navigation** and one for **intra-page navigation**.
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <nav>
+    <ol>
+      <li><a href="#">Bikes</a></li>
+      <li><a href="#">BMX</a></li>
+      <li>Jump Bike 3000</li>
+    </ol>
+  </nav>
+
+  <h1>Jump Bike 3000</h1>
+  <p>
+    This BMX bike is a solid step into the pro world. It looks as legit as it
+    rides and is built to polish your skills.
+  </p>
+  ```
+
+  </td><td valign="top">
+
+  <nav>
+    <ol>
+      <li><a href="#">Bikes</a></li>
+      <li><a href="#">BMX</a></li>
+      <li>Jump Bike 3000</li>
+    </ol>
+  </nav>
+
+  <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
+  <h1>Jump Bike 3000</h1>
+  <p>
+    This BMX bike is a solid step into the pro world. It looks as legit as it
+    rides and is built to polish your skills.
+  </p>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<article>`: A container tag which represents a **self-contained composition** in a document, page, application, or site, which is intended to be independently distributable or reusable:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <article>
+    <h1>Weather forecast for Seattle</h1>
+    <article>
+      <h2>03 March 2018</h2>
+      <p>Rain.</p>
+    </article>
+    <article>
+      <h2>04 March 2018</h2>
+      <p>Periods of rain.</p>
+    </article>
+    <article>
+      <h2>05 March 2018</h2>
+      <p>Heavy rain.</p>
+    </article>
+  </article>
+  ```
+
+  </td><td valign="top">
+
+  <article>
+    <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
+    <h1>Weather forecast for Seattle</h1>
+    <article>
+      <h2>03 March 2018</h2>
+      <p>Rain.</p>
+    </article>
+    <article>
+      <h2>04 March 2018</h2>
+      <p>Periods of rain.</p>
+    </article>
+    <article>
+      <h2>05 March 2018</h2>
+      <p>Heavy rain.</p>
+    </article>
+  </article>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<section>`: A container tag which represents a **generic section (part)** of a document. Sections should always have a heading, with very few exceptions:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <h1>Choosing an Apple</h1>
+  <section>
+    <h2>Introduction</h2>
+    <p>
+      This document provides a guide to help with the important task of choosing
+      the correct Apple.
+    </p>
+  </section>
+
+  <section>
+    <h2>Criteria</h2>
+    <p>
+      There are many different criteria to be considered when choosing an Apple —
+      size, color, firmness, sweetness, tartness...
+    </p>
+  </section>
+  ```
+
+  </td><td valign="top">
+
+  <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
+  <h1>Choosing an Apple</h1>
+  <section>
+    <h2>Introduction</h2>
+    <p>
+      This document provides a guide to help with the important task of choosing
+      the correct Apple.
+    </p>
+  </section>
+
+  <section>
+    <h2>Criteria</h2>
+    <p>
+      There are many different criteria to be considered when choosing an Apple —
+      size, color, firmness, sweetness, tartness...
+    </p>
+  </section>
+
+  </td></tr>
+
+  </tbody></table>
+
+#### Text Tags
+
+- `<h1>` ~ `<h6>`: Head layout text tags which also make on its own line with some default margin.
+
+  `<h1>` is the most important and `<h6>` is the least important:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <h1>Heading 1</h1>
@@ -178,10 +653,9 @@ For better consistency, we **use the term "element" to refer both the tag and th
   <h6>Heading 6</h6>
   ```
 
-  </th><th flex-1 valign="top">
+  </td><td valign="top">
 
-  Preview
-
+  <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
   <h1>Heading 1</h1>
   <h2>Heading 2</h2>
   <h3>Heading 3</h3>
@@ -189,129 +663,755 @@ For better consistency, we **use the term "element" to refer both the tag and th
   <h5>Heading 5</h5>
   <h6>Heading 6</h6>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<p>`: A paragraph element, which will make content exclusive line and add some margin;
+- `<p>`: A paragraph layout text tag which also make content on its own line with some default margin:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<a>`: An anchor element, which is used to create hyperlinks or anchor points;
+- `<hr>`: A layout text tag which creates a horizontal divider line:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>P1</p>
+  <hr>
+  <p>P2</p>
+  ```
+
+  </td><td valign="top">
+
+  <p>P1</p>
+  <hr>
+  <p>P2</p>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<br>`: A layout text tag which creates a line break:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>
+    O'er all the hilltops<br />
+    Is quiet now,<br />
+    In all the treetops<br />
+    Hearest thou<br />
+    Hardly a breath;<br />
+    The birds are asleep in the trees:<br />
+    Wait, soon like these<br />
+    Thou too shalt rest.
+  </p>
+  ```
+
+  </td><td valign="top">
+
+  <p>
+    O'er all the hilltops<br />
+    Is quiet now,<br />
+    In all the treetops<br />
+    Hearest thou<br />
+    Hardly a breath;<br />
+    The birds are asleep in the trees:<br />
+    Wait, soon like these<br />
+    Thou too shalt rest.
+  </p>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<pre>`: A preformatted layout text tag which preserves the original format of text:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <pre>
+               S
+               A
+              LUT
+               M
+              O N
+              D  E
+              DONT
+            JE SUIS
+            LA  LAN
+            G U E  É
+           L O Q U E N
+          TE      QUESA
+         B  O  U  C  H  E
+        O        P A R I S
+       T I R E   ET   TIRERA
+      T O U             JOURS
+     AUX                  A  L
+   LEM                      ANDS   - Apollinaire
+  </pre>
+  ```
+
+  </td><td valign="top">
+
+  <pre>
+               S
+               A
+              LUT
+               M
+              O N
+              D  E
+              DONT
+            JE SUIS
+            LA  LAN
+            G U E  É
+           L O Q U E N
+          TE      QUESA
+         B  O  U  C  H  E
+        O        P A R I S
+       T I R E   ET   TIRERA
+      T O U             JOURS
+     AUX                  A  L
+   LEM                      ANDS   - Apollinaire
+  </pre>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<a>`: A anchor functional text tag which creates hyperlink / anchor point:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <a href="https://www.example.com">This is a link</a>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <a href="https://www.example.com">This is a link</a>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<strong>`: A strong importance element, which will make text bold, better than `<b>` in semantics;
+- `<cite>` & `<q>` & `<blockquote>`: References functional text tags, which is used to reference **the title of a creative work**, **a short inline quotation** & **an extended quotation** respectively:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <figure>
+    <blockquote>
+      <p>
+        It was a bright cold day in April, and the clocks were striking thirteen.
+      </p>
+    </blockquote>
+    <figcaption>
+      First sentence in
+      <cite
+        ><a href="http://www.george-orwell.org/1984/0.html"
+          >Nineteen Eighty-Four</a
+        ></cite
+      >
+      by George Orwell (Part 1, Chapter 1).
+    </figcaption>
+  </figure>
+
+  <hr>
+
+  <p>
+    When Dave asks HAL to open the pod bay door, HAL answers:
+    <q
+      cite="https://www.imdb.com/title/tt0062622/quotes/?item=qt0396921&ref_=ext_shr_lnk">
+      I'm sorry, Dave. I'm afraid I can't do that.
+    </q>
+  </p>
+
+  <hr>
+
+  <div>
+    <blockquote cite="https://www.huxley.net/bnw/four.html">
+      <p>
+        Words can be like X-rays, if you use them properly—they'll go through
+        anything. You read and you're pierced.
+      </p>
+    </blockquote>
+    <p>—Aldous Huxley, <cite>Brave New World</cite></p>
+  </div>
+  ```
+
+  </td><td valign="top">
+
+  <figure>
+    <blockquote>
+      <p>
+        It was a bright cold day in April, and the clocks were striking thirteen.
+      </p>
+    </blockquote>
+    <figcaption>
+      First sentence in
+      <cite
+        ><a href="http://www.george-orwell.org/1984/0.html"
+          >Nineteen Eighty-Four</a
+        ></cite
+      >
+      by George Orwell (Part 1, Chapter 1).
+    </figcaption>
+  </figure>
+
+  <hr>
+
+  <p>
+    When Dave asks HAL to open the pod bay door, HAL answers:
+    <q
+      cite="https://www.imdb.com/title/tt0062622/quotes/?item=qt0396921&ref_=ext_shr_lnk">
+      I'm sorry, Dave. I'm afraid I can't do that.
+    </q>
+  </p>
+
+  <hr>
+
+  <div>
+    <blockquote cite="https://www.huxley.net/bnw/four.html">
+      <p>
+        Words can be like X-rays, if you use them properly—they'll go through
+        anything. You read and you're pierced.
+      </p>
+    </blockquote>
+    <p>—Aldous Huxley, <cite>Brave New World</cite></p>
+  </div>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<strong>`: A embellishment text tag makes text strong & bold, better than `<b>` in semantics:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <strong>This text is important.</strong>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <strong>This text is important.</strong>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<em>`: An emphasis element, which will make text italic, better than `<i>` in semantics;
+- `<em>`: A embellishment text tag makes text emphasis & italic, better than `<i>` in semantics:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
-
-  ```html
-  <em>This text is emphasized.</em>
-  ```
 
   </th><th flex-1 valign="top">
 
   Preview
 
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <em>This text is emphasized.</em>
+  ```
+
+  </td><td valign="top">
+
   <em>This text is emphasized.</em>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<del>`: A deleted text element, which will make text with strikethrough, better than `<s>` or explicitly set CSS style `text-decoration: line-through` in semantics;
+- `<small>`: A embellishment text tag makes text a side comment & small:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>
+    MDN Web Docs is a learning platform for Web technologies and the software that
+    powers the Web.
+  </p>
+
+  <hr />
+
+  <p>
+    <small>The content is licensed under a Creative Commons Attribution-ShareAlike 2.5 Generic License.</small>
+  </p>
+  ```
+
+  </td><td valign="top">
+
+  <p>
+    MDN Web Docs is a learning platform for Web technologies and the software that
+    powers the Web.
+  </p>
+
+  <hr />
+
+  <p>
+    <small>The content is licensed under a Creative Commons Attribution-ShareAlike 2.5 Generic License.</small>
+  </p>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<u>`: A embellishment text tag marks the text is unarticulated with underline:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
-
-  ```html
-  <del>This text is deleted.</del>
-  ```
 
   </th><th flex-1 valign="top">
 
   Preview
 
-  <del>This text is deleted.</del>
-
   </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  Please <u>pay attention</u>!
+  ```
+
+  </td><td valign="top">
+
+  Please <u>pay attention</u>!
+
+  </td></tr>
 
   </tbody></table>
 
-#### Form & Control Elements
-
-- `<form>`: A form element, which is used to collect user input and submit it to a server;
+- `<s>`: A embellishment text tag marks the text is outdated with strikethrough:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  Price: <s>$100</s> $69!
+  ```
+
+  </td><td valign="top">
+
+  Price: <s>$100</s> $69!
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<ins>`: A embellishment text tag marks the text is newly inserted with underline:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <ins datetime="2026-08-19">New inserted item!</ins>
+  ```
+
+  </td><td valign="top">
+
+  <ins datetime="2026-08-19">New inserted item!</ins>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<del>`: A embellishment text tag marks the text is newly deleted with strikethrough:
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <del datetime="2026-08-19">Deleted outdated item!</del>
+  ```
+
+  </td><td valign="top">
+
+  <del datetime="2026-08-19">Deleted outdated item!</del>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<time>`: A embellishment text tag adds machine-readable format date to improve search engines results or custom features:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>
+    The Cure will be celebrating their 40th anniversary on
+    <time datetime="2018-07-07">July 7</time> in London's Hyde Park.
+  </p>
+
+  <p>
+    The concert starts at <time datetime="20:00">20:00</time> and you'll be able
+    to enjoy the band for at least <time datetime="PT2H30M">2h 30m</time>.
+  </p>
+  ```
+
+  </td><td valign="top">
+
+  <p>
+    The Cure will be celebrating their 40th anniversary on
+    <time datetime="2018-07-07">July 7</time> in London's Hyde Park.
+  </p>
+
+  <p>
+    The concert starts at <time datetime="20:00">20:00</time> and you'll be able
+    to enjoy the band for at least <time datetime="PT2H30M">2h 30m</time>.
+  </p>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<code>`: A embellishment text tag marks that the text is code snippest:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>
+    The <code>push()</code> method adds one or more elements to the end of an
+    array and returns the new length of the array.
+  </p>
+  ```
+
+  </td><td valign="top">
+
+  <p>
+    The <code>push()</code> method adds one or more elements to the end of an
+    array and returns the new length of the array.
+  </p>
+
+  </td></tr>
+
+  </tbody></table>
+
+
+- `<address>`: A embellishment text tag indicates that the enclosed HTML provides contact information for a person or people, or for an organization:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>Contact the author of this page:</p>
+
+  <address>
+    <a href="mailto:jim@example.com">jim@example.com</a><br />
+    <a href="tel:+14155550132">+1 (415) 555‑0132</a>
+  </address>
+  ```
+
+  </td><td valign="top">
+
+  <p>Contact the author of this page:</p>
+
+  <address>
+    <a href="mailto:jim@example.com">jim@example.com</a><br />
+    <a href="tel:+14155550132">+1 (415) 555‑0132</a>
+  </address>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<sub>` & `<sup>`: A embellishment text tag makes text as **subscript** & **superscript** respectively:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  H<sub>2</sub>O / 2<sup>2</sup> = 4
+  ```
+
+  </td><td valign="top">
+
+  H<sub>2</sub>O / 2<sup>2</sup> = 4
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<ruby>` + `<rt>`: Embellishment text tags add pronunciation to text:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
+  ```
+
+  </td><td valign="top">
+
+  <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
+
+  </td></tr>
+
+  </tbody></table>
+
+- `<dft>` & `<abbr>`: Embellishment text tags mark the text as **a term** & **an abbreviation** respectively:
+
+  <table><tbody>
+
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <p>
+    You can use <abbr>CSS</abbr> (Cascading Style Sheets) to style your
+    <abbr>HTML</abbr> (HyperText Markup Language). Using style sheets, you can
+    keep your <abbr>CSS</abbr> presentation layer and <abbr>HTML</abbr> content
+    layer separate. This is called "separation of concerns."
+  </p>
+  ```
+
+  </td><td valign="top">
+
+  <p>
+    You can use <abbr>CSS</abbr> (Cascading Style Sheets) to style your
+    <abbr>HTML</abbr> (HyperText Markup Language). Using style sheets, you can
+    keep your <abbr>CSS</abbr> presentation layer and <abbr>HTML</abbr> content
+    layer separate. This is called "separation of concerns."
+  </p>
+
+  </td></tr>
+
+  </tbody></table>
+
+
+#### Form & Control Tags
+
+- `<form>`: A form tag, which is used to collect user input and submit it to a server:
+
+  <table><tbody>
+
+  <tr flex gap-4><th flex-1 valign="top">
+
+  Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <form action="/submit" method="post">
@@ -324,9 +1424,7 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </form>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <form space-y-4 action="/submit" method="post">
     <div>
@@ -337,21 +1435,29 @@ For better consistency, we **use the term "element" to refer both the tag and th
     </div>
   </form>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<input>`: An input element, which is used to create interactive controls for `<form>` fields to accept data from the user, so it often be placed inside a `<form>` element.
+- `<input>`: An input tag, which is used to create a interactive control for a field of `<form>` to accept data from the user, so it often be placed inside a `<form>` tag.
 
-  `<input>` has many types, such as `text`, `password`, `checkbox`, `radio`, etc, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input#input_types) for more details.
+  `<input>` tag has many different types, such as `text`, `password`, `checkbox`, `radio`, etc, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Tags/input#input_types) for more details.
 
-  `<input>` uses `name` attribute to specify the form field name.
+  `<input>` uses `name` attribute to specify the form field name:
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <!-- Frequently Used Input Types -->
@@ -371,7 +1477,7 @@ For better consistency, we **use the term "element" to refer both the tag and th
     <input type="datetime-local">
   </div>
   <div>
-    <input type="checkbox" name="remember" value="day"> Remember me at least for a day
+    <input type="checkbox"name="remember" value="day"> Remember me at least for a day
   </div>
   <div>
     <input type="checkbox" name="remember" value="week"> Remember me at least for a week
@@ -396,9 +1502,7 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </div>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <div space-y-4>
     <div>
@@ -442,13 +1546,13 @@ For better consistency, we **use the term "element" to refer both the tag and th
     </div>
   </div>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<textarea>`: A textarea element, which is used to create a multi-line text input control, it often be placed inside a `<form>` element too.
+- `<textarea>`: A textarea tag, which is used to create a multi-line text input control, it often be placed inside a `<form>` tag too.
 
-  `<textarea>` has attributes like `rows` and `cols` to specify the visible size of the textarea.
+  `<textarea>` has attributes like `rows` and `cols` to specify the visible size of the textarea:
 
   <table><tbody>
 
@@ -456,27 +1560,33 @@ For better consistency, we **use the term "element" to refer both the tag and th
 
   Code
 
-  ```html
-  <div>
-    <textarea rows="4" cols="50"></textarea>
-  </div>
-  ```
-
   </th><th flex-1 valign="top">
 
   Preview
 
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
   <div>
-    <textarea rows="4" cols="50"></textarea>
+    <textarea rows="4" cols="30"></textarea>
+  </div>
+  ```
+
+  </td><td valign="top">
+
+  <div>
+    <textarea rows="4" cols="30"></textarea>
   </div>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<select>` + `<option>`: A select element and option element, which are used to create a drop-down list, they often be placed inside a `<form>` element too.
+- `<select>` + `<optgroup>` + `<option>`: Select and option tags, which are used to create a drop-down list, they often be placed inside a `<form>` tag too.
 
-  `<select>` can have `multiple` attribute to allow multiple selections, and each `<option>` can have `value` attribute to specify the value of the option.
+  `<select>` can have `multiple` attribute to allow multiple selections, and each `<option>` can have `value` attribute to specify the value of the option:
 
   <table><tbody>
 
@@ -484,45 +1594,73 @@ For better consistency, we **use the term "element" to refer both the tag and th
 
   Code
 
-  ```html
-  <div>
-    <select name="fruits">
-      <option value="apple">Apple</option>
-      <option value="banana">Banana</option>
-      <option value="orange">Orange</option>
-    </select>
-  </div>
-  ```
-
   </th><th flex-1 valign="top">
 
   Preview
 
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
   <div>
-    <select name="fruits">
-      <option value="apple">Apple</option>
-      <option value="banana">Banana</option>
-      <option value="orange">Orange</option>
+    <select>
+      <optgroup label="Theropods">
+        <option>Tyrannosaurus</option>
+        <option>Velociraptor</option>
+        <option>Deinonychus</option>
+      </optgroup>
+      <optgroup label="Sauropods">
+        <option>Diplodocus</option>
+        <option>Saltasaurus</option>
+        <option>Apatosaurus</option>
+      </optgroup>
+    </select>
+  </div>
+  ```
+
+  </td><td valign="top">
+
+  <div>
+    <select>
+      <optgroup label="Theropods">
+        <option>Tyrannosaurus</option>
+        <option>Velociraptor</option>
+        <option>Deinonychus</option>
+      </optgroup>
+      <optgroup label="Sauropods">
+        <option>Diplodocus</option>
+        <option>Saltasaurus</option>
+        <option>Apatosaurus</option>
+      </optgroup>
     </select>
   </div>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<label>`: A label element, which is used to define a label for an `<input>` element, it often be placed inside a `<form>` element too.
+- `<label>`: A label tag, which is used to define a label for an `<input>` tag, it often be placed inside a `<form>` tag too.
 
-  `<label>` can be associated with an `<input>` element through `for` attribute, and the value of `for` attribute should be the same as the `id` of the `<input>` element.
+  `<label>` can be associated with an `<input>` tag through `for` attribute, and the value of `for` attribute should be the same as the `id` of the `<input>` tag:
 
   > [!Note]
   >
-  > You can place the `<label>` element before or after the `<input>` element, but it's **not recommended to wrap the `<input>` element with `<label>` element**, because it will make the structure of the form more complex and less readable.
+  > You can place the `<label>` tag before or after the `<input>` tag, but it's **not recommended to wrap the `<input>` tag with `<label>` tag**, because it will make the structure of the form more complex and less readable.
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <div>
@@ -544,9 +1682,7 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </div>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <div space-y-4>
     <div>
@@ -568,27 +1704,35 @@ For better consistency, we **use the term "element" to refer both the tag and th
     </div>
   </div>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-- `<button>`: A button element, which is used to create clickable buttons. It has three types: `submit`, `reset`, and `button`.
+- `<button>`: A button tag, which is used to create clickable buttons. It has three types: `submit`, `reset`, and `button`.
 
-  `submit` type will trigger form submission, `reset` type will reset the form to its initial state, these two types are often be placed inside a `<form>` element too, while `button` type has no default behavior, so it can be used anywhere.
+  `submit` type will trigger form submission, `reset` type will reset the form to its initial state, these two types are often be placed inside a `<form>` tag too, while `button` type has no default behavior, so it can be used anywhere:
 
   > [!Caution]
   >
-  > The default type of `<button>` element is `submit`, please never forget to explicitly set `type="button"` for `<button>` element if you don't want it to trigger form submission!
+  > The default type of `<button>` tag is `submit`, please never forget to explicitly set `type="button"` for `<button>` tag if you don't want it to trigger form submission!
 
   > [!Note]
   >
-  > `<input>` element has corresponding type as button, such as `<input type="submit">`, but `<button>` element supports inner content, so it's more flexible and recommended to use.
+  > `<input>` tag has corresponding type as button, such as `<input type="submit">`, but `<button>` tag supports inner content, so it's more customized and recommended than `<input type="submit">`.
 
   <table><tbody>
 
   <tr flex gap-4><th flex-1 valign="top">
 
   Code
+
+  </th><th flex-1 valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
 
   ```html
   <div>
@@ -602,9 +1746,7 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </div>
   ```
 
-  </th><th flex-1 valign="top">
-
-  Preview
+  </td><td valign="top">
 
   <div space-y-4>
     <div>
@@ -618,15 +1760,15 @@ For better consistency, we **use the term "element" to refer both the tag and th
     </div>
   </div>
 
-  </th></tr>
+  </td></tr>
 
   </tbody></table>
 
-#### Script & Style & External Resource Elements <a name="script-style-external-resource-elements"></a>
+#### Resource Tags
 
-- `<script>`: A script element, which is used to embed or reference JavaScript code in the HTML document.
+- `<script>` & `<noscript>`: Script resource tags, which is used to **embed or reference JavaScript code** & **display fallback content when the browser disabled or does not support JavaScript** in the HTML document respectively.
 
-  [Modern browsers](https://caniuse.com/es6-module) support ESM (ECMAScript Modules) in `<script>` element, so you can use `type="module"` attribute to enable module mode, and use `import` statement to import other modules.
+  [Modern browsers](https://caniuse.com/es6-module) support ESM (ECMAScript Modules) in `<script>` tag, so you can use `type="module"` attribute to enable module mode, and use `import` statement to import other modules.
 
   Code
 
@@ -639,14 +1781,14 @@ For better consistency, we **use the term "element" to refer both the tag and th
   <!-- Referencing external JavaScript file -->
   <script src="script.js"></script>
 
-  <!-- Using ESM in script element -->
+  <!-- Using ESM in script tag -->
   <script type="module">
     import { myFunction } from './module.js';
     myFunction();
   </script>
   ```
 
-- `<style>`: A style element, which is used to embed CSS styles in the HTML document.
+- `<style>`: A style resource tag, which is used to embed CSS styles in the HTML document.
 
   Code
 
@@ -662,7 +1804,7 @@ For better consistency, we **use the term "element" to refer both the tag and th
   </style>
   ```
 
-- `<link>`: A link element, which is used to reference external resources, such as CSS files, icons, etc.
+- `<link>`: A link resource tag, which is used to reference external resources, such as CSS files, icons, etc.
 
   `rel` attribute is used to specify the relationship between the current document and the linked resource, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel).
 
@@ -676,11 +1818,82 @@ For better consistency, we **use the term "element" to refer both the tag and th
   <link rel="icon" href="favicon.ico">
   ```
 
-### Void Elements & Non-Void Elements
+- `<img>` & `<picture>` & `<source>` & `<video>` & `<track>` & `<audio>`: Media resource tags:
 
-In HTML, there are two types of elements: [**void elements**](https://developer.mozilla.org/en-US/docs/Glossary/Void_element) and **non-void elements**.
+  <table><tbody>
 
-Void elements have only a start tag and do not have an end tag, they cannot contain any content, for example:
+  <tr><th valign="top">
+
+  Code
+
+  </th><th valign="top">
+
+  Preview
+
+  </th></tr>
+
+  <tr><td valign="top">
+
+  ```html
+  <img
+  class="fit-picture"
+  src="https://developer.mozilla.org/shared-assets/images/examples/grapefruit-slice.jpg"
+  alt="Grapefruit slice atop a pile of other slices" />
+
+  <picture>
+    <source
+      srcset="https://developer.mozilla.org/shared-assets/images/examples/surfer.jpg"
+      media="(orientation: portrait)" />
+    <img src="https://developer.mozilla.org/shared-assets/images/examples/painted-hand.jpg" alt="" />
+  </picture>
+
+  <video controls width="250">
+    <source src="https://developer.mozilla.org/shared-assets/videos/flower.webm" type="video/webm" />
+    <source src="https://developer.mozilla.org/shared-assets/videos/flower.mp4" type="video/mp4" />
+    Download the
+    <a href="https://developer.mozilla.org/shared-assets/videos/flower.webm">WEBM</a>
+    or
+    <a href="https://developer.mozilla.org/shared-assets/videos/flower.mp4">MP4</a>
+    video.
+  </video>
+
+  <audio controls src="https://developer.mozilla.org/shared-assets/audio/t-rex-roar.mp3"></audio>
+  ```
+
+  </td><td valign="top">
+  <img
+  class="fit-picture"
+  src="https://developer.mozilla.org/shared-assets/images/examples/grapefruit-slice.jpg"
+  alt="Grapefruit slice atop a pile of other slices" />
+
+  <picture>
+    <source
+      srcset="https://developer.mozilla.org/shared-assets/images/examples/surfer.jpg"
+      media="(orientation: portrait)" />
+    <img src="https://developer.mozilla.org/shared-assets/images/examples/painted-hand.jpg" alt="" />
+  </picture>
+
+  <video controls width="250">
+    <source src="https://developer.mozilla.org/shared-assets/videos/flower.webm" type="video/webm" />
+    <source src="https://developer.mozilla.org/shared-assets/videos/flower.mp4" type="video/mp4" />
+    Download the
+    <a href="https://developer.mozilla.org/shared-assets/videos/flower.webm">WEBM</a>
+    or
+    <a href="https://developer.mozilla.org/shared-assets/videos/flower.mp4">MP4</a>
+    video.
+  </video>
+
+  <audio controls src="https://developer.mozilla.org/shared-assets/audio/t-rex-roar.mp3"></audio>
+
+  </td></tr>
+
+  </tbody></table>
+
+### Void Tags & Non-void Tags
+
+In HTML, there are two types of tags: [**void tags**](https://developer.mozilla.org/en-US/docs/Glossary/Void_tag) and **non-void tags**.
+
+Void tags have only a start tag and do not have an end tag, they cannot contain any content, for example:
 
 ```html
 <img src="image.jpg">
@@ -689,17 +1902,21 @@ Void elements have only a start tag and do not have an end tag, they cannot cont
 <hr>
 ```
 
-Non-void elements have both a start tag and an end tag, they can contain content, for example:
+Non-void tags have both a start tag and an end tag, they can contain content, for example:
 
 ```html
-<div>This is a div element.</div>
-<p>This is a paragraph element.</p>
-<a href="https://www.example.com">This is a link element.</a>
+<div>This is a div tag.</div>
+<p>This is a paragraph tag.</p>
+<a href="https://www.example.com">This is a link tag.</a>
 ```
 
 > [!Caution]
 >
 > There is no concept of **"self-closing tag"** in HTML, if you write a "self-closing tag" like `<img src="image.jpg" />`, what the browser does is just simply ignore the `/` character, and treat it as `<img src="image.jpg">`.
+
+## Elements
+
+**Elements** are instances of **tags**: We write tags in HTML document, and the browser will parse them into elements.
 
 ## Attributes vs. Properties
 
@@ -707,15 +1924,15 @@ In HTML, the most common confusion is between attributes and properties.
 
 ### Attributes
 
-We know tags will be parsed into elements when browsers render the HTML document, and the attributes of the tags will be used to control the characteristics of the elements, for example:
+We know tags will be used to create elements when browsers parse the HTML document, so the **attributes** of the tags will be used to **control the characteristics of the elements**, for example:
 
 ```html
 <input type="text" value="Hello">
 ```
 
-In this example, browsers will create an text `<input>` element with default value "Hello".
+In this example, browsers will create an **text** `<input>` element with **default value** "Hello".
 
-When the attributes change, the characteristics of the element will also change, so browsers will update the element when attributes are updated, for example:
+When the attributes change, the characteristics of the element will also change, for example:
 
 <table><tbody>
 
@@ -724,9 +1941,9 @@ When the attributes change, the characteristics of the element will also change,
 Code
 
 ```html
-<input id="myInput" type="text" value="Hello">
-<button onclick="document.querySelector('#myInput').setAttribute('type',Math.random()>0.5?'password':'text')">
-  Change Type
+<div><input id="myInput" type="text" value="Hello"></div>
+<button onclick="document.querySelector('#myInput').setAttribute('type', document.querySelector('#myInput').getAttribute('type') === 'text'?'password' : 'text')">
+  Toggle Type
 </button>
 ```
 
@@ -734,9 +1951,9 @@ Code
 
 Preview
 
-<input id="myInput" type="text" value="Hello">
-<button onclick="document.querySelector('#myInput').setAttribute('type',Math.random()>0.5?'password':'text')">
-  Change Type
+<div><input id="myInput" type="text" value="Hello"></div>
+<button onclick="document.querySelector('#myInput').setAttribute('type', document.querySelector('#myInput').getAttribute('type') === 'text'?'password' : 'text')">
+  Toggle Type
 </button>
 
 </th></tr>
@@ -745,7 +1962,9 @@ Preview
 
 ### Properties
 
-Properties are actually **IDL (Interface Definition Language) attributes**, which are meant to be used by programming languages, and we can access them through JavaScript DOM API, for example:
+**Properties** are **the characteristics of the element** we mentioned before.
+
+They are **IDL (Interface Definition Language) attributes**, which are meant to be used by programming languages, so we can access them through DOM API, for example:
 
 ```javascript
 const inputElement = document.querySelector('input')
@@ -754,7 +1973,9 @@ console.log(inputElement.value) // Accessing the 'value' property
 
 ### Synchronization Between Attributes and Properties
 
-By default, when an HTML element is created, the attributes are used to initialize the **corresponding (not necessary with the same name)** properties, for example:
+By default, when an HTML element is created, the attributes are always used to **initialize the corresponding (not necessary with the same name)** properties.
+
+For a same name example, the `src` attribute initializes the `src` property of the `<img>` element:
 
 ```html
 <img id="myImage" src="image.jpg">
@@ -770,9 +1991,44 @@ By default, when an HTML element is created, the attributes are used to initiali
 </script>
 ```
 
-In this example, the `src` attribute initializes the `src` property of the `<img>` element.
+For different name examples:
 
-After initialization, the synchronization between attributes and properties is not guaranteed, and it depends on the specific attribute/property pair:
+The `class` attribute corresponds to the `className` property:
+
+```html
+<div id="myDiv" class="my-class"></div>
+<script>
+  const divElement = document.querySelector('#myDiv')
+  console.log(divElement.getAttribute('class')) // -> my-class
+  console.log(divElement.className) // -> my-class
+</script>
+```
+
+The `value` attribute of an `<input>` element corresponds to the `defaultValue` property, and the `defaultValue` property only applies to `value` property when the first time element has been initialized (or reset?):
+
+```html
+<input id="myInput" type="text" value="Initial Value">
+<script>
+  const inputElement = document.querySelector('#myInput')
+  console.log(inputElement.getAttribute('value')) // -> Initial Value
+  console.log(inputElement.defaultValue) // -> Initial Value
+  console.log(inputElement.value) // -> Initial Value
+
+  // Updating the 'value' property
+  inputElement.value = 'Changed Value'
+  console.log(inputElement.getAttribute('value')) // -> Initial Value
+  console.log(inputElement.defaultValue) // -> Initial Value
+  console.log(inputElement.value) // -> Changed Value
+
+  // Updating the 'defaultValue' property
+  inputElement.defaultValue = 'New Default Value'
+  console.log(inputElement.getAttribute('value')) // -> New Default Value
+  console.log(inputElement.defaultValue) // -> New Default Value
+  console.log(inputElement.value) // -> Changed Value
+</script>
+```
+
+After initialization, the **synchronization between attributes and properties is not guaranteed**, it depends on following rules:
 
 - Only **standard attributes** will synchronize with properties. **Custom attributes** will not.
 
@@ -790,43 +2046,6 @@ After initialization, the synchronization between attributes and properties is n
   </script>
   ```
 
-- Some attributes are synchronize with properties **with different names**.
-
-  For example, the `class` attribute corresponds to the `className` property in JavaScript:
-
-  ```html
-  <div id="myDiv" class="my-class"></div>
-  <script>
-    const divElement = document.querySelector('#myDiv')
-    console.log(divElement.getAttribute('class')) // -> my-class
-    console.log(divElement.className) // -> my-class
-  </script>
-  ```
-
-  The `value` attribute of an `<input>` element corresponds to the `defaultValue` property, and the `defaultValue` property only applies to `value` property when the first time element has been initialized (or reset?):
-
-  ```html
-  <input id="myInput" type="text" value="Initial Value">
-  <script>
-    const inputElement = document.querySelector('#myInput')
-    console.log(inputElement.getAttribute('value')) // -> Initial Value
-    console.log(inputElement.defaultValue) // -> Initial Value
-    console.log(inputElement.value) // -> Initial Value
-
-    // Updating the 'value' property
-    inputElement.value = 'Changed Value'
-    console.log(inputElement.getAttribute('value')) // -> Initial Value
-    console.log(inputElement.defaultValue) // -> Initial Value
-    console.log(inputElement.value) // -> Changed Value
-
-    // Updating the 'defaultValue' property
-    inputElement.defaultValue = 'New Default Value'
-    console.log(inputElement.getAttribute('value')) // -> New Default Value
-    console.log(inputElement.defaultValue) // -> New Default Value
-    console.log(inputElement.value) // -> Changed Value
-  </script>
-  ```
-
 - Attributes prefixed with `data-` will synchronize with the sub-property of `dataset` property.
 
   ```html
@@ -836,7 +2055,6 @@ After initialization, the synchronization between attributes and properties is n
     console.log(divElement.dataset.info) // -> someData
   </script>
   ```
-
 
 ## How Browsers Render HTML?
 
@@ -857,7 +2075,7 @@ After initialization, the synchronization between attributes and properties is n
 
         For **a module `<script type="module" src="...">` tag**, it will behave like a defer script by default.
     4.  When it encounters **a inlined `<style>` tag** while parsing HTML, it will change to parse all the CSS content into CSSOM one time and in place.
-    5.  When it encounters **a [external resource](#script-style-external-resource-elements) referred by `<link>` tag**, it will entrust network process to download the resource, and never pause the parsing;
+    5.  When it encounters **a [external resource](#resource-tags) referred by `<link>` tag**, it will entrust network process to download the resource, and never pause the parsing;
 
         If the external resource is a CSS file `<link rel="stylesheet" href="...">`, it will change to parse CSS into CSSOM (CSS Object Model) after the CSS file is downloaded.
     6.  When there is no more render-blocking tasks: No not downloaded `<link rel="stylesheet">` tags, or downloaded but not parsed `<link rel="stylesheet">` tags, it will conjunct them into a **render tree**, and then **calculate the layout**, **paint the page** and **composite the layers**.

@@ -1,7 +1,7 @@
 ---
 title: Neovim and LazyVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-07-20T10:30+08:00
+update: 2026-08-19T11:14+08:00
 lang: en
 duration: 26min
 type: manual
@@ -35,8 +35,7 @@ LazyVim is a Neovim configuration framework that simplifies the setup and manage
 To install Neovim, I highly recommend using the package manager for your operating system. For example, on Windows, you can use `winget`:
 
 ```nu
-# Command `sudo` is powered by gsudo
-sudo winget add -e --id Neovim.Neovim --scope machine
+winget add --exact --id Neovim.Neovim
 ```
 
 To install LazyVim, make sure your system satisfies [the requirements](https://www.lazyvim.org/#%EF%B8%8F-requirements) first, then just simply follow [the official documentation](https://www.lazyvim.org/installation).

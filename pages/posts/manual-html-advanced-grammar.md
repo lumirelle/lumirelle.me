@@ -9,19 +9,6 @@ group: Web
 order: 6
 ---
 
-<style>
-.prose table thead, .prose table tbody {
-  display: block;
-}
-.prose table tr {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-.prose table th, .prose table td {
-  overflow-x: auto;
-}
-</style>
-
 [[toc]]
 
 ## Introduction
@@ -71,76 +58,26 @@ order: 6
 
 - `<div>`: A container tag which just make content on its own line:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <div>123</div><div>123</div>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <div>123</div><div>123</div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<span>`: A container tag without any function:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <span>123</span><span>123</span>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <span>123</span><span>123</span>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<ul>` + `<li>`: An unordered list and list item container tags, better than `<div>` to express the relationship between items and their container:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <ul>
     <li>Item 1</li>
@@ -148,33 +85,15 @@ order: 6
   </ul>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <ul>
     <li>Item 1</li>
     <li>Item 2</li>
   </ul>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<ol>` + `<li>`: An ordered list and list item container tags, better than `<div>` to express the relationship between items and their container, but seldom used in practice than `<ul>`:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <ol>
     <li>Item 1</li>
@@ -182,34 +101,16 @@ order: 6
   </ol>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <ol>
     <li>Item 1</li>
     <li>Item 2</li>
   </ol>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 There are some sematic tags new introduced in HTML 5:
 
 - `<header>`: A container tag which represents introductory content of the **whole document** or **a section**, may contain some heading elements but also a logo, a search form, an author name, and other elements:
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <!-- Header of the whole document -->
@@ -231,8 +132,7 @@ There are some sematic tags new introduced in HTML 5:
   </article>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <header>
     <a href="#">Cute Puppies Express!</a>
   </header>
@@ -246,28 +146,11 @@ There are some sematic tags new introduced in HTML 5:
       ...
     </p>
   </article>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<main>`: A container tag which represents the dominant content of the **whole document**.
 
   The content of a `<main>` element should be unique, content that is repeated across different documents or document sections such as headers, sidebars, footers, etc. shouldn't be included:
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <header>Gecko facts</header>
@@ -285,8 +168,7 @@ There are some sematic tags new introduced in HTML 5:
   </main>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <header>Gecko facts</header>
   <main>
     <p>
@@ -298,26 +180,9 @@ There are some sematic tags new introduced in HTML 5:
       walls and even windows.
     </p>
   </main>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<aside>`: A container tag which represents indirectly related content against then main content:
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <header>Gecko facts</header>
@@ -352,8 +217,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
     <header>Gecko facts</header>
   <div style="display: flex; gap: 16px">
     <!-- Aside of whole `<main>` content -->
@@ -384,26 +248,9 @@ There are some sematic tags new introduced in HTML 5:
       </p>
     </main>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<footer>`: A container tag which represents a footer of the **whole document** or **a section**, typically contains information about the author, copyright or links related:
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <header>Wizard</header>
@@ -427,8 +274,7 @@ There are some sematic tags new introduced in HTML 5:
   </footer>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <header>Wizard</header>
 
   <article>
@@ -446,30 +292,13 @@ There are some sematic tags new introduced in HTML 5:
   <footer>
     <p>© 2018 Gandalf www.example.com</p>
   </footer>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<nav>`: A container tag which represents a section of a page whose purpose is to provide navigation links.
 
   It's not necessary for all links to be contained in a `<nav>` element. `<nav>` is intended only for **a major block of navigation links**; typically the `<footer>` element often has a list of links that don't need to be in a `<nav>` element.
 
   A document may have several `<nav>` elements, for example, one for **site navigation** and one for **intra-page navigation**.
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <nav>
@@ -487,8 +316,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <nav>
     <ol>
       <li><a href="#">Bikes</a></li>
@@ -503,26 +331,9 @@ There are some sematic tags new introduced in HTML 5:
     This BMX bike is a solid step into the pro world. It looks as legit as it
     rides and is built to polish your skills.
   </p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<article>`: A container tag which represents a **self-contained composition** in a document, page, application, or site, which is intended to be independently distributable or reusable:
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <article>
@@ -542,8 +353,7 @@ There are some sematic tags new introduced in HTML 5:
   </article>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <article>
     <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
     <h1>Weather forecast for Seattle</h1>
@@ -560,26 +370,9 @@ There are some sematic tags new introduced in HTML 5:
       <p>Heavy rain.</p>
     </article>
   </article>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<section>`: A container tag which represents a **generic section (part)** of a document. Sections should always have a heading, with very few exceptions:
-
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <h1>Choosing an Apple</h1>
@@ -600,8 +393,7 @@ There are some sematic tags new introduced in HTML 5:
   </section>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
   <h1>Choosing an Apple</h1>
   <section>
@@ -619,10 +411,7 @@ There are some sematic tags new introduced in HTML 5:
       size, color, firmness, sweetness, tartness...
     </p>
   </section>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 #### Text Tags
 
@@ -630,20 +419,6 @@ There are some sematic tags new introduced in HTML 5:
 
   `<h1>` is the most important and `<h6>` is the least important:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <h1>Heading 1</h1>
   <h2>Heading 2</h2>
@@ -653,8 +428,7 @@ There are some sematic tags new introduced in HTML 5:
   <h6>Heading 6</h6>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
   <h1>Heading 1</h1>
   <h2>Heading 2</h2>
@@ -662,87 +436,34 @@ There are some sematic tags new introduced in HTML 5:
   <h4>Heading 4</h4>
   <h5>Heading 5</h5>
   <h6>Heading 6</h6>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<p>`: A paragraph layout text tag which also make content on its own line with some default margin:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<hr>`: A layout text tag which creates a horizontal divider line:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>P1</p>
   <hr>
   <p>P2</p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>P1</p>
   <hr>
   <p>P2</p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<br>`: A layout text tag which creates a line break:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>
     O'er all the hilltops<br />
@@ -756,8 +477,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>
     O'er all the hilltops<br />
     Is quiet now,<br />
@@ -768,27 +488,10 @@ There are some sematic tags new introduced in HTML 5:
     Wait, soon like these<br />
     Thou too shalt rest.
   </p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<pre>`: A preformatted layout text tag which preserves the original format of text:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <pre>
                S
@@ -812,8 +515,7 @@ There are some sematic tags new introduced in HTML 5:
   </pre>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <pre>
                S
                A
@@ -834,55 +536,20 @@ There are some sematic tags new introduced in HTML 5:
      AUX                  A  L
    LEM                      ANDS   - Apollinaire
   </pre>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<a>`: A anchor functional text tag which creates hyperlink / anchor point:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <a href="https://www.example.com">This is a link</a>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <a href="https://www.example.com">This is a link</a>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<cite>` & `<q>` & `<blockquote>`: References functional text tags, which is used to reference **the title of a creative work**, **a short inline quotation** & **an extended quotation** respectively:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <figure>
     <blockquote>
@@ -924,8 +591,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <figure>
     <blockquote>
       <p>
@@ -964,83 +630,30 @@ There are some sematic tags new introduced in HTML 5:
     </blockquote>
     <p>—Aldous Huxley, <cite>Brave New World</cite></p>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<strong>`: A embellishment text tag makes text strong & bold, better than `<b>` in semantics:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <strong>This text is important.</strong>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <strong>This text is important.</strong>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<em>`: A embellishment text tag makes text emphasis & italic, better than `<i>` in semantics:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <em>This text is emphasized.</em>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <em>This text is emphasized.</em>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<small>`: A embellishment text tag makes text a side comment & small:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>
     MDN Web Docs is a learning platform for Web technologies and the software that
@@ -1054,8 +667,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>
     MDN Web Docs is a learning platform for Web technologies and the software that
     powers the Web.
@@ -1066,139 +678,50 @@ There are some sematic tags new introduced in HTML 5:
   <p>
     <small>The content is licensed under a Creative Commons Attribution-ShareAlike 2.5 Generic License.</small>
   </p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<u>`: A embellishment text tag marks the text is unarticulated with underline:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   Please <u>pay attention</u>!
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   Please <u>pay attention</u>!
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<s>`: A embellishment text tag marks the text is outdated with strikethrough:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   Price: <s>$100</s> $69!
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   Price: <s>$100</s> $69!
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<ins>`: A embellishment text tag marks the text is newly inserted with underline:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <ins datetime="2026-08-19">New inserted item!</ins>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <ins datetime="2026-08-19">New inserted item!</ins>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<del>`: A embellishment text tag marks the text is newly deleted with strikethrough:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <del datetime="2026-08-19">Deleted outdated item!</del>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <del datetime="2026-08-19">Deleted outdated item!</del>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<time>`: A embellishment text tag adds machine-readable format date to improve search engines results or custom features:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>
     The Cure will be celebrating their 40th anniversary on
@@ -1211,8 +734,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>
     The Cure will be celebrating their 40th anniversary on
     <time datetime="2018-07-07">July 7</time> in London's Hyde Park.
@@ -1222,27 +744,10 @@ There are some sematic tags new introduced in HTML 5:
     The concert starts at <time datetime="20:00">20:00</time> and you'll be able
     to enjoy the band for at least <time datetime="PT2H30M">2h 30m</time>.
   </p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<code>`: A embellishment text tag marks that the text is code snippest:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>
     The <code>push()</code> method adds one or more elements to the end of an
@@ -1250,34 +755,16 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>
     The <code>push()</code> method adds one or more elements to the end of an
     array and returns the new length of the array.
   </p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 
 - `<address>`: A embellishment text tag indicates that the enclosed HTML provides contact information for a person or people, or for an organization:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>Contact the author of this page:</p>
 
@@ -1287,91 +774,37 @@ There are some sematic tags new introduced in HTML 5:
   </address>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>Contact the author of this page:</p>
 
   <address>
     <a href="mailto:jim@example.com">jim@example.com</a><br />
     <a href="tel:+14155550132">+1 (415) 555‑0132</a>
   </address>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<sub>` & `<sup>`: A embellishment text tag makes text as **subscript** & **superscript** respectively:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   H<sub>2</sub>O / 2<sup>2</sup> = 4
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   H<sub>2</sub>O / 2<sup>2</sup> = 4
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<ruby>` + `<rt>`: Embellishment text tags add pronunciation to text:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<dft>` & `<abbr>`: Embellishment text tags mark the text as **a term** & **an abbreviation** respectively:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <p>
     You can use <abbr>CSS</abbr> (Cascading Style Sheets) to style your
@@ -1381,37 +814,19 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <p>
     You can use <abbr>CSS</abbr> (Cascading Style Sheets) to style your
     <abbr>HTML</abbr> (HyperText Markup Language). Using style sheets, you can
     keep your <abbr>CSS</abbr> presentation layer and <abbr>HTML</abbr> content
     layer separate. This is called "separation of concerns."
   </p>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 
 #### Form & Control Tags
 
 - `<form>`: A form tag, which is used to collect user input and submit it to a server:
-
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <form action="/submit" method="post">
@@ -1424,9 +839,8 @@ There are some sematic tags new introduced in HTML 5:
   </form>
   ```
 
-  </td><td valign="top">
-
-  <form space-y-4 action="/submit" method="post">
+  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  <form action="/submit" method="post">
     <div>
       <input type="text" name="username">
     </div>
@@ -1434,30 +848,13 @@ There are some sematic tags new introduced in HTML 5:
       <button type="submit">Submit</button>
     </div>
   </form>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<input>`: An input tag, which is used to create a interactive control for a field of `<form>` to accept data from the user, so it often be placed inside a `<form>` tag.
 
   `<input>` tag has many different types, such as `text`, `password`, `checkbox`, `radio`, etc, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Tags/input#input_types) for more details.
 
   `<input>` uses `name` attribute to specify the form field name:
-
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <!-- Frequently Used Input Types -->
@@ -1502,9 +899,8 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   ```
 
-  </td><td valign="top">
-
-  <div space-y-4>
+  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  <div>
     <div>
       <input type="text" placeholder="Enter your name">
     </div>
@@ -1545,63 +941,28 @@ There are some sematic tags new introduced in HTML 5:
       <input type="search">
     </div>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<textarea>`: A textarea tag, which is used to create a multi-line text input control, it often be placed inside a `<form>` tag too.
 
   `<textarea>` has attributes like `rows` and `cols` to specify the visible size of the textarea:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <div>
     <textarea rows="4" cols="30"></textarea>
   </div>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <div>
     <textarea rows="4" cols="30"></textarea>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<select>` + `<optgroup>` + `<option>`: Select and option tags, which are used to create a drop-down list, they often be placed inside a `<form>` tag too.
 
   `<select>` can have `multiple` attribute to allow multiple selections, and each `<option>` can have `value` attribute to specify the value of the option:
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <div>
     <select>
@@ -1619,8 +980,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   ```
 
-  </td><td valign="top">
-
+  ::: preview
   <div>
     <select>
       <optgroup label="Theropods">
@@ -1635,10 +995,7 @@ There are some sematic tags new introduced in HTML 5:
       </optgroup>
     </select>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<label>`: A label tag, which is used to define a label for an `<input>` tag, it often be placed inside a `<form>` tag too.
 
@@ -1647,20 +1004,6 @@ There are some sematic tags new introduced in HTML 5:
   > [!Note]
   >
   > You can place the `<label>` tag before or after the `<input>` tag, but it's **not recommended to wrap the `<input>` tag with `<label>` tag**, because it will make the structure of the form more complex and less readable.
-
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
 
   ```html
   <div>
@@ -1682,9 +1025,8 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   ```
 
-  </td><td valign="top">
-
-  <div space-y-4>
+  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  <div>
     <div>
       <!-- `<label>` before `<input>` -->
       <label for="username1">Username:</label>
@@ -1703,10 +1045,7 @@ There are some sematic tags new introduced in HTML 5:
       </label>
     </div>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 - `<button>`: A button tag, which is used to create clickable buttons. It has three types: `submit`, `reset`, and `button`.
 
@@ -1720,20 +1059,6 @@ There are some sematic tags new introduced in HTML 5:
   >
   > `<input>` tag has corresponding type as button, such as `<input type="submit">`, but `<button>` tag supports inner content, so it's more customized and recommended than `<input type="submit">`.
 
-  <table><tbody>
-
-  <tr flex gap-4><th flex-1 valign="top">
-
-  Code
-
-  </th><th flex-1 valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <div>
     <button type="submit">Submit</button>
@@ -1746,9 +1071,8 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   ```
 
-  </td><td valign="top">
-
-  <div space-y-4>
+  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  <div>
     <div>
       <button type="submit">Submit</button>
     </div>
@@ -1759,10 +1083,7 @@ There are some sematic tags new introduced in HTML 5:
       <button type="button" onclick="alert('Button clicked!')">Click Me</button>
     </div>
   </div>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 #### Resource Tags
 
@@ -1820,20 +1141,6 @@ There are some sematic tags new introduced in HTML 5:
 
 - `<img>` & `<picture>` & `<source>` & `<video>` & `<track>` & `<audio>`: Media resource tags:
 
-  <table><tbody>
-
-  <tr><th valign="top">
-
-  Code
-
-  </th><th valign="top">
-
-  Preview
-
-  </th></tr>
-
-  <tr><td valign="top">
-
   ```html
   <img
   class="fit-picture"
@@ -1860,9 +1167,8 @@ There are some sematic tags new introduced in HTML 5:
   <audio controls src="https://developer.mozilla.org/shared-assets/audio/t-rex-roar.mp3"></audio>
   ```
 
-  </td><td valign="top">
+  ::: preview
   <img
-  class="fit-picture"
   src="https://developer.mozilla.org/shared-assets/images/examples/grapefruit-slice.jpg"
   alt="Grapefruit slice atop a pile of other slices" />
 
@@ -1884,10 +1190,7 @@ There are some sematic tags new introduced in HTML 5:
   </video>
 
   <audio controls src="https://developer.mozilla.org/shared-assets/audio/t-rex-roar.mp3"></audio>
-
-  </td></tr>
-
-  </tbody></table>
+  :::
 
 ### Void Tags & Non-void Tags
 
@@ -1934,12 +1237,6 @@ In this example, browsers will create an **text** `<input>` element with **defau
 
 When the attributes change, the characteristics of the element will also change, for example:
 
-<table><tbody>
-
-<tr flex flex-col><th valign="top">
-
-Code
-
 ```html
 <div><input id="myInput" type="text" value="Hello"></div>
 <button onclick="document.querySelector('#myInput').setAttribute('type', document.querySelector('#myInput').getAttribute('type') === 'text'?'password' : 'text')">
@@ -1947,18 +1244,12 @@ Code
 </button>
 ```
 
-</th><th valign="top">
-
-Preview
-
+::: preview body { display: flex; flex-direction: column; gap: 0.5rem }
 <div><input id="myInput" type="text" value="Hello"></div>
 <button onclick="document.querySelector('#myInput').setAttribute('type', document.querySelector('#myInput').getAttribute('type') === 'text'?'password' : 'text')">
   Toggle Type
 </button>
-
-</th></tr>
-
-</tbody></table>
+:::
 
 ### Properties
 

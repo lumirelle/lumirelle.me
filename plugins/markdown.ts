@@ -21,6 +21,7 @@ import MarkdownItTOC from 'markdown-it-table-of-contents'
 import sharp from 'sharp'
 import _Markdown from 'unplugin-vue-markdown/vite'
 import { slugify } from '../scripts/slugify.ts'
+import { PreviewPlugin } from './markdown-preview.ts'
 
 const ogSVg = readFileSync('./scripts/og-template.svg', 'utf8')
 
@@ -122,6 +123,7 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
       })
       md.use(MarkdownItGitHubAlerts)
       md.use(MarkdownItFootNote)
+      md.use(PreviewPlugin)
     },
     frontmatterPreprocess(frontmatter, options, id, defaults) {
       ((): void => {

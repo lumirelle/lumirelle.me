@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-19T11:11+08:00
+update: 2026-08-20T14:41+08:00
 lang: en
-duration: 17min
+duration: 18min
 type: manual
 group: Computer
 order: 1
@@ -387,9 +387,10 @@ Below softwares are highly recommended and helpful for the development use with 
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
+| Fontconfig | `pacman -S fontconfig` | / |
+| (Optional) Noto Fonts CJK | `pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
 | Base Devel | `pacman -S base-devel` | Basic dev dependencies. |
 | Unzip | `pacman -S unzip` | / |
-| Fontconfig | `pacman -S fontconfig` | / |
 | Nushell | `pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Starship | `pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
 | Zoxide | `pacman -S zoxide` | Fuzzy-match `cd`. |
@@ -397,6 +398,7 @@ Below softwares are highly recommended and helpful for the development use with 
 | Git | `pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | OpenSSH | `pacman -S openssh` | / |
 | Mise | `pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| (Optional) Chromium | `pacman -S chromium` | If you need to run PlayWright with Chromium. |
 
 Next, remaining useful softwares:
 

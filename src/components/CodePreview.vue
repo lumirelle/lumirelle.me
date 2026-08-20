@@ -8,7 +8,7 @@ const props = withDefaults(
   {
     code: '',
     headStyle: '',
-    sandbox: 'allow-scripts',
+    sandbox: 'allow-scripts allow-same-origin',
   },
 )
 
@@ -20,13 +20,33 @@ const srcdoc = ref('')
 
 onMounted(() => {
   const body = props.code || (hasSlot.value ? container.value?.innerHTML ?? '' : '')
-  srcdoc.value = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>body{margin:0;font-family:system-ui,sans-serif;padding:8px}${props.headStyle}</style></head><body>${body}</body></html>`
+  srcdoc.value = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+    body{margin:0;font-family:system-ui,sans-serif;padding:12px;${props.headStyle}}
+  </style></head><body>${body}</body></html>`
 })
 
-function resize(): void {
-  const h = frame.value?.contentDocument?.body.scrollHeight
+function onLoad(): void {
+  const doc = frame.value?.contentDocument
+  if (!doc)
+    return
+
+  const parent = window.parent.document.documentElement
+  const apply = () => {
+    const dark = parent.classList.contains('dark')
+    doc.documentElement.style.background = dark ? '#050505' : '#fff'
+    doc.body.style.color = dark ? '#e0e0e0' : '#111'
+  }
+
+  apply()
+
+  new MutationObserver(apply).observe(parent, {
+    attributes: true,
+    attributeFilter: ['class'],
+  })
+
+  const h = doc.body.scrollHeight
   if (h)
-    frame.value!.style.height = `${h + 16}px`
+    frame.value!.style.height = `${h + 24}px`
 }
 </script>
 
@@ -39,7 +59,7 @@ function resize(): void {
     title="HTML preview"
     :srcdoc="srcdoc"
     :sandbox="sandbox"
-    class="rounded-lg border-none w-full"
-    @load="resize"
+    class="border border-base rounded-lg w-full"
+    @load="onLoad"
   />
 </template>

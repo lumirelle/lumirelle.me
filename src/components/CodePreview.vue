@@ -16,7 +16,8 @@ const frame = ref<HTMLIFrameElement | null>(null)
 const srcdoc = ref('')
 
 onMounted(() => {
-  const html = globalThis.atob(props.code)
+  const bytes = Uint8Array.from(globalThis.atob(props.code), c => c.charCodeAt(0))
+  const html = new TextDecoder().decode(bytes)
   srcdoc.value = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
     body{margin:0;font-family:system-ui,sans-serif;padding:12px;${props.headStyle}}
   </style></head><body>${html}</body></html>`

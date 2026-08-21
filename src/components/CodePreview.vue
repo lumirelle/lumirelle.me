@@ -12,17 +12,14 @@ const props = withDefaults(
   },
 )
 
-const slots = useSlots()
-const hasSlot = computed(() => !!slots.default)
-const container = ref<HTMLElement | null>(null)
 const frame = ref<HTMLIFrameElement | null>(null)
 const srcdoc = ref('')
 
 onMounted(() => {
-  const body = props.code || (hasSlot.value ? container.value?.innerHTML ?? '' : '')
+  const html = globalThis.atob(props.code)
   srcdoc.value = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>
     body{margin:0;font-family:system-ui,sans-serif;padding:12px;${props.headStyle}}
-  </style></head><body>${body}</body></html>`
+  </style></head><body>${html}</body></html>`
 })
 
 function onLoad(): void {
@@ -51,9 +48,6 @@ function onLoad(): void {
 </script>
 
 <template>
-  <div v-if="hasSlot" ref="container" class="hidden">
-    <slot />
-  </div>
   <iframe
     ref="frame"
     title="HTML preview"

@@ -2,6 +2,10 @@ import type { MarkdownExit, StateBlock } from 'markdown-exit'
 
 const PREVIEW_RE = /^preview(?:[ \t]+(\S.*))?$/
 
+function escapeAttr(value: string): string {
+  return Buffer.from(value).toString('base64')
+}
+
 export function PreviewPlugin(md: MarkdownExit): void {
   md.block.ruler.before('fence', 'preview', (state: StateBlock, startLine: number, endLine: number, silent: boolean) => {
     const start = state.bMarks[startLine]! + state.tShift[startLine]!
@@ -26,9 +30,6 @@ export function PreviewPlugin(md: MarkdownExit): void {
       return true
 
     const style = match[1]?.trim() ?? ''
-    const openTag = style
-      ? `<CodePreview head-style="${style}">`
-      : '<CodePreview>'
 
     let nextLine = startLine + 1
     let depth = 1
@@ -52,12 +53,16 @@ export function PreviewPlugin(md: MarkdownExit): void {
     if (depth !== 0)
       return false
 
-    const contentStart = state.bMarks[startLine + 1]
-    const contentEnd = state.bMarks[nextLine]
+    const contentStart = state.bMarks[startLine + 1]!
+    const contentEnd = state.bMarks[nextLine]!
+    const rawHtml = state.src.slice(contentStart, contentEnd).trim()
+
+    const codeAttr = `code="${escapeAttr(rawHtml)}"`
+    const styleAttr = style ? ` head-style="${style}"` : ''
 
     const token = state.push('html_block', '', 0)
     token.map = [startLine, nextLine + 1]
-    token.content = `${openTag}\n${state.src.slice(contentStart, contentEnd).trimEnd()}\n</CodePreview>`
+    token.content = `<CodePreview ${codeAttr}${styleAttr} />`
 
     state.line = nextLine + 1
     return true

@@ -1,9 +1,9 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-08-19T18:21+08:00
+update: 2026-08-21T12:03+08:00
 lang: en
-duration: 29min
+duration: 32min
 type: manual
 group: Web
 order: 6
@@ -92,7 +92,7 @@ order: 6
   </ul>
   :::
 
-- `<ol>` + `<li>`: An ordered list and list item container tags, better than `<div>` to express the relationship between items and their container, but seldom used in practice than `<ul>`:
+- `<ol>` + `<li>`: An ordered list and list item container tags, better than `<div>` to express the **order between items**, but seldom used in practice than `<ul>`:
 
   ```html
   <ol>
@@ -106,6 +106,84 @@ order: 6
     <li>Item 1</li>
     <li>Item 2</li>
   </ol>
+  :::
+
+- `<dl>` & `<dt>` & `<dd>`: Description list & item container tags, better than `<div>` to express the **relationship between head and description**, but seldom used in practice; The most commonly usecase is order details:
+
+  ```html
+  <p>Order details</p>
+
+  <dl style="display: grid; grid-template-columns: 150px 1fr; gap: 12px 20px">
+    <dt>Order number</dt><dd>ORD-20250821-8842</dd>
+    <dt>Order time</dt><dd>2025-08-21 14:30</dd>
+    <dt>Payment method</dt><dd>WeChat</dd>
+    <dt>Order Status</dt><dd>Shipped</dd>
+  </dl>
+  ```
+
+  :::preview
+  <p>Order details</p>
+
+  <dl style="display: grid; grid-template-columns: 150px 1fr; gap: 12px 20px">
+    <dt>Order number</dt><dd>ORD-20250821-8842</dd>
+    <dt>Order time</dt><dd>2025-08-21 14:30</dd>
+    <dt>Payment method</dt><dd>WeChat</dd>
+    <dt>Order Status</dt><dd>Shipped</dd>
+  </dl>
+  :::
+
+- `<details>` & `<summary>`: Disclosure container tags, better than `<div>` to hide & disclosure information while click; The most commonly usecase is FAQ:
+
+  ```html
+  <details name="requirements">
+    <summary>Graduation Requirements</summary>
+    <p>
+      Requires 40 credits, including a passing grade in health, geography,
+      history, economics, and wood shop.
+    </p>
+  </details>
+  <details name="requirements">
+    <summary>System Requirements</summary>
+    <p>
+      Requires a computer running an operating system. The computer must have some
+      memory and ideally some kind of long-term storage. An input device as well
+      as some form of output device is recommended.
+    </p>
+  </details>
+  <details name="requirements">
+    <summary>Job Requirements</summary>
+    <p>
+      Requires knowledge of HTML, CSS, JavaScript, accessibility, web performance,
+      privacy, security, and internationalization, as well as a dislike of
+      broccoli.
+    </p>
+  </details>
+  ```
+
+  :::preview
+  <details name="requirements">
+    <summary>Graduation Requirements</summary>
+    <p>
+      Requires 40 credits, including a passing grade in health, geography,
+      history, economics, and wood shop.
+    </p>
+  </details>
+  <details name="requirements">
+    <summary>System Requirements</summary>
+    <p>
+      Requires a computer running an operating system. The computer must have some
+      memory and ideally some kind of long-term storage. An input device as well
+      as some form of output device is recommended.
+    </p>
+  </details>
+  <details name="requirements">
+    <summary>Job Requirements</summary>
+    <p>
+      Requires knowledge of HTML, CSS, JavaScript, accessibility, web performance,
+      privacy, security, and internationalization, as well as a dislike of
+      broccoli.
+    </p>
+  </details>
   :::
 
 There are some sematic tags new introduced in HTML 5:
@@ -153,7 +231,7 @@ There are some sematic tags new introduced in HTML 5:
   The content of a `<main>` element should be unique, content that is repeated across different documents or document sections such as headers, sidebars, footers, etc. shouldn't be included:
 
   ```html
-  <header>Gecko facts</header>
+  <header style="text-align: center">Gecko facts</header>
   <!-- Dominant content of the whole document -->
   <!-- Direct child of `<body>` -->
   <main>
@@ -169,7 +247,7 @@ There are some sematic tags new introduced in HTML 5:
   ```
 
   ::: preview
-  <header>Gecko facts</header>
+  <header style="text-align: center">Gecko facts</header>
   <main>
     <p>
       Geckos are a group of usually small, usually nocturnal lizards. They are
@@ -180,74 +258,6 @@ There are some sematic tags new introduced in HTML 5:
       walls and even windows.
     </p>
   </main>
-  :::
-
-- `<aside>`: A container tag which represents indirectly related content against then main content:
-
-  ```html
-  <header>Gecko facts</header>
-  <div style="display: flex; gap: 16px">
-    <!-- Aside of whole `<main>` content -->
-    <aside style="min-width: 20%">
-      <nav>
-        <ul>
-          <li>...</li>
-          <li>...</li>
-          <li>...</li>
-        </ul>
-      </nav>
-    </aside>
-
-    <main>
-      <p>
-        Geckos are a group of usually small, usually nocturnal lizards. They are
-        found on every continent except Antarctica.
-      </p>
-      <!-- Aside of the a part of `<main>` content -->
-      <aside style="float: right">
-        <p>
-          <a href="https://en.wikipedia.org/wiki/Gecko">Wiki</a> of Gecko.
-        </p>
-      </aside>
-      <p>
-        Many species of gecko have adhesive toe pads which enable them to climb
-        walls and even windows.
-      </p>
-    </main>
-  </div>
-  ```
-
-  ::: preview
-    <header>Gecko facts</header>
-  <div style="display: flex; gap: 16px">
-    <!-- Aside of whole `<main>` content -->
-    <aside style="min-width: 20%">
-      <nav>
-        <ul>
-          <li>...</li>
-          <li>...</li>
-          <li>...</li>
-        </ul>
-      </nav>
-    </aside>
-
-    <main>
-      <p>
-        Geckos are a group of usually small, usually nocturnal lizards. They are
-        found on every continent except Antarctica.
-      </p>
-      <!-- Aside of the a part of `<main>` content -->
-      <aside style="float: right">
-        <p>
-          <a href="https://en.wikipedia.org/wiki/Gecko">Wiki</a> of Gecko.
-        </p>
-      </aside>
-      <p>
-        Many species of gecko have adhesive toe pads which enable them to climb
-        walls and even windows.
-      </p>
-    </main>
-  </div>
   :::
 
 - `<footer>`: A container tag which represents a footer of the **whole document** or **a section**, typically contains information about the author, copyright or links related:
@@ -333,7 +343,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<article>`: A container tag which represents a **self-contained composition** in a document, page, application, or site, which is intended to be independently distributable or reusable:
+- `<article>`: A container tag which represents a **self-contained composition** in a document which is intended to be independently distributable or reusable:
 
   ```html
   <article>
@@ -413,6 +423,123 @@ There are some sematic tags new introduced in HTML 5:
   </section>
   :::
 
+- `<aside>`: A container tag which represents **indirectly related additional content** against then main content:
+
+  ```html
+  <header style="text-align: center">Gecko facts</header>
+  <div style="display: flex; gap: 16px">
+    <!-- Aside of whole `<main>` content -->
+    <aside style="min-width: 20%">
+      <nav>
+        <ul>
+          <li>...</li>
+          <li>...</li>
+          <li>...</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <p>
+        Geckos are a group of usually small, usually nocturnal lizards. They are
+        found on every continent except Antarctica.
+      </p>
+      <!-- Aside of the a part of `<main>` content -->
+      <aside style="float: right; margin-inline-start: 0.5rem">
+        <p>
+          <a href="https://en.wikipedia.org/wiki/Gecko">Wiki</a> of Gecko.
+        </p>
+      </aside>
+      <p>
+        Many species of gecko have adhesive toe pads which enable them to climb
+        walls and even windows.
+      </p>
+    </main>
+  </div>
+  ```
+
+  ::: preview
+  <header style="text-align: center">Gecko facts</header>
+  <div style="display: flex; gap: 16px">
+    <!-- Aside of whole `<main>` content -->
+    <aside style="min-width: 20%">
+      <nav>
+        <ul>
+          <li>...</li>
+          <li>...</li>
+          <li>...</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main>
+      <p>
+        Geckos are a group of usually small, usually nocturnal lizards. They are
+        found on every continent except Antarctica.
+      </p>
+      <!-- Aside of the a part of `<main>` content -->
+      <aside style="float: right; margin-inline-start: 0.5rem">
+        <p>
+          <a href="https://en.wikipedia.org/wiki/Gecko">Wiki</a> of Gecko.
+        </p>
+      </aside>
+      <p>
+        Many species of gecko have adhesive toe pads which enable them to climb
+        walls and even windows.
+      </p>
+    </main>
+  </div>
+  :::
+
+- `<figure>` & `<figcaption>`: A container tag which represents **related additional content** against then main content:
+
+  ```html
+  <figure>
+    <img
+      src="https://developer.mozilla.org/shared-assets/images/examples/elephant.jpg"
+      alt="Elephant at sunset" />
+    <figcaption>An elephant at sunset</figcaption>
+  </figure>
+  ```
+
+  :::preview
+  <figure>
+    <img
+      src="https://developer.mozilla.org/shared-assets/images/examples/elephant.jpg"
+      alt="Elephant at sunset" />
+    <figcaption>An elephant at sunset</figcaption>
+  </figure>
+  :::
+
+- `<search>`: A container tag which represents **search region**:
+
+  ```html
+  <header>
+    <h1>Movie website</h1>
+    <search>
+      <form action="./search/">
+        <label for="movie">Find a Movie</label>
+        <input type="search" id="movie" name="q" />
+        <button type="submit">Search</button>
+      </form>
+    </search>
+  </header>
+  ```
+
+  :::preview
+  <header>
+    <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
+    <h1>Movie website</h1>
+    <search>
+      <form action="./search/">
+        <label for="movie">Find a Movie</label>
+        <input type="search" id="movie" name="q" />
+        <button type="submit">Search</button>
+      </form>
+    </search>
+  </header>
+  :::
+
 #### Text Tags
 
 - `<h1>` ~ `<h6>`: Head layout text tags which also make on its own line with some default margin.
@@ -462,7 +589,7 @@ There are some sematic tags new introduced in HTML 5:
   <p>P2</p>
   :::
 
-- `<br>`: A layout text tag which creates a line break:
+- `<br>` & `<wbr>`: Layout text tag which **creates a line break** or **create a break opportunity**:
 
   ```html
   <p>
@@ -475,6 +602,12 @@ There are some sematic tags new introduced in HTML 5:
     Wait, soon like these<br />
     Thou too shalt rest.
   </p>
+
+  <div style="width: 200px; border: 1px solid red">
+    <p>Fernstraßenbauprivatfinanzierungsgesetz</p>
+    <p>Fernstraßen<wbr />bau<wbr />privat<wbr />finanzierungs<wbr />gesetz</p>
+    <p>Fernstraßen&shy;bau&shy;privat&shy;finanzierungs&shy;gesetz</p>
+  </div>
   ```
 
   ::: preview
@@ -488,6 +621,12 @@ There are some sematic tags new introduced in HTML 5:
     Wait, soon like these<br />
     Thou too shalt rest.
   </p>
+
+  <div style="width: 200px; border: 1px solid red">
+    <p>Fernstraßenbauprivatfinanzierungsgesetz</p>
+    <p>Fernstraßen<wbr />bau<wbr />privat<wbr />finanzierungs<wbr />gesetz</p>
+    <p>Fernstraßen&shy;bau&shy;privat&shy;finanzierungs&shy;gesetz</p>
+  </div>
   :::
 
 - `<pre>`: A preformatted layout text tag which preserves the original format of text:
@@ -632,6 +771,22 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
+- `<mark>`: A embellishment text tag makes text marked & highlight:
+
+  ```html
+  <p>
+    Several species of <mark>salamander</mark> inhabit the temperate rainforest of
+    the Pacific Northwest.
+  </p>
+  ```
+
+  ::: preview
+  <p>
+    Several species of <mark>salamander</mark> inhabit the temperate rainforest of
+    the Pacific Northwest.
+  </p>
+  :::
+
 - `<strong>`: A embellishment text tag makes text strong & bold, better than `<b>` in semantics:
 
   ```html
@@ -713,11 +868,11 @@ There are some sematic tags new introduced in HTML 5:
 - `<del>`: A embellishment text tag marks the text is newly deleted with strikethrough:
 
   ```html
-  <del datetime="2026-08-19">Deleted outdated item!</del>
+  <del datetime="2026-08-19">Deleted item!</del>
   ```
 
   ::: preview
-  <del datetime="2026-08-19">Deleted outdated item!</del>
+  <del datetime="2026-08-19">Deleted item!</del>
   :::
 
 - `<time>`: A embellishment text tag adds machine-readable format date to improve search engines results or custom features:
@@ -746,12 +901,36 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<code>`: A embellishment text tag marks that the text is code snippest:
+- `<var>`: A embellishment text tag mark the text is a variable:
+
+  ```html
+  <p>
+    The volume of a box is <var>l</var> × <var>w</var> × <var>h</var>, where
+    <var>l</var> represents the length, <var>w</var> the width and
+    <var>h</var> the height of the box.
+  </p>
+  ```
+
+  :::preview
+  <p>
+    The volume of a box is <var>l</var> × <var>w</var> × <var>h</var>, where
+    <var>l</var> represents the length, <var>w</var> the width and
+    <var>h</var> the height of the box.
+  </p>
+  :::
+
+- `<code>` & `<samp>`: Embellishment text tags mark that the text is **code snippest** or **computer program sample (or quoted) output** respectively:
 
   ```html
   <p>
     The <code>push()</code> method adds one or more elements to the end of an
     array and returns the new length of the array.
+  </p>
+
+  <p>
+    When the process is complete, the utility will output the text
+    <samp>Scan complete. Found <em>N</em> results.</samp> You can then proceed to
+    the next step.
   </p>
   ```
 
@@ -760,8 +939,13 @@ There are some sematic tags new introduced in HTML 5:
     The <code>push()</code> method adds one or more elements to the end of an
     array and returns the new length of the array.
   </p>
-  :::
 
+  <p>
+    When the process is complete, the utility will output the text
+    <samp>Scan complete. Found <em>N</em> results.</samp> You can then proceed to
+    the next step.
+  </p>
+  :::
 
 - `<address>`: A embellishment text tag indicates that the enclosed HTML provides contact information for a person or people, or for an organization:
 
@@ -781,6 +965,22 @@ There are some sematic tags new introduced in HTML 5:
     <a href="mailto:jim@example.com">jim@example.com</a><br />
     <a href="tel:+14155550132">+1 (415) 555‑0132</a>
   </address>
+  :::
+
+- `<kbd>`: A embellishment text tag marks the text as user keyboard input:
+
+  ```html
+  <p>
+    Please press <kbd><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></kbd> to re-render an
+    MDN page.
+  </p>
+  ```
+
+  :::preview
+  <p>
+    Please press <kbd><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></kbd> to re-render an
+    MDN page.
+  </p>
   :::
 
 - `<sub>` & `<sup>`: A embellishment text tag makes text as **subscript** & **superscript** respectively:
@@ -803,23 +1003,31 @@ There are some sematic tags new introduced in HTML 5:
   <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
   :::
 
-- `<dft>` & `<abbr>`: Embellishment text tags mark the text as **a term** & **an abbreviation** respectively:
+- `<dfn>` & `<abbr>`: Embellishment text tags mark the text as **a term** & **an abbreviation** respectively:
 
   ```html
   <p>
-    You can use <abbr>CSS</abbr> (Cascading Style Sheets) to style your
-    <abbr>HTML</abbr> (HyperText Markup Language). Using style sheets, you can
-    keep your <abbr>CSS</abbr> presentation layer and <abbr>HTML</abbr> content
-    layer separate. This is called "separation of concerns."
+    <dfn id="html"><abbr title="HyperText Markup Language">HTML</abbr> </dfn> is a
+    markup language used to create the semantics and structure of a web page.
+  </p>
+
+  <p>
+    A <dfn id="spec">Specification</dfn> (<abbr>spec</abbr>) is a document that
+    outlines in detail how a technology or API is intended to function and how it
+    is accessed.
   </p>
   ```
 
   ::: preview
   <p>
-    You can use <abbr>CSS</abbr> (Cascading Style Sheets) to style your
-    <abbr>HTML</abbr> (HyperText Markup Language). Using style sheets, you can
-    keep your <abbr>CSS</abbr> presentation layer and <abbr>HTML</abbr> content
-    layer separate. This is called "separation of concerns."
+    <dfn id="html"><abbr title="HyperText Markup Language">HTML</abbr> </dfn> is a
+    markup language used to create the semantics and structure of a web page.
+  </p>
+
+  <p>
+    A <dfn id="spec">Specification</dfn> (<abbr>spec</abbr>) is a document that
+    outlines in detail how a technology or API is intended to function and how it
+    is accessed.
   </p>
   :::
 
@@ -829,7 +1037,7 @@ There are some sematic tags new introduced in HTML 5:
 - `<form>`: A form tag, which is used to collect user input and submit it to a server:
 
   ```html
-  <form action="/submit" method="post">
+  <form action="" method="get">
     <div>
       <input type="text" name="username">
     </div>
@@ -840,7 +1048,7 @@ There are some sematic tags new introduced in HTML 5:
   ```
 
   ::: preview body > :not(:first-child) { margin-top: 1rem }
-  <form action="/submit" method="post">
+  <form action="" method="get">
     <div>
       <input type="text" name="username">
     </div>
@@ -1085,6 +1293,125 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
+#### Table Tags
+
+- `<table>`: A table container tag.
+- `<caption>`: A **table caption (or title)** tag, if exists, it must be the first directly child of `<table>`.
+- `<colgroup>` & `<col>`: Table column tags which are the proxy of table columns, commonly used to **control cell characteristics by columns**; If exist, `<colgroup>` must be place after `<caption>` but before sematic table section tags.
+- `<thead>` & `<tbody>` & `<tfoot>`: Sematic table section tags, **grouping rows** into head rows, body rows & foot rows, must be the direct child of `<table>`.
+- `<tr>`: A table row tag, must be the direct child of `<table>` or sematic table section tags.
+- `<th>` & `<td>`: Table cell tags, indicates **head cell** or **data cell** respectively, must be the direct child of `<tr>`.
+
+#### Other Functional Tags
+
+- `<canvas>`: Provides the [canvas scripting API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) & the [WebGL API](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API), used to draw graphics and animations:
+
+  ```html
+  <canvas width="120" height="120">
+    An alternative text describing what your canvas displays.
+  </canvas>
+  <script>
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "green";
+    // Add a rectangle at (10, 10) with size 100x100 pixels
+    ctx.fillRect(10, 10, 100, 100);
+  </script>
+  ```
+
+  :::preview
+  <canvas width="120" height="120">
+    An alternative text describing what your canvas displays.
+  </canvas>
+  <script>
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "green";
+    // Add a rectangle at (10, 10) with size 100x100 pixels
+    ctx.fillRect(10, 10, 100, 100);
+  </script>
+  :::
+
+- `<iframe>`: Represents a nested browsing context, embedding another HTML page into the current one. Each code preview section of this post is powered by `<iframe>`.
+
+- `<dialog>`: Represents a modal or non-modal dialog box or other interactive component, such as a dismissible alert, inspector, or subwindow:
+
+  ```html
+  <button command="show-modal" commandfor="my-dialog">Open dialog</button>
+  <dialog id="my-dialog">
+    <p>This dialog was opened using an invoker command.</p>
+    <button commandfor="my-dialog" command="close">Close</button>
+  </dialog>
+  ```
+
+  :::preview height:200px
+  <button command="show-modal" commandfor="my-dialog">Open dialog</button>
+  <dialog id="my-dialog">
+    <p>This dialog was opened using an invoker command.</p>
+    <button commandfor="my-dialog" command="close">Close</button>
+  </dialog>
+  :::
+
+#### Web Component Tags
+
+- `<template>` & `<slot>`: Web component related tags:
+
+  ```html
+  <template id="my-card">
+    <style>
+      .card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; }
+    </style>
+    <div class="card">
+      <slot name="title">DEFAULT TITLE</slot>
+      <slot>DEFAULT CONTENT</slot>
+    </div>
+  </template>
+
+  <script>
+    customElements.define('my-card', class extends HTMLElement {
+      constructor() {
+        super();
+        const tpl = document.getElementById('my-card');
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.appendChild(tpl.content.cloneNode(true));
+      }
+    });
+  </script>
+
+  <my-card>
+    <span slot="title">Coffee</span>
+    <p>Water temperature 90℃, powder-to-water ratio 1:15.</p>
+  </my-card>
+  ```
+
+  :::preview
+  <template id="my-card">
+    <style>
+      .card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; }
+    </style>
+    <div class="card">
+      <slot name="title">DEFAULT TITLE</slot>
+      <slot>DEFAULT CONTENT</slot>
+    </div>
+  </template>
+
+  <script>
+    customElements.define('my-card', class extends HTMLElement {
+      constructor() {
+        super();
+        const tpl = document.getElementById('my-card');
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.appendChild(tpl.content.cloneNode(true));
+      }
+    });
+  </script>
+
+  <my-card>
+    <span slot="title">Coffee</span>
+    <p>Water temperature 90℃, powder-to-water ratio 1:15.</p>
+  </my-card>
+  :::
+
 #### Resource Tags
 
 - `<script>` & `<noscript>`: Script resource tags, which is used to **embed or reference JavaScript code** & **display fallback content when the browser disabled or does not support JavaScript** in the HTML document respectively.
@@ -1219,7 +1546,7 @@ Non-void tags have both a start tag and an end tag, they can contain content, fo
 
 ## Elements
 
-**Elements** are instances of **tags**: We write tags in HTML document, and the browser will parse them into elements.
+**Elements** are instances of **tags**: We write tags in HTML document, and the browser will parse them into elements while [rendering HTML](#how-browsers-render-html).
 
 ## Attributes vs. Properties
 
@@ -1253,7 +1580,7 @@ When the attributes change, the characteristics of the element will also change,
 
 ### Properties
 
-**Properties** are **the characteristics of the element** we mentioned before.
+**Properties** are **the characteristics of the element** we mentioned [before](#attributes).
 
 They are **IDL (Interface Definition Language) attributes**, which are meant to be used by programming languages, so we can access them through DOM API, for example:
 

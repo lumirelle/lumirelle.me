@@ -1,7 +1,7 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-08-21T12:03+08:00
+update: 2026-08-21T15:19+08:00
 lang: en
 duration: 32min
 type: manual
@@ -1673,6 +1673,10 @@ After initialization, the **synchronization between attributes and properties is
     console.log(divElement.dataset.info) // -> someData
   </script>
   ```
+
+## DOM API
+
+See [MDN Web Pages](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) for more details.
 
 ## How Browsers Render HTML?
 

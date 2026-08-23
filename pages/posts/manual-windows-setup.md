@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-20T14:41+08:00
+update: 2026-08-23T18:55+08:00
 lang: en
-duration: 18min
+duration: 19min
 type: manual
 group: Computer
 order: 1
@@ -141,7 +141,7 @@ First, adjust system settings with _Winutil_:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Winutil | PowerShell:<br>`irm "https://christitus.com/win" \| iex` | In "Tweaks" tab, just to apply the recommended settings simply, if you are not sure about those switches~<br><br>In "Config" tab, I will enable "Windows Subsystem fo Linux" feature;<br><br>  |
+| Winutil | PowerShell:<br>`irm "https://christitus.com/win" \| iex` | In "Tweaks" tab, just to apply the recommended settings simply, if you are not sure about those switches~<br><br>In "Config" tab, I will enable "Windows Subsystem fo Linux" feature;<br><br> |
 
 (Optional) If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
 
@@ -265,17 +265,17 @@ Next, remaining useful softwares:
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Firefox | `winget add --exact --id Mozilla.Firefox` | My daily use browser. See extensions setup [here](#browser-setup). |
-| (Optional) Nutstore | `winget add --exact --id Nutstore.Nutstore ` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
+| (Optional) Nutstore | `winget add --exact --id Nutstore.Nutstore` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
 | (Optional) KeePassXC | `winget add --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `winget add --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
 | Tree Sitter CLI | `winget add --exact --id tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Neovim | `winget add --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Pi Coding Agent | `winget add --exact --id EarendilWorks.pi` | Just vibe! |
 | Visual Studio Code | `winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
 | Zed | `winget add --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
 | RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_2. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_3. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_4. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_5. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_6. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_7. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_9. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_10. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_11. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_12. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_13. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
 | Revo Uninstaller | Free:<br>`winget add --exact --id RevoUninstaller.RevoUninstaller`<br><br>Pro:<br>`winget add --exact --id RevoUninstaller.RevoUninstallerPro` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
 | Microsoft To Do | `winget add --exact --id 9NBLGGH5R558` | Just to do! |
-| ZCode | `winget add --exact --id ZhipuAI.ZCode` | Just vibe! |
 
 #### Browser Setup
 
@@ -311,12 +311,12 @@ Sometime useful extensions:
 
 I also like to customize the default browser fonts:
 
-1.  Go to [about:preferences#accessibility](about:preferences#accessibility).
-2.  Click "Advanced settings".
-3.  Fonts for "Latin", I prefer "Fraunces 9pt" (A serif font) as both Serif & Sans-serif font, "Annotation Mono" as Monospace font.
-4.  Fonts for "Simplified Chinese", I prefer "Resource Han Rounded SC" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
-5.  Fonts for "Traditional Chinese (Taiwan)", I prefer "Resource Han Rounded TW" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
-6.  Fonts for "Traditional Chinese (Hong Kong)", I prefer "Resource Han Rounded HK" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+1. Go to [about:preferences#accessibility](about:preferences#accessibility).
+2. Click "Advanced settings".
+3. Fonts for "Latin", I prefer "Fraunces 9pt" (A serif font) as both Serif & Sans-serif font, "Annotation Mono" as Monospace font.
+4. Fonts for "Simplified Chinese", I prefer "Resource Han Rounded SC" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+5. Fonts for "Traditional Chinese (Taiwan)", I prefer "Resource Han Rounded TW" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
+6. Fonts for "Traditional Chinese (Hong Kong)", I prefer "Resource Han Rounded HK" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
 
 To customize font-family of Firefox Devtools, you can refer to my [GitHub gist](https://gist.github.com/lumirelle/919722d43a643b2a8f2f2ce8db697eda).
 
@@ -326,6 +326,8 @@ Install the tool softwares below as you need:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
+| Auto Dark Mode | `winget add --exact --id XP8JK4HZBVF435` | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
+| Twinkle Tray | `winget add --exact --id 9PLJWWSV01LK` | Save my eyes!<br><br>Screen brightness manager. |
 | PixPin | `winget add --exact --id PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
@@ -378,6 +380,47 @@ wsl --install archlinux --location {{install_location_you_prefer}}
 wsl --install Debain --location {{install_location_you_prefer}}
 ```
 
+### Arch Linux Specific Setup
+
+If you prefer to use Arch Linux as WSL distribution just like me, you'd better to perform some specific setup, such as switch default user from `root`.
+
+You should create your own user in `wheel` user group with customized password:
+
+```nu
+useradd -m -G wheel {{username}}
+passwd {{username}}
+```
+
+Then enable `sudo` command calling permission for wheel user group:
+
+```nu
+# Openning `sudo` config via `vi`
+visudo
+# Then, uncomment line `%wheel ALL=(ALL:ALL) ALL` in `vi`,
+# save and exit with `:wq`
+```
+
+Then set default user of WSL to the user you newly created, openning `wsl.conf` with `vi`:
+
+```nu
+vi /etc/wsl.conf
+```
+
+Append below config:
+
+```ini
+[user]
+default={{username}}
+```
+
+Then save and exit with `:wq` too.
+
+Finally, you can switch to the newly created user:
+
+```nu
+su - {{username}}
+```
+
 ### Recommended Linux Softwares
 
 > [!Note]
@@ -387,25 +430,28 @@ Below softwares are highly recommended and helpful for the development use with 
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Fontconfig | `pacman -S fontconfig` | / |
-| (Optional) Noto Fonts CJK | `pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
-| Base Devel | `pacman -S base-devel` | Basic dev dependencies. |
-| Unzip | `pacman -S unzip` | / |
-| Nushell | `pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Starship | `pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
-| Zoxide | `pacman -S zoxide` | Fuzzy-match `cd`. |
-| Chezmoi | `pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
-| Git | `pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
-| OpenSSH | `pacman -S openssh` | / |
-| Mise | `pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
-| (Optional) Chromium | `pacman -S chromium` | If you need to run PlayWright with Chromium. |
+| Unzip | `sudo pacman -S unzip` | / |
+| Wget | `sudo pacman -S wget`| / |
+| Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
+| Fontconfig | `sudo pacman -S fontconfig` | / |
+| (Optional) Noto Fonts CJK | `sudo pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
+| Nushell | `sudo pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | `sudo pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
+| Zoxide | `sudo pacman -S zoxide` | Fuzzy-match `cd`. |
+| Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
+| Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| OpenSSH | `sudo pacman -S openssh` | / |
+| Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| (Optional) Chromium | `sudo pacman -S chromium` | If you need to run PlayWright with Chromium. |
+| Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from AUR instead of Arch official pacman registry. |
 
 Next, remaining useful softwares:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Tree Sitter CLI | `pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
-| Neovim | `pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
+| Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Pi Coding Agent | `yay -S pi-coding-agent-bin` | The minimal agent harness. |
 
 ## Forth Step: Maintain System
 

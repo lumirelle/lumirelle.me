@@ -17,10 +17,10 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       fonts: {
         // Standards
-        'serif': 'Fraunces',
+        'serif': 'Merriweather',
         'sans': 'Inter Tight',
         'mono': {
-          name: '"Annotation Mono"',
+          name: '"Go Mono"',
           provider: 'none',
         },
         // Strict 62.5%em Group
@@ -46,9 +46,8 @@ export default defineConfig<PresetWind4Theme>({
           name: '"Maple Mono CN"',
           provider: 'none',
         },
-        'geist-mono': 'Geist Mono',
-        'drafting-mono': {
-          name: '"Drafting* Mono"',
+        'go-mono': {
+          name: '"Go Mono"',
           provider: 'none',
         },
         'recursive': {
@@ -71,7 +70,7 @@ export default defineConfig<PresetWind4Theme>({
     // Font family rules, without nerd symbols
     ['font-62.5%em', { 'font-family': '"Annotation Mono", "Maple Mono WR CN", monospace' }],
     ['font-62%em', { 'font-family': '"0xProto", "Maple Mono WD CN", monospace' }],
-    ['font-60%em', { 'font-family': '"Geist Mono", "Maple Mono CN", monospace' }],
+    ['font-60%em', { 'font-family': '"Go Mono", "Maple Mono CN", monospace' }],
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC", monospace' }],
     ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN", monospace' }],
     ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],

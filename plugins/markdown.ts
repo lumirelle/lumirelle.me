@@ -149,7 +149,7 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
           }
           const svg = ogSVg.replaceAll(/\{\{([^}]+)\}\}/g, (_, name) => data[name] || '')
           console.info(
-            `Generating ${output}. Notice you should install "Fraunces 9pt" font in your system.`,
+            `Generating ${output}. Notice you should install "Merriweather 18pt" font in your system.`,
           )
           try {
             await sharp(Buffer.from(svg))

@@ -49,9 +49,29 @@
   src: url('/fonts/MapleMono-CN-Regular.ttf');
 }
 @font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Bold-Italic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+/* @font-face {
   font-family: 'Drafting* Mono';
   src: url('/fonts/DraftingMono-Regular.woff2') format('woff2');
-}
+} */
 @font-face {
   font-family: 'Recursive';
   src: url('/fonts/Recursive_VF_1.085.woff2');

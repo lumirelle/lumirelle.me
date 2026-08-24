@@ -8,6 +8,15 @@ duration: 15min
 
 [[toc]]
 
+> [!Note]
+> Current status (2026-08-24T17:41+08:00):
+> ```json
+> {
+>   "UI": "'Merriweather 18pt', 'Resource Han Rounded SC', serif",
+>   "code": "'Symbols Nerd Font', 'Go Mono', 'Maple Mono CN', monospace"
+> }
+> ```
+
 ## Introduce to Monospace Fonts
 
 Monospace fonts are fonts in which each character occupies the same amount of horizontal space.
@@ -180,7 +189,7 @@ And Latin font have more choice:
 
   <img src="/posts/misc-programming-fonts/drafting-mono.png" alt="Drafting Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- ⭐ [Geist Mono](https://github.com/vercel/geist-font/releases):
+- [Geist Mono](https://github.com/vercel/geist-font/releases):
 
   <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="thin to black, with italic" preset="green" />
 
@@ -188,7 +197,7 @@ And Latin font have more choice:
 
   <img src="/posts/misc-programming-fonts/geist-mono.png" alt="Geist Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-- [Go Mono](https://go.googlesource.com/image/+/refs/heads/master/font/gofont/ttfs/):
+- ⭐ [Go Mono](https://go.googlesource.com/image/+/refs/heads/master/font/gofont/ttfs/):
 
   <TextTag text="static" preset="amber" /><TextTag text="serif" /><TextTag text="regular, bold, with italic" preset="green" />
 
@@ -227,8 +236,8 @@ And Latin font have more choice:
 Then, you can using these font like this:
 
 ```json
-// 'Geist Mono' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'Geist Mono', 'Maple Mono CN', monospace"
+// 'Go Mono' can be replaced by any other Latin fonts listed above
+"'Symbols Nerd Font', 'Go Mono', 'Maple Mono CN', monospace"
 ```
 
 #### 50%em Group
@@ -528,7 +537,7 @@ async function _symlinkConfig(
 <div font="[&_code]:60%em!">
 
 ```json
-"'Symbols Nerd Font', 'Geist Mono', 'Maple Mono CN', monospace"
+"'Symbols Nerd Font', 'Go Mono', 'Maple Mono CN', monospace"
 ```
 
 ```js

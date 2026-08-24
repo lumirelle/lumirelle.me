@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-24T11:37+08:00
+update: 2026-08-24T17:22+08:00
 lang: en
 duration: 18min
 type: manual
@@ -263,7 +263,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Pi Coding Agent | `winget add EarendilWorks.pi` | Just vibe! |
 | Herdr | `winget add Herdr.Herdr.Preview` | Terminal mutiplexer. |
-| Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
+| Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-wsl-environment). |
 
 ##### Graphic User Interface (GUI)
 

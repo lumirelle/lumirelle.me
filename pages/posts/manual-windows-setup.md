@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-23T18:55+08:00
+update: 2026-08-24T11:37+08:00
 lang: en
-duration: 19min
+duration: 18min
 type: manual
 group: Computer
 order: 1
@@ -104,7 +104,7 @@ start ms-cxh:localonly
 >
 > Believe me, all these choices are for best stability and cleaness of the system. 🥺
 
-## Second Step: Setup Daily Use Environment
+## Second Step: Setup Environment
 
 ### Prerequisite Software
 
@@ -245,36 +245,59 @@ winget {{command}} -?
 
 #### Recommended Softwares
 
-Below softwares are highly recommended and helpful for the daily use with Windows, you should install them **in order** as you need:
+Below softwares are highly recommended and helpful for Windows, you can install them **in order and as your need**.
+
+##### Terminal User Interface (TUI)
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
-| Nushell | `winget add --exact --id Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Starship | `winget add --exact --id Starship.Starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
-| Zoxide | `winget add --exact --id ajeetdsouza.zoxide` | Fuzzy-match `cd`. |
-| Git | `winget add --exact --id Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
-| Chezmoi | `winget add --exact --id twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
-| WinLibs | `winget add --exact --id BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows. |
-| Mise | `winget add --exact --id jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | `winget add Starship.Starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
+| Zoxide | `winget add ajeetdsouza.zoxide` | Fuzzy-match `cd`. |
+| Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
+| WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows. |
+| Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
+| Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
+| Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Pi Coding Agent | `winget add EarendilWorks.pi` | Just vibe! |
+| Herdr | `winget add Herdr.Herdr.Preview` | Terminal mutiplexer. |
 | Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-development-environment). |
 
-Next, remaining useful softwares:
+##### Graphic User Interface (GUI)
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Firefox | `winget add --exact --id Mozilla.Firefox` | My daily use browser. See extensions setup [here](#browser-setup). |
-| (Optional) Nutstore | `winget add --exact --id Nutstore.Nutstore` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
-| (Optional) KeePassXC | `winget add --exact --id KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
-| Internet Download Manager | `winget add --exact --id Tonec.InternetDownloadManager` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
-| Tree Sitter CLI | `winget add --exact --id tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
-| Neovim | `winget add --exact --id Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Pi Coding Agent | `winget add --exact --id EarendilWorks.pi` | Just vibe! |
-| Visual Studio Code | `winget add --exact --id Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
-| Zed | `winget add --exact --id ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
+| Auto Dark Mode | `winget add XP8JK4HZBVF435` | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
+| Twinkle Tray | `winget add 9PLJWWSV01LK` | Save my eyes!<br><br>Screen brightness manager. |
+| Firefox | `winget add Mozilla.Firefox` | My daily use browser. See extensions setup [here](#browser-setup). |
+| Nutstore | `winget add Nutstore.Nutstore` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
+| KeePassXC | `winget add KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
+| Internet Download Manager | `winget add Tonec.InternetDownloadManager` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
+| Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
+| Zed | `winget add ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
+| Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
+| Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
 | RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_2. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_3. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_4. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_5. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_6. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_7. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_9. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_10. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_11. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_12. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_13. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
-| Revo Uninstaller | Free:<br>`winget add --exact --id RevoUninstaller.RevoUninstaller`<br><br>Pro:<br>`winget add --exact --id RevoUninstaller.RevoUninstallerPro` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
-| Microsoft To Do | `winget add --exact --id 9NBLGGH5R558` | Just to do! |
+| PixPin | `winget add PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
+| OBS Studio | `winget add OBSProject.OBSStudio` | / |
+| Thunderbird | `winget add Mozilla.Thunderbird` | Email manager. |
+| WeChat | `winget add Tencent.WeChat.Universal` | Chat software. |
+| QQ | `winget add Tencent.QQ.NT` | Chat software. |
+| Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
+| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | PDF converter. |
+| Microsoft To Do | `winget add 9NBLGGH5R558` | Just to do! |
+| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
+| NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
+| Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
+| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
+| Revo Uninstaller | Free:<br>`winget add RevoUninstaller.RevoUninstaller`<br><br>Pro:<br>`winget add RevoUninstaller.RevoUninstallerPro` | Software uninstaller.<br><br>_Free_ or _Pro_, as your need. |
+| Driver Store Explorer | `winget add lostindark.DriverStoreExplorer` | Clear unused/outdated device drivers. |
+| DISM++ | `winget add ChuyuTeam.DISM++` | Clear disk. |
+| Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | / |
+| Steam | `winget add Valve.Steam` | / |
+| Epic Games | `winget add EpicGames.EpicGamesLauncher` | / |
 
 #### Browser Setup
 
@@ -319,50 +342,13 @@ I also like to customize the default browser fonts:
 
 To customize font-family of Firefox Devtools, you can refer to my [GitHub gist](https://gist.github.com/lumirelle/919722d43a643b2a8f2f2ce8db697eda).
 
-#### Additional Softwares
-
-Install the tool softwares below as you need:
-
-| Software | Source/Install Command | Note |
-| -- | -- | -- |
-| Auto Dark Mode | `winget add --exact --id XP8JK4HZBVF435` | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
-| Twinkle Tray | `winget add --exact --id 9PLJWWSV01LK` | Save my eyes!<br><br>Screen brightness manager. |
-| PixPin | `winget add --exact --id PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
-| Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For classic context menu. |
-| Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For Windows 11 new context menu. |
-| Driver Store Explorer | `winget add --exact --id lostindark.DriverStoreExplorer` | Clear unused/outdated device drivers. |
-| DISM++ | `winget add --exact --id ChuyuTeam.DISM++` | Clear disk. |
-| WeChat | `winget add --exact --id Tencent.WeChat.Universal` | / |
-| QQ | `winget add --exact --id Tencent.QQ.NT` | / |
-| Thunderbird | `winget add --exact --id Mozilla.Thunderbird` | / |
-| Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
-| NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
-| Steam | `winget add --exact --id Valve.Steam` | / |
-| Epic Games | `winget add --exact --id EpicGames.EpicGamesLauncher` | / |
-| OBS Studio | `winget add --exact --id OBSProject.OBSStudio` | / |
-
-Install the dev softwares below as you need:
-
-| Software | Source/Install Command | Note |
-| -- | -- | -- |
-| Podman Desktop | `winget add --exact --id RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
-| Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
-| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
-
-Some one-time use software:
-
-| Software | Source/Install Command | Note |
-| -- | -- | -- |
-| Crystal Disk Info | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | / |
-| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | / |
-
 #### Uninstall Unnecessary Softwares
 
 Use _Revo Uninstaller_ to uninstall all the software you don't like!
 
 In particular, **"Windows Programs"** tab let you can completely uninstall system bundled softwares!
 
-## Third Step: Setup Development Environment
+## Third Step: Setup WSL Environment
 
 Firstly, you should ensure you have the latest WSL installation:
 
@@ -378,6 +364,22 @@ wsl --install archlinux --location {{install_location_you_prefer}}
 # Debain
 wsl --install Debain --location {{install_location_you_prefer}}
 ```
+
+### Prerequisite WSL Softwares
+
+> [!Note]
+> Below commands use _Arch_ distribution & it's package manager `pacman` as examples.
+
+Below softwares are prerequisite softwares for WSL use:
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Unzip | `sudo pacman -S unzip` | / |
+| Wget | `sudo pacman -S wget`| / |
+| OpenSSH | `sudo pacman -S openssh` | / |
+| Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
+| Fontconfig | `sudo pacman -S fontconfig` | / |
+| (Optional) Noto Fonts CJK | `sudo pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
 
 ### Arch Linux Specific Setup
 
@@ -420,7 +422,7 @@ Finally, you can switch to the newly created user:
 su - {{username}}
 ```
 
-### Recommended Linux Softwares
+### Recommended WSL Softwares
 
 > [!Note]
 > Below commands use _Arch_ distribution & it's package manager `pacman` as examples.
@@ -429,28 +431,18 @@ Below softwares are highly recommended and helpful for the development use with 
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Unzip | `sudo pacman -S unzip` | / |
-| Wget | `sudo pacman -S wget`| / |
-| Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
-| Fontconfig | `sudo pacman -S fontconfig` | / |
-| (Optional) Noto Fonts CJK | `sudo pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
+| Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from AUR instead of Arch official pacman registry. |
 | Nushell | `sudo pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Starship | `sudo pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
 | Zoxide | `sudo pacman -S zoxide` | Fuzzy-match `cd`. |
 | Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
 | Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
-| OpenSSH | `sudo pacman -S openssh` | / |
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
-| (Optional) Chromium | `sudo pacman -S chromium` | If you need to run PlayWright with Chromium. |
-| Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from AUR instead of Arch official pacman registry. |
-
-Next, remaining useful softwares:
-
-| Software | Source/Install Command | Note |
-| -- | -- | -- |
 | Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Pi Coding Agent | `yay -S pi-coding-agent-bin` | The minimal agent harness. |
+| Herdr | `yay -S herdr-bin` | Terminal mutiplexer. |
+| (Optional) Chromium | `sudo pacman -S chromium` | If you choose Arch distribution and need to run PlayWright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu distribution, as a workaround, we can install PlayWright dependencies via installing Chromium. |
 
 ## Forth Step: Maintain System
 

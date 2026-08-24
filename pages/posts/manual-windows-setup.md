@@ -151,6 +151,8 @@ First, adjust system settings with _Winutil_:
 
 (Optional) Next, [update the OS](ms-settings:windowsupdate), [login Microsoft Account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
 
+Finally, enable Windows system built-in `sudo` support and select `inline` running method in "Terminal" section from settings [System > Advanced](ms-settings:developers).
+
 ### Setup Softwares
 
 > [!Note]
@@ -185,8 +187,6 @@ Add package (Machine scope, **not recommended**, requires admin privileges):
 ```nu
 # Windows system built-in `sudo`
 sudo winget add {{query}}
-# gsudo, https://github.com/gerardog/gsudo
-gsudo winget add {{query}}
 ```
 
 Add package to specific location:
@@ -250,7 +250,6 @@ Below softwares are highly recommended and helpful for the daily use with Window
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
-| gsudo | `winget add --exact --id gerardog.gsudo` | `sudo` for Windows.<br><br><strong>If you are using Windows 11 and want to hijack system built-in `sudo` command, you should put the installation path to gsudo (default to `C:\Program Files\gsudo\Current`) in the very front of "system environment variable" `Path`.</strong><br><br><strong>Until now (2026/8/11), it's still the superior alternative to the system's built-in `sudo` command.</strong> |
 | Nushell | `winget add --exact --id Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Starship | `winget add --exact --id Starship.Starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
 | Zoxide | `winget add --exact --id ajeetdsouza.zoxide` | Fuzzy-match `cd`. |

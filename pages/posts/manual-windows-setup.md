@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-26T10:55+08:00
+update: 2026-08-28T10:47+08:00
 lang: en
 duration: 18min
 type: manual
@@ -261,7 +261,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Pi Coding Agent | `winget add EarendilWorks.pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe!<br><br><details><summary>Extensions setup:</summary>- <code>pi install npm:pi-web-access</code><br>- <code>pi install npm:@narumitw/pi-btw</code><br>- <code>pi install npm:pi-herdr-subagents</code><br></details> |
+| Pi Coding Agent | `winget add EarendilWorks.pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe!<br><br><details><summary>Extensions setup:</summary>- <code>pi install npm:pi-web-access</code><br>- <code>pi install npm:@narumitw/pi-btw</code><br>- <code>pi install npm:pi-herdr-subagents</code><br>- <code>pi install npm:pi-tool-display</code><br></details> |
 | Herdr | `winget add Herdr.Herdr.Preview` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
 | Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-wsl-environment). |
 
@@ -375,7 +375,7 @@ Below softwares are prerequisite softwares for WSL use:
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Unzip | `sudo pacman -S unzip` | / |
-| Wget | `sudo pacman -S wget`| / |
+| Wget | `sudo pacman -S wget` | / |
 | OpenSSH | `sudo pacman -S openssh` | / |
 | Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
 | Fontconfig | `sudo pacman -S fontconfig` | / |
@@ -440,7 +440,7 @@ Below softwares are highly recommended and helpful for the development use with 
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Pi Coding Agent | `yay -S pi-coding-agent-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe!<br><br><details><summary>Extensions setup:</summary>- <code>pi install npm:pi-web-access</code><br>- <code>pi install npm:@narumitw/pi-btw</code><br>- <code>pi install npm:pi-herdr-subagents</code><br></details> |
+| Pi Coding Agent | `yay -S pi-coding-agent-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe!<br><br><details><summary>Extensions setup:</summary>- <code>pi install npm:pi-web-access</code><br>- <code>pi install npm:@narumitw/pi-btw</code><br>- <code>pi install npm:pi-herdr-subagents</code><br>- <code>pi install npm:pi-tool-display</code><br></details> |
 | Herdr | `yay -S herdr-bin` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
 | (Optional) Chromium | `sudo pacman -S chromium` | If you choose Arch distribution and need to run PlayWright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu distribution, as a workaround, we can install PlayWright dependencies via installing Chromium. |
 

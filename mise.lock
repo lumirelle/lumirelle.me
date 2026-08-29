@@ -40,70 +40,70 @@ url = "https://github.com/nubjs/nub/releases/download/v0.7.5/nub-win32-x64.zip"
 url_api = "https://api.github.com/repos/nubjs/nub/releases/assets/507734620"
 
 [[tools.hk]]
-version = "1.56.0"
+version = "1.56.1"
 backend = "aqua:jdx/hk"
 
 [tools.hk."platforms.linux-arm64"]
-checksum = "sha256:6c5b84e2078b83194888d314e830c24398a856f1659f324c9a5c98fac5ec8db6"
-url = "https://github.com/jdx/hk/releases/download/v1.56.0/hk-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/520698505"
+checksum = "sha256:cd671706a273dac35b012fd585a0fba1b0c0f340558dccfd4c9a4b976a794597"
+url = "https://github.com/jdx/hk/releases/download/v1.56.1/hk-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632120"
 
 [tools.hk."platforms.linux-arm64-musl"]
-checksum = "sha256:e28eca21809220a7c0c8c894d901370e73b1ae9bf5bb1a898ff41744e0d937e6"
-url = "https://github.com/jdx/hk/releases/download/v1.56.0/hk-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/520698506"
+checksum = "sha256:5feac3cfcdae33227197d0104832b91a5d293733320632c3c19f864866a6c8ce"
+url = "https://github.com/jdx/hk/releases/download/v1.56.1/hk-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632119"
 
 [tools.hk."platforms.linux-x64"]
-checksum = "sha256:eea0beedea7a49a74cd9190e4cc7c27ed209fb77b1b0eec711123cec02303a95"
-url = "https://github.com/jdx/hk/releases/download/v1.56.0/hk-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/520698520"
+checksum = "sha256:67157431e36bb523213d8361a9f59b6eb718f80ae8534827849552b3c6c92a04"
+url = "https://github.com/jdx/hk/releases/download/v1.56.1/hk-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632131"
 
 [tools.hk."platforms.linux-x64-musl"]
-checksum = "sha256:0efc6dbafd09a67a7e2de7c364101a51c4490f62fc76e84cd8bc8da0db78f9b6"
-url = "https://github.com/jdx/hk/releases/download/v1.56.0/hk-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/520698521"
+checksum = "sha256:e7435c1aec98f60d98712da3231541987ac67c017c001f767c0f37bd517cfe43"
+url = "https://github.com/jdx/hk/releases/download/v1.56.1/hk-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632133"
 
 [tools.hk."platforms.macos-arm64"]
-checksum = "sha256:600207a25ac055ead8b20bd59ae779821e0dee9fc03c041ddb4432b60ad21b68"
-url = "https://github.com/jdx/hk/releases/download/v1.56.0/hk-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/520698508"
+checksum = "sha256:f8400a1427e66f1b968e58568115a2138b5d0fe88e0561b97d3822648b7e35ea"
+url = "https://github.com/jdx/hk/releases/download/v1.56.1/hk-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632123"
 
 [tools.hk."platforms.windows-x64"]
-checksum = "sha256:1d0fa7242d5af85586527eab2a7fc5799c54388e1394e34ef5af26db9bc64ede"
-url = "https://github.com/jdx/hk/releases/download/v1.56.0/hk-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/hk/releases/assets/520698507"
+checksum = "sha256:4ccf353e484997dd4975361b6433f3b2661f5db614f2b382cddcac7eaa74a604"
+url = "https://github.com/jdx/hk/releases/download/v1.56.1/hk-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/hk/releases/assets/525632118"
 
 [[tools.node]]
-version = "26.7.0"
+version = "26.8.1"
 backend = "core:node"
 
 [tools.node."platforms.linux-arm64"]
-checksum = "sha256:925aa6157dd37542d0d7f2e28b7bf61e7b39284411210b0498bc3788db4aef68"
-url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-linux-arm64.tar.gz"
+checksum = "sha256:d5f973ce975e4bd03e6c2038260f7e9201615aa8e1ee293c72f8dcc2a6d9fddb"
+url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-linux-arm64.tar.gz"
 
 [tools.node."platforms.linux-arm64-musl"]
-checksum = "sha256:1f16cc0f6febcb1bed1d4550306806dbcfbaf5c1bc2f44f3c5c8b5d22a4cc27a"
-url = "https://unofficial-builds.nodejs.org/download/release/v26.7.0/node-v26.7.0-linux-arm64-musl.tar.gz"
+checksum = "sha256:0fe78afdeb4a4d273b14abbd4b946c772885c58994c9d23b1c8ae0a59a2f8a53"
+url = "https://unofficial-builds.nodejs.org/download/release/v26.8.1/node-v26.8.1-linux-arm64-musl.tar.gz"
 
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:bd6b6c31e377bad9ad579bed72e5bc11f4c879ac9452ad51d30e646ea3d828df"
-url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-linux-x64.tar.gz"
+checksum = "sha256:b2b76660fa4ded4e0b2a41ee3c0c651cd52ea8170ead91ebac1e147ac3d55643"
+url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-linux-x64.tar.gz"
 
 [tools.node."platforms.linux-x64-musl"]
-checksum = "sha256:5dc0180e7684ede6fc9d9e6333da45686f4b5a7820729d33c68335b283337295"
-url = "https://unofficial-builds.nodejs.org/download/release/v26.7.0/node-v26.7.0-linux-x64-musl.tar.gz"
+checksum = "sha256:13135a6a2106f9d111fa9b48c8801ed119ad43e7e1d00de17d77a9c44899aada"
+url = "https://unofficial-builds.nodejs.org/download/release/v26.8.1/node-v26.8.1-linux-x64-musl.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:7ee659a7768e641bbfd5360940660b8e8fd0052f77488f365562bac522fc15d4"
-url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-darwin-arm64.tar.gz"
+checksum = "sha256:6e577fd0d9db776db82306629e441a9dace416702622aebdd171c9dfaa41f4d2"
+url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-darwin-arm64.tar.gz"
 
 [tools.node."platforms.macos-x64"]
-checksum = "sha256:f279d1ed28ce57f7788bf23435d2ad7fdd7438904ad5c4d8a1081a7cde3d4b96"
-url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-darwin-x64.tar.gz"
+checksum = "sha256:fe9c6dbf9c8e1b4443803d75e2a20366e420dae650c747dbb116b22975751baf"
+url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-darwin-x64.tar.gz"
 
 [tools.node."platforms.windows-x64"]
-checksum = "sha256:d3bd72755141ed32bbcd841228ee81897c8a98d50dfa7dae2179399a0a7c90f8"
-url = "https://nodejs.org/dist/v26.7.0/node-v26.7.0-win-x64.zip"
+checksum = "sha256:57693d8e93d1b04e7b7de46aca53ecd63e97564e73de36a68428d7ff08d83587"
+url = "https://nodejs.org/dist/v26.8.1/node-v26.8.1-win-x64.zip"
 
 [[tools.pkl]]
 version = "0.32.1"

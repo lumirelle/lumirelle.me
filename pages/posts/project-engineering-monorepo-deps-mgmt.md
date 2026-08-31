@@ -14,7 +14,9 @@ type: note
 }
 .prose table tr {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr;
+  grid-template-columns: 1fr;
+  grid-auto-flow: column;
+  grid-auto-columns: 2fr;
 }
 .prose table td {
   overflow-x: auto;

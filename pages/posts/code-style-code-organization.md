@@ -1,13 +1,28 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-08-18T13:52+08:00
+update: 2026-09-01T00:51+08:00
 lang: en
-duration: 13min
+duration: 15min
 type: note
 ---
 
 [[toc]]
+
+<style>
+.prose table thead, .prose table tbody {
+  display: block;
+}
+.prose table tr {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 2fr;
+}
+.prose table th, .prose table td {
+  overflow-x: auto;
+}
+</style>
+
 
 ## Why Good Code Organization Is Necessary?
 
@@ -27,7 +42,7 @@ All of below examples work, but the good example has much better readability and
 
 <table><tbody>
 
-<tr><th valign="top">
+<tr><td valign="top">
 
 A good example:
 
@@ -47,24 +62,9 @@ export const UserStatusLabels = {
 } as const
 
 export const UserStatusOptions = [
-  {
-    label: UserStatusLabels[
-      UserStatus.Inactive
-    ],
-    value: UserStatus.Inactive
-  },
-  {
-    label: UserStatusLabels[
-      UserStatus.Active
-    ],
-    value: UserStatus.Active
-  },
-  {
-    label: UserStatusLabels[
-      UserStatus.Banned
-    ],
-    value: UserStatus.Banned
-  },
+  { label: UserStatusLabels[UserStatus.Inactive], value: UserStatus.Inactive },
+  { label: UserStatusLabels[UserStatus.Active], value: UserStatus.Active },
+  { label: UserStatusLabels[UserStatus.Banned], value: UserStatus.Banned },
 ] as const
 ```
 
@@ -79,11 +79,7 @@ import {
 export const FORM_FIELDS = [
   { name: 'username', defaultValue: 'guest' },
   { name: 'password' },
-  {
-    name: 'status',
-    defaultValue: UserStatus.Inactive,
-    options: UserStatusOptions,
-  },
+  { name: 'status', defaultValue: UserStatus.Inactive, options: UserStatusOptions, },
   // When `options` is a function,
   // we will call it when we create fields,
   // and cache the options in the field instance.
@@ -103,17 +99,11 @@ import { UserStatusLabels } from './constants'
 const TABLE_COLUMNS = [
   { label: 'Name', props: 'name' },
   { label: 'Age', props: 'age' },
-  {
-    label: 'Status',
-    props: 'status',
-    format: values => (
-      UserStatusLabels[values.status]
-    )
-  }
+  { label: 'Status', props: 'status', format: values => UserStatusLabels[values.status] }
 ] as const
 ```
 
-</th><th valign="top">
+</td><td valign="top">
 
 A bad example:
 
@@ -133,34 +123,15 @@ export const UserStatusLabels = {
 } as const
 
 export const UserStatusOptions = [
-  {
-    label: UserStatusLabels[
-      UserStatus.Inactive
-    ],
-    value: UserStatus.Inactive
-  },
-  {
-    label: UserStatusLabels[
-      UserStatus.Active
-    ],
-    value: UserStatus.Active
-  },
-  {
-    label: UserStatusLabels[
-      UserStatus.Banned
-    ],
-    value: UserStatus.Banned
-  },
+  { label: UserStatusLabels[UserStatus.Inactive], value: UserStatus.Inactive },
+  { label: UserStatusLabels[UserStatus.Active], value: UserStatus.Active },
+  { label: UserStatusLabels[UserStatus.Banned], value: UserStatus.Banned },
 ] as const
 
 export const FORM_FIELDS = [
   { name: 'username', defaultValue: 'guest' },
   { name: 'password' },
-  {
-    name: 'status',
-    defaultValue: UserStatus.Inactive,
-    options: UserStatusOptions,
-  },
+  { name: 'status', defaultValue: UserStatus.Inactive, options: UserStatusOptions, },
   { name: 'group', options: listUserGroups },
 ] as const
 
@@ -171,20 +142,18 @@ function listUserGroups() {
 const TABLE_COLUMNS = [
   { label: 'Name', props: 'name' },
   { label: 'Age', props: 'age' },
-  {
-    label: 'Status',
-    props: 'status',
-    format: values => (
-      UserStatusLabels[values.status]
-    )
-  }
+  { label: 'Status', props: 'status', format: values => UserStatusLabels[values.status] }
 ] as const
 ```
 
-</th></tr>
+</td></tr>
 
 </tbody></table>
 
+There is a general order of thought for identifying the different focuses:
+
+1. Module. Code for launch a Playwright instance and code fore orchestrate automation tasks are obviously not part of the same module.
+2. Content nature. Global constants code and test cases code are obviously not the same.
 
 ### Leave Structure in Focus, Hide Implementation in Details
 
@@ -192,7 +161,7 @@ In order to let the reader understand our code easily, we'd better leave only th
 
 <table><tbody>
 
-<tr><th valign="top">
+<tr><td valign="top">
 
 _src/good.ts_
 
@@ -246,7 +215,7 @@ function run(context) {
 }
 ```
 
-</th><th valign="top">
+</td><td valign="top">
 
 _src/bad.ts_
 
@@ -284,10 +253,9 @@ export function main() {
 }
 ```
 
-</th></tr>
+</td></tr>
 
 </tbody></table>
-
 
 ### Focus Above, Details Below
 
@@ -297,7 +265,7 @@ All of below examples work, but the good example has much better readability and
 
 <table><tbody>
 
-<tr><th valign="top">
+<tr><td valign="top">
 
 _src/good.ts_
 
@@ -351,7 +319,7 @@ function run(context) {
 }
 ```
 
-</th><th valign="top">
+</td><td valign="top">
 
 _src/bad.ts_
 
@@ -405,9 +373,43 @@ function createContext() {
 }
 ```
 
-</th></tr>
+</td></tr>
 
 </tbody></table>
+
+### Special First, General Last
+
+There is a common classic pattern you may already know: Guard clause.
+
+The key point of guard clause is: Achieve early return via conditional inversion.
+
+```ts
+function buyTickets(id: string, amount: number, options: any): void {
+  // TODO(Lumirelle): Should we use function instead of objects for better tree-shaking in any cases?
+  const ticketRepo = new TicketRepository()
+
+  // Early return with an error via inversing condition `ticketRepo.has(id)` to `!ticketRepo.has(id)`
+  if (!ticketRepo.has(id)) {
+    throw new Error(`The ticket with ID "${id}" does not exist!`)
+  }
+
+  const userRepo = new UserRepo()
+  const userInfo = userRepo.getInfo()
+
+  if (userInfo.balance < amount) {
+    throw new Error(`Your current balance does not enough to buy this ticket!
+You still need to recharge by ${userInfo.balance - amount}$.`)
+  }
+
+  // ...
+
+  ticketRepo.buy(id)
+}
+```
+
+It hoist all of the special logics in the start, and leave the last and most general logic at the end.
+
+Base on those structure, you will never lose yourself within the charming control flows & data flows.
 
 ## They Are Not Panaceas
 
@@ -417,7 +419,7 @@ Before we do these, we must pay attention to the **motivation and quality**.
 
 ### Do Not Separate Related Codes
 
-Heavily dependent codes should not be separated to different places, otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
+Heavily dependent codes should not be separated to different places, even if they look like two very different focus , otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
 
 > [!Note]
 >
@@ -425,7 +427,7 @@ Heavily dependent codes should not be separated to different places, otherwise i
 
 <table><tbody>
 
-<tr><th valign="top">
+<tr><td valign="top">
 
 Bad Example:
 
@@ -511,12 +513,9 @@ const {
 
 <template>
   <div>
-    // [!code focus:5]
+    // [!code focus:2]
     <SelectorComponent v-model="selected" />
-    <FormComponent
-      v-model="formData"
-      :config="formConfig"
-    />
+    <FormComponent v-model="formData" :config="formConfig" />
   </div>
 </template>
 ```
@@ -554,19 +553,16 @@ const {
 
 <template>
   <div>
-    // [!code focus:5]
+    // [!code focus:2]
     <SelectorComponent v-model="selected" />
-    <FormComponent
-      v-model="formData"
-      :config="formConfig"
-    />
+    <FormComponent v-model="formData" :config="formConfig" />
   </div>
 </template>
 ```
 
 </details>
 
-</th><th valign="top">
+</td><td valign="top">
 
 Good Example:
 
@@ -628,28 +624,25 @@ const {
 
 <template>
   <div>
-    // [!code focus:6]
+    // [!code focus:3]
     <!-- Combined -->
     <!-- internal `v-if` based on `enableSelector` -->
-    <FormComponent
-      v-model="formData"
-      :config="formConfig"
-    />
+    <FormComponent v-model="formData" :config="formConfig" />
   </div>
 </template>
 ```
 
-</th></tr>
+</td></tr>
 
 </tbody></table>
 
-### Do Not Extract Structure from Simple Implementation
+### Do Not Extract Structure from Simple/Specific Implementation
 
-Some simple implementation codes are no need to be extracted, excessive abstraction is just to show off skills, makes mental cost and has no practical application.
+Some simple implementation codes are no need to be extracted, excessive abstraction is just to show off skills, makes mental cost (constant context switching) and has no practical application.
 
 <table><tbody>
 
-<tr><th valign="top">
+<tr><td valign="top">
 
 _src/good.ts_
 
@@ -667,7 +660,7 @@ export function main() {
 }
 ```
 
-</th><th valign="top">
+</td><td valign="top">
 
 _src/bad.ts_ 😅
 
@@ -691,7 +684,96 @@ function isStrictFalse(value: unknown): value is false {
 }
 ```
 
-</th></tr>
+</td></tr>
+
+</tbody></table>
+
+The same for specific implementation who is not reusable, extract them only leads to negative effects:
+
+<table><tbody>
+
+<tr><td valign="top">
+
+_src/good.ts_
+
+```ts
+export interface ContactFormData {
+  name: string | null
+  email: string | null
+  message: string | null
+  /** Date in ms. */
+  date: number | null
+}
+export function useContactForm() {
+  const formData = ref<ContactFormData>({
+    name: null,
+    email: null,
+    message: null,
+    date: null,
+  })
+
+  function submit() {
+    const contactRepo = new ContactRepository()
+    const params = {
+      ...formData.value
+    }
+    // Convert date to seconds.
+    params.date = params.date / 1000
+    contactRepo.submit(params)
+  }
+
+  return {
+    formData
+  }
+}
+```
+
+</td><td valign="top">
+
+_src/bad.ts_ 😅
+
+```ts
+export interface ContactFormData {
+  name: string | null
+  email: string | null
+  message: string | null
+  /** Date in ms. */
+  date: number | null
+}
+export function useContactForm() {
+  const formData = ref<ContactFormData>({
+    name: null,
+    email: null,
+    message: null,
+    date: null,
+  })
+
+  function submit() {
+    const contactRepo = new ContactRepository()
+    const params = buildContactFormParams(formData)
+    contactRepo.submit(params)
+  }
+
+  return {
+    formData
+  }
+}
+/**
+ * After using AI for so long, I've noticed that
+ * AI really enjoys extract these specific logics
+ * into a large number of non-reusable util functions.
+ */
+export function buildContactFormParams(formData: Ref<ContactFormData>): ContactFormData {
+  const params = {
+    ...formData.value
+  }
+  // Convert date to seconds.
+  params.date = params.date / 1000
+  return params
+}
+```
+
+</td></tr>
 
 </tbody></table>
 
@@ -701,7 +783,7 @@ If a code is heavy and reusable, we can extract it to a separate file, just like
 
 <table><tbody>
 
-<tr><th valign="top">
+<tr><td valign="top">
 
 Bad Example (Not Extracted):
 
@@ -709,7 +791,7 @@ _src/views/bad-page.vue_
 
 ```vue
 <script setup lang="ts">
-// [!code focus:57]
+// [!code focus:55]
 // imports ...
 
 // Too many top-level codes,
@@ -756,9 +838,7 @@ const pageComponents = computed(() => {
   return pageModules.value.map((module) => {
     const component = COMPONENT_MAP[module.name]
     if (!component) {
-      throw new Error(
-        `Component ${module.name} not found`
-      )
+      throw new Error(`Component ${module.name} not found`)
     }
     return {
       id: module.id,
@@ -785,7 +865,7 @@ const pageComponents = computed(() => {
 </template>
 ```
 
-</th><th valign="top">
+</td><td valign="top">
 
 Bad Example (Extracted to a separate file but unreusable):
 
@@ -837,9 +917,7 @@ export function useTemplatePage() {
     return pageModules.value.map((module) => {
       const component = COMPONENT_MAP[module.name]
       if (!component) {
-        throw new Error(
-          `Component ${module.name} not found`
-        )
+        throw new Error(`Component ${module.name} not found`)
       }
       return {
         id: module.id,
@@ -864,22 +942,16 @@ const { pageComponents } = useTemplatePage()
 </script>
 
 <template>
-  // [!code focus:11]
+  // [!code focus:5]
   <div>
-    <template
-      v-for="module in pageComponents"
-      :key="module.id"
-    >
-      <component
-        :is="module.component"
-        v-bind="module.payload"
-      />
+    <template v-for="module in pageComponents" :key="module.id">
+      <component :is="module.component" v-bind="module.payload" />
     </template>
   </div>
 </template>
 ```
 
-</th></tr>
+</td></tr>
 
 </tbody></table>
 
@@ -937,9 +1009,7 @@ function useTemplatePage() {
     return pageModules.value.map((module) => {
       const component = COMPONENT_MAP[module.name]
       if (!component) {
-        throw new Error(
-          `Component ${module.name} not found`
-        )
+        throw new Error(`Component ${module.name} not found`)
       }
       return {
         id: module.id,
@@ -956,16 +1026,10 @@ function useTemplatePage() {
 </script>
 
 <template>
-  // [!code focus:11]
+  // [!code focus:5]
   <div>
-    <template
-      v-for="module in pageComponents"
-      :key="module.id"
-    >
-      <component
-        :is="module.component"
-        v-bind="module.payload"
-      />
+    <template v-for="module in pageComponents" :key="module.id">
+      <component :is="module.component" v-bind="module.payload" />
     </template>
   </div>
 </template>

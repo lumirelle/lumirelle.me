@@ -19,7 +19,7 @@ order: 4
   grid-auto-flow: column;
   grid-auto-columns: 2fr;
 }
-.prose table td {
+.prose table th, .prose table td {
   overflow-x: auto;
 }
 </style>

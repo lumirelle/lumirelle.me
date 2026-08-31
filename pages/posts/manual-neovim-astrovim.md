@@ -1,5 +1,5 @@
 ---
-title: Neovim and LazyVim Manual
+title: Neovim and AstroVim Manual
 date: 2025-12-25T14:48+08:00
 update: 2026-08-19T11:14+08:00
 lang: en
@@ -15,7 +15,9 @@ order: 4
 }
 .prose table tr {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr 2fr;
+  grid-template-columns: 1fr;
+  grid-auto-flow: column;
+  grid-auto-columns: 2fr;
 }
 .prose table td {
   overflow-x: auto;
@@ -24,11 +26,17 @@ order: 4
 
 [[toc]]
 
-## Neovim & LazyVim
+## Neovim & AstroVim
 
 Neovim is a modern fork of Vim, which aims to improve the extensibility and usability of Vim.
 
-LazyVim is a Neovim configuration framework that simplifies the setup and management of Neovim plugins and settings, with it, we can get a out-of-the-box Neovim experience with sensible defaults and powerful features.
+AstroVim is a Neovim configuration distribution with plenty of configuration defaults, which provide (almost) out-of-box experience to us.
+
+### Why I Choose AstroVim Other than LazyVim?
+
+- Minimal
+- Configurations are structured
+- ...
 
 ## Installation
 
@@ -38,25 +46,25 @@ To install Neovim, I highly recommend using the package manager for your operati
 winget add --exact --id Neovim.Neovim
 ```
 
-To install LazyVim, make sure your system satisfies [the requirements](https://www.lazyvim.org/#%EF%B8%8F-requirements) first, then just simply follow [the official documentation](https://www.lazyvim.org/installation).
+To install AstroVim, make sure your system satisfies [the requirements](https://docs.astronvim.com/#-requirements) first, then just simply follow [the official documentation](https://docs.astronvim.com/).
 
 Or just try [my configuration setup](https://github.com/lumirelle/dotfiles), powered by [Chezmoi](https://github.com/twpayne/chezmoi).
 
 ## Basic Usage
 
-[Neovim Quick Reference](https://neovim.io/doc/user/quickref.html).
+[Neovim Quick Reference](https://neovim.io/doc/user/quickref.html) & [AstroVim Mappings]https://docs.astronvim.com/mappings().
 
 ### Launch Neovim
 
-To launch Neovim and LazyVim, simply open your terminal and type:
+To launch Neovim with AstroVim, simply open your terminal and type:
 
 ```nu
 nvim
 ```
 
-Then you will see the LazyVim dashboard. The first time you open that dashboard, LazyVim will automatically setup the plugins for you, which may take a while. After that, you can start using Neovim and LazyVim.
+Then you will see the home screen (dashboard). The first time you open that dashboard, AstroVim will automatically setup the plugins for you, which may take a while. After that, you can start using them.
 
-To launch Neovim with a specific file, use:
+To launch with a specific file, use:
 
 ```nu
 nvim path/to/your/file
@@ -76,7 +84,7 @@ Neovim has several modes, the most commonly used ones are:
 - **Command-line mode**: Used for executing commands.
 - **Terminal mode**: Used for running terminal commands.
 
-### Write & Quit
+### Write & Quit <a name="write-quit"></a>
 
 Belows are the commonly used commands for writing and quitting Neovim:
 
@@ -94,12 +102,14 @@ Belows are the commonly used commands for writing and quitting Neovim:
 |  | `:x[it][!] {file}` | Normal, Visual | **When changes** have been made, equivalent to `:wq {file}`; Otherwise, equivalent to `:q` |
 |  | `:xa[ll][!]` | Normal, Visual | Write **all changed buffers** and exit |
 
-There are also some shortcuts for write and quit commands:
+There are also some **common (not all) & useful** shortcuts for write and quit commands:
 
 | Command | Mode | Description |
 | -- | -- | -- |
+| `<leader>w` | Normal | Shortcut for `:w` |
+| `<leader>q` | Normal | Shortcut for `:confirm q` |
+| `<leader>Q` | Normal | Shortcut for `:confirm qall` |
 | `ZZ` | Normal | Shortcut for `:x` |
-| `ZQ` | Normal | Shortcut for `:q!` |
 
 [^1]: I use these groups to categorize the commands and help memorize them. There is no "group" concept in Neovim, it's just for learning purpose.
 [^2]: This means you should start typing the command in the referred mode(s). For the commands starting with `:`, it will enter command-line mode after you type `:` directly.
@@ -129,11 +139,11 @@ Motions are the commands that help us navigate through the text. Most of them ar
 
 | Group | Command | Mode | Description | Also |
 | -- | -- | -- | -- | -- |
-| Down | N `j` | Normal, Visual | Move down N lines;<br>When N is not given, it behaves the same as `gj` (set by LazyVim) | `<Up>` |
+| Down | N `j` | Normal, Visual | Move down N lines;<br>When N is not given, it behaves the same as `gj` (set by AstroVim) | `<Up>` |
 |  | N `gj` | Normal, Visual | Move down N **screen lines** | `<Up>` |
 |  | N `+` | Normal, Visual | Move down N lines, on the **first non-blank character** |  |
 |  | N `_` | Normal, Visual | Move down **N - 1** lines, on the **first non-blank character** |  |
-| Up | N `k` | Normal, Visual | Move up N lines;<br>When N is not given, it behaves the same as `gk` (set by LazyVim) | `<Down>` |
+| Up | N `k` | Normal, Visual | Move up N lines;<br>When N is not given, it behaves the same as `gk` (set by AstroVim) | `<Down>` |
 |  | N `gk` | Normal, Visual | Move up N **screen lines** |  |
 |  | N `-` | Normal, Visual | Move up N lines, on the **first non-blank character** |  |
 | Line | N `G` | Normal, Visual | Goto line N (Default: Last line),<br>on the **first non-blank character if `'startofline'` is enabled** |  |
@@ -142,7 +152,7 @@ Motions are the commands that help us navigate through the text. Most of them ar
 
 > [!Note]
 >
-> By default, LazyVim remaps `j` and `k` to `gj` and `gk` when N is not given (or `0`), which are more recommended for modern usage.
+> By default, AstroVim remaps `j` and `k` to `gj` and `gk` when N is not given (or `0`), which are more recommended for modern usage.
 >
 > Also, it's highly recommended to enable relative line numbers in Neovim for better line navigation experience.
 
@@ -173,10 +183,10 @@ In programming, brackets (including parentheses, (curly) braces & (square) brack
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| General | N `[*` | Normal, Visual | N times backward to the start of block comment |
+| Comment | N `[*` | Normal, Visual | N times backward to the start of block comment |
 |  | N `]*` | Normal, Visual | N times forward to the end of block comment |
-| Matched | `%` | Normal, Visual | Find the **next** parenthesis, brace, bracket, block comment opening or closing **in this line**, then goto its match |
-| Unclosed | N `]%` | Normal, Visual | N times forward to the **next unclosed** parenthesis, brace, bracket, block comment |
+| Matched Bracket | `%` | Normal, Visual | Find the **next** parenthesis, brace, bracket, block comment opening or closing **in this line**, then goto its match |
+| Unclosed Bracket | N `]%` | Normal, Visual | N times forward to the **next unclosed** parenthesis, brace, bracket, block comment |
 |  | N `[%` | Normal, Visual | N times backward to the **previous unclosed** parenthesis, brace, bracket, block comment |
 |  | N `])` | Normal, Visual | N times forward to unclosed `)` |
 |  | N `[(` | Normal, Visual | N times backward to unclosed `(` |
@@ -246,14 +256,20 @@ If you have a really long file and want to move to a specific character or word,
 | Repeat Search | N `n` | Normal, Visual | Repeat the last search N times |
 |  | N `N` | Normal, Visual | Repeat the last search N times in **opposite direction** |
 
-There are also some useful find & search motions for coding, which require additional lsp information, and setup by LazyVim:
+There are also some useful find & search motions for coding, which require additional lsp information setup by Neovim itself:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Goto definition | `gd` | Normal | Goto (type) definition of identifier under the cursor |
-|  | `gD` | Normal | Goto source definition of identifier under the cursor (Only JS / JSX / TS / TSX / Vue) |
-|  | `gI` | Normal | Goto implementation of identifier under the cursor |
-|  | `gr` | Normal | Goto references of identifier under the cursor |
+| LSP | `gd` | Normal | `vim.lsp.buf.definition()` |
+|  | `gri` | Normal | `vim.lsp.buf.implementation()` |
+|  | `grr` | Normal | `vim.lsp.buf.references()` |
+
+And belows are setup by AstroVim:
+
+| Group | Command | Mode | Description |
+| -- | -- | -- | -- |
+| LSP Symbols | `<leader>ls` | Normal | Search symbols |
+|  | `<leader>lS` | Normal | Symbols outline |
 
 #### Mark & Jump Motions
 
@@ -283,32 +299,47 @@ There are also some useful find & search motions for coding, which require addit
 |  | `zz` | Normal, Visual | Current line at center of window | `z.` |
 |  | `zb` | Normal, Visual | Current line at bottom of window | `z-` |
 
-### Window / Buffer & Tab
+### Window & Buffer
 
-In Neovim, the term "window" is the same as "buffer".
+#### Window
 
-#### Split Window / Buffer
-
-| Group | Command | Mode | Description |
-| -- | -- | -- | -- |
-| Window | `<leader>-` | Normal | Split the current window below (Set by LazyVim) |
-| Window | `<leader>\|` | Normal | Split the current window to the right (Set by LazyVim) |
-
-#### Switch Window / Buffer
+To create (split) windows:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Window | `<C-h>` | Normal | Move to the left window |
+| Split Window | `\` | Normal | Horizontal split current buffer (Set by AstroVim) |
+| | `\|` | Normal | Vertical split current buffer (Set by AstroVim) |
+| Split Window From Buffer | `<leader>b\` | Normal | Horizontal split buffer from tabline (Set by AstroVim) |
+| | `<leader>b\|` | Normal | Vertical split buffer from tabline (Set by AstroVim) |
+
+To navigate between windows:
+
+| Group | Command | Mode | Description |
+| -- | -- | -- | -- |
+| Navigate Window | `<C-h>` | Normal | Move to the left window |
 |  | `<C-j>` | Normal | Move to the window below |
 |  | `<C-k>` | Normal | Move to the window above |
 |  | `<C-l>` | Normal | Move to the right window |
 
-#### Switch Tab
+To close (quit) windows, you already know how to do: [Write & Quit](#write-quit)
+
+#### Buffer
+
+To create buffers, you just need to open a file.
+
+To navigate between buffers:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Tab | `H` | Normal | Move to the previous tab |
-|  | `L` | Normal | Move to the next tab |
+| Navigate Buffer | `[b` | Normal | Move to the previous buffer (Set by AstroVim) |
+|  | `]b` | Normal | Move to the next buffer (Set by AstroVim) |
+
+To close buffers:
+
+| Group | Command | Mode | Description |
+| -- | -- | -- | -- |
+| Close Buffer | `<leader>c` | Normal | Close buffer (Set by AstroVim) |
+|  | `<leader>C` | Normal | Force close buffer (Set by AstroVim) |
 
 ### Visual Select
 
@@ -339,7 +370,7 @@ In Neovim, the term "window" is the same as "buffer".
 | New line | N `o` | Normal | Open a new line below the current line, append text (N times) |  |
 |  | N `O` | Normal | Open a new line above the current line, insert text (N times) |  |
 
-Use `<Esc>` or `<C-[>` to exit insert mode and return to normal mode.
+Use `<Esc>` & `<C-[>` (Neovim built-in) or `jk` & `jj` (AstroVim specify) to exit insert mode and return to normal mode.
 
 > [!Note]
 >
@@ -367,6 +398,8 @@ Use `<Esc>` or `<C-[>` to exit insert mode and return to normal mode.
 | -- | -- | -- | -- | -- |
 | Character Delete | N `x` | Normal | Delete N characters under and after the cursor | `<Del>` |
 |  | N `X` | Normal | Delete N characters before the cursor |  |
+|  | N `s` | Normal | Delete N characters under and after the cursor, and enter insert mode |  |
+|  | N `S` | Normal | Delete N characters before the cursor, and enter insert mode |  |
 | General Delete | N `d{motion}` | Normal | Delete the text that is moved over with `{motion}` |  |
 |  | N `dd` | Normal | Delete N lines |  |
 |  | N `D` | Normal | Delete to the end of the line (and N-1 more lines) |  |
@@ -400,10 +433,8 @@ Use `<Esc>` or `<C-[>` to exit insert mode and return to normal mode.
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
 | Replace | N `r{char}` | Normal | Replace N characters with `{char}` |
-|  | N `gr{char}` | Normal | Replace N characters without affecting layout |
 |  | `r{char}` | Visual | Replace the each char of the selected text with `{char}` |
 | Replace mode | N `R` | Normal | Enter **replace mode** (Repeat the entered text N times) |
-|  | N `gR` | Normal | Enter **virtual replace mode** (Like replace mode, but without affecting layout) |
 | Change (Delete & enter insert mode) | N `c{motion}` | Normal | Change the text that is moved over with `{motion}` |
 |  | N `cc` | Normal | Change N lines |
 |  | N `C` | Normal | Change to the EOL (and N-1 more lines) |
@@ -428,7 +459,7 @@ Use `<Esc>` or `<C-[>` to exit insert mode and return to normal mode.
 | Format | N `={motion}` | Normal | Autoformat the lines that are moved over with `{motion}` |
 |  | N `==` | Normal | Autoformat N lines |
 | Comment | N `gc{motion}` | Normal | Comment the lines that are moved over with `{motion}` |
-|  | N `gcc` | Normal | Comment N lines |
+|  | N `<leader>/` | Normal | Comment N lines |
 
 #### Undo and Redo
 
@@ -479,7 +510,7 @@ In Neovim, you can start multi cursor from blockwise visual mode:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Terminal | N `<C-/>` | Normal, Terminal | Open a terminal N (it's number order) in root directory |
+| Terminal | N `<C-'>` | Normal, Terminal | Open a terminal N (it's number order) in root directory |
 
 ### Version Information
 

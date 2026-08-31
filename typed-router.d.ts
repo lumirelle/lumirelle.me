@@ -178,9 +178,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/manual-neovim-lazyvim': RouteRecordInfo<
-      '/posts/manual-neovim-lazyvim',
-      '/posts/manual-neovim-lazyvim',
+    '/posts/manual-neovim-astrovim': RouteRecordInfo<
+      '/posts/manual-neovim-astrovim',
+      '/posts/manual-neovim-astrovim',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -478,9 +478,9 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'pages/posts/manual-neovim-lazyvim.md': {
+    'pages/posts/manual-neovim-astrovim.md': {
       routes:
-        | '/posts/manual-neovim-lazyvim'
+        | '/posts/manual-neovim-astrovim'
       views:
         | never
       pathParamNames:

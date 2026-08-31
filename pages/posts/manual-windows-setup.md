@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-08-31T12:45+08:00
+update: 2026-08-31T14:06+08:00
 lang: en
-duration: 18min
+duration: 19min
 type: manual
 group: Computer
 order: 1
@@ -253,7 +253,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal | System bundled | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/7/10)... |
+| Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/8/31)...<br><br>What's more, I switch to preview version (v1.25+) for Kitty keyboard protocol support. |
 | Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Starship | `winget add Starship.Starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
 | Zoxide | `winget add ajeetdsouza.zoxide` | Fuzzy-match `cd`. |

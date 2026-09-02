@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-02T10:18+08:00
+update: 2026-09-02T12:16+08:00
 lang: en
-duration: 18min
+duration: 19min
 type: manual
 group: Computer
 order: 1
@@ -259,7 +259,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | Zoxide | `winget add ajeetdsouza.zoxide` | Fuzzy-match `cd`. |
 | Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
-| WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows. |
+| WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` flags to `gcc` & `g++` respectively. |
 | Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |

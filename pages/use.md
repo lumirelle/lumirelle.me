@@ -57,10 +57,9 @@ I'm really want to try MAC mini if I have chance in the future. ☺️
 - Product Icons:
   - [Material Product Icons for VS Code](https://github.com/material-extensions/vscode-material-product-icons)
 
-### Agent Applications
+### Harness (For LLM, Harness + LLM = Agent)
 
-- Agent Applications:
-  - [Pi Coding Agent](https://pi.dev) &ndash; Simple, fast, vibe-ready!
+- [Oh My Pi](https://omp.sh/) &ndash; Simple, fast, vibe-ready!
 
 ### Browser
 

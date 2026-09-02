@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-02T12:16+08:00
+update: 2026-09-02T13:45+08:00
 lang: en
 duration: 19min
 type: manual
@@ -281,7 +281,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | Zed | `winget add ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
 | Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
 | Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
-| RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>_1. [Browser Bookmarks](raycast://extensions/raycast/browser-bookmarks?source=webstore)_;<br>_2. [Hacker News](raycast://extensions/thomas/hacker-news?source=webstore)_;<br>_3. [GitHub](raycast://extensions/raycast/github?source=webstore)_;<br>_4. [Git Repos](raycast://extensions/moored/git-repos?source=webstore)_;<br>_5. [Search npm Packages](raycast://extensions/mrmartineau/search-npm?source=webstore) (npm)_;<br>_6. [Can I Use](raycast://extensions/thomaslombart/can-i-use?source=webstore)_;<br>_7. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)_;<br><br>_8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)_;<br>_9. [Random Data Generator](raycast://extensions/loris/random?source=webstore)_;<br>_10. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)_;<br>_11. [Format JSON](raycast://extensions/destiner/json-format?source=webstore)_;<br>_12. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)_<br><br>_13. [Raycast Explorer](raycast://extensions/raycast/raycast-explorer?source=webstore)_. </details> |
+| RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>1. [Google Translate](raycast://extensions/gebeto/translate?source=webstore)<br>2. [Universal Website Search](raycast://extensions/pernielsentikaer/any-website-search?source=webstore)<br>3. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)<br>4. [Kaomoji Search](raycast://extensions/yalishanda/kaomoji-search?source=webstore)<br><br>5. [Port Manager](raycast://extensions/lucaschultz/port-manager?source=webstore)<br><br>6. [Random Data Generator](raycast://extensions/loris/random?source=webstore)<br>7. [Placeholder](raycast://extensions/koinzhang/placeholder?source=webstore)<br>8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)<br>8. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)<br>9. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)<br>10. [ray.so](raycast://extensions/garrett/ray-so?source=webstore)</details> |
 | PixPin | `winget add PixPin.PixPin` | Screen capture.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disable the built-in Windows screenshot feature "Use the Print screen key to open screen capture". |
 | OBS Studio | `winget add OBSProject.OBSStudio` | / |
 | Thunderbird | `winget add Mozilla.Thunderbird` | Email manager. |

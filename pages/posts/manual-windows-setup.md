@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-02T13:45+08:00
+update: 2026-09-05T11:35+08:00
 lang: en
 duration: 19min
 type: manual
@@ -379,6 +379,7 @@ Below softwares are prerequisite softwares for WSL use:
 | Unzip | `sudo pacman -S unzip` | / |
 | Wget | `sudo pacman -S wget` | / |
 | OpenSSH | `sudo pacman -S openssh` | / |
+| Less | `sudo pacman -S less` | / |
 | Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
 | Fontconfig | `sudo pacman -S fontconfig` | / |
 | (Optional) Noto Fonts CJK | `sudo pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
@@ -446,7 +447,25 @@ Below softwares are highly recommended and helpful for the development use with 
 | Herdr | `yay -S herdr-bin` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
 | (Optional) Chromium | `sudo pacman -S chromium` | If you choose Arch distribution and need to run PlayWright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu distribution, as a workaround, we can install PlayWright dependencies via installing Chromium. |
 
-## Forth Step: Maintain System
+## Forth Step: Local LLM
+
+If you want to try local LLM on your Windows computer just like me, I highly recommended you to try WSL + llama.cpp:
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| llama.cpp | `sudo pacman -S llama-cpp` | / |
+| ggml-cuda | `sudo pacman -S ggml-cuda` | If you are using Nvidia GPU. |
+| ggml-vulkan & vulkan-dzn | `sudo pacman -S ggml-vulkan vulkan-dzn` | If you are using AMD GPU. |
+
+And then you can deploy your local LLM via below commands:
+
+```nu
+llama-server -hf {{model-name}}:{{model-version}} ... {{additional-args}}
+```
+
+You can customize your own model & args, or just refer to my personal use [llm star-up scripts](https://github.com/lumirelle/llm).
+
+## Fifth Step: Maintain System
 
 ### Windows
 

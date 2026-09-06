@@ -16,6 +16,7 @@ local eslint_support_filetypes = {
   "javascriptreact",
   "typescript",
   "typescriptreact",
+  "vue",
   -- Configurations
   "json",
   "jsonc",

@@ -19,7 +19,6 @@ local linters = new Mapping<String, Step> {
         "*.cts",
         "*.tsx",
         "*.vue",
-        "*.css",
         // Configurations
         "*.json",
         "*.jsonc",

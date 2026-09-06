@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-05T11:35+08:00
+update: 2026-09-06T15:01+08:00
 lang: en
 duration: 19min
 type: manual
@@ -262,6 +262,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` flags to `gcc` & `g++` respectively. |
 | Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
+| Apple PKL LSP | `wget https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -O ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
 | Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Oh My Pi | `winget add can1357.oh-my-pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
 | Herdr | `winget add Herdr.Herdr.Preview` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
@@ -442,6 +443,7 @@ Below softwares are highly recommended and helpful for the development use with 
 | Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
+| Apple PKL LSP | `wget https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -O ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
 | Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Oh My Pi | `yay -S oh-my-pi-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
 | Herdr | `yay -S herdr-bin` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |

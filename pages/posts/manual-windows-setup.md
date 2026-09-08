@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-14T14:34+08:00
+update: 2026-09-14T23:00+08:00
 lang: en
 duration: 19min
 type: manual
@@ -32,31 +32,33 @@ order: 1
 >
 > Please never reinstall Windows when you don’t have time. You certainly don't want your girlfriend to make you spend the night with your computer, right?
 
-I know Windows is the best OS for us to play games, but the worst OS to develop.
+I know Windows is the best OS for us to play games on, but the worst OS to develop on.
 
-But if we have no choice, the only one thing we can do is trying our best to make Windows being better for our development. 🥰
+But if we have no choice, the only thing we can do is to try our best to make Windows better for our development. 🥰
 
 ## First Step: Reinstall a Clean Windows
 
-The only way to make everything clean and fresh in Windows is to reinstall it.
+The only way to get a clean Windows experience is to reinstall it.
 
-We can use [_Ventoy_](https://www.ventoy.net/en/download.html) with a _Windows ISO file_ to make a _bootable USB drive_ to reinstall Windows. This allows us to decide which edition & version of Windows to use.
+We can use [_Ventoy_](https://www.ventoy.net/en/download.html) and a _Windows operating system image file (ISO)_ to make a _bootable USB drive_ and reinstall Windows. This way, we can freely choose the operating system edition we want (Home, Education, Pro, etc.).
 
 ### Install & Setup Ventoy
 
 First, insert your USB flash driver.
 
-If you want to store some additional files into that USB flash driver, like the necessary softwares (like [_Clash Verge Rev_](#prerequisite-software)), you can separate this driver into two partitions, but **make sure you really remember that which partition stores Ventoy**: When you enter the BIOS, you will be asked to select the right one to start up Ventoy.
+If you want to store some extra files on your USB flash driver, such as essential softwares (like [_Clash Verge Rev_](#prerequisite-software)), you can divide the driver into two partitions.
 
-Finally, just follow the [Ventoy's official installation guide](https://www.ventoy.net/en/doc_start.html) to complete the installation of Ventoy into your USB flash driver.
+Partitioning will not affect Ventoy's ability to find the image files, but **remember which partition you installed Ventoy itself on**. When botting the installer via BIOS, you need to select the correct partition.
+
+Finally, just follow the [Ventoy's official installation guide](https://www.ventoy.net/en/doc_start.html) to complete the remaining installation and setup steps.
 
 ### Download Windows ISO
 
 > [!Note]
 >
-> I only list the links for Windows 11, because I only use Windows 11 now.
+> I've only listed the links of Windows 11 image, because I'm currently using Windows 11 exclusively.
 >
-> If you want to use back Windows 10 / 7 / etc., you can also try to find them from [Microsoft official website](https://www.microsoft.com/en-us/software-download/) or [Mass Grave](https://massgrave.dev/) by yourself.
+> If you want to switch back to Windows 10 / 7 / etc., you can find the image links yourself from [Microsoft official website](https://www.microsoft.com/en-us/software-download/) or [Mass Grave](https://massgrave.dev/).
 
 For developers, it's recommended to use the latest **professional edition** of Windows.
 
@@ -72,25 +74,25 @@ To download Windows ISO:
 
 ### Make a Bootable USB Drive
 
-Just move the downloaded Windows ISO file to the USB flash drive.
+Just put the downloaded Windows ISO file onto the USB flash drive.
 
-It's doesn't matter which partition you put it in, Ventoy can handle it.
+It's doesn't matter which partition you put it on, Ventoy can handle it.
 
 ### Reinstall Windows
 
-First, restart your computer and enter _BIOS_. Just quickly and non-stop clicking on the appropriate key before the startup logo shows up, until you see the BIOS menu. The key depends on your _motherboard / computer model_, and usually is one of `ESC` / `F11` / `F12` / `Delete`.
+First, restart your computer and enter _BIOS_: You should quickly and non-stop clicking on the appropriate key before the startup logo shows up, until you see the BIOS menu. The actually key depends on your _motherboard / computer model_, and usually be one of `ESC` / `F11` / `F12` / `Delete`.
 
-Next, start the reinstallation process with the steps below:
+Next, prepare for the reinstallation process with below steps:
 
-1. Choose your USB flash drive (**with the right partition** where Ventoy is installed if there are more than one) in the boot menu;
-2. If you see the **"Security Violation"** error first time you boot from it, don't worry, it's contrallable. Please refer to [Ventoy guides](https://www.ventoy.net/en/doc_secure.html) to enroll the Ventoy's secure boot key to solve this problem;
-3. After Ventoy starts up, just choose the Windows ISO to start the reinstallation process.
+1. Choose your USB flash drive (**with the right partition** where Ventoy is installed if there are more than one) in the boot menu.
+2. If you see the **"Security Violation"** error, don't worry, it's contrallable. Please refer to [Ventoy guides](https://www.ventoy.net/en/doc_secure.html) to enroll the Ventoy's secure boot key to solve this problem.
+3. After you entering Ventoy GUI, choose your Windows ISO file to start the reinstallation process.
 
 Then, customize your Windows installation options and wait for the process to complete.
 
-For my own case, I prefer to use **Windows 11 Professional Edition (without "N" flag)**, and **create one and only one partition for each disk device**. Different pepole may have different preferences, I prefer them because: Professional edition has more out of box presets for developers & players, and for modern systems, make multiple partitions on one disk is really no reason and no benefit.
+For my own case, I prefer to use **Windows 11 Professional Edition (without "N" flag)**, and **create only one partition for each disk device**. Different pepole may have different preferences, I prefer them because: Professional edition has the most presets out of box for developers & players, and for modern systems, creating multiple partitions on one disk device is really no benefit.
 
-What's more, for a cleaner Windows username, I prefer to **use local account** to setup Windows, instead of Microsoft account, which allows us to have a custom username. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, when you are stucking on the login page of Microsoft account:
+What's more, in order to get a "clean & customized" username on Windows, please **use local account** to setup Windows instead of Microsoft account, which helps you get rid of the urgly numeric username generated from your email of Microsoft account. Just press `Shift+F10` to open command prompt, and run the command below to create a local account on the pop-up window, when you are stucking on the login page of Microsoft account:
 
 ```cmd
 start ms-cxh:localonly
@@ -98,11 +100,11 @@ start ms-cxh:localonly
 
 > [!Caution]
 >
-> My advice is not to use _OOBE_ to bypass Microsoft account login, especially the **online updates**, because you may forget to or even not to apply the necessary security updates any more after reinstalling, which may cause this fresh installed Windows to go wrong: Maybe some of drivers will be broken, or some of core system components will be broken, etc.
+> My advice is not to use _OOBE_ to bypass Microsoft account login instead of **use local account**, it will also bypass the **online updates**, and you may forget or even not to apply the necessary security updates after the reinstallation, which may cause the fresh installed Windows to go wrong: Maybe some of drivers will be broken, or some of core system components will be broken, etc.
 >
 > It's a lesson in blood and tears...
 >
-> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, because it will download not only the necessary components, but also some useless ones. Don't worry, we will entirely remove them later.
+> Of course, the online update of Windows is very slow, basically takes 1 ~ 2 hours, because it will download not only the necessary components, but also some useless ones. Don't worry and just be patient, we will entirely remove them later.
 >
 > Believe me, all these choices are for best stability and cleaness of the system. 🥺
 
@@ -110,24 +112,24 @@ start ms-cxh:localonly
 
 ### Prerequisite Software
 
-(Optional) If your area has some **"mysterious"** network restrictions, you should prepare a proxy software before all of below steps:
+(Optional) If the area you live in has some **"mysterious"** network restrictions, you may need to prepare a proxy software before any other network-aware step:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Clash Verge Rev | Download from [GitHub Release](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) into your USB flash driver.<br><br>You'd better prepare it before reinstallation. | <TextTag text="Chezmoi-ed" /> Network proxy manager. |
+| Clash Verge Rev | Download from [GitHub Release Page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash driver.<br><br>You'd better prepare it before the reinstallation. | <TextTag text="Chezmoi-ed" /> Network proxy manager. |
 
 ### Configure Windows Itself
 
 #### Replace Windows Defender
 
-I hate _Windows Defender_, because it's too often to be a false positive, deleting my software...
+I hate _Windows Defender_, because it's too often to be a false positive and deleting my software in accident...
 
 First, we need to disable it entirely:
 
-1. Opening ["Virus & threat protection settings"](windowsdefender://threatsettings/), turn off all switches to close all of anti-virus features of Windows Defender;
+1. Opening ["Virus & threat protection settings"](windowsdefender://threatsettings/), turn off all switches to close all of anti-virus features of Windows Defender.
 2. Use [_Defender Control v2.1_](https://www.sordum.org/9480/defender-control-v2-1/) to entirely disable Windows Defender (backend services, etc.).
 
-Next, we can choose a quieter anti-virus software instead. I recommend [_Huorong_](https://www.huorong.cn/person), which is much quieter and non-invasive.
+Optionally, we can choose a quieter anti-virus software instead. I recommend [_Huorong_](https://www.huorong.cn/person), which is much quieter and non-invasive.
 
 | Software | Source/Install Command |
 | -- | -- |
@@ -139,7 +141,7 @@ Next, we can choose a quieter anti-virus software instead. I recommend [_Huorong
 
 #### Adjust System Settings
 
-First, adjust system settings with _Winutil_:
+First, adjust system settings via _Winutil_:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
@@ -151,18 +153,18 @@ First, adjust system settings with _Winutil_:
 | -- | -- |
 | HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
 
-(Optional) Next, [update the OS](ms-settings:windowsupdate), [login Microsoft Account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
+(Optional) Next, [update the OS to latest](ms-settings:windowsupdate), [login Microsoft Account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
 
 Finally, enable Windows system built-in `sudo` support and select `inline` running method in "Terminal" section from settings [System > Advanced](ms-settings:developers).
 
 ### Setup Softwares
 
 > [!Note]
-> Don't forget to restart your computer to make these softwares work properly after the end of this step!
+> Don't forget to restart your computer to make softwares metioned below work properly after the end of this step!
 
 #### Learn How to Use WinGet
 
-I highly recommend you to use [WinGet](https://learn.microsoft.com/windows/package-manager/winget/) to manage your softwares, it is the official Windows package manager, and helps you to avoid fake & malicious softwares.
+I highly recommend you to use [WinGet](https://learn.microsoft.com/windows/package-manager/winget/) to manage your softwares on Windows, it is the official Windows package manager, and helps you to avoid fake & malicious softwares.
 
 > [!Note]
 > `{{xxx}}` means a placeholder, `xxx` is the description text.
@@ -188,7 +190,7 @@ Add package (Machine scope, **not recommended**, requires admin privileges):
 
 ```nu
 # Windows system built-in `sudo`
-sudo winget add {{query}}
+sudo winget add {{query}} --scope machine
 ```
 
 Add package to specific location:
@@ -247,24 +249,24 @@ winget {{command}} -?
 
 #### Recommended Softwares
 
-Below softwares are highly recommended and helpful for Windows, you can install them **in order and as your need**.
+Below softwares are highly recommended and helpful for daily use and development, you can install them **in order and as your need**.
 
 ##### Terminal User Interface (TUI)
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/8/31)...<br><br>What's more, I switch to preview version (v1.25+) for Kitty keyboard protocol support. |
+| Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/8/31)...<br><br>What's more, I switch to preview version (v1.25+) for Kitty keyboard protocol & image display support. |
 | Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
 | WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` flags to `gcc` & `g++` respectively. |
 | Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
-| Apple PKL LSP | `curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
+| Apple PKL LSP | `mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
 | Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Pi Coding Agent | `winget add EarendilWorks.pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
 | Herdr | `winget add Herdr.Herdr.Preview` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
-| Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-wsl-environment). |
+| Windows Subsystem for Linux | `wsl --install` or `wsl --update` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-wsl-environment). |
 
 ##### Graphic User Interface (GUI)
 
@@ -276,8 +278,8 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | Nutstore | `winget add Nutstore.Nutstore` | WebDav.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you are facing the problem of clashing right after you openning Nutstore, it's recommended to restart you application or trigger the update of Nutstore.** |
 | KeePassXC | `winget add KeePassXCTeam.KeePassXC` | Password manager, you can replace with your preferred one. |
 | Internet Download Manager | `winget add Tonec.InternetDownloadManager` | Download manager, for better download experience.<br><br>**It also installs browser extension to handle the browser downloading!** |
-| Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
 | Zed | `winget add ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
+| Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not IDE, it's just a text editor!<br>... |
 | Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
 | Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Container is comming soon, may be we don't need this in the future?** |
 | RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>1. [Google Translate](raycast://extensions/gebeto/translate?source=webstore)<br>2. [Universal Website Search](raycast://extensions/pernielsentikaer/any-website-search?source=webstore)<br>3. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)<br>4. [Kaomoji Search](raycast://extensions/yalishanda/kaomoji-search?source=webstore)<br><br>5. [Port Manager](raycast://extensions/lucaschultz/port-manager?source=webstore)<br><br>6. [Random Data Generator](raycast://extensions/loris/random?source=webstore)<br>7. [Placeholder](raycast://extensions/koinzhang/placeholder?source=webstore)<br>8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)<br>8. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)<br>9. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)<br>10. [ray.so](raycast://extensions/garrett/ray-so?source=webstore)</details> |
@@ -345,7 +347,7 @@ To customize font-family of Firefox Devtools, you can refer to my [GitHub gist](
 
 #### Uninstall Unnecessary Softwares
 
-Use _Revo Uninstaller_ to uninstall all the software you don't like!
+Use _Revo Uninstaller_ to uninstall all the softwares you don't like!
 
 In particular, **"Windows Programs"** tab let you can completely uninstall system bundled softwares!
 
@@ -371,7 +373,7 @@ wsl --install Debain --location {{install_location_you_prefer}}
 > [!Note]
 > Below commands use _Arch_ distribution & it's package manager `pacman` as examples.
 
-Below softwares are prerequisite softwares for WSL use:
+Below softwares are prerequisite softwares for WSL daily use & development:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
@@ -429,7 +431,7 @@ su - {{username}}
 > [!Note]
 > Below commands use _Arch_ distribution & it's package manager `pacman` as examples.
 
-Below softwares are highly recommended and helpful for the development use with Linux, you should install them **in order** as you need:
+Below softwares are highly recommended and helpful for the development use with Linux, you may want to install them **in order as you need**:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
@@ -439,7 +441,7 @@ Below softwares are highly recommended and helpful for the development use with 
 | Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
-| Apple PKL LSP | `curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
+| Apple PKL LSP | `mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
 | Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
 | Pi Coding Agent | `yay -S pi-coding-agent-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
 | Herdr | `yay -S herdr-bin` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
@@ -455,13 +457,13 @@ If you want to try local LLM on your Windows computer just like me, I highly rec
 | ggml-cuda | `sudo pacman -S ggml-cuda` | If you are using Nvidia GPU. |
 | ggml-vulkan & vulkan-dzn | `sudo pacman -S ggml-vulkan vulkan-dzn` | If you are using AMD GPU. |
 
-And then you can deploy your local LLM via below commands:
+And then you can deploy your local LLM via below command:
 
 ```nu
 llama-server -hf {{model-name}}:{{model-version}} ... {{additional-args}}
 ```
 
-You can customize your own model & args, or just refer to my personal use [llm star-up scripts](https://github.com/lumirelle/llm).
+You can customize your own model & args, or just refer to my personal use [llm start-up scripts](https://github.com/lumirelle/llm).
 
 ## Fifth Step: Maintain System
 
@@ -479,9 +481,9 @@ Programs should under:
   - Portable
     - `<DRIVER>:/Program Files Portable/`
 
-Use Revo Uninstaller clean useless software at regular intervals.
+Use Revo Uninstaller clean up useless softwares at regular intervals.
 
-Use DISM++ clean system at regular intervals.
+Use DISM++ clean up the system at regular intervals.
 
 Shut down and restart at regular intervals.
 
@@ -490,36 +492,37 @@ Shut down and restart at regular intervals.
 Projects should under:
 
 - `~/my/`: My projects:
-  - `~/my/infra/`: My infrastructure projects;
-  - `~/my/demo/`: My demo projects;
-  - `~/my/prod/`: My production projects;
-  - `~/my/contrib/`: Open source projects I contribute to;
-  - `~/my/docs/`: My docs;
+  - `~/my/infra/`: My infrastructure projects.
+  - `~/my/learning`: My learning records.
+  - `~/my/demo/`: My demo projects.
+  - `~/my/prod/`: My production projects.
+  - `~/my/contrib/`: Open source projects I contribute to.
+  - `~/my/llm`: My llm related projects.
   - ...
-- `~/workon/`: Projects I work on;
+- `~/workon/`: Projects I work on.
   - ...
 
 > [!Caution]
 >
-> Use a symlink to link the projects folder is a bad behavior, it can cause problems when some devtools are resolving the project path.
+> Use a symlink to link the project folder in other place is a bad behavior, it can cause problems when some devtools are resolving the project path.
 
 ## Optional Step: Without WSL-based Development Environment
 
-If you prefer to use Windows itself as your development environment, or you are not allowed to use WSL for some reasons,you can follow the steps below to setup your development environment.
+If you prefer to use Windows itself as your development environment, or you are not allowed to use WSL for some reasons, you can follow the steps below to setup your development environment.
 
 ### Disable App Execution Aliases
 
 Some versions of Windows have a feature called "App Execution Aliases", which is enabled by default.
 
-With this feature enabled, Windows will automatically create a stub executable in `~/AppData/Local/Microsoft/WindowsApps/`, like `python.exe`, even you have not installed the corresponding application.
+With this feature enabled, Windows will automatically create a stub executable under `~/AppData/Local/Microsoft/WindowsApps/`, like `python.exe`, even you have not installed the corresponding application.
 
-What's more, the Windows app path `~/AppData/Local/Microsoft/WindowsApps/` is placed in the very front of the system environment variable `Path` by default, which means that if you install Python not via that stub executable, but via your preferred way, the system will still execute the stub executable instead of the real one, which is really annoying.
+What's more, the Windows app path `~/AppData/Local/Microsoft/WindowsApps/` is placed in the very front of the system environment variable `Path` by default, which means that if you are installing _Python_ via your customized way (such as `winget add`, or installer from official website), the system will still resovle `python` to the stub executable instead of yours, which is really annoying.
 
-Before disabling this feature, let's say together: **"Fuck you, Windows!"**
+Before disabling this feature, let's say: **"Fuck you, Windows! Fuck you, Microsoft!"**
 
-To disable this feature for Python:
+To disable this "feature" (Yes, this is a real "feature" XD):
 
-1. Open "Settings > Apps > Advanced app settings > App execution aliases";
+1. Open "Settings > Apps > Advanced app settings > App execution aliases".
 2. Find "App Installer (python.exe)" & "App Installer (python3.exe)", and turn off the switch.
 
 The same for other applications.

@@ -30,7 +30,7 @@ order: 1
 
 > [!Caution]
 >
-> Please never to reinstall Windows when you don’t have time. You certainly don't want your girlfriend to let you spend the night with your computer, right?
+> Please never reinstall Windows when you don’t have time. You certainly don't want your girlfriend to make you spend the night with your computer, right?
 
 I know Windows is the best OS for us to play games, but the worst OS to develop.
 

@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-06T15:01+08:00
+update: 2026-09-09T17:59+08:00
 lang: en
 duration: 19min
 type: manual
@@ -255,8 +255,6 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | -- | -- | -- |
 | Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only one choice for Windows until now (2026/8/31)...<br><br>What's more, I switch to preview version (v1.25+) for Kitty keyboard protocol support. |
 | Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Starship | `winget add Starship.Starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
-| Zoxide | `winget add ajeetdsouza.zoxide` | Fuzzy-match `cd`. |
 | Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
 | WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` flags to `gcc` & `g++` respectively. |
@@ -264,7 +262,7 @@ Below softwares are highly recommended and helpful for Windows, you can install 
 | Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Apple PKL LSP | `wget https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -O ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
 | Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Oh My Pi | `winget add can1357.oh-my-pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
+| Pi Coding Agent | `winget add EarendilWorks.pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
 | Herdr | `winget add Herdr.Herdr.Preview` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
 | Windows Subsystem for Linux | `wsl --install` | Best Linux distribution in the world, best development environment for Windows. 🥰<br><br>Requires reboot after installation.<br><br>See WSL setup [here](#third-step-setup-wsl-environment). |
 
@@ -437,15 +435,13 @@ Below softwares are highly recommended and helpful for the development use with 
 | -- | -- | -- |
 | Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from AUR instead of Arch official pacman registry. |
 | Nushell | `sudo pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Starship | `sudo pacman -S starship` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell prompt powered by Rust too. |
-| Zoxide | `sudo pacman -S zoxide` | Fuzzy-match `cd`. |
 | Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
 | Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important that _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells who may be called by other softwares are still recommended to be install globally) & project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Apple PKL LSP | `wget https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -O ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
 | Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Oh My Pi | `yay -S oh-my-pi-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
+| Pi Coding Agent | `yay -S pi-coding-agent-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
 | Herdr | `yay -S herdr-bin` | <TextTag text="Chezmoi-ed" text-xs /> Terminal mutiplexer. |
 | (Optional) Chromium | `sudo pacman -S chromium` | If you choose Arch distribution and need to run PlayWright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu distribution, as a workaround, we can install PlayWright dependencies via installing Chromium. |
 

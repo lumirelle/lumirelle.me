@@ -17,10 +17,10 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       fonts: {
         // Standards
-        'serif': 'Merriweather',
+        'serif': 'Space Grotesk',
         'sans': 'Inter Tight',
         'mono': {
-          name: '"Go Mono"',
+          name: '"0xProto"',
           provider: 'none',
         },
         // Strict 62.5%em Group

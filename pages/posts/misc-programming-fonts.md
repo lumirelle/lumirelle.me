@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts
 date: 2025-10-15T14:10+08:00
-update: 2026-06-14T18:54+08:00
+update: 2026-09-14T14:26+08:00
 lang: en
 duration: 15min
 ---
@@ -12,8 +12,8 @@ duration: 15min
 > Current status (2026-08-24T17:41+08:00):
 > ```json
 > {
->   "UI": "'Merriweather 18pt', 'Resource Han Rounded SC', serif",
->   "code": "'Symbols Nerd Font', 'Go Mono', 'Maple Mono CN', monospace"
+>   "UI": "'Space Grotesk', 'Resource Han Rounded SC', serif",
+>   "code": "'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
 > }
 > ```
 

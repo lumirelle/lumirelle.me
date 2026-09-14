@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-14T09:50+08:00
+update: 2026-09-14T14:34+08:00
 lang: en
 duration: 19min
 type: manual
@@ -336,7 +336,7 @@ I also like to customize the default browser fonts:
 
 1. Go to [about:preferences#accessibility](about:preferences#accessibility).
 2. Click "Advanced settings".
-3. Fonts for "Latin", I prefer "Fraunces 9pt" (A serif font) as both Serif & Sans-serif font, "Annotation Mono" as Monospace font.
+3. Fonts for "Latin", I prefer "Space Grotesk" (A serif font) as both Serif & Sans-serif font, "Annotation Mono" as Monospace font.
 4. Fonts for "Simplified Chinese", I prefer "Resource Han Rounded SC" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
 5. Fonts for "Traditional Chinese (Taiwan)", I prefer "Resource Han Rounded TW" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.
 6. Fonts for "Traditional Chinese (Hong Kong)", I prefer "Resource Han Rounded HK" (A Sans-serif font) as both Serif & Sans-serif font, "Maple Mono WR CN" as Monospace font.

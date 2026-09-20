@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-20T10:55+08:00
+update: 2026-09-20T11:26+08:00
 lang: en
-duration: 20min
+duration: 21min
 type: manual
 group: Computer
 order: 1
@@ -77,6 +77,24 @@ To download a Windows ISO:
 Just put the downloaded Windows ISO file onto the USB flash drive.
 
 It doesn't matter which partition you put it on; Ventoy can handle it.
+
+### Before You Wipe
+
+My preference is simple: **I wipe every disk on reinstall and keep nothing from the old system**. If there is something I need, I export it to the USB flash drive that carries Ventoy (see above) before I start.
+
+Know what that costs you:
+
+- Once wiped, the old data is gone for good — no tool or recovery service will reliably bring it back.
+- The old system is very likely encrypted, because Windows turns on **Device Encryption** (BitLocker) by default on modern machines, and the recovery key is kept in the Microsoft account that the *old* installation signed in with. Wiping the system drive does not touch other disks encrypted the same way, so if you have any, keep that account reachable.
+
+> [!Caution]
+>
+> Check this **before** you wipe, not after: if you own another encrypted disk or an old backup, make sure you can still sign in to the Microsoft account it was registered with.
+
+References:
+
+- [Device Encryption in Windows](https://support.microsoft.com/en-us/windows/security/encryption/device-encryption-in-windows)
+- [Find your BitLocker recovery key](https://account.microsoft.com/devices/recoverykey)
 
 ### Reinstall Windows
 
@@ -152,6 +170,10 @@ First, adjust system settings via _Winutil_:
 | Software | Source/Install Command |
 | -- | -- |
 | HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
+
+> [!Note]
+>
+> Tools like _HEU KMS Activator_ bypass Windows licensing: using them may violate the Microsoft Software License Terms, and they are commonly flagged as malware by security vendors. Keep in mind that you just disabled _Windows Defender_ in the previous step, so run them only if you understand where they come from and accept the risk.
 
 (Optional) Next, [update the OS to the latest version](ms-settings:windowsupdate), [sign in to your Microsoft account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
 
@@ -255,7 +277,7 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only choice for Windows so far (2026/8/31)...<br><br>What's more, I switched to the preview version (v1.25+) for Kitty keyboard protocol and image display support. |
+| Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only choice for Windows so far (2026/8/31)...<br><br>What's more, I switched to the preview version (v1.25+) for Kitty keyboard protocol support. |
 | Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
 | Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
@@ -338,7 +360,7 @@ I also like to customize the default browser fonts:
 
 1. Go to [about:preferences#accessibility](about:preferences#accessibility).
 2. Click "Advanced settings".
-3. For "Latin" fonts, I prefer "Space Grotesk" (a serif font) as both the serif and sans-serif font, and "Annotation Mono" as the monospace font.
+3. For "Latin" fonts, I prefer "Space Grotesk" (a sans-serif font) as both the serif and sans-serif font, and "Annotation Mono" as the monospace font.
 4. For "Simplified Chinese" fonts, I prefer "Resource Han Rounded SC" (a sans-serif font) as both the serif and sans-serif font, and "Maple Mono WR CN" as the monospace font.
 5. For "Traditional Chinese (Taiwan)" fonts, I prefer "Resource Han Rounded TW" (a sans-serif font) as both the serif and sans-serif font, and "Maple Mono WR CN" as the monospace font.
 6. For "Traditional Chinese (Hong Kong)" fonts, I prefer "Resource Han Rounded HK" (a sans-serif font) as both the serif and sans-serif font, and "Maple Mono WR CN" as the monospace font.

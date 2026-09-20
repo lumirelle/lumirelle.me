@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-09-01T00:51+08:00
+update: 2026-09-20T12:15+08:00
 lang: en
 duration: 15min
 type: note
@@ -24,21 +24,21 @@ type: note
 </style>
 
 
-## Why Good Code Organization Is Necessary?
+## Why Is Good Code Organization Necessary?
 
-The only reason is **making the code readable and maintainable**.
+The only reason is to **make the code readable and maintainable**.
 
-As a developer, the time you spend with code is much more than the time you spend with your girl! To save this time to stay with your family more often, we need code has good readability and maintainability.
+As a developer, you spend far more time with code than with your girlfriend! So that you can spend more of that time with your family, we need code to be readable and maintainable.
 
 ## How to Organize Code?
 
-This is a long topic. For different programming languages with different grammar, there are even different rules and best practices. But anyway, this article does not try to cover all situations, just pick some general basic principles and best practices. Based on these principles and best practices, you can easily extend to other specific situations.
+This is a long topic. Different programming languages have different grammars, and therefore different rules and best practices. But anyway, this article does not try to cover every situation; it just picks some general basic principles and best practices. Based on these, you can easily extend them to other specific situations.
 
 ### Per File, Per Focus
 
-Human brain can only hold a limited amount of information at the same time, if we have more than one focus in a file, it may break our focus and do harm to our judgement.
+The human brain can only hold a limited amount of information at a time. If we have more than one focus in a file, it may break our concentration and harm our judgement.
 
-All of below examples work, but the good example has much better readability and maintainability.
+All of the examples below work, but the good example has much better readability and maintainability.
 
 <table><tbody>
 
@@ -150,14 +150,14 @@ const TABLE_COLUMNS = [
 
 </tbody></table>
 
-There is a general order of thought for identifying the different focuses:
+There is a general order of thought for identifying different focuses:
 
-1. Module. Code for launch a Playwright instance and code fore orchestrate automation tasks are obviously not part of the same module.
-2. Content nature. Global constants code and test cases code are obviously not the same.
+1. Module. Code for launching a Playwright instance and code for orchestrating automation tasks are obviously not part of the same module.
+2. Nature of the content. Global constant code and test case code are obviously not the same thing.
 
-### Leave Structure in Focus, Hide Implementation in Details
+### Keep Structure in Focus, Hide Implementation Details
 
-In order to let the reader understand our code easily, we'd better leave only the structure in focus, and hide the implementation in details.
+To help the reader understand our code easily, we'd better leave only the structure in focus and hide the implementation details.
 
 <table><tbody>
 
@@ -259,9 +259,9 @@ export function main() {
 
 ### Focus Above, Details Below
 
-Put the focus on the top, so that we can quickly understand the main logic of the code. If we are interested in the details, we can read from top to bottom, which fit with human reading habits well.
+Put the focus at the top so that we can quickly understand the main logic of the code. If we are interested in the details, we can read from top to bottom, which fits human reading habits well.
 
-All of below examples work, but the good example has much better readability and maintainability.
+All of the examples below work, but the good example has much better readability and maintainability.
 
 <table><tbody>
 
@@ -379,16 +379,16 @@ function createContext() {
 
 ### Special First, General Last
 
-There is a common classic pattern you may already know: Guard clause.
+There is a classic pattern you may already know: the guard clause.
 
-The key point of guard clause is: Achieve early return via conditional inversion.
+The key point of the guard clause is to achieve an early return via conditional inversion.
 
 ```ts
 function buyTickets(id: string, amount: number, options: any): void {
   // TODO(Lumirelle): Should we use function instead of objects for better tree-shaking in any cases?
   const ticketRepo = new TicketRepository()
 
-  // Early return with an error via inversing condition `ticketRepo.has(id)` to `!ticketRepo.has(id)`
+  // Early return with an error by inverting the condition `ticketRepo.has(id)` to `!ticketRepo.has(id)`
   if (!ticketRepo.has(id)) {
     throw new Error(`The ticket with ID "${id}" does not exist!`)
   }
@@ -397,8 +397,8 @@ function buyTickets(id: string, amount: number, options: any): void {
   const userInfo = userRepo.getInfo()
 
   if (userInfo.balance < amount) {
-    throw new Error(`Your current balance does not enough to buy this ticket!
-You still need to recharge by ${userInfo.balance - amount}$.`)
+    throw new Error(`Your current balance is not enough to buy this ticket!
+You still need to top up by ${amount - userInfo.balance}$.`)
   }
 
   // ...
@@ -407,23 +407,23 @@ You still need to recharge by ${userInfo.balance - amount}$.`)
 }
 ```
 
-It hoist all of the special logics in the start, and leave the last and most general logic at the end.
+It hoists all the special logic to the start and leaves the most general logic at the end.
 
-Base on those structure, you will never lose yourself within the charming control flows & data flows.
+Based on that structure, you will never lose yourself among the charming control flows and data flows.
 
 ## They Are Not Panaceas
 
-Of course, code organization is not a panacea, excessive code organization can cause additional cost for our mental.
+Of course, code organization is not a panacea; excessive organization can impose an additional mental cost.
 
-Before we do these, we must pay attention to the **motivation and quality**.
+Before we do any of this, we must pay attention to **motivation and quality**.
 
 ### Do Not Separate Related Codes
 
-Heavily dependent codes should not be separated to different places, even if they look like two very different focus , otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
+Heavily dependent code should not be split across different places, even if the pieces look like two very different concerns; otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
 
 > [!Note]
 >
-> Regarding data flow direction, strictly adhering to unidirectional data flow is the best practice.
+> As for data flow direction, strictly adhering to unidirectional data flow is the best practice.
 
 <table><tbody>
 
@@ -444,10 +444,10 @@ export function useFormComponent(
 
   // ...
 
-  // This logic based on `selected`,
-  // this cause `useFormComponent`
+  // This logic is based on `selected`,
+  // which means `useFormComponent`
   // should be called after
-  // `useSelectorComponent` is called.
+  // `useSelectorComponent`.
   watch(selected, (newSelected) => {
     // Update some fields of formData
     // when selected changes
@@ -467,10 +467,10 @@ _src/composables/use-selector-component.ts_
 export function useSelectorComponent(
   formData: Record<string, any>,
 ) {
-  // This logic based on `formData`,
-  // this cause `useSelectorComponent`
+  // This logic is based on `formData`,
+  // which means `useSelectorComponent`
   // should be called after
-  // `useFormComponent` is called.
+  // `useFormComponent`.
   const selected = computed(() => {
     // Compute selected based on
     // other fields of formData
@@ -603,12 +603,12 @@ _src/views/good-page.vue_
 // imports ...
 
 // [!code focus:17]
-// Combined them together...
+// Combined into a single composable...
 const {
   formData,
   formConfig,
   selected
-} = useFormComponent({
+} = useFormAndSelectorComponent({
   config: {
     columns: [
       { label: 'Name', props: 'name' },
@@ -626,7 +626,7 @@ const {
   <div>
     // [!code focus:3]
     <!-- Combined -->
-    <!-- internal `v-if` based on `enableSelector` -->
+    <!-- internally `v-if` based on `enableSelector` -->
     <FormComponent v-model="formData" :config="formConfig" />
   </div>
 </template>
@@ -636,9 +636,9 @@ const {
 
 </tbody></table>
 
-### Do Not Extract Structure from Simple/Specific Implementation
+### Do Not Extract Structure from Simple or Specific Implementations
 
-Some simple implementation codes are no need to be extracted, excessive abstraction is just to show off skills, makes mental cost (constant context switching) and has no practical application.
+Some simple implementation code does not need to be extracted; excessive abstraction is just showing off, adds mental cost (constant context switching), and has no practical payoff.
 
 <table><tbody>
 
@@ -688,7 +688,7 @@ function isStrictFalse(value: unknown): value is false {
 
 </tbody></table>
 
-The same for specific implementation who is not reusable, extract them only leads to negative effects:
+The same goes for specific implementations that are not reusable; extracting them only leads to negative effects:
 
 <table><tbody>
 
@@ -760,8 +760,8 @@ export function useContactForm() {
 }
 /**
  * After using AI for so long, I've noticed that
- * AI really enjoys extract these specific logics
- * into a large number of non-reusable util functions.
+ * AI really enjoys extracting these specific pieces
+ * of logic into a large number of non-reusable util functions.
  */
 export function buildContactFormParams(formData: Ref<ContactFormData>): ContactFormData {
   const params = {
@@ -777,9 +777,9 @@ export function buildContactFormParams(formData: Ref<ContactFormData>): ContactF
 
 </tbody></table>
 
-### Do Extract But Not Separate for Unreusable but Heavy Codes
+### Do Extract, But Do Not Separate, Unreusable Heavy Code
 
-If a code is heavy and reusable, we can extract it to a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-related-codes). But if a code is unreusable, for example, it's a specific page's logic, we can still extract them to a composed big function in the same file.
+If a piece of code is heavy and reusable, we can extract it into a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-related-codes). But if a piece of code is not reusable — for example, it's a specific page's logic — we can still extract it into one big composed function in the same file.
 
 <table><tbody>
 
@@ -794,7 +794,7 @@ _src/views/bad-page.vue_
 // [!code focus:55]
 // imports ...
 
-// Too many top-level codes,
+// Too much top-level code,
 // and we cannot see the
 // structure of the page clearly.
 
@@ -867,14 +867,14 @@ const pageComponents = computed(() => {
 
 </td><td valign="top">
 
-Bad Example (Extracted to a separate file but unreusable):
+Bad Example (Extracted to a separate file, but not reusable):
 
 _src/composables/useTemplatePage.ts_
 
 ```ts
 // imports ...
 
-// A one time use composable...
+// A one-time-use composable...
 
 interface PageModule {
   id: string
@@ -955,7 +955,7 @@ const { pageComponents } = useTemplatePage()
 
 </tbody></table>
 
-The only right code looks like:
+The only right way looks like this:
 
 _src/views/good-page.vue_
 
@@ -972,7 +972,7 @@ interface PageModule {
 
 const { pageComponents } = useTemplatePage()
 
-// --- Main logic above, details below ! ---
+// --- Main logic above, details below! ---
 
 function useTemplatePage() {
   const pageModules = useFetch(
@@ -1047,7 +1047,7 @@ export function complexLogic() {
   process(context)
   teardown(context)
 
-  // --- Main logic above, details below ! ---
+  // --- Main logic above, details below! ---
 
   function createContext() {
     // ...
@@ -1080,35 +1080,35 @@ complexLogic()
 // ...
 ```
 
-### If Your Team Only Care About Deadlines But Not Code Quality...
+### If Your Team Only Cares About Deadlines But Not Code Quality...
 
 As the saying goes, when in Rome, do as the Romans do; one must learn to be tactful in life.
 
-If your team only care about deadlines but not code quality, just follow them:
+If your team only cares about deadlines and not code quality, just follow along:
 
 > "Make it work, make it right, make it fast." -- Kent Beck
 
-You just need ato make our code work, fit the business requirements, without bugs. That's all. Then, do organization only when you be happy to.
+You just need to make the code work, meet the business requirements, and be free of bugs. That's all. Then do the organizing only when you feel like it.
 
-Remember, you are the angel in these dirty world fulled with AI generated contents. Some of these contents are black boxes, no one knows how they work, because those AI's users do not care about can these contents work efficiently or not, they do not care about the future maintenance, and they even never review the content before applying: "Since we're using AI anyway, it won't complain about the bloat and maintainability of the code. If there's a bug, the tester will finder it; if AI cannot fix it, then let the developer fix it, so what if it's bloat and maintainable?"
+Remember, you are the angel in this dirty world full of AI-generated content. Some of this content is a black box; no one knows how it works, because those AI users do not care whether it works efficiently or not, they do not care about future maintenance, and they never even review the content before applying it: "Since we're using AI anyway, it won't complain about the bloat and maintainability of the code. If there's a bug, the tester will find it; if AI cannot fix it, then let the developer fix it, so what if it's bloated and unmaintainable?"
 
-I mean, in this shit-like world, the best practice is to make up for the situation only when it's getting troublesome. 😉
+I mean, in this shitty world, the best practice is to patch things up only when they get troublesome. 😉
 
 > ~~“亡羊补牢，为时未晚。”~~
 >
-> ~~"It's never too late to mend the fence after the sheep are lost."~~
+> ~~"It's never too late to mend the fold after the sheep are lost."~~
 >
 > “既未亡羊，何必补牢？”
 >
-> "Why mend the fence when the sheep have not been lost?"
+> "Why mend the fold when no sheep has been lost?"
 
 ## Examples
 
 ### Example: Per File, Per Focus
 
-A simple example, one day I found the `vite.config.ts` file in my project is getting too large and complex, the root cause is that there are too many plugins with heavy logic. The solution is quite simple, just move each plugin (of course, only the plugins with additional logic are worth to be moved) into a separate file.
+A simple example: one day I found that the `vite.config.ts` file in my project was getting too large and complex. The root cause was that there were too many plugins with heavy logic. The solution is quite simple: just move each plugin (of course, only the plugins with additional logic are worth moving) into a separate file.
 
-You can see that commit details [here](https://github.com/lumirelle/lumirelle.me/commit/7c1594db4c5cd5bd422659f1ea820da75e3f893c#diff-6a3b01ba97829c9566ef2d8dc466ffcffb4bdac08706d3d6319e42e0aa6890dd).
+You can see the commit details [here](https://github.com/lumirelle/lumirelle.me/commit/7c1594db4c5cd5bd422659f1ea820da75e3f893c#diff-6a3b01ba97829c9566ef2d8dc466ffcffb4bdac08706d3d6319e42e0aa6890dd).
 
 ## References
 

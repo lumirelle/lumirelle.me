@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Naming Patterns'
 date: 2025-09-23T15:58+08:00
-update: 2026-08-18T12:21+08:00
+update: 2026-09-20T11:47+08:00
 lang: en
 duration: 19min
 type: note
@@ -9,35 +9,35 @@ type: note
 
 [[toc]]
 
-## Why We Need to Care About Symbol Naming Patterns?
+## Why Do We Need to Care About Symbol Naming Patterns?
 
 > [!Note]
 >
-> Of course, naming patterns are always the fallback options, [code organization](code-style-code-organization) is the better way to improve the code readability and maintainability.
+> Of course, naming patterns are always the fallback option; [code organization](code-style-code-organization) is a better way to improve code readability and maintainability.
 
-In a huge project, we may have thousands of symbols, likes variable, function etc. If we cannot organize them (E.g., the project manager has pressed your working hours, or you don’t want to wipe the ass of your co-worker), the only thing we can do is to use the better naming patterns to improve the code readability and maintainability.
+In a large project, we may have thousands of symbols, like variables, functions, etc. If we cannot organize them (e.g., the project manager has squeezed your schedule, or you don’t want to clean up after your co-worker), the only thing we can do is adopt better naming patterns to improve code readability and maintainability.
 
-This article will introduce some naming patterns I preferred in my projects.
+This article introduces some naming patterns I prefer in my projects.
 
-In a word, the rule of thumb is: **single responsibility principle**, which means each thing the symbol targets to should have only one reason to change, and this reason must be reflected in the symbol name.
+In short, the rule of thumb is the **single responsibility principle**: each thing a symbol represents should have only one reason to change, and that reason must be reflected in the symbol's name.
 
-> "Respond to all changes with never changing." -- My elementary school math teacher
+> "Respond to every change with what never changes." — My elementary school math teacher
 
-To find a consistent way to handle most of cases, here we borrow the [BEM naming pattern](https://getbem.com/), and assign Block, Element, Modifier with different meanings based on the actual context. All of below naming patterns are based on BEM naming pattern.
+To find a consistent way to handle most cases, we borrow the [BEM naming pattern](https://getbem.com/) and assign Block, Element, and Modifier different meanings based on the actual context. All of the naming patterns below are based on the BEM naming pattern.
 
-But, in general, **Element** is the main target of the thing, **Block** shows the scope of the main target, **Modifier** may be the extra description or qualifier, just like the general meaning of BEM.
+In general, though, **Element** is the main target of the thing, **Block** shows the scope of that main target, and **Modifier** is an extra description or qualifier, just like their general meaning in BEM.
 
-What's more, **camelCase**, **PascalCase** & **SCREAMING_SNAKE_CASE** are used based on the sematic of the thing.
+What's more, **camelCase**, **PascalCase**, and **SCREAMING_SNAKE_CASE** are used based on the semantics of the thing.
 
 ## Variable Naming Pattern
 
-For variables, the naming pattern is based on the stored data, so the stored data is **Element**.
+For variables, the naming pattern is based on the stored data, so the stored data is the **Element**.
 
-TL&DR: **Element is a subject shows what can we call this data, Block is a scope property shows who does the Element belong to, Modifier is a descriptive property shows what special characteristics this data has.**
+TL;DR: **Element is a subject that shows what we can call this data; Block is a scope property that shows who the Element belongs to; Modifier is a descriptive property that shows what special characteristics this data has.**
 
-A more precise statements are:
+More precisely:
 
-- The variable name should always contain a **subject**, which shows **what can we call this data**, and that's **Element**;
+- The variable name should always contain a **subject**, which shows **what we can call this data**; that's the **Element**;
 
   ```ts
   // "NAME" is the subject of this variable,
@@ -45,7 +45,7 @@ A more precise statements are:
   const NAME = 'Alice'
   ```
 
-- For required **scope properties**, we recognize it as **Block**, which shows **who does the Element belong to**. It can be omitted **only if** the Block can be easily inferred from the context, for better readability;
+- For a required **scope property**, we recognize it as the **Block**, which shows **who the Element belongs to**. It can be omitted **only if** the Block can be easily inferred from the context, for better readability;
 
   ```ts
   // "USER" is a scope property of "NAME",
@@ -60,7 +60,7 @@ A more precise statements are:
   }
   ```
 
-- For optional **descriptive properties**, we recognize them as **Modifier**. It's **required if** there are similar data with the same Element but different characteristics.
+- For an optional **descriptive property**, we recognize it as a **Modifier**. It's **required if** there is similar data with the same Element but different characteristics.
 
   ```ts
   // "FIRST" is a descriptive property of "NAME",
@@ -72,9 +72,9 @@ A more precise statements are:
   let isNameValid = true
   ```
 
-And you may already see, based on their sematic, we use **camelCase** for mutable variable, **SCREAMING_SNAKE_CASE** for truly immutable variable, which means a variable which is declared with `const` but stores a object reference should still use **camelCase**, `const` here just means that variable cannot be re-assigned, but be able to modify the value it has referenced.
+As you may have already noticed, based on their semantics, we use **camelCase** for mutable variables and **SCREAMING_SNAKE_CASE** for truly immutable variables. This means a variable declared with `const` that stores an object reference should still use **camelCase**: `const` here only means the variable cannot be re-assigned, but the value it references can still be modified.
 
-Now let's look at more examples:
+Now let's look at some more examples:
 
 _src/xxx.ts_
 
@@ -116,8 +116,8 @@ _src/pages/configure-product.vue_
 import { computed, ref, useTemplateRef } from 'vue'
 import { ProductType } from '@/enums/product'
 
-// `FormData` is part of browser built-in API,
-// we use `SubmitFormData` to distinguish our customized API.
+// `FormData` is part of the browser's built-in API,
+// so we use `SubmitFormData` to distinguish our own API.
 interface SubmitFormData {
   name: string | null
   email: string | null
@@ -181,13 +181,13 @@ const tableColumnConfigs = ref([
 
 ## Function Naming Pattern
 
-For functions, the naming pattern is based on the use, so the use is **Element**.
+For functions, the naming pattern is based on the use, so the use is the **Element**.
 
-TL&DR: **Element is a predicate shows what the functions does, Block is a object (antonyms of the subject) which may has additional descriptive properties shows what the function returns / calls with, Modifier is a descriptive property shows what special characteristics this function has.**
+TL;DR: **Element is a predicate that shows what the function does; Block is an object (the antonym of the subject) that may have additional descriptive properties showing what the function returns or is called with; Modifier is a descriptive property that shows what special characteristics the function has.**
 
-A more precise statements are:
+More precisely:
 
-- The function name should always contain a **predicate**, which shows **what the function does**, and that's **Element**;
+- The function name should always contain a **predicate**, which shows **what the function does**; that's the **Element**;
 
   ```ts
   // "get" is a predicate,
@@ -195,7 +195,7 @@ A more precise statements are:
   declare function get(userId: string): User
   ```
 
-- For required **object (antonyms of the subject) which may has additional descriptive properties**, we recognize it as **Block**, which shows **what the function returns / calls with**. It can be omitted **only if** the Block can be easily inferred from the context, for better use;
+- For a required **object (the antonym of the subject) that may have additional descriptive properties**, we recognize it as the **Block**, which shows **what the function returns or is called with**. It can be omitted **only if** the Block can be easily inferred from the context, for better usability;
 
   ```ts
   // "get" is a verb, "User" is the object of this function,
@@ -204,44 +204,44 @@ A more precise statements are:
   declare function getUser(userId: string): User
 
   // "log" is a predicate,
-  // "Message" is object of this function,
-  // so we recognize "log" as an Element.
+  // "Message" is the object of this function,
+  // so we recognize "log" as an Element,
   // "Message" as a Block.
   // People always "log" a "Message",
-  // so we can omit the Block for better use.
+  // so we can omit the Block for better usability.
   declare function log(message: string): void
 
   // "add" is a predicate,
-  // "Numbers" & "Strings" are the objects of these functions,
+  // "Numbers" and "Strings" are the objects of these functions,
   // so we recognize "add" as an Element,
-  // "Numbers" & "Strings" as Blocks.
-  // The type of function params of "add" functions
+  // "Numbers" and "Strings" as Blocks.
+  // The parameter types of the "add" functions
   // can reflect the objects of these functions,
-  // so we can omit the Blocks for better use.
+  // so we can omit the Blocks for better usability.
   declare function add(a: number, b: number): number
   declare function add(a: string, b: string): string
   // ...
 
   declare class UserRepository {
-    // "add" is a verb, "User" is the object of this function,
+    // "get" is a verb, "User" is the object of this function,
     // because it's a method of "UserRepository",
     // we can easily infer the Block is "User",
-    // so we can omit the Block for better use.
+    // so we can omit the Block for better usability.
     get(userId: string): User
   }
 
   // "count" is a verb, "UserPosts" is the object of this function,
-  // notice, "User" here is a property of "Posts", not the function.
+  // notice that "User" here is a property of "Posts", not of the function.
   declare function countUserPosts(userId: string): number
   ```
 
-- For optional **descriptive properties**, we recognize them as **Modifier**. It's **required if** there are similar functions with the same Block and Element but different characteristics, and who are hard to distingue within that context.
+- For an optional **descriptive property**, we recognize it as a **Modifier**. It's **required if** there are similar functions with the same Block and Element but different characteristics that are hard to distinguish in that context.
 
   ```ts
   // "ById" is a property of this function,
   // so we recognize "ById" as a Modifier, "User" as a Block, "get" as an Element.
-  // Because we can easily infer "ById" from function param,
-  // we can omit it for better use.
+  // Because we can easily infer "ById" from the function parameter,
+  // we can omit it for better usability.
   declare function getUser(userId: string): User
 
   // "WithDefault" is a property of this function,
@@ -249,13 +249,13 @@ A more precise statements are:
   declare function getUserNameWithDefault(userId: string): User
   ```
 
-And we use **camelCase** for all of functions.
+And we use **camelCase** for all functions.
 
-Let's look at more examples for different types of functions in the following sections.
+Let's look at more examples of different types of functions in the following sections.
 
 ### Endpoint Functions
 
-For some basic examples:
+Here are some basic examples:
 
 ```ts
 // [!code focus:4]
@@ -277,21 +277,21 @@ export async function listActiveUsers(): Promise<User[]> {
 }
 ```
 
-Of course, with endpoint functions, we can futher induction some **common Blocks (predicates)** based on the HTTP methods (or their uses in some edge cases).
+Of course, for endpoint functions we can further induce some **common Elements (predicates)** based on the HTTP methods (or their uses in some edge cases).
 
 > [!Note]
 >
-> Before you reading the introduction below, please ensure you know the difference between HTTP methods and commonly used CRUD operation types.
+> Before reading the introduction below, please make sure you know the difference between HTTP methods and commonly used CRUD operation types.
 
 > [!Note]
 >
-> `GET`, `PUT` & `PATCH` method requests can be distinguished by the nature of that request, while other method requests often use business verbs.
+> `GET`, `PUT`, and `PATCH` requests can be distinguished by the nature of the request, while requests with other methods often use business verbs.
 
-- `GET` method request is used to read data, it's **safe[^1]** and **idempotent[^2]**. They can be distinguished by the nature of the request:
-  - `get` for **single data**.
-  - `list` for **multiple data**.
-  - `search` for **multiple data** with **keyword matching**.
-  - `query` for **multiple data** with **pagination**.
+- A `GET` request is used to read data; it's **safe[^1]** and **idempotent[^2]**. Such requests can be distinguished by the nature of the request:
+  - `get` for a **single record**.
+  - `list` for **multiple records**.
+  - `search` for **multiple records** with **keyword matching**.
+  - `query` for **multiple records** with **pagination**.
 
   E.g.:
 
@@ -330,7 +330,7 @@ Of course, with endpoint functions, we can futher induction some **common Blocks
 
   // [!code focus:7]
   /**
-   * Search users with keyword. This keyword maybe match multiple fields. For
+   * Search users by keyword. The keyword may match multiple fields, for
    * example, name, email, phone, etc.
    *
    * Block is "Users", Element is "search".
@@ -396,7 +396,7 @@ Of course, with endpoint functions, we can futher induction some **common Blocks
 
       // [!code focus:7]
       /**
-       * Search users with keyword. This keyword maybe match multiple fields. For
+       * Search users by keyword. The keyword may match multiple fields, for
        * example, name, email, phone, etc.
        *
        * Element is "search".
@@ -423,10 +423,10 @@ Of course, with endpoint functions, we can futher induction some **common Blocks
 
   </details>
 
-- `POST` method request is used to create data, it's **not safe** and **not idempotent**. The acceptable verbs are:
+- A `POST` request is used to create data; it's **not safe** and **not idempotent**. The acceptable verbs are:
   - `create` for **creating new data (from nothing)**.
   - `add` for **adding data (to a collection)**.
-  - ... But more often to use business verbs like `register`, `login`, `upload`, etc.
+  - ... though business verbs like `register`, `login`, `upload`, etc. are used more often.
 
   E.g.:
 
@@ -574,7 +574,7 @@ Of course, with endpoint functions, we can futher induction some **common Blocks
 
   </details>
 
-- `PUT` and `PATCH` method requests are used to update data, they're **not safe** but **idempotent**. The acceptable verbs are:
+- `PUT` and `PATCH` requests are used to update data; they're **not safe** but **idempotent**. The acceptable verbs are:
   - `update` for updating **(partially or fully)** existing data.
   - `patch` for **emphasizing partially updating** existing data.
   - `replace` for **emphasizing fully updating** existing data.
@@ -676,9 +676,9 @@ Of course, with endpoint functions, we can futher induction some **common Blocks
 
   </details>
 
-- `DELETE` method request is used to delete data, it's **not safe** but **idempotent**. The acceptable verb is:
+- A `DELETE` request is used to delete data; it's **not safe** but **idempotent**. The acceptable verb is:
   - `delete` for deleting **existing data**.
-  - ... But more often to use business verbs like `revoke`, etc.
+  - ... though business verbs like `revoke`, etc. are used more often.
 
   E.g.:
 
@@ -742,7 +742,7 @@ Of course, with endpoint functions, we can futher induction some **common Blocks
 
   </details>
 
-There is a special case we need to pay attention to: **Upsert (Update or insert)**, which means to create or update data, can be implemented by `PUT` method, because it's **not safe** but **idempotent**, and it should only uses the verb `upsert`.
+There is a special case worth paying attention to: **upsert (update or insert)**, which means creating or updating data. It can be implemented with the `PUT` method because it's **not safe** but **idempotent**, and it should only use the verb `upsert`.
 
   E.g.:
 
@@ -771,9 +771,9 @@ There is a special case we need to pay attention to: **Upsert (Update or insert)
       /**
        * Upsert (update or insert) existing user.
        *
-       * Block is "User", Element is "upsert".
+       * Element is "upsert".
        */
-      upsertUser(data: User): Promise<User> {
+      upsert(data: User): Promise<User> {
         return await request.put('/user/upsert', { data })
         // [!code focus:1]
       }
@@ -788,15 +788,15 @@ To learn more about HTTP methods, please read the [computer network manual](manu
 
 > [!Note]
 >
-> If you have try this rule in practice, you may find that sometimes it's more like a unrealistic fantasies, because when you work on a team, you have no way to control others' behavior:
+> If you have tried this rule in practice, you may find that sometimes it feels more like an unrealistic fantasy, because when you work on a team, you have no way to control others' behavior:
 >
-> You may receive a endpoint function from endpoint developer, and that function can be used to **query data** but must request by `POST` method, and the instigator just tells you: "I feel lazy to create a standlone DTO for query params, so I use `POST` method directly. Just make some adjustments yourself!".
+> You may receive an endpoint function from the endpoint developer, and that function can be used to **query data** but must be requested with `POST`, and the person responsible just tells you: "I'm too lazy to create a standalone DTO for the query params, so I'll just use `POST` directly. Just make some adjustments yourself!".
 >
-> Don't be discouraged, this is the time to show your professionalism: In this case, you can classify these annoying functions based on **the uses** of the function! 😀
+> Don't be discouraged — this is the time to show your professionalism: in this case, you can classify these annoying functions based on **the use** of the function! 😀
 
 ### State Checking Function/Method
 
-For some basic examples:
+Here are some basic examples:
 
 ```ts
 // [!code focus:4]
@@ -823,11 +823,11 @@ export function isUserVIP(user: User): boolean {
 }
 ```
 
-You may notice that, in above examples, we have a fixed Block "user" for these functions.
+You may notice that in the examples above, we have a fixed Block "user" for these functions.
 
-**In practice, these functions should not be defined in the global scope, instead, they should be class methods or instance methods, like Repository Pattern in [Endpoint Functions](#endpoint-functions) section.**
+**In practice, these functions should not be defined in the global scope; instead, they should be class methods or instance methods, like the Repository Pattern in the [Endpoint Functions](#endpoint-functions) section.**
 
-In this way, we can avoid global function pollution, also can omit the fixed Block. For example:
+This way, we can avoid global function pollution and also omit the fixed Block. For example:
 
 ```ts
 // [!code focus:1]
@@ -844,7 +844,7 @@ class User implements UserLike {
 
   // [!code focus:4]
   /**
-   * Now we transform it to a method of User class, and omit the Block "user"!
+   * Now we turn it into a method of the User class, which lets us omit the Block "user"!
    */
   hasPermission(permission: Permission): boolean {
     for (const role of this.roles) {
@@ -859,7 +859,7 @@ class User implements UserLike {
 
   // [!code focus:4]
   /**
-   * Now we transform it to a method of User class, and omit the Block "user"!
+   * Now we turn it into a method of the User class, which lets us omit the Block "user"!
    */
   isVIP(): boolean {
     return this.roles.includes('vip')
@@ -871,7 +871,7 @@ class User implements UserLike {
 
 ### Event Handler Function
 
-For some basic examples:
+Here are some basic examples:
 
 ```vue
 <script setup lang="ts">
@@ -926,7 +926,7 @@ async function onAnEventSuccess(result: any) {
 </template>
 ```
 
-Of course, with event handler functions, we can futher induction some common Blocks (predicates):
+Of course, for event handler functions we can further induce some common Elements (predicates):
 
 - `before` for **handling before the event happens**.
 - `on` for **handling when the event happens**.

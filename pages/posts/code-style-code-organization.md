@@ -1,9 +1,9 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-09-20T12:15+08:00
+update: 2026-09-20T21:21+08:00
 lang: en
-duration: 15min
+duration: 20min
 type: note
 ---
 
@@ -34,9 +34,234 @@ As a developer, you spend far more time with code than with your girlfriend! So 
 
 This is a long topic. Different programming languages have different grammars, and therefore different rules and best practices. But anyway, this article does not try to cover every situation; it just picks some general basic principles and best practices. Based on these, you can easily extend them to other specific situations.
 
-### Per File, Per Focus
+### One Module, One Main Object
 
-The human brain can only hold a limited amount of information at a time. If we have more than one focus in a file, it may break our concentration and harm our judgement.
+The human brain can only hold a limited amount of information at a time. If we have more than one **main object** in a **module**, it may break our concentration and harm our judgement.
+
+#### What Is a Module and What Is Its Main Object?
+
+A **module** here is an independent collection of functionality that can be built on top of other external modules or provide functionality for other modules. It's module **on code organization level**.
+
+The **main object** of a module is the entity it is about: a noun you can point at (package, currency, partner), not an action you perform (purchase, display).
+
+All parts of a module should have a **unified namespace**. The form of the namespace expression is not fixed, but it must be reflected in the **file path**: it can be a dedicated directory, or a single name reused across directories, as in the "partner" module of a Vue website project, which is related to the partners of this website:
+
+```txt
+-- app/
+   |-- constants/
+   |   |-- partner.ts
+   |-- components/
+   |   |-- partner/
+   |       |-- Banner.vue
+   |       |-- Cta.vue
+   |       |-- ...
+   |-- composables/
+   |   |-- usePartners.ts
+   |-- pages/
+   |   |-- partner.vue
+   |-- utils/
+   |   |-- partner.ts
+   |-- ...
+```
+
+This unified namespace is usually derived from the main object the module is related to, rather than from the actions performed on it. So you generally should not separate *purchasing a package* and *displaying package pricing* into two modules: they are two things you do with the same object, not two modules.
+
+#### What Happens When a Module Has Two Main Objects?
+
+All of the examples below work, but the good example has much better readability and maintainability:
+
+<table><tbody>
+
+<tr><td valign="top">
+
+A good example:
+
+_src/constants/package.ts_
+
+```ts
+/** @module package */
+
+export const PackageType = {
+  Personal: 0,
+  Professional: 1,
+  Enterprise: 2,
+} as const
+
+export type PackageTypeValue = (typeof PackageType)[keyof typeof PackageType]
+
+export const PackageTypeLabels: Record<PackageTypeValue, string> = {
+  [PackageType.Personal]: 'Personal',
+  [PackageType.Professional]: 'Professional',
+  [PackageType.Enterprise]: 'Enterprise',
+}
+
+export const PackageTypeOptions = [
+  { label: PackageTypeLabels[PackageType.Personal], value: PackageType.Personal },
+  { label: PackageTypeLabels[PackageType.Professional], value: PackageType.Professional },
+  { label: PackageTypeLabels[PackageType.Enterprise], value: PackageType.Enterprise },
+] as const
+```
+
+_src/constants/currency.ts_
+
+```ts
+/** @module currency */
+
+export const Currency = {
+  Usd: 'USD',
+  Eur: 'EUR',
+} as const
+
+export type CurrencyValue = (typeof Currency)[keyof typeof Currency]
+
+export const CurrencySymbols: Record<CurrencyValue, string> = {
+  [Currency.Usd]: '$',
+  [Currency.Eur]: '€',
+}
+```
+
+_src/pages/package/pricing.vue_
+
+```vue
+<!-- @module package -->
+
+<script setup lang="ts">
+// [!code focus:9]
+// For the "package" module, "currency" is an external module.
+import {
+  CurrencySymbols,
+  type CurrencyValue,
+} from '~/constants/currency'
+import {
+  PackageTypeLabels,
+  type PackageTypeValue,
+} from '~/constants/package'
+
+interface Package {
+  type: PackageTypeValue
+  name: string
+  priceInCents: number
+}
+
+defineProps<{
+  packages: Package[]
+  currency: CurrencyValue
+}>()
+</script>
+
+<template>
+  <section>
+    <h2>Package Pricing</h2>
+    <ul>
+      <li v-for="pkg in packages" :key="pkg.type">
+        <h3>{{ pkg.name }}</h3>
+        <p>{{ PackageTypeLabels[pkg.type] }}</p>
+        <p>
+          {{ CurrencySymbols[currency] }}{{ (pkg.priceInCents / 100).toFixed(2) }}
+        </p>
+      </li>
+    </ul>
+  </section>
+</template>
+```
+
+</td><td valign="top">
+
+A bad example:
+
+_src/constants.ts_
+
+```ts
+// The package domain
+export const PackageType = {
+  Personal: 0,
+  Professional: 1,
+  Enterprise: 2,
+} as const
+
+export type PackageTypeValue = (typeof PackageType)[keyof typeof PackageType]
+
+export const PackageTypeLabels: Record<PackageTypeValue, string> = {
+  [PackageType.Personal]: 'Personal',
+  [PackageType.Professional]: 'Professional',
+  [PackageType.Enterprise]: 'Enterprise',
+}
+
+export const PackageTypeOptions = [
+  { label: PackageTypeLabels[PackageType.Personal], value: PackageType.Personal },
+  { label: PackageTypeLabels[PackageType.Professional], value: PackageType.Professional },
+  { label: PackageTypeLabels[PackageType.Enterprise], value: PackageType.Enterprise },
+] as const
+
+// The Currency domain
+export const Currency = {
+  Usd: 'USD',
+  Eur: 'EUR',
+} as const
+
+export type CurrencyValue = (typeof Currency)[keyof typeof Currency]
+
+export const CurrencySymbols: Record<CurrencyValue, string> = {
+  [Currency.Usd]: '$',
+  [Currency.Eur]: '€',
+}
+```
+
+_src/pages/package/pricing.vue_
+
+```vue
+<script setup lang="ts">
+// [!code focus:6]
+import {
+  CurrencySymbols,
+  type CurrencyValue,
+  PackageTypeLabels,
+  type PackageTypeValue,
+} from '~/constants'
+
+interface Package {
+  type: PackageTypeValue
+  name: string
+  priceInCents: number
+}
+
+defineProps<{
+  packages: Package[]
+  currency: CurrencyValue
+}>()
+</script>
+
+<template>
+  <section>
+    <h2>Package Pricing</h2>
+    <ul>
+      <li v-for="pkg in packages" :key="pkg.type">
+        <h3>{{ pkg.name }}</h3>
+        <p>{{ PackageTypeLabels[pkg.type] }}</p>
+        <p>
+          {{ CurrencySymbols[currency] }}{{ (pkg.priceInCents / 100).toFixed(2) }}
+        </p>
+      </li>
+    </ul>
+  </section>
+</template>
+```
+
+</td></tr>
+
+</tbody></table>
+
+The bad version is not bad because it is long. It is bad because `src/constants.ts` can no longer answer "what is in here?" without the word *and*.
+
+### One File, One Focus
+
+Similar to modules, if a file has more than one focus, it may break our concentration and harm our judgement.
+
+#### What Is a Focus?
+
+A **focus** is the purpose of this file: A module may contain multiple functionalities, and each file plays its own role in one or more functionalities and has its own concern — that concern is the file's focus.
+
+#### What Happens When a File Has Two Foci?
 
 All of the examples below work, but the good example has much better readability and maintainability.
 
@@ -46,118 +271,195 @@ All of the examples below work, but the good example has much better readability
 
 A good example:
 
-_src/constants.ts_
+_src/utils/cli/parser.ts_
 
 ```ts
-export const UserStatus = {
-  Inactive: 0,
-  Active: 1,
-  Banned: 2,
-} as const
+// Args parser for CLI
 
-export const UserStatusLabels = {
-  [UserStatus.Inactive]: 'Inactive',
-  [UserStatus.Active]: 'Active',
-  [UserStatus.Banned]: 'Banned',
-} as const
+export function parseArgs(argv: string[]): string[] {
+  const args: string[] = []
+  let currentArg = ''
+  let inQuotes = false
 
-export const UserStatusOptions = [
-  { label: UserStatusLabels[UserStatus.Inactive], value: UserStatus.Inactive },
-  { label: UserStatusLabels[UserStatus.Active], value: UserStatus.Active },
-  { label: UserStatusLabels[UserStatus.Banned], value: UserStatus.Banned },
-] as const
-```
+  for (const arg of argv) {
+    if (arg.startsWith('"') && arg.endsWith('"')) {
+      args.push(arg.slice(1, -1))
+    }
+    else if (arg.startsWith('"')) {
+      inQuotes = true
+      currentArg += `${arg.slice(1)} `
+    }
+    else if (arg.endsWith('"')) {
+      inQuotes = false
+      currentArg += arg.slice(0, -1)
+      args.push(currentArg.trim())
+      currentArg = ''
+    }
+    else if (inQuotes) {
+      currentArg += `${arg} `
+    }
+    else {
+      args.push(arg)
+    }
+  }
 
-_src/form.ts_
+  if (inQuotes) {
+    console.error('Unmatched quotes in arguments')
+  }
 
-```ts
-import {
-  UserStatus,
-  UserStatusOptions
-} from './constants'
-
-export const FORM_FIELDS = [
-  { name: 'username', defaultValue: 'guest' },
-  { name: 'password' },
-  { name: 'status', defaultValue: UserStatus.Inactive, options: UserStatusOptions, },
-  // When `options` is a function,
-  // we will call it when we create fields,
-  // and cache the options in the field instance.
-  { name: 'group', options: listUserGroups },
-] as const
-
-function listUserGroups() {
-  // ...
+  return args
 }
 ```
 
-_src/table.ts_
+_src/utils/cli/factory.ts_
 
 ```ts
-import { UserStatusLabels } from './constants'
+// Args factory for CLI
 
-const TABLE_COLUMNS = [
-  { label: 'Name', props: 'name' },
-  { label: 'Age', props: 'age' },
-  { label: 'Status', props: 'status', format: values => UserStatusLabels[values.status] }
-] as const
+import { parseArgs } from './parser.ts'
+
+class Cli {
+  private commands: Map<string, (...args: string[]) => void>
+  constructor() {
+    this.commands = new Map()
+  }
+
+  command(name: string, action: (...args: string[]) => void): Cli {
+    this.commands.set(name, action)
+    return this
+  }
+
+  run(): Cli {
+    const args = parseArgs(process.argv.slice(2))
+    const commandName = args[0]
+    const commandArgs = args.slice(1)
+    const command = this.commands.get(commandName)
+    if (command)
+      command(...commandArgs)
+    else
+      console.error(`Command not found: ${commandName}`)
+    return this
+  }
+}
+
+export function cli() {
+  return new Cli()
+}
+```
+
+_src/cli.ts_
+
+```ts
+import { cli } from './utils/cli/factory.ts'
+
+cli().command('greet', (name: string) => {
+  console.log(`Hello, ${name}!`)
+}).command('add', (a: string, b: string) => {
+  const sum = Number(a) + Number(b)
+  console.log(`Sum: ${sum}`)
+}).run()
 ```
 
 </td><td valign="top">
 
 A bad example:
 
-_src/all-in-one.ts_
+_src/utils/cli.ts_
 
 ```ts
-export const UserStatus = {
-  Inactive: 0,
-  Active: 1,
-  Banned: 2,
-} as const
+// Everything about the CLI!
 
-export const UserStatusLabels = {
-  [UserStatus.Inactive]: 'Inactive',
-  [UserStatus.Active]: 'Active',
-  [UserStatus.Banned]: 'Banned',
-} as const
+class Cli {
+  private commands: Map<string, (...args: string[]) => void>
+  constructor() {
+    this.commands = new Map()
+  }
 
-export const UserStatusOptions = [
-  { label: UserStatusLabels[UserStatus.Inactive], value: UserStatus.Inactive },
-  { label: UserStatusLabels[UserStatus.Active], value: UserStatus.Active },
-  { label: UserStatusLabels[UserStatus.Banned], value: UserStatus.Banned },
-] as const
+  command(name: string, action: (...args: string[]) => void): Cli {
+    this.commands.set(name, action)
+    return this
+  }
 
-export const FORM_FIELDS = [
-  { name: 'username', defaultValue: 'guest' },
-  { name: 'password' },
-  { name: 'status', defaultValue: UserStatus.Inactive, options: UserStatusOptions, },
-  { name: 'group', options: listUserGroups },
-] as const
-
-function listUserGroups() {
-  // ...
+  run(): Cli {
+    const args = parseArgs(process.argv.slice(2))
+    const commandName = args[0]
+    const commandArgs = args.slice(1)
+    const command = this.commands.get(commandName)
+    if (command)
+      command(...commandArgs)
+    else
+      console.error(`Command not found: ${commandName}`)
+    return this
+  }
 }
 
-const TABLE_COLUMNS = [
-  { label: 'Name', props: 'name' },
-  { label: 'Age', props: 'age' },
-  { label: 'Status', props: 'status', format: values => UserStatusLabels[values.status] }
-] as const
+export function cli() {
+  return new Cli()
+}
+
+export function parseArgs(argv: string[]): string[] {
+  const args: string[] = []
+  let currentArg = ''
+  let inQuotes = false
+
+  for (const arg of argv) {
+    if (arg.startsWith('"') && arg.endsWith('"')) {
+      args.push(arg.slice(1, -1))
+    }
+    else if (arg.startsWith('"')) {
+      inQuotes = true
+      currentArg += `${arg.slice(1)} `
+    }
+    else if (arg.endsWith('"')) {
+      inQuotes = false
+      currentArg += arg.slice(0, -1)
+      args.push(currentArg.trim())
+      currentArg = ''
+    }
+    else if (inQuotes) {
+      currentArg += `${arg} `
+    }
+    else {
+      args.push(arg)
+    }
+  }
+
+  if (inQuotes) {
+    console.error('Unmatched quotes in arguments')
+  }
+
+  return args
+}
+```
+
+_src/cli.ts_
+
+```ts
+import { cli } from './utils/cli'
+
+cli().command('greet', (name: string) => {
+  console.log(`Hello, ${name}!`)
+}).command('add', (a: string, b: string) => {
+  const sum = Number(a) + Number(b)
+  console.log(`Sum: ${sum}`)
+}).run()
 ```
 
 </td></tr>
 
 </tbody></table>
 
-There is a general order of thought for identifying different focuses:
+### Leave Main Logic as an Outline, Hide Detail Logic Internally
 
-1. Module. Code for launching a Playwright instance and code for orchestrating automation tasks are obviously not part of the same module.
-2. Nature of the content. Global constant code and test case code are obviously not the same thing.
+#### What Is Logic?
 
-### Keep Structure in Focus, Hide Implementation Details
+Logic is expressed by functions — in other words, "logic" here means functions.
 
-To help the reader understand our code easily, we'd better leave only the structure in focus and hide the implementation details.
+#### Why Should We Leave Main Logic as an Outline?
+
+To help the reader understand our file easily, we'd better leave main logic as an outline, and hide detail logic internally.
+
+All of the examples below work, but the good example has much better readability and maintainability.
 
 <table><tbody>
 
@@ -166,6 +468,7 @@ To help the reader understand our code easily, we'd better leave only the struct
 _src/good.ts_
 
 ```ts
+// [!code focus:11]
 export function main() {
   const context = createContext()
 
@@ -257,11 +560,17 @@ export function main() {
 
 </tbody></table>
 
-### Focus Above, Details Below
+### Main Logic Above, Details Below
 
-Put the focus at the top so that we can quickly understand the main logic of the code. If we are interested in the details, we can read from top to bottom, which fits human reading habits well.
+Put the main logic at the top so that we can quickly understand the main logic of the code. If we are interested in the details, we can read from top to bottom, which fits human reading habits well.
 
 All of the examples below work, but the good example has much better readability and maintainability.
+
+> [!Note]
+>
+> We are talking about **definition order** — the order in which functions *appear in the file* — not **execution order**. By the time `main()` is called, everything it uses already exists; we never really execute a symbol before it is defined. XD.
+>
+> This is a **style convention rather than a language feature**. Robert C. Martin calls it the *Stepdown Rule* in *Clean Code* (chapter 3) — code should read like a top-down newspaper article. Most languages support it in one form or another; a handful need a forward declaration (C, C++, Nim, Pascal), and very few cannot express it at all (e.g. Oberon-07, Coq).
 
 <table><tbody>
 
@@ -270,6 +579,7 @@ All of the examples below work, but the good example has much better readability
 _src/good.ts_
 
 ```ts
+// [!code focus:11]
 export function main() {
   const context = createContext()
 
@@ -350,6 +660,7 @@ function init(context) {
   globalThis.__initialized = true
 }
 
+// [!code focus:11]
 export function main() {
   const context = createContext()
 
@@ -377,7 +688,7 @@ function createContext() {
 
 </tbody></table>
 
-### Special First, General Last
+### Special Condition First, General One Last
 
 There is a classic pattern you may already know: the guard clause.
 
@@ -407,7 +718,7 @@ You still need to top up by ${amount - userInfo.balance}$.`)
 }
 ```
 
-It hoists all the special logic to the start and leaves the most general logic at the end.
+It hoists all the special conditional logic to the start and leaves the most general logic at the end.
 
 Based on that structure, you will never lose yourself among the charming control flows and data flows.
 
@@ -417,9 +728,9 @@ Of course, code organization is not a panacea; excessive organization can impose
 
 Before we do any of this, we must pay attention to **motivation and quality**.
 
-### Do Not Separate Related Codes
+### Do Not Separate Interdependent Code into Different Files
 
-Heavily dependent code should not be split across different places, even if the pieces look like two very different concerns; otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
+Interdependent code should not be split across different places, even if the pieces look like two very different concerns; otherwise it will lead to a mess of data flow and dependencies, which makes the code harder to understand and maintain.
 
 > [!Note]
 >
@@ -636,7 +947,7 @@ const {
 
 </tbody></table>
 
-### Do Not Extract Structure from Simple or Specific Implementations
+### Do Not Extract Logic from Simple or Special Implementations
 
 Some simple implementation code does not need to be extracted; excessive abstraction is just showing off, adds mental cost (constant context switching), and has no practical payoff.
 
@@ -688,7 +999,7 @@ function isStrictFalse(value: unknown): value is false {
 
 </tbody></table>
 
-The same goes for specific implementations that are not reusable; extracting them only leads to negative effects:
+The same goes for special implementations that are not reusable; extracting them only leads to negative effects:
 
 <table><tbody>
 
@@ -777,9 +1088,9 @@ export function buildContactFormParams(formData: Ref<ContactFormData>): ContactF
 
 </tbody></table>
 
-### Do Extract, But Do Not Separate, Unreusable Heavy Code
+### Extract Heavy Logic, But Do Not Separate It into Different Files If It's Non-reusable
 
-If a piece of code is heavy and reusable, we can extract it into a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-related-codes). But if a piece of code is not reusable — for example, it's a specific page's logic — we can still extract it into one big composed function in the same file.
+If a piece of code is heavy and reusable, we can extract it into a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-interdependent-code-into-different-files). But if a piece of code is not reusable — for example, it's a specific page's logic — we should not extract it into different files but one big composed function in the same file.
 
 <table><tbody>
 
@@ -961,7 +1272,7 @@ _src/views/good-page.vue_
 
 ```vue
 <script setup lang="ts">
-// [!code focus:11]
+// [!code focus:12]
 // imports ...
 
 interface PageModule {
@@ -973,6 +1284,7 @@ interface PageModule {
 const { pageComponents } = useTemplatePage()
 
 // --- Main logic above, details below! ---
+// --- But limited by language support! ---
 
 function useTemplatePage() {
   const pageModules = useFetch(
@@ -1035,7 +1347,7 @@ function useTemplatePage() {
 </template>
 ```
 
-For plain JavaScript / TypeScript, we can still achieve this by using a big composed function with nested functions:
+For plain JavaScript / TypeScript, we can still achieve this by using a big composed function with nested functions (In fact, the code within the `<script>` tag in the `.vue` file is plain JavaScript / TypeScript code):
 
 _src/utils/complex-logic.ts_
 
@@ -1080,6 +1392,8 @@ complexLogic()
 // ...
 ```
 
+TODO: For unsupported languages...
+
 ### If Your Team Only Cares About Deadlines But Not Code Quality...
 
 As the saying goes, when in Rome, do as the Romans do; one must learn to be tactful in life.
@@ -1104,7 +1418,7 @@ I mean, in this shitty world, the best practice is to patch things up only when 
 
 ## Examples
 
-### Example: Per File, Per Focus
+### Example: One File, One Focus
 
 A simple example: one day I found that the `vite.config.ts` file in my project was getting too large and complex. The root cause was that there were too many plugins with heavy logic. The solution is quite simple: just move each plugin (of course, only the plugins with additional logic are worth moving) into a separate file.
 

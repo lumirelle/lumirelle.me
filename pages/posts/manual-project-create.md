@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-09-21T15:45+08:00
+update: 2026-09-21T16:37+08:00
 lang: en
 duration: 1min
 type: manual
@@ -47,7 +47,7 @@ degit git@github.com:antfu/starter-vscode.git {{project-path}}
 
 Use the `create-vue` CLI tool:
 
-```bash
+```nu
 degit https://github.com/antfu-collective/vitesse-lite {{project-path}}
 ```
 

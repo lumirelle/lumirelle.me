@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-09-21T11:28+08:00
 lang: en
 duration: 21min
 type: manual
@@ -302,7 +302,7 @@ The software below is highly recommended and helpful for daily use and developme
 | Internet Download Manager | `winget add Tonec.InternetDownloadManager` | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
 | Zed | `winget add ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but with better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
 | Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
-| Navicat Premium Lite | [Official Website](https://www.navicat.com/download/navicat-premium-lite) | / |
+| DBX | `winget add t8y2.dbx` | Better database manager! |
 | Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Containers are coming soon; maybe we won't need this in the future?** |
 | RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>1. [Google Translate](raycast://extensions/gebeto/translate?source=webstore)<br>2. [Universal Website Search](raycast://extensions/pernielsentikaer/any-website-search?source=webstore)<br>3. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)<br>4. [Kaomoji Search](raycast://extensions/yalishanda/kaomoji-search?source=webstore)<br><br>5. [Port Manager](raycast://extensions/lucaschultz/port-manager?source=webstore)<br><br>6. [Random Data Generator](raycast://extensions/loris/random?source=webstore)<br>7. [Placeholder](raycast://extensions/koinzhang/placeholder?source=webstore)<br>8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)<br>8. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)<br>9. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)<br>10. [ray.so](raycast://extensions/garrett/ray-so?source=webstore)</details> |
 | PixPin | `winget add PixPin.PixPin` | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |

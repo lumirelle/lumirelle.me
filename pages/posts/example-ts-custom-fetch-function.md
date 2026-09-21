@@ -1,7 +1,7 @@
 ---
 title: 'Example: TypeScript Custom Fetch Function'
 date: 2026-04-18T22:28+08:00
-update: 2026-06-25T14:57+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 1min
 type: note
@@ -11,7 +11,7 @@ type: note
 
 ## Introduction
 
-There are several requirements of a modern fetch function:
+There are several requirements for a modern fetch function:
 
 1. Type-safe;
 2. Error handling;
@@ -19,7 +19,7 @@ There are several requirements of a modern fetch function:
 4. Customizable;
 5. ... Other features, such as caching, retry, etc.
 
-I highly recommended to use [ofetch](https://github.com/unjs/ofetch) to achieve these requirements. You can use the pre-created `ofetch` function, or just create your own [custom fetch function](#custom-fetch-function) via `ofetch.create()`.
+I highly recommend using [ofetch](https://github.com/unjs/ofetch) to achieve these requirements. You can use the pre-created `ofetch` function, or just create your own [custom fetch function](#custom-fetch-function) via `ofetch.create()`.
 
 ## Examples
 

@@ -1,7 +1,7 @@
 ---
 title: 'Performance Optimization: HTTP Versions'
 date: 2026-04-21T10:48+08:00
-update: 2026-06-25T14:48+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 3min
 type: note
@@ -13,32 +13,32 @@ type: note
 
 Most people probably overlook the fact that HTTP versions actually have a significant impact on page loading performance.
 
-Here is a blog comparing the differences between HTTP/1, HTTP/1.1, HTTP/2, and HTTP/3: https://www.debugbear.com/blog/http1-vs-http2
+Here is a blog post comparing the differences between HTTP/1, HTTP/1.1, HTTP/2, and HTTP/3: https://www.debugbear.com/blog/http1-vs-http2
 
 In a word:
 
-- HTTP/1.x: One request per connection at a time, up to 6 connections per domain (in practice) to achieve parallelism;
+- HTTP/1.x: One request per connection at a time, with up to 6 connections per domain (in practice) to achieve parallelism;
   - HTTP/1.0: The connection will be closed after the request is completed;
-  - HTTP/1.1: The connection can be reused by next request;
-- HTTP/2: Multiple request per connection at a time, no need to open multiple connections for same domain, with header compression, based on TCP;
-- HTTP/3: **Based on QUIC**, which is a transport protocol built on top of UDP, packet loss no longer block the queue.
+  - HTTP/1.1: The connection can be reused by the next request;
+- HTTP/2: Multiple requests per connection at a time, no need to open multiple connections for the same domain, with header compression, based on TCP;
+- HTTP/3: **Based on QUIC**, which is a transport protocol built on top of UDP; packet loss no longer blocks the queue.
 
   <details>
     <summary>More details about queue blocking</summary>
 
-    TCP protocol enforces in-order delivery, in HTTP/2, if a packet of request A is lost, all the other requests in the same connection B, C, D... should wait for the retransmission of request A, we call this phenomenon "head-of-line blocking".
+    The TCP protocol enforces in-order delivery. In HTTP/2, if a packet of request A is lost, all the other requests in the same connection, B, C, D..., have to wait for the retransmission of request A. We call this phenomenon "head-of-line blocking".
 
-    In HTTP/3, since it is based on QUIC, which is built on top of UDP who does not enforce in-order delivery, packet loss no longer block the queue, so the performance is better than HTTP/2.
+    In HTTP/3, since it is based on QUIC, which is built on top of UDP, which does not enforce in-order delivery, packet loss no longer blocks the queue, so the performance is better than HTTP/2.
   </details>
 
-So, to deploy a modern web applications, you should use at least HTTP/2! 🥰
+So, to deploy a modern web application, you should use at least HTTP/2! 🥰
 
 ## Enable High HTTP Versions
 
-High HTTP versions are only supported in HTTPS protocol, so you need to prepare your SSL certificate first.
+High HTTP versions are only supported in the HTTPS protocol, so you need to prepare an SSL certificate first.
 
 > [!Note]
-> In local environment, you can use [mkcert](https://github.com/FiloSottile/mkcert) to generate a local CA and certificates to enable HTTPS.
+> In a local environment, you can use [mkcert](https://github.com/FiloSottile/mkcert) to generate a local CA and certificates to enable HTTPS.
 
 ### Enable HTTP/2
 
@@ -89,7 +89,7 @@ With Nginx, you need to check if your Nginx version supports HTTP/3:
 nginx -V 2>&1 | grep -- --with-http_v3_module
 ```
 
-If you see the output is not empty, it means your Nginx supports HTTP/3 (Otherwise, you need to upgrade your Nginx version or use Linux version). Then you can add the following configuration to enable HTTP/3:
+If the output is not empty, it means your Nginx supports HTTP/3 (otherwise, you need to upgrade your Nginx version or use a Linux build). Then you can add the following configuration to enable HTTP/3:
 
 ```nginx
 server {

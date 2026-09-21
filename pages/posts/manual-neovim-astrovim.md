@@ -1,7 +1,7 @@
 ---
 title: Neovim and AstroVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-08-19T11:14+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 26min
 type: manual
@@ -30,9 +30,9 @@ order: 4
 
 Neovim is a modern fork of Vim, which aims to improve the extensibility and usability of Vim.
 
-AstroVim is a Neovim configuration distribution with plenty of configuration defaults, which provide (almost) out-of-box experience to us.
+AstroVim is a Neovim configuration distribution with plenty of configuration defaults, which provides an (almost) out-of-the-box experience to us.
 
-### Why I Choose AstroVim Other than LazyVim?
+### Why I Choose AstroVim over LazyVim
 
 - Minimal
 - Configurations are structured
@@ -46,13 +46,13 @@ To install Neovim, I highly recommend using the package manager for your operati
 winget add --exact --id Neovim.Neovim
 ```
 
-To install AstroVim, make sure your system satisfies [the requirements](https://docs.astronvim.com/#-requirements) first, then just simply follow [the official documentation](https://docs.astronvim.com/).
+To install AstroVim, make sure your system satisfies [the requirements](https://docs.astronvim.com/#-requirements) first, then simply follow [the official documentation](https://docs.astronvim.com/).
 
 Or just try [my configuration setup](https://github.com/lumirelle/dotfiles), powered by [Chezmoi](https://github.com/twpayne/chezmoi).
 
 ## Basic Usage
 
-[Neovim Quick Reference](https://neovim.io/doc/user/quickref.html) & [AstroVim Mappings]https://docs.astronvim.com/mappings().
+[Neovim Quick Reference](https://neovim.io/doc/user/quickref.html) & [AstroVim Mappings](https://docs.astronvim.com/mappings).
 
 ### Launch Neovim
 
@@ -62,7 +62,7 @@ To launch Neovim with AstroVim, simply open your terminal and type:
 nvim
 ```
 
-Then you will see the home screen (dashboard). The first time you open that dashboard, AstroVim will automatically setup the plugins for you, which may take a while. After that, you can start using them.
+Then you will see the home screen (dashboard). The first time you open that dashboard, AstroVim will automatically set up the plugins for you, which may take a while. After that, you can start using them.
 
 To launch with a specific file, use:
 
@@ -70,13 +70,13 @@ To launch with a specific file, use:
 nvim path/to/your/file
 ```
 
-Then you will see a editor buffer with the file opened.
+Then you will see an editor buffer with the file opened.
 
-If you have entered Neovim, you can also try command `:e path/to/your/file` to open a file in the current buffer, or `:tabnew path/to/your/file` to open a file in a new tab.
+If you have entered Neovim, you can also try the command `:e path/to/your/file` to open a file in the current buffer, or `:tabnew path/to/your/file` to open a file in a new tab.
 
 ### Modes
 
-Neovim has several modes, the most commonly used ones are:
+Neovim has several modes; the most commonly used ones are:
 
 - **Normal mode**: The default mode, used for navigation and manipulation of text.
 - **Insert mode**: Used for inserting text.
@@ -86,7 +86,7 @@ Neovim has several modes, the most commonly used ones are:
 
 ### Write & Quit <a name="write-quit"></a>
 
-Belows are the commonly used commands for writing and quitting Neovim:
+Below are the commonly used commands for writing and quitting Neovim:
 
 | Group[^1] | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -95,8 +95,8 @@ Belows are the commonly used commands for writing and quitting Neovim:
 |  | `:wa[ll][!]` | Normal, Visual | Write **all buffers** |
 | Quit | `:q[uit][!]` | Normal, Visual | Quit **current buffer**, **unless / discard** changes made, which depends on the presence of `[!]`. Exit Neovim when there is not any other non-help buffer |
 |  | `:qa[ll][!]` | Normal, Visual | Quit **all buffers** (so this will cause Neovim to exit directly), **unless / discard** changes made, which depends on the presence of `[!]` |
-| Write & Quit | `:wq[!]` | Normal, Visual | The combination of `:w` and `:q`, write current buffer to current file, then quit that buffer |
-|  | `:wq[!] {file}` | Normal, Visual | Write current buffer to `{file}` and exit that buffer |
+| Write & Quit | `:wq[!]` | Normal, Visual | The combination of `:w` and `:q`: write the current buffer to the current file, then quit that buffer |
+|  | `:wq[!] {file}` | Normal, Visual | Write the current buffer to `{file}` and exit that buffer |
 |  | `:wqall[!]` | Normal, Visual | Write **all buffers** and exit those buffers (will cause Neovim to exit directly) |
 |  | `:x[it][!]` | Normal, Visual | **When changes** have been made, equivalent to `:wq`; Otherwise, equivalent to `:q` |
 |  | `:x[it][!] {file}` | Normal, Visual | **When changes** have been made, equivalent to `:wq {file}`; Otherwise, equivalent to `:q` |
@@ -111,7 +111,7 @@ There are also some **common (not all) & useful** shortcuts for write and quit c
 | `<leader>Q` | Normal | Shortcut for `:confirm qall` |
 | `ZZ` | Normal | Shortcut for `:x` |
 
-[^1]: I use these groups to categorize the commands and help memorize them. There is no "group" concept in Neovim, it's just for learning purpose.
+[^1]: I use these groups to categorize the commands and help memorize them. There is no "group" concept in Neovim, it's just for learning purposes.
 [^2]: This means you should start typing the command in the referred mode(s). For the commands starting with `:`, it will enter command-line mode after you type `:` directly.
 
 ### Motions
@@ -158,7 +158,7 @@ Motions are the commands that help us navigate through the text. Most of them ar
 
 #### Word Motions
 
-Moving by characters and lines is too slow for most cases, another kind of motions we often use is text object motions. Words are the most commonly used text objects, both writing and programming:
+Moving by characters and lines is too slow for most cases; another kind of motion we often use is text object motions. Words are the most commonly used text objects, both in writing and programming:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -171,15 +171,15 @@ Moving by characters and lines is too slow for most cases, another kind of motio
 |  | N `ge` | Normal, Visual | Backward to the end of the Nth word |
 |  | N `gE` | Normal, Visual | Backward to the end of the Nth WORD **(blank-separated)** |
 
-There is a way can help you remember them easier, if you are [LTR writing system](https://en.wikipedia.org/wiki/Left-to-right) user:
+There is a way that can help you remember them more easily, if you are an [LTR writing system](https://en.wikipedia.org/wiki/Left-to-right) user:
 
-- `w`, `e` are the two adjacent keys on the keyboard, who are both used to move **forward**. `w` is the **left one**, which means moving forward to the **beginning of word**; `e` is the **right one**, which means moving forward to the **end of word**
+- `w`, `e` are the two adjacent keys on the keyboard, which are both used to move **forward**. `w` is the **left one**, which means moving forward to the **beginning of word**; `e` is the **right one**, which means moving forward to the **end of word**
 - `b` means **"backward" & "beginning"**, which is used to move backward to the beginning of word
-- We often use goto command to express the opposite / switch state, so: `ge` means move **backward** to the **end** of word
+- We often use the goto command to express the opposite / switch state, so: `ge` means moving **backward** to the **end** of the word
 
 #### Bracket / Comment Motions
 
-In programming, brackets (including parentheses, (curly) braces & (square) brackets), and (block) comments are also one of the commonly used text objects, they all have opening and closing pairs:
+In programming, brackets (including parentheses, (curly) braces & (square) brackets) and (block) comments are also among the commonly used text objects; they all have opening and closing pairs:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -201,14 +201,14 @@ In programming, brackets (including parentheses, (curly) braces & (square) brack
 |  | N `(` | Normal, Visual | N sentences backward |
 | Paragraph | N `}` | Normal, Visual | N paragraphs forward |
 |  | N `{` | Normal, Visual | N paragraphs backward |
-| Section | N `]]` | Normal, Visual | N sections forward, at **start** of section. Section are defined by file-specific markers, usually requiring additional plugins |
+| Section | N `]]` | Normal, Visual | N sections forward, at **start** of section. Sections are defined by file-specific markers, usually requiring additional plugins |
 |  | N `[[` | Normal, Visual | N sections backward, at **start** of section |
 |  | N `][` | Normal, Visual | N sections forward, at **end** of section |
 |  | N `[]` | Normal, Visual | N sections backward, at **end** of section |
 
 #### Text Object Motions with Other Operators
 
-These special text object motions used with other operators are often start with `i` (inner) or `a` (around), which means whether to include the leading and trailing characters:
+These special text object motions used with other operators often start with `i` (inner) or `a` (around), which indicates whether to include the leading and trailing characters:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -237,7 +237,7 @@ These special text object motions used with other operators are often start with
 
 #### Find & Search Motions <a name="find-search-motions"></a>
 
-If you have a really long file and want to move to a specific character or word, you can achieve this by find/search motions:
+If you have a really long file and want to move to a specific character or word, you can achieve this with find/search motions:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -256,7 +256,7 @@ If you have a really long file and want to move to a specific character or word,
 | Repeat Search | N `n` | Normal, Visual | Repeat the last search N times |
 |  | N `N` | Normal, Visual | Repeat the last search N times in **opposite direction** |
 
-There are also some useful find & search motions for coding, which require additional lsp information setup by Neovim itself:
+There are also some useful find & search motions for coding, which require additional LSP information set up by Neovim itself:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -264,7 +264,7 @@ There are also some useful find & search motions for coding, which require addit
 |  | `gri` | Normal | `vim.lsp.buf.implementation()` |
 |  | `grr` | Normal | `vim.lsp.buf.references()` |
 
-And belows are setup by AstroVim:
+And below are the ones set up by AstroVim:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
@@ -321,7 +321,7 @@ To navigate between windows:
 |  | `<C-k>` | Normal | Move to the window above |
 |  | `<C-l>` | Normal | Move to the right window |
 
-To close (quit) windows, you already know how to do: [Write & Quit](#write-quit)
+To close (quit) windows, you already know how to do it: [Write & Quit](#write-quit)
 
 #### Buffer
 
@@ -352,9 +352,9 @@ To close buffers:
 
 > [!Note]
 >
-> For some modern terminals, like _Windows Terminal_, they may have the keybing from `<C-v>` to paste from clipboard by default, you can disable that keybinding in the terminal settings to use it for blockwise visual mode in Neovim.
+> For some modern terminals, like _Windows Terminal_, they may have the keybinding for `<C-v>` set to paste from the clipboard by default; you can disable that keybinding in the terminal settings to use it for blockwise visual mode in Neovim.
 >
-> To copy and paste, you can use `<C-Insert>` and `<S-Insert>` instead, this are the legacy keybindings which are supported by most of the terminals.
+> To copy and paste, you can use `<C-Insert>` and `<S-Insert>` instead; these are the legacy keybindings which are supported by most terminals.
 
 ### Edit
 
@@ -362,21 +362,21 @@ To close buffers:
 
 | Group | Command | Mode | Description | Also |
 | -- | -- | -- | -- | -- |
-| Append | N `a` | Normal | append text after the cursor (n times) |  |
-|  | n `a` | normal | append text at eol (n times) |  |
-| insert | n `i` | normal | insert text before the cursor (n times) | `<insert>` |
-|  | n `i` | normal | insert text before the first non-blank character of the line (N times) |  |
+| Append | N `a` | Normal | Append text after the cursor (N times) |  |
+|  | n `a` | normal | Append text at EOL (n times) |  |
+| Insert | n `i` | normal | Insert text before the cursor (N times) | `<insert>` |
+|  | n `i` | normal | Insert text before the first non-blank character of the line (N times) |  |
 |  | N `gI` | Normal | Insert text at the beginning of the line (N times) |  |
 | New line | N `o` | Normal | Open a new line below the current line, append text (N times) |  |
 |  | N `O` | Normal | Open a new line above the current line, insert text (N times) |  |
 
-Use `<Esc>` & `<C-[>` (Neovim built-in) or `jk` & `jj` (AstroVim specify) to exit insert mode and return to normal mode.
+Use `<Esc>` & `<C-[>` (Neovim built-in) or `jk` & `jj` (specified by AstroVim) to exit insert mode and return to normal mode.
 
 > [!Note]
 >
-> For some terminals like _Windows Terminal_, they may sand something different to what you actually pressed, for example, for `<C-[>`, it may send `\u001b[46;5u` instead.
+> For some terminals like _Windows Terminal_, they may send something different from what you actually pressed; for example, for `<C-[>`, it may send `\u001b[46;5u` instead.
 >
-> You need to use something like actions in _Windows Terminal_ to custom the sendings to fix this.
+> You need to use something like actions in _Windows Terminal_ to customize the key sendings to fix this.
 
 #### Special Keys in Insert Mode
 
@@ -510,7 +510,7 @@ In Neovim, you can start multi cursor from blockwise visual mode:
 
 | Group | Command | Mode | Description |
 | -- | -- | -- | -- |
-| Terminal | N `<C-'>` | Normal, Terminal | Open a terminal N (it's number order) in root directory |
+| Terminal | N `<C-'>` | Normal, Terminal | Open terminal N (in numerical order) in the root directory |
 
 ### Version Information
 

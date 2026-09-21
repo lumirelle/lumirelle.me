@@ -1,7 +1,7 @@
 ---
 title: 'Performance Optimization: Manually Split Chunks'
 date: 2025-11-05T16:22+08:00
-update: 2026-06-24T18:01+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 14min
 type: note
@@ -11,19 +11,19 @@ type: note
 
 ## Introduction
 
-As a modern front-end developer, you may be very familiar with the word **"chunks splitting"**.
+As a modern front-end developer, you may be very familiar with the word **"chunk splitting"**.
 
-But before this, we must understand the concepts of **"module", "chunk" and "bundle"**: They are the concepts from Webpack, but they are also widely used in other modern bundlers / build tools.
+But before that, we must understand the concepts of **"module", "chunk" and "bundle"**: They are concepts from Webpack, but they are also widely used in other modern bundlers / build tools.
 
 ### Module
 
-A "module" is **any source file** in your project (like `.js`, `.ts`, `.vue`, and even though a `.css`, `.svg`, etc.), which **can be (or supported to be)** processed by your bundler / build tool and imported into other "modules".
+A "module" is **any source file** in your project (like `.js`, `.ts`, `.vue`, and even `.css`, `.svg`, etc.), which **can be (or is supported to be)** processed by your bundler / build tool and imported into other "modules".
 
 ### Chunk
 
 A "chunk" is **a group of modules** which **will be compiled into a single output file** by your bundler / build tool, so it determines the output bundle structure of your project.
 
-In a word: **"chunks splitting" determines which modules are grouped together into chunks.** (So, I'm willing to call it "chunk grouping" or "code splitting" instead "chunks splitting")
+In a word: **"chunk splitting" determines which modules are grouped together into chunks.** (So, I'm willing to call it "chunk grouping" or "code splitting" instead of "chunk splitting")
 
 #### Basic Chunking Behavior
 
@@ -118,19 +118,19 @@ console.log('This is a library.')
 
 </tbody></table>
 
-Unfortunately, things are much more complicated for Web applications, because we have not only JS / TS modules, but also HTML modules, style modules (like `.css`, `.scss`, etc.) and even though asset modules (like `.svg`, `.png`, etc.).
+Unfortunately, things are much more complicated for Web applications, because we have not only JS / TS modules, but also HTML modules, style modules (like `.css`, `.scss`, etc.) and even asset modules (like `.svg`, `.png`, etc.).
 
 And due to the technical limitation, when you try to group modules, you:
 
 - **Can** group JS / TS modules into a JS chunk, of course;
 - **Can** group style modules into a CSS chunk, of course;
-- **Can not** group JS / TS modules into a CSS chunk, of course;
-- **Can not** group style modules into a JS chunk
+- **Cannot** group JS / TS modules into a CSS chunk, of course;
+- **Cannot** group style modules into a JS chunk
   - Unless you are using runtime CSS injection technique (like [style-loader](https://webpack.js.org/loaders/style-loader/), [vite-plugin-style-inject](https://www.npmjs.com/package/vite-plugin-style-inject), etc.);
   - Unless you are using "CSS-in-JS" technique (like [styled-components](https://styled-components.com/), [emotion](https://emotion.sh/docs/introduction), etc.);
 - Other modules (like `.svg`, `.png`, etc.) are usually treated as **asset modules**, which will be emitted into the output directory as separate files, and cannot be grouped into JS / CSS chunks. Also, the import result of those modules will be replaced with the URL of the emitted file.
 
-Also, the entrypoint module of a Web application is usually a HTML module, which is belong to asset modules, so there is a special behavior: **Each module imported by the entrypoint HTML will be grouped into a separate chunk**, just like they are all entrypoint modules.
+Also, the entrypoint module of a Web application is usually a HTML module, which belongs to asset modules, so there is a special behavior: **Each module imported by the entrypoint HTML will be grouped into a separate chunk**, just like they are all entrypoint modules.
 
 For example, a simple Vite project:
 
@@ -259,13 +259,13 @@ _dist/assets/icon.svg_
 
 </tbody></table>
 
-#### Things to Consider in Chunks Splitting
+#### Things to Consider in Chunk Splitting
 
 To group modules into chunks, there are a lot of strategies, also a lot of things to consider.
 
-The first thing is the **chunk execution order**: If module1 is imported before module2, after they group into two chunks, we still need to ensure that the chunk contains module1 is imported first, otherwise, it may break the logic of the application, especially for side effect code.
+The first thing is the **chunk execution order**: If module1 is imported before module2, after they are grouped into two chunks, we still need to ensure that the chunk containing module1 is imported first; otherwise, it may break the logic of the application, especially for side effect code.
 
-The second thing is **to avoid circular chunks, also to avoid mangle the exports of entrypoint modules**. There is a simple example:
+The second thing is **to avoid circular chunks, and also to avoid mangling the exports of entrypoint modules**. There is a simple example:
 
 _src/index.js_
 
@@ -390,7 +390,7 @@ export { bar, foo }
 
 #### Tree Shaking
 
-Specially, if a module is never been used by any other module, it will not been grouped into any chunk, this is called **"tree shaking"**.
+Specifically, if a module is never used by any other module, it will not be grouped into any chunk; this is called **"tree shaking"**.
 
 Example:
 
@@ -428,51 +428,51 @@ console.log(foo)
 
 A "bundle" is **an output file** generated by your bundler / build tool **for each emitted chunk**.
 
-## Why Manually Chunks Splitting?
+## Why Manually Split Chunks?
 
 > [!Note]
 >
 > This background is necessary for us to understand the motivation of manually splitting chunks, and how to split chunks.
 
-After understanding the concepts of "module", "chunk" and "bundle", we know "chunk" deeply determine the output structure of "bundle", so manually splitting chunks can help us to control the output, which can bring the following benefits:
+After understanding the concepts of "module", "chunk" and "bundle", we know "chunk" deeply determines the output structure of "bundle", so manually splitting chunks can help us to control the output, which can bring the following benefits:
 
-- **Improve cache efficiency**: Separating the vendor modules (like Vue, React, etc.) into separate chunks can improve the cache efficiency, because these modules are usually used everywhere in the application, and they are not changed frequently. So we can take advantage of the browser & CDN cache to avoid re-downloading them every time we change the source code;
-- **Page loading performance**: **Since HTTP/2.0**, the browser can **handle more requests in parallel** (one TCP connection, multiplexing) than HTTP/1.1 (up to 6 TCP connections per domain), we can safely split the large output bundles into more smaller chunks, to improve the page loading performance.
+- **Improve cache efficiency**: Separating the vendor modules (like Vue, React, etc.) into separate chunks can improve cache efficiency, because these modules are usually used everywhere in the application, and they do not change frequently. So we can take advantage of the browser & CDN cache to avoid re-downloading them every time we change the source code;
+- **Page loading performance**: **Since HTTP/2.0**, the browser can **handle more requests in parallel** (one TCP connection, multiplexing) than HTTP/1.1 (up to 6 TCP connections per domain), so we can safely split the large output bundles into smaller chunks, to improve the page loading performance.
   > [!Note]
   > [Rolldown](https://rolldown.rs/)'s recommended chunk size is around **100KiB ~ 250KiB**, and [Webpack](https://webpack.js.org/plugins/split-chunks-plugin/#optimizationsplitchunks)`s recommended chunk size is around **20KiB ~ 244KiB**.
 
-## How to do Manual Chunks Splitting?
+## How to Do Manual Chunk Splitting?
 
 ### Modern Bundler Default Chunking Behavior
 
-Modern bundlers / build tools have already provided a default split strategy preset for us as fallback:
+Modern bundlers / build tools have already provided a default split strategy preset for us as a fallback:
 
 - Based on the [Basic chunking behavior](#basic-chunking-behavior);
 - They will extract **shared parts** from the bundle into independent chunks.
 
-These strategies are suitable for most of the cases, except for some special ones:
+These strategies are suitable for most cases, except for some special ones:
 
-1. Want to cache the vendor modules which is **used everywhere**.
+1. Want to cache vendor modules that are **used everywhere**.
 
-    If you are familiar with the principle of the modern bundlers / build tools, you may know that they will attach file hash to each output file, so that we (actually, it's the browser) can identify the file version easily. CDN also uses these hash to identify the file version.
+    If you are familiar with the principle of the modern bundlers / build tools, you may know that they will attach a file hash to each output file, so that we (actually, it's the browser) can identify the file version easily. The CDN also uses these hashes to identify the file version.
 
-    If you put both the source code and the dependencies into the same chunk, every time you change the source code, the hash of this chunk will change, and user should re-fetch the whole chunk, even though a bunch of the code (from the dependencies) has not changed. This cause CDN cache invalidation, and hurts the website performance.
+    If you put both the source code and the dependencies into the same chunk, every time you change the source code, the hash of this chunk will change, and the user has to re-fetch the whole chunk, even though a bunch of the code (from the dependencies) has not changed. This causes CDN cache invalidation and hurts website performance.
 
     In this case, we need to separate these chunks manually.
 
-2. Some of output chunks with default strategy are too large, we need to split them into smaller chunks manually.
+2. Some output chunks produced by the default strategy are too large, so we need to split them into smaller chunks manually.
 
 
-### Things to Consider in Manual Chunks Splitting
+### Things to Consider in Manual Chunk Splitting
 
 When we want to split chunks manually, we need to consider the following things:
 
-With the popularization of **ESM**, **build-time tree shaking** becoming the standard optimization method for reducing bundle size, this presents a requirement for us when doing code splitting: **Do not mix one-time used modules with shared modules in the same chunk**, otherwise, the effect of tree shaking will be degraded.
+With the popularization of **ESM**, **build-time tree shaking** has become the standard optimization method for reducing bundle size, this presents a requirement for us when doing code splitting: **Do not mix one-time used modules with shared modules in the same chunk**, otherwise, the effect of tree shaking will be degraded.
 
 <details>
 <summary>Reason</summary>
 
-Imagine that, you have a web application with two dynamic imported routes `/home` & `/about`:
+Imagine that you have a web application with two dynamically imported routes `/home` & `/about`:
 
 ```ts
 const routes = [
@@ -491,7 +491,7 @@ const routes = [
 
 When you visit the `/home` route, it's expected that only the code related to the `/home` route will be loaded.
 
-Assume these two pages both use the same vendor library, for example, `loadash-es`, `/home` uses `debounce` function, while `/about` uses `throttle` function.
+Assume these two pages both use the same vendor library, for example, `lodash-es`: `/home` uses the `debounce` function, while `/about` uses the `throttle` function.
 
 _src/pages/home.vue_
 
@@ -534,7 +534,7 @@ function throttle() {
 // ...
 ```
 
-Every time you visit `/home`, only `debounce` function will be loaded; every time you visit `/about`, only `throttle` function will be loaded. So clean and efficient!
+Every time you visit `/home`, only the `debounce` function will be loaded; every time you visit `/about`, only the `throttle` function will be loaded. So clean and efficient!
 
 What if you extract the whole vendor library `lodash-es` into a separate chunk? The output bundles will be like this:
 
@@ -566,17 +566,17 @@ import { throttle } from './vendor.js'
 // ...
 ```
 
-Oops, every time you visit each page, browser will always download the whole `vendor.js`! Although the tree shaking is still working: never used code still not be included in the chunks, but this cause unused code to be downloaded and executed in some cases, which degrades the loading performance of the first screen.
+Oops, every time you visit each page, the browser will always download the whole `vendor.js`! Although tree shaking is still working: unused code is still not included in the chunks, but this causes unused code to be downloaded and executed in some cases, which degrades the loading performance of the first screen.
 
 </details>
 
 ### Vite
 
-Since Vite 8, it uses _Rolldown_ as the low-level bundler, supporting more flexible configuration for chunks splitting, which is similar to _Webpack_.
+Since Vite 8, it uses _Rolldown_ as the low-level bundler, supporting more flexible configuration for chunk splitting, which is similar to _Webpack_.
 
-What's more, its **"automatic code splitting"** feature provides more intelligent default chunk splitting strategy, than Webpack: It will group **the module and its dependencies** within the same chunk group, without considering the constraints, which is what we expect in most cases. See more details [here](https://rolldown.rs/in-depth/manual-code-splitting#why-does-the-group-contain-modules-that-don-t-satisfy-the-constraints).
+What's more, its **"automatic code splitting"** feature provides a more intelligent default chunk splitting strategy than Webpack: It will group **the module and its dependencies** within the same chunk group, without considering the constraints, which is what we expect in most cases. See more details [here](https://rolldown.rs/in-depth/manual-code-splitting#why-does-the-group-contain-modules-that-don-t-satisfy-the-constraints).
 
-BTW, Vite & Rolldown called chunk splitting to **"code splitting"**, we can use `build.rolldownOptions.output.codeSplitting` in the configuration (like `vite.config.ts`) to custom the behavior.
+BTW, Vite & Rolldown call chunk splitting **"code splitting"**; we can use `build.rolldownOptions.output.codeSplitting` in the configuration (like `vite.config.ts`) to customize the behavior.
 
 _vite.config.ts_
 
@@ -642,9 +642,9 @@ export default defineConfig({
 
 ### Vite 7
 
-For Vite 7 and below, we can only use `build.rollupOptions.output.manualChunks` in the configuration (like `vite.config.ts`) to custom the chunks splitting behavior.
+For Vite 7 and below, we can only use `build.rollupOptions.output.manualChunks` in the configuration (like `vite.config.ts`) to customize the chunk splitting behavior.
 
-Due to the limitation of Rollup, it is much less flexible than Vite 8 & Webpack: **Vite 7 just supports to cache the vendor modules into separate chunks.**
+Due to the limitation of Rollup, it is much less flexible than Vite 8 & Webpack: **Vite 7 only supports caching the vendor modules into separate chunks.**
 
 _vite.config.ts_
 
@@ -678,7 +678,7 @@ export default defineConfig({
 
 For Webpack, we can use `optimization.splitChunks` in the configuration (like `webpack.config.js`) to split chunks.
 
-It has a default configuration, you can refer [the document](https://webpack.js.org/plugins/split-chunks-plugin/#optimizationsplitchunks) for more details.
+It has a default configuration; you can refer to [the document](https://webpack.js.org/plugins/split-chunks-plugin/#optimizationsplitchunks) for more details.
 
 _webpack.config.js_
 
@@ -785,7 +785,7 @@ export default defineConfig({
 })
 ```
 
-And you can inspect the chunks in the "Chunks" tab of the opening website.
+And you can inspect the chunks in the "Chunks" tab of the page that opens.
 
 ### Vite 7
 

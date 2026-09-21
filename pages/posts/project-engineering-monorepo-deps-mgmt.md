@@ -1,7 +1,7 @@
 ---
 title: 'Project Engineering: Monorepo Dependencies Management'
 date: 2025-11-01T16:06+08:00
-update: 2026-07-20T12:01+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 2min
 type: note
@@ -27,9 +27,9 @@ type: note
 
 ## Introduction
 
-If you are working on a **"monorepo"**, you may have got in trouble with dependencies version management before: Each time you want to change the version of a shared dependency, you need to modify every place it has been referenced.
+If you are working on a **"monorepo"**, you may have run into trouble with dependency version management before: Each time you want to change the version of a shared dependency, you need to modify every place where it is referenced.
 
-Thanks to the modern [JavaScript package managers](manual-js-pm), we have **"workspace"** & **"catalogs"** (or "catalog", a unified catalog without explicit name) to handle this situation: You can define & use a catalog reference instead of plain version specifier.
+Thanks to the modern [JavaScript package managers](manual-js-pm), we have **"workspace"** & **"catalogs"** (or "catalog", a unified catalog without an explicit name) to handle this situation: You can define & use a catalog reference instead of a plain version specifier.
 
 For example:
 
@@ -102,17 +102,17 @@ For example:
 
 ## What's the Best Practice for Workspace?
 
-### Prefer "catalogs" than "catalog"
+### Prefer "catalogs" over "catalog"
 
 With **"catalogs"**, you can categorize your dependencies into different groups, which is much better for management.
 
 ### Less is More
 
-The meaning of categorizing your dependencies is to simplify the dependency management, so we shouldn't spend a lot of time to categorize them clearly and exactly.
+The point of categorizing your dependencies is to simplify dependency management, so we shouldn't spend a lot of time categorizing them precisely.
 
-For example, you don't need to categorize dev dependencies into `linter`, `formatter`, and other small pieces, just put them together in the `check` catalog, and that's quit enough.
+For example, you don't need to categorize dev dependencies into `linter`, `formatter`, and other small pieces, just put them together in the `check` catalog, and that's quite enough.
 
-There are my personal opinions about the catalog names:
+Here are my personal opinions about the catalog names:
 
 | Catalog for                       | Catalog Name for Web Applications  | Catalog Name for Libraries        |
 | --------------------------------- | ---------------------------------- | --------------------------------- |

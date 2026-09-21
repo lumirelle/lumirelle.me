@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
-update: 2026-09-20T21:21+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 20min
 type: note
@@ -28,7 +28,7 @@ type: note
 
 The only reason is to **make the code readable and maintainable**.
 
-As a developer, you spend far more time with code than with your girlfriend! So that you can spend more of that time with your family, we need code to be readable and maintainable.
+As a developer, you spend far more time with code than with your girlfriend! To spend more of that time with your family, we need code to be readable and maintainable.
 
 ## How to Organize Code?
 
@@ -40,7 +40,7 @@ The human brain can only hold a limited amount of information at a time. If we h
 
 #### What Is a Module and What Is Its Main Object?
 
-A **module** here is an independent collection of functionality that can be built on top of other external modules or provide functionality for other modules. It's module **on code organization level**.
+A **module** here is an independent collection of functionality that can be built on top of other external modules or provide functionality for other modules. It's a module **on the code organization level**.
 
 The **main object** of a module is the entity it is about: a noun you can point at (package, currency, partner), not an action you perform (purchase, display).
 
@@ -259,7 +259,7 @@ Similar to modules, if a file has more than one focus, it may break our concentr
 
 #### What Is a Focus?
 
-A **focus** is the purpose of this file: A module may contain multiple functionalities, and each file plays its own role in one or more functionalities and has its own concern — that concern is the file's focus.
+A **focus** is the purpose of this file: a module may contain multiple functionalities, and each file plays its own role in one or more functionalities and has its own concern — that concern is the file's focus.
 
 #### What Happens When a File Has Two Foci?
 
@@ -1090,7 +1090,7 @@ export function buildContactFormParams(formData: Ref<ContactFormData>): ContactF
 
 ### Extract Heavy Logic, But Do Not Separate It into Different Files If It's Non-reusable
 
-If a piece of code is heavy and reusable, we can extract it into a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-interdependent-code-into-different-files). But if a piece of code is not reusable — for example, it's a specific page's logic — we should not extract it into different files but one big composed function in the same file.
+If a piece of code is heavy and reusable, we can extract it into a separate file, just like [the `useFormAndSelectorComponent` example above](#do-not-separate-interdependent-code-into-different-files). But if a piece of code is not reusable — for example, it's a specific page's logic — we should not extract it into different files, but into one big composed function in the same file.
 
 <table><tbody>
 
@@ -1347,7 +1347,7 @@ function useTemplatePage() {
 </template>
 ```
 
-For plain JavaScript / TypeScript, we can still achieve this by using a big composed function with nested functions (In fact, the code within the `<script>` tag in the `.vue` file is plain JavaScript / TypeScript code):
+For plain JavaScript / TypeScript, we can still achieve this by using a big composed function with nested functions (in fact, the code within the `<script>` tag in the `.vue` file is plain JavaScript / TypeScript code):
 
 _src/utils/complex-logic.ts_
 

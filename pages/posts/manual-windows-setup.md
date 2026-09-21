@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-20T11:26+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 21min
 type: manual
@@ -46,7 +46,7 @@ We can use [_Ventoy_](https://www.ventoy.net/en/download.html) and a _Windows op
 
 First, insert your USB flash drive.
 
-If you want to store some extra files on your USB flash drive, such as essential software (like [_Clash Verge Rev_](#prerequisite-software)), you can divide the drive into two partitions.
+If you want to store some extra files on your USB flash drive, such as essential software ([_Clash Verge Rev_](#prerequisite-software)), you can divide the drive into two partitions.
 
 Partitioning will not affect Ventoy's ability to find the image files, but **remember which partition you installed Ventoy itself on**. While booting the installer from the BIOS, you need to select the correct partition.
 
@@ -343,7 +343,7 @@ In the tables below, `~` means the same as above.
 | KeePassXC-Browser | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) & [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
 | Dark Reader | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) & [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes!!! |
 | Read Frog | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/read-frog-open-ai-translator/) & [Chromium](https://chromewebstore.google.com/detail/read-frog-translate-learn/modkelfkcfjpgbfmnbnllalkiogfofhb) | / |
-| Vimium C - All by Keyboard | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) & [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled |
+| Vimium C - All by Keyboard | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) & [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled. |
 | Refined Github | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) & [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | Requires your GitHub access token. |
 | File Icons for GitHub and GitLab | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) & [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
 | Npmx redirect | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) & [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Fuck Npm! |
@@ -395,7 +395,7 @@ wsl --install Debian --location {{install_location_you_prefer}}
 > [!Note]
 > The commands below use the _Arch_ distribution and its package manager, `pacman`, as examples.
 
-Below software is required for daily use and development in WSL:
+The software below is required for daily use and development in WSL:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
@@ -453,7 +453,7 @@ su - {{username}}
 > [!Note]
 > The commands below use the _Arch_ distribution and its package manager, `pacman`, as examples.
 
-Below software is highly recommended and helpful for development with Linux; you may want to install them **in the order you need**:
+The software below is highly recommended and helpful for development with Linux; you may want to install them **in the order you need**:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
@@ -536,13 +536,13 @@ If you prefer to use Windows itself as your development environment, or you are 
 
 Some versions of Windows have a feature called "App Execution Aliases", which is enabled by default.
 
-With this feature enabled, Windows will automatically create a stub executable under `~/AppData/Local/Microsoft/WindowsApps/`, like `python.exe`, even if you have not installed the corresponding application.
+With this feature enabled, Windows will automatically create a stub executable under `~/AppData/Local/Microsoft/WindowsApps/`, such as `python.exe`, even if you have not installed the corresponding application.
 
 What's more, the Windows app path `~/AppData/Local/Microsoft/WindowsApps/` is placed at the very front of the system environment variable `Path` by default, which means that if you install _Python_ in your own way (such as with `winget add`, or the installer from the official website), the system will still resolve `python` to the stub executable instead of yours, which is really annoying.
 
 Before disabling this feature, let's just say: **"Fuck you, Windows! Fuck you, Microsoft!"**
 
-To disable this "feature" (Yes, this is a real "feature" XD):
+To disable this "feature" (yes, this is a real "feature" XD):
 
 1. Open "Settings > Apps > Advanced app settings > App execution aliases".
 2. Find "App Installer (python.exe)" & "App Installer (python3.exe)" and turn off the switch.

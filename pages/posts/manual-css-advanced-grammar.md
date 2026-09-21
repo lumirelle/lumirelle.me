@@ -1,7 +1,7 @@
 ---
 title: CSS Advanced Grammar Manual
 date: 2026-04-26T20:56+08:00
-update: 2026-04-30T17:38+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 20min
 type: manual
@@ -17,7 +17,7 @@ CSS (Cascading Style Sheets) is a stylesheet language used to describe the prese
 
 - **Selectors**: Used to select the elements to which the styles will be applied;
 - **Properties & Values (with Units)**: Used to specify the styles to be applied to the selected elements;
-- **Layers & Specificity**: Used to determine which styles will be applied when there are conflicting styles.
+- **Layers & Specificity**: Used to determine which styles will be applied when there are conflicting styles;
 - **Variables**: Used to store values that can be reused throughout the stylesheet;
 - **Functions**: Used to perform calculations or manipulate values in the stylesheet;
 - **Media Queries**: Used to apply styles based on the characteristics of the device or viewport.
@@ -28,7 +28,7 @@ The common uses of CSS are:
 
 ## Selectors
 
-### How Browser Match Nested Selectors?
+### How Do Browsers Match Nested Selectors?
 
 When the browser matches nested selectors, it starts **from the rightmost** selector and **moves leftwards**. For example, for the selector `.parent .child`, the browser will first look for elements with the class `child`, and then check if they have a parent element with the class `parent`. **This has better performance than starting from the leftmost selector**.
 
@@ -36,22 +36,22 @@ When the browser matches nested selectors, it starts **from the rightmost** sele
 
 ### Display
 
-The `display` property is used to control whether an element is **treated as a block or inline box** and **the layout used for its children**, it supports both the legacy **single-value syntax** and new [**multiple-value syntax**](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Display/Multi-keyword_syntax).
+The `display` property is used to control whether an element is **treated as a block or inline box** and **the layout used for its children**; it supports both the legacy **single-value syntax** and the new [**multiple-value syntax**](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Display/Multi-keyword_syntax).
 
 > [!Note]
 > Currently you gain no benefit from using the multiple-value versions, as there is a direct mapping for each multi-keyword version to a legacy version, as demonstrated in the table above.
 >
-> What's more, the multiple-value versions still has [limited browser compatibility](https://caniuse.com/mdn-css_properties_display_multi-keyword_values).
+> What's more, the multiple-value versions still have [limited browser compatibility](https://caniuse.com/mdn-css_properties_display_multi-keyword_values).
 
 The full acceptable & **useful** & **widely supported** values for the `display` property are as follows:
 
 | Short (Single) Value | Full (Multiple) Value | Description |
 | --- | --- | --- |
 | `none` | / | The element will be removed from the document |
-| `content` | / | The element will be replaced by it's content |
+| `content` | / | The element will be replaced by its content |
 | `block` | `block flow` | The element will be displayed as a **block-level [block container](https://drafts.csswg.org/css-display/#block-container)**, aka [**block box**](https://drafts.csswg.org/css-display/#block-box) |
 | `flow-root` | `block flow-root` | The element will be displayed as a **block-level [block container](https://drafts.csswg.org/css-display/#block-container)**, aka [**block box**](https://drafts.csswg.org/css-display/#block-box), and establish a new **BFC (Block Formatting Context)** |
-| `inline` | `inline flow` | The element will be displayed as an [**inline inline box**](https://drafts.csswg.org/css-display/#inline-box) |
+| `inline` | `inline flow` | The element will be displayed as an [**inline box**](https://drafts.csswg.org/css-display/#inline-box) |
 | `inline-block` | `inline flow-root` | The element will be displayed as an **inline-level [block container](https://drafts.csswg.org/css-display/#block-container)**, aka **inline block** |
 | `flex` | `block flex` | The element will be displayed as a **block-level [flex container](https://drafts.csswg.org/css-flexbox-1/#flex-container)** |
 | `inline-flex` | `inline flex` | The element will be displayed as an **inline-level [flex container](https://drafts.csswg.org/css-flexbox-1/#flex-container)** |
@@ -60,7 +60,7 @@ The full acceptable & **useful** & **widely supported** values for the `display`
 | ~~`table`~~ | ~~`block table`~~ | ~~The element will be displayed as a **block-level [table container](https://drafts.csswg.org/css-tables-3/#table-wrapper-box)**.~~ In practice, we'd better use `flex` or `grid` instead of `table`. |
 | ~~`inline-table`~~ | ~~`inline table`~~ | ~~The element will be displayed as an **inline-level [table container](https://drafts.csswg.org/css-tables-3/#table-wrapper-box)**.~~ In practice, we'd better use `flex` or `grid` instead of `table`. |
 
-The multiple values list above can be separated into below categories:
+The multiple values list above can be separated into the following categories:
 
 - Outside: These keywords specify the element's outer display type;
   - `block`
@@ -86,7 +86,7 @@ The multiple values list above can be separated into below categories:
   - `none`
   - `contents`
 
-Please refer to [layouts section](#layouts) for more details about the uses.
+Please refer to the [layouts section](#layouts) for more details about the uses.
 
 ## Layers & Specificity
 
@@ -110,7 +110,7 @@ When two conflicting styles **are in different layers**, they will be applied ac
     }
     ```
 
-2. **Layered styles** follow the order of declaration, the earlier declared layer will have higher precedence than the later declared layer;
+2. **Layered styles** follow the order of declaration: the earlier declared layer will have higher precedence than the later declared layer;
 
     _src/assets/explicitly-declared-layers.css_
 
@@ -151,7 +151,7 @@ When two conflicting styles **are in different layers**, they will be applied ac
     }
     ```
 
-Only if these two styles are **in the same layer**, they will be applied according to the specificity of their selectors. The **more specific selector** will have **higher precedence** and will be applied, and the specificity of each type of selector is calculated as follows:
+Only when these two styles are **in the same layer** will they be applied according to the specificity of their selectors. The **more specific selector** will have **higher precedence** and will be applied, and the specificity of each type of selector is calculated as follows:
 
 | Selector Type | Specificity Value (256-base, questionable) |
 | --- | --- |
@@ -167,7 +167,7 @@ When two conflicting styles are **in the same layer and have the same specificit
 
 ### Flex
 
-Flex layout is a **one-dimensional** layout, helps us to arrange items in a row or column.
+Flex layout is a **one-dimensional** layout that helps us to arrange items in a row or column.
 
 It has two main components: **flex container** and **flex items**. The flex container is the parent element that has `display: flex` or `display: inline-flex`, and the flex items are the child elements of the flex container.
 
@@ -217,7 +217,7 @@ _flex-wrap: wrap, allow flex items to wrap onto multiple lines_
   <div w-25 h-25 p-4 shrink-0 bg-red>6</div>
 </div>
 
-Why we say flex layout is a one-dimensional layout? Because flex items in flex layout are **only have their own sub cross axis**, but **shared one main axis**, although they are laid out in multiple lines:
+Why do we say flex layout is a one-dimensional layout? Because flex items in a flex layout **only have their own sub cross axis**, but **share one main axis**, even though they are laid out in multiple lines:
 
 <div m-auto flex flex-wrap gap-4 w-100 h-100 bg-blue relative>
   <div absolute left-50% transform -translate-x-50% top-0 bottom-0 w-1 bg-violet style="writing-mode: vertical-lr;">Cross Axis</div>
@@ -236,7 +236,7 @@ Why we say flex layout is a one-dimensional layout? Because flex items in flex l
   <div absolute left-83 transform -translate-x-50% top-52 bottom-0 w-1 bg-violet style="writing-mode: vertical-lr;">Sub Cross Axis</div>
 </div>
 
-<a name="flex-content-alignment"></a> To control the alignment of **the content (treat all items as a whole, surrounded by the white border)** along the **main axis**, we can use the **`justify-content` property**, and for **cross axis**, we can use the **`align-content` property**.
+<a name="flex-content-alignment"></a> To control the alignment of **the content (treat all items as a whole, surrounded by the white border)** along the **main axis**, we can use the **`justify-content` property**, and for the **cross axis**, we can use the **`align-content` property**.
 
 _justify-content: start, default_
 
@@ -349,7 +349,7 @@ _align-content: center_
 <a name="flex-items-alignment"></a> To control the alignment of **all the items** along **their own sub cross axis**, we can use the **`align-items` property**.
 
 > [!Note]
-> Because flex items have no sub main axis, `justify-items` property has no effect on them.
+> Because flex items have no sub main axis, the `justify-items` property has no effect on them.
 
 _align-items: center_
 
@@ -376,10 +376,10 @@ _align-items: center_
 
 #### Flex Items
 
-<a name="flex-item-alignment"></a> There is also a property can control individual alignment of specific flex item, which is `align-self` property, and it will override the `align-items` property defined in the parent container.
+<a name="flex-item-alignment"></a> There is also a property that can control the individual alignment of a specific flex item, which is the `align-self` property, and it will override the `align-items` property defined in the parent container.
 
 > [!Note]
-> Because flex items have no sub main axis, `justify-self` property has no effect on them.
+> Because flex items have no sub main axis, the `justify-self` property has no effect on them.
 
 _align-self: end, block 1_
 
@@ -404,9 +404,9 @@ _align-self: end, block 1_
   <div absolute left-83 transform -translate-x-50% top-63.5 w-1 h-25 bg-orange></div>
 </div>
 
-<a name="flex-item-sizing"></a> There are also some properties can control the sizing of flex items, such as `flex-grow`, `flex-shrink` and `flex-basis` properties, and they will override the default sizing behavior of flex items.
+<a name="flex-item-sizing"></a> There are also some properties that can control the sizing of flex items, such as `flex-grow`, `flex-shrink` and `flex-basis` properties, and they will override the default sizing behavior of flex items.
 
-`flex-grow` & `flex-shrink` properties accept a weight value:
+The `flex-grow` & `flex-shrink` properties accept a weight value:
 
 _flex-grow: 1_
 
@@ -425,7 +425,7 @@ _flex-shrink: 1_
   <div w-25 h-25 p-4 shrink-0 bg-red>4</div>
 </div>
 
-While `flex-basis` property accepts a length value:
+The `flex-basis` property accepts a length value:
 
 _flex-basis: 12.5rem, will override the default sizing_
 
@@ -435,7 +435,7 @@ _flex-basis: 12.5rem, will override the default sizing_
 
 #### Tricks
 
-To implement a header navigation bar with logo on the left and other navigation items on the right, you can simply use `flex` layout with `justify-content: flex-end` property, and set `margin-left: auto` on the logo item to push it to the left:
+To implement a header navigation bar with logo on the left and other navigation items on the right, you can simply use a `flex` layout with the `justify-content: flex-end` property, and set `margin-left: auto` on the logo item to push it to the left:
 
 <div m-auto flex justify-end gap-4 w-150 h-100 bg-blue relative>
   <div m-e-auto w-25 h-25 p-4 shrink-0 bg-red>1</div>
@@ -446,13 +446,13 @@ To implement a header navigation bar with logo on the left and other navigation 
 
 ### Grid
 
-Grid layout is a **two-dimensional** layout, helps us to arrange items in rows and columns. It has many similarities with [flex layout](#flex).
+Grid layout is a **two-dimensional** layout that helps us to arrange items in rows and columns. It has many similarities with [flex layout](#flex).
 
 It has two main components: **grid container** and **grid items**. The grid container is the parent element that has `display: grid` or `display: inline-grid`, and the grid items are the child elements of the grid container.
 
 #### Grid Container
 
-By default, when we have not specified how many the columns and rows are of the grid layout, it will create **auto-placed items** following the behavior controlled by a group of properties `grid-auto-*`.
+By default, when we have not specified how many columns and rows the grid layout has, it will create **auto-placed items** following the behavior controlled by a group of properties, `grid-auto-*`.
 
 <a name="grid-auto-flow"></a> The `grid-auto-flow` property is used to control which direction the auto-placed items will be placed in, `row` or `column`:
 
@@ -540,7 +540,7 @@ _grid-template-rows: 100px_
   <div p-4 shrink-0 bg-red>3</div>
 </div>
 
-<a name="grid-content-alignment"></a> To control the alignment of **the content (treat all items as a whole)**, we can use the **`justify-content` property** for **inline direction**, and **`align-content` property** for **block direction**.
+<a name="grid-content-alignment"></a> To control the alignment of **the content (treat all items as a whole)**, we can use the **`justify-content` property** for the **inline direction**, and the **`align-content` property** for the **block direction**.
 
 _justify-content: start, default_
 
@@ -574,7 +574,7 @@ _align-content: center_
   <div p-4 shrink-0 bg-red>3</div>
 </div>
 
-<a name="grid-items-alignment"></a> To control the alignment of **all the items**, we can use the **`justify-items` property** for **their own inline direction**, and **`align-items` property** for **their own block direction**.
+<a name="grid-items-alignment"></a> To control the alignment of **all the items**, we can use the **`justify-items` property** for **their own inline direction**, and the **`align-items` property** for **their own block direction**.
 
 _justify-items: stretch, default_
 
@@ -609,7 +609,7 @@ _align-items: center_
   <div p-4 shrink-0 bg-red>3</div>
 </div>
 
-<a name="grid-areas"></a> Instead of using number to specify the position of grid items, we can also use named grid areas defined by `grid-template-areas` property to control the layout of grid items, which is more maintainable and readable.
+<a name="grid-areas"></a> Instead of using numbers to specify the position of grid items, we can also use named grid areas defined by the `grid-template-areas` property to control the layout of grid items, which is more maintainable and readable.
 
 <div m-auto grid gap-4 w-100 h-100 bg-blue relative style="grid-template-areas: 'header header' 'sidebar main' 'sidebar footer';">
   <div p-4 shrink-0 bg-red style="grid-area: header;">header</div>
@@ -620,7 +620,7 @@ _align-items: center_
 
 #### Grid Items
 
-<a name="grid-item-alignment"></a> Of course, we can control the alignment of specific grid item by using `justify-self` and `align-self` properties, and they will override the `justify-items` and `align-items` properties defined in the parent container.
+<a name="grid-item-alignment"></a> Of course, we can control the alignment of a specific grid item by using the `justify-self` and `align-self` properties, and they will override the `justify-items` and `align-items` properties defined in the parent container.
 
 _justify-self: center, block 1_
 
@@ -638,7 +638,7 @@ _align-self: center, block 1_
   <div p-4 shrink-0 bg-red>3</div>
 </div>
 
-<a name="grid-item-position"></a> Because grid is a two-dimensional layout, we can easily control the position of each item by using `grid-row` and `grid-column` properties, and they will override the default auto-placement behavior of grid items.
+<a name="grid-item-position"></a> Because grid is a two-dimensional layout, we can easily control the position of each item by using the `grid-row` and `grid-column` properties, and they will override the default auto-placement behavior of grid items.
 
 _Specific positioning, allow overlapping (support negative indices)_
 
@@ -654,7 +654,7 @@ _With Span, smart typesetting_
   <div p-4 grid="row-span-2" shrink-0 bg-green op-80>Spans 2 rows<br>second column</div>
 </div>
 
-<a name="grid-area"></a> To specify the position of grid item by using named grid area, we can use `grid-area` property.
+<a name="grid-area"></a> To specify the position of a grid item by using a named grid area, we can use the `grid-area` property.
 
 <div m-auto grid gap-4 w-100 h-100 bg-blue relative style="grid-template-areas: 'header header' 'sidebar main' 'sidebar footer';">
   <div p-4 shrink-0 bg-red style="grid-area: header;">header</div>

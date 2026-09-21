@@ -1,7 +1,7 @@
 ---
 title: POSIX Shell Script Manual
 date: 2025-12-01T15:50+08:00
-update: 2026-08-19T10:59+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 20min
 type: manual
@@ -13,15 +13,15 @@ order: 3
 
 ## Why POSIX Shell Command Language?
 
-Portable. The standard shell command language which can be running on **almost every** Unix-like operator system.
+Portable. The standard shell command language, which can run on **almost every** Unix-like operating system.
 
 ## What Is `sh`?
 
 `sh` is a REPL (Read-Eval-Print Loop) environment to run POSIX Shell command language.
 
-`sh` is a name or agreement, not a specific program, in different operator system, `sh` is also different:
+`sh` is a name or an agreement, not a specific program; on different operating systems, `sh` is also different:
 
-| Operator System | Implementation |
+| Operating System | Implementation |
 | -- | -- |
 | Debian / Ubuntu | `dash` |
 | Alpine Linux | `busybox ash` |
@@ -33,13 +33,13 @@ Portable. The standard shell command language which can be running on **almost e
 
 > [!Note]
 >
-> On _Windows_, you can running POSIX shell script via **Windows Subsystem for Linux (WSL)** or **Git Bash**.
+> On _Windows_, you can run POSIX shell scripts via **Windows Subsystem for Linux (WSL)** or **Git Bash**.
 
 ## First POSIX Shell Script
 
 POSIX shell script uses the `.sh` file extension.
 
-You can create and run your first script by following steps:
+You can create and run your first script by following these steps:
 
 1. Open your terminal and ensure you are running `sh`:
 
@@ -49,7 +49,7 @@ You can create and run your first script by following steps:
 
     > [!Note]
     >
-    > "Terminal" and "shell" are different things, terminal is the interface for users to interact with the shell, and shell is the command-line interpreter that executes commands. So you can run `sh` in different terminals, like _Terminal.app_ on macOS, _GNOME Terminal_ on Linux, or _Windows Terminal_ on Windows.
+    > "Terminal" and "shell" are different things: the terminal is the interface for users to interact with the shell, and the shell is the command-line interpreter that executes commands. So you can run `sh` in different terminals, like _Terminal.app_ on macOS, _GNOME Terminal_ on Linux, or _Windows Terminal_ on Windows.
 
 2. Create a new file named `hello.sh` using a text editor like `vi`:
 
@@ -64,8 +64,8 @@ You can create and run your first script by following steps:
    echo 'Hello, POSIX!'
    ```
 
-4. Save and exit the editor (in `vi`, press `Esc`, type `:wq`, and hit `Enter`), come back to `sh`.
-5. Give the script execution permission by running following command:
+4. Save and exit the editor (in `vi`, press `Esc`, type `:wq`, and hit `Enter`), and go back to `sh`.
+5. Give the script execution permission by running the following command:
 
    ```sh
    chmod +x hello.sh
@@ -96,9 +96,9 @@ You may have noticed the first line of the script:
 echo 'Hello, POSIX shell!'
 ```
 
-This line is called a **shebang** (or hashbang), it tells the system which **shell interpreter** to use to execute the script, and it's syntaxed as `#!{{path_to_interpreter}}`. Which means: you can execute your script with other compatible shell interpreters, like `#!/bin/bash` or `#!/bin/zsh`.
+This line is called a **shebang** (or hashbang); it tells the system which **shell interpreter** to use to execute the script, and its syntax is `#!{{path_to_interpreter}}`. Which means: you can execute your script with other compatible shell interpreters, like `#!/bin/bash` or `#!/bin/zsh`.
 
-But anyway, running POSIX shell script with `sh` itself is the best choice. Most of people who love modern shell experience with _ZSh_, _Fish_, or else may only use those modern shells as the interactive shells, and still using `sh` as the script interpreter for best compatibility and stability.
+But anyway, running a POSIX shell script with `sh` itself is the best choice. Most people who love the modern shell experience with _Zsh_, _Fish_, or others may only use those modern shells as interactive shells, and still use `sh` as the script interpreter for the best compatibility and stability.
 
 ## Statement
 
@@ -119,7 +119,7 @@ fi
 
 ### Statement Separator
 
-POSIX shell allows you to write multiple statements in one line, and separate them with a semicolon `;`. It can be omitted if each command is on a separate line:
+POSIX shell allows you to write multiple statements on one line, separating them with a semicolon `;`. It can be omitted if each command is on a separate line:
 
 ```sh
 #!/bin/sh
@@ -143,7 +143,7 @@ name='World'
 name_with_space = 'World'
 ```
 
-As usual, you cannot / shouldnot use shell preserved keywords, commands, special characters, space, or start with a number for variable names:
+As usual, you cannot / should not use shell reserved keywords, commands, special characters, or spaces for variable names, nor start a variable name with a number:
 
 ```sh
 #!/bin/sh
@@ -168,7 +168,7 @@ with_space = 'World'
 
 ### Access Variable
 
-To access the value of a variable, you need to **prefix it with a `$`** sign, this means **"evaluate"**:
+To access the value of a variable, you need to **prefix it with a `$`** sign, which means **"evaluate"**:
 
 ```sh
 #!/bin/sh
@@ -176,7 +176,7 @@ name='World'
 echo "Hello, $name!"
 ```
 
-If there are some extra texts right after the variable, you should use curly braces `{}` to enclose the variable name, so that POSIX shell can correctly identify it's name:
+If there are some extra texts right after the variable, you should use curly braces `{}` to enclose the variable name, so that POSIX shell can correctly identify its name:
 
 ```sh
 #!/bin/sh
@@ -186,9 +186,9 @@ echo "Hello, ${name}s!"
 
 ### Access with Default Value
 
-You can also access a variable with default value using the following syntax:
+You can also access a variable with a default value using the following syntax:
 
-- `${{{variable}}:-{{default_value}}}`: If `value` is **unset or null**, return `default_value`, otherwise return the value of `variable`.
+- `${{{variable}}:-{{default_value}}}`: If `value` is **unset or null**, return `default_value`; otherwise return the value of `variable`.
 
   ```sh
   #!/bin/sh
@@ -206,7 +206,7 @@ You can also access a variable with default value using the following syntax:
   echo "Hello, $username!"
   ```
 
-- `${{{variable}}:+{{alternate_value}}}`: If `value` is **set and not null**, return `alternate_value`, otherwise return empty value.
+- `${{{variable}}:+{{alternate_value}}}`: If `value` is **set and not null**, return `alternate_value`; otherwise return an empty value.
 
   ```sh
   #!/bin/sh
@@ -237,11 +237,11 @@ unset name
 echo "Hello, $name!"  # -> Hello, !
 ```
 
-Of course, [readonly variable](#work-with-readonly-command) cannot be unset.
+Of course, a [readonly variable](#work-with-readonly-command) cannot be unset.
 
 ### Work with `readonly` Command
 
-`readonly` command can be used to **define readonly variables** or **print readonly variables' information**.
+The `readonly` command can be used to **define readonly variables** or **print readonly variables' information**.
 
 To define a readonly variable:
 
@@ -260,7 +260,7 @@ To print readonly variables' information:
 
 ### Work with `export` Command
 
-`export` command can be used to **define exported variables**.
+The `export` command can be used to **define exported variables**.
 
 ```sh
 #!/bin/sh
@@ -272,7 +272,7 @@ sh -c "echo $MY_VAR" # -> Hello
 
 POSIX shell has several special built-in variables that provide useful information in shell/script environment.
 
-In shell environment:
+In the shell environment:
 
 - `$?`: The **exit code** of the last executed command.
 - `$$`: The **process ID** of the current shell.
@@ -281,14 +281,14 @@ In shell environment:
 - `$-`: The **current shell options**.
 - ...
 
-In script environment, including all above, plus with:
+In the script environment, including all of the above, plus:
 
 - `$0`: The **name of the shell or script**.
 - `$1`, `$2`, ...: The first, second, ... **command-line arguments** passed to the script.
 
   > [!Note]
   >
-  > If the arguments are more than 9, you need to bracket them like `${10}`, `${11}`.
+  > If there are more than 9 arguments, you need to wrap them in braces like `${10}`, `${11}`.
 
 - `$#`: The **number of command-line arguments** passed to the script.
 - `$@`: All command-line arguments passed to the script as **separate words**.
@@ -325,7 +325,7 @@ POSIX shell has only one data type: **"string" (or so-called "word")**.
 
 ### Plain Text String
 
-A plain text will be treated as a string by default, no need of quotes:
+A plain text will be treated as a string by default, with no need for quotes:
 
 ```sh
 #!/bin/sh
@@ -349,11 +349,11 @@ echo $str # -> Hello World
 
 > [!Note]
 >
-> For my own opinion, surrounding strings with quotes as possible is the best practice. This helps the code to get more readable and maintainable.
+> In my opinion, surrounding strings with quotes whenever possible is the best practice. This helps the code to be more readable and maintainable.
 
 ### Single Quotes vs Double Quotes
 
-POSIX shell allows us use both **quotes** and **double quotes** to enclose a string, but they behave differently when it comes to special characters:
+POSIX shell allows us to use both **single quotes** and **double quotes** to enclose a string, but they behave differently when it comes to special characters:
 
 - Using **Single Quotes**: Strings defined with single quotes will treat **everything literally**, including special characters like `$`, `\`, and backticks `` ` ``.
 
@@ -417,7 +417,7 @@ echo $str3 # -> HelloWorldHelloWorld
 
 ### Mathematical Calculation
 
-Although POSIX shell only recognize everything as string, there still **mathematical operation `$(())`** to help people perform mathematical calculation:
+Although POSIX shell recognizes everything only as a string, there is still the **mathematical operation `$(())`** to help people perform mathematical calculations:
 
 ```sh
 #!/bin/sh
@@ -429,13 +429,13 @@ add() {
 echo $(add $a $b) # -> 3
 ```
 
-The above example uses a function (custom command) and evaluate operator `$()` to capture the stdout, you can refer them it [this section](#return-code-capture-stdout)
+The above example uses a function (custom command) and the evaluation operator `$()` to capture the stdout; you can refer to them in [this section](#return-code-capture-stdout)
 
 ## Function (Custom Command)
 
 POSIX shell allows you to define functions to organize your code into reusable blocks.
 
-What's more, function in POSIX shell is **custom command**.
+What's more, a function in POSIX shell is a **custom command**.
 
 ### Define Function
 
@@ -467,14 +467,14 @@ greet 'Bob'   # -> -sh: greet: not found
 
 ### Parameters
 
-Just like scripts, functions can also accept arguments, which we called **parameters**, and can be accessed using special context variables:
+Just like scripts, functions can also accept arguments, which we call **parameters**, and which can be accessed using special context variables:
 
 - `$0`: The **name of the function**.
 - `$1`, `$2`, ...: The first, second, ... **parameters** passed to the function.
 
   > [!Note]
   >
-  > If the parameters are more than 9, you need to use `${10}`, `${11}`, ... to access them.
+  > If there are more than 9 parameters, you need to use `${10}`, `${11}`, ... to access them.
 
 - `$#`: The **number of parameters** passed to the function.
 - `$@`: All parameters passed to the function as **separate words**.
@@ -483,7 +483,7 @@ Just like scripts, functions can also accept arguments, which we called **parame
 
 ### Call Function
 
-To call a function, just like to call a command, the arguments can be passed after the function name and should be separated by spaces:
+To call a function, just like calling a command, the arguments can be passed after the function name and should be separated by spaces:
 
 ```sh
 #!/bin/sh
@@ -496,7 +496,7 @@ greet 'Alice'
 
 ### Return Code & Capture Stdout <a name="return-code-capture-stdout"></a>
 
-The return code of function is the same as **"command exit code"** in POSIX shell, they can only be in the range of 0~255, so we cannot use them to return results:
+The return code of a function is the same as the **"command exit code"** in POSIX shell; it can only be in the range of 0~255, so we cannot use it to return results:
 
 ```sh
 #!/bin/sh
@@ -509,7 +509,7 @@ result=$?
 echo "The sum is: $result"  # -> The sum is: 44 ❌
 ```
 
-To return results, we'd better use evaluate operator `$()` to capture the `stdout`:
+To return results, we'd better use the evaluation operator `$()` to capture the `stdout`:
 
 ```sh
 #!/bin/sh
@@ -523,7 +523,7 @@ echo "The sum is: $result_fixed"  # -> The sum is: 300 ✅
 
 ### Variable Scope
 
-POSIX shell has no variable scope, in other word, all variables in POSIX shell are global:
+POSIX shell has no variable scope; in other words, all variables in POSIX shell are global:
 
 ```sh
 #!/bin/sh
@@ -537,7 +537,7 @@ my_function
 echo $variable  # -> Hahaha, hacked!
 ```
 
-In order to avoid confliction and unexpected behavior, it's recommend to add prefix `__` to private variables, which can helps people distingue them with global variables:
+In order to avoid conflicts and unexpected behavior, it's recommended to add the prefix `__` to private variables, which can help people distinguish them from global variables:
 
 ```sh
 #!/bin/sh
@@ -551,14 +551,14 @@ echo $__private # Oops, you should not try to access a private variable! 🚫
 
 ## Conditional Judgment & Statement
 
-In POSIX shell world, the **return / exit code** of function / command are used to explain `true` or `false`:
+In the POSIX shell world, the **return / exit code** of a function / command is used to represent `true` or `false`:
 
-- `0` means **nothing errors**, corresponding to `true`
-- `1` means **something errors**, corresponding to `false`
+- `0` means **no errors**, corresponding to `true`
+- `1` means **an error occurred**, corresponding to `false`
 
 ### Test Conditional Judgment
 
-POSIX shell provides a built-in command named `test` to evaluate conditional `test_case` expression, it has two different syntaxes:
+POSIX shell provides a built-in command named `test` to evaluate a conditional `test_case` expression; it has two different syntaxes:
 
 ```sh
 test {{test_case}}
@@ -579,10 +579,10 @@ test 5 -lt 10
 echo $? # -> 0, means true
 ```
 
-#### Commonly Test Cases
+#### Commonly Used Test Cases
 
 > [!Note]
-> For variables used in test cases, it's recommended to always surrounded by a pair of double-quote:
+> For variables used in test cases, it's recommended to always surround them with a pair of double quotes:
 >
 > ```sh
 > #!/bin/sh
@@ -602,7 +602,7 @@ echo $? # -> 0, means true
 > fi
 > ```
 
-Here are some commonly test cases you may use in POSIX scripts:
+Here are some commonly used test cases you may use in POSIX scripts:
 
 File type test cases:
 
@@ -640,24 +640,24 @@ Number test cases:
 - `{{number_1}} -gt {{number_2}}`: `0` if `{{number_1}}` is greater than `{{number_2}}`
 - `{{number_1}} -ge {{number_2}}`: `0` if `{{number_1}}` is greater than or equal to `{{number_2}}`
 
-To revert the result of a test case, you can prefix `{{test_case}}` with `!` (space is required):
+To invert the result of a test case, you can prefix `{{test_case}}` with `!` (space is required):
 
 - `! {{test_case}}`: `0` if `{{test_case}}` is `1`
 
 #### Combine Test Judgments
 
-You can combine multiple test conditional judgments like this:
+You can combine multiple test conditions like this:
 
 - `{{test_condition_1}} && {{test_condition_2}}`: `0` if both `{{test_condition_1}}` and `{{test_condition_2}}` are `0`
 - `{{test_condition_1}} || {{test_condition_2}}`: `0` if either `{{test_condition_1}}` or `{{test_condition_2}}` is `0`
 
-If you want to change the precedence of test judgments, you can use following syntax:
+If you want to change the precedence of test judgments, you can use the following syntax:
 
 - `{ {{combined_test_judgments}}; } && {other_test_judgment}`: Make `{{combined_test_judgments}}` have high precedence
 
 ### If Conditional Statement
 
-The fully syntax of an `if` statement is:
+The full syntax of an `if` statement is:
 
 ```sh
 if {{function_or_command_call1}}; then
@@ -669,7 +669,7 @@ else
 fi
 ```
 
-What `if` statement judge is the function return code / command exit code.
+What an `if` statement judges is the function return code / command exit code.
 
 For example:
 
@@ -699,7 +699,7 @@ fi
 
 ### Case Conditional Statement
 
-POSIX shell use `case` statement to execute commands based on [regular expression matching](#glob-patterns), like `switch` statement in other programming languages but more powerful:
+POSIX shell uses the `case` statement to execute commands based on [regular expression matching](#glob-patterns), like the `switch` statement in other programming languages but more powerful:
 
 ```sh
 case {{variable}} in
@@ -729,7 +729,7 @@ done
 
 If `words` is omitted, it will iterate over the special variable `$@` (all command-line arguments passed to the script as separate words) by default, but you **shouldn't do this** in practice to avoid confusion.
 
-If `words` is **a unquoted text contains multiple words**, `for ... in ...` loop will iterate over each word separately, so if you want to iterate over items with spaces, you should quote them:
+If `words` is **unquoted text containing multiple words**, the `for ... in ...` loop will iterate over each word separately; so if you want to iterate over items with spaces, you should quote them:
 
 ```sh
 #!/bin/sh
@@ -769,7 +769,7 @@ done
 > echo "Total words: $word_count"
 > ```
 >
-> But the cost is you should **pay more attention to quoted and unquoted** strings:
+> But the cost is that you should **pay more attention to quoted and unquoted** strings:
 >
 > ```sh
 > #!/bin/sh
@@ -799,7 +799,7 @@ done
 > #    Blueberry Muffin
 > ```
 
-[Pathname expansion](#glob) also works with `for ... in` loops, can be used to generate `words`, it will **expand to the matched files from the current directory** before the loop starts:
+[Pathname expansion](#glob) also works with `for ... in` loops, and can be used to generate `words`; it will **expand to the matched files from the current directory** before the loop starts:
 
 ```sh
 #!/bin/sh
@@ -813,7 +813,7 @@ done
 
 ### While Loop
 
-The syntax of a `while` loop is nothing special, and the condition expression follows the same rules of [`if` statement](#if-conditional-statement): It judge the function return code / command exit code too.
+The syntax of a `while` loop is nothing special, and the condition expression follows the same rules of [`if` statement](#if-conditional-statement): It judges the function return code / command exit code too.
 
 ```sh
 while {{function_or_command_call}}; do
@@ -836,7 +836,7 @@ done
 
 ### Until Loop
 
-`until` loop is the opposite of `while` loop, it will keep executing the commands until the condition becomes true:
+The `until` loop is the opposite of the `while` loop; it will keep executing the commands until the condition becomes true:
 
 ```sh
 until {{function_or_command_call}}; do
@@ -859,20 +859,20 @@ done
 
 ### Continue and Break
 
-POSIX shell also provides `continue` and `break` command to control the flow of loops:
+POSIX shell also provides the `continue` and `break` commands to control the flow of loops:
 
 - `continue`: Skip the current iteration and move to the next iteration of the loop.
 - `break`: Exit the loop immediately.
 
 ## Glob
 
-In POSIX shell, globs (short for global patterns) are special wildcard patterns used for filename/pathname match.
+In POSIX shell, globs (short for global patterns) are special wildcard patterns used for filename/pathname matching.
 
 ### Glob Patterns
 
 > [!Note]
-> 1.  Globs do not match hidden files (files or folders whose name is start with `.`) unless you explicitly include the dot: `.*` or `.[!.]*.`
-> 2.  If a glob pattern is not quoted, it will be expanded, this called **"pathname expansion"**. Pathname expansion happens **before command execution**, so it’s purely a shell feature.
+> 1.  Globs do not match hidden files (files or folders whose name starts with `.`) unless you explicitly include the dot: `.*` or `.[!.]*.`
+> 2.  If a glob pattern is not quoted, it will be expanded; this is called **"pathname expansion"**. Pathname expansion happens **before command execution**, so it’s purely a shell feature.
 >     For example:
 >
 >     ```sh
@@ -882,7 +882,7 @@ In POSIX shell, globs (short for global patterns) are special wildcard patterns 
 >     echo '*.sh' # -> *.sh
 >     ```
 
-POSIX shells support following **basic glob patterns**:
+POSIX shells support the following **basic glob patterns**:
 
 - `*`: Matches any string, including the empty string
 - `?`: Matches any single character
@@ -899,7 +899,7 @@ There are also some **advanced glob patterns** (with `shopt -s extglob` enabled)
 - `@({{pattern}})`: Matches exactly one occurrence of the `{{pattern}}`
 - `!({{pattern}})`: Matches anything that does not match the `{{pattern}}`
 
-There are also additional **preset character classes**, they must be used with set, for example: `[{{character_class}}]`:
+There are also additional **preset character classes**; they must be used within a set, for example: `[{{character_class}}]`:
 
 - `[:alnum:]`: Matches any alphanumeric character (equivalent to `[A-Za-z0-9]`)
 - `[:alpha:]`: Matches any alphabetic character (equivalent to `[A-Za-z]`)
@@ -918,7 +918,7 @@ There are also additional **preset character classes**, they must be used with s
 
 ### `seq` Command
 
-`seq` command can be used to **generate a sequence of numbers**.
+The `seq` command can be used to **generate a sequence of numbers**.
 
 The syntax of `seq` command is:
 
@@ -938,7 +938,7 @@ echo $(seq 5)
 #    5
 ```
 
-You can also specify the start number, end number and step value:
+You can also specify the start number, end number, and step value:
 
 ```sh
 #!/bin/sh

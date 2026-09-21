@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Symbol Naming Patterns'
 date: 2025-09-23T15:58+08:00
-update: 2026-09-20T11:47+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 19min
 type: note
@@ -277,7 +277,7 @@ export async function listActiveUsers(): Promise<User[]> {
 }
 ```
 
-Of course, for endpoint functions we can further induce some **common Elements (predicates)** based on the HTTP methods (or their uses in some edge cases).
+Of course, for endpoint functions we can further derive some **common Elements (predicates)** based on the HTTP methods (or their uses in some edge cases).
 
 > [!Note]
 >
@@ -926,7 +926,7 @@ async function onAnEventSuccess(result: any) {
 </template>
 ```
 
-Of course, for event handler functions we can further induce some common Elements (predicates):
+Of course, for event handler functions we can further derive some common Elements (predicates):
 
 - `before` for **handling before the event happens**.
 - `on` for **handling when the event happens**.

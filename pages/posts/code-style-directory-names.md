@@ -1,7 +1,7 @@
 ---
 title: 'Code Style: Directory Names'
 date: 2026-03-30T17:24+08:00
-update: 2026-04-18T22:26+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 1min
 type: note
@@ -15,7 +15,7 @@ type: note
 >
 > Reference: [Plural vs Singular - Directory Names](https://logansbailey.com/plural-vs-singular-directory-names).
 
-1. If the directory name is **describing or emphasizing what the files** it contains, it should be plural. For example:
+1. If the directory name is **describing or emphasizing what the files** it contains **are**, it should be plural. For example:
 
     ```plaintext
     src/
@@ -27,12 +27,12 @@ type: note
     │   └── parse.js
     ```
 
-2. If the directory name is **describing or emphasizing the uses / purpose of the files** in contains, it should be singular. For example:
+2. If the directory name is **describing or emphasizing the uses / purpose of the files** it contains, it should be singular. For example:
 
     ```plaintext
     src/
     ├── test/         # All files in this directory are used to test.
-    │   │             # Not only tests, but also setup and teardown files,
+    │   │             # Not only tests, but also setup and teardown files.
     │   │             # Sometimes, there are even fixtures and config files.
     │   ├── setup.js
     │   ├── teardown.js

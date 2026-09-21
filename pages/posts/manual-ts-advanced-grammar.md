@@ -1,7 +1,7 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2026-03-24T13:17+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 35min
 type: manual
@@ -15,17 +15,17 @@ order: 10
 
 > [!Note]
 >
-> This manual hypothesizes that you have already read [JavaScript Advanced Grammar Manual](js-advanced-grammar-manual).
+> This manual hypothesizes that you have already read the [JavaScript Advanced Grammar Manual](manual-js-advanced-grammar).
 
 TypeScript is a superset of JavaScript that adds static typing to the language.
 
-So adding type support for JavaScript and improving development experience are the main purposes of TypeScript, remember that will help you a lot.
+So adding type support for JavaScript and improving the development experience are the main purposes of TypeScript; remembering that will help you a lot.
 
-For my own opinion, we should use TypeScript instead raw JavaScript as much as possible, it's a kind of documentation for our codebase, which also improves much the readability and maintainability, helps us to catch errors early.
+In my opinion, we should use TypeScript instead of raw JavaScript as much as possible; it's a kind of documentation for our codebase, which also greatly improves readability and maintainability, and helps us to catch errors early.
 
 ## Types for Data Type
 
-In TypeScript world, we can use JavaScript data types to define a TypeScript type.
+In the TypeScript world, we can use JavaScript data types to define a TypeScript type.
 
 ### Primitive
 
@@ -70,7 +70,7 @@ TypeScript has the following types to express corresponding JavaScript primitive
 
 ### Object
 
-In JavaScript, everything except primitive values is object, so TypeScript has a type called `object` to express all non-primitive types:
+In JavaScript, everything except primitive values is an object, so TypeScript has a type called `object` to express all non-primitive types:
 
 ```ts [twoslash]
 const obj: object = {
@@ -91,7 +91,7 @@ const func: object = function () {
 
 ## Type Literal
 
-We can also use JavaScript value literals to define a TypeScript type, we call it **type literal**.
+We can also use JavaScript value literals to define a TypeScript type, which we call a **type literal**.
 
 ```ts
 const value: 'hello' = 'hello'
@@ -142,13 +142,13 @@ console.log(e)
 
 > [!Note]
 >
-> You may notice that for objects, the type of properties are not inferred as literal.
+> You may notice that for objects, the types of properties are not inferred as literal.
 >
 > This is because, in JavaScript, a `const` variable just means itself cannot be reassigned with other values. For objects, the variable only stores the reference to them, so `const` means the reference inside that variable cannot be changed, but the object itself can still be modified.
 >
-> You can see, **"TypeScript is a superset of JavaScript that adds static typing to the language"**. All of the behaviors of type should compatible with JavaScript.
+> You can see, **"TypeScript is a superset of JavaScript that adds static typing to the language"**. All of the behaviors of type should be compatible with JavaScript.
 >
-> To solve this, TypeScript provides `as const` to mark whether the object properties is immutable or mutable, just like [`Object.freeze`](manual-js-advanced-grammar#limiting-access-to-object), but compile-time only, without runtime changes (with more compatibility).
+> To solve this, TypeScript provides `as const` to mark whether the object properties are immutable or mutable, just like [`Object.freeze`](manual-js-advanced-grammar#limiting-access-to-object), but compile-time only, without runtime changes (with more compatibility).
 >
 > (Array, [tuple](#advanced-working-with-array-and-tuple-type), function are the same, because they are objects under the hood 🙂)
 
@@ -156,7 +156,7 @@ The most commonly used type literals are **string**, **object**, **array** and *
 
 ### String Type Literal
 
-String type literal are usually used to express multiple states which cannot expressed by boolean.
+String type literals are usually used to express multiple states which cannot be expressed by a boolean.
 
 For example, to express the state of a traffic light, we should use `string` type literal:
 
@@ -164,9 +164,9 @@ For example, to express the state of a traffic light, we should use `string` typ
 const trafficLight: 'red' | 'yellow' | 'green' = 'red'
 ```
 
-You can see we use `|` to join multiple string type literals together, which is called [union](#union-and-intersection-types), string type literal are often used with them, and we will explain it in detail later.
+You can see we use `|` to join multiple string type literals together, which is called a [union](#union-and-intersection-types); string type literals are often used with them, and we will explain it in detail later.
 
-We can even use string template in string type literal, to express more complex string types, it's also widely used in TypeScript:
+We can even use string templates in string type literals, to express more complex string types; it's also widely used in TypeScript:
 
 ```ts [twoslash]
 type World = 'World'
@@ -178,7 +178,7 @@ type Greeting = `Hello ${World}, ${Name}!`
 
 ### Object Type Literal
 
-As you imagine, **object type literal** uses [JavaScript object literal syntax](manual-js-advanced-grammar#object) `{ ... }`, without "," as separator:
+As you imagine, **object type literal** uses [JavaScript object literal syntax](manual-js-advanced-grammar#object) `{ ... }`, without "," as a separator:
 
 ```ts
 // [!code highlight:7]
@@ -210,7 +210,7 @@ As you imagine, **array type literal** simply uses [JavaScript array literal syn
 const arr: [1, 2, 3] = [1, 2, 3]
 ```
 
-It has another name called **tuple type** -- An array with limited length and element types.
+It has another name called **tuple type** -- an array with limited length and element types.
 
 ### Function Type Literal
 
@@ -224,7 +224,7 @@ const func: Func = function (a, b) {
 }
 ```
 
-If the type starts with `new` keyword, it means this function can only be called with `new` keyword:
+If the type starts with the `new` keyword, it means this function can only be called with the `new` keyword:
 
 ```ts
 type ConstructorFunc = new (a: number, b: number) => Number
@@ -235,13 +235,13 @@ const constructorFunc: ConstructorFunc = function (a, b) {
 
 ## Union and Intersection Types
 
-As we all know, JavaScript is a dynamic typing language, so one variable is allowed to be assigned to different types of values at different times. As the side effect, when we try to get the value of that variable, the value may be any one of those types too, so we need to check them before using it.
+As we all know, JavaScript is a dynamically typed language, so a variable is allowed to be assigned different types of values at different times. As a side effect, when we try to get the value of that variable, the value may be any one of those types too, so we need to check its type before using it.
 
 In order to support this behavior, we need **union** and **intersection** types.
 
 ### Union Type
 
-Union likes "or", it means **any one of the given types is accepted**. You can use **`|` operator (union operator)** to create it:
+A union is like "or"; it means **any one of the given types is accepted**. You can use the **`|` operator (union operator)** to create it:
 
 ```ts [twoslash]
 // @errors: 2322
@@ -264,7 +264,7 @@ else if (typeof a === 'string') {
 }
 ```
 
-Naturally, there is also a type called **"never"**, it means an empty union, which accepts no types:
+Naturally, there is also a type called **"never"**; it means an empty union, which accepts no types:
 
 ```ts [twoslash]
 // @errors: 2322
@@ -272,14 +272,14 @@ const a: never = 1
 const b: never = 'hello'
 ```
 
-And, there is also a type called **"any"**, it accepts any types:
+And there is also a type called **"any"**; it accepts any type:
 
 ```ts
 const a: any = 1
 const b: any = 'hello'
 ```
 
-**unknown** is a type that is more strict than `any`, it accepts any types, but forces you to check the type before using it:
+**unknown** is a type that is stricter than `any`; it accepts any type, but forces you to check the type before using it:
 
 ```ts [twoslash]
 // @errors: 18046
@@ -297,7 +297,7 @@ else if (typeof a === 'string') {
 
 ### Intersection Type
 
-Intersection likes "and", it means **only the type who satisfies all of the given types is accepted**. You can use **`&` operator (intersect operator)** to create it:
+An intersection is like "and"; it means **only a type that satisfies all of the given types is accepted**. You can use the **`&` operator (intersection operator)** to create it:
 
 ```ts [twoslash]
 // @errors: 2322
@@ -335,7 +335,7 @@ a.c = false
 
 ### Type Narrowing
 
-We already know, to handle the side effect of dynamic typing under the hood, we need to check the type of variables before using them, one of the common ways is **type narrowing**:
+As we already know, to handle the side effect of dynamic typing under the hood, we need to check the type of variables before using them; one of the common ways is **type narrowing**:
 
 - Conditional statements with `typeof` operator
 
@@ -459,9 +459,9 @@ We already know, to handle the side effect of dynamic typing under the hood, we 
 
 ### Type Guard Function
 
-Type guard function is a function with conditional statements and some checks that can help TypeScript infer the type of a variable, the return value is a boolean express whether the variable is a specific type.
+A type guard function is a function with conditional statements and some checks that can help TypeScript infer the type of a variable; the return value is a boolean expressing whether the variable is a specific type.
 
-The return type of type guard function should use a special syntax called **type predicate** `parameterName is Type`:
+The return type of a type guard function should use a special syntax called a **type predicate** `parameterName is Type`:
 
 ```ts [twoslash]
 function isNumber(a: any): a is number {
@@ -479,13 +479,13 @@ else {
 }
 ```
 
-Nothing special in type guard functions, it's just a kind of encapsulation, which can make the type checking logic reusable and more readable.
+There is nothing special in type guard functions; it's just a kind of encapsulation, which can make the type checking logic reusable and more readable.
 
 ## Advanced Working with Object Type
 
 ### Readonly Property
 
-As we know, we can use `as const` to mark the object as immutable without runtime changes (than `Object.freeze`), this also works on the specific property, but they are different:
+As we know, we can use `as const` to mark the object as immutable without runtime changes (unlike `Object.freeze`); this also works on a specific property, but they are different:
 
 ```ts [twoslash]
 // @errors: 2540 2322
@@ -512,9 +512,9 @@ const obj2 = {
 obj2.a = 2
 ```
 
-You can see, use `as const` on the entire object will infer the types of properties as literal from their values, also **marks these properties as `readonly`**, which means these properties are not re-assignable, while use `as const` on a specific property not.
+As you can see, using `as const` on the entire object will infer the types of properties as literals from their values, and also **marks these properties as `readonly`**, which means these properties are not re-assignable, while using `as const` on a specific property does not.
 
-`readonly` is a keyword which can only be used in object type literal or [class](#readonly-field). As your imagine, we'd better to use `readonly` keyword with object type literal instead `as const` assertion to mark a specific property immutable:
+`readonly` is a keyword which can only be used in an object type literal or a [class](#readonly-field). As you can imagine, we'd better use the `readonly` keyword with an object type literal instead of an `as const` assertion to mark a specific property immutable:
 
 ```ts [twoslash]
 // @errors: 2540
@@ -532,7 +532,7 @@ obj.a = 2
 
 ### Optional Property
 
-By default, all properties in object type literal are required, which means they must be provided when creating an object of that type:
+By default, all properties in an object type literal are required, which means they must be provided when creating an object of that type:
 
 ```ts [twoslash]
 // @errors: 2741
@@ -543,7 +543,7 @@ const obj: {
 }
 ```
 
-To create optional properties, we can use `?` keyword which is expected to be placed right after the property name:
+To create optional properties, we can use the `?` keyword which is expected to be placed right after the property name:
 
 ```ts [twoslash]
 const obj: {
@@ -557,11 +557,11 @@ const obj: {
 
 > [!Note]
 >
-> There is a TypeScript built-in utility type called [`Record`](#built-in-utility-types) which is similar to this syntax, but it supports union type for keys, while this syntax not.
+> There is a TypeScript built-in utility type called [`Record`](#built-in-utility-types) which is similar to this syntax, but it supports union type for keys, while this syntax does not.
 >
 > It's recommended to always use `Record` instead of index signature, but you still need to know this syntax.
 
-Sometimes you don’t know all the actually names of a object type literal properties ahead of time, but you do know the shape of these names.
+Sometimes you don’t know all the actual names of an object type literal's properties ahead of time, but you do know the shape of these names.
 
 In those cases you can use an index signature to describe these properties:
 
@@ -598,7 +598,7 @@ TypeScript has corresponding types to express the JavaScript built-in objects, a
 <!-- And it will parse it as a color but not a valid color, and cause the build error. -->
 <!-- So I change it to "constructors" to avoid this issue. -->
 
-As some objects who are constructors can be called with or without `new` keyword with different return types, while others may can only be called without `new` keyword, TypeScript also compatible with these behaviors.
+As some objects that are constructors can be called with or without the `new` keyword with different return types, while others may only be called without the `new` keyword, TypeScript is also compatible with these behaviors.
 
 Let's take a look at the built-in type definition of `String` in TypeScript for example:
 
@@ -638,7 +638,7 @@ See [here](#indexed-access-type).
 
 ## Advanced Working with Function Type
 
-In JavaScript, there are three ways to define function: function declaration, function expression and arrow function, and they are all supported in TypeScript with type annotations.
+In JavaScript, there are three ways to define a function: function declaration, function expression and arrow function, and they are all supported in TypeScript with type annotations.
 
 The syntax of typing function declarations looks like other static typing languages:
 
@@ -655,7 +655,7 @@ For function expression and arrow function, we use [function type literal](#func
 
 As we know, JavaScript has no function overload, because it's a dynamic typing language, but TypeScript fills this gap.
 
-Function overload let us can know clearly what the arguments and return type a function can accept and return.
+Function overload lets us clearly know what arguments and return type a function can accept and return.
 
 To overload a function in TypeScript, the only thing you need to do is to define compatible overload function signatures before the implementation signature:
 
@@ -681,9 +681,9 @@ console.log(fn)
 
 > [!Note]
 >
-> If any overload signature exists, the implementation signature will be hidden for the user. So TypeScript tell you `fn` in the above example only has two overloads.
+> If any overload signature exists, the implementation signature will be hidden from the user. So TypeScript tells you `fn` in the above example only has two overloads.
 
-What does mean "compatible"? Just look at the below example, the second overload return a `string`, which is not compatible with the implementation: the implementation only allows return `number`.
+What does "compatible" mean? Just look at the example below: the second overload returns a `string`, which is not compatible with the implementation, because the implementation only allows returning `number`.
 
 ```ts [twoslash]
 // @errors: 2394
@@ -764,9 +764,9 @@ interface MyInterface {
 
   > [!Caution]
   >
-  > Use declaration merging between interface and class is not recommended, like the above example, the property `name` is not optional, and in `string` type, but you actually get `undefined`, which is confusing and error-prone.
+  > Use declaration merging between an interface and a class is not recommended. Like the above example: the property `name` is not optional and is of type `string`, but you actually get `undefined`, which is confusing and error-prone.
   >
-  > What's worse, we know this is caused by the missing implementation, but there is no way to ensure the merged declarations are implemented, so we should use `implements` keyword instead.
+  > What's worse, we know this is caused by the missing implementation, but there is no way to ensure the merged declarations are implemented, so we should use the `implements` keyword instead.
 
 - Implements: Classes can implement interface types. This can solve the problem of missing implementation in declaration merging between interface and class, and also make the code more readable and maintainable.
 
@@ -793,7 +793,7 @@ interface MyInterface {
 
 ## Advanced Working with Class
 
-TypeScript has some additional features on JavaScript class other than type annotations.
+TypeScript has some additional features on JavaScript classes other than type annotations.
 
 ### Readonly Field
 
@@ -811,7 +811,7 @@ person.FLAG = 'human'
 
 ### Member Visibility
 
-TypeScript add three visibility modifiers to class members: `public`, `protected` and `private`:
+TypeScript adds three visibility modifiers to class members: `public`, `protected` and `private`:
 
 ```ts
 class Person {
@@ -831,7 +831,7 @@ class Person {
 - `protected`: Can be accessed within the class and its subclasses.
 - `private`: Can be accessed only within the class.
 
-  Different from other OOP languages, TypeScript allow cross-instance `private` access:
+  Different from other OOP languages, TypeScript allows cross-instance `private` access:
 
   ```ts [twoslash]
   class A {
@@ -848,7 +848,7 @@ class Person {
 
 Just like other OOP languages, TypeScript has `interface` and `implements` keywords (We mentioned them [before](#interface-type)).
 
-There is also a `abstract` keyword to define an abstract class:
+There is also an `abstract` keyword to define an abstract class:
 
 ```ts
 abstract class Animal {
@@ -867,7 +867,7 @@ The behavior of abstract class is simply following the OOP principle.
 
 TypeScript also has generic types to create reusable types, and their usage is similar to other OOP languages with generics.
 
-Generic types are build with **generic parameter** which is surrounded by `<>`, it can be used on types, interfaces, classes and functions:
+Generic types are built with a **generic parameter** which is surrounded by `<>`; it can be used on types, interfaces, classes and functions:
 
 ```ts
 // Types
@@ -904,11 +904,11 @@ As you can see, the generic parameters are always **placed right after the symbo
 
 ## Decorator
 
-Decorator in is a special function that can be called on **classes**, **class members**, or other JavaScript syntax forms during definition (like annotations in Java).
+A decorator is a special function that can be called on **classes**, **class members**, or other JavaScript syntax forms during definition (like annotations in Java).
 
 Now that both [Decorators](https://github.com/tc39/proposal-decorators) and [Decorator Metadata](https://github.com/tc39/proposal-decorator-metadata) have achieved Stage 3 within TC39, you can use them in TypeScript without any configuration.
 
-[Parameter Decorator](https://github.com/tc39/proposal-class-method-parameter-decorators) is still in Stage 1, hope it will be supported in the future.
+[Parameter Decorator](https://github.com/tc39/proposal-class-method-parameter-decorators) is still in Stage 1; hope it will be supported in the future.
 
 ### Decorator Definition
 
@@ -932,7 +932,7 @@ type Decorator = (
 ) => Output | void
 ```
 
-The `Input` is determind by the target of the decorator, and if a decorator returns a value, it means replace the original `Input` on target with the returned one.
+The `Input` is determined by the target of the decorator, and if a decorator returns a value, it means replacing the original `Input` on the target with the returned one.
 
 For example, for class decorator, the `Input` is the class constructor:
 
@@ -946,7 +946,7 @@ function logClass(constructor: Constructor) {
 }
 ```
 
-For context, TypeScript already has types to support them. See the showing examples below for more details.
+For context, TypeScript already has types to support them. See the examples shown below for more details.
 
 ### Using Decorator
 
@@ -1155,7 +1155,7 @@ new C().x = 1
 
 #### Class Auto Accessor Decorator
 
-Auto-Accessors is part of [Grouped and Auto-Accessors](https://github.com/tc39/proposal-grouped-and-auto-accessors) proposal in Stage 1 within TC39, it allows you to define a class field with a grouped accessor without explicitly defining the getter and setter.
+Auto-Accessors is part of the [Grouped and Auto-Accessors](https://github.com/tc39/proposal-grouped-and-auto-accessors) proposal in Stage 1 within TC39; it allows you to define a class field with a grouped accessor without explicitly defining the getter and setter.
 
 ```ts
 class C {
@@ -1215,9 +1215,9 @@ c.x = 123 // -> Setting x to 123
 
 > [!Caution]
 >
-> As [Decorators](https://github.com/tc39/proposal-decorators) has removed the parameter decorator support while archiving Stage 3 within TC39, and new solution [Parameter Decorators](https://github.com/tc39/proposal-class-method-parameter-decorators) is still in Stage 1.
+> As [Decorators](https://github.com/tc39/proposal-decorators) has removed the parameter decorator support after reaching Stage 3 within TC39, and the new solution [Parameter Decorators](https://github.com/tc39/proposal-class-method-parameter-decorators) is still in Stage 1.
 >
-> So this section still using [the old Decorators in Stage 2](https://github.com/tc39/proposal-decorators-previous), and it's **incompatible** with new decorators, you'd better not using it in your real codebase.
+> So this section still uses [the old Decorators in Stage 2](https://github.com/tc39/proposal-decorators-previous), and it's **incompatible** with new decorators; you'd better not use it in your real codebase.
 >
 > To run this example, you need:
 >
@@ -1309,13 +1309,13 @@ console.log(bugReport.print(undefined))
 
 ## Types Manipulation
 
-Welcome! You are now reading the most import part of TypeScript.
+Welcome! You are now reading the most important part of TypeScript.
 
-Before this, you already know a lot of different types in TypeScript, now you will learn how to manipulate them.
+Before this, you already know a lot of different types in TypeScript; now you will learn how to manipulate them.
 
 ### Type Alias
 
-You may already notice that, we can use `type` keyword to define a custom type (create a type alias), with union, intersection, mapped types and so on:
+You may have already noticed that we can use the `type` keyword to define a custom type (create a type alias), with union, intersection, mapped types and so on:
 
 ```ts
 type NumberOrString = number | string
@@ -1344,7 +1344,7 @@ Through it, you can create complex and reusable types, for better type developme
 
 ### `typeof` Operator
 
-Sometimes, especially when you are facing a really complex type, you doesn't want to construct that type manually, and that type is not exported, the only way to get the type is to use `typeof` operator:
+Sometimes, especially when you are facing a really complex type, you don't want to construct that type manually, and that type is not exported; the only way to get the type is to use the `typeof` operator:
 
 ```vue
 <script setup lang="ts">
@@ -1356,7 +1356,7 @@ const xxxRef = ref<typeof ComponentXxx>()
 </template>
 ```
 
-Additionally, TypeScript intentionally limits the sorts of expressions you can use typeof on: It’s only legal to use `typeof` on **identifiers**, but not **expressions**:
+Additionally, TypeScript intentionally limits the sorts of expressions you can use `typeof` on: it’s only legal to use `typeof` on **identifiers**, but not **expressions**:
 
 <!-- eslint-skip -->
 
@@ -1387,7 +1387,7 @@ type ObjectKeys = keyof ObjectType & {}
 
 ### Indexed Access Type
 
-We can use an indexed access type to look up a specific property on object type (Don't forget, array, tuple, and function are also object types 😄):
+We can use an indexed access type to look up a specific property on an object type (don't forget, array, tuple, and function are also object types 😄):
 
 ```ts [twoslash]
 type Person = { age: number, name: string, alive: boolean }
@@ -1445,7 +1445,7 @@ type Age = (typeof MyArray)[number]['age']
 
 ### Conditional Type
 
-Conditional types let you can make decisions based on the type of the input, it often used with generic types:
+Conditional types let you make decisions based on the type of the input; they are often used with generic types:
 
 ```ts [twoslash]
 type IsString<T> = T extends string ? true : false
@@ -1504,7 +1504,7 @@ type StrArrOrNumArr = ToArray<string | number>
                     = string[] | number[]
 ```
 
-If you want to avoid this behavior, you can use tuple type to wrap the generic parameter and the comparasion type, this does not change the result but makes it non-distributive:
+If you want to avoid this behavior, you can use a tuple type to wrap the generic parameter and the comparison type; this does not change the result but makes it non-distributive:
 
 ```ts [twoslash]
 type ToArray<Type> = [Type] extends [any] ? Type[] : never
@@ -1528,7 +1528,7 @@ type StrArrOrNumArr = ToArray<string | number>
 
 ### Mapped Type
 
-Mapped type is a way to create a new object type by transforming properties of existing object types, it based on object type, [**dynamic property names**](manual-js-advanced-grammar#dynamic-computed-property-names), [union type](#union-type) and `in` operator (to interator a union type), and also support [conditional types](#conditional-type).
+A mapped type is a way to create a new object type by transforming the properties of existing object types; it is based on object types, [**dynamic property names**](manual-js-advanced-grammar#dynamic-computed-property-names), [union type](#union-type) and the `in` operator (to iterate a union type), and also supports [conditional types](#conditional-type).
 
 For example below, we use dynamic property names with `Key in Union` to iterate through the union of keys of the existing object type `T`, and use indexed access type `T[Key]` to get the value type of that property:
 
@@ -1570,7 +1570,7 @@ type Required<T> = {
 
 #### Mapping with `as` Operator
 
-In TypeScript 4.1 and onwards, you can mapping with an `as` clause in a mapped type, it can be used to change/filter the property keys.
+In TypeScript 4.1 and onwards, you can map with an `as` clause in a mapped type; it can be used to change/filter the property keys.
 
 For example, you can leverage features like string template literal types to transform to new property keys from prior ones:
 
@@ -1621,7 +1621,7 @@ type KindlessCircle = RemoveKindField<Circle>
 // ...
 ```
 
-A example of advanced usage:
+An example of advanced usage:
 
 ```ts [twoslash]
 type EventConfig<Events extends { kind: string }> = {
@@ -1646,7 +1646,7 @@ type Config = EventConfig<SquareEvent | CircleEvent>
 
 ### `satisfies` Operator
 
-The `satisfies` operator is a type assertion that allows you to check if a type is satisfied another type **without change it's original type**.
+The `satisfies` operator is a type assertion that allows you to check whether a type satisfies another type **without changing its original type**.
 
 This is very useful when we need to check the type of an immutable object, but we don't want to lose its literal type.
 
@@ -1804,7 +1804,7 @@ Declaration merging is a powerful TypeScript feature that allows you to combine 
 
 - Namespace merging
 
-  Useful when you want to add some extra exported members to an existing namespace, often be used with other declarations merging.
+  Useful when you want to add some extra exported members to an existing namespace, often used with other declaration merging.
 
   ```ts [twoslash]
   namespace A {

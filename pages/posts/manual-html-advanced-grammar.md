@@ -1,7 +1,7 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-08-21T15:19+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 32min
 type: manual
@@ -16,11 +16,11 @@ order: 6
 **HTML (HyperText Markup Language)** is the standard markup language for creating web pages. It consists of:
 
 - **Doctypes**: Declarations that specify the HTML version being used, placed at the beginning of the document.
-- **Tags**: Writting in HTML source file, used to represent corresponding elements.
-- **Attributes**: Specified within the opening tag, define the characteristics of element that tag represents.
-- **DOM**: An **API** to represents and interacts with HTML documents.
-- **Elements**: Interactive instance for tags, a part of DOM API.
-- **Properties**: Properties of elements that can be accessed and manipulated through DOM API, some of properties are [initialized by or even synchronized with attributes](#synchronization-between-attributes-and-properties).
+- **Tags**: Written in an HTML source file, used to represent corresponding elements.
+- **Attributes**: Specified within the opening tag, define the characteristics of the element that the tag represents.
+- **DOM**: An **API** to represent and interact with HTML documents.
+- **Elements**: Interactive instances of tags, a part of the DOM API.
+- **Properties**: Properties of elements that can be accessed and manipulated through the DOM API; some of the properties are [initialized by or even synchronized with attributes](#synchronization-between-attributes-and-properties).
 - **Content**: The text contained within an element.
 - **External Resources**: Files outside the current HTML document. They are referenced via elements / attributes. Common types include CSS stylesheets, JavaScript files, images, fonts, icons, and media files.
 
@@ -48,7 +48,7 @@ order: 6
 
 > [!Note]
 >
-> Thoughs the doctype declaration is not case-sensitive, it's still recommended to use uppercase for the `DOCTYPE` keyword, it's a kind of agreed convention in the ecosystem.
+> Though the doctype declaration is not case-sensitive, it's still recommended to use uppercase for the `DOCTYPE` keyword; it's a kind of agreed convention in the ecosystem.
 
 ## Tags
 
@@ -56,7 +56,7 @@ order: 6
 
 #### Container Tags
 
-- `<div>`: A container tag which just make content on its own line:
+- `<div>`: A container tag which just makes content on its own line:
 
   ```html
   <div>123</div><div>123</div>
@@ -76,7 +76,7 @@ order: 6
   <span>123</span><span>123</span>
   :::
 
-- `<ul>` + `<li>`: An unordered list and list item container tags, better than `<div>` to express the relationship between items and their container:
+- `<ul>` + `<li>`: An unordered list and list item container tags; better than `<div>` for expressing the relationship between items and their container:
 
   ```html
   <ul>
@@ -92,7 +92,7 @@ order: 6
   </ul>
   :::
 
-- `<ol>` + `<li>`: An ordered list and list item container tags, better than `<div>` to express the **order between items**, but seldom used in practice than `<ul>`:
+- `<ol>` + `<li>`: An ordered list and list item container tags, better than `<div>` for expressing the **order between items**, but less commonly used in practice than `<ul>`:
 
   ```html
   <ol>
@@ -108,7 +108,7 @@ order: 6
   </ol>
   :::
 
-- `<dl>` & `<dt>` & `<dd>`: Description list & item container tags, better than `<div>` to express the **relationship between head and description**, but seldom used in practice; The most commonly usecase is order details:
+- `<dl>` & `<dt>` & `<dd>`: Description list & item container tags, better than `<div>` for expressing the **relationship between head and description**, but seldom used in practice; the most common use case is order details:
 
   ```html
   <p>Order details</p>
@@ -132,7 +132,7 @@ order: 6
   </dl>
   :::
 
-- `<details>` & `<summary>`: Disclosure container tags, better than `<div>` to hide & disclosure information while click; The most commonly usecase is FAQ:
+- `<details>` & `<summary>`: Disclosure container tags, better than `<div>` for hiding and disclosing information on click; the most common use case is FAQ:
 
   ```html
   <details name="requirements">
@@ -186,9 +186,9 @@ order: 6
   </details>
   :::
 
-There are some sematic tags new introduced in HTML 5:
+There are some semantic tags newly introduced in HTML 5:
 
-- `<header>`: A container tag which represents introductory content of the **whole document** or **a section**, may contain some heading elements but also a logo, a search form, an author name, and other elements:
+- `<header>`: A container tag which represents introductory content of the **whole document** or **a section**; it may contain some heading elements but also a logo, a search form, an author name, and other elements:
 
   ```html
   <!-- Header of the whole document -->
@@ -228,7 +228,7 @@ There are some sematic tags new introduced in HTML 5:
 
 - `<main>`: A container tag which represents the dominant content of the **whole document**.
 
-  The content of a `<main>` element should be unique, content that is repeated across different documents or document sections such as headers, sidebars, footers, etc. shouldn't be included:
+  The content of a `<main>` element should be unique; content that is repeated across different documents or document sections, such as headers, sidebars, footers, etc., shouldn't be included:
 
   ```html
   <header style="text-align: center">Gecko facts</header>
@@ -260,7 +260,7 @@ There are some sematic tags new introduced in HTML 5:
   </main>
   :::
 
-- `<footer>`: A container tag which represents a footer of the **whole document** or **a section**, typically contains information about the author, copyright or links related:
+- `<footer>`: A container tag which represents a footer of the **whole document** or **a section**; it typically contains information about the author, copyright, or related links:
 
   ```html
   <header>Wizard</header>
@@ -423,7 +423,7 @@ There are some sematic tags new introduced in HTML 5:
   </section>
   :::
 
-- `<aside>`: A container tag which represents **indirectly related additional content** against then main content:
+- `<aside>`: A container tag which represents **indirectly related additional content** against the main content:
 
   ```html
   <header style="text-align: center">Gecko facts</header>
@@ -491,7 +491,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
-- `<figure>` & `<figcaption>`: A container tag which represents **related additional content** against then main content:
+- `<figure>` & `<figcaption>`: A container tag which represents **related additional content** against the main content:
 
   ```html
   <figure>
@@ -511,7 +511,7 @@ There are some sematic tags new introduced in HTML 5:
   </figure>
   :::
 
-- `<search>`: A container tag which represents **search region**:
+- `<search>`: A container tag which represents a **search region**:
 
   ```html
   <header>
@@ -542,7 +542,7 @@ There are some sematic tags new introduced in HTML 5:
 
 #### Text Tags
 
-- `<h1>` ~ `<h6>`: Head layout text tags which also make on its own line with some default margin.
+- `<h1>` ~ `<h6>`: Heading layout text tags which also take up their own line with some default margin.
 
   `<h1>` is the most important and `<h6>` is the least important:
 
@@ -565,7 +565,7 @@ There are some sematic tags new introduced in HTML 5:
   <h6>Heading 6</h6>
   :::
 
-- `<p>`: A paragraph layout text tag which also make content on its own line with some default margin:
+- `<p>`: A paragraph layout text tag which also makes content appear on its own line with some default margin:
 
   ```html
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
@@ -589,7 +589,7 @@ There are some sematic tags new introduced in HTML 5:
   <p>P2</p>
   :::
 
-- `<br>` & `<wbr>`: Layout text tag which **creates a line break** or **create a break opportunity**:
+- `<br>` & `<wbr>`: Layout text tags which **create a line break** or **create a break opportunity**:
 
   ```html
   <p>
@@ -677,7 +677,7 @@ There are some sematic tags new introduced in HTML 5:
   </pre>
   :::
 
-- `<a>`: A anchor functional text tag which creates hyperlink / anchor point:
+- `<a>`: An anchor functional text tag which creates hyperlink / anchor point:
 
   ```html
   <a href="https://www.example.com">This is a link</a>
@@ -687,7 +687,7 @@ There are some sematic tags new introduced in HTML 5:
   <a href="https://www.example.com">This is a link</a>
   :::
 
-- `<cite>` & `<q>` & `<blockquote>`: References functional text tags, which is used to reference **the title of a creative work**, **a short inline quotation** & **an extended quotation** respectively:
+- `<cite>` & `<q>` & `<blockquote>`: Reference functional text tags, which are used to reference **the title of a creative work**, **a short inline quotation** & **an extended quotation** respectively:
 
   ```html
   <figure>
@@ -771,7 +771,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
-- `<mark>`: A embellishment text tag makes text marked & highlight:
+- `<mark>`: An embellishment text tag that makes text marked & highlighted:
 
   ```html
   <p>
@@ -787,7 +787,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<strong>`: A embellishment text tag makes text strong & bold, better than `<b>` in semantics:
+- `<strong>`: An embellishment text tag makes text strong & bold, better than `<b>` in semantics:
 
   ```html
   <strong>This text is important.</strong>
@@ -797,7 +797,7 @@ There are some sematic tags new introduced in HTML 5:
   <strong>This text is important.</strong>
   :::
 
-- `<em>`: A embellishment text tag makes text emphasis & italic, better than `<i>` in semantics:
+- `<em>`: An embellishment text tag that makes text emphasized & italic, better than `<i>` in semantics:
 
   ```html
   <em>This text is emphasized.</em>
@@ -807,7 +807,7 @@ There are some sematic tags new introduced in HTML 5:
   <em>This text is emphasized.</em>
   :::
 
-- `<small>`: A embellishment text tag makes text a side comment & small:
+- `<small>`: An embellishment text tag that makes text small as a side comment:
 
   ```html
   <p>
@@ -835,7 +835,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<u>`: A embellishment text tag marks the text is unarticulated with underline:
+- `<u>`: An embellishment text tag that marks the text as unarticulated with an underline:
 
   ```html
   Please <u>pay attention</u>!
@@ -845,7 +845,7 @@ There are some sematic tags new introduced in HTML 5:
   Please <u>pay attention</u>!
   :::
 
-- `<s>`: A embellishment text tag marks the text is outdated with strikethrough:
+- `<s>`: An embellishment text tag that marks the text as outdated with a strikethrough:
 
   ```html
   Price: <s>$100</s> $69!
@@ -855,7 +855,7 @@ There are some sematic tags new introduced in HTML 5:
   Price: <s>$100</s> $69!
   :::
 
-- `<ins>`: A embellishment text tag marks the text is newly inserted with underline:
+- `<ins>`: An embellishment text tag that marks the text as newly inserted with an underline:
 
   ```html
   <ins datetime="2026-08-19">New inserted item!</ins>
@@ -865,7 +865,7 @@ There are some sematic tags new introduced in HTML 5:
   <ins datetime="2026-08-19">New inserted item!</ins>
   :::
 
-- `<del>`: A embellishment text tag marks the text is newly deleted with strikethrough:
+- `<del>`: An embellishment text tag that marks the text as newly deleted with a strikethrough:
 
   ```html
   <del datetime="2026-08-19">Deleted item!</del>
@@ -875,7 +875,7 @@ There are some sematic tags new introduced in HTML 5:
   <del datetime="2026-08-19">Deleted item!</del>
   :::
 
-- `<time>`: A embellishment text tag adds machine-readable format date to improve search engines results or custom features:
+- `<time>`: An embellishment text tag that adds a machine-readable date format to improve search engine results or custom features:
 
   ```html
   <p>
@@ -901,7 +901,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<var>`: A embellishment text tag mark the text is a variable:
+- `<var>`: An embellishment text tag that marks the text as a variable:
 
   ```html
   <p>
@@ -919,7 +919,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<code>` & `<samp>`: Embellishment text tags mark that the text is **code snippest** or **computer program sample (or quoted) output** respectively:
+- `<code>` & `<samp>`: Embellishment text tags mark that the text is **code snippet** or **computer program sample (or quoted) output** respectively:
 
   ```html
   <p>
@@ -947,7 +947,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<address>`: A embellishment text tag indicates that the enclosed HTML provides contact information for a person or people, or for an organization:
+- `<address>`: An embellishment text tag indicates that the enclosed HTML provides contact information for a person or people, or for an organization:
 
   ```html
   <p>Contact the author of this page:</p>
@@ -967,7 +967,7 @@ There are some sematic tags new introduced in HTML 5:
   </address>
   :::
 
-- `<kbd>`: A embellishment text tag marks the text as user keyboard input:
+- `<kbd>`: An embellishment text tag marks the text as user keyboard input:
 
   ```html
   <p>
@@ -983,7 +983,7 @@ There are some sematic tags new introduced in HTML 5:
   </p>
   :::
 
-- `<sub>` & `<sup>`: A embellishment text tag makes text as **subscript** & **superscript** respectively:
+- `<sub>` & `<sup>`: An embellishment text tag that makes text **subscript** & **superscript** respectively:
 
   ```html
   H<sub>2</sub>O / 2<sup>2</sup> = 4
@@ -1058,9 +1058,9 @@ There are some sematic tags new introduced in HTML 5:
   </form>
   :::
 
-- `<input>`: An input tag, which is used to create a interactive control for a field of `<form>` to accept data from the user, so it often be placed inside a `<form>` tag.
+- `<input>`: An input tag, which is used to create an interactive control for a field of a `<form>` to accept data from the user, so it is often placed inside a `<form>` tag.
 
-  `<input>` tag has many different types, such as `text`, `password`, `checkbox`, `radio`, etc, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Tags/input#input_types) for more details.
+  `<input>` tag has many different types, such as `text`, `password`, `checkbox`, `radio`, etc.; you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Tags/input#input_types) for more details.
 
   `<input>` uses `name` attribute to specify the form field name:
 
@@ -1151,7 +1151,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
-- `<textarea>`: A textarea tag, which is used to create a multi-line text input control, it often be placed inside a `<form>` tag too.
+- `<textarea>`: A textarea tag, which is used to create a multi-line text input control; it is often placed inside a `<form>` tag too.
 
   `<textarea>` has attributes like `rows` and `cols` to specify the visible size of the textarea:
 
@@ -1167,7 +1167,7 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
-- `<select>` + `<optgroup>` + `<option>`: Select and option tags, which are used to create a drop-down list, they often be placed inside a `<form>` tag too.
+- `<select>` + `<optgroup>` + `<option>`: Select and option tags, which are used to create a drop-down list; they are often placed inside a `<form>` tag too.
 
   `<select>` can have `multiple` attribute to allow multiple selections, and each `<option>` can have `value` attribute to specify the value of the option:
 
@@ -1205,13 +1205,13 @@ There are some sematic tags new introduced in HTML 5:
   </div>
   :::
 
-- `<label>`: A label tag, which is used to define a label for an `<input>` tag, it often be placed inside a `<form>` tag too.
+- `<label>`: A label tag, which is used to define a label for an `<input>` tag; it is often placed inside a `<form>` tag too.
 
   `<label>` can be associated with an `<input>` tag through `for` attribute, and the value of `for` attribute should be the same as the `id` of the `<input>` tag:
 
   > [!Note]
   >
-  > You can place the `<label>` tag before or after the `<input>` tag, but it's **not recommended to wrap the `<input>` tag with `<label>` tag**, because it will make the structure of the form more complex and less readable.
+  > You can place the `<label>` tag before or after the `<input>` tag, but it's **not recommended to wrap the `<input>` tag with the `<label>` tag**, because it will make the structure of the form more complex and less readable.
 
   ```html
   <div>
@@ -1257,15 +1257,15 @@ There are some sematic tags new introduced in HTML 5:
 
 - `<button>`: A button tag, which is used to create clickable buttons. It has three types: `submit`, `reset`, and `button`.
 
-  `submit` type will trigger form submission, `reset` type will reset the form to its initial state, these two types are often be placed inside a `<form>` tag too, while `button` type has no default behavior, so it can be used anywhere:
+  The `submit` type will trigger form submission, and the `reset` type will reset the form to its initial state; these two types are often placed inside a `<form>` tag too, while the `button` type has no default behavior, so it can be used anywhere:
 
   > [!Caution]
   >
-  > The default type of `<button>` tag is `submit`, please never forget to explicitly set `type="button"` for `<button>` tag if you don't want it to trigger form submission!
+  > The default type of the `<button>` tag is `submit`; please never forget to explicitly set `type="button"` for the `<button>` tag if you don't want it to trigger form submission!
 
   > [!Note]
   >
-  > `<input>` tag has corresponding type as button, such as `<input type="submit">`, but `<button>` tag supports inner content, so it's more customized and recommended than `<input type="submit">`.
+  > The `<input>` tag has a corresponding button type, such as `<input type="submit">`, but the `<button>` tag supports inner content, so it's more customizable and recommended than `<input type="submit">`.
 
   ```html
   <div>
@@ -1296,11 +1296,11 @@ There are some sematic tags new introduced in HTML 5:
 #### Table Tags
 
 - `<table>`: A table container tag.
-- `<caption>`: A **table caption (or title)** tag, if exists, it must be the first directly child of `<table>`.
-- `<colgroup>` & `<col>`: Table column tags which are the proxy of table columns, commonly used to **control cell characteristics by columns**; If exist, `<colgroup>` must be place after `<caption>` but before sematic table section tags.
-- `<thead>` & `<tbody>` & `<tfoot>`: Sematic table section tags, **grouping rows** into head rows, body rows & foot rows, must be the direct child of `<table>`.
-- `<tr>`: A table row tag, must be the direct child of `<table>` or sematic table section tags.
-- `<th>` & `<td>`: Table cell tags, indicates **head cell** or **data cell** respectively, must be the direct child of `<tr>`.
+- `<caption>`: A **table caption (or title)** tag; if it exists, it must be the first direct child of `<table>`.
+- `<colgroup>` & `<col>`: Table column tags which are the proxy of table columns, commonly used to **control cell characteristics by columns**; if present, `<colgroup>` must be placed after `<caption>` but before the semantic table section tags.
+- `<thead>` & `<tbody>` & `<tfoot>`: Semantic table section tags, **grouping rows** into head rows, body rows & foot rows; they must be direct children of `<table>`.
+- `<tr>`: A table row tag; it must be a direct child of `<table>` or semantic table section tags.
+- `<th>` & `<td>`: Table cell tags which indicate a **head cell** or a **data cell** respectively; they must be direct children of `<tr>`.
 
 #### Other Functional Tags
 
@@ -1414,9 +1414,9 @@ There are some sematic tags new introduced in HTML 5:
 
 #### Resource Tags
 
-- `<script>` & `<noscript>`: Script resource tags, which is used to **embed or reference JavaScript code** & **display fallback content when the browser disabled or does not support JavaScript** in the HTML document respectively.
+- `<script>` & `<noscript>`: Script resource tags, which are used to **embed or reference JavaScript code** & **display fallback content when the browser has disabled or does not support JavaScript** in the HTML document respectively.
 
-  [Modern browsers](https://caniuse.com/es6-module) support ESM (ECMAScript Modules) in `<script>` tag, so you can use `type="module"` attribute to enable module mode, and use `import` statement to import other modules.
+  [Modern browsers](https://caniuse.com/es6-module) support ESM (ECMAScript Modules) in `<script>` tag, so you can use the `type="module"` attribute to enable module mode, and use the `import` statement to import other modules.
 
   Code
 
@@ -1454,7 +1454,7 @@ There are some sematic tags new introduced in HTML 5:
 
 - `<link>`: A link resource tag, which is used to reference external resources, such as CSS files, icons, etc.
 
-  `rel` attribute is used to specify the relationship between the current document and the linked resource, you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel).
+  The `rel` attribute is used to specify the relationship between the current document and the linked resource; you can refer to [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Attributes/rel).
 
   Code
 
@@ -1523,7 +1523,7 @@ There are some sematic tags new introduced in HTML 5:
 
 In HTML, there are two types of tags: [**void tags**](https://developer.mozilla.org/en-US/docs/Glossary/Void_tag) and **non-void tags**.
 
-Void tags have only a start tag and do not have an end tag, they cannot contain any content, for example:
+Void tags have only a start tag and no end tag; they cannot contain any content. For example:
 
 ```html
 <img src="image.jpg">
@@ -1532,7 +1532,7 @@ Void tags have only a start tag and do not have an end tag, they cannot contain 
 <hr>
 ```
 
-Non-void tags have both a start tag and an end tag, they can contain content, for example:
+Non-void tags have both a start tag and an end tag; they can contain content. For example:
 
 ```html
 <div>This is a div tag.</div>
@@ -1542,11 +1542,11 @@ Non-void tags have both a start tag and an end tag, they can contain content, fo
 
 > [!Caution]
 >
-> There is no concept of **"self-closing tag"** in HTML, if you write a "self-closing tag" like `<img src="image.jpg" />`, what the browser does is just simply ignore the `/` character, and treat it as `<img src="image.jpg">`.
+> There is no concept of a **"self-closing tag"** in HTML; if you write a "self-closing tag" like `<img src="image.jpg" />`, what the browser does is just simply ignore the `/` character, and treat it as `<img src="image.jpg">`.
 
 ## Elements
 
-**Elements** are instances of **tags**: We write tags in HTML document, and the browser will parse them into elements while [rendering HTML](#how-browsers-render-html).
+**Elements** are instances of **tags**: we write tags in an HTML document, and the browser will parse them into elements while [rendering HTML](#how-do-browsers-render-html).
 
 ## Attributes vs. Properties
 
@@ -1554,15 +1554,15 @@ In HTML, the most common confusion is between attributes and properties.
 
 ### Attributes
 
-We know tags will be used to create elements when browsers parse the HTML document, so the **attributes** of the tags will be used to **control the characteristics of the elements**, for example:
+We know tags will be used to create elements when browsers parse the HTML document, so the **attributes** of the tags are used to **control the characteristics of the elements**. For example:
 
 ```html
 <input type="text" value="Hello">
 ```
 
-In this example, browsers will create an **text** `<input>` element with **default value** "Hello".
+In this example, browsers will create a **text** `<input>` element with the **default value** "Hello".
 
-When the attributes change, the characteristics of the element will also change, for example:
+When the attributes change, the characteristics of the element will also change. For example:
 
 ```html
 <div><input id="myInput" type="text" value="Hello"></div>
@@ -1582,7 +1582,7 @@ When the attributes change, the characteristics of the element will also change,
 
 **Properties** are **the characteristics of the element** we mentioned [before](#attributes).
 
-They are **IDL (Interface Definition Language) attributes**, which are meant to be used by programming languages, so we can access them through DOM API, for example:
+They are **IDL (Interface Definition Language) attributes**, which are meant to be used by programming languages, so we can access them through the DOM API. For example:
 
 ```javascript
 const inputElement = document.querySelector('input')
@@ -1591,9 +1591,9 @@ console.log(inputElement.value) // Accessing the 'value' property
 
 ### Synchronization Between Attributes and Properties
 
-By default, when an HTML element is created, the attributes are always used to **initialize the corresponding (not necessary with the same name)** properties.
+By default, when an HTML element is created, the attributes are always used to **initialize the corresponding (not necessarily identically named)** properties.
 
-For a same name example, the `src` attribute initializes the `src` property of the `<img>` element:
+For an example with the same name, the `src` attribute initializes the `src` property of the `<img>` element:
 
 ```html
 <img id="myImage" src="image.jpg">
@@ -1609,7 +1609,7 @@ For a same name example, the `src` attribute initializes the `src` property of t
 </script>
 ```
 
-For different name examples:
+For examples with different names:
 
 The `class` attribute corresponds to the `className` property:
 
@@ -1622,7 +1622,7 @@ The `class` attribute corresponds to the `className` property:
 </script>
 ```
 
-The `value` attribute of an `<input>` element corresponds to the `defaultValue` property, and the `defaultValue` property only applies to `value` property when the first time element has been initialized (or reset?):
+The `value` attribute of an `<input>` element corresponds to the `defaultValue` property, and the `defaultValue` property only applies to the `value` property when the element is initialized for the first time (or reset?):
 
 ```html
 <input id="myInput" type="text" value="Initial Value">
@@ -1646,7 +1646,7 @@ The `value` attribute of an `<input>` element corresponds to the `defaultValue` 
 </script>
 ```
 
-After initialization, the **synchronization between attributes and properties is not guaranteed**, it depends on following rules:
+After initialization, the **synchronization between attributes and properties is not guaranteed**; it depends on the following rules:
 
 - Only **standard attributes** will synchronize with properties. **Custom attributes** will not.
 
@@ -1664,7 +1664,7 @@ After initialization, the **synchronization between attributes and properties is
   </script>
   ```
 
-- Attributes prefixed with `data-` will synchronize with the sub-property of `dataset` property.
+- Attributes prefixed with `data-` will synchronize with the sub-property of the `dataset` property.
 
   ```html
   <div id="myDiv" data-info="someData"></div>
@@ -1678,50 +1678,50 @@ After initialization, the **synchronization between attributes and properties is
 
 See [MDN Web Pages](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model) for more details.
 
-## How Browsers Render HTML?
+## How Do Browsers Render HTML?
 
 ### The Process of Rendering HTML
 
-1.  After user entered URL in browser and start navigation, the browser process will notify the network process to request HTML document from the server.
-2.  While receiving the HTML content from the network process, the browser process will entrust renderer process to **steaming parse** the HTML content **segment-by-segment and incrementally**;
-3.  When renderer process parses the HTML, it will parse the HTML content from top to bottom:
+1.  After the user enters a URL in the browser and starts navigation, the browser process notifies the network process to request the HTML document from the server.
+2.  While receiving the HTML content from the network process, the browser process will entrust the renderer process to **stream-parse** the HTML content **segment by segment and incrementally**;
+3.  When the renderer process parses the HTML, it parses the content from top to bottom:
     1.  It will maintain two trees: **DOM (Document Object Model) tree** and **CSSOM (CSS Object Model) tree**;
     2.  When it encounters **a normal HTML tag** while parsing HTML, it will create a corresponding DOM element based on the tag and attributes, and insert the element into the DOM tree;
-    3.  When it encounters **a synchronous inlined `<script>` tag** while parsing HTML, it will pause the parsing and start to execute the JavaScript code, and then resume parsing after the script execution is completed. Because JavaScript can modify the DOM tree & CSSOM tree, should be executed directly.
+    3.  When it encounters **a synchronous inlined `<script>` tag** while parsing HTML, it will pause parsing and start executing the JavaScript code, then resume parsing after the script execution is completed, because JavaScript can modify the DOM tree & CSSOM tree and should be executed directly.
 
-        For **a synchronous remote `<script src="...">` tag**, it will entrust network process to download the file, and pause the parsing until the external JavaScript file is both downloaded and executed (unless it's dynamically inserted by JavaScript code, then it will be treated as asynchronous script);
+        For **a synchronous remote `<script src="...">` tag**, it will entrust the network process to download the file, and pause parsing until the external JavaScript file is both downloaded and executed (unless it's dynamically inserted by JavaScript code, in which case it will be treated as an asynchronous script);
 
-        For **a asynchronous `<script src="..." async>` tag**, it will no longer pause the parsing while downloading, but pause the parsing and executing the script as soon as it's downloaded;
+        For **an asynchronous `<script src="..." async>` tag**, it will no longer pause parsing while downloading, but pause parsing and execute the script as soon as it's downloaded;
 
-        For **a defer `<script src="..." defer>` tag**, it will not pause the parsing while downloading too, and only be executed after the parsing is completed (but before the `DOMContentLoaded` event is fired);
+        For **a defer `<script src="..." defer>` tag**, it will not pause parsing while downloading either, and will only be executed after parsing is completed (but before the `DOMContentLoaded` event is fired);
 
         For **a module `<script type="module" src="...">` tag**, it will behave like a defer script by default.
-    4.  When it encounters **a inlined `<style>` tag** while parsing HTML, it will change to parse all the CSS content into CSSOM one time and in place.
-    5.  When it encounters **a [external resource](#resource-tags) referred by `<link>` tag**, it will entrust network process to download the resource, and never pause the parsing;
+    4.  When it encounters **an inlined `<style>` tag** while parsing HTML, it will parse all the CSS content into the CSSOM at once and in place.
+    5.  When it encounters **an [external resource](#resource-tags) referred by a `<link>` tag**, it will entrust the network process to download the resource, and never pause parsing;
 
-        If the external resource is a CSS file `<link rel="stylesheet" href="...">`, it will change to parse CSS into CSSOM (CSS Object Model) after the CSS file is downloaded.
-    6.  When there is no more render-blocking tasks: No not downloaded `<link rel="stylesheet">` tags, or downloaded but not parsed `<link rel="stylesheet">` tags, it will conjunct them into a **render tree**, and then **calculate the layout**, **paint the page** and **composite the layers**.
+        If the external resource is a CSS file `<link rel="stylesheet" href="...">`, it will parse the CSS into the CSSOM (CSS Object Model) after the CSS file is downloaded.
+    6.  When there are no more render-blocking tasks — no `<link rel="stylesheet">` tags that are not downloaded, or downloaded but not parsed — it will join them into a **render tree**, and then **calculate the layout**, **paint the page**, and **composite the layers**.
 
-        The first painting was so-called **First Contentful Paint (FCP)**. After that, if there are any changes in the DOM tree or CSSOM tree, the browser will do **redraw and reflow**.
-4.  After the whole HTML parsed (also, **all deferred scripts are downloaded and executed**), the browser process will fire `DOMContentLoaded` event, then fire `load` event after all the resources are loaded, and display the page to users.
+        The first painting is the so-called **First Contentful Paint (FCP)**. After that, if there are any changes in the DOM tree or CSSOM tree, the browser will do a **redraw and reflow**.
+4.  After the whole HTML is parsed (and **all deferred scripts are downloaded and executed**), the browser process will fire the `DOMContentLoaded` event, then fire the `load` event after all the resources are loaded, and display the page to the user.
 
-### Why Browser Build Two Separate Trees for DOM and CSSOM?
+### Why Do Browsers Build Two Separate Trees for DOM and CSSOM?
 
-Why browsers build two separate trees for DOM and CSSOM, conjunct them later, instead of building a single tree that combines both DOM and CSSOM?
+Why do browsers build two separate trees for the DOM and CSSOM and join them later, instead of building a single tree that combines both DOM and CSSOM?
 
-1. They have different structures, DOM tree is a parent-child tree, while CSSOM tree is more like a flat list. If you build them together, that means you may need to maintain many copies of CSS styles for different DOM elements.
-2. What's worse, if you do not build them separately, it will be hard to reuse information when the browser wants to redraw and reflow the page. For example, if we build a single tree, how can we deal with the situation when there are some additional elements with the same selector with the previous parsed CSS styles? Parse them again? What a waste of performance.
+1. They have different structures: the DOM tree is a parent-child tree, while the CSSOM tree is more like a flat list. If you build them together, that means you may need to maintain many copies of CSS styles for different DOM elements.
+2. What's worse, if you do not build them separately, it will be hard to reuse information when the browser wants to redraw and reflow the page. For example, if we build a single tree, how can we deal with the situation when there are some additional elements with the same selector as the previously parsed CSS styles? Parse them again? What a waste of performance.
 
 ### Performance of Rendering HTML
 
 What affects the performance of rendering HTML?
 
-1. **The size of the HTML document**: The larger the HTML document, the **more time it takes todownload**;
+1. **The size of the HTML document**: The larger the HTML document, the **more time it takes to download**;
 2. **The number / complexity of DOM elements**: The more / more complex DOM elements, the **more time it takes to parse** HTML (create and insert elements into the DOM tree);
 3. **The number / complexity of synchronous `<script>` tags**: Each synchronous `<script>` tag will **pause the parsing** and (**download if it's remote**) execute the JavaScript code, which can significantly affect the performance of parsing HTML, especially if the JavaScript code is large or complex;
 4. **The number / complexity of external `<link rel="stylesheet">` tags**: Each external CSS file will **pause the parsing** and (**download**) parse the CSS code into CSSOM tree, which can significantly affect the performance of parsing HTML, especially if the CSS code is large or complex;
-5. **The number / complexity of CSS rules**: The task of parsing CSS is also done by the rendering process. The more / more complex CSS rules, the **more time it takes on rendering process** (to parse them into CSSOM tree), the more time it takes to conjunct DOM tree and CSSOM tree, and the more time the whole parsing process takes.
-6. **The number / size of other external resources**: Although external resources will not pause the parsing, they still **take the download time and download bandwidth**, which can affect the performance of download HTML document, remote scripts and CSS files, and the performance of parsing HTML indirectly.
+5. **The number / complexity of CSS rules**: The task of parsing CSS is also done by the rendering process. The more / more complex CSS rules, the **more time it takes on the rendering process** (to parse them into the CSSOM tree), the more time it takes to join the DOM tree and CSSOM tree, and the more time the whole parsing process takes.
+6. **The number / size of other external resources**: Although external resources will not pause the parsing, they still **take the download time and download bandwidth**, which can affect the performance of downloading the HTML document, remote scripts and CSS files, and indirectly the performance of parsing HTML.
 
 What's the best practice?
 

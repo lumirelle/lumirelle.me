@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-08-18T14:14+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 15min
 type: manual
@@ -19,19 +19,19 @@ Git is a distributed version control system, which is used to track changes in s
 
 - **Repository (Repo)**:
 
-  Repository contains all the information about your project.
+  A repository contains all the information about your project.
 
-  In concept, a repository is be composed of three parts: Git's configuration (in `.git`), the **commit history** (in `.git`), and the **working directory** (tracked files).
+  Conceptually, a repository is composed of three parts: Git's configuration (in `.git`), the **commit history** (in `.git`), and the **working directory** (tracked files).
 
-  Repository can be stored in local (on your computer), remote (on a server like GitHub) or both.
+  A repository can be stored locally (on your computer), remotely (on a server like GitHub), or both.
 
 - **Commit**:
 
-  A commit is a diff record than the previous one, except for the initial commit, it stores the initial state of your project.
+  A commit is a diff record against the previous one; except for the initial commit, which stores the initial state of your project.
 
-  Each commit is named with a **unique ID** (SHA-1 until now).
+  Each commit is identified by a **unique ID** (SHA-1 so far).
 
-  What's more, two different commits can base on the same previous commit. Through this, we can build **forks (branches)** on top of commit history. That's why the commit history looks like a **tree**.
+  What's more, two different commits can be based on the same previous commit. Through this, we can build **forks (branches)** on top of the commit history. That's why the commit history looks like a **tree**.
 
 - **Pointer**:
 
@@ -39,7 +39,7 @@ Git is a distributed version control system, which is used to track changes in s
 
   Pointers can move to another commit node.
 
-  **HEAD** is a special pointer, the **working directory** is always based on the commit node referenced by HEAD. If HEAD moves to another commit node, the working directory will also change immediately to reflect the state of that commit node.
+  **HEAD** is a special pointer: the **working directory** is always based on the commit node referenced by HEAD. If HEAD moves to another commit node, the working directory will also change immediately to reflect the state of that commit node.
 
 - **Branch**:
 
@@ -53,17 +53,17 @@ Git is a distributed version control system, which is used to track changes in s
   o==========+=> (main)
   ```
 
-  We usually named the initial branch to `main` or `master`.
+  We usually name the initial branch `main` or `master`.
 
   The branch name is just a pointer to a specific commit node, which shows the end of the branch. When a new commit is made on this branch, the pointer will move to the new commit node.
 
-  When you switch / checkout to a branch, it's just move the HEAD pointer to the commit node referenced by that branch name pointer.
+  When you switch / checkout to a branch, it just moves the HEAD pointer to the commit node referenced by that branch name pointer.
 
 - **Working Directory**:
 
   The working directory shows **the current state of your project**. It is always based on the commit node you are currently on (referenced by HEAD), with your uncommitted changes.
 
-  When HEAD points move to another commit node, the working directory will also change to reflect the state of that commit node.
+  When HEAD moves to another commit node, the working directory will also change to reflect the state of that commit node.
 
 - **Staging Area**:
 
@@ -85,9 +85,9 @@ To initialize a fresh Git repository, open your project in the terminal and run:
 git init
 ```
 
-Then, Git will create a hidden `.git`, which contains all the Git metadata for your project.
+Then, Git will create a hidden `.git` directory, which contains all the Git metadata for your project.
 
-At that time, there is no any commit in your repository, and the working directory is empty.
+At that point, there are no commits in your repository, and the working directory is empty.
 
 ### Make Changes and Commit
 
@@ -111,9 +111,9 @@ git commit --message "feat: initial commit"
 
 Every time you want to record some changes, you can make a commit like this.
 
-Making a commit will record the changes you made than the previous commit (or the initial state), also creates a new commit node in the commit history tree based on the previous node.
+Making a commit records the changes you made since the previous commit (or the initial state), and also creates a new commit node in the commit history tree based on the previous node.
 
-This is the most basic version control usecase.
+This is the most basic version control use case.
 
 ### Add Remote
 
@@ -129,9 +129,9 @@ git remote add origin https://github.com/username/repo.git
 
 ### Pull and Push Commits
 
-To sync your local commit history with a remote repository, you can `pull` commits from and `push` commits to them.
+To sync your local commit history with a remote repository, you can `pull` commits from it and `push` commits to it.
 
-To pull latest commit history from the remote repository, you can use the following command:
+To pull the latest commit history from the remote repository, you can use the following command:
 
 ```bash
 git pull
@@ -152,12 +152,12 @@ With branches, you can `checkout` a temporary fork with a specific state, and wo
 After the tasks are done on those branches, you can apply them back by **pull request**.
 
 > [!Note]
-> I highly recommend you always to use **pull request** instead of `merge` to apply review and approval process.
+> I highly recommend you always use a **pull request** instead of `merge` to apply the review and approval process.
 >
 > `merge` should only be used in cases of:
 >
-> 1.  Merge multiple feature branches into one big feature branch, caused by the changes of requirements or else;
-> 2.  Merge upstream changes (for example, changes on the main branch) to feature branch. (In this case, `rebase` is a better choice than `merge`)
+> 1.  Merge multiple feature branches into one big feature branch, due to changed requirements or other reasons;
+> 2.  Merge upstream changes (for example, changes on the main branch) into a feature branch. (In this case, `rebase` is a better choice than `merge`.)
 
 #### Branch Management Workflow
 
@@ -167,17 +167,17 @@ To keep things controlled and organized, there are several common branch managem
 
   <TextTag>Personal</TextTag><TextTag preset="red">Not recommended</TextTag>
 
-  Everything are committed to the `main` branch directly.
+  Everything is committed to the `main` branch directly.
 
-  One or more commits make a new version release. Tags on the `main` branch are used to mark the version numbers.
+  One or more commits make up a new version release. Tags on the `main` branch are used to mark the version numbers.
 
 - [**Single major version workflow:**](#single-major-version-workflow) <i id="single-major-version-workflow"></i>
 
   <TextTag>Personal / Team</TextTag><TextTag preset="green">Single version</TextTag>
 
-  Create a new branch for each feature (`feat/xxx`) or hotfix (`hotfix/xxx`) from the `main` branch, apply it back to the `main` branch by **pull request** after the development is done.
+  Create a new branch for each feature (`feat/xxx`) or hotfix (`hotfix/xxx`) from the `main` branch, then apply it back to the `main` branch by **pull request** after the development is done.
 
-  One or more pull requests make a new version release. Tags on the `main` branch are used to mark the version numbers too.
+  One or more pull requests make up a new version release. Tags on the `main` branch are used to mark the version numbers too.
 
 - [**Multiple major versions workflow:**](#multiple-major-versions-workflow) <i id="multiple-major-versions-workflow"></i>
 
@@ -187,12 +187,12 @@ To keep things controlled and organized, there are several common branch managem
 
   - `main` branch is for **the next major version**;
   - `v{{version}}` branch group is for the released major versions, e.g. `v1.x`, `v2.x`, etc.
-  - `feat/xxx` branch is for new feature, created from the `main` branch, also will be applied back to the `main` branch by **pull request** after the development is done.
+  - `feat/xxx` branch is for a new feature, created from the `main` branch, and will also be applied back to the `main` branch by **pull request** after the development is done.
 
-    If this feature need to be **backported** to the released major versions, you should use `cherry-pick` to pick the merge commit node to the appropriate `v{{version}}` branch ([example](https://github.com/nuxt/nuxt)).
-  - `hotfix/xxx` branch is for hotfix, created from the first included `v{{version}}` branch, and will be applied back to the appropriate `v{{version}}` branch by **pull request** after the development is done.
+    If this feature needs to be **backported** to the released major versions, you should use `cherry-pick` to pick the merge commit node into the appropriate `v{{version}}` branch ([example](https://github.com/nuxt/nuxt)).
+  - `hotfix/xxx` branch is for a hotfix, created from the first included `v{{version}}` branch, and will be applied back to the appropriate `v{{version}}` branch by **pull request** after the development is done.
 
-    If this hotfix need to be **forwardported** to the later versions, you can use `merge` to apply it back to the later `v{{version}}` & `main` branches ([example](https://github.com/symfony/symfony)).
+    If this hotfix needs to be **forwardported** to the later versions, you can use `merge` to apply it back to the later `v{{version}}` & `main` branches ([example](https://github.com/symfony/symfony)).
 
   A simple comparison with single major version workflow:
 
@@ -217,8 +217,8 @@ To keep things controlled and organized, there are several common branch managem
   - `uat` branch is for **UAT environment**;
   - `test` branch is for **testing environment**;
   - `dev` branch is for **development environment**;
-  - `feat/xxx` branch is for new feature, created from the `main` branch, which will be applied back to `dev`, `test`, `uat`, `release` branch by **pull request**, based on the feature's development process.
-  - `hotfix/xxx` branch is for hotfix, created from the `main` branch, which will be applied back to `dev`, `test`, `uat`, `release` branch by **pull request**, based on the hotfix's development process.
+  - `feat/xxx` branch is for a new feature, created from the `main` branch, which will be applied back to the `dev`, `test`, `uat`, and `release` branches by **pull request**, based on the feature's development process.
+  - `hotfix/xxx` branch is for a hotfix, created from the `main` branch, which will be applied back to the `dev`, `test`, `uat`, and `release` branches by **pull request**, based on the hotfix's development process.
 
 You can choose one of the workflows above based on your project's size, type, complexity or your preference.
 
@@ -231,19 +231,19 @@ You can choose one of the workflows above based on your project's size, type, co
 #### Feature Branch
 
 > [!Note]
-> Basically, we only start a new feature development on the next major version branch, which is the `main` branch in this case.
+> Basically, we only start new feature development on the next major version branch, which is the `main` branch in this case.
 >
 > If other versions need this feature, we can backport it.
 >
-> That's to say, we will never develop a new feature for a specific released version but not for the next major version.
+> That is to say, we will never develop a new feature for a specific released version but not for the next major version.
 
-To add a new feature, you should create a new feature branch based from `main` branch first.
+To add a new feature, you should create a new feature branch based on the `main` branch first.
 
 ```bash
 git switch --create feat/feature-name main
 ```
 
-Then, you can work on your feature branch, commit changes frequently, and push them to remote regularly:
+Then, you can work on your feature branch, commit changes frequently, and push them to the remote regularly:
 
 ```bash
 echo "Hello, Git!" > index.js
@@ -259,13 +259,13 @@ git commit --message "feat: add second.js"
 
 #### Hotfix Branch
 
-To add a hotfix, you should create a new hotfix branch based from the first included released version branch. For example, if the bug appears in the `v1.x` branch to the next major version:
+To add a hotfix, you should create a new hotfix branch based on the first included released version branch. For example, if the bug appears in the `v1.x` branch to the next major version:
 
 ```bash
 git switch --create hotfix/bug-name v1.x
 ```
 
-Then, you can work on your hotfix branch, commit changes frequently, and push them to remote regularly:
+Then, you can work on your hotfix branch, commit changes frequently, and push them to the remote regularly:
 
 ```bash
 echo "Fix the bug!" >> index.js
@@ -277,7 +277,7 @@ git commit --message "hotfix: fix the bug"
 
 ### Discard Changes
 
-When you work on your feature branch, you may want to discard the changes (in workspace).
+When you work on your feature branch, you may want to discard the changes (in the workspace).
 
 You can use the following command to restore specific tracked files:
 
@@ -304,15 +304,15 @@ To clean untracked directories & files:
 git clean --force -d .
 ```
 
-### Disadd Changes
+### Unstage Changes
 
-If you have staged some changes by `git add`, you can also disadd them by `git reset`:
+If you have staged some changes by `git add`, you can also unstage them with `git reset`:
 
 ```bash
 git reset index.html index.css
 ```
 
-To disadd all changes:
+To unstage all changes:
 
 ```bash
 git reset .
@@ -320,14 +320,14 @@ git reset .
 
 ### Undo Last Commit
 
-When you commit some changes in accident, you can undo it by `git reset HEAD^`:
+When you commit some changes by accident, you can undo it with `git reset HEAD^`:
 
 ```bash
 git reset HEAD^
 ```
 
 > [!Caution]
-> If this commit has been pushed to remote, you need to perform force push to remote after undo it:
+> If this commit has been pushed to the remote, you need to force push to the remote after undoing it:
 >
 > ```bash
 > git push --force
@@ -337,7 +337,7 @@ git reset HEAD^
 
 ### Amend Last Commit
 
-If you want to amend the last commit, more conveniently than drop the last commit and create a new one, you can do:
+If you want to amend the last commit, which is more convenient than dropping the last commit and creating a new one, you can do:
 
 ```bash
 git commit --amend --no-edit
@@ -353,7 +353,7 @@ git commit --amend --message "fix: some bugs"
 ```
 
 > [!Caution]
-> If this commit has been pushed to remote, you need to perform force push to remote after undo it:
+> If this commit has been pushed to the remote, you need to force push to the remote after undoing it:
 >
 > ```bash
 > git push --force
@@ -363,11 +363,11 @@ git commit --amend --message "fix: some bugs"
 
 ### Revert Commit
 
-Undo or amend last commit is unsafe, this may break other collaborators' work if you and them are working on the same branch.
+Undoing or amending the last commit is unsafe; this may break other collaborators' work if you and they are working on the same branch.
 
-For more safety choice, you can use `git revert` to create a new commit that undoes the changes made by a specific commit.
+For a safer choice, you can use `git revert` to create a new commit that undoes the changes made by a specific commit.
 
-The cost is that the commit history will be more ugly, likes your "evidence of guilt", which will spread through the ages. 🫠
+The cost is that the commit history will be uglier, like your "evidence of guilt", which will spread through the ages. 🫠
 
 ```bash
 git revert HEAD
@@ -375,7 +375,7 @@ git revert HEAD
 
 ### Rebase Branch
 
-When you want to integrate some changes in the upstream branch to your branch, you can rebase your branch onto it.
+When you want to integrate some changes from the upstream branch into your branch, you can rebase your branch onto it.
 
 ```bash
 git switch {{your-branch}}
@@ -385,7 +385,7 @@ git push --force
 ```
 
 > [!Caution]
-> Do not rebase a branch which is **cooperated with others**.
+> Do not rebase a branch that is **shared with others**.
 >
 > This may cause problems for other collaborators, so please use it with caution 🙏.
 
@@ -393,7 +393,7 @@ git push --force
 
 #### Pull Request
 
-I highly recommend you always to use **pull request** to perform code review and approval process before integrate changes from a branch to another branch.
+I highly recommend you always use a **pull request** to perform the code review and approval process before integrating changes from one branch to another branch.
 
 All the operations are simple:
 
@@ -415,7 +415,7 @@ git push
 #### Integrate Changes Example
 
 > [!Note]
-> This example uses `merge` to shows the flow of integrating changes, but I still recommend you to use **pull request** instead.
+> This example uses `merge` to show the flow of integrating changes, but I still recommend you use a **pull request** instead.
 
 Feature branch development flow:
 
@@ -445,7 +445,7 @@ git justmerge hotfix/bug-name
 
 ### Manage Tags & Create Released Major Version Branch
 
-When you want to release a new version, after completing the necessary changes (changelogs, bumping version...), you should create a version tag to mark this point on the `main` branch, and push it to remote.
+When you want to release a new version, after completing the necessary changes (changelogs, bumping the version...), you should create a version tag to mark this point on the `main` branch, and push it to the remote.
 
 ```bash
 # Complete the necessary changes...
@@ -463,7 +463,7 @@ Then push the tag to remote:
 git push --tags
 ```
 
-Or if you want to delete a tag
+Or if you want to delete a tag:
 
 ```bash
 git tag --delete v1.0.0
@@ -478,7 +478,7 @@ git switch --create v1.x main
 
 ### Delete Branch
 
-After every time you have integrated the changes from feature / hotfix branch to the target branch, you can delete them, if they are no longer needed.
+Once you have integrated the changes from a feature / hotfix branch into the target branch, you can delete it if it is no longer needed.
 
 This helps to keep your branch list clean and organized.
 
@@ -492,9 +492,9 @@ git push origin --delete hotfix/bug-name
 
 ### Backport Feature (Cherry-pick)
 
-Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing the entire branch. In this case, you can use the `cherry-pick`.
+Sometimes, you may want to apply some specific commits from one branch to another branch without merging/rebasing the entire branch. In this case, you can use `cherry-pick`.
 
-The most common usecase is to backport a feature to the released major version branch. For example, you want to backport the feature in `main` branch, which is introduced by the merging of `feat/xxx`, the only few things you need to do is:
+The most common use case is to backport a feature to the released major version branch. For example, you want to backport the feature on the `main` branch, which is introduced by the merging of `feat/xxx`, the only things you need to do are:
 
 1.  Find the merge commit hash of `feat/xxx` in the `main` branch, for example, `1234567`;
 2.  Cherry-pick this commit to the released major version branch `v1.x`:
@@ -507,10 +507,10 @@ git push
 
 ### Forwardport Bugfix (Merge)
 
-When you want to apply a bugfix from a released major version branch to the later versions, just do as what you do in [integrate changes](#integrate-changes) section:
+When you want to apply a bugfix from a released major version branch to the later versions, just do as you do in the [integrate changes](#integrate-changes) section:
 
 > [!Note]
-> Of course, **pull request** is still recommended than `merge`.
+> Of course, a **pull request** is still recommended over `merge`.
 
 ```bash
 git switch v2.x
@@ -537,13 +537,13 @@ email = your.email@example.com
 editor = nvim
 ```
 
-To get full configuration example, please refer to my [`.gitconfig`](https://github.com/lumirelle/dotfiles/blob/main/dot_gitconfig) file.
+To get a full configuration example, please refer to my [`.gitconfig`](https://github.com/lumirelle/dotfiles/blob/main/dot_gitconfig) file.
 
 #### `.gitignore`
 
-To ignore certain files or directories in your Git repository.
+This file is used to ignore certain files or directories in your Git repository.
 
-I prefer to use the templates from [github/gitignore](https://github.com/github/gitignore). There are some extensions for different editor to generate `.gitignore` file based on those templates with ease:
+I prefer to use the templates from [github/gitignore](https://github.com/github/gitignore). There are some extensions for different editors to generate a `.gitignore` file based on those templates with ease:
 
 - Neovim: [`gitignore.nvim`](https://github.com/wintermute-cell/gitignore.nvim)
 - VSCode: [`codezombiech.gitignore`](https://marketplace.visualstudio.com/items?itemName=codezombiech.gitignore).
@@ -556,7 +556,7 @@ To solve this problem, you can create a `.git-blame-ignore-revs` file in the roo
 
 > [!Note]
 >
-> Git does not respect `.git-blame-ignore-revs` by default, you need to configure it in your `.gitconfig` file:
+> Git does not respect `.git-blame-ignore-revs` by default; you need to configure it in your `.gitconfig` file:
 >
 > ```ini
 > [blame]
@@ -567,10 +567,10 @@ To solve this problem, you can create a `.git-blame-ignore-revs` file in the roo
 
 https://github.com/jesseduffield/lazygit
 
-Simple terminal UI for git commands, I highly recommend it for everyone.
+Simple terminal UI for git commands; I highly recommend it for everyone.
 
-Why? If you have used VSCode or other IDEs quite a long time, with their Git GUI, you may find that: You have to wait several seconds for each GUI operation, wait for the GUI to update. That's quite annoying, especially with a large project, when the IDE takes a lot of CPU and memory resources, the Git GUI will be even slower.
+Why? If you have used VS Code or other IDEs for quite a long time, with their Git GUI, you may find that: you have to wait several seconds for each GUI operation, waiting for the GUI to update. That's quite annoying, especially with a large project: when the IDE takes a lot of CPU and memory resources, the Git GUI will be even slower.
 
-The truth is: The raw Git commands are already completed, but the GUI is still rendering and updating, which means 80% of the time you spend on the Git GUI is wasted on GUI itself!
+The truth is: the raw Git commands are already completed, but the GUI is still rendering and updating, which means 80% of the time you spend on the Git GUI is wasted on the GUI itself!
 
-So, why not just use a terminal UI for Git commands? Both fast and visual!
+So, why not just use a terminal UI for Git commands? It is both fast and visual!

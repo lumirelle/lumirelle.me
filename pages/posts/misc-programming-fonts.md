@@ -1,7 +1,7 @@
 ---
 title: Programming Fonts
 date: 2025-10-15T14:10+08:00
-update: 2026-09-14T14:26+08:00
+update: 2026-09-21T10:32+08:00
 lang: en
 duration: 15min
 ---
@@ -17,7 +17,7 @@ duration: 15min
 > }
 > ```
 
-## Introduce to Monospace Fonts
+## Introduction to Monospace Fonts
 
 Monospace fonts are fonts in which each character occupies the same amount of horizontal space.
 
@@ -25,38 +25,38 @@ Basically, we always use monospace fonts for programming, because they can align
 
 ## Test-Driven Comparison
 
-You can compare various programming fonts with test-driven method in this [website](https://programmingfonts.org/).
+You can compare various programming fonts with the test-driven method on this [website](https://programmingfonts.org/).
 
 ## My Preference
 
 > [!Note]
 >
-> ~~As a Chinese, sometimes I have to use both Latin characters and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get better development experience.~~
+> ~~As a Chinese person, sometimes I have to use both Latin and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get a better development experience.~~
 >
-> After a long time of testing, I found that it's not necessary to let the width of 2 Latin characters equal to 1 CJK character. We don't actually have this need because we basically use our native language only when we need to write comments and UI text.
+> After a long time of testing, I found that it's not necessary to make the width of 2 Latin characters equal to 1 CJK character. We don't actually have this need because we basically use our native language only when we need to write comments and UI text.
 >
-> Alright, I admit, the true reason is finding a suitable and aesthetically pleasing matching font is just too difficult...
+> Alright, I admit: the true reason is that finding a suitable and aesthetically pleasing matching font is just too difficult...
 
-My basic requirements for fonts are that:
+My basic requirements for fonts are:
 
 1. They must have at least two weights (Regular & Bold);
 2. They must have italic styles;
-3. Save my eyes but not serious.
+3. Be easy on the eyes but not too serious.
 
-All of fonts listed below are satisfy these requirements.
+All of the fonts listed below satisfy these requirements.
 
 ### Strict 1 Latin Character = 1 CJK Character
 
 > [!Note]
 >
-> In Web development, `em` is base on the current font size. For example, if the font size is `16px`, then `1em` = `16px`. We can use this unit to describe the ratio of character width to font size.
+> In Web development, `em` is based on the current font size. For example, if the font size is `16px`, then `1em` = `16px`. We can use this unit to describe the ratio of character width to font size.
 >
 > As some font families are variable, they may support custom character width, so I will use the default character width to categorize these fonts.
 
-- **62.5%em group**: If the font size is 16px, one Latin character will be 10px (62.5%em), and one CJK character will be 20px (62.5% \* 2 = 125%em), like "Annotation Mono", etc
-- **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), like "Monaspace Xenon Var", etc
-- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), like "Go Mono" and "Maple Font", etc
-- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), like "M PLUS Code Latin" and "Source Han Sans TC", etc
+- **62.5%em group**: If the font size is 16px, one Latin character will be 10px (62.5%em), and one CJK character will be 20px (62.5% \* 2 = 125%em), such as "Annotation Mono".
+- **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), such as "Monaspace Xenon Var".
+- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), such as "Go Mono" and "Maple Font".
+- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), such as "M PLUS Code Latin" and "Source Han Sans TC".
 
 <a name="font-weights"></a> Also, this is a comparison table of the font weight aliases and the corresponding numeric values:
 
@@ -77,9 +77,9 @@ All of fonts listed below are satisfy these requirements.
 
 > [!Note]
 >
-> It seems like impossible to find a CJK font with 62%em width, so I decide to may a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+> It seems impossible to find a CJK font with 62.5%em width, so I decided to make a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
 
-This group uses my custom build &ndash; ["Maple Mono WR CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK characters support, via bellow command:
+This group uses my custom build &ndash; ["Maple Mono WR CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK character support, via the command below:
 
 ```nu
 python build.py --width wider --cn --no-nf
@@ -87,7 +87,7 @@ python build.py --width wider --cn --no-nf
 
 > [!Note]
 >
-> `--width wider` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most of them.
+> `--width wider` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most cases.
 
 - ⭐ [Annotation Mono](https://qwerasd205.github.io/AnnotationMono/): <a name="Annotation Mono"></a>
 
@@ -97,7 +97,7 @@ python build.py --width wider --cn --no-nf
 
   <img src="/posts/misc-programming-fonts/AnnotationMono.png" alt="AnnotationMono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-Then, you can using these font like this:
+Then, you can use these fonts like this:
 
 ```json
 "'Symbols Nerd Font', 'Annotation Mono', 'Maple Mono WR CN', monospace"
@@ -107,9 +107,9 @@ Then, you can using these font like this:
 
 > [!Note]
 >
-> It seems like impossible to find a CJK font with 62%em width, so I decide to may a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+> It seems impossible to find a CJK font with 62%em width, so I decided to make a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
 
-This group uses my custom build &ndash; ["Maple Mono WD CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK characters support, via bellow command:
+This group uses my custom build &ndash; ["Maple Mono WD CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK character support, via the command below:
 
 ```nu
 python build.py --width wide --cn --no-nf
@@ -117,7 +117,7 @@ python build.py --width wide --cn --no-nf
 
 > [!Note]
 >
-> `--width wide` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most of them.
+> `--width wide` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most cases.
 
 - ⭐ [0xProto](https://github.com/0xType/0xProto/releases): <a name="0xProto"></a>
 
@@ -131,11 +131,11 @@ python build.py --width wide --cn --no-nf
 
   <TextTag text="variable" preset="amber" /><TextTag text="serif" preset="blue" /><TextTag text="extralight to extrabold, with italic" preset="green" />
 
-  The Monaspace type system is a monospaced type superfamily with some modern tricks up its sleeve. Xenon is the slab serif version
+  The Monaspace type system is a monospaced type superfamily with some modern tricks up its sleeve. Xenon is the slab serif version.
 
   <img src="/posts/misc-programming-fonts/monaspace-xenon.png" alt="Monaspace Xenon" style="width: 100%; height: auto; border-radius: 12px;" />
 
-Then, you can using these font like this:
+Then, you can use these fonts like this:
 
 ```json
 "'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
@@ -145,17 +145,17 @@ Then, you can using these font like this:
 
 > [!Note]
 >
-> Most of Latin fonts are designed to be 60%em width, but very few CJK fonts are.
+> Most Latin fonts are designed to be 60%em wide, but very few CJK fonts are.
 
-This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support.
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK character support.
 
 > [!Note]
 >
-> "Maple Mono CN" itself is a beautiful monospace font, you can use it standalone if you want.
+> "Maple Mono CN" itself is a beautiful monospace font; you can use it standalone if you want.
 >
-> The variable version of Maple Mono CN is still in progress, just see the [discussion](https://github.com/subframe7536/maple-font/discussions/503).
+> The variable version of Maple Mono CN is still in progress; see the [discussion](https://github.com/subframe7536/maple-font/discussions/503).
 
-And Latin font have more choice:
+And Latin fonts have more choices:
 
 - [Adwaita Mono](https://gitlab.gnome.org/GNOME/adwaita-fonts/-/tree/main/mono?ref_type=heads):
 
@@ -169,7 +169,7 @@ And Latin font have more choice:
 
   <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="regular, bold, with italic" preset="green" />
 
-  The Anka/Coder family is a monospaced, courier-width (60% of height; em size 2048x1229) font that can be used for source code, terminal windows etc.
+  The Anka/Coder family is a monospaced, courier-width (60% of height; em size 2048x1229) font that can be used for source code, terminal windows, etc.
 
   <img src="/posts/misc-programming-fonts/anka-coder.png" alt="Anka Coder" style="width: 100%; height: auto; border-radius: 12px;" />
 
@@ -217,7 +217,7 @@ And Latin font have more choice:
 
   > [!Warning]
   >
-  > Variable version has some rendering issues about non-breaking space in Chromium-based applications (like Chrome, VSCode, etc.), please track the [issue #472245780](https://issues.chromium.org/issues/472245780).
+  > The variable version has some rendering issues with non-breaking spaces in Chromium-based applications (like Chrome, VS Code, etc.); please track [issue #472245780](https://issues.chromium.org/issues/472245780).
 
   <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="light to 1000, with italic" preset="green" />
 
@@ -233,7 +233,7 @@ And Latin font have more choice:
 
   <img src="/posts/misc-programming-fonts/red-hat-mono.svg" alt="Red Hat Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-Then, you can using these font like this:
+Then, you can use these fonts like this:
 
 ```json
 // 'Go Mono' can be replaced by any other Latin fonts listed above
@@ -244,11 +244,11 @@ Then, you can using these font like this:
 
 > [!Note]
 >
-> Most of CJK fonts are designed to be 50%em width, but very few Latin fonts are.
+> Most CJK fonts are designed to be 50%em wide, but very few Latin fonts are.
 
-This group may look a bit narrow for most people, it uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK characters support.
+This group may look a bit narrow for most people; it uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK character support.
 
-These are some latin fonts you can choose for this group:
+These are some Latin fonts you can choose for this group:
 
 - [Inconsolata](https://github.com/google/fonts/blob/main/ofl/inconsolata):
 
@@ -282,7 +282,7 @@ These are some latin fonts you can choose for this group:
 
   <img src="/posts/misc-programming-fonts/ubuntu-mono.png" alt="Ubuntu Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-Then, you can using these font like this:
+Then, you can use these fonts like this:
 
 ```json
 // 'M PLUS Code Latin' can be replaced by any other Latin fonts listed above
@@ -293,9 +293,9 @@ Then, you can using these font like this:
 
 If you're thinking, "Whatever!" then the "Comic" font family is perfect for you.
 
-This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK characters support too.
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK character support too.
 
-And latin font family:
+And here are the Latin font families:
 
 - ⭐ [Comic Mono](https://dtinth.github.io/comic-mono-font/):
 
@@ -305,7 +305,7 @@ And latin font family:
 
   <img src="/posts/misc-programming-fonts/comic-mono.png" alt="Comic Mono" style="width: 100%; height: auto; border-radius: 12px;" />
 
-Then, you can using this font like this:
+Then, you can use this font like this:
 
 ```json
 "'Symbols Nerd Font', 'Comic Mono', 'Maple Mono CN', monospace"

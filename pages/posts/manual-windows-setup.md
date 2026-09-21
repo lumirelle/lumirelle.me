@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-21T11:28+08:00
+update: 2026-09-21T16:21+08:00
 lang: en
 duration: 21min
 type: manual
@@ -339,16 +339,16 @@ In the tables below, `~` means the same as above.
 
 | Extension | Source/Install Command | Note |
 | -- | -- | -- |
-| Tampermonkey | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) & [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | User scripts in use: [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
-| KeePassXC-Browser | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) & [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
 | Dark Reader | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) & [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes!!! |
+| KeePassXC-Browser | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) & [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
+| Tampermonkey | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) & [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | User scripts in use: [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
 | Read Frog | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/read-frog-open-ai-translator/) & [Chromium](https://chromewebstore.google.com/detail/read-frog-translate-learn/modkelfkcfjpgbfmnbnllalkiogfofhb) | / |
 | Vimium C - All by Keyboard | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) & [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled. |
 | Refined Github | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) & [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | Requires your GitHub access token. |
 | File Icons for GitHub and GitLab | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) & [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
 | Npmx redirect | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) & [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Fuck Npm! |
+| Styled XML Viewer | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/styled-xml-viewer/) & [Chromium](https://chromewebstore.google.com/detail/styled-xml-viewer/ejlmflppkjfbbkhgidccfjelfgfgicph) | / |
 | CSS Stacking Context inspector | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) & [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) | / |
-| Grammar and Spell Checker | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/languagetool/) & [Chromium](https://chromewebstore.google.com/detail/ai-grammar-checker-paraph/oldceeleldhonbafppcapldpdifcinji) | / |
 
 Sometimes useful extensions:
 

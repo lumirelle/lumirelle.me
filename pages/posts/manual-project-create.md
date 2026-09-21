@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-09-21T15:45+08:00
 lang: en
 duration: 1min
 type: manual
@@ -17,7 +17,7 @@ This is a manual for how to create a new project with a specific tech stack.
 
 ## Prerequisites
 
-Use a [Nushell alias `degit`](https://github.com/lumirelle/dotfiles/blob/main/dot_config/shared/nushell/aliases/degit.nu) instead of the [`degit` CLI](https://npmx.dev/package/degit).
+The [`degit` CLI](https://npmx.dev/package/degit).
 
 ## TypeScript Library
 

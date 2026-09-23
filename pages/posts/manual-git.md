@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-09-22T17:56+08:00
+update: 2026-09-23T18:15+08:00
 lang: en
 duration: 15min
 type: manual
@@ -17,7 +17,7 @@ Git is a distributed version control system, which is used to track changes in s
 
 ### Core Concepts
 
-- **Repository (Repo)**:
+- [**Repository (Repo):**](#repository) <i id="repository"></i>
 
   A repository contains all the information about your project.
 
@@ -25,7 +25,7 @@ Git is a distributed version control system, which is used to track changes in s
 
   A repository can be stored locally (on your computer), remotely (on a server like GitHub), or both.
 
-- **Commit (Revision)**:
+- [**Commit (Revision):**](#commit) <i id="commit"></i>
 
   A commit is a **diff record** against the previous one; except for the initial commit, which stores the initial state of your project.
 
@@ -33,7 +33,7 @@ Git is a distributed version control system, which is used to track changes in s
 
   What's more, two different commits can be based on the same previous commit. Through this, we can build **forks (branches)** on top of the commit history. That's why the commit history looks like a **tree**.
 
-- **Pointer**:
+- [**Pointer:**](#pointer) <i id="pointer"></i>
 
   A pointer is a reference to a specific commit, which can be used to identify that commit.
 
@@ -43,7 +43,7 @@ Git is a distributed version control system, which is used to track changes in s
 
   **HEAD** is a special pointer: it is usually a *symbolic* pointer that points to a branch rather than directly to a commit, and it only points to a commit directly in the "detached HEAD" state. Keeping the **working directory** in sync with the commit HEAD refers to is the job of the command that moves HEAD: `git switch` / `git checkout` update the working directory (and refuse if that would overwrite your uncommitted changes), while `git reset --soft` moves HEAD and leaves the working directory untouched.
 
-- **Branch**:
+- [**Branch:**](#branch) <i id="branch"></i>
 
   A branch starts from a shared commit with other branches (for the first branch, it starts from the initial commit), so we can say: a branch is a bunch of changes made on top of that starting commit.
 
@@ -63,15 +63,15 @@ Git is a distributed version control system, which is used to track changes in s
 
   **In Git, the branch is the first-class citizen.** Working on a branch is the default and intended way to work: `git commit` records onto whatever branch `HEAD` points to, and that branch advances automatically. The branch, not the commit, is the unit you create, switch, merge, and delete. Commits that are not on a branch are a special case (the "detached HEAD" state), kept alive only by the reflog, so they are rarely used for real work. In general, any commit that no ref points to, no branch, no tag, no remote ref, is **unreachable**: Git stops tracking it, and it is eventually garbage-collected.
 
-- **Working Directory**:
+- [**Working Directory:**](#working-directory) <i id="working-directory"></i>
 
   The working directory shows **the current state of your project**: the files on disk (the content of the commit) you are on, plus your uncommitted changes and any untracked or ignored files. It is *not* automatically in sync with `HEAD`; see **Pointer** above.
 
-- **Staging Area**:
+- [**Staging Area:**](#staging-area) <i id="staging-area"></i>
 
   The staging area is a place where you can stage changes before committing them.
 
-- **Conflict**:
+- [**Conflict:**](#conflict) <i id="conflict"></i>
 
   In git, conflicts prevent you from doing anything until you resolve it.
 
@@ -461,22 +461,6 @@ The cost is that the commit history will be uglier, like your "evidence of guilt
 git revert HEAD
 ```
 
-### Rebase Branch
-
-When you want to integrate some changes from the upstream branch into your branch, you can rebase your branch onto it.
-
-```bash
-git switch {{your-branch}}
-git rebase {{upstream-branch}}
-# A rebase rewrites history, so the push needs --force-with-lease --force-if-includes (never plain --force)!!!
-git push --force-with-lease --force-if-includes
-```
-
-> [!Caution]
-> Do not rebase a branch that is **shared with others**.
->
-> This may cause problems for other collaborators, so please use it with caution 🙏.
-
 ### Integrate Changes
 
 #### Pull Request
@@ -489,12 +473,28 @@ All the operations are simple:
 2. Perform code review and approval process;
 3. Then, accept the pull request.
 
+#### Rebase Branch
+
+When you want to integrate some changes from the upstream branch into your current branch, instead of `merge` with a ugly history tree, you can rebase your current branch onto it.
+
+```bash
+git switch {{branch}}
+git rebase {{upstreamBranch}}
+
+# A rebase rewrites history, so the push needs --force-with-lease --force-if-includes (never plain --force)!!!
+git push --force-with-lease --force-if-includes
+```
+
+> [!Caution]
+> Do not rebase a branch that is **shared with others**.
+>
+> This may cause problems for other collaborators, so please use it with caution 🙏.
+
 #### Merge Branch (Not Recommended)
 
 ```bash
-git switch {{target-branch}}
-
-git merge {{your-branch}}
+git switch {{targetBranch}}
+git merge {{yourBranch}}
 
 # Don't forget to push the target branch to remote!
 git push
@@ -533,7 +533,7 @@ git justmerge hotfix/bug-name
 
 ### Manage Tags & Create Released Major Version Branch
 
-When you want to release a new version, after completing the necessary changes (changelogs, bumping the version...), you should create a version tag to mark this point on the `main` branch, and push it to the remote.
+When you want to release a new version, after completing the necessary changes (changelogs, bumping the version...), you should create a version tag to mark this point on the main branch, and push it to the remote.
 
 ```bash
 # Complete the necessary changes...
@@ -555,13 +555,29 @@ Or if you want to delete a tag:
 
 ```bash
 git tag --delete v1.0.0
+
+# Deleting a tag locally does not delete it on the remote:
+git push --delete origin v1.0.0
 ```
 
 After that, you should create a new branch for this released major version.
 
 ```bash
-# TODO: Can we use tag v1.0.0 instead of main?
-git switch --create v1.x main
+# Instead of going through `main`, the tag marks the exact release commit:
+git switch --create v1.x v1.0.0
+
+# Don't forget to push to remote
+git push
+```
+
+When the released major version branch already exists (for example, releasing `v1.1.0` on the `v1.x` branch), you can create the tag from it directly:
+
+```bash
+# In Git the branch has already advanced with the release commit:
+git tag v1.1.0 v1.x
+
+# Don't forget to push the tag and the branch to remote!
+git push --tags
 ```
 
 ### Delete Branch
@@ -589,26 +605,35 @@ The most common use case is to backport a feature to the released major version 
 
 ```bash
 git switch v1.x
-git cherry-pick 1234567
+
+# `-x` records the source commit in the message, which makes later auditing possible:
+# `--mainline 1` is required,
+# when the cherry-picked commit is a merge commit:
+git cherry-pick -x --mainline 1 1234567
+
 git push
 ```
 
-### Forwardport Bugfix (Merge)
+### Forwardport Bugfix (Cherry-pick)
 
-When you want to apply a bugfix from a released major version branch to the later versions, just do as you do in the [integrate changes](#integrate-changes) section:
-
-> [!Note]
-> Of course, a **pull request** is still recommended over `merge`.
+When you want to apply a bugfix from a released major version branch to the later versions, you can cherry-pick it, just like a backport. For example, you want to forwardport the hotfix on the `v1.x` branch, which is introduced by the merging of `hotfix/bug-name`, to the `v2.x` and `main` branches:
 
 ```bash
 git switch v2.x
-git justmerge v1.x
+git cherry-pick -x --mainline 1 1234567
 git push
 
 git switch main
-git justmerge v1.x
+git cherry-pick -x --mainline 1 1234567
 git push
 ```
+
+> [!Note]
+> `-x` records the source commit in the message, so you can check whether a hotfix has already been forwardported:
+>
+> ```bash
+> git log --grep='cherry picked from commit 1234567' v2.x main
+> ```
 
 ### Git Configuration
 
@@ -629,7 +654,7 @@ To get a full configuration example, please refer to my [`.gitconfig`](https://g
 
 #### `.gitignore`
 
-This file is used to ignore certain paths in your Git repository: every line is a pattern that selects paths (files, directories, or wildcards) — e.g. `*.log`, `build/`, or `!src/keep.log` to un-ignore a single one.
+This file is used to ignore certain paths in your Git repository: every line is a pattern that selects paths (files, directories, or wildcards). E.g. `*.log`, `build/`, or `!src/keep.log` to un-ignore a single one.
 
 I prefer to use the templates from [github/gitignore](https://github.com/github/gitignore). There are some extensions for different editors to generate a `.gitignore` file based on those templates with ease:
 

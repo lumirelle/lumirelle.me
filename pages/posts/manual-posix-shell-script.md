@@ -6,7 +6,7 @@ lang: en
 duration: 20min
 type: manual
 group: Shell
-order: 3
+order: 1
 ---
 
 [[toc]]

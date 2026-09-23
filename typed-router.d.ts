@@ -164,6 +164,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/manual-jj': RouteRecordInfo<
+      '/posts/manual-jj',
+      '/posts/manual-jj',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/manual-js-advanced-grammar': RouteRecordInfo<
       '/posts/manual-js-advanced-grammar',
       '/posts/manual-js-advanced-grammar',
@@ -457,6 +464,14 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/manual-html-advanced-grammar.md': {
       routes:
         | '/posts/manual-html-advanced-grammar'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/manual-jj.md': {
+      routes:
+        | '/posts/manual-jj'
       views:
         | never
       pathParamNames:

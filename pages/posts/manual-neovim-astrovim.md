@@ -6,7 +6,7 @@ lang: en
 duration: 26min
 type: manual
 group: Editor
-order: 4
+order: 1
 ---
 
 <style>

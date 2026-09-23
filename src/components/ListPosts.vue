@@ -2,6 +2,7 @@
 import type { Post } from '~/types'
 import { useRouter } from 'vue-router'
 import { chineseOnly, formatDate } from '~/logics'
+import { manualGroupOrder } from '../../data/manual-groups'
 
 const props = defineProps<{
   type?: string
@@ -34,13 +35,26 @@ const routes: Post[] = router
     order: i.meta.frontmatter.order,
   }))
 
+function manualGroupIndex(p: Post): number {
+  const idx = manualGroupOrder.indexOf(p.group || '')
+  return idx === -1 ? manualGroupOrder.length : idx
+}
+
 const posts = computed(() =>
   [...(props.posts || routes), ...(props.extra || [])]
     .sort((a, b) => {
-      if (props.type === 'manual')
+      if (props.type === 'manual') {
+        const groupDiff = manualGroupIndex(a) - manualGroupIndex(b)
+        if (groupDiff !== 0)
+          return groupDiff
+        const groupNameDiff = (a.group || '').localeCompare(b.group || '')
+        if (groupNameDiff !== 0)
+          return groupNameDiff
         return (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
-      else
+      }
+      else {
         return Number(new Date(b.date)) - Number(new Date(a.date))
+      }
     })
     .filter(i => !chineseOnly.value || !i.lang || i.lang === 'zh'),
 )

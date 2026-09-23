@@ -1,12 +1,12 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-09-22T17:56+08:00
 lang: en
 duration: 15min
 type: manual
 group: VCS
-order: 5
+order: 1
 ---
 
 [[toc]]
@@ -21,13 +21,13 @@ Git is a distributed version control system, which is used to track changes in s
 
   A repository contains all the information about your project.
 
-  Conceptually, a repository is composed of three parts: Git's configuration (in `.git`), the **commit history** (in `.git`), and the **working directory** (tracked files).
+  Conceptually, a repository is composed of three parts: Git's configuration & metadata (in `.git`), the **commit history** (in `.git`), and the **working directory** (tracked paths).
 
   A repository can be stored locally (on your computer), remotely (on a server like GitHub), or both.
 
-- **Commit**:
+- **Commit (Revision)**:
 
-  A commit is a diff record against the previous one; except for the initial commit, which stores the initial state of your project.
+  A commit is a **diff record** against the previous one; except for the initial commit, which stores the initial state of your project.
 
   Each commit is identified by a **unique ID** (SHA-1 so far).
 
@@ -35,15 +35,17 @@ Git is a distributed version control system, which is used to track changes in s
 
 - **Pointer**:
 
-  A pointer is a reference to a specific commit node, which can be used to identify the commit node & the branch it belongs to (branch name).
+  A pointer is a reference to a specific commit, which can be used to identify that commit.
 
-  Pointers can move to another commit node.
+  Pointers can move to another commit.
 
-  **HEAD** is a special pointer: the **working directory** is always based on the commit node referenced by HEAD. If HEAD moves to another commit node, the working directory will also change immediately to reflect the state of that commit node.
+  Git has two main kinds of pointers: `HEAD` is an **implicit pointer** that always marks where you are working, while a **branch** is an **explicit, named pointer** that Git advances for you as you commit.
+
+  **HEAD** is a special pointer: it is usually a *symbolic* pointer that points to a branch rather than directly to a commit, and it only points to a commit directly in the "detached HEAD" state. Keeping the **working directory** in sync with the commit HEAD refers to is the job of the command that moves HEAD: `git switch` / `git checkout` update the working directory (and refuse if that would overwrite your uncommitted changes), while `git reset --soft` moves HEAD and leaves the working directory untouched.
 
 - **Branch**:
 
-  A branch starts from a shared commit node with other branches (for the initial branch, it starts from the initial commit node), so we can say: branches are a bunch of changes made on top of that shared commit node.
+  A branch starts from a shared commit with other branches (for the first branch, it starts from the initial commit), so we can say: a branch is a bunch of changes made on top of that starting commit.
 
   ```txt
                                          (feat/feature-name)
@@ -55,19 +57,23 @@ Git is a distributed version control system, which is used to track changes in s
 
   We usually name the initial branch `main` or `master`.
 
-  The branch name is just a pointer to a specific commit node, which shows the end of the branch. When a new commit is made on this branch, the pointer will move to the new commit node.
+  The branch name is just a pointer to a specific commit, which shows the end of the branch. When a new commit is made on this branch, that branch pointer will move to the new commit automatically.
 
-  When you switch / checkout to a branch, it just moves the HEAD pointer to the commit node referenced by that branch name pointer.
+  When you switch / checkout to a branch, it just moves the *symbolic* HEAD pointer to that branch name pointer.
+
+  **In Git, the branch is the first-class citizen.** Working on a branch is the default and intended way to work: `git commit` records onto whatever branch `HEAD` points to, and that branch advances automatically. The branch, not the commit, is the unit you create, switch, merge, and delete. Commits that are not on a branch are a special case (the "detached HEAD" state), kept alive only by the reflog, so they are rarely used for real work. In general, any commit that no ref points to, no branch, no tag, no remote ref, is **unreachable**: Git stops tracking it, and it is eventually garbage-collected.
 
 - **Working Directory**:
 
-  The working directory shows **the current state of your project**. It is always based on the commit node you are currently on (referenced by HEAD), with your uncommitted changes.
-
-  When HEAD moves to another commit node, the working directory will also change to reflect the state of that commit node.
+  The working directory shows **the current state of your project**: the files on disk (the content of the commit) you are on, plus your uncommitted changes and any untracked or ignored files. It is *not* automatically in sync with `HEAD`; see **Pointer** above.
 
 - **Staging Area**:
 
   The staging area is a place where you can stage changes before committing them.
+
+- **Conflict**:
+
+  In git, conflicts prevent you from doing anything until you resolve it.
 
 ## Basic Usage of Git
 
@@ -79,6 +85,10 @@ Git is a distributed version control system, which is used to track changes in s
 
 ### Initialize Git Repository
 
+There are two ways to start a Git repository: **create a new one** from your local files (`git init`), or **clone an existing one** from a remote repository (`git clone`).
+
+#### Create a New Repository
+
 To initialize a fresh Git repository, open your project in the terminal and run:
 
 ```bash
@@ -88,6 +98,16 @@ git init
 Then, Git will create a hidden `.git` directory, which contains all the Git metadata for your project.
 
 At that point, there are no commits in your repository, and the working directory is empty.
+
+#### Clone an Existing Repository
+
+To start from an existing remote repository instead, use `git clone`:
+
+```bash
+git clone {{repoUrl}} {{destination}}
+```
+
+The remote is named `origin` unless you pass `--origin {{name}}`, and the default branch is checked out, so you can start working right away. The remote's other branches are available as **remote-tracking branches** (like `origin/main`).
 
 ### Make Changes and Commit
 
@@ -115,11 +135,13 @@ Making a commit records the changes you made since the previous commit (or the i
 
 This is the most basic version control use case.
 
-### Add Remote
+### Sync with Remote Repository
 
 As a distributed version control system, Git allows you to collaborate with others by syncing your local repository with a remote repository. You can use services like GitHub, GitLab, or Bitbucket to host your remote repositories.
 
-You need to add a remote, so that Git knows where the remote repository is located, and how to sync with it.
+#### For Newly Created Repositories
+
+If you created your repository with `git init` instead of cloning it, it has no remote yet. Before you can pull or push, you need to add one, so that Git knows where the remote repository is located, and how to sync with it.
 
 To add a remote, use the following command:
 
@@ -127,19 +149,61 @@ To add a remote, use the following command:
 git remote add origin https://github.com/username/repo.git
 ```
 
-### Pull and Push Commits
+You can inspect the configured remotes with `git remote --verbose`, and manage them with `git remote rename` / `set-url` / `remove`.
 
-To sync your local commit history with a remote repository, you can `pull` commits from it and `push` commits to it.
+#### Sync Changes with Remote
 
-To pull the latest commit history from the remote repository, you can use the following command:
+In Git, the branch is the first-class citizen: you sync commits through branches.
+
+As you already know, a branch is a reference to commits. You can use `git fetch` to update the locally remembered position of the remote branch (`refs/remotes/{{remote}}/{{branch}}`). After that, you can **integrate changes** from or to that remote branch — `git pull` commits from that remote branch and `git push` commits to it.
+
+Both commands operate on the **current branch**, and they need to know which remote branch it is linked to: its **upstream**, recorded as `branch.{{name}}.remote` and `branch.{{name}}.merge`.
+
+A branch created with `git switch --create` has no upstream yet. You should establish the link once, either by pushing the branch with `--set-upstream`:
 
 ```bash
+# To see the current branch you are on:
+# $> git branch
+# -> * feat/feature-name
+
+git push --set-upstream origin feat/feature-name
+```
+
+Or by linking the branch to an existing remote branch:
+
+```bash
+# To see the current branch you are on:
+# $> git branch
+# -> * main
+
+git branch --set-upstream-to=origin/main
+```
+
+> [!Note]
+> In this article's configuration, `push.autoSetupRemote = true` is set, so the first `git push` of a new branch creates its upstream automatically, and `--set-upstream` is usually unnecessary.
+
+Once the upstream is set, both commands are simple. You can verify the relation with:
+
+```bash
+git branch
+# -> * main
+git config --get branch.main.remote
+# -> origin
+git config --get branch.main.merge
+# -> refs/heads/main
+```
+
+To integrate the latest commits from that remote branch to the current branch, you can use the following command:
+
+```bash
+# Integrate commits from origin/main to main
 git pull
 ```
 
-To push your latest commit history to the remote repository:
+To integrate your latest commits to that remote branch:
 
 ```bash
+# Integrate commits from main to origin/main
 git push
 ```
 
@@ -163,45 +227,47 @@ After the tasks are done on those branches, you can apply them back by **pull re
 
 To keep things controlled and organized, there are several common branch management workflows:
 
-- [**Single branch workflow:**](#single-branch-workflow) <i id="single-branch-workflow"></i>
+- [**Main Branch Workflow:**](#main-branch-workflow) <i id="main-branch-workflow"></i>
 
   <TextTag>Personal</TextTag><TextTag preset="red">Not recommended</TextTag>
 
-  Everything is committed to the `main` branch directly.
+  Everything is committed to the main branch directly.
 
-  One or more commits make up a new version release. Tags on the `main` branch are used to mark the version numbers.
+  Versions are marked by tags on the main branch, each release means one or more commits on the main branch.
 
-- [**Single major version workflow:**](#single-major-version-workflow) <i id="single-major-version-workflow"></i>
+- [**Feature Branch Workflow:**](#feature-branch-workflow) <i id="feature-branch-workflow"></i>
 
   <TextTag>Personal / Team</TextTag><TextTag preset="green">Single version</TextTag>
 
-  Create a new branch for each feature (`feat/xxx`) or hotfix (`hotfix/xxx`) from the `main` branch, then apply it back to the `main` branch by **pull request** after the development is done.
+  The main branch only accepts **pull/merge requests** and does not accept any direct commit.
 
-  One or more pull requests make up a new version release. Tags on the `main` branch are used to mark the version numbers too.
+  Commits are performed on feature branches (`feat/xxx`) or hotfix branches (`hotfix/xxx`), which are always checked out from the main branch and applied back to the main branch via pull/merge requests once development is complete.
 
-- [**Multiple major versions workflow:**](#multiple-major-versions-workflow) <i id="multiple-major-versions-workflow"></i>
+  Versions are marked by tags on the main branch, each release means one or more pull/merge requests on the main branch.
+
+- [**Multiple Versions Workflow:**](#multiple-versions-workflow) <i id="multiple-versions-workflow"></i>
 
   <TextTag>Personal / Team</TextTag><TextTag preset="green">Multiple versions</TextTag>
 
-  Based on the [single major version workflow](#single-major-version-workflow), with multiple long-term branches for different major versions.
+  Based on the [feature branch workflow](#feature-branch-workflow), with multiple long-term branches for different major versions.
 
-  - `main` branch is for **the next major version**;
-  - `v{{version}}` branch group is for the released major versions, e.g. `v1.x`, `v2.x`, etc.
-  - `feat/xxx` branch is for a new feature, created from the `main` branch, and will also be applied back to the `main` branch by **pull request** after the development is done.
+  - Main branch is for **the next major version**
+  - Released version branches (`v{{version}}`) are for the released major versions, e.g. `v1.x`, `v2.x`, etc.
+  - Feature (`feat/xxx`) branches are for new features, checkout from the main branch, and applied back to the main branch by pull/merge requests once the development is done.
 
-    If this feature needs to be **backported** to the released major versions, you should use `cherry-pick` to pick the merge commit node into the appropriate `v{{version}}` branch ([example](https://github.com/nuxt/nuxt)).
-  - `hotfix/xxx` branch is for a hotfix, created from the first included `v{{version}}` branch, and will be applied back to the appropriate `v{{version}}` branch by **pull request** after the development is done.
+    If this feature needs to be **backported** to any released major version, you should use `cherry-pick` to pick that merge commit into the appropriate `v{{version}}` branch. See [examples](https://github.com/nuxt/nuxt) here.
+  - Hotfix (`hotfix/xxx`) branches are for hotfixes, checkout from the first included released version branch, and applied back to that branch by pull/merge requests once the development is done.
 
-    If this hotfix needs to be **forwardported** to the later versions, you can use `merge` to apply it back to the later `v{{version}}` & `main` branches ([example](https://github.com/symfony/symfony)).
+    If this hotfix needs to be **forwardported** to any other released version or next major version, you should use `cherry-pick` to pick that merge commit into the appropriate `v{{version}}` or main branch. See [examples](https://github.com/nuxt/nuxt) here.
 
-  A simple comparison with single major version workflow:
+  A simple comparison with feature branch workflow:
 
   ```txt
-  Single Major Version Workflow:
+  Feature Branch Workflow:
   o- ... -o- ... ... ... ... ... -o- ... ... ... ... ... -> (main)
           (tag v1.0.0)            (tag v2.0.0)
 
-  Multiple Major Versions Workflow:
+  Multiple Versions Workflow:
   o- ... -o- ... ... ... ... ... -o- ... ... ... ... ... -> (main)
           |                       |
           o- ... -> (v1.x)        o- ... -> (v2.x)
@@ -211,29 +277,36 @@ To keep things controlled and organized, there are several common branch managem
 
   <TextTag>Personal / Team</TextTag><TextTag preset="green">Multiple environments</TextTag>
 
-  Based on the [single major version workflow](#single-major-version-workflow), with multiple long-term branches for different environments.
+  Based on the [feature branch workflow](#feature-branch-workflow), with multiple long-term branches for different environments.
 
-  - `main` branch is for **production environment**;
-  - `uat` branch is for **UAT environment**;
-  - `test` branch is for **testing environment**;
-  - `dev` branch is for **development environment**;
-  - `feat/xxx` branch is for a new feature, created from the `main` branch, which will be applied back to the `dev`, `test`, `uat`, and `release` branches by **pull request**, based on the feature's development process.
-  - `hotfix/xxx` branch is for a hotfix, created from the `main` branch, which will be applied back to the `dev`, `test`, `uat`, and `release` branches by **pull request**, based on the hotfix's development process.
+  - main branch is for **production environment**
+  - `uat` branch is for **UAT environment**
+  - `test` branch is for **testing environment**
+  - `dev` branch is for **development environment**
+  - Feature branches are for new features, checkout from the main branch, and applied back to the `dev`, `test`, `uat`, and main branches by pull/merge requests, based on the feature's development process.
+  - Hotfix branches are for hotfixes, checkout from the main branch, and applied back to the `dev`, `test`, `uat`, and main branches by pull/merge requests, based on the hotfix's development process.
+
+  > [!Note]
+  > **Why not promote strictly (`test` → `uat` → `main`)?**
+  >
+  > A promotion is a *wholesale* merge (`git switch uat && git merge test`): everything sitting on the previous environment's branch comes along. Environment branches are writable in practice and collect things that must not be released (a debug commit on `test`, a config tweak on `uat`) and a strict chain would carry them upward without anyone deciding to.
+  >
+  > Applying every change to every environment flips the failure mode: **missing an application is explicit and cheap to find** (compare the applied sets, or just open a pull request), whereas something riding along unnoticed is implicit and hard to trace, especially when the promotion happened as a local merge.
+  >
+  > It is the same kind of decision as backport/forwardport across version branches: moving changes between long-lived branches is always a per-change, human one. The price is that you should care about which artifact/commit each environment actually runs.
 
 You can choose one of the workflows above based on your project's size, type, complexity or your preference.
 
 > [!Note]
 >
-> This article will use the most complex [**multiple major versions workflow**](#multiple-major-versions-workflow) as an example.
+> This article will use the most complex [**multiple versions workflow**](#multiple-versions-workflow) as an example.
 
 ### Create a New Branch
 
 #### Feature Branch
 
 > [!Note]
-> Basically, we only start new feature development on the next major version branch, which is the `main` branch in this case.
->
-> If other versions need this feature, we can backport it.
+> Basically, we only start new feature development on the next major version branch, which is the `main` branch in this case. If other versions need this feature, we can backport it.
 >
 > That is to say, we will never develop a new feature for a specific released version but not for the next major version.
 
@@ -277,31 +350,42 @@ git commit --message "hotfix: fix the bug"
 
 ### Discard Changes
 
-When you work on your feature branch, you may want to discard the changes (in the workspace).
+When you work on your branch, you may want to discard the changes (in the workspace).
 
-You can use the following command to restore specific tracked files:
+All of the commands below take a **pathspec**:  can be a file, a directory, or a wildcard pattern. E.g. `index.ts`, `bin/`, or `src/**/*.ts`.
+
+You can use the following command to restore specific tracked paths:
 
 ```bash
 git restore index.html index.css
 ```
 
-To restore all files:
+To restore all paths:
 
 ```bash
-# `.` means the project root, of course, only if you are in the project root.
+# `.` means the project root,
+# of course, only if you are in the project root.
 git restore .
 ```
 
-To clean untracked files:
+To clean specific untracked paths (`-d` allows directories):
 
 ```bash
-git clean --force index.ts
+git clean --force -d bin/ index.ts
 ```
 
-To clean untracked directories & files:
+To clean all untracked paths:
 
 ```bash
+# `.` means the project root,
+# of course, only if you are in the project root.
 git clean --force -d .
+```
+
+Paths you never want Git to track belong in `.gitignore`. For a path that is already tracked, add it to `.gitignore` first and then untrack it without deleting it from disk:
+
+```bash
+git rm --cached -r index.ts
 ```
 
 ### Unstage Changes
@@ -327,11 +411,15 @@ git reset HEAD^
 ```
 
 > [!Caution]
-> If this commit has been pushed to the remote, you need to force push to the remote after undoing it:
+> If this commit has been pushed to the remote, undoing it locally only rewrites *your* history, and the remote still has the old commit. So putting the undo on the remote needs a force push:
 >
 > ```bash
-> git push --force
+> git push --force-with-lease --force-if-includes
 > ```
+>
+> `--force-with-lease` refuses when the remote has moved since your last fetch, so you cannot silently overwrite a collaborator's work.
+>
+> `--force-if-includes` (Git 2.30+) adds the other half: the remote's new commits must have been integrated locally, which is what protects you when a background fetch refreshed the lease for you.
 >
 > This may cause problems for other collaborators, please use it with caution 🙏.
 
@@ -353,10 +441,10 @@ git commit --amend --message "fix: some bugs"
 ```
 
 > [!Caution]
-> If this commit has been pushed to the remote, you need to force push to the remote after undoing it:
+> If this commit has been pushed to the remote, you need to force push to the remote after amending it:
 >
 > ```bash
-> git push --force
+> git push --force-with-lease --force-if-includes
 > ```
 >
 > This may cause problems for other collaborators, so please use it with caution 🙏.
@@ -380,8 +468,8 @@ When you want to integrate some changes from the upstream branch into your branc
 ```bash
 git switch {{your-branch}}
 git rebase {{upstream-branch}}
-# Use --force with caution!!!
-git push --force
+# A rebase rewrites history, so the push needs --force-with-lease --force-if-includes (never plain --force)!!!
+git push --force-with-lease --force-if-includes
 ```
 
 > [!Caution]
@@ -541,7 +629,7 @@ To get a full configuration example, please refer to my [`.gitconfig`](https://g
 
 #### `.gitignore`
 
-This file is used to ignore certain files or directories in your Git repository.
+This file is used to ignore certain paths in your Git repository: every line is a pattern that selects paths (files, directories, or wildcards) — e.g. `*.log`, `build/`, or `!src/keep.log` to un-ignore a single one.
 
 I prefer to use the templates from [github/gitignore](https://github.com/github/gitignore). There are some extensions for different editors to generate a `.gitignore` file based on those templates with ease:
 

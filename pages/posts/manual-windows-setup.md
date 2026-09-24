@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-21T16:21+08:00
+update: 2026-09-24T10:55+08:00
 lang: en
 duration: 21min
 type: manual
@@ -296,7 +296,7 @@ The software below is highly recommended and helpful for daily use and developme
 | -- | -- | -- |
 | Auto Dark Mode | `winget add XP8JK4HZBVF435` | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
 | Twinkle Tray | `winget add 9PLJWWSV01LK` | Save my eyes!<br><br>Screen brightness manager. |
-| Firefox | `winget add Mozilla.Firefox` | My daily browser. See extensions setup [here](#browser-setup). |
+| Brave | `winget add Brave.Brave` | My daily browser. See extensions setup [here](#browser-setup). |
 | Nutstore | `winget add Nutstore.Nutstore` | WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |
 | KeePassXC | `winget add KeePassXCTeam.KeePassXC` | Password manager; you can replace it with your preferred one. |
 | Internet Download Manager | `winget add Tonec.InternetDownloadManager` | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
@@ -304,7 +304,7 @@ The software below is highly recommended and helpful for daily use and developme
 | Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
 | DBX | `winget add t8y2.dbx` | Better database manager! |
 | Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Containers are coming soon; maybe we won't need this in the future?** |
-| RayCast | `winget add --source msstore --exact --id 9PFXXSHC64H3` | <details><summary>Extensions</summary><br>1. [Google Translate](raycast://extensions/gebeto/translate?source=webstore)<br>2. [Universal Website Search](raycast://extensions/pernielsentikaer/any-website-search?source=webstore)<br>3. [Svgl](raycast://extensions/1weiho/svgl?source=webstore)<br>4. [Kaomoji Search](raycast://extensions/yalishanda/kaomoji-search?source=webstore)<br><br>5. [Port Manager](raycast://extensions/lucaschultz/port-manager?source=webstore)<br><br>6. [Random Data Generator](raycast://extensions/loris/random?source=webstore)<br>7. [Placeholder](raycast://extensions/koinzhang/placeholder?source=webstore)<br>8. [Regex Tester](raycast://extensions/allenan/regex-tester?source=webstore)<br>8. [Json2TS](raycast://extensions/gbarba/json2ts?source=webstore)<br>9. [Word Count](raycast://extensions/itsmingjie/word-count?source=webstore)<br>10. [ray.so](raycast://extensions/garrett/ray-so?source=webstore)</details> |
+| Wox | `winget add Wox.Wox` | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Unsplash<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
 | PixPin | `winget add PixPin.PixPin` | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
 | OBS Studio | `winget add OBSProject.OBSStudio` | / |
 | Thunderbird | `winget add Mozilla.Thunderbird` | Email manager. |
@@ -328,27 +328,24 @@ The software below is highly recommended and helpful for daily use and developme
 
 I hate _Chrome_ because it's too opinionated, and I hate _Edge_ because it's too heavy.
 
-I currently prefer _Firefox_. Firefox is my daily browser, while the system-bundled _Edge_ is my secondary browser for the special cases that require the _Chromium_ engine.
+I currently prefer _Brave_. Brave is my daily browser with the best performance I could find, while the _Firefox_ is my secondary browser for compatibility testing.
 
 My browser extensions:
-
-> [!NOTE]
-> The "Tampermonkey" extension requires you to enable developer mode to run user scripts (JavaScript).
 
 In the tables below, `~` means the same as above.
 
 | Extension | Source/Install Command | Note |
 | -- | -- | -- |
-| Dark Reader | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) & [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) | Save my eyes!!! |
-| KeePassXC-Browser | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) & [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) | / |
-| Tampermonkey | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) & [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | User scripts in use: [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
-| Read Frog | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/read-frog-open-ai-translator/) & [Chromium](https://chromewebstore.google.com/detail/read-frog-translate-learn/modkelfkcfjpgbfmnbnllalkiogfofhb) | / |
-| Vimium C - All by Keyboard | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) & [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled. |
-| Refined Github | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) & [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) | Requires your GitHub access token. |
-| File Icons for GitHub and GitLab | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) & [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) | / |
-| Npmx redirect | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) & [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) | Fuck Npm! Fuck Npm! |
-| Styled XML Viewer | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/styled-xml-viewer/) & [Chromium](https://chromewebstore.google.com/detail/styled-xml-viewer/ejlmflppkjfbbkhgidccfjelfgfgicph) | / |
-| CSS Stacking Context inspector | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) & [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) | / |
+| Dark Reader | [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) | Save my eyes!!! |
+| KeePassXC-Browser | [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) | Connect to my password manager! |
+| Tampermonkey | [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) | User scripts in use: <br>- [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
+| Vimium C - All by Keyboard | [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled. |
+| 豆包，浏览器 AI 助手 | [Chromium](https://www.doubao.com/browser-extension/landing?from=ext&extId=dbjibobgilijgolhjdcbdebjhejelffo) | Translator, summaryer! |
+| Refined Github | [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) | Requires your GitHub access token. |
+| File Icons for GitHub and GitLab | [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) | / |
+| Npmx redirect | [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) | Fuck Npm! Fuck Npm! |
+| Styled XML Viewer | [Chromium](https://chromewebstore.google.com/detail/styled-xml-viewer/ejlmflppkjfbbkhgidccfjelfgfgicph) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/styled-xml-viewer/) | / |
+| CSS Stacking Context inspector | [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) | / |
 
 Sometimes useful extensions:
 
@@ -358,14 +355,27 @@ Sometimes useful extensions:
 
 I also like to customize the default browser fonts:
 
+<details>
+<summary>Brave</summary>
+
+1. Go to [brave://settings/fonts](brave://settings/fonts).
+2. I prefer "Space Grotesk" (a sans-serif font) as both the "Standard", "Serif" and "Sans-serif" font, and "Annotation Mono" as the "Fixed-width" font.
+
+</details>
+
+<details>
+<summary>Firefox</summary>
+
 1. Go to [about:preferences#accessibility](about:preferences#accessibility).
 2. Click "Advanced settings".
-3. For "Latin" fonts, I prefer "Space Grotesk" (a sans-serif font) as both the serif and sans-serif font, and "Annotation Mono" as the monospace font.
-4. For "Simplified Chinese" fonts, I prefer "Resource Han Rounded SC" (a sans-serif font) as both the serif and sans-serif font, and "Maple Mono WR CN" as the monospace font.
-5. For "Traditional Chinese (Taiwan)" fonts, I prefer "Resource Han Rounded TW" (a sans-serif font) as both the serif and sans-serif font, and "Maple Mono WR CN" as the monospace font.
-6. For "Traditional Chinese (Hong Kong)" fonts, I prefer "Resource Han Rounded HK" (a sans-serif font) as both the serif and sans-serif font, and "Maple Mono WR CN" as the monospace font.
+3. For "Latin" fonts, I prefer "Space Grotesk" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Annotation Mono" as the "Monospace" font.
+4. For "Simplified Chinese" fonts, I prefer "Resource Han Rounded SC" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Maple Mono WR CN" as the "Monospace" font.
+5. For "Traditional Chinese (Taiwan)" fonts, I prefer "Resource Han Rounded TW" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Maple Mono WR CN" as the "Monospace" font.
+6. For "Traditional Chinese (Hong Kong)" fonts, I prefer "Resource Han Rounded HK" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Maple Mono WR CN" as the "Monospace" font.
 
 To customize the font-family of Firefox DevTools, you can refer to my [GitHub gist](https://gist.github.com/lumirelle/919722d43a643b2a8f2f2ce8db697eda).
+
+</details>
 
 #### Uninstall Unnecessary Software
 

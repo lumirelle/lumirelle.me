@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-24T10:55+08:00
+update: 2026-09-24T11:20+08:00
 lang: en
 duration: 21min
 type: manual
@@ -304,7 +304,7 @@ The software below is highly recommended and helpful for daily use and developme
 | Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
 | DBX | `winget add t8y2.dbx` | Better database manager! |
 | Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Containers are coming soon; maybe we won't need this in the future?** |
-| Wox | `winget add Wox.Wox` | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Unsplash<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
+| Wox | `winget add Wox.Wox` | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
 | PixPin | `winget add PixPin.PixPin` | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
 | OBS Studio | `winget add OBSProject.OBSStudio` | / |
 | Thunderbird | `winget add Mozilla.Thunderbird` | Email manager. |

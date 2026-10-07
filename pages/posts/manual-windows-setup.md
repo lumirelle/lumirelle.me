@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-09-24T11:20+08:00
+update: 2026-10-07T20:22+08:00
 lang: en
 duration: 21min
 type: manual
@@ -280,6 +280,7 @@ The software below is highly recommended and helpful for daily use and developme
 | Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only choice for Windows so far (2026/8/31)...<br><br>What's more, I switched to the preview version (v1.25+) for Kitty keyboard protocol support. |
 | Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| GitHub CLI | `winget add GitHub.cli` | / |
 | Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
 | WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
 | Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells that may be called by other software are still recommended to be installed globally) and project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
@@ -471,6 +472,7 @@ The software below is highly recommended and helpful for development with Linux;
 | Nushell | `sudo pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
 | Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
 | Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| GitHub CLI | `sudo pacman -S github-cli` | / |
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells that may be called by other software are still recommended to be installed globally) and project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
 | Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
 | Apple PKL LSP | `mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |

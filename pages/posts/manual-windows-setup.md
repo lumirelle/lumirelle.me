@@ -1,9 +1,9 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-10-07T20:22+08:00
+update: 2026-10-15T12:40+08:00
 lang: en
-duration: 21min
+duration: 23min
 type: manual
 group: Computer
 order: 1
@@ -130,11 +130,11 @@ start ms-cxh:localonly
 
 ### Prerequisite Software
 
-(Optional) If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time:
-
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Clash Verge Rev | Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | <TextTag text="Chezmoi-ed" /> Network proxy manager. |
+| Clash Verge Rev | Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | <TextTag text="Optional" /><TextTag text="Chezmoi-ed" />Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time: |
+| Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git`. |
+| Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: `mise bootstrap`.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
 
 ### Configure Windows Itself
 
@@ -149,13 +149,9 @@ First, we need to disable it entirely:
 
 Optionally, we can choose a quieter antivirus program instead. I recommend [_Huorong_](https://www.huorong.cn/person), which is much quieter and less invasive.
 
-| Software | Source/Install Command |
-| -- | -- |
-| Huorong | [Official Website](https://www.huorong.cn/person) |
-
-> [!Note]
->
-> You can choose any other antivirus software you like — anything but _Windows Defender_!!!
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Huorong | [Official Website](https://www.huorong.cn/person) | <TextTag text="Optional" text-xs /><br><br>You can choose any other antivirus software you like — anything but Windows Defender!!! |
 
 #### Adjust System Settings
 
@@ -163,167 +159,113 @@ First, adjust system settings via _Winutil_:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Winutil | PowerShell:<br>`irm "https://christitus.com/win" \| iex` | In the "Tweaks" tab, just apply the recommended settings if you are not sure about those switches~<br><br>In the "Config" tab, I enable the "Windows Subsystem for Linux" feature;<br><br> |
+| Winutil | `powershell -Command 'irm "https://christitus.com/win" \| iex'` | In the "Tweaks" tab, just apply the recommended settings if you are not sure about those switches~<br><br>In the "Config" tab, I enable the "Windows Subsystem for Linux" feature;<br><br> |
 
-(Optional) If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
+If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
 
-| Software | Source/Install Command |
-| -- | -- |
-| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) |
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) | <TextTag text="Optional" text-xs /> |
 
 > [!Note]
 >
 > Tools like _HEU KMS Activator_ bypass Windows licensing: using them may violate the Microsoft Software License Terms, and they are commonly flagged as malware by security vendors. Keep in mind that you just disabled _Windows Defender_ in the previous step, so run them only if you understand where they come from and accept the risk.
 
-(Optional) Next, [update the OS to the latest version](ms-settings:windowsupdate), [sign in to your Microsoft account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
+Optionally, [update the OS to the latest version](ms-settings:windowsupdate), [sign in to your Microsoft account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
 
 Finally, enable Windows' built-in `sudo` support and select the `inline` running method in the "Terminal" section under [System > Advanced](ms-settings:developers) in Settings.
 
-### Install Software
-
-> [!Note]
-> Don't forget to restart your computer after this step so that the software mentioned below works properly!
-
-#### Learn How to Use WinGet
-
-I highly recommend using [WinGet](https://learn.microsoft.com/windows/package-manager/winget/) to manage your software on Windows. It is the official Windows package manager and helps you avoid fake and malicious software.
-
-> [!Note]
-> `{{xxx}}` is a placeholder, where `xxx` is the description text.
-
-Search for a package:
-
-```nu
-# Search via name or ID
-winget search {{query}}
-# Search name only
-winget search --name {{query}}
-# Search ID only
-winget search --id {{query}}
-```
-
-Install a package:
-
-```nu
-winget add {{query}}
-```
-
-Install a package (machine scope, **not recommended**, requires admin privileges):
-
-```nu
-# Windows system built-in `sudo`
-sudo winget add {{query}} --scope machine
-```
-
-Install a package to a specific location:
-
-```nu
-winget add {{query}} --location /path/you/like/
-# Or
-winget add {{query}} -l /path/you/like/
-```
-
-Install a package in interactive mode (the default is non-interactive mode):
-
-```nu
-winget add {{query}} --interactive
-# Or
-winget add {{query}} -i
-```
-
-Install a package with no UI (the default shows a UI):
-
-```nu
-winget add {{query}} --silent
-# Or
-winget add {{query}} -h
-```
-
-Install a package with an exact ID match:
-
-```nu
-winget add --exact --id {{id}}
-# Or
-winget add -e --id {{id}}
-```
-
-Install a specific version (the default is the latest version):
-
-```nu
-winget add {{query}} --version {{version}}
-# Or
-winget add {{query}} -v {{version}}
-```
-
-Remove a package:
-
-```nu
-winget rm {{query}}
-```
-
-For more information:
-
-```nu
-winget {{command}} --help
-# Or
-winget {{command}} -?
-```
-
-#### Recommended Software
+### Recommended Software
 
 The software below is highly recommended and helpful for daily use and development; you can install them **in order and as needed**.
 
-##### Terminal User Interface (TUI)
+#### Windows Operator System Manager
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal | `winget add Microsoft.WindowsTerminal.Preview` | <TextTag text="Chezmoi-ed" text-xs /> The only choice for Windows so far (2026/8/31)...<br><br>What's more, I switched to the preview version (v1.25+) for Kitty keyboard protocol support. |
-| Nushell | `winget add Nushell.Nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Git | `winget add Git.Git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
-| GitHub CLI | `winget add GitHub.cli` | / |
-| Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
-| WinLibs | `winget add BrechtSanders.WinLibs.POSIX.UCRT` | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
-| Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells that may be called by other software are still recommended to be installed globally) and project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
-| Tree Sitter CLI | `winget add tree-sitter.tree-sitter-cli` | An incremental parsing system for programming tools. |
-| Apple PKL LSP | `mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
-| Neovim | `winget add Neovim.Neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Pi Coding Agent | `winget add EarendilWorks.pi` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
-| Herdr | `winget add Herdr.Herdr.Preview` | <TextTag text="Chezmoi-ed" text-xs /> Terminal multiplexer. |
-| Windows Subsystem for Linux | `wsl --install` or `wsl --update` | The best Linux distribution in the world and the best development environment for Windows. 🥰<br><br>Requires a reboot after installation.<br><br>See WSL setup [here](#third-step-set-up-the-wsl-environment). |
-
-##### Graphical User Interface (GUI)
-
-| Software | Source/Install Command | Note |
-| -- | -- | -- |
-| Auto Dark Mode | `winget add XP8JK4HZBVF435` | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
-| Twinkle Tray | `winget add 9PLJWWSV01LK` | Save my eyes!<br><br>Screen brightness manager. |
-| Brave | `winget add Brave.Brave` | My daily browser. See extensions setup [here](#browser-setup). |
-| Nutstore | `winget add Nutstore.Nutstore` | WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |
-| KeePassXC | `winget add KeePassXCTeam.KeePassXC` | Password manager; you can replace it with your preferred one. |
-| Internet Download Manager | `winget add Tonec.InternetDownloadManager` | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
-| Zed | `winget add ZedIndustries.Zed` | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but with better performance than Visual Studio Code.**<br><br>I feel that its usage and design philosophy don't quite suit me, especially the configuration files... |
-| Visual Studio Code | `winget add Microsoft.VisualStudioCode` | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
-| DBX | `winget add t8y2.dbx` | Better database manager! |
-| Podman Desktop | `winget add RedHat.Podman-Desktop` | **Wow! WSL Containers are coming soon; maybe we won't need this in the future?** |
-| Wox | `winget add Wox.Wox` | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
-| PixPin | `winget add PixPin.PixPin` | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
-| OBS Studio | `winget add OBSProject.OBSStudio` | / |
-| Thunderbird | `winget add Mozilla.Thunderbird` | Email manager. |
-| WeChat | `winget add Tencent.WeChat.Universal` | Chat software. |
-| QQ | `winget add Tencent.QQ.NT` | Chat software. |
-| Enterprise WPS | [Official Website](https://ep.wps.cn/download) | Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
-| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | PDF converter. |
-| Microsoft To Do | `winget add 9NBLGGH5R558` | Just to do! |
-| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
-| NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
+| Fastfetch | <TextTag text="Mise-ed" text-xs /> | Display system information. |
+| Bottom | <TextTag text="Mise-ed" text-xs /> | Display system device resource usage. |
+| GDU | <TextTag text="Mise-ed" text-xs /> | Fask disk usage analyzer written in Go. |
+| DISM++ | <TextTag text="Mise-ed" text-xs /> | Clean up your disk. |
+| Revo Uninstaller | <TextTag text="Mise-ed" text-xs /> | Software uninstaller (Pro edition). |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | Brings back the classic context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For the new Windows 11 context menu. |
-| Revo Uninstaller | Free:<br>`winget add RevoUninstaller.RevoUninstaller`<br><br>Pro:<br>`winget add RevoUninstaller.RevoUninstallerPro` | Software uninstaller.<br><br>_Free_ or _Pro_, as you need. |
-| Driver Store Explorer | `winget add lostindark.DriverStoreExplorer` | Clean up unused/outdated device drivers. |
-| DISM++ | `winget add ChuyuTeam.DISM++` | Clean up your disk. |
-| CrystalDiskInfo | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | / |
-| Steam | `winget add Valve.Steam` | / |
-| Epic Games | `winget add EpicGames.EpicGamesLauncher` | / |
+| Driver Store Explorer | `winget add lostindark.DriverStoreExplorer` | <TextTag text="Optional" text-xs />Clean up unused/outdated device drivers. |
+| CrystalDiskInfo | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | <TextTag text="Optional" text-xs />Disk info viewer. |
+
+#### Windows Environment/Infrastructure
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | <TextTag text="Optional" text-xs />MSVC Runtime. **Usually, we don't need to install this manually.** |
+| WinLibs | <TextTag text="Mise-ed" text-xs /> | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
+| Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
+| Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
+| Git | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
+| Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
+| Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
+| Apple PKL LSP | <pre><code>mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar</code></pre> | Apple PKL LSP. |
+| Windows Subsystem for Linux | `wsl --install` or `wsl --update` | The best Linux distribution in the world and the best development environment for Windows. 🥰<br><br>Requires a reboot after installation.<br><br>See WSL setup [here](#third-step-set-up-the-wsl-environment-archlinux). |
+
+#### Windows User Experience Enhance
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Twinkle Tray | <TextTag text="Mise-ed" text-xs /> | Save my eyes!<br><br>Screen brightness manager. |
+| Auto Dark Mode | <TextTag text="Mise-ed" text-xs /> | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
+| Wox | <TextTag text="Mise-ed" text-xs /> | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
+| Brave | <TextTag text="Mise-ed" text-xs /> | My daily browser. See extensions setup [here](#browser-setup). |
+| Internet Download Manager | `winget add Tonec.InternetDownloadManager` | <TextTag text="Optional" text-xs />Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
+| Nutstore | `winget add Nutstore.Nutstore` | <TextTag text="Optional" text-xs />WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |
+| KeePassXC | `winget add KeePassXCTeam.KeePassXC` | <TextTag text="Optional" text-xs />Password manager; you can replace it with your preferred one. |
+| PixPin | <TextTag text="Mise-ed" text-xs /> | Screen capture tool.<br><br>I use <TextTag text="Mise-ed" text-xs /> to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
+| zoxide | <TextTag text="Mise-ed" text-xs /> | A smarter cd command. |
+| fd | <TextTag text="Mise-ed" text-xs /> | A simple, fast and user-friendly alternative to `find`. |
+| fzf | <TextTag text="Mise-ed" text-xs /> | A command-line fuzzy finder. |
+| ripgrep | <TextTag text="Mise-ed" text-xs /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
+| Lazygit | <TextTag text="Mise-ed" text-xs /> | Simple terminal UI for git commands. |
+| Yazi | <TextTag text="Mise-ed" text-xs /> | Blazing fast terminal file manager. |
+| OBS Studio | <TextTag text="Mise-ed" text-xs /> | / |
+| Microsoft To Do | <TextTag text="Mise-ed" text-xs /> | Just to do! |
+
+#### Terminal & Shell on Windows
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Windows Terminal Preview | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> The only choice for Windows so far (2026/8/31)... |
+| Nushell | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | <TextTag text="Mise-ed" text-xs /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
+| Herdr | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Terminal multiplexer. |
+
+#### Development on Windows
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Neovim | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Zed | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but with better performance than Visual Studio Code.** |
+| Visual Studio Code | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
+| Pi Coding Agent | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
+| DBX | <TextTag text="Mise-ed" text-xs /> | Better database manager! |
+| hyperfine | <TextTag text="Mise-ed" text-xs /> | A command-line benchmarking tool. |
+
+#### Working on Windows
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Thunderbird | `winget add Mozilla.Thunderbird` | <TextTag text="Optional" text-xs />Email manager. |
+| WeChat | `winget add Tencent.WeChat.Universal` | <TextTag text="Optional" text-xs />Chat with others. |
+| QQ | `winget add Tencent.QQ.NT` | <TextTag text="Optional" text-xs />Chat with others. |
+| Enterprise WPS | [Official Website](https://ep.wps.cn/download) | <TextTag text="Optional" text-xs />Office toolbox.<br><br>Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
+| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | <TextTag text="Optional" text-xs />PDF converter. |
+
+#### Playing on Windows
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | <TextTag text="Optional" text-xs /> |
+| Steam | `winget add Valve.Steam` | <TextTag text="Optional" text-xs /> |
+| Epic Games | `winget add EpicGames.EpicGamesLauncher` | <TextTag text="Optional" text-xs /> |
 
 #### Browser Setup
 
@@ -341,7 +283,7 @@ In the tables below, `~` means the same as above.
 | KeePassXC-Browser | [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) | Connect to my password manager! |
 | Tampermonkey | [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) | User scripts in use: <br>- [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
 | Vimium C - All by Keyboard | [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled. |
-| 豆包，浏览器 AI 助手 | [Chromium](https://www.doubao.com/browser-extension/landing?from=ext&extId=dbjibobgilijgolhjdcbdebjhejelffo) | Translator, summaryer! |
+| 豆包，浏览器 AI 助手 | [Chromium](https://www.doubao.com/browser-extension/landing?from=ext&extId=dbjibobgilijgolhjdcbdebjhejelffo) | Translator (`Alt+1`), summaryer (`Alt+2`)! |
 | Refined Github | [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) | Requires your GitHub access token. |
 | File Icons for GitHub and GitLab | [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) | / |
 | Npmx redirect | [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) | Fuck Npm! Fuck Npm! |
@@ -384,7 +326,7 @@ Use _Revo Uninstaller_ to uninstall all the software you don't like!
 
 In particular, the **"Windows Programs"** tab lets you completely uninstall system-bundled software!
 
-## Third Step: Set Up the WSL Environment
+## Third Step: Set Up the WSL Environment (Archlinux)
 
 First, make sure your WSL installation is up to date:
 
@@ -401,26 +343,20 @@ wsl --install archlinux --location {{install_location_you_prefer}}
 wsl --install Debian --location {{install_location_you_prefer}}
 ```
 
-### Prerequisite WSL Software
+### Prerequisite Archlinux Software
 
-> [!Note]
-> The commands below use the _Arch_ distribution and its package manager, `pacman`, as examples.
-
-The software below is required for daily use and development in WSL:
+The software below is required for daily use and development in Archlinux:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Unzip | `sudo pacman -S unzip` | / |
-| Wget | `sudo pacman -S wget` | / |
-| OpenSSH | `sudo pacman -S openssh` | / |
-| Less | `sudo pacman -S less` | / |
 | Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
-| Fontconfig | `sudo pacman -S fontconfig` | / |
-| (Optional) Noto Fonts CJK | `sudo pacman -S noto-fonts-cjk` | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
+| Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git`. |
+| Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: `mise bootstrap`.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
+| Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
 
-### Arch Linux Specific Setup
+### Configure Archlinux Itself
 
-If you prefer to use Arch Linux as your WSL distribution just like me, you'd better perform some specific setup, such as switching the default user away from `root`.
+If you prefer to use Archlinux as your WSL distribution just like me, you'd better perform some specific setup, such as switching the default user away from `root`.
 
 You should create your own user in the `wheel` group with a custom password:
 
@@ -461,25 +397,61 @@ su - {{username}}
 
 ### Recommended WSL Software
 
-> [!Note]
-> The commands below use the _Arch_ distribution and its package manager, `pacman`, as examples.
+The software below is highly recommended and helpful for development with Archlinux; you may want to install them **in the order you need**:
 
-The software below is highly recommended and helpful for development with Linux; you may want to install them **in the order you need**:
+#### Archlinux Operator System Manager
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
-| Nushell | `sudo pacman -S nushell` | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
-| Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git` |
-| Git | `sudo pacman -S git` | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
-| GitHub CLI | `sudo pacman -S github-cli` | / |
-| Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Devtools manager.<br><br><strong>I use mise to manage system-scope user-called tools (other tools like shells that may be called by other software are still recommended to be installed globally) and project-scope tools.</strong><br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what devtools I use globally. |
-| Tree Sitter CLI | `sudo pacman -S tree-sitter-cli` | An incremental parsing system for programming tools. |
-| Apple PKL LSP | `mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar` | Apple PKL LSP. |
-| Neovim | `sudo pacman -S neovim` | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Pi Coding Agent | `yay -S pi-coding-agent-bin` | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
-| Herdr | `yay -S herdr-bin` | <TextTag text="Chezmoi-ed" text-xs /> Terminal multiplexer. |
-| (Optional) Chromium | `sudo pacman -S chromium` | If you choose the Arch distribution and need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
+| Fastfetch | <TextTag text="Mise-ed" text-xs /> | Display system information. |
+| Bottom | <TextTag text="Mise-ed" text-xs /> | Display system device resource usage. |
+| GDU | <TextTag text="Mise-ed" text-xs /> | Fask disk usage analyzer written in Go. |
+
+#### Archlinux Environment/Infrastructure
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| unzip | <TextTag text="Mise-ed" text-xs /> | / |
+| wget | <TextTag text="Mise-ed" text-xs /> | / |
+| OpenSSH | <TextTag text="Mise-ed" text-xs /> | / |
+| less | <TextTag text="Mise-ed" text-xs /> | / |
+| fontconfig | <TextTag text="Mise-ed" text-xs /> | / |
+| Noto Fonts CJK | <TextTag text="Mise-ed" text-xs /> | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
+| Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
+| Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
+| Git | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
+| Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
+| Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
+| Apple PKL LSP | <pre><code>mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar`</code></pre> | Apple PKL LSP. |
+| Chromium | <TextTag text="Mise-ed" text-xs /> | If you need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
+
+#### Archlinux User Experience Enhance
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| zoxide | <TextTag text="Mise-ed" text-xs /> | A smarter cd command. |
+| fd | <TextTag text="Mise-ed" text-xs /> | A simple, fast and user-friendly alternative to `find`. |
+| fzf | <TextTag text="Mise-ed" text-xs /> | A command-line fuzzy finder. |
+| ripgrep | <TextTag text="Mise-ed" text-xs /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
+| Lazygit | <TextTag text="Mise-ed" text-xs /> | Simple terminal UI for git commands. |
+| Yazi | <TextTag text="Mise-ed" text-xs /> | Blazing fast terminal file manager. |
+
+#### Terminal & Shell on Archlinux
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Nushell | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Starship | <TextTag text="Mise-ed" text-xs /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
+| Herdr | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Terminal multiplexer. |
+
+#### Development on Archlinux
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Neovim | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
+| Pi Coding Agent | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
+| hyperfine | <TextTag text="Mise-ed" text-xs /> | A command-line benchmarking tool. |
 
 ## Fourth Step: Local LLM
 

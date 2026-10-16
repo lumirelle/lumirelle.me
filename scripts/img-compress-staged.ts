@@ -1,8 +1,8 @@
 import { confirm } from '@clack/prompts'
-import Git from 'simple-git'
+import { simpleGit } from 'simple-git'
 import { compressImages } from './img-compress'
 
-const git = Git()
+const git = simpleGit()
 const stagedFiles = (await git.diff(['--cached', '--name-only']))
   .split('\n')
   .map(i => i.trim())

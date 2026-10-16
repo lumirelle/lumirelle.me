@@ -1,8 +1,8 @@
-amends "package://github.com/jdx/hk/releases/download/v1.57.0/hk@1.57.0#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.6.0/hk@2.6.0#/Config.pkl"
 
-import "package://github.com/jdx/hk/releases/download/v1.57.0/hk@1.57.0#/Builtins.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.6.0/hk@2.6.0#/Builtins.pkl"
 
-local linters = new Mapping<String, Step> {
+steps {
   // Code
   ["oxlint"] = Builtins.ox_lint
   ["eslint"] = (Builtins.eslint) {
@@ -30,12 +30,12 @@ local linters = new Mapping<String, Step> {
         "*.mdc",
         "*.mdx",
       )
-    check = new Config.CommandSpec {
-      command = new Config.Command { argv = List("eslint", "--no-warn-ignored", "{{files}}") }
+    check = new CommandSpec {
+      command = new Command { argv = List("eslint", "--no-warn-ignored", "{{files}}") }
       effect = "read"
     }
-    fix = new Config.CommandSpec {
-      command = new Config.Command {
+    fix = new CommandSpec {
+      command = new Command {
         argv = List("eslint", "--no-warn-ignored", "--fix", "{{files}}")
       }
       effect = "write"
@@ -43,9 +43,9 @@ local linters = new Mapping<String, Step> {
     depends = List("oxlint")
   }
   ["tsc"] = (Builtins.tsc) {
-    check = new Config.CommandSpec {
-      command = new Config.Command {
-        List("vue-tsc", "--build", "--noEmit")
+    check = new CommandSpec {
+      command = new Command {
+        argv = List("vue-tsc", "--build", "--noEmit")
       }
       effect = "write"
     }
@@ -61,25 +61,16 @@ local linters = new Mapping<String, Step> {
   ["stylua"] = Builtins.stylua
   ["hk"] {
     glob = List("hk.pkl")
-    check = new Config.CommandSpec {
-      command = new Config.Command { argv = List("hk", "validate") }
+    check = new CommandSpec {
+      command = new Command { argv = List("hk", "validate") }
       effect = "read"
     }
   }
-  ["pkl-format"] = Builtins.pkl_format
-}
-
-hooks {
-  ["pre-commit"] {
-    fix = true
-    stash = "git"
-    steps = linters
-  }
-  ["fix"] {
-    fix = true
-    steps = linters
-  }
-  ["check"] {
-    steps = linters
+  ["pkl-format"] = (Builtins.pkl_format) {
+    shell = null
+    fix = new CommandSpec {
+      command = new Command { argv = List("pkl", "format", "--write", "{{ files }}") }
+      effect = "write"
+    }
   }
 }

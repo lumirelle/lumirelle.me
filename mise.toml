@@ -14,7 +14,15 @@ pkl = 'latest'
 description = 'Automatically install Node.js dependencies via nub.'
 sources = ['package.json', 'nub.lock']
 outputs = ['node_modules/']
-run = 'nub pm pin && nub install'
+run = '''
+nub pm pin
+# Netlify caches node_modules but not nub's package-index store
+# (~/.local/share/nub), and linking a warm node_modules against a cold store
+# fails with `ERR_AUBE_MISSING_PACKAGE_INDEX` (nub 0.9.6), so CI installs from
+# scratch on every build.
+[ -z "$CI" ] || rm -rf node_modules
+nub install
+'''
 auto = true
 
 [env]
@@ -24,11 +32,10 @@ _.path = ['{{config_root}}/node_modules/.bin']
 KNIP_DISABLE_RAW_TRANSFER = 1
 
 [hooks]
-# Only running self-update on Netlify,
-# to update mise before installing tools,
-# because Netlify's built-in mise is outdated.
+# Only running self-update on CI, to update mise before installing tools,
+# because the mise preinstalled on the runner (e.g. Netlify's) is outdated.
 preinstall = '''
-test $NETLIFY && mise self-update
+[ -z "$CI" ] || mise self-update
 '''
 
 [tasks.dev]

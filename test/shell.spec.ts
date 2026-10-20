@@ -1,4 +1,4 @@
-import type { ConsoleMessage, Page } from '@playwright/test'
+import type { ConsoleMessage, Locator, Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
 import { readAllHtml, readBundle, readPages, routes } from './support/artifacts'
 
@@ -498,6 +498,131 @@ test('cd .. sits in the gutter outside the routed content and keeps the query', 
   expect(insideContent).toBe(false)
 
   await expect(cdUp).toHaveAttribute('href', '/?page=2')
+})
+
+/**
+ * A row's size, rounded past subpixel noise.
+ *
+ * Size rather than position: the entrance cascade animates a `translateY`, which
+ * moves a bounding box without changing layout, and scrolling moves it again.
+ * Height is what a wrap-point change would alter, so height is what "layout
+ * inert" actually means here.
+ */
+async function roundedSize(locator: Locator): Promise<Record<string, number>> {
+  const box = await locator.boundingBox()
+  if (!box) {
+    throw new Error('the element has no box')
+  }
+  return { height: Math.round(box.height * 100) / 100, width: Math.round(box.width * 100) / 100 }
+}
+
+/** The ledger rows, as list items: the only list on the pilot page. */
+function ledgerRows(page: Page) {
+  return page.getByRole('main').getByRole('listitem')
+}
+
+test('the Post list is a ledger with one row per Post', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const expected = routes.filter(route => route.path.startsWith('/posts/')).length
+  expect(expected).toBeGreaterThan(20)
+  await expect(ledgerRows(page)).toHaveCount(expected)
+
+  // Group labels are real headings sitting on the Frame's rule, not oversized
+  // outline numerals floating above the rows.
+  const group = page.getByRole('main').getByRole('heading', { level: 2 }).first()
+  await expect(group).toBeVisible()
+  const labelPaint = await group.evaluate((el) => {
+    const style = getComputedStyle(el)
+    const section = el.parentElement!
+    return {
+      background: style.backgroundColor,
+      canvas: getComputedStyle(document.documentElement).backgroundColor,
+      rule: getComputedStyle(section).borderTopWidth,
+    }
+  })
+  // The label masks the rule it sits on, so no hairline runs through the text.
+  expect(toRgb(labelPaint.background)).toBe(toRgb(labelPaint.canvas))
+  expect(labelPaint.rule).toBe('1px')
+})
+
+test('dates are a monospaced, tabular column', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const dates = ledgerRows(page).locator('time')
+  await expect(dates.first()).toBeVisible()
+
+  const painted = await dates.evaluateAll(els => els.map(el => ({
+    variant: getComputedStyle(el).fontVariantNumeric,
+    family: getComputedStyle(el).fontFamily,
+  })))
+  expect(painted.length).toBeGreaterThan(20)
+  for (const date of painted) {
+    expect(date.variant).toContain('tabular-nums')
+    expect(date.family).toMatch(/mono/i)
+  }
+})
+
+test('the ledger keeps its ordering: newest year first, then newest date', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  // Read what a visitor reads: the group label above each block, then the dates
+  // inside it. Years must descend, and within a year the dates must not rise.
+  const groups = await page.evaluate(() => {
+    const sections = [...document.querySelectorAll('main section')]
+    return sections.map(section => ({
+      label: section.querySelector('h2')?.textContent?.trim() ?? '',
+      dates: [...section.querySelectorAll('time')].map(time => time.textContent?.trim() ?? ''),
+    }))
+  })
+
+  expect(groups.length).toBeGreaterThan(0)
+  const years = groups.map(group => Number(group.label))
+  expect(years.every(year => Number.isFinite(year))).toBe(true)
+  expect([...years].sort((a, b) => b - a)).toEqual(years)
+
+  for (const group of groups) {
+    const stamps = group.dates.map(date => Date.parse(`${date} ${group.label}`))
+    expect(stamps.every(stamp => Number.isFinite(stamp))).toBe(true)
+    expect([...stamps].sort((a, b) => b - a)).toEqual(stamps)
+  }
+})
+
+test('no middle-dot metadata strings remain in the list', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const text = ((await page.getByRole('main').textContent()) ?? '').replaceAll(/\s+/g, ' ')
+  expect(text).not.toContain('·')
+})
+
+test('STEP n. belongs to Manuals only', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+  await expect(page.getByRole('main')).not.toContainText('STEP ')
+
+  await page.goto('/manuals', { waitUntil: 'load' })
+  await expect(page.getByRole('main')).toContainText('STEP 1.')
+})
+
+test('hovering a row inverts its date cell without moving the title', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const row = ledgerRows(page).first()
+  const date = row.locator('time')
+  const restingColour = await date.evaluate(el => getComputedStyle(el).color)
+
+  await row.hover()
+  const during = await roundedSize(row)
+
+  // Terminal selection: the date reads as a selected line, canvas on ink.
+  await expect
+    .poll(() => date.evaluate(el => getComputedStyle(el).color))
+    .toBe('rgb(255, 255, 255)')
+  expect(restingColour).not.toBe('rgb(255, 255, 255)')
+
+  // The decode-glitch resolves the title in place: random glyphs are wider and
+  // narrower than the real ones, so the row must not move while they swap.
+  await expect.poll(() => roundedSize(row)).toEqual(during)
 })
 
 for (const route of routes) {

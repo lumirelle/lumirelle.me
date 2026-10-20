@@ -23,6 +23,7 @@ import _Markdown from 'unplugin-vue-markdown/vite'
 import { readingTime } from '../scripts/reading-time.ts'
 import { slugify } from '../scripts/slugify.ts'
 import { PreviewPlugin } from './markdown-preview.ts'
+import { vercelDark, vercelLight } from './shiki-vercel-theme.ts'
 
 const ogSVg = readFileSync('./scripts/og-template.svg', 'utf8')
 
@@ -47,8 +48,9 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
       md.use(
         MarkdownItShiki({
           themes: {
-            dark: 'vitesse-dark',
-            light: 'vitesse-light',
+            // Built from the palette in lumirelle/vercel.nvim — see plugins/shiki-vercel-theme.ts
+            dark: vercelDark as any,
+            light: vercelLight as any,
           },
           defaultColor: false,
           cssVariablePrefix: '--s-',

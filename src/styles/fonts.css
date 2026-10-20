@@ -1,0 +1,36 @@
+/*
+ * Self-hosted faces.
+ *
+ * "Aporetic Serif Mono" is the only Aporetic cut that exists as a font file in
+ * this repo (public/fonts/aporetic-serif-mono-*.ttf, ~4.9 MB each). There is no
+ * proportional "Aporetic Serif", so --font-serif falls back to the system serif
+ * stack — that is deliberate, not an oversight.
+ *
+ * The TTFs are subset to Latin + punctuation + arrows + box drawing + blocks and
+ * compressed to woff2 (86 KB per weight). Regenerate with:
+ *
+ *   pyftsubset public/fonts/aporetic-serif-mono-normalregularupright.ttf \
+ *     --output-file=public/fonts/aporetic-serif-mono-regular.woff2 \
+ *     --flavor=woff2 --layout-features='*' --no-recalc-timestamp \
+ *     --unicodes="U+0000-00FF,U+0100-017F,U+2000-206F,U+2190-21FF,U+2500-257F,U+25A0-25FF"
+ *
+ * (same for normalboldupright -> -bold.woff2). CJK is intentionally excluded:
+ * the mono face only ever sets the system voice — dates, counts, labels — and
+ * anything that needs CJK is prose, which is serif.
+ */
+
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/aporetic-serif-mono-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/aporetic-serif-mono-bold.woff2') format('woff2');
+}

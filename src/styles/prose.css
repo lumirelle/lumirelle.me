@@ -5,15 +5,15 @@
 }
 
 .prose {
-  --fg-light: #888;
-  --fg: #555;
+  --fg-light: #767676;
+  --fg: #3a3a3a;
   --fg-deep: #222;
   --fg-deeper: #000;
 
   color: var(--fg);
   max-width: var(--prose-max-width);
-  font-size: 1rem;
-  line-height: 1.75;
+  font-size: 1.125rem;
+  line-height: 1.7;
 }
 html.dark .prose {
   --fg-light: #888;

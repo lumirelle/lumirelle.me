@@ -10,6 +10,27 @@ html {
   background: #8884;
 }
 
+/*
+ * Focus.
+ *
+ * The design treats a hairline as one of three things — a Rail, a row divider,
+ * or a focus outline — so the indicator is a 1 px outline offset 2 px, never a
+ * colour, a glow or a filled state. It is drawn in the strongest ink rather than
+ * in `stroke`: a 1 px #E2E2E2 rule on white is 1.07:1, which is not a focus
+ * indicator, and a keyboard user has to be able to find it in both schemes.
+ */
+:where(a, button, [role='button'], [tabindex]:not([tabindex='-1']), input, select, textarea, summary, details):focus-visible {
+  outline: 1px solid var(--color-ink-strong);
+  outline-offset: 2px;
+}
+
+/* Content surfaces answer the pointer with a fill, never with a border. */
+a,
+button,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* NProgress */
 #nprogress {
   pointer-events: none;

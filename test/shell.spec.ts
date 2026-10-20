@@ -229,6 +229,105 @@ test('the sponsors list is reachable from the footer', async ({ page }) => {
   await expect(sponsors).toHaveAttribute('href', '/sponsors-list')
 })
 
+/** The content column's box, which is what the Frame's measure amounts to. */
+async function readColumn(page: Page): Promise<{ left: number, width: number }> {
+  const box = await page.getByRole('main').boundingBox()
+  if (!box) {
+    throw new Error('the content column has no box')
+  }
+  return { left: Math.round(box.x), width: Math.round(box.width) }
+}
+
+for (const viewport of [
+  { name: 'a wide screen', width: 1440, height: 900 },
+  { name: 'a laptop', width: 1024, height: 800 },
+  { name: 'a phone', width: 390, height: 844 },
+]) {
+  test(`the Frame holds one bounded column on ${viewport.name}`, async ({ page }) => {
+    await page.setViewportSize(viewport)
+    await page.goto('/posts', { waitUntil: 'load' })
+
+    const column = await readColumn(page)
+
+    // The measure never exceeds 820 px, and on a screen too narrow to hold it the
+    // column simply takes what is left — it never overflows the viewport.
+    expect(column.width).toBeLessThanOrEqual(820)
+    expect(column.width).toBeLessThanOrEqual(viewport.width)
+    expect(column.left).toBeGreaterThanOrEqual(0)
+    expect(column.left + column.width).toBeLessThanOrEqual(viewport.width)
+
+    // Centred on every screen wide enough to centre it.
+    if (viewport.width > 820) {
+      const rightGutter = viewport.width - (column.left + column.width)
+      expect(Math.abs(rightGutter - column.left)).toBeLessThanOrEqual(1)
+    }
+
+    // No horizontal scrolling is introduced by the Frame's own geometry.
+    const overflows = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    )
+    expect(overflows).toBe(false)
+
+    // Row dividers survive every breakpoint: the footer rule is the one row the
+    // Frame always has, whether or not the page has a list.
+    const footerRule = await page
+      .locator('footer')
+      .evaluate(el => getComputedStyle(el).borderTopWidth)
+    expect(footerRule).toBe('1px')
+  })
+}
+
+test('the Frame does not move when only the page changes', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+  const before = await readColumn(page)
+  const headerBefore = await page.getByRole('banner').boundingBox()
+
+  await page.getByRole('banner').getByRole('link', { name: 'projects', exact: true }).click()
+  await expect(page).toHaveURL(/\/projects$/)
+
+  expect(await readColumn(page)).toEqual(before)
+  expect(await page.getByRole('banner').boundingBox()).toEqual(headerBefore)
+})
+
+for (const scheme of ['light', 'dark'] as const) {
+  test(`a keyboard-focused control paints its outline in the ${scheme} scheme`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme })
+    await page.goto('/posts', { waitUntil: 'load' })
+
+    // Tab until a navigation link holds focus, so this is real keyboard focus
+    // rather than a `:focus` style a mouse click would also trigger.
+    let focused = ''
+    for (let i = 0; i < 12 && focused !== 'projects'; i++) {
+      await page.keyboard.press('Tab')
+      focused = await page.evaluate(
+        () => (document.activeElement?.textContent ?? '').trim(),
+      )
+    }
+    expect(focused).toBe('projects')
+
+    const outline = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement
+      const style = getComputedStyle(el)
+      return {
+        style: style.outlineStyle,
+        width: style.outlineWidth,
+        offset: style.outlineOffset,
+        colour: style.outlineColor,
+        canvas: getComputedStyle(document.documentElement).backgroundColor,
+      }
+    })
+
+    expect(outline.style).toBe('solid')
+    expect(outline.width).toBe('1px')
+    expect(outline.offset).toBe('2px')
+
+    // Visible in both schemes: the outline must not be the canvas colour.
+    const [or = 0, og = 0, ob = 0] = (outline.colour.match(/[\d.]+/g) ?? []).map(Number)
+    const [cr = 0, cg = 0, cb = 0] = (outline.canvas.match(/[\d.]+/g) ?? []).map(Number)
+    expect(Math.abs(or - cr) + Math.abs(og - cg) + Math.abs(ob - cb)).toBeGreaterThan(60)
+  })
+}
+
 for (const route of routes) {
   test(`${route.path} renders its own content and the Shell`, async ({ page }) => {
     const problems: string[] = []

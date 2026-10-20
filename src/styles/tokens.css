@@ -27,6 +27,10 @@
   /* #767676 is the point where faint text clears WCAG AA (4.54:1) on white. */
   --color-ink-faint: #767676;
 
+  /* The Frame: one centred column, on every route. */
+  --shell-measure: 820px;
+  --shell-gutter: 32px;
+
   /* Radius: square everywhere else. */
   --radius-control: 4px; /* interactive surfaces */
   --radius-window: 8px; /* the code window, styled in P2 */

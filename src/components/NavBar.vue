@@ -29,12 +29,12 @@ function isCurrent(path: string): boolean {
   <!-- eslint-disable vue-a11y/anchor-has-content -->
   <header class="z-40">
     <div
-      class="text-[12px] font-mono mx-auto px-8 py-5 flex gap-8 max-w-[820px] items-center justify-between"
+      class="text-[12px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-8 gap-y-3 max-w-[var(--shell-measure)] items-center justify-between"
     >
       <RouterLink class="text-ink-strong shrink-0 h-6 w-6 select-none" to="/" focusable="false">
         <Logo />
       </RouterLink>
-      <nav class="text-ink-faint flex gap-7 items-center" print:op0>
+      <nav class="text-ink-faint flex flex-wrap gap-x-7 gap-y-2 items-center" print:op0>
         <RouterLink
           v-for="link in links"
           :key="link.to"

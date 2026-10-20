@@ -96,8 +96,21 @@ onKeyStroke('Escape', (e) => {
 </script>
 
 <template>
+  <!--
+    The Frame.
+
+    It belongs to the Shell, not to the page: the column and its rhythm are
+    rendered once, outside `RouterView`, so a route change replaces only what is
+    inside `<main>` and never shifts the measure a reader is anchored to.
+
+    There are no vertical Rails. The column is held by its own 820 px measure and
+    by hairline rules, and the left margin column carries the structure instead.
+    A hairline here is only ever a row divider — never a border around content.
+  -->
   <NavBar />
-  <main class="px-7 py-10 of-x-hidden">
+  <main
+    class="mx-auto px-[var(--shell-gutter)] pb-10 pt-12 max-w-[var(--shell-measure)] of-x-hidden"
+  >
     <RouterView />
     <Footer :key="route.path" />
   </main>

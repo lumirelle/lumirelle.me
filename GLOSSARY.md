@@ -13,12 +13,12 @@ The chrome that outlives a route change: navigation, footer and the Frame.
 _Avoid_: Layout, chrome, wrapper, template
 
 **Frame**:
-The hairline structure that bounds the content column and separates sections. It encodes structure; it never decorates.
-_Avoid_: Grid, borders, dividers
+The hairline structure that separates sections and holds the content column's rhythm. It encodes structure; it never decorates. It does not draw vertical rules around the column — the measure does that job.
+_Avoid_: Grid, borders, dividers, container
 
 **Rail**:
-One vertical hairline of the Frame, bounding the content column on either side.
-_Avoid_: Gutter, column line
+The vertical hairline in the left gutter that carries the outline, with `cd ..` above it. It exists only where the gutter is wide enough to hold it, and it never touches the content column.
+_Avoid_: Sidebar, gutter, column line
 
 **Splash**:
 The opening sequence shown once per session before the Shell reveals itself.

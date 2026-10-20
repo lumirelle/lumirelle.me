@@ -1,0 +1,115 @@
+# Shell — variant E (confirmed)
+
+The redesign's Shell, as confirmed from the prototype. **This file is the design reference the tickets build against.** The runnable version lives on branch `prototype/redesign-shell` (commit `8955979`, `?variant=E`) — read it for proportions and feel, not for implementation, because half of it is deliberately throwaway (see *Prototype hacks* below).
+
+Companion decisions: [ADR-0001](../adr/0001-geist-style-transfer.md) (style transfer, zero-dependency motion), [ADR-0002](../adr/0002-semantic-and-syntax-colour.md) (hue only for syntax and severity).
+
+## Structure
+
+One centred column, 820 px max, 32 px side padding, on every route. No vertical rails: the earlier "Frame with two Rails" idea did not survive the prototype — the column is held by its own measure and hairline rules, and the left margin column carries the structure instead.
+
+```
+lumirelle@me ~/posts                        posts  projects  use  photos  demos  ☾
+──────────────────────────────────────────────────────────────────────────────
+                         [ content column, 820 px max ]
+```
+
+- **Header row** — 20 px vertical padding, no rule beneath it.
+- **Content** — starts 48 px below the header on every route (`pt-12`), so list mastheads and post titles share one rhythm.
+- **Footer** — hairline above, mono 11 px, two items.
+
+## Type
+
+| role | face | size |
+| --- | --- | --- |
+| Post / page titles | Aporetic Serif (system serif fallback) | 46 px |
+| List row titles | same | 23 px, 1.32 |
+| Prose | same | 18 px / 1.7 |
+| Chrome, dates, metadata | **Aporetic Serif Mono** | 12 px |
+| Rail entries, group labels, footer | same | 11 px |
+| Code | same | 13.5 px / 1.7 |
+| Code window bar, copy | same | 10 px |
+
+Mono is for system truth — nav, breadcrumb, dates, counts, labels. Serif is for voice — titles and prose. Never mix the two in one line. No all-caps labels; `STEP n.` stays only in Manuals, which are genuinely ordered.
+
+## Geometry
+
+- Content column **820 px**, padding **32 px**.
+- Margin column **6.5 rem**, right-aligned mono, two lines for manuals (`manuals` / `computer`).
+- List rows: `grid [6.5rem 1fr]`, titles left, reading time right-aligned against the inner edge, dates tabular.
+- Outline rail: fixed, gutter only. `left: max(16px, 50% - 626px)`, width **224 px**, `cd ..` at **top 72**, rail at **top 102** (`--rail-top + 30`). Hidden below **1400 px**, where the gutter can't hold it without touching the column; there the site's existing hover-reveal outline takes over.
+- Radii: **8 px** on the code window, **4 px** on interactive controls, square everywhere else.
+
+## Tokens
+
+| token | light | dark |
+| --- | --- | --- |
+| canvas | `#FFFFFF` | `#000000` |
+| surface | `#F6F6F6` | `#0D0D0D` |
+| stroke | `#E2E2E2` | `#262626` |
+| ink | `#3A3A3A` | `#C4C4C4` |
+| ink-strong | `#111111` | `#F2F2F2` |
+| ink-faint | `#767676` | `#6E6E6E` |
+
+`#767676` is not a taste call: it is the point where faint text clears WCAG AA (4.54:1) on white. The darker *strong* border in dark mode is `#454545`, because `#262626` disappears against black.
+
+## Colour
+
+Structure is monochrome. Hue appears in exactly two places (ADR-0002):
+
+- **Syntax**, from the [`lumirelle/vercel.nvim`](https://github.com/lumirelle/vercel.nvim) palette via a Shiki theme (`plugins/shiki-vercel-theme.ts`, already on `main`): keywords/operators pink, strings green, numbers/properties blue, functions/types purple, comments grey.
+- **Severity**, the `[900]` accent step of each scale: note blue, tip green, important purple, warning amber, caution red.
+
+Never on chrome, never as decoration, never as a hover or focus state — focus is a 1 px stroke outline, offset 2 px.
+
+## Effects
+
+One orchestrated moment, everything else answers an action. All of it is off under `prefers-reduced-motion`.
+
+- **Splash** — ASCII boot, once per session: a box-drawn ghost fades in, a command types under it (`lumirelle.me $ ls posts --sort=date`), cursor blinks, panel lifts. ~1.1 s total; any click or keypress jumps to the end. **Plain ASCII only** (`+ - | o ~`): box-drawing and block glyphs (`█ ▀ ▄ ─`) overhang their cell in Aporetic Serif Mono and the frame drifts.
+- **Route change** — a 200 ms opacity `route-in` keyed on the route. **No View Transitions** (see #9): scroll and the transition must be owned by the same code, and here that is the router.
+- **Caret** — a 2 px bar after the list command line, `steps(1, end)` at 1.1 s. The Splash's typing cursor is the same 2 px bar.
+- **Hover decode-glitch** — a row title resolves left to right from random ASCII over 260 ms. Layout-inert by construction: the real string stays in flow as an invisible spacer and the animated copy is painted over it in a clipped, absolutely positioned box.
+- **Terminal selection** — hovering a row inverts the date cell (ink on canvas, inverse in dark), like a selected line in a shell.
+
+## Chrome utilities
+
+Everything the old `NavBar` provided has to be re-earned by a custom Shell. Each has been missed at least once during the prototype:
+
+- **Breadcrumb** — `lumirelle@me ~/path`, live path, faint plus strong.
+- **Theme toggle** — last item in the nav row, no box, icons `i-ri-sun-line` / `dark:i-ri-moon-line`, `aria-label` follows state ("Switch to dark theme"), and it calls `toggleDark` so the site's circular reveal is reused.
+- **Scroll to top** — fixed bottom-right 24 px, 32 px square, 4 px radius, hairline, mono `↑` at `ink-strong` (17.9:1 light / 18.8:1 dark), inverting on hover. Appears past 320 px and is `inert` while hidden — not merely transparent.
+- **`cd ..`** — Shell element above the outline rail, `$` at full ink, rest faint, parent path with the query preserved.
+
+## Outline rail
+
+The TOC comes from the pipeline (`markdown-it-table-of-contents`), restyled — not re-implemented: mono 11 px, hairline on its left, **two levels only** (h4 makes it unreadable at that size), permanent at ≥1400 px, hover-revealed below. The active section is tracked with scroll arithmetic (not `IntersectionObserver`, which went stale) and marked with `>` in a reserved `1.4ch` gutter so labels never shift.
+
+## Code blocks
+
+Terminal windows, not `<pre>` blocks:
+
+```
+● ● ●   ts                                    copy
+const str: string = 'hello'
+```
+
+8 px radius, 1 px stroke, `surface` fill, `overflow: hidden` so the bar and the horizontally scrolling `<pre>` clip to the frame. Bar: 7/12 px padding, 9 px dots at `#ff5f57` / `#febc2e` / `#28c840`, language as window title (from `code.language-*`), copy at the right reading `copy` → `copied`. Copy falls back to a selection-based `execCommand` when `navigator.clipboard` is unavailable or denied.
+
+## Prototype hacks — do not copy
+
+| in the prototype | where it belongs |
+| --- | --- |
+| `enhanceCodeBlocks()` wraps `<pre>` and injects the window bar | markdown plugin (Shiki transformer / renderer), where the language is already known |
+| language label via DOM post-processing | same |
+| `?variant=` branch in `App.vue`, `PrototypeSwitcher` | deleted; the Shell ships as the real `NavBar`/`App.vue` |
+| inline hex values everywhere | the token layer (#4) |
+| glitch and rail mounted by `refreshOutline()` on route change | Vue components inside the Shell, rendered once |
+
+## Traps worth remembering
+
+- **Art canvases paint over the Shell.** `ArtDots` appends a full-viewport canvas later in DOM order than the Shell; it washes the whole page and the header reads as "missing". Retiring Art (#7) is a correctness prerequisite, not just cleanup.
+- **A filled animation's identity `transform` is still a containing block**, and will drag the `position: fixed` rail into the content column. Animate opacity only.
+- **`mouseenter` doesn't bubble**: hover state for a nested element has to come from the row's own handler (and needs `focus`/`blur` pairing for a11y).
+- **`router.push()` resolves before Vue commits.** Any work that races the DOM swap must await `nextTick`.
+- **Never await an unbounded `requestAnimationFrame`** in a lifecycle that gates rendering — a backgrounded tab never fires it.

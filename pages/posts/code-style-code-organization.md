@@ -3,7 +3,6 @@ title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 20min
 type: note
 ---
 

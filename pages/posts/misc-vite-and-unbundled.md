@@ -3,7 +3,6 @@ title: Vite and Unbundled
 date: 2025-12-03T11:56+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 2min
 ---
 
 [[toc]]

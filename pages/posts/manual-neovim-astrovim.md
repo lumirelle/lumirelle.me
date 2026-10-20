@@ -3,7 +3,6 @@ title: Neovim and AstroVim Manual
 date: 2025-12-25T14:48+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 26min
 type: manual
 group: Editor
 order: 1

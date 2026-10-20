@@ -3,7 +3,6 @@ title: 'Performance Optimization: Manually Split Chunks'
 date: 2025-11-05T16:22+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 14min
 type: note
 ---
 

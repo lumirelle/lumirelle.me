@@ -3,7 +3,6 @@ title: Programming Fonts
 date: 2025-10-15T14:10+08:00
 update: 2026-10-20T15:01+08:00
 lang: en
-duration: 23min
 ---
 
 <style>

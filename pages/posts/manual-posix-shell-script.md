@@ -3,7 +3,6 @@ title: POSIX Shell Script Manual
 date: 2025-12-01T15:50+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 20min
 type: manual
 group: Shell
 order: 1

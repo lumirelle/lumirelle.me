@@ -3,7 +3,6 @@ title: Git Manual
 date: 2025-09-26T11:47+08:00
 update: 2026-09-23T18:15+08:00
 lang: en
-duration: 15min
 type: manual
 group: VCS
 order: 1

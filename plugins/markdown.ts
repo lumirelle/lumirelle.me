@@ -20,6 +20,7 @@ import MarkdownItMagicLink from 'markdown-it-magic-link'
 import MarkdownItTOC from 'markdown-it-table-of-contents'
 import sharp from 'sharp'
 import _Markdown from 'unplugin-vue-markdown/vite'
+import { readingTime } from '../scripts/reading-time.ts'
 import { slugify } from '../scripts/slugify.ts'
 import { PreviewPlugin } from './markdown-preview.ts'
 
@@ -168,6 +169,8 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
         )
         frontmatter.image = `https://lumirelle.me/${path}`
       })()
+      if (id.includes('/pages/posts/'))
+        frontmatter.duration = readingTime(readFileSync(id, 'utf8'))
       const head = defaults(frontmatter, options)
       return { head, frontmatter }
     },

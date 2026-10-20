@@ -3,7 +3,6 @@ title: 'Code Style: Symbol Naming Patterns'
 date: 2025-09-23T15:58+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 19min
 type: note
 ---
 

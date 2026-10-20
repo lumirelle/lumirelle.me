@@ -3,7 +3,6 @@ title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
 update: 2026-10-15T12:40+08:00
 lang: en
-duration: 23min
 type: manual
 group: Computer
 order: 1

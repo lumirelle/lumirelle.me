@@ -3,7 +3,6 @@ title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 92min
 type: manual
 group: Web
 order: 3

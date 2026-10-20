@@ -3,7 +3,6 @@ title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 32min
 type: manual
 group: Web
 order: 1

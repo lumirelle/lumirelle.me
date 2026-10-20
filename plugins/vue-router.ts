@@ -2,6 +2,7 @@ import type { Plugin } from 'vite'
 import { readFileSync } from 'node:fs'
 import matter from 'gray-matter'
 import _VueRouter from 'vue-router/vite'
+import { readingTime } from '../scripts/reading-time.ts'
 
 export function VueRouter(): Plugin<any> | Plugin<any>[] {
   return _VueRouter({
@@ -13,7 +14,10 @@ export function VueRouter(): Plugin<any> | Plugin<any>[] {
       if (!path)
         return
       if (!path.includes('projects.md') && path.endsWith('.md')) {
-        const { data } = matter(readFileSync(path, 'utf8'))
+        const raw = readFileSync(path, 'utf8')
+        const { data } = matter(raw)
+        if (path.includes('/pages/posts/'))
+          data.duration = readingTime(raw)
         route.addToMeta({
           frontmatter: data,
         })

@@ -3,7 +3,6 @@ title: 'Code Style: Title Case'
 date: 2026-03-22T22:38+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 1min
 type: note
 ---
 

@@ -3,7 +3,6 @@ title: Computer Network Manual
 date: 2025-09-30T22:30+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 22min
 type: manual
 group: Computer
 order: 2

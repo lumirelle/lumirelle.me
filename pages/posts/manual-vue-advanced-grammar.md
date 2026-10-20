@@ -3,7 +3,6 @@ title: Vue Advanced Grammar Manual
 date: 2026-01-28T11:47+08:00
 update: 2026-09-21T10:32+08:00
 lang: en
-duration: 87min
 type: manual
 group: Web
 order: 6

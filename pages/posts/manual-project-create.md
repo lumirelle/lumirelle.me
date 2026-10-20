@@ -3,7 +3,6 @@ title: Project Create Manual
 date: 2025-09-28T11:34+08:00
 update: 2026-09-21T16:37+08:00
 lang: en
-duration: 1min
 type: manual
 group: Web
 order: 7

@@ -1,18 +1,8 @@
 /* Root Style */
-:root {
-  --c-bg: #fff;
-  --c-scrollbar: #eee;
-  --c-scrollbar-hover: #bbb;
-}
 html {
-  background-color: var(--c-bg);
+  background-color: var(--color-canvas);
   overflow-x: hidden;
   overflow-y: scroll;
-}
-html.dark {
-  --c-bg: #050505;
-  --c-scrollbar: #111;
-  --c-scrollbar-hover: #222;
 }
 
 /* Selection */
@@ -37,7 +27,7 @@ html.dark {
 
 /* Custom Scrollbar */
 * {
-  scrollbar-color: var(--c-scrollbar) var(--c-bg);
+  scrollbar-color: var(--color-surface) var(--color-canvas);
 }
 ::-webkit-scrollbar {
   width: 6px;
@@ -47,15 +37,15 @@ html.dark {
 }
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
-  background: var(--c-bg);
+  background: var(--color-canvas);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--c-scrollbar);
+  background: var(--color-surface);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--c-scrollbar-hover);
+  background: var(--color-stroke);
 }
 
 /* SponsorKit */
@@ -185,7 +175,7 @@ html:not(.dark) [img-dark] {
 /* Overrides Floating Vue */
 .v-popper--theme-dropdown .v-popper__inner,
 .v-popper--theme-tooltip .v-popper__inner {
-  --at-apply: bg-base color-base text-base rounded border border-base shadow;
+  --at-apply: bg-base color-base text-base rounded border border-stroke shadow;
   box-shadow: 0 6px 30px #0000001a;
 }
 .v-popper--theme-tooltip .v-popper__arrow-inner,
@@ -195,7 +185,7 @@ html:not(.dark) [img-dark] {
 }
 .v-popper--theme-tooltip .v-popper__arrow-outer,
 .v-popper--theme-dropdown .v-popper__arrow-outer {
-  --at-apply: border-base;
+  --at-apply: border-stroke;
 }
 .v-popper--theme-tooltip.v-popper--shown,
 .v-popper--theme-tooltip.v-popper--shown * {

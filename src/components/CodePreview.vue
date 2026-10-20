@@ -54,7 +54,7 @@ function onLoad(): void {
     title="HTML preview"
     :srcdoc="srcdoc"
     :sandbox="sandbox"
-    class="border border-base rounded-lg w-full"
+    class="border border-stroke rounded-lg w-full"
     @load="onLoad"
   />
 </template>

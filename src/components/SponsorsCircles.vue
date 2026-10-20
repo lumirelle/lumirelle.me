@@ -75,7 +75,7 @@ onMounted(() => {
               : c.radius < 50
                 ? 'hover:scale-125'
                 : 'hover:scale-110',
-          c.radius > 25 ? 'border-0.5 border-base' : '',
+          c.radius > 25 ? 'border-0.5 border-stroke' : '',
         ]"
         :href="c.link"
         target="_blank"

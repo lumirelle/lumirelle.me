@@ -226,3 +226,7 @@ Languages (with their own development kits):
 ### VSCode Extension Projects
 
 - [Starter VSCode](https://github.com/antfu/starter-vscode) &ndash; VS Code Extension starter template
+
+## Bookmarks
+
+The sites and tools I keep coming back to: [my bookmarks page](/bookmarks).

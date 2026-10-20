@@ -7,18 +7,58 @@ function toTop(): void {
 }
 
 const { y: scroll } = useWindowScroll()
+const route = useRoute()
+
+/** The Shell's voice: five destinations, lowercase, mono. */
+const links = [
+  { label: 'posts', to: '/posts' },
+  { label: 'projects', to: '/projects' },
+  { label: 'use', to: '/use' },
+  { label: 'photos', to: '/photos' },
+  { label: 'demos', to: '/demos' },
+]
+
+// `/posts/manual-git` is still `posts`: the section owns its children, so the
+// active mark survives every route deeper in the tree.
+function isCurrent(path: string): boolean {
+  return route.path === path || route.path.startsWith(`${path}/`)
+}
 </script>
 
 <template>
   <!-- eslint-disable vue-a11y/anchor-has-content -->
-  <header class="header z-40">
-    <RouterLink
-      class="m-5 outline-none h-12 w-12 select-none absolute xl:fixed"
-      to="/"
-      focusable="false"
+  <header class="z-40">
+    <div
+      class="text-[12px] font-mono mx-auto px-8 py-5 flex gap-8 max-w-[820px] items-center justify-between"
     >
-      <Logo />
-    </RouterLink>
+      <RouterLink class="text-ink-strong shrink-0 h-6 w-6 select-none" to="/" focusable="false">
+        <Logo />
+      </RouterLink>
+      <nav class="text-ink-faint flex gap-7 items-center" print:op0>
+        <RouterLink
+          v-for="link in links"
+          :key="link.to"
+          :to="link.to"
+          class="nav-link transition-colors"
+          :class="isCurrent(link.to) ? 'text-ink-strong' : 'hover:text-ink-strong'"
+          :aria-current="isCurrent(link.to) ? 'page' : undefined"
+        >
+          {{ link.label }}
+        </RouterLink>
+        <a href="/feed.xml" target="_blank" title="RSS feed" aria-label="RSS feed">
+          <div i-la-rss-square />
+        </a>
+        <a
+          href="https://github.com/lumirelle"
+          target="_blank"
+          title="Source on GitHub"
+          aria-label="Source on GitHub"
+        >
+          <div i-uil-github-alt />
+        </a>
+        <ToggleTheme />
+      </nav>
+    </div>
     <button
       title="Scroll to top"
 
@@ -28,95 +68,19 @@ const { y: scroll } = useWindowScroll()
     >
       <div i-ri-arrow-up-line />
     </button>
-    <nav class="nav">
-      <div class="spacer" />
-      <div class="right" print:op0>
-        <RouterLink to="/posts" title="Posts">
-          <span class="lt-md:hidden">Posts</span>
-          <div i-ri-article-line md:hidden />
-        </RouterLink>
-        <RouterLink to="/projects" title="Projects">
-          <span class="lt-md:hidden">Projects</span>
-          <div i-ri-lightbulb-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/use" title="Use">
-          <span class="lt-md:hidden">Use</span>
-          <div i-ri-heart-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/bookmarks" title="Bookmarks">
-          <span class="lt-md:hidden">Bookmarks</span>
-          <div i-ri-bookmark-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/sponsors-list" title="Sponsors">
-          <span class="lt-md:hidden">Sponsors</span>
-          <div i-ri-heart-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/photos" title="Photos">
-          <div i-ri-camera-3-line />
-        </RouterLink>
-        <RouterLink to="/demos" title="Demos">
-          <div i-ri-screenshot-line />
-        </RouterLink>
-        <a href="https://github.com/lumirelle" target="_blank" title="GitHub" class="lt-md:hidden">
-          <div i-uil-github-alt />
-        </a>
-        <a href="/feed.xml" target="_blank" title="RSS" class="lt-md:hidden">
-          <div i-la-rss-square style="font-size: 1.25rem; margin: 0 -0.125rem" />
-        </a>
-        <ToggleTheme />
-      </div>
-    </nav>
   </header>
 </template>
 
 <style scoped>
-.header h1 {
-  margin-bottom: 0;
+/* Interaction answers the pointer in the token layer's time, not a fork-era
+   literal. #11 owns the focus outline and the toggle's own states. */
+.nav-link {
+  transition-duration: var(--duration-interaction);
+  transition-timing-function: var(--ease-interaction);
 }
 
-.logo {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-}
-
-.nav {
-  padding: 2rem;
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto max-content;
-  box-sizing: border-box;
-}
-
-.nav > * {
-  margin: auto;
-}
-
-.nav img {
-  margin-bottom: 0;
-}
-
-.nav a {
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s ease;
-  opacity: 0.6;
-  outline: none;
-}
-
-.nav a:hover {
-  opacity: 1;
-  text-decoration-color: inherit;
-}
-
-.nav .right {
-  display: grid;
-  grid-gap: 1.2rem;
-  grid-auto-flow: column;
-}
-
-.nav .right > * {
-  margin: auto;
+nav a:hover,
+nav a:focus-visible {
+  color: var(--color-ink-strong);
 }
 </style>

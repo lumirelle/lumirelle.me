@@ -70,6 +70,26 @@ export default defineConfig<PresetWind4Theme>({
   ],
   transformers: [transformerDirectives()],
 
+  // Colour and radius are published by `src/styles/tokens.css`: the utilities
+  // resolve the custom property, so the value flips with the colour scheme
+  // instead of being baked into every rule that mentions it.
+  theme: {
+    colors: {
+      canvas: 'var(--color-canvas)',
+      surface: 'var(--color-surface)',
+      stroke: 'var(--color-stroke)',
+      ink: {
+        DEFAULT: 'var(--color-ink)',
+        strong: 'var(--color-ink-strong)',
+        faint: 'var(--color-ink-faint)',
+      },
+    },
+    radius: {
+      control: 'var(--radius-control)',
+      window: 'var(--radius-window)',
+    },
+  },
+
   rules: [
     // Font family rules, without nerd symbols
     ['font-62.5%em', { 'font-family': '"Annotation Mono", "Maple Mono WR CN", monospace' }],
@@ -86,14 +106,15 @@ export default defineConfig<PresetWind4Theme>({
   safelist: ['i-ri-menu-2-fill'],
   shortcuts: [
     {
-      'bg-base': 'bg-white dark:bg-black',
-      'color-base': 'text-black dark:text-white',
-      'border-base': 'border-[#8884]',
+      // Thin aliases kept for existing templates: the value still comes from
+      // the token layer, so there is exactly one place a scheme is resolved.
+      'bg-base': 'bg-canvas',
+      'color-base': 'text-ink-strong',
     },
     [
       /^btn-(\w+)$/,
       ([_, color]): string =>
-        `op50 px2.5 py1 transition-all duration-200 ease-out no-underline! hover:(op100 text-${color} bg-${color}/10) border border-base! rounded`,
+        `op50 px2.5 py1 transition-all duration-200 ease-out no-underline! hover:(op100 text-${color} bg-${color}/10) border border-stroke! rounded`,
     ],
   ],
 })

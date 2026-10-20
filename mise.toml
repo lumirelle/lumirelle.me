@@ -83,6 +83,15 @@ run = "nub ./scripts/photos-manage.ts"
 [tasks.start]
 run = "vite preview"
 
+[tasks.test]
+description = 'Build from the checked-in tree and run the browser suite against the production output.'
+env = { NODE_ENV = "production" }
+run = [
+  "nub ./scripts/prepare-test-build.ts",
+  "vite-ssg build",
+  "playwright test",
+]
+
 [tasks.check]
 description = 'Run all checks.'
 usage = '''

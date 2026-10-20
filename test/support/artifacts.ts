@@ -1,0 +1,105 @@
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+
+/**
+ * Reads the production build instead of the source tree.
+ *
+ * Assertions that are about the build rather than about a page belong here:
+ * "this route was prerendered", "its HTML already contains its own text". The
+ * suite must never import application modules — that would be a second seam.
+ */
+
+const DIST = 'dist'
+
+/** Path prefixes under `dist/` that are tooling, not pages of the site. */
+const NOT_A_PAGE = ['admin']
+
+/** Shortest text run that is distinctive enough to identify a route. */
+const MIN_MARKER_LENGTH = 60
+
+/** Characters that end a marker: one is an entity, the other is a literal `&`. */
+const ENTITY_BOUNDARY = '\u0000'
+
+export interface RouteArtifact {
+  /** Site path, e.g. `/posts/manual-git`. */
+  path: string
+  /** The prerendered HTML file that serves it. */
+  file: string
+  /** A distinctive run of text taken from the prerendered page content. */
+  marker: string
+}
+
+/**
+ * `main` is the content landmark, so it is the one container the suite may
+ * depend on: it survives any change to the Shell's markup or class names.
+ */
+function extractMainHtml(html: string): string {
+  const main = /<main\b[^>]*>([\s\S]*?)<\/main>/.exec(html)
+  return main?.[1] ?? html
+}
+
+function toReadableText(html: string): string {
+  return html
+    // Rendered code and JSON payloads are not page content.
+    .replaceAll(/<(script|style)\b[\s\S]*?<\/\1>/g, ' ')
+    // Tags vanish without leaving a gap, exactly as `textContent` joins
+    // adjacent elements — otherwise `toContainText` would disagree with us at
+    // every block boundary.
+    .replaceAll(/<[^>]+>/g, '')
+    // Entities are decoded by the browser but not here, so mark them as a
+    // boundary instead of guessing an equivalent character.
+    .replaceAll(/&[#\w]+;/g, ENTITY_BOUNDARY)
+    .replaceAll(/\s+/g, ' ')
+    .trim()
+}
+
+/**
+ * The longest entity-free run of prerendered text, which is unique enough to
+ * prove that the live page rendered *this* route rather than a fallback.
+ */
+function extractMarker(html: string): string {
+  const runs = toReadableText(extractMainHtml(html))
+    .split(ENTITY_BOUNDARY)
+    .flatMap(part => part.split('&'))
+    .map(run => run.trim())
+    .filter(run => run.length >= MIN_MARKER_LENGTH)
+    .sort((a, b) => b.length - a.length)
+
+  return runs[0]?.slice(0, MIN_MARKER_LENGTH) ?? ''
+}
+
+function toSitePath(file: string): string {
+  // `index.html` serves its own directory, everything else drops the extension.
+  const segments = file.split('/')
+  if (segments.at(-1) === 'index.html') {
+    segments.pop()
+    return segments.length ? `/${segments.join('/')}` : '/'
+  }
+
+  segments[segments.length - 1] = segments.at(-1)!.replace(/\.html$/, '')
+  return `/${segments.join('/')}`
+}
+
+function readRouteArtifacts(): RouteArtifact[] {
+  if (!existsSync(DIST)) {
+    throw new Error(`No ${DIST}/ to test. Run \`mise run test\`, which builds it first.`)
+  }
+
+  const files = readdirSync(DIST, { recursive: true, encoding: 'utf8' })
+    .map(file => file.split('\\').join('/'))
+    .filter(file => file.endsWith('.html'))
+    .filter(file => !NOT_A_PAGE.some(prefix => file.startsWith(`${prefix}/`)))
+    .sort((a, b) => a.localeCompare(b))
+
+  return files.map((file) => {
+    const html = readFileSync(join(DIST, file), 'utf8')
+    return { path: toSitePath(file), file, marker: extractMarker(html) }
+  })
+}
+
+/** Every prerendered route, discovered from the build. */
+export const routes: RouteArtifact[] = readRouteArtifacts()
+
+if (routes.length === 0) {
+  throw new Error(`No routes found in ${DIST}/ — the build produced no HTML.`)
+}

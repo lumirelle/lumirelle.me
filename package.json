@@ -34,6 +34,7 @@
     "@lumirelle/tsconfig": "^0.1.6",
     "@octokit/core": "^7.0.8",
     "@octokit/rest": "^22.0.1",
+    "@playwright/test": "^1.64.1",
     "@shikijs/markdown-exit": "^4.5.0",
     "@shikijs/transformers": "^4.5.0",
     "@shikijs/twoslash": "^4.5.0",

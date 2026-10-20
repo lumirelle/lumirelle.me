@@ -613,6 +613,9 @@ test('STEP n. belongs to Manuals only', async ({ page }) => {
 test('hovering a row inverts its date cell without moving the title', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('/posts', { waitUntil: 'load' })
+  // The mono face swaps in after first paint; measure once it has settled, or
+  // the font's own metric change would be mistaken for a layout shift.
+  await page.evaluate(() => document.fonts.ready)
 
   const row = ledgerRows(page).first()
   const date = row.locator('time')
@@ -716,6 +719,155 @@ test.describe('with JavaScript disabled', () => {
       await expect(
         page.getByRole('banner').getByRole('link', { name: 'posts', exact: true }),
       ).toBeVisible()
+    }
+  })
+})
+
+/*
+ * The exit audit.
+ *
+ * P1 promised that no Effect is load-bearing, so these walk *every* route with
+ * the Effects stripped rather than sampling one page. Each loop names the route
+ * it failed on, so a failure still points at a page.
+ */
+
+test('every route is complete with reduced motion and no Effects', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+
+  for (const route of routes) {
+    await page.goto(route.path, { waitUntil: 'load' })
+
+    const content = page.getByRole('main')
+    await expect(content, `${route.path}: content`).toBeVisible()
+    expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`)
+      .toContain(squash(route.marker))
+
+    await expect(page.getByRole('banner'), `${route.path}: Shell`).toBeVisible()
+    await expect(page.locator(splash), `${route.path}: Splash`).toBeHidden()
+
+    // No route animation and no entrance cascade, both by media query.
+    const motion = await page.evaluate(() => ({
+      route: getComputedStyle(document.querySelector('.route-in')!).animationName,
+      cascade: [...document.querySelectorAll('.slide-enter, .slide-enter-content > *')]
+        .map(el => getComputedStyle(el).animationName)
+        .filter(name => name !== 'none'),
+    }))
+    expect(motion.route, `${route.path}: route animation`).toBe('none')
+    expect(motion.cascade, `${route.path}: entrance cascade`).toEqual([])
+  }
+})
+
+test('every surface keeps its hairlines and ink in dark mode', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' })
+
+  for (const route of routes) {
+    await page.goto(route.path, { waitUntil: 'load' })
+
+    const paint = await page.evaluate(() => {
+      const footer = document.querySelector('footer')
+      const body = getComputedStyle(document.body)
+      const root = getComputedStyle(document.documentElement)
+      return {
+        canvas: root.backgroundColor,
+        ink: body.color,
+        rule: footer ? getComputedStyle(footer).borderTopColor : 'rgb(38, 38, 38)',
+      }
+    })
+
+    expect(toChannels(paint.canvas), `${route.path}: canvas`).toEqual([0, 0, 0])
+    // A dark-mode hairline that disappears into the canvas is a lost structure.
+    expect(toChannels(paint.rule), `${route.path}: hairline`).not.toEqual([0, 0, 0])
+    // And body ink must clear the canvas by a wide margin.
+    const [r, g, b] = toChannels(paint.ink)
+    expect(r + g + b, `${route.path}: ink`).toBeGreaterThan(300)
+  }
+})
+
+test('the Frame degrades below the breakpoint on both P1 pages', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+
+  for (const path of ['/posts', '/posts/manual-git']) {
+    await page.goto(path, { waitUntil: 'load' })
+
+    const frame = await page.evaluate(() => ({
+      overflows: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      footerRule: getComputedStyle(document.querySelector('footer')!).borderTopWidth,
+      mainWidth: document.querySelector('main')!.getBoundingClientRect().width,
+    }))
+
+    expect(frame.overflows, `${path}: horizontal scroll`).toBe(false)
+    // Row dividers survive; only the vertical rails would have been dropped, and
+    // the design has none.
+    expect(frame.footerRule, `${path}: row divider`).toBe('1px')
+    expect(frame.mainWidth, `${path}: column width`).toBeLessThanOrEqual(390)
+  }
+})
+
+test('keyboard focus reaches the navigation and the rows, and is always painted', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const seen: string[] = []
+  let outlines = 0
+  let rowLinks = 0
+
+  for (let i = 0; i < 20; i++) {
+    await page.keyboard.press('Tab')
+
+    const focused = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null
+      if (!el || el === document.body) {
+        return null
+      }
+      const style = getComputedStyle(el)
+      return {
+        label: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 24),
+        style: style.outlineStyle,
+        width: style.outlineWidth,
+        offset: style.outlineOffset,
+        colour: style.outlineColor,
+        identity: `${el.tagName}.${(el.className || '').toString().slice(0, 20)}`,
+        inRow: Boolean(el.closest('li')),
+      }
+    })
+
+    if (!focused) {
+      break
+    }
+
+    seen.push(focused.label || focused.identity)
+    expect(focused.style, `focus outline on ${focused.identity}`).toBe('solid')
+    expect(focused.width, `focus outline width on ${focused.identity}`).toBe('1px')
+    expect(focused.offset, `focus outline offset on ${focused.identity}`).toBe('2px')
+    expect(toChannels(focused.colour), `focus outline colour on ${focused.identity}`)
+      .toEqual([17, 17, 17])
+    outlines += 1
+    if (focused.inRow) {
+      rowLinks += 1
+    }
+  }
+
+  expect(outlines).toBeGreaterThanOrEqual(8)
+  // The tab order leaves the header and reaches the ledger too.
+  expect(rowLinks).toBeGreaterThanOrEqual(3)
+  // Every text link plus the two icon controls plus the theme toggle, then rows.
+  expect(seen).toEqual(expect.arrayContaining(['posts', 'projects', 'use', 'photos', 'demos']))
+})
+
+test.describe('with JavaScript disabled, every route', () => {
+  test.use({ javaScriptEnabled: false })
+
+  test('still prerenders its content and the Shell', async ({ page }) => {
+    for (const route of routes) {
+      await page.goto(route.path, { waitUntil: 'load' })
+
+      const content = page.getByRole('main')
+      await expect(content, `${route.path}: content`).toBeVisible()
+      expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`)
+        .toContain(squash(route.marker))
+
+      await expect(page.getByRole('banner'), `${route.path}: Shell`).toBeVisible()
+      await expect(page.locator(splash), `${route.path}: Splash`).toBeHidden()
     }
   })
 })

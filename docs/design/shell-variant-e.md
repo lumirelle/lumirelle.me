@@ -113,3 +113,42 @@ const str: string = 'hello'
 - **`mouseenter` doesn't bubble**: hover state for a nested element has to come from the row's own handler (and needs `focus`/`blur` pairing for a11y).
 - **`router.push()` resolves before Vue commits.** Any work that races the DOM swap must await `nextTick`.
 - **Never await an unbounded `requestAnimationFrame`** in a lifecycle that gates rendering — a backgrounded tab never fires it.
+
+## P1 exit audit
+
+Run against the production build at 1440 / 1024 / 390 px, in both colour schemes, with the
+Effects stripped. Everything below is what the build actually renders, not what was intended.
+
+**Kept, and now asserted by the suite.** One 820 px column with a 32 px gutter on every route;
+row dividers at every breakpoint and down to 390 px with no horizontal scrolling; a 1 px focus
+outline at 2 px offset, painted in both schemes; dark-mode hairlines (`#262626`) and ink levels
+that stay clear of the canvas; the ledger's tabular date column, right-aligned reading time and
+group labels on the rule; the Splash absent on a seeded session and under reduced motion; every
+route complete with JavaScript disabled.
+
+**Fixed during the audit** — each was a real deviation, not a matter of taste:
+
+- Ledger rows inherited `.prose ul > li::before`, so every row carried a grey bullet and a 1.75 em
+  indent. The pilot page is wrapped in `.prose`, so the ledger now clears that itself.
+- `.prose a:hover` *adds* a 1 px border under a link. On hover, every ledger row and every filter
+  link grew a second hairline — a hairline that was none of a Rail, a row divider or a focus
+  outline. Cleared in both states.
+- `SubNav` was still the fork's 3xl serif link stack, which made the pilot page read as two designs
+  stacked. It is now 12 px mono, active at full ink, with lowercase labels.
+- The header row wrapped to three lines on a 390 px phone. It is 11 px with tighter gaps below
+  `md`, so it packs to two.
+
+**Recorded, not fixed — these belong to P2:**
+
+- **The Post page's masthead still joins its metadata with `·`** ("First post on … · Last edit on …
+  · 20min"). The middle-dot removal in P1 is about the *list*, where columns now do that work; the
+  Post page's own header is P2's to set.
+- **The outline rail is unstyled.** The pipeline-generated TOC still appears as the fork's
+  hover-revealed hamburger at the viewport edge, not as the mono rail in the gutter described under
+  *Outline rail* above. `cd ..` is correctly placed above where it will live.
+- **Reading time stacks under the title below 640 px**, right-aligned within the stacked block. The
+  design's inner-edge column needs the two-column grid, and a 390 px screen cannot hold a 6.5 rem
+  margin column plus a title.
+
+**Deliberate, so it is not "fixed" later:** there are no vertical Rails. The earlier Frame idea did
+not survive the prototype, and the column is held by its measure and by row dividers instead.

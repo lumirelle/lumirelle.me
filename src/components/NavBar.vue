@@ -27,10 +27,10 @@ function isCurrent(path: string): boolean {
 <template>
   <header class="z-40">
     <div
-      class="text-[12px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-8 gap-y-3 max-w-[var(--shell-measure)] items-center justify-between"
+      class="text-[11px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-6 gap-y-2 max-w-[var(--shell-measure)] items-center justify-between md:text-[12px]"
     >
       <ShellBreadcrumb />
-      <nav class="text-ink-faint flex flex-wrap gap-x-7 gap-y-2 items-center" print:op0>
+      <nav class="text-ink-faint flex flex-wrap gap-x-3 gap-y-2 items-center md:gap-x-7" print:op0>
         <RouterLink
           v-for="link in links"
           :key="link.to"

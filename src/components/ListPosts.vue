@@ -241,6 +241,29 @@ function languageLabel(p: Post): string | undefined {
   font-family: var(--font-mono, monospace);
 }
 
+/*
+ * Rows are rows, not prose list items.
+ *
+ * The pilot page is wrapped in `.prose`, which gives every `ul > li` a drawn
+ * bullet and a 1.75em indent. The ledger's structure is its grid, so both are
+ * turned off here — the scoped attribute keeps this above `.prose`'s rule.
+ */
+.ledger ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ledger ul > li {
+  position: static;
+  padding-left: 0;
+}
+
+.ledger ul > li::before {
+  content: none;
+  background: none;
+}
+
 /* A label on the Frame's rule: 11 px, faint, masked against the canvas. */
 .group-label {
   display: inline-block;
@@ -262,11 +285,16 @@ function languageLabel(p: Post): string | undefined {
   border-bottom: 1px solid var(--color-stroke);
 }
 
-.row-link {
+.row-link,
+.row-link:hover {
   display: block;
   padding: 0.6rem 0;
-  text-decoration: none;
   color: inherit;
+  /* `.prose a` draws a rule under every link and, on hover, *adds* one. The row
+     divider is the Frame's job — a hairline is a Rail, a row divider or a focus
+     outline, never a link decoration — so both states are cleared. */
+  border-bottom: none;
+  text-decoration: none;
 }
 
 .row-grid {
@@ -370,6 +398,7 @@ function languageLabel(p: Post): string | undefined {
 
   .cell-meta {
     margin-top: 0.25rem;
+    justify-content: space-between;
   }
 }
 

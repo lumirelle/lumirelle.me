@@ -140,6 +140,11 @@ route complete with JavaScript disabled.
 
 **Recorded, not fixed — these belong to P2:**
 
+- **Code blocks are still `<pre>` blocks**, not the terminal windows described under *Code blocks*:
+  no `surface` fill, no 1 px `stroke`, no 8 px radius, no window bar. Their twoslash popups still
+  carry the alpha border (`--twoslash-border-color: #8884`) and a hard-coded `#191919` fill, which
+  the token layer replaces when the windows are built.
+
 - **The Post page's masthead still joins its metadata with `·`** ("First post on … · Last edit on …
   · 20min"). The middle-dot removal in P1 is about the *list*, where columns now do that work; the
   Post page's own header is P2's to set.

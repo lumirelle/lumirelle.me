@@ -175,10 +175,11 @@ test('the header row is five mono text links, two named icons and the theme togg
   await expect(nav.getByRole('link', { name: /rss|feed/i })).toBeVisible()
   await expect(nav.getByRole('link', { name: /github|source/i })).toBeVisible()
 
-  // The theme toggle closes the row.
-  const lastControl = nav.locator('a, button').last()
-  await expect(lastControl).toHaveAttribute('role', 'button')
-  await expect(lastControl).toHaveAccessibleName(/theme|toggle|scheme/i)
+  // The theme toggle closes the row, as a real button with a state-following name.
+  const toggles = nav.getByRole('button')
+  await expect(toggles).toHaveCount(1)
+  await expect(toggles.first()).toHaveAccessibleName(/switch to (dark|light) theme/i)
+  expect(await nav.locator('a, button').last().evaluate(el => el.tagName)).toBe('BUTTON')
 
   // `one line, no rule beneath it`: the hairline belongs to the Frame (#5).
   expect(await header.evaluate(el => getComputedStyle(el).borderBottomWidth)).toBe('0px')
@@ -394,6 +395,109 @@ test('reduced motion strips the route keyframe and the cascade', async ({ page }
   expect(
     await page.locator('.route-in').evaluate(el => getComputedStyle(el).animationName),
   ).toBe('none')
+})
+
+test('the breadcrumb tracks the live route', async ({ page }) => {
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  const breadcrumb = page.getByRole('banner').getByRole('link', { name: /lumirelle@me/i })
+  await expect(breadcrumb).toBeVisible()
+  await expect(breadcrumb).toHaveAccessibleName('lumirelle@me ~/posts/manual-git')
+
+  // The path is at full ink; the constant part is faint. Asserted as rendered
+  // colour, not as a class.
+  const inks = await breadcrumb.evaluate((el) => {
+    const [constant, path] = [...el.querySelectorAll('span')]
+    return {
+      path: getComputedStyle(path!).color,
+      constant: getComputedStyle(constant!).color,
+    }
+  })
+  expect(toChannels(inks.path)).toEqual([17, 17, 17])
+  expect(inks.path).not.toBe(inks.constant)
+
+  // It is a live path, so navigating changes it.
+  await page.goto('/use', { waitUntil: 'load' })
+  await expect(
+    page.getByRole('banner').getByRole('link', { name: /lumirelle@me/i }),
+  ).toHaveAccessibleName('lumirelle@me ~/use')
+})
+
+test('the theme toggle names its destination and reuses the site reveal', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await page.goto('/', { waitUntil: 'load' })
+
+  const toggle = page.getByRole('banner').getByRole('button')
+  await expect(toggle).toHaveAccessibleName('Switch to dark theme')
+
+  await toggle.click()
+
+  // The reveal runs a View Transition, so the class lands a beat later.
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')))
+    .toBe(true)
+  await expect(toggle).toHaveAccessibleName('Switch to light theme')
+})
+
+test('the theme toggle still works under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
+  await page.goto('/', { waitUntil: 'load' })
+
+  const toggle = page.getByRole('banner').getByRole('button')
+  await toggle.click()
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.classList.contains('dark')))
+    .toBe(true)
+})
+
+test('scroll to top is inert until the reader has scrolled', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  const control = page.getByRole('button', { name: 'Scroll to top', includeHidden: true })
+  await expect(control).toHaveCount(1)
+
+  // Absent from the accessibility tree and the tab order while hidden — not
+  // merely transparent.
+  await expect(control).toHaveAttribute('inert', '')
+  expect(await control.evaluate(el => (el as HTMLButtonElement).matches(':enabled') && el.hasAttribute('inert'))).toBe(true)
+
+  await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }))
+  await expect
+    .poll(() => control.evaluate(el => el.hasAttribute('inert')))
+    .toBe(false)
+  await expect(control).toBeVisible()
+
+  // Inverts on hover: ink fill, canvas glyph. Polled, because the control
+  // transitions colour over 120 ms and an immediate read lands mid-flight.
+  await control.hover()
+  await expect
+    .poll(async () => {
+      const painted = await control.evaluate(el => ({
+        background: getComputedStyle(el).backgroundColor,
+        colour: getComputedStyle(el).color,
+      }))
+      return { background: toRgb(painted.background), colour: toRgb(painted.colour) }
+    })
+    .toEqual({ background: 'rgb(17, 17, 17)', colour: 'rgb(255, 255, 255)' })
+
+  // And it returns the reader to the top.
+  await control.click()
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
+})
+
+test('cd .. sits in the gutter outside the routed content and keeps the query', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 900 })
+  await page.goto('/posts?page=2', { waitUntil: 'load' })
+
+  const cdUp = page.getByRole('link', { name: /cd \.\./ })
+  await expect(cdUp).toBeVisible()
+
+  // Outside the routed content: it is not inside the page's article.
+  const insideContent = await cdUp.evaluate(el => Boolean(el.closest('article, main')))
+  expect(insideContent).toBe(false)
+
+  await expect(cdUp).toHaveAttribute('href', '/?page=2')
 })
 
 for (const route of routes) {

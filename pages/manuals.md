@@ -1,6 +1,5 @@
 ---
 title: Manuals - Lumirelle
-art: plum
 display: ''
 ---
 

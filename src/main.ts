@@ -1,7 +1,6 @@
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat.js'
 import FloatingVue from 'floating-vue'
-import NProgress from 'nprogress'
 import { createPinia } from 'pinia'
 import { ViteSSG } from 'vite-ssg'
 import { setupRouterScroller } from 'vue-router-better-scroller'
@@ -36,23 +35,26 @@ export const createApp = ViteSSG(
 
     if (!import.meta.env.SSR) {
       const html = document.querySelector('html')!
-      setupRouterScroller(router, {
-        selectors: {
-          html(ctx) {
-            // only do the sliding transition when the scroll position is not 0
-            // Disable sliding transition on Dev Mode
-            html.classList.toggle('no-sliding', ctx.savedPosition?.top !== 0 || import.meta.env.DEV)
-            return true
-          },
-        },
-        behavior: 'auto',
+
+      // The entrance cascade is a first-load Effect. Dev mode disables it so
+      // authoring is not fought by it; everywhere else it plays once, and the
+      // first route change retires it for good so it can never run underneath
+      // the route transition.
+      if (import.meta.env.DEV)
+        html.classList.add('no-sliding')
+
+      let navigations = 0
+      router.afterEach(() => {
+        navigations += 1
+        if (navigations > 1)
+          html.classList.add('no-sliding')
       })
 
-      router.beforeEach(() => {
-        NProgress.start()
-      })
-      router.afterEach(() => {
-        NProgress.done()
+      // The router owns navigation and scrolling; the incoming content animates
+      // itself with one CSS keyframe. Nothing here touches the scroll position.
+      setupRouterScroller(router, {
+        selectors: { html: () => true },
+        behavior: 'auto',
       })
     }
   },

@@ -103,3 +103,32 @@ export const routes: RouteArtifact[] = readRouteArtifacts()
 if (routes.length === 0) {
   throw new Error(`No routes found in ${DIST}/ — the build produced no HTML.`)
 }
+
+/** Every JavaScript chunk the build emitted, as one searchable blob. */
+export function readBundle(): string {
+  const assets = join(DIST, 'assets')
+  if (!existsSync(assets)) {
+    throw new Error(`No ${assets}/ to read. Run \`mise run test\`, which builds it first.`)
+  }
+
+  return readdirSync(assets, { recursive: true, encoding: 'utf8' })
+    .filter(file => file.endsWith('.js'))
+    .map(file => readFileSync(join(assets, file), 'utf8'))
+    .join('\n')
+}
+
+/** Every prerendered HTML page, as one searchable blob. */
+export function readAllHtml(): string {
+  return readdirSync(DIST, { recursive: true, encoding: 'utf8' })
+    .filter(file => file.endsWith('.html'))
+    .map(file => readFileSync(join(DIST, file), 'utf8'))
+    .join('\n')
+}
+
+/** Every Markdown page, which is where authoring conventions are observable. */
+export function readPages(): { file: string, source: string }[] {
+  return readdirSync('pages', { recursive: true, encoding: 'utf8' })
+    .filter(file => file.endsWith('.md'))
+    .sort((a, b) => a.localeCompare(b))
+    .map(file => ({ file, source: readFileSync(join('pages', file), 'utf8') }))
+}

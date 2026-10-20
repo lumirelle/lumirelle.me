@@ -66,28 +66,9 @@ onMounted(() => {
     }
   }, 1)
 })
-
-const ArtComponent = computed(() => {
-  let { art } = frontmatter
-  if (art === 'random') {
-    art = Math.random() > 0.5 ? 'plum' : 'dots'
-  }
-  if (typeof globalThis !== 'undefined') {
-    if (art === 'plum') {
-      return defineAsyncComponent(() => import('./ArtPlum.vue'))
-    }
-    else if (art === 'dots') {
-      return defineAsyncComponent(() => import('./ArtDots.vue'))
-    }
-  }
-  return null
-})
 </script>
 
 <template>
-  <ClientOnly v-if="ArtComponent">
-    <component :is="ArtComponent" />
-  </ClientOnly>
   <div
     v-if="frontmatter.display ?? frontmatter.title"
     class="prose m-auto mb-8"

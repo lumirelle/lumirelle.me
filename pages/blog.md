@@ -1,7 +1,6 @@
 ---
 title: Blog - Lumirelle
 display: ''
-art: plum
 ---
 
 <SubNav />

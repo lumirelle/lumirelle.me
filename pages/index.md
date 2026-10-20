@@ -2,7 +2,6 @@
 title: Lumirelle
 description: Lumirelle's Portfolio
 image: https://lumirelle.me/og.png
-art: random
 ---
 
 Hey! I'm Lumirelle, a developer who wants to learn every kinds of technology and share what I've learned with the world.

@@ -111,7 +111,13 @@ onKeyStroke('Escape', (e) => {
   <main
     class="mx-auto px-[var(--shell-gutter)] pb-10 pt-12 max-w-[var(--shell-measure)] of-x-hidden"
   >
-    <RouterView />
+    <!--
+      Keyed on the route so the incoming content replays `route-in` (200 ms,
+      opacity only — see main.css). Scroll stays the router's business.
+    -->
+    <div :key="route.fullPath" class="route-in">
+      <RouterView />
+    </div>
     <Footer :key="route.path" />
   </main>
   <Transition name="fade">

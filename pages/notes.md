@@ -1,6 +1,5 @@
 ---
 title: Notes - Lumirelle
-art: plum
 display: ''
 ---
 

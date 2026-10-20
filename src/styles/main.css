@@ -31,21 +31,6 @@ button,
   -webkit-tap-highlight-color: transparent;
 }
 
-/* NProgress */
-#nprogress {
-  pointer-events: none;
-}
-#nprogress .bar {
-  background: #888;
-  opacity: 0.75;
-  position: fixed;
-  z-index: 1031;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-}
-
 /* Custom Scrollbar */
 * {
   scrollbar-color: var(--color-surface) var(--color-canvas);
@@ -105,6 +90,17 @@ html:not(.dark) [img-dark] {
   }
 }
 @media (prefers-reduced-motion: no-preference) {
+  /*
+   * The entrance cascade is a first-load Effect, and it is capped at six stages.
+   *
+   * Six because the effect is a *shape* — content arriving in a rhythm — not a
+   * queue: past the sixth row a stage stops adding anything and starts delaying
+   * the page. First load only, because a route change has its own transition
+   * (`route-in` below) and the two must never run over each other.
+   *
+   * `html.no-sliding` is added permanently by `src/main.ts` from the first route
+   * change onward, so this plays once and then never again.
+   */
   html:not(.no-sliding) [slide-enter],
   html:not(.no-sliding) .slide-enter,
   html:not(.no-sliding) .slide-enter-content > *:not(:has(.table-of-contents)) {
@@ -112,7 +108,10 @@ html:not(.dark) [img-dark] {
     --enter-step: 90ms;
     --enter-initial: 0ms;
     animation: slide-enter 1s both 1;
-    animation-delay: calc(var(--enter-initial) + var(--enter-stage) * var(--enter-step));
+    /* The cap: templates may hand in any stage number, the rhythm stops at six. */
+    animation-delay: calc(
+      var(--enter-initial) + min(var(--enter-stage), 6) * var(--enter-step)
+    );
   }
   .slide-enter-content > *:nth-child(1) {
     --enter-stage: 1 !important;
@@ -132,47 +131,37 @@ html:not(.dark) [img-dark] {
   .slide-enter-content > *:nth-child(6) {
     --enter-stage: 6 !important;
   }
-  .slide-enter-content > *:nth-child(7) {
-    --enter-stage: 7 !important;
+  /*
+   * Everything past the sixth block rides the sixth stage, so the tail arrives
+   * as one rather than queueing behind indices the page never asked to show.
+   */
+  .slide-enter-content > *:nth-child(n + 7) {
+    --enter-stage: 6 !important;
   }
-  .slide-enter-content > *:nth-child(8) {
-    --enter-stage: 8 !important;
+}
+
+/*
+ * Route change.
+ *
+ * One 200 ms opacity keyframe keyed on the route, owned by CSS rather than by
+ * the router's scroll handling (see #9: View Transitions cannot coexist with a
+ * router that owns scrolling). Opacity only, deliberately — a filled animation
+ * leaves an identity `transform` behind, which makes the wrapper a containing
+ * block and would drag any `position: fixed` rail into the content column.
+ */
+@keyframes route-in {
+  from {
+    opacity: 0;
   }
-  .slide-enter-content > *:nth-child(9) {
-    --enter-stage: 9 !important;
-  }
-  .slide-enter-content > *:nth-child(10) {
-    --enter-stage: 10 !important;
-  }
-  .slide-enter-content > *:nth-child(11) {
-    --enter-stage: 11 !important;
-  }
-  .slide-enter-content > *:nth-child(12) {
-    --enter-stage: 12 !important;
-  }
-  .slide-enter-content > *:nth-child(13) {
-    --enter-stage: 13 !important;
-  }
-  .slide-enter-content > *:nth-child(14) {
-    --enter-stage: 14 !important;
-  }
-  .slide-enter-content > *:nth-child(15) {
-    --enter-stage: 15 !important;
-  }
-  .slide-enter-content > *:nth-child(16) {
-    --enter-stage: 16 !important;
-  }
-  .slide-enter-content > *:nth-child(17) {
-    --enter-stage: 17 !important;
-  }
-  .slide-enter-content > *:nth-child(18) {
-    --enter-stage: 18 !important;
-  }
-  .slide-enter-content > *:nth-child(19) {
-    --enter-stage: 19 !important;
-  }
-  .slide-enter-content > *:nth-child(20) {
-    --enter-stage: 20 !important;
+}
+
+.route-in {
+  animation: route-in var(--duration-route) var(--ease-route) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-in {
+    animation: none;
   }
 }
 ::view-transition-old(root),

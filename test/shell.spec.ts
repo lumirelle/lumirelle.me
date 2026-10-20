@@ -1,6 +1,6 @@
 import type { ConsoleMessage, Page } from '@playwright/test'
 import { expect, test } from '@playwright/test'
-import { routes } from './support/artifacts'
+import { readAllHtml, readBundle, readPages, routes } from './support/artifacts'
 
 /**
  * Baseline seam for the site redesign.
@@ -327,6 +327,74 @@ for (const scheme of ['light', 'dark'] as const) {
     expect(Math.abs(or - cr) + Math.abs(og - cg) + Math.abs(ob - cb)).toBeGreaterThan(60)
   })
 }
+
+test('the build carries nothing the redesign retired', () => {
+  // `pixi.js` and `simplex-noise` drew the per-page canvases; `nprogress` drew
+  // the 2 px route bar. None of them may survive in a shipped chunk.
+  // Case-sensitive: Floating Vue keeps a `$_hideInProgress` flag, and a
+  // case-insensitive search for `nprogress` would match it.
+  const bundle = readBundle()
+  for (const retired of ['pixi', 'simplex-noise', 'nprogress', 'NProgress']) {
+    expect(bundle).not.toContain(retired)
+  }
+
+  // No page selects a canvas background any more, and no prerendered page
+  // carries a canvas from one.
+  const withArt = readPages().filter(page => /^art:/m.test(page.source))
+  expect(withArt.map(page => page.file)).toEqual([])
+  expect(readAllHtml()).not.toMatch(/<canvas/i)
+})
+
+test('the entrance cascade plays once, capped at six stages', async ({ page }) => {
+  // A Post is the page with many top-level blocks; the list has one component.
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  // A page with many top-level blocks: everything past the sixth must inherit
+  // the sixth stage's delay rather than queueing behind its own index.
+  const delays = await page.evaluate(() => {
+    const blocks = [...document.querySelectorAll('.slide-enter-content > *')]
+    return blocks.slice(0, 10).map(el => getComputedStyle(el).animationDelay)
+  })
+  expect(delays.length).toBeGreaterThan(6)
+  expect(new Set(delays.slice(6)).size).toBe(1)
+  expect(delays[9]).toBe(delays[5])
+})
+
+test('a route change is one opacity keyframe and never replays the cascade', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const cascadeOnFirstLoad = await page.evaluate(
+    () => document.documentElement.classList.contains('no-sliding'),
+  )
+  expect(cascadeOnFirstLoad).toBe(false)
+
+  const wrapper = page.locator('.route-in')
+  const name = await wrapper.evaluate(el => getComputedStyle(el).animationName)
+  const duration = await wrapper.evaluate(el => getComputedStyle(el).animationDuration)
+  expect(name).toBe('route-in')
+  expect(duration).toBe('0.2s')
+
+  // Opacity only: a filled `transform` would leave an identity transform behind
+  // and turn the wrapper into a containing block.
+  expect(await wrapper.evaluate(el => getComputedStyle(el).transform)).toBe('none')
+
+  await page.getByRole('banner').getByRole('link', { name: 'projects', exact: true }).click()
+  await expect(page).toHaveURL(/\/projects$/)
+
+  // From the first route change on, the cascade is retired for good.
+  expect(
+    await page.evaluate(() => document.documentElement.classList.contains('no-sliding')),
+  ).toBe(true)
+})
+
+test('reduced motion strips the route keyframe and the cascade', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  expect(
+    await page.locator('.route-in').evaluate(el => getComputedStyle(el).animationName),
+  ).toBe('none')
+})
 
 for (const route of routes) {
   test(`${route.path} renders its own content and the Shell`, async ({ page }) => {

@@ -17,12 +17,16 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       fonts: {
         // Standards
-        'serif': 'Space Grotesk',
-        'sans': 'Inter Tight',
-        'mono': {
-          name: '"0xProto"',
+        'serif': {
+          name: 'Aporetic Serif',
           provider: 'none',
         },
+        'sans': 'Inter Tight',
+        'mono': {
+          name: '"Aporetic Serif Mono"',
+          provider: 'none',
+        },
+        // XXX: Only load when necessary
         // Strict 62.5%em Group
         'maple-mono-wr-cn': {
           name: '"Maple Mono WR CN"',
@@ -71,6 +75,7 @@ export default defineConfig<PresetWind4Theme>({
     ['font-62.5%em', { 'font-family': '"Annotation Mono", "Maple Mono WR CN", monospace' }],
     ['font-62%em', { 'font-family': '"0xProto", "Maple Mono WD CN", monospace' }],
     ['font-60%em', { 'font-family': '"Go Mono", "Maple Mono CN", monospace' }],
+    ['font-52.5%em', { 'font-family': '"Aporetic Serif Mono", "Zhuque Fangsong A1050", monospace' }],
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC", monospace' }],
     ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN", monospace' }],
     ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],

@@ -1,19 +1,133 @@
 ---
 title: Programming Fonts
 date: 2025-10-15T14:10+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-10-20T15:01+08:00
 lang: en
-duration: 15min
+duration: 23min
 ---
+
+<style>
+/* Font Definitions */
+/* Strict 62.5%em Group */
+@font-face {
+  font-family: 'Maple Mono WR CN';
+  src: url('/fonts/MapleMonoWR-CN-Regular.ttf');
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Regular_Italic.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Bold.woff2') format('woff2');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Bold_Italic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+}
+/* Strict 62%em Group */
+@font-face {
+  font-family: 'Maple Mono WD CN';
+  src: url('/fonts/MapleMonoWD-CN-Regular.ttf');
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Italic.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Bold.woff2') format('woff2');
+  font-weight: bold;
+}
+/* Strict 60%em Group */
+@font-face {
+  font-family: 'Maple Mono CN';
+  src: url('/fonts/MapleMono-CN-Regular.ttf');
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Bold-Italic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+/* @font-face {
+  font-family: 'Drafting* Mono';
+  src: url('/fonts/DraftingMono-Regular.woff2') format('woff2');
+} */
+@font-face {
+  font-family: 'Recursive';
+  src: url('/fonts/Recursive_VF_1.085.woff2');
+  font-weight: 300 1000;
+  font-style: oblique 0deg 14deg;
+}
+/* Strict 52.5%em Group */
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalregularupright.ttf');
+}
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalregularitalic.ttf');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalboldupright.ttf');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalbolditalic.ttf');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Zhuque Fangsong A1050';
+  src: url('/fonts/ZhuqueFangsong-Aporetic1050.ttf');
+}
+/* Strict 50%em Group */
+@font-face {
+  font-family: 'Source Han Sans TC';
+  src: url('/fonts/SourceHanSansTC-Normal.otf');
+}
+
+</style>
 
 [[toc]]
 
 > [!Note]
-> Current status (2026-08-24T17:41+08:00):
+> Current status (2026-10-20T13:56+08:00):
 > ```json
 > {
->   "UI": "'Space Grotesk', 'Resource Han Rounded SC', serif",
->   "code": "'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
+>   "UI": "'Aporetic Serif', 'Zhuque Fangsong (technical preview)', 'Symbols Nerd Font', serif",
+>   "code": "'Aporetic Serif Mono', 'Zhuque Fansong A1050', 'Symbols Nerd Font Mono', monospace"
 > }
 > ```
 
@@ -29,19 +143,13 @@ You can compare various programming fonts with the test-driven method on this [w
 
 ## My Preference
 
-> [!Note]
->
-> ~~As a Chinese person, sometimes I have to use both Latin and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get a better development experience.~~
->
-> After a long time of testing, I found that it's not necessary to make the width of 2 Latin characters equal to 1 CJK character. We don't actually have this need because we basically use our native language only when we need to write comments and UI text.
->
-> Alright, I admit: the true reason is that finding a suitable and aesthetically pleasing matching font is just too difficult...
+As a Chinese, sometimes I have to use both Latin and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get a better development experience.
 
 My basic requirements for fonts are:
 
-1. They must have at least two weights (Regular & Bold);
-2. They must have italic styles;
-3. Be easy on the eyes but not too serious.
+1. They must have at least two weights (Regular & Bold)
+2. The latin font must have italic styles
+3. Be easy on the eyes but not too serious
 
 All of the fonts listed below satisfy these requirements.
 
@@ -56,6 +164,7 @@ All of the fonts listed below satisfy these requirements.
 - **62.5%em group**: If the font size is 16px, one Latin character will be 10px (62.5%em), and one CJK character will be 20px (62.5% \* 2 = 125%em), such as "Annotation Mono".
 - **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), such as "Monaspace Xenon Var".
 - **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), such as "Go Mono" and "Maple Font".
+- **52.5%em group**: If the font size is 16px, one Latin character will be 8.4px (52.5%em), and one CJK character will be 16.8px (52.5% \* 2 = 1050%em), such as "Aporetic Serif" and "Zhuque Fansong A1050" (From my custom build, see [here](https://github.com/lumirelle/demo-misc/tree/main/20261019/aporetic-serif-cjk)).
 - **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), such as "M PLUS Code Latin" and "Source Han Sans TC".
 
 <a name="font-weights"></a> Also, this is a comparison table of the font weight aliases and the corresponding numeric values:
@@ -75,9 +184,11 @@ All of the fonts listed below satisfy these requirements.
 
 #### 62.5%em Group
 
+For CJK:
+
 > [!Note]
 >
-> It seems impossible to find a CJK font with 62.5%em width, so I decided to make a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+> It seems impossible to find a CJK font with 62.5%em width, so I decided to make a custom build based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
 
 This group uses my custom build &ndash; ["Maple Mono WR CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK character support, via the command below:
 
@@ -88,6 +199,8 @@ python build.py --width wider --cn --no-nf
 > [!Note]
 >
 > `--width wider` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most cases.
+
+For Latin:
 
 - ⭐ [Annotation Mono](https://qwerasd205.github.io/AnnotationMono/): <a name="Annotation Mono"></a>
 
@@ -100,14 +213,16 @@ python build.py --width wider --cn --no-nf
 Then, you can use these fonts like this:
 
 ```json
-"'Symbols Nerd Font', 'Annotation Mono', 'Maple Mono WR CN', monospace"
+"'Annotation Mono', 'Maple Mono WR CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 #### 62%em Group
 
+For CJK:
+
 > [!Note]
 >
-> It seems impossible to find a CJK font with 62%em width, so I decided to make a custom font based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+> It seems impossible to find a CJK font with 62%em width too, so I decided to make a custom build based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
 
 This group uses my custom build &ndash; ["Maple Mono WD CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK character support, via the command below:
 
@@ -118,6 +233,8 @@ python build.py --width wide --cn --no-nf
 > [!Note]
 >
 > `--width wide` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most cases.
+
+For Latin:
 
 - ⭐ [0xProto](https://github.com/0xType/0xProto/releases): <a name="0xProto"></a>
 
@@ -138,10 +255,12 @@ python build.py --width wide --cn --no-nf
 Then, you can use these fonts like this:
 
 ```json
-"'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
+"'0xProto', 'Maple Mono WD CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 #### 60%em Group
+
+For CJK:
 
 > [!Note]
 >
@@ -237,10 +356,36 @@ Then, you can use these fonts like this:
 
 ```json
 // 'Go Mono' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'Go Mono', 'Maple Mono CN', monospace"
+"'Go Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+#### 52.5%em Group
+
+A niche option.
+
+For CJK:
+
+This group use my custom build – "Zhuque Fansong A1050" for CJK character support, see [lumirelle/demo-misc](https://github.com/lumirelle/demo-misc/tree/main/20261019/aporetic-serif-cjk) for more details.
+
+For Latin:
+
+- ⭐ [Aporetic Serif Mono](https://github.com/protesilaos/aporetic):
+
+  <TextTag text="static" preset="amber" /><TextTag text="serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  A custom build of Iosevka with different style and metrics than the default.
+
+  <img src="/posts/misc-programming-fonts/aporetic-serif-mono.png" alt="Aporetic Serif Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use these fonts like this:
+
+```json
+"'Aporetic Serif Mono', 'Zhuque Fansong A1050', 'Symbols Nerd Font Mono', monospace"
 ```
 
 #### 50%em Group
+
+For CJK:
 
 > [!Note]
 >
@@ -286,8 +431,9 @@ Then, you can use these fonts like this:
 
 ```json
 // 'M PLUS Code Latin' can be replaced by any other Latin fonts listed above
-"'Symbols Nerd Font', 'M PLUS Code Latin', 'Source Han Sans TC', monospace"
+"'M PLUS Code Latin', 'Source Han Sans TC', 'Symbols Nerd Font Mono', monospace"
 ```
+
 
 ### Casual Choice
 
@@ -308,7 +454,7 @@ And here are the Latin font families:
 Then, you can use this font like this:
 
 ```json
-"'Symbols Nerd Font', 'Comic Mono', 'Maple Mono CN', monospace"
+"'Comic Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 ## Font Preview
@@ -320,7 +466,7 @@ Then, you can use this font like this:
 <div font="[&_code]:62.5%em!">
 
 ```json
-"'Symbols Nerd Font', 'Annotation Mono', 'Maple Mono WR CN', monospace"
+"'Annotation Mono', 'Maple Mono WR CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 ```js
@@ -429,7 +575,7 @@ async function _symlinkConfig(
 <div font="[&_code]:62%em!">
 
 ```json
-"'Symbols Nerd Font', '0xProto', 'Maple Mono WD CN', monospace"
+"'0xProto', 'Maple Mono WD CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 ```js
@@ -537,7 +683,7 @@ async function _symlinkConfig(
 <div font="[&_code]:60%em!">
 
 ```json
-"'Symbols Nerd Font', 'Go Mono', 'Maple Mono CN', monospace"
+"'Go Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 ```js
@@ -640,12 +786,121 @@ async function _symlinkConfig(
 
 </div>
 
+#### 52.5%em Group
+
+<div font="[&_code]:52.5%em!">
+
+```json
+"'Aporetic Serif Mono', 'Zhuque Fansong A1050', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+
 #### 50%em Group
 
 <div font="[&_code]:50%em!">
 
 ```json
-"'Symbols Nerd Font', 'M PLUS Code Latin', 'Source Han Sans TC', monospace"
+"'M PLUS Code Latin', 'Source Han Sans TC', 'Symbols Nerd Font Mono', monospace"
 ```
 
 ```js
@@ -753,7 +1008,7 @@ async function _symlinkConfig(
 <div font="[&_code]:casual!">
 
 ```json
-"'Symbols Nerd Font', 'Comic Mono', 'Maple Mono CN', monospace"
+"'Comic Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
 ```
 
 ```js

@@ -1,4 +1,5 @@
 import type { ConsoleMessage, Locator, Page } from '@playwright/test'
+import type { RouteArtifact } from './support/artifacts'
 import { expect, test } from '@playwright/test'
 import { readAllHtml, readBundle, readPages, routes } from './support/artifacts'
 
@@ -635,6 +636,22 @@ test('hovering a row inverts its date cell without moving the title', async ({ p
   await expect.poll(() => roundedSize(row)).toEqual(during)
 })
 
+/**
+ * The invariant every route shares: the prerendered content is on screen and the
+ * Shell is around it. Used by the per-route walk and by both stripped-Effect
+ * walks, so the three cannot drift apart.
+ */
+async function expectRouteRendered(page: Page, route: RouteArtifact): Promise<void> {
+  const content = page.getByRole('main')
+  await expect(content, `${route.path}: content`).toBeVisible()
+  expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`)
+    .toContain(squash(route.marker))
+
+  const shell = page.getByRole('banner')
+  await expect(shell, `${route.path}: Shell`).toBeVisible()
+  await expect(shell.getByRole('link', { name: /posts/i }).first()).toBeVisible()
+}
+
 /** Marks this test's session as cold, undoing the returning-visitor seed. */
 async function coldSession(page: Page): Promise<void> {
   await page.addInitScript(() => {
@@ -662,6 +679,12 @@ test('the Splash plays once on a cold session and blocks the page beneath it', a
   })
   expect(hit.insideSplash).toBe(true)
   expect(hit.scrollable).toBe(true)
+
+  // The Splash is the first-load moment, so the entrance cascade does not also
+  // run underneath it.
+  expect(
+    await page.evaluate(() => document.documentElement.classList.contains('no-sliding')),
+  ).toBe(true)
 
   // And it finishes by itself, in about a second, with nobody touching it.
   await expect(overlay).toBeHidden({ timeout: 2000 })
@@ -737,12 +760,7 @@ test('every route is complete with reduced motion and no Effects', async ({ page
   for (const route of routes) {
     await page.goto(route.path, { waitUntil: 'load' })
 
-    const content = page.getByRole('main')
-    await expect(content, `${route.path}: content`).toBeVisible()
-    expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`)
-      .toContain(squash(route.marker))
-
-    await expect(page.getByRole('banner'), `${route.path}: Shell`).toBeVisible()
+    await expectRouteRendered(page, route)
     await expect(page.locator(splash), `${route.path}: Splash`).toBeHidden()
 
     // No route animation and no entrance cascade, both by media query.
@@ -861,12 +879,7 @@ test.describe('with JavaScript disabled, every route', () => {
     for (const route of routes) {
       await page.goto(route.path, { waitUntil: 'load' })
 
-      const content = page.getByRole('main')
-      await expect(content, `${route.path}: content`).toBeVisible()
-      expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`)
-        .toContain(squash(route.marker))
-
-      await expect(page.getByRole('banner'), `${route.path}: Shell`).toBeVisible()
+      await expectRouteRendered(page, route)
       await expect(page.locator(splash), `${route.path}: Splash`).toBeHidden()
     }
   })
@@ -884,19 +897,7 @@ for (const route of routes) {
 
     await page.goto(route.path, { waitUntil: 'load' })
 
-    const content = page.getByRole('main')
-    await expect(content).toBeVisible()
-
-    // The prerendered HTML is minified, so block boundaries carry no whitespace
-    // there while the hydrated DOM inserts some. Compare with whitespace
-    // removed entirely, which is the only stable common denominator.
-    expect(squash((await content.textContent()) ?? '')).toContain(squash(route.marker))
-
-    // The Shell is chrome: it must be present on every route, with a way back
-    // into the writing. Asserted by role and accessible name, never by class.
-    const shell = page.getByRole('banner')
-    await expect(shell).toBeVisible()
-    await expect(shell.getByRole('link', { name: /posts/i }).first()).toBeVisible()
+    await expectRouteRendered(page, route)
 
     expect(problems).toEqual([])
   })

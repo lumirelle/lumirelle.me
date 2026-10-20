@@ -27,6 +27,12 @@ export function runSplash(): void {
     return
   }
 
+  // The Splash *is* the first-load moment, so the entrance cascade does not run
+  // underneath it. Without this it would play to completion behind an opaque
+  // overlay and only its tail would ever be seen — invisible work, and a second
+  // orchestrated entrance competing with the one the visitor is watching.
+  root.classList.add('no-sliding')
+
   const splash = document.getElementById('splash')
   const timers: number[] = []
   let finished = false

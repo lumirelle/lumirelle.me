@@ -17,3 +17,4 @@ src/data/sponsors-circles.json
 public/assets/fonts
 test-results
 playwright-report
+.worktrees

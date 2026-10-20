@@ -6,6 +6,7 @@ import { ViteSSG } from 'vite-ssg'
 import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
+import { runSplash } from './logics/splash.ts'
 import '@unocss/reset/tailwind.css'
 
 import 'floating-vue/dist/style.css'
@@ -17,6 +18,7 @@ import '@shikijs/twoslash/style-rich.css'
 import '@shikijs/magic-move/style.css'
 import './styles/fonts.css'
 import './styles/tokens.css'
+import './styles/splash.css'
 import './styles/main.css'
 import './styles/prose.css'
 import './styles/markdown.css'
@@ -49,6 +51,10 @@ export const createApp = ViteSSG(
         if (navigations > 1)
           html.classList.add('no-sliding')
       })
+
+      // The Splash's end state. With JavaScript off the head script never adds
+      // `has-splash`, so this is a no-op and nothing on the page depends on it.
+      runSplash()
 
       // The router owns navigation and scrolling; the incoming content animates
       // itself with one CSS keyframe. Nothing here touches the scroll position.

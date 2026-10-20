@@ -14,15 +14,56 @@
     <title>Lumirelle</title>
     <script>
       ;(function () {
+        const root = document.documentElement
         const prefersDark =
           window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         const setting = localStorage.getItem('vueuse-color-scheme') || 'auto'
         if (setting === 'dark' || (prefersDark && setting !== 'light'))
-          document.documentElement.classList.toggle('dark', true)
+          root.classList.toggle('dark', true)
+
+        // The Splash is decided here, next to dark mode, so it paints in the
+        // first frame and a returning visitor never sees a flash of it. A cold
+        // session that allows motion gets it; anything else never renders it.
+        // The failsafe timeout means a broken bundle can never leave the page
+        // behind an overlay.
+        try {
+          const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          if (!reduced && !sessionStorage.getItem('lumirelle-splash-seen')) {
+            root.classList.add('has-splash')
+            window.setTimeout(function () {
+              root.classList.remove('has-splash')
+            }, 4000)
+          }
+        }
+        catch (error) {
+          root.classList.remove('has-splash')
+        }
       })()
     </script>
   </head>
   <body class="font-serif text-ink relative">
+    <!--
+      The Splash, in the prerendered HTML so it paints before hydration.
+      Visibility is decided by the head script above; with JavaScript off the
+      `has-splash` class is never added, so this stays hidden and the page is
+      fully readable.
+    -->
+    <div id="splash" aria-hidden="true">
+      <div class="splash-panel">
+        <pre class="splash-ghost">+-------------------+
+|     .-.   .-.     |
+|    ( o ) ( o )    |
+|     '-'   '-'     |
+|       \   /       |
+|    .---"""---.    |
+|   /   o   o   \   |
+|  |      ~      |  |
+|   \           /   |
+|    '---------'    |
++-------------------+</pre>
+        <p class="splash-command"><span class="splash-typed">lumirelle.me $ ls posts --sort=date</span><span class="splash-caret"></span></p>
+      </div>
+    </div>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
     <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

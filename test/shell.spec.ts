@@ -129,6 +129,13 @@ function isGrey(colour: string): boolean {
 }
 
 test.beforeEach(async ({ page, baseURL: base }) => {
+  // Every test starts as a *returning* visitor, so the Splash cannot slow down or
+  // obscure an assertion that is not about it. The Splash tests remove the flag
+  // again with their own init script, which runs after this one.
+  await page.addInitScript(() => {
+    sessionStorage.setItem('lumirelle-splash-seen', '1')
+  })
+
   // Keep the suite hermetic: third-party embeds (widgets, remote avatars) are
   // answered locally so a network hiccup cannot fail a page-load assertion, and
   // so only this origin can produce a real 404.
@@ -623,6 +630,94 @@ test('hovering a row inverts its date cell without moving the title', async ({ p
   // The decode-glitch resolves the title in place: random glyphs are wider and
   // narrower than the real ones, so the row must not move while they swap.
   await expect.poll(() => roundedSize(row)).toEqual(during)
+})
+
+/** Marks this test's session as cold, undoing the returning-visitor seed. */
+async function coldSession(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    sessionStorage.removeItem('lumirelle-splash-seen')
+  })
+}
+
+const splash = '#splash'
+
+test('the Splash plays once on a cold session and blocks the page beneath it', async ({ page }) => {
+  await coldSession(page)
+  await page.goto('/', { waitUntil: 'load' })
+
+  const overlay = page.locator(splash)
+  await expect(overlay).toBeVisible()
+
+  // Opaque and on top: a click lands on the overlay, not on the page beneath,
+  // while scrolling is untouched.
+  const hit = await page.evaluate(() => {
+    const el = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2)
+    return {
+      insideSplash: Boolean(el?.closest('#splash')),
+      scrollable: getComputedStyle(document.documentElement).overflowY !== 'hidden',
+    }
+  })
+  expect(hit.insideSplash).toBe(true)
+  expect(hit.scrollable).toBe(true)
+
+  // And it finishes by itself, in about a second, with nobody touching it.
+  await expect(overlay).toBeHidden({ timeout: 2000 })
+})
+
+test('a click jumps the Splash to its end state', async ({ page }) => {
+  await coldSession(page)
+  await page.goto('/', { waitUntil: 'load' })
+  await expect(page.locator(splash)).toBeVisible()
+
+  await page.mouse.click(200, 200)
+
+  await expect(page.locator(splash)).toBeHidden({ timeout: 1000 })
+  await expect
+    .poll(() => page.evaluate(() => sessionStorage.getItem('lumirelle-splash-seen')))
+    .toBe('1')
+})
+
+test('a returning visitor never sees the Splash', async ({ page }) => {
+  // The default session is already seeded by `beforeEach`.
+  await page.goto('/posts', { waitUntil: 'load' })
+  await expect(page.locator(splash)).toBeHidden()
+})
+
+test('the Splash is not rendered under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await coldSession(page)
+  await page.goto('/', { waitUntil: 'load' })
+
+  await expect(page.locator(splash)).toBeHidden()
+})
+
+test('the Splash never replays on a route change', async ({ page }) => {
+  await coldSession(page)
+  await page.goto('/', { waitUntil: 'load' })
+  await page.mouse.click(200, 200)
+  await expect(page.locator(splash)).toBeHidden({ timeout: 1000 })
+
+  await page.goto('/posts', { waitUntil: 'load' })
+  await expect(page.locator(splash)).toBeHidden()
+
+  await page.getByRole('banner').getByRole('link', { name: 'projects', exact: true }).click()
+  await expect(page).toHaveURL(/\/projects$/)
+  await expect(page.locator(splash)).toBeHidden()
+})
+
+test.describe('with JavaScript disabled', () => {
+  test.use({ javaScriptEnabled: false })
+
+  test('every page is readable and never shows the Splash', async ({ page }) => {
+    for (const path of ['/', '/posts', '/use']) {
+      await page.goto(path, { waitUntil: 'load' })
+      await expect(page.locator(splash)).toBeHidden()
+      await expect(page.getByRole('main')).toBeVisible()
+      await expect(
+        page.getByRole('banner').getByRole('link', { name: 'posts', exact: true }),
+      ).toBeVisible()
+    }
+  })
 })
 
 for (const route of routes) {

@@ -412,6 +412,10 @@ test('the breadcrumb tracks the live route', async ({ page }) => {
   await expect(breadcrumb).toBeVisible()
   await expect(breadcrumb).toHaveAccessibleName('lumirelle@me ~/posts/manual-git')
 
+  // The Shell has no logo, so this line is the only way home from the header.
+  // If it ever stops linking to `/`, the site becomes a one-way trip.
+  await expect(breadcrumb).toHaveAttribute('href', '/')
+
   // The path is at full ink; the constant part is faint. Asserted as rendered
   // colour, not as a class.
   const inks = await breadcrumb.evaluate((el) => {

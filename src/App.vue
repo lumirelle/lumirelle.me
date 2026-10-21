@@ -121,14 +121,23 @@ onKeyStroke('Escape', (e) => {
   <div class="mx-auto px-[var(--shell-gutter)] max-w-[var(--shell-measure)] of-x-hidden">
     <main class="pb-28 pt-12">
       <!--
-        Keyed on the route so the incoming content replays `route-in` (200 ms,
-        opacity only — see main.css). Scroll stays the router's business.
+        A real enter/leave pair rather than a keyed remount: the outgoing page
+        stays on screen while it moves away, which is what makes the change read
+        as a terminal scrolling rather than as content blinking into place.
+
+        Both pages are stacked in a single grid cell, so they share one column
+        width. Taking the leaving page out of flow instead would have re-resolved
+        its containing block against the viewport, widened it to the window and
+        slid its content left as it left.
+
+        Scroll stays the router's business throughout.
       -->
-      <div
-        :key="route.fullPath"
-        :class="kind === 'type' ? '' : ['route-in', `route-${kind === 'route-up' ? 'up' : 'down'}`]"
-      >
-        <RouterView />
+      <div class="route-stack">
+        <Transition :name="kind === 'type' ? 'none' : `route-${kind}`">
+          <div :key="route.fullPath" class="route-frame" :data-route="route.fullPath">
+            <RouterView />
+          </div>
+        </Transition>
       </div>
     </main>
     <Footer />

@@ -22,6 +22,12 @@ interface Heading {
   top: number
 }
 
+/** The frame that owns the route being rendered — during a transition there are two. */
+function liveFrame(): HTMLElement | null {
+  const frames = [...document.querySelectorAll<HTMLElement>('.route-frame')]
+  return frames.find(frame => frame.dataset.route === route.fullPath) ?? null
+}
+
 /**
  * The rail belongs to the Shell, not to the routed content.
  *
@@ -29,44 +35,63 @@ interface Heading {
  * under whatever the page transition animates — and a `transform` anywhere up
  * that tree becomes its containing block, so a `position: fixed` rail resolves
  * against the content column instead of the viewport and jumps into the text.
- * Adopting it into `<body>` once per route keeps it viewport-relative and makes
- * the transition safe.
+ * Adopting it into `<body>` keeps it viewport-relative and makes the transition
+ * safe.
+ *
+ * Ownership is by route, not by "first match in the document": during a
+ * transition the outgoing page is still mounted, so a plain query would keep
+ * finding the old rail and the new Post would never get one.
  */
 let adopted: HTMLElement | null = null
 
 function adoptRail(): void {
-  const rail = document.querySelector<HTMLElement>('.table-of-contents')
+  const frame = liveFrame()
 
-  // The previous page's rail has no Post to belong to any more.
-  if (adopted && adopted !== rail) {
-    adopted.remove()
+  if (!frame) {
+    adopted?.remove()
     adopted = null
+    return
   }
 
-  if (rail && rail.parentElement !== document.body) {
+  // Already adopted for this route: nothing to do (the rail is out of the frame).
+  if (adopted?.dataset.owner === route.fullPath) {
+    return
+  }
+
+  adopted?.remove()
+  adopted = null
+
+  const rail = frame.querySelector<HTMLElement>('.table-of-contents')
+  if (rail) {
+    rail.dataset.owner = route.fullPath
     document.body.appendChild(rail)
     adopted = rail
   }
 }
 
 let headings: Heading[] = []
-let frame: number | undefined
+let frameRequest: number | undefined
+let adoptTimer: number | undefined
 
+/** Measure the headings of the live page only, never the one that is leaving. */
 function measure(): void {
-  headings = [...document.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]')]
+  const live = liveFrame()
+  const scope = live ?? document
+  headings = [...scope.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]')]
     .map(heading => ({ id: heading.id, top: heading.getBoundingClientRect().top + window.scrollY }))
 }
 
 function track(): void {
-  frame = undefined
-  const marks = document.querySelectorAll<HTMLAnchorElement>('.table-of-contents a[href^="#"]')
+  frameRequest = undefined
+  const marks = (adopted ?? document).querySelectorAll<HTMLAnchorElement>('.table-of-contents a[href^="#"]')
   if (!marks.length || !headings.length)
     return
 
-  // A heading becomes active once its top passes a third of the viewport down.
+  // A heading becomes active once its top passes a third of the viewport down; at
+  // the very top of the page nobody has, so the first section is where you are.
   const line = window.scrollY + window.innerHeight / 3
   const passed = headings.filter(heading => heading.top <= line)
-  const activeId = passed.length ? passed.at(-1)!.id : ''
+  const activeId = passed.length ? passed.at(-1)!.id : (headings[0]?.id ?? '')
 
   for (const mark of marks) {
     mark.classList.toggle('toc-active', mark.getAttribute('href') === `#${activeId}`)
@@ -74,8 +99,8 @@ function track(): void {
 }
 
 function onScroll(): void {
-  if (frame === undefined)
-    frame = requestAnimationFrame(track)
+  if (frameRequest === undefined)
+    frameRequest = requestAnimationFrame(track)
 }
 
 function refresh(): void {
@@ -84,8 +109,18 @@ function refresh(): void {
   track()
 }
 
-onMounted(() => {
+/**
+ * A route change renders over two frames, so the incoming rail may not exist yet
+ * when the route commits. Look again once the move has finished.
+ */
+function refreshAfterMove(): void {
   refresh()
+  window.clearTimeout(adoptTimer)
+  adoptTimer = window.setTimeout(refresh, 350)
+}
+
+onMounted(() => {
+  refreshAfterMove()
   window.addEventListener('scroll', onScroll, { passive: true })
   window.addEventListener('resize', refresh, { passive: true })
 })
@@ -93,14 +128,15 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', refresh)
-  if (frame !== undefined)
-    cancelAnimationFrame(frame)
+  if (frameRequest !== undefined)
+    cancelAnimationFrame(frameRequest)
+  window.clearTimeout(adoptTimer)
   adopted?.remove()
   adopted = null
 })
 
 // The TOC is generated per Post, so remeasure once the new page has committed.
-watch(() => route.fullPath, () => nextTick(refresh))
+watch(() => route.fullPath, () => nextTick(refreshAfterMove))
 </script>
 
 <template>

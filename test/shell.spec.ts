@@ -61,12 +61,10 @@ interface RenderedChrome {
 async function readChrome(page: Page): Promise<RenderedChrome> {
   return page.evaluate(() => {
     const root = getComputedStyle(document.documentElement)
-    const nav = document.querySelector('header nav[aria-label="Primary"]')
-    const links = [...(nav?.querySelectorAll('a') ?? [])]
-    const current = links.find(link => link.getAttribute('aria-current') === 'page')
-    const idle = links.find(link => link !== current && (link.textContent ?? '').trim() !== '')
+    const header = document.querySelector('header nav[aria-label="Primary"]')
+    const link = header?.querySelector('a')
     const footer = document.querySelector('footer')
-    if (!current || !idle || !footer) {
+    if (!link || !footer) {
       throw new Error('the Shell is missing one of the elements the palette is read from')
     }
 
@@ -77,8 +75,10 @@ async function readChrome(page: Page): Promise<RenderedChrome> {
       scrollbarTrack: track,
       stroke: getComputedStyle(footer).borderTopColor,
       ink: getComputedStyle(document.body).color,
-      inkStrong: getComputedStyle(current).color,
-      inkFaint: getComputedStyle(idle).color,
+      // The header reads at the secondary ink by design, so the primary level is
+      // read from a page title and the faint level from the footer.
+      inkStrong: getComputedStyle(document.querySelector('.masthead-title')!).color,
+      inkFaint: getComputedStyle(footer).color,
     }
   })
 }
@@ -369,43 +369,62 @@ test('the entrance cascade plays once, capped at six stages', async ({ page }) =
   expect(delays[9]).toBe(delays[5])
 })
 
-test('a route change is one opacity keyframe and never replays the cascade', async ({ page }) => {
+test('a route change keeps the outgoing page and moves both', async ({ page }) => {
   await page.goto('/posts', { waitUntil: 'load' })
 
-  const cascadeOnFirstLoad = await page.evaluate(
-    () => document.documentElement.classList.contains('no-sliding'),
-  )
-  expect(cascadeOnFirstLoad).toBe(false)
+  // On first load there is only ever one page on screen.
+  await expect(page.locator('.route-frame')).toHaveCount(1)
 
-  const wrapper = page.locator('.route-in')
-  const name = await wrapper.evaluate(el => getComputedStyle(el).animationName)
-  const duration = await wrapper.evaluate(el => getComputedStyle(el).animationDuration)
-  expect(name).toBe('route-in-down')
-  expect(duration).toBe('0.2s')
+  await page.getByRole('banner')
+    .getByRole('navigation', { name: 'Primary' })
+    .getByRole('link', { name: 'projects', exact: true })
+    .click()
 
-  // The move is `backwards`-filled, so once the frame has played there is no
-  // transform left: a lingering one would make the wrapper a containing block
-  // and drag the fixed outline rail into the column.
+  // The old page is still there while it leaves, which is what makes the change
+  // read as a scroll rather than a swap.
+  await expect.poll(() => page.locator('.route-frame').count()).toBe(2)
+
+  // And it is a slow, viewport-scale move rather than a 24 px nudge.
+  const moving = await page.locator('.route-frame').last().evaluate((el) => {
+    const style = getComputedStyle(el)
+    return { duration: style.transitionDuration, property: style.transitionProperty }
+  })
+  expect(moving.duration).toContain('0.6s')
+  expect(moving.property).toContain('transform')
+
+  // And once it is done, nothing is left behind: no lingering transform that
+  // would turn the wrapper into a containing block for the fixed rail.
+  await expect.poll(() => page.locator('.route-frame').count()).toBe(1)
   await expect
-    .poll(() => wrapper.evaluate(el => getComputedStyle(el).transform))
+    .poll(() => page.locator('.route-frame').evaluate(el => getComputedStyle(el).transform))
     .toBe('none')
-
-  await page.getByRole('banner').getByRole('link', { name: 'projects', exact: true }).click()
-  await expect(page).toHaveURL(/\/projects$/)
-
-  // From the first route change on, the cascade is retired for good.
-  expect(
-    await page.evaluate(() => document.documentElement.classList.contains('no-sliding')),
-  ).toBe(true)
 })
 
-test('reduced motion strips the route keyframe and the cascade', async ({ page }) => {
+test('reduced motion strips the route move and the cascade', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/posts', { waitUntil: 'load' })
 
+  // Ask the stylesheet what it would do, rather than racing the transition: put
+  // the move classes on the page and read what they resolve to.
+  const effect = await page.locator('.route-frame').evaluate((el) => {
+    el.classList.add('route-down-enter-from', 'route-down-enter-active')
+    const style = getComputedStyle(el)
+    const resolved = { transform: style.transform, duration: style.transitionDuration }
+    el.classList.remove('route-down-enter-from', 'route-down-enter-active')
+    return resolved
+  })
+
+  expect(effect.transform).toBe('none')
+  expect(effect.duration).toBe('0s')
+
+  // The entrance cascade is off by media query too.
   expect(
-    await page.locator('.route-in').evaluate(el => getComputedStyle(el).animationName),
-  ).toBe('none')
+    await page.evaluate(() =>
+      [...document.querySelectorAll('.slide-enter, .slide-enter-content > *')]
+        .map(el => getComputedStyle(el).animationName)
+        .filter(name => name !== 'none'),
+    ),
+  ).toEqual([])
 })
 
 test('every segment of the breadcrumb is its own route', async ({ page }) => {
@@ -425,14 +444,14 @@ test('every segment of the breadcrumb is its own route', async ({ page }) => {
   await expect(current).toHaveText('manual-git')
   await expect(crumbs.getByRole('link', { name: 'manual-git' })).toHaveCount(0)
 
-  // The constant half is faint; the segment you are reading is at full ink.
+  // The whole line reads at one ink, separators included: nothing in the header
+  // changes colour to signal state, so it must not look half-disabled.
   const inks = await crumbs.evaluate((el) => {
-    const constant = el.querySelector('.const')!
-    const mark = el.querySelector('[aria-current="page"]')!
-    return { constant: getComputedStyle(constant).color, mark: getComputedStyle(mark).color }
+    const painted = [...el.querySelectorAll('a, .sep, [aria-current]')]
+      .map(node => getComputedStyle(node).color)
+    return [...new Set(painted)]
   })
-  expect(toChannels(inks.constant)).toEqual([118, 118, 118])
-  expect(toChannels(inks.mark)).toEqual([17, 17, 17])
+  expect(inks).toEqual(['rgb(58, 58, 58)'])
 
   // And an ancestor segment really navigates.
   await crumbs.getByRole('link', { name: 'posts' }).click()
@@ -603,7 +622,7 @@ test('the post sections read as `posts` in the header', async ({ page }) => {
     expect(
       toChannels(await posts.evaluate(el => getComputedStyle(el).color)),
       path,
-    ).toEqual([17, 17, 17])
+    ).toEqual([58, 58, 58])
     await expect(posts, path).toHaveAttribute('aria-current', 'true')
 
     // And no other item claims to be current.
@@ -626,9 +645,11 @@ test('moving between sections types the flag instead of fading the page', async 
   await page.getByRole('main').getByRole('link', { name: 'manuals', exact: true }).click()
   await expect(page).toHaveURL(/\/manuals$/)
 
-  // Not a change of place: no page-level keyframe on the wrapper.
+  // Not a change of place: no page-level move, so the old page is never kept
+  // alongside the new one.
+  await expect(page.locator('.route-frame')).toHaveCount(1)
   expect(
-    await page.locator('main > div').first().evaluate(el => getComputedStyle(el).animationName),
+    await page.locator('.route-frame').evaluate(el => getComputedStyle(el).transform),
   ).toBe('none')
 
   // The flag is what changed, so the flag is what gets typed.
@@ -637,14 +658,80 @@ test('moving between sections types the flag instead of fading the page', async 
     .toBe('ls posts --type=manual --sort=date')
 })
 
-test('a navigation from elsewhere still cross-fades', async ({ page }) => {
+test('the leaving page keeps its column while it goes', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 })
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const boxes = () => page.evaluate(() =>
+    [...document.querySelectorAll('.route-frame')].map((el) => {
+      const box = el.getBoundingClientRect()
+      return { x: Math.round(box.x), width: Math.round(box.width) }
+    }))
+
+  const [rest] = await boxes()
+
+  await page.getByRole('banner')
+    .getByRole('navigation', { name: 'Primary' })
+    .getByRole('link', { name: 'projects', exact: true })
+    .click()
+  await expect.poll(() => page.locator('.route-frame').count()).toBe(2)
+
+  // Both pages share one grid cell, so neither may drift sideways or widen while
+  // it moves. Both used to: the shared column took the wider page's content width
+  // and pushed the leaving list past the column's right edge.
+  for (const box of await boxes()) {
+    expect(box).toEqual(rest)
+  }
+})
+
+test('a navigation from elsewhere keeps the outgoing page', async ({ page }) => {
   await page.goto('/projects', { waitUntil: 'load' })
-  await page.getByRole('banner').getByRole('link', { name: 'posts', exact: true }).click()
+  await page.getByRole('banner')
+    .getByRole('navigation', { name: 'Primary' })
+    .getByRole('link', { name: 'posts', exact: true })
+    .click()
   await expect(page).toHaveURL(/\/posts$/)
 
-  expect(
-    await page.locator('main > div').first().evaluate(el => getComputedStyle(el).animationName),
-  ).toBe('route-in-down')
+  // Two frames mid-flight: the old page scrolling out, the new one arriving.
+  await expect.poll(() => page.locator('.route-frame').count()).toBe(2)
+})
+
+test('the outline rail follows the Post you navigate to', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  const rail = () => page.evaluate(() => {
+    const toc = document.querySelector('.table-of-contents')
+    if (!toc) {
+      return null
+    }
+    return {
+      owner: (toc as HTMLElement).dataset.owner ?? '',
+      first: toc.querySelector('a')?.textContent?.trim() ?? '',
+      active: toc.querySelector('a.toc-active')?.textContent?.trim() ?? '',
+      x: Math.round(toc.getBoundingClientRect().x),
+    }
+  })
+
+  const git = await rail()
+  expect(git?.owner).toBe('/posts/manual-git')
+  expect(git?.first).toBe('What Is Git?')
+  // The first section is marked at the top, so the rail is never blank.
+  expect(git?.active).toBe('What Is Git?')
+
+  // Navigate to a different Post: the rail must be that Post's, not the last one.
+  await page.goto('/posts', { waitUntil: 'load' })
+  await page.getByRole('main')
+    .getByRole('link')
+    .filter({ hasText: 'Vue Advanced Grammar Manual' })
+    .first()
+    .click()
+
+  await expect.poll(async () => (await rail())?.owner).toBe('/posts/manual-vue-advanced-grammar')
+  const vue = await rail()
+  expect(vue?.first).not.toBe(git?.first)
+  // And it is still in the gutter, not dragged into the column by the transition.
+  expect(vue?.x).toBe(git?.x)
 })
 
 test('the ledger keeps its ordering: newest year first, then newest date', async ({ page }) => {
@@ -863,14 +950,14 @@ test('every route is complete with reduced motion and no Effects', async ({ page
     await expectRouteRendered(page, route)
     await expect(page.locator(splash), `${route.path}: Splash`).toBeHidden()
 
-    // No route animation and no entrance cascade, both by media query.
+    // No route move and no entrance cascade, both by media query.
     const motion = await page.evaluate(() => ({
-      route: getComputedStyle(document.querySelector('.route-in')!).animationName,
+      route: getComputedStyle(document.querySelector('.route-frame')!).transform,
       cascade: [...document.querySelectorAll('.slide-enter, .slide-enter-content > *')]
         .map(el => getComputedStyle(el).animationName)
         .filter(name => name !== 'none'),
     }))
-    expect(motion.route, `${route.path}: route animation`).toBe('none')
+    expect(motion.route, `${route.path}: route transform`).toBe('none')
     expect(motion.cascade, `${route.path}: entrance cascade`).toEqual([])
   }
 })

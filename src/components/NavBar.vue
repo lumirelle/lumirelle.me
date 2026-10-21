@@ -50,7 +50,7 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
     >
       <ShellBreadcrumb />
       <nav
-        class="text-ink-faint flex flex-wrap gap-x-3 gap-y-2 items-center md:gap-x-7"
+        class="text-ink flex flex-wrap gap-x-3 gap-y-2 items-center md:gap-x-7"
         aria-label="Primary"
         print:op0
       >
@@ -58,8 +58,7 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
           v-for="link in links"
           :key="link.to"
           :to="link.to"
-          class="nav-link transition-colors"
-          :class="isCurrent(link) ? 'text-ink-strong' : 'hover:text-ink-strong'"
+          class="nav-link"
           :aria-current="currentMark(link)"
         >
           {{ link.label }}
@@ -84,15 +83,13 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
 </template>
 
 <style scoped>
-/* Interaction answers the pointer in the token layer's time, not a fork-era
-   literal. */
-.nav-link {
-  transition-duration: var(--duration-interaction);
-  transition-timing-function: var(--ease-interaction);
-}
-
-nav a:hover,
-nav a:focus-visible {
-  color: var(--color-ink-strong);
+/*
+ * One ink for the whole row, at the *secondary* level: the header is chrome, and
+ * it should sit behind the titles it frames. It does not brighten on hover and
+ * does not dim the routes you are not on — position is announced by
+ * `aria-current` and by the focus outline instead.
+ */
+nav a {
+  color: var(--color-ink);
 }
 </style>

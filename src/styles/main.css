@@ -143,62 +143,104 @@ html:not(.dark) [img-dark] {
 /*
  * Route change.
  *
- * One 200 ms opacity keyframe keyed on the route, owned by CSS rather than by
- * the router's scroll handling (see #9: View Transitions cannot coexist with a
- * router that owns scrolling). Opacity only, deliberately — a filled animation
- * leaves an identity `transform` behind, which makes the wrapper a containing
- * block and would drag any `position: fixed` rail into the content column.
+ * A scroll, not a nudge: the old page travels most of a screen while the new one
+ * arrives behind it, over 600 ms, easing out the way a scroll settles. Going
+ * deeper scrolls up (content moves up, the next page comes from below); going
+ * back up the tree reverses it. A change between the list's sections gets no move
+ * at all — it types its command line instead — so `Transition name="none"`
+ * applies no classes.
+ *
+ * The shift is in `vh` so the distance is a screen, whatever the screen is.
+ *
+ * The leaving page is taken out of flow for the 200 ms. Two pages in flow at once
+ * would double the document height and let the footer run away, and absolute
+ * positioning keeps the old page exactly where it was while it moves.
+ *
+ * `transform` on either page would make it a containing block for `position:
+ * fixed` descendants, which is why the outline rail is adopted into `<body>` by
+ * the Shell (`src/components/shell/ShellCdUp.vue`) rather than left inside the
+ * animated subtree. `Transition` removes its classes at the end, so nothing is
+ * left behind either way.
  */
-@keyframes route-in {
-  from {
-    opacity: 0;
-  }
+/*
+ * Both pages live in the same grid cell, so they keep the column's width and
+ * position while they move. (Out-of-flow was the alternative, and it silently
+ * re-based the leaving page on the viewport — its content then stretched and
+ * slid left.)
+ */
+.route-stack {
+  display: grid;
+  /*
+   * Pinned to the column, never sized by content. An `auto` column takes its
+   * width from the wider of the two pages, so the window between them widened
+   * both and pushed the leaving page past the column's right edge.
+   */
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.route-frame {
+  grid-area: 1 / 1;
+  min-width: 0;
 }
 
 /*
- * The page-level transition, borrowed from a terminal: going deeper prints
- * downwards, going back up the tree prints upwards.
+ * The old page leaves first and quickly; the new one takes the rest of the time.
  *
- * `backwards` fill, never `both` — a filled animation leaves an identity
- * `transform` behind, which makes the wrapper a containing block. That is the
- * trap that dragged the fixed outline rail into the content column during the
- * prototype, and the reason the rail is now adopted out of the routed content
- * (`src/components/shell/ShellCdUp.vue`) before any of this runs.
+ * A simultaneous cross-fade put two dense pages on top of each other for half a
+ * second, which reads as ghosting rather than as scrolling. Sequencing them means
+ * the outgoing page has vacated before the incoming one is legible.
  */
-@keyframes route-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
+.route-down-leave-active,
+.route-up-leave-active {
+  transition:
+    transform 240ms var(--ease-route),
+    opacity 180ms linear;
 }
 
-@keyframes route-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(-24px);
-  }
+.route-down-enter-active,
+.route-up-enter-active {
+  transition:
+    transform var(--duration-route) var(--ease-route),
+    opacity 240ms linear 200ms;
 }
 
-.route-in {
-  animation: route-in var(--duration-route) var(--ease-route) backwards;
+.route-down-enter-from {
+  opacity: 0;
+  transform: translateY(40vh);
 }
 
-.route-in.route-down {
-  animation-name: route-in-down;
+.route-down-leave-to {
+  opacity: 0;
+  transform: translateY(-40vh);
 }
 
-.route-in.route-up {
-  animation-name: route-in-up;
+.route-up-enter-from {
+  opacity: 0;
+  transform: translateY(-40vh);
+}
+
+.route-up-leave-to {
+  opacity: 0;
+  transform: translateY(40vh);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* The directional rules below outrank `.route-in` alone, so name them all. */
-  .route-in,
-  .route-in.route-down,
-  .route-in.route-up {
-    animation: none;
+  .route-down-enter-active,
+  .route-down-leave-active,
+  .route-up-enter-active,
+  .route-up-leave-active {
+    transition: none;
+  }
+
+  .route-down-enter-from,
+  .route-down-leave-to,
+  .route-up-enter-from,
+  .route-up-leave-to {
+    opacity: 1;
+    transform: none;
   }
 }
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;

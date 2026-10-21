@@ -56,21 +56,18 @@ const crumbs = computed<Crumb[]>(() => {
   font-size: 12px;
 }
 
-/* The constant half of the prompt: faint, because it never changes. */
+/*
+ * The whole header reads at one ink level — the secondary one — so it sits behind
+ * the titles it frames. State is carried by `aria-current` and by the focus
+ * outline, not by a colour that makes half the row look disabled: nothing here
+ * changes colour on hover, on the active route, or between the constant half and
+ * the path.
+ */
 .const,
 .crumb {
   border-bottom: none;
   text-decoration: none;
-  transition: color var(--duration-interaction) var(--ease-interaction);
-}
-
-.const {
-  color: var(--color-ink-faint);
-}
-
-.const:hover,
-.crumb:hover {
-  color: var(--color-ink-strong);
+  color: var(--color-ink);
 }
 
 /* A space between the identity and the path, as in a shell prompt. */
@@ -79,17 +76,9 @@ const crumbs = computed<Crumb[]>(() => {
   white-space: pre;
 }
 
-.sep {
-  color: var(--color-ink-faint);
-}
-
-.crumb {
-  color: var(--color-ink-strong);
-}
-
-/* Where you already are: marked, but not a link. */
+.sep,
 .current {
-  color: var(--color-ink-strong);
+  color: var(--color-ink);
 }
 
 @media (max-width: 30rem) {

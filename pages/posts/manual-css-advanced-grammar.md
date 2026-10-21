@@ -1,7 +1,7 @@
 ---
 title: CSS Advanced Grammar Manual
 date: 2026-04-26T20:56+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-10-21T20:28+08:00
 lang: en
 type: manual
 group: Web
@@ -38,7 +38,7 @@ When the browser matches nested selectors, it starts **from the rightmost** sele
 The `display` property is used to control whether an element is **treated as a block or inline box** and **the layout used for its children**; it supports both the legacy **single-value syntax** and the new [**multiple-value syntax**](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Display/Multi-keyword_syntax).
 
 > [!Note]
-> Currently you gain no benefit from using the multiple-value versions, as there is a direct mapping for each multi-keyword version to a legacy version, as demonstrated in the table above.
+> Currently you gain no benefit from using the multiple-value versions, as there is a direct mapping for each multi-keyword version to a legacy version, as demonstrated in the table below.
 >
 > What's more, the multiple-value versions still have [limited browser compatibility](https://caniuse.com/mdn-css_properties_display_multi-keyword_values).
 
@@ -67,9 +67,6 @@ The multiple values list above can be separated into the following categories:
 
   > [!Note]
   > When a display property is specified with **only an outer value** (e.g., `display: block` or `display: inline`), the inner value defaults to `flow` (e.g., `display: block flow` and `display: inline flow`).
-
-  > [!Note]
-  > When use single-value syntax as a
 
 - Inside: These keywords specify the element's inner display type, which defines the type of formatting context that its contents are laid out in (assuming it is a non-replaced element);
   - `flow`
@@ -150,7 +147,7 @@ When two conflicting styles **are in different layers**, they will be applied ac
     }
     ```
 
-Only when these two styles are **in the same layer** will they be applied according to the specificity of their selectors. The **more specific selector** will have **higher precedence** and will be applied, and the specificity of each type of selector is calculated as follows:
+Only when two styles are **in the same layer** will they be applied according to the specificity of their selectors. The **more specific selector** will have **higher precedence** and will be applied, and the specificity of each type of selector is calculated as follows:
 
 | Selector Type | Specificity Value (256-base, questionable) |
 | --- | --- |

@@ -1,68 +1,23 @@
 <script setup lang="ts">
 import { formatDate } from '~/logics'
+import { scrollToHash, useInPageLinks } from '~/logics/in-page-links.ts'
 
 const { frontmatter } = defineProps<{
   frontmatter: Record<string, any>
 }>()
 
-const router = useRouter()
 const content = ref<HTMLDivElement>()
 
-function navigate(): boolean {
-  if (location.hash) {
-    const el = document.querySelector(decodeURIComponent(location.hash))
-    if (el) {
-      const rect = el.getBoundingClientRect()
-      const y = window.scrollY + rect.top - 40
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth',
-      })
-      return true
-    }
-  }
-  return false
-}
+useInPageLinks(content)
 
 onMounted(() => {
-  const handleAnchors = (event: MouseEvent & { target: HTMLElement }): void => {
-    const link = event.target.closest('a')
+  useEventListener(globalThis, 'hashchange', scrollToHash)
 
-    if (
-      !event.defaultPrevented
-      && link
-      && event.button === 0
-      && link.target !== '_blank'
-      && link.rel !== 'external'
-      && !link.download
-      && !event.metaKey
-      && !event.ctrlKey
-      && !event.shiftKey
-      && !event.altKey
-    ) {
-      const url = new URL(link.href)
-      if (url.origin !== globalThis.location.origin) {
-        return
-      }
-
-      event.preventDefault()
-      const { pathname, hash } = url
-      if (hash && (!pathname || pathname === location.pathname)) {
-        globalThis.history.replaceState({}, '', hash)
-        navigate()
-      }
-      else {
-        router.push({ path: pathname, hash })
-      }
-    }
-  }
-
-  useEventListener(globalThis, 'hashchange', navigate)
-  useEventListener(content.value!, 'click', handleAnchors, { passive: false })
-
+  // A link into the middle of the page (`/posts/x#section`) has to land after the
+  // content has laid out, which is why the retry exists.
   setTimeout(() => {
-    if (!navigate()) {
-      setTimeout(navigate, 1000)
+    if (!scrollToHash()) {
+      setTimeout(scrollToHash, 1000)
     }
   }, 1)
 })

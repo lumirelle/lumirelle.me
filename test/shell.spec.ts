@@ -738,6 +738,31 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
   expect(vue?.x).toBe(git?.x)
 })
 
+test('a rail link scrolls instead of moving the page', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  // The rail is adopted into `<body>`, which puts it outside the Post body's own
+  // link handling. Left to the browser, the hash reached the router as a new
+  // location and re-keyed the route frame: the rail played the page transition
+  // while the headings it points at only scrolled.
+  await page.locator('.route-frame').evaluate(el => el.setAttribute('data-kept', ''))
+
+  await page.locator('.table-of-contents a[href="#basic-usage-of-git"]').click()
+
+  // The move is the smooth scroll the body's own heading links make, so the
+  // heading comes to rest under the header rather than at the top edge.
+  const heading = page.locator('.route-frame[data-kept] #basic-usage-of-git')
+  const top = () => heading.evaluate(el => Math.round(el.getBoundingClientRect().top))
+  await expect.poll(top).toBeLessThan(60)
+
+  // The frame the visitor was reading is still the frame on screen. A re-keyed
+  // one would have been swapped out within `--duration-route` (600 ms).
+  await page.waitForTimeout(700)
+  await expect(page.locator('.route-frame[data-kept]')).toHaveCount(1)
+  await expect(page).toHaveURL(/#basic-usage-of-git$/)
+})
+
 test('the header stays on one line and never collapses its parents', async ({ page }) => {
   // The longest slug on the site: the current segment is the only thing that may
   // give way.

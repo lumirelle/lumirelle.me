@@ -10,6 +10,8 @@
  * It is a Shell element: the rail is in the gutter, outside the routed content,
  * and `cd ..` belongs above it rather than inside the Post body.
  */
+import { useInPageLinks } from '~/logics/in-page-links.ts'
+
 const route = useRoute()
 
 const parent = computed(() => {
@@ -41,31 +43,38 @@ function liveFrame(): HTMLElement | null {
  * Ownership is by route, not by "first match in the document": during a
  * transition the outgoing page is still mounted, so a plain query would keep
  * finding the old rail and the new Post would never get one.
+ *
+ * Adopting it also takes it out from under the Post body's link handling, so the
+ * rail installs the same in-page rule itself (see `~/logics/in-page-links.ts`).
+ * Without it a rail click reaches the router, changes the hash, re-keys the route
+ * frame and plays the page transition for what is only a scroll.
  */
-let adopted: HTMLElement | null = null
+const adopted = shallowRef<HTMLElement | null>(null)
+
+useInPageLinks(adopted)
 
 function adoptRail(): void {
   const frame = liveFrame()
 
   if (!frame) {
-    adopted?.remove()
-    adopted = null
+    adopted.value?.remove()
+    adopted.value = null
     return
   }
 
   // Already adopted for this route: nothing to do (the rail is out of the frame).
-  if (adopted?.dataset.owner === route.fullPath) {
+  if (adopted.value?.dataset.owner === route.fullPath) {
     return
   }
 
-  adopted?.remove()
-  adopted = null
+  adopted.value?.remove()
+  adopted.value = null
 
   const rail = frame.querySelector<HTMLElement>('.table-of-contents')
   if (rail) {
     rail.dataset.owner = route.fullPath
     document.body.appendChild(rail)
-    adopted = rail
+    adopted.value = rail
   }
 }
 
@@ -83,7 +92,7 @@ function measure(): void {
 
 function track(): void {
   frameRequest = undefined
-  const marks = (adopted ?? document).querySelectorAll<HTMLAnchorElement>('.table-of-contents a[href^="#"]')
+  const marks = (adopted.value ?? document).querySelectorAll<HTMLAnchorElement>('.table-of-contents a[href^="#"]')
   if (!marks.length || !headings.length)
     return
 
@@ -131,8 +140,8 @@ onBeforeUnmount(() => {
   if (frameRequest !== undefined)
     cancelAnimationFrame(frameRequest)
   window.clearTimeout(adoptTimer)
-  adopted?.remove()
-  adopted = null
+  adopted.value?.remove()
+  adopted.value = null
 })
 
 // The TOC is generated per Post, so remeasure once the new page has committed.

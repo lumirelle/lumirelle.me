@@ -98,7 +98,7 @@ Everything the old `NavBar` provided has to be re-earned by a custom Shell. Each
 
 ## Outline rail
 
-The TOC comes from the pipeline (`markdown-it-table-of-contents`), restyled — not re-implemented: mono 11 px, hairline on its left, **two levels only** (h4 makes it unreadable at that size), permanent at ≥1400 px, hover-revealed below. The active section is tracked with scroll arithmetic (not `IntersectionObserver`, which went stale) and marked with `>` in a reserved `1.4ch` gutter so labels never shift.
+The TOC comes from the pipeline (`markdown-it-table-of-contents`), restyled — not re-implemented: mono 11 px, hairline on its left, **three levels** (h2, h3, h4), permanent at ≥1400 px, hover-revealed below. h4 is carried because it is a real section level in the Manuals, but set at **10 px** one indent further in: at rail size a fourth level reads as another section instead of a subdivision. An outline taller than the viewport scrolls inside the rail rather than running off it. The active section is tracked with scroll arithmetic (not `IntersectionObserver`, which went stale) and marked with `>` in a reserved `1.4ch` gutter so labels never shift.
 
 ## Code blocks
 

@@ -763,6 +763,59 @@ test('a rail link scrolls instead of moving the page', async ({ page }) => {
   await expect(page).toHaveURL(/#basic-usage-of-git$/)
 })
 
+test('the outline rail lists h4 sections as subdivisions', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-computer-network', { waitUntil: 'load' })
+
+  // h4 is a real section level in the Manuals, so the rail carries it.
+  const deep = page.locator('.table-of-contents a[href="#what-is-tls-ssl"]')
+  await expect(deep).toBeVisible()
+
+  // Smaller than the level above it, so a subdivision never reads as a peer.
+  const sizes = await page.evaluate(() => {
+    const rail = document.querySelector('.table-of-contents')!
+    const size = (href: string) =>
+      Number.parseFloat(getComputedStyle(rail.querySelector(`a[href="${href}"]`)!).fontSize)
+    return { h3: size('#session-layer'), h4: size('#what-is-tls-ssl') }
+  })
+  expect(sizes.h4).toBeLessThan(sizes.h3)
+
+  // And it is tracked like any other level.
+  await deep.click()
+  await expect(deep).toHaveClass(/toc-active/)
+})
+
+test('a long outline scrolls inside the rail, not off the page', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
+
+  const list = page.locator('.table-of-contents > ul')
+  const box = await list.boundingBox()
+  expect(box!.y + box!.height).toBeLessThanOrEqual(950)
+  expect(await list.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(true)
+
+  // The section the visitor is in is shown inside the rail's own window, wherever
+  // the page was scrolled to.
+  const mark = page.locator('.table-of-contents a[href="#unhandled-rejections"]')
+  await page.evaluate(() => {
+    const heading = document.querySelector('#unhandled-rejections')!
+    document.documentElement.style.scrollBehavior = 'auto'
+    window.scrollTo(0, heading.getBoundingClientRect().top + window.scrollY)
+  })
+  await expect(mark).toHaveClass(/toc-active/)
+
+  const inRail = await mark.evaluate((el) => {
+    const rail = document.querySelector('.table-of-contents > ul')!.getBoundingClientRect()
+    const entry = el.parentElement!.getBoundingClientRect()
+    return {
+      shown: entry.top >= rail.top - 1 && entry.bottom <= rail.bottom + 1,
+      scrolled: document.querySelector<HTMLElement>('.table-of-contents > ul')!.scrollTop > 0,
+    }
+  })
+  expect(inRail.shown).toBe(true)
+  expect(inRail.scrolled).toBe(true)
+})
+
 test('the header stays on one line and never collapses its parents', async ({ page }) => {
   // The longest slug on the site: the current segment is the only thing that may
   // give way.

@@ -86,7 +86,7 @@ let adoptTimer: number | undefined
 function measure(): void {
   const live = liveFrame()
   const scope = live ?? document
-  headings = [...scope.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id]')]
+  headings = [...scope.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id], .prose h4[id]')]
     .map(heading => ({ id: heading.id, top: heading.getBoundingClientRect().top + window.scrollY }))
 }
 
@@ -101,10 +101,19 @@ function track(): void {
   const line = window.scrollY + window.innerHeight / 3
   const passed = headings.filter(heading => heading.top <= line)
   const activeId = passed.length ? passed.at(-1)!.id : (headings[0]?.id ?? '')
+  let active: HTMLAnchorElement | undefined
 
   for (const mark of marks) {
-    mark.classList.toggle('toc-active', mark.getAttribute('href') === `#${activeId}`)
+    const isActive = mark.getAttribute('href') === `#${activeId}`
+    mark.classList.toggle('toc-active', isActive)
+    if (isActive)
+      active = mark
   }
+
+  // The rail is a window on the outline, and with h4 in it a long Manual's mark
+  // can fall outside that window. `nearest` moves the rail only when it has to,
+  // so a reader who scrolled the rail themselves keeps their place.
+  active?.scrollIntoView({ block: 'nearest' })
 }
 
 function onScroll(): void {

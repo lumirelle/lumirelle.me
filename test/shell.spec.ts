@@ -444,14 +444,18 @@ test('every segment of the breadcrumb is its own route', async ({ page }) => {
   await expect(current).toHaveText('manual-git')
   await expect(crumbs.getByRole('link', { name: 'manual-git' })).toHaveCount(0)
 
-  // The whole line reads at one ink, separators included: nothing in the header
-  // changes colour to signal state, so it must not look half-disabled.
+  // The prompt `lumirelle@me` sits one level above the path: `~`, the slashes and
+  // the segments are all the faint level, and nothing changes colour for state.
   const inks = await crumbs.evaluate((el) => {
-    const painted = [...el.querySelectorAll('a, .sep, [aria-current]')]
-      .map(node => getComputedStyle(node).color)
-    return [...new Set(painted)]
+    const prompt = el.querySelector('.const:not(.tilde)')!
+    const path = [...el.querySelectorAll('.tilde, .sep, .crumb, [aria-current]')]
+    return {
+      prompt: getComputedStyle(prompt).color,
+      path: [...new Set(path.map(node => getComputedStyle(node).color))],
+    }
   })
-  expect(inks).toEqual(['rgb(58, 58, 58)'])
+  expect(toChannels(inks.prompt)).toEqual([58, 58, 58])
+  expect(inks.path).toEqual(['rgb(118, 118, 118)'])
 
   // And an ancestor segment really navigates.
   await crumbs.getByRole('link', { name: 'posts' }).click()
@@ -622,7 +626,7 @@ test('the post sections read as `posts` in the header', async ({ page }) => {
     expect(
       toChannels(await posts.evaluate(el => getComputedStyle(el).color)),
       path,
-    ).toEqual([58, 58, 58])
+    ).toEqual([118, 118, 118])
     await expect(posts, path).toHaveAttribute('aria-current', 'true')
 
     // And no other item claims to be current.
@@ -732,6 +736,81 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
   expect(vue?.first).not.toBe(git?.first)
   // And it is still in the gutter, not dragged into the column by the transition.
   expect(vue?.x).toBe(git?.x)
+})
+
+test('the header stays on one line and never collapses its parents', async ({ page }) => {
+  // The longest slug on the site: the current segment is the only thing that may
+  // give way.
+  await page.setViewportSize({ width: 1440, height: 800 })
+  await page.goto('/posts/test-recursive-mono-nbsp-rendering', { waitUntil: 'load' })
+
+  const read = () => page.evaluate(() => {
+    const box = (el: Element) => {
+      const rect = el.getBoundingClientRect()
+      return { width: Math.round(rect.width), truncated: el.scrollWidth > el.clientWidth + 1 }
+    }
+    const crumb = document.querySelector('.breadcrumb')!.getBoundingClientRect()
+    const nav = document.querySelector('nav[aria-label="Primary"]')!.getBoundingClientRect()
+    return {
+      prompt: box(document.querySelector('.const:not(.tilde)')!),
+      parent: box(document.querySelector('.crumb:not(.current)')!),
+      current: box(document.querySelector('.current')!),
+      oneLine: Math.abs(crumb.y - nav.y) < 2,
+      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+    }
+  })
+
+  const wide = await read()
+  expect(wide.oneLine).toBe(true)
+  expect(wide.overflow).toBe(false)
+  // Parents keep their full width; the slug is the one that ellipsises.
+  expect(wide.prompt.width).toBeGreaterThan(60)
+  expect(wide.parent.width).toBeGreaterThan(20)
+  expect(wide.parent.truncated).toBe(false)
+  expect(wide.current.truncated).toBe(true)
+
+  // On a phone the same holds: the row is one line, the parents are intact.
+  await page.setViewportSize({ width: 390, height: 800 })
+  await page.goto('/posts/test-recursive-mono-nbsp-rendering', { waitUntil: 'load' })
+  const narrow = await read()
+  expect(narrow.overflow).toBe(false)
+  expect(narrow.prompt.width).toBe(wide.prompt.width)
+  expect(narrow.parent.width).toBe(wide.parent.width)
+})
+
+test('code blocks are terminal windows with a copy control', async ({ page }) => {
+  await page.goto('/posts/manual-js-pm', { waitUntil: 'load' })
+
+  const window = page.locator('.code-window').first()
+  await expect(window).toBeVisible()
+
+  const chrome = await window.evaluate((el) => {
+    const style = getComputedStyle(el)
+    const bar = el.querySelector('.code-window-bar')!
+    return {
+      radius: style.borderTopLeftRadius,
+      border: style.borderTopWidth,
+      fill: style.backgroundColor,
+      overflow: style.overflow,
+      dots: bar.querySelectorAll('.code-dot').length,
+      language: bar.querySelector('.code-window-lang')?.textContent?.trim() ?? '',
+    }
+  })
+
+  // 8 px radius, one hairline, the surface fill, clipped to the frame.
+  expect(chrome.radius).toBe('8px')
+  expect(chrome.border).toBe('1px')
+  expect(toChannels(chrome.fill)).toEqual([246, 246, 246])
+  expect(chrome.overflow).toBe('hidden')
+  expect(chrome.dots).toBe(3)
+  expect(chrome.language).not.toBe('')
+
+  // The window is prerendered, so the control works before anything hydrates it
+  // per block: one delegated listener covers them all.
+  const copy = window.getByRole('button', { name: 'Copy code' })
+  await expect(copy).toHaveText('copy')
+  await copy.click()
+  await expect(copy).toHaveText(/copied|failed/)
 })
 
 test('the ledger keeps its ordering: newest year first, then newest date', async ({ page }) => {

@@ -18,7 +18,7 @@ const label = computed(() => (isDark.value ? 'Switch to light theme' : 'Switch t
 <template>
   <button
     type="button"
-    class="text-ink select-none"
+    class="text-ink-faint select-none"
     :aria-label="label"
     :title="label"
     @click="toggleDark($event)"

@@ -46,11 +46,11 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
 <template>
   <header class="z-40">
     <div
-      class="text-[11px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-6 gap-y-2 max-w-[var(--shell-measure)] items-center justify-between md:text-[12px]"
+      class="text-[11px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-6 gap-y-2 max-w-[var(--shell-measure)] items-center justify-between md:text-[12px] min-[520px]:flex-nowrap"
     >
       <ShellBreadcrumb />
       <nav
-        class="text-ink flex flex-wrap gap-x-3 gap-y-2 items-center md:gap-x-7"
+        class="text-ink-faint flex flex-none flex-nowrap gap-x-2.5 items-center md:gap-x-7 sm:gap-x-3"
         aria-label="Primary"
         print:op0
       >
@@ -84,12 +84,18 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
 
 <style scoped>
 /*
- * One ink for the whole row, at the *secondary* level: the header is chrome, and
- * it should sit behind the titles it frames. It does not brighten on hover and
- * does not dim the routes you are not on — position is announced by
- * `aria-current` and by the focus outline instead.
+ * One ink for the whole row, at the faint level: the header is chrome and sits
+ * well behind the titles it frames. It does not brighten on hover and does not
+ * dim the routes you are not on — position is announced by `aria-current` and by
+ * the focus outline instead.
  */
 nav a {
-  color: var(--color-ink);
+  max-width: 12ch;
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--color-ink-faint);
 }
 </style>

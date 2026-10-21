@@ -6,6 +6,7 @@ import { ViteSSG } from 'vite-ssg'
 import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
+import { installCodeCopy } from './logics/code-copy.ts'
 import { installRouteTransition } from './logics/route-transition.ts'
 import { runSplash } from './logics/splash.ts'
 import '@unocss/reset/tailwind.css'
@@ -56,6 +57,8 @@ export const createApp = ViteSSG(
       // The Splash's end state. With JavaScript off the head script never adds
       // `has-splash`, so this is a no-op and nothing on the page depends on it.
       runSplash()
+
+      installCodeCopy()
 
       // Section-to-section navigation is not a change of place, so it types the
       // command line instead of cross-fading the page.

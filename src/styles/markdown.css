@@ -1,3 +1,86 @@
+/*
+ * Code blocks are terminal windows, not <pre> blocks: 8 px radius, one hairline,
+ * `surface` fill, and `overflow: hidden` so the bar and the horizontally
+ * scrolling code clip to the frame instead of escaping it.
+ */
+.code-window {
+  margin: 1.25em 0;
+  overflow: hidden;
+
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--radius-window);
+}
+
+.code-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  padding: 7px 12px;
+
+  font-family: var(--font-mono, monospace);
+  font-size: 10px;
+  color: var(--color-ink-faint);
+
+  border-bottom: 1px solid var(--color-stroke);
+}
+
+/* The one place hue is allowed on chrome: the design reference says so. */
+.code-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.code-dot-red {
+  background-color: #ff5f57;
+}
+
+.code-dot-yellow {
+  background-color: #febc2e;
+}
+
+.code-dot-green {
+  background-color: #28c840;
+}
+
+/* The language, as the window's title. */
+.code-window-lang {
+  margin-left: 3px;
+}
+
+.code-copy {
+  margin-left: auto;
+  padding: 0;
+
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+
+  transition: color var(--duration-interaction) var(--ease-interaction);
+}
+
+.code-copy:hover {
+  color: var(--color-ink-strong);
+}
+
+.code-window pre,
+.code-window pre.shiki {
+  margin: 0;
+  padding: 12px;
+  border-radius: 0;
+  background-color: transparent;
+
+  /* Code is read left to right at its own indentation, never centred. */
+  text-align: left;
+
+  overflow-x: auto;
+}
+
 .shiki.has-focused .line:not(.focused) {
   opacity: 0.4;
   filter: blur(0.095rem);

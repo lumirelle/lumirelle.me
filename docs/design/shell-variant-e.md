@@ -87,9 +87,11 @@ One orchestrated moment, everything else answers an action. All of it is off und
 
 Everything the old `NavBar` provided has to be re-earned by a custom Shell. Each has been missed at least once during the prototype:
 
-- **Breadcrumb** — `lumirelle@me ~/path`, live path, faint plus strong, and **every segment is its own
-  route**: `lumirelle@me` and `~` both go home, `posts` goes to `/posts`, and the segment you are already
-  reading is marked rather than linked.
+- **Breadcrumb** — `lumirelle@me ~/path`, and **every segment is its own route**: `lumirelle@me` and `~`
+  both go home, `posts` goes to `/posts`, and the segment you are already reading is marked rather than
+  linked. The prompt sits at the secondary ink, `~` and the slashes and the path at the faint level. The
+  header is one line at every width it can hold and never collapses the prompt or a parent segment: only
+  the current slug truncates, at 32ch and with an ellipsis.
 - **Theme toggle** — last item in the nav row, no box, icons `i-ri-sun-line` / `dark:i-ri-moon-line`, `aria-label` follows state ("Switch to dark theme"), and it calls `toggleDark` so the site's circular reveal is reused.
 - **Scroll to top** — fixed bottom-right 24 px, 32 px square, 4 px radius, hairline, mono `↑` at `ink-strong` (17.9:1 light / 18.8:1 dark), inverting on hover. Appears past 320 px and is `inert` while hidden — not merely transparent.
 - **`cd ..`** — Shell element above the outline rail, `$` at full ink, rest faint, parent path with the query preserved.
@@ -100,7 +102,10 @@ The TOC comes from the pipeline (`markdown-it-table-of-contents`), restyled — 
 
 ## Code blocks
 
-Terminal windows, not `<pre>` blocks:
+Terminal windows, not `<pre>` blocks — built by a Shiki transformer in
+`plugins/markdown.ts` (`codeWindow()`), because that is where the language is already known and because
+the chrome belongs in the prerendered HTML. The copy control is one delegated listener
+(`src/logics/code-copy.ts`), so it works on markup rendered long before hydration:
 
 ```
 ● ● ●   ts                                    copy
@@ -175,10 +180,9 @@ Two deliberate deviations from the prototype remain. **The list keeps a filter r
 
 **Recorded, not fixed — these belong to P2:**
 
-- **Code blocks are still `<pre>` blocks**, not the terminal windows described under *Code blocks*:
-  no `surface` fill, no 1 px `stroke`, no 8 px radius, no window bar. Their twoslash popups still
-  carry the alpha border (`--twoslash-border-color: #8884`) and a hard-coded `#191919` fill, which
-  the token layer replaces when the windows are built.
+- **Twoslash popups** inside code blocks still carry the alpha border
+  (`--twoslash-border-color: #8884`) and a hard-coded `#191919` fill. The windows around them are built;
+  the popup chrome is not.
 
 - **The Post page's masthead still joins its metadata with `·`** ("First post on … · Last edit on …
   · 20min"). The middle-dot removal in P1 is about the *list*, where columns now do that work; the

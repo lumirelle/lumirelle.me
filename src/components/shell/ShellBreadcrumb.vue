@@ -47,27 +47,50 @@ const crumbs = computed<Crumb[]>(() => {
 </template>
 
 <style scoped>
+/*
+ * The line may shrink, but only by as much as its one shrinkable child gives up —
+ * there is no clipping on the container, so a long path can never eat the prompt
+ * or the parents above it.
+ */
 .breadcrumb {
   display: flex;
   align-items: baseline;
-  flex-shrink: 0;
+  flex: 0 1 auto;
+  min-width: 0;
 
   font-family: var(--font-mono, monospace);
   font-size: 12px;
 }
 
 /*
- * The whole header reads at one ink level — the secondary one — so it sits behind
- * the titles it frames. State is carried by `aria-current` and by the focus
- * outline, not by a colour that makes half the row look disabled: nothing here
- * changes colour on hover, on the active route, or between the constant half and
- * the path.
+ * The prompt (`lumirelle@me ~`) sits at the secondary ink; the path segments and
+ * the slashes between them drop to the faint level, because they are the part
+ * that changes and the part you can click.
+ *
+ * Nothing here changes colour on hover or on the active route: position is
+ * carried by `aria-current` and by the focus outline.
  */
-.const,
+.const {
+  flex: none;
+  color: var(--color-ink);
+}
+
+/* `~` is part of the path, not part of the prompt: it is a link, and it reads
+   with the segments it prefixes. */
+.const.tilde {
+  flex: none;
+  color: var(--color-ink-faint);
+}
+
+/* Parent segments are never truncated: where you came from stays readable. */
 .crumb {
+  flex: none;
+
+  white-space: nowrap;
+
   border-bottom: none;
   text-decoration: none;
-  color: var(--color-ink);
+  color: var(--color-ink-faint);
 }
 
 /* A space between the identity and the path, as in a shell prompt. */
@@ -76,9 +99,29 @@ const crumbs = computed<Crumb[]>(() => {
   white-space: pre;
 }
 
-.sep,
+.sep {
+  flex: none;
+  color: var(--color-ink-faint);
+}
+
+/*
+ * The page you are on is the one that gives way. A slug like
+ * `test-recursive-mono-nbsp-rendering` is the longest thing in the header, so it
+ * gets a ceiling and an ellipsis, and it can shrink to nothing if it has to —
+ * the header never wraps and the parents above it never collapse.
+ */
 .current {
-  color: var(--color-ink);
+  flex: 0 1 auto;
+  /* Enough for the ellipsis itself: a collapsed segment should read as truncated,
+     not as a bare trailing slash. */
+  min-width: 2ch;
+  max-width: 32ch;
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--color-ink-faint);
 }
 
 @media (max-width: 30rem) {

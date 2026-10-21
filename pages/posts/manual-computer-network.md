@@ -193,26 +193,38 @@ A network is a huge tree structure. What if there are more switches? The MAC add
 ... ... ... ... ...
 ```
 
-To solve this problem, you need another thing to identify devices other than MAC addresses, that is an **IP address (Internet Protocol Address)**.
+To solve this problem, you need a small-scale centralized management system in the form of a "enfeoffment system": each small country is built via an **IP address (Internet Protocol Address)** with specific **subnet mask**. Each leader of country is one of the member of a bigger country, finally form the entire kingdom – Internet kingdom.
 
-An IP address is a 32-bit (4-byte) identifier[^1], usually represented in decimal format, separated by dots. For example, `192.168.1.1`. An IP address uses part of its bits to identify the sub-network it created and the router itself **(called the network part)**, and another part to identify the computers connected to it **(called the host part)**. An IP address also uses a **subnet mask** to dynamically determine how many bits are the network part and how many bits are the host part.
+> In real world, the largest leader of the entire kingdom is **IANA (Internet Assigned Numbers Authority)**, then **RIR (Regional Internet Registry)**, then **LIR (Local Internet Registry)** or **ISP (Internet Service Provider)**, finally you (and your **router**).
 
-Unlike a MAC address, an IP address is designed for **routing**: a MAC address only contains device identifier information, but an IP address (with a mask) can reflect which level the device is at in the network tree. With IP addresses, we no longer need to record all of the devices connected to a port, but only the router and the devices in the same sub-network.
+An IP address is a 32-bit (4-byte) identifier[^1], usually represented in decimal format, separated by dots. For example, `192.168.1.1`. An IP address uses part of its bits to identify the sub-network it created and the router itself **(called the network part)**, and another part to identify the computers connected to it **(called the host part)**. **Subnet mask** is the thing dynamically determine how many bits of an IP are the network part and how many bits are the host part.
 
-How does the mask work? Let's take a look at an example. For a sub-network with IP addresses from `192.168.1.0` to `192.168.1.255` and subnet mask `255.255.255.0`:
+The host part plus the subnet mask are called IP subnet identifier. For example, `255.240.0.0/12` (equivalent to `11111111.11110000.00000000.00000000/12`). The remaining IP address whithin each subnet belong to the leader of that subnet. For example, `255.240.0.0` (`11111111.11110000.00000000.00000000`) ~ `255.240.255.255` (`11111111.11110000.11111111.11111111`) are belong to `255.240.0.0/12`.
 
-The subnet mask in binary is `11111111.11111111.11111111.00000000`, which has 24 bits of `1`, so the first 24 bits (the first 3 bytes) of the IP address are the network part, and the last 8 bits (the last byte) are the host part. That is to say, the network part is `192.168.1`, and the host part ranges from `0` to `255`, so this sub-network can have up to 254 IP addresses.
+> Obviously, larger leaders of country will have larger subnet.
 
-Why 254? Because there are two special IP addresses in each sub-network that are reserved and cannot be assigned to any computer:
+<details>
+  <summary>How does the subnet mask actually work?</summary>
 
-- The **first address (the network address) is used to identify the subnet itself**. It is the lowest address in the subnet range.
-- The **last address (the broadcast address) is used to send data to all hosts in the subnet**. It is the highest address in the subnet range.
+  Let's take a look at an example. For a sub-network with IP addresses from `192.168.1.0` to `192.168.1.255` and subnet mask `255.255.255.0`:
 
-So, we can describe this sub-network by `192.168.1.0/24` (in CIDR notation).
+  The subnet mask in binary is `11111111.11111111.11111111.00000000`, which has 24 bits of `1`, so the first 24 bits (the first 3 bytes) of the IP address are the network part, and the last 8 bits (the last byte) are the host part. That is to say, the network part is `192.168.1`, and the host part ranges from `0` to `255`, so this sub-network can have up to 254 IP addresses.
 
-Before applying IP addressing to our network, we need a device to handle message forwarding based on IP addresses, like a switch for MAC addresses; it's called a **router**.
+  Why 254? Because there are two special IP addresses in each sub-network that are reserved and cannot be assigned to any computer:
+
+  - The **first address (the network address) is used to identify the subnet itself**. It is the lowest address in the subnet range.
+  - The **last address (the broadcast address) is used to send data to all hosts in the subnet**. It is the highest address in the subnet range.
+
+  So, we can describe this sub-network by `192.168.1.0/24` (in CIDR notation).
+</details>
+
+Unlike a MAC address, an IP address is designed for **routing**: a MAC address only contains device identifier information, but an IP address (with a mask) and the network topology structure can reflect which level the device is at in the network tree. With IP addresses and network topology structure, we no longer need to record all of the devices connected to a port.
+
+How the network topology structure build? Use **routers**, a device to handle message forwarding based on IP addresses, like a switch for MAC addresses.
 
 A router is an enhanced version of a switch; it's a device which has its own MAC address and IP address, and it will assign IP addresses to each computer connected to it, and also set each computer's default gateway to its own IP address.
+
+Due to the characteristics of IP address and subnet masks, routers can easily determine to which destination a message sent to a particular IP address should be forwarded: For router with subnet `192.168.1.0/24`, a message to `192.168.0.3` does not belong to its subnet, so the router will forward that message to the upstream router.
 
 And the message sent has a new structure: we added **internet layer** info to store the IP addresses of both sender and receiver, which we call a **third-level data package**:
 
@@ -236,11 +248,14 @@ And the message sent has a new structure: we added **internet layer** info to st
 >
 > Notice that, in this case, the computer only knows the IP address of the target device, but it does not know the MAC address. So there's an agreement here: use each router's MAC address as the destination when sending the message to each router, and the last router (the router of the sub-network where the target device is located) will rewrite the destination MAC address to the target device's MAC address before the data link layer transmission begins.
 
-Now how do these computers communicate with each other? There are two different cases, depending on whether they are in the same sub-network or not (assuming they know each other's IP address):
+Now how do these computers communicate with each other actually? There are two different cases, depending on whether they are in the same sub-network or not (assuming they know each other's IP address[^4]):
 
 - Computer A with IP address `192.168.1.10` and MAC address `AA:AA:AA:AA:AA:AA` wants to communicate with computer B with IP address `192.168.1.11` and MAC address `BB:BB:BB:BB:BB:BB`, in sub-network `192.168.1.0/24`, computer A knows they are in the same sub-network, so it will do as before and try to send a **second-level data package**.
 
   Computer A now does not make a broadcast asking "What is your MAC address?" to all devices in the LAN; it can broadcast "What is the MAC address of IP address `192.168.1.11`?", which is much more efficient than before because it will only get a reply from the target device, and this is called the **Address Resolution Protocol (ARP)**.
+
+  > [!Note]
+  > The router is not involved.
 
   After computer A gets the response, it will record:
 
@@ -530,3 +545,5 @@ See [REST Client documentation](https://github.com/Huachao/vscode-restclient/blo
 [^2]: **Safe** methods are those that do not modify resources on the server. They are intended for information retrieval only.
 
 [^3]: **Idempotent** methods are those that can be called multiple times without different outcomes. The first request has the same effect as subsequent requests.
+
+[^4]: How they know each's IP address? One scenario is that you (user) provide it, another is that you provide a domain name, DNS service resolves the actually IP address for you.

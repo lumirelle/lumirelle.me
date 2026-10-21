@@ -1,7 +1,7 @@
 ---
 title: POSIX Shell Script Manual
 date: 2025-12-01T15:50+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-10-21T16:56+08:00
 lang: en
 type: manual
 group: Shell
@@ -91,7 +91,7 @@ You can create and run your first script by following these steps:
 You may have noticed the first line of the script:
 
 ```sh
-#!/bin/sh // [!code highlight]
+#!/bin/sh // [!code focus]
 echo 'Hello, POSIX shell!'
 ```
 

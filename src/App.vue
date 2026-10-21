@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { transitionKind } from './logics/route-transition.ts'
+
 const route = useRoute()
+
+/** Section changes type the command line; everything else cross-fades. */
+const kind = transitionKind
 
 const imageModel = ref<HTMLImageElement>()
 const imageAlt = ref<string>()
@@ -108,18 +113,23 @@ onKeyStroke('Escape', (e) => {
     A hairline here is only ever a row divider — never a border around content.
   -->
   <NavBar />
-  <main
-    class="mx-auto px-[var(--shell-gutter)] pb-16 pt-12 max-w-[var(--shell-measure)] of-x-hidden"
-  >
-    <!--
-      Keyed on the route so the incoming content replays `route-in` (200 ms,
-      opacity only — see main.css). Scroll stays the router's business.
-    -->
-    <div :key="route.fullPath" class="route-in">
-      <RouterView />
-    </div>
+  <!--
+    The column. It carries the measure and the gutter, and it holds both the
+    content and the footer — so the closing rule is the column's width while the
+    space above it belongs to `main`'s own bottom padding.
+  -->
+  <div class="mx-auto px-[var(--shell-gutter)] max-w-[var(--shell-measure)] of-x-hidden">
+    <main class="pb-28 pt-12">
+      <!--
+        Keyed on the route so the incoming content replays `route-in` (200 ms,
+        opacity only — see main.css). Scroll stays the router's business.
+      -->
+      <div :key="route.fullPath" :class="kind === 'type' ? '' : 'route-in'">
+        <RouterView />
+      </div>
+    </main>
     <Footer />
-  </main>
+  </div>
   <Transition name="fade">
     <div
       v-if="imageModel"

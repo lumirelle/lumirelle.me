@@ -14,7 +14,9 @@ lumirelle@me ~/posts                        posts  projects  use  photos  demos 
                          [ content column, 820 px max ]
 ```
 
-- **Header row** — 20 px vertical padding, no rule beneath it.
+- **Header row** — 20 px vertical padding, no rule beneath it. `/blog`, `/notes` and `/manuals` are the
+  same list under another filter, so all three read as `posts` in the navigation (marked
+  `aria-current="true"`, not `"page"` — they are the current *section*, not the current page).
 - **Content** — starts 48 px below the header on every route (`pt-12`), so list mastheads and post titles share one rhythm.
 - **Footer** — hairline above, mono 11 px, two items.
 
@@ -158,6 +160,11 @@ the reference itself had drifted from the prototype, so both were corrected:
   the gutter, with `cd ..` above it, the active section marked `>` in a reserved `1.4ch` gutter, and scroll
   arithmetic tracking it.
 - The footer's rule and items were neither the prototype's width nor its type. They are now.
+
+Also settled after the audit: the post sections read as `posts` in the header, the chinese-only filter
+control is gone (its filter had no other consumer), the `$`-to-text gap is 16 px in both the masthead and
+`cd ..`, and the space above the closing rule is `main`'s own bottom padding — 7 rem — rather than
+padding that ended up below the footer.
 
 Two deliberate deviations from the prototype remain. **The list keeps a filter row** (`chinese only`, `all`,
 `blog`, `notes`, `manuals`): the prototype has none, but the Shell's navigation has no other route to

@@ -2,7 +2,7 @@
 import type { Post } from '~/types'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
-import { chineseOnly } from '~/logics'
+import { transitionKind } from '~/logics/route-transition'
 import { manualGroupOrder } from '../../data/manual-groups'
 
 /**
@@ -95,17 +95,69 @@ const posts = computed<LedgerRow[]>(() =>
         return (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
       }
       return Number(new Date(b.date)) - Number(new Date(a.date))
-    })
-    .filter(i => !chineseOnly.value || !i.lang || i.lang === 'zh'),
+    }),
 )
 
 const manualCount = computed(() => posts.value.filter(post => post.manual).length)
 
-const command = computed(() =>
-  props.type
-    ? `ls posts --type=${props.type} --sort=date`
-    : 'ls posts --sort=date',
+/**
+ * The command is rendered in two parts: what the list *is* (`ls posts`), and the
+ * flags that say which slice of it you are reading. Only the second part types,
+ * so a section change shows `--type=` arriving rather than the whole line
+ * appearing — the flag is the thing that actually changed.
+ */
+const flags = computed(() =>
+  props.type ? `--type=${props.type} --sort=date` : '--sort=date',
 )
+
+/** The tail as currently typed out. Prerendered complete, so no-JS reads it. */
+const typedFlags = ref(flags.value)
+const reduced = usePreferredReducedMotion()
+
+let typeFrame: number | undefined
+
+function typeFlags(): void {
+  if (typeFrame !== undefined) {
+    cancelAnimationFrame(typeFrame)
+  }
+
+  const full = flags.value
+  if (reduced.value === 'reduce') {
+    typedFlags.value = full
+    return
+  }
+
+  const started = performance.now()
+  typedFlags.value = ''
+
+  const tick = (now: number): void => {
+    const progress = Math.min(1, (now - started) / 260)
+    typedFlags.value = full.slice(0, Math.ceil(progress * full.length))
+    if (progress < 1) {
+      typeFrame = requestAnimationFrame(tick)
+    }
+    else {
+      typeFrame = undefined
+    }
+  }
+
+  typeFrame = requestAnimationFrame(tick)
+}
+
+onMounted(() => {
+  // Only when this mount *is* a section change. A direct load has nothing to
+  // compare against, and typing the command under the reader's first paint would
+  // be motion for its own sake.
+  if (transitionKind.value === 'type') {
+    typeFlags()
+  }
+})
+
+onBeforeUnmount(() => {
+  if (typeFrame !== undefined) {
+    cancelAnimationFrame(typeFrame)
+  }
+})
 
 function isFuture(a?: Date | string | number): boolean {
   return a !== undefined && new Date(a) > new Date()
@@ -174,25 +226,11 @@ const route = useRoute()
 
     <div class="command">
       <span class="prompt">$</span>
-      <span>{{ command }}</span>
-      <span class="caret" aria-hidden="true" />
+      <span class="command-line">ls posts {{ typedFlags }}<span class="caret" aria-hidden="true" /></span>
       <span class="counts">{{ posts.length }} entries / {{ manualCount }} manuals</span>
     </div>
 
     <nav class="filters" aria-label="Post sections">
-      <button
-        type="button"
-        class="filter"
-        :class="chineseOnly ? 'text-ink-strong' : 'text-ink-faint'"
-        :aria-pressed="chineseOnly"
-        @click="chineseOnly = !chineseOnly"
-      >
-        <span
-          :class="chineseOnly ? 'i-carbon-checkbox-checked' : 'i-carbon-checkbox'"
-          aria-hidden="true"
-        />
-        chinese only
-      </button>
       <RouterLink
         v-for="section in sections"
         :key="section.to"
@@ -311,12 +349,18 @@ const route = useRoute()
   font-variant-numeric: tabular-nums;
 }
 
+/* The command is one text run, so the caret follows whatever has been typed. */
+.command-line {
+  white-space: pre;
+}
+
 /* A 2 px bar, not a glyph: block characters overhang their cell in this face. */
 .caret {
   display: inline-block;
   width: 2px;
   height: 1em;
-  margin-left: -1rem;
+  margin-left: 1px;
+  vertical-align: -0.1em;
 
   background-color: var(--color-ink-strong);
   animation: caret-blink 1.1s steps(1, end) infinite;

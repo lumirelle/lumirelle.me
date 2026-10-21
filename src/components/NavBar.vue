@@ -10,17 +10,36 @@ const route = useRoute()
 
 /** The Shell's voice: five destinations, lowercase, mono. */
 const links = [
-  { label: 'posts', to: '/posts' },
-  { label: 'projects', to: '/projects' },
-  { label: 'use', to: '/use' },
-  { label: 'photos', to: '/photos' },
-  { label: 'demos', to: '/demos' },
-]
+  // `/blog`, `/notes` and `/manuals` are the same list under another filter, so
+  // they read as `posts` in the navigation — nothing else in the header would
+  // tell a reader which section of the site they are in.
+  { label: 'posts', to: '/posts', also: ['/blog', '/notes', '/manuals'] },
+  { label: 'projects', to: '/projects', also: [] },
+  { label: 'use', to: '/use', also: [] },
+  { label: 'photos', to: '/photos', also: [] },
+  { label: 'demos', to: '/demos', also: [] },
+] as const
+
+type Link = (typeof links)[number]
 
 // `/posts/manual-git` is still `posts`: the section owns its children, so the
 // active mark survives every route deeper in the tree.
-function isCurrent(path: string): boolean {
-  return route.path === path || route.path.startsWith(`${path}/`)
+function isCurrent(link: Link): boolean {
+  const { to, also } = link as { to: string, also: readonly string[] }
+  return route.path === to
+    || route.path.startsWith(`${to}/`)
+    || also.includes(route.path)
+}
+
+/**
+ * `page` only when this is literally that page; a section that merely *contains*
+ * the current route is `true`, so a screen reader does not announce `/blog` as
+ * "posts, current page".
+ */
+function currentMark(link: Link): 'page' | 'true' | undefined {
+  if (!isCurrent(link))
+    return undefined
+  return route.path === link.to ? 'page' : 'true'
 }
 </script>
 
@@ -36,8 +55,8 @@ function isCurrent(path: string): boolean {
           :key="link.to"
           :to="link.to"
           class="nav-link transition-colors"
-          :class="isCurrent(link.to) ? 'text-ink-strong' : 'hover:text-ink-strong'"
-          :aria-current="isCurrent(link.to) ? 'page' : undefined"
+          :class="isCurrent(link) ? 'text-ink-strong' : 'hover:text-ink-strong'"
+          :aria-current="currentMark(link)"
         >
           {{ link.label }}
         </RouterLink>

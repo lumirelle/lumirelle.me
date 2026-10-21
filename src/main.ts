@@ -6,6 +6,7 @@ import { ViteSSG } from 'vite-ssg'
 import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
+import { installRouteTransition } from './logics/route-transition.ts'
 import { runSplash } from './logics/splash.ts'
 import '@unocss/reset/tailwind.css'
 
@@ -55,6 +56,10 @@ export const createApp = ViteSSG(
       // The Splash's end state. With JavaScript off the head script never adds
       // `has-splash`, so this is a no-op and nothing on the page depends on it.
       runSplash()
+
+      // Section-to-section navigation is not a change of place, so it types the
+      // command line instead of cross-fading the page.
+      installRouteTransition(router)
 
       // The router owns navigation and scrolling; the incoming content animates
       // itself with one CSS keyframe. Nothing here touches the scroll position.

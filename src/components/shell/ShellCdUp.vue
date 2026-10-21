@@ -103,7 +103,8 @@ watch(() => route.fullPath, () => nextTick(refresh))
   font-family: var(--font-mono, monospace);
   font-size: 11px;
   line-height: 1.5;
-  gap: 0.5ch;
+  /* The same gap the masthead puts between its `$` and its command. */
+  gap: 1rem;
   align-items: baseline;
 
   color: var(--color-ink-faint);

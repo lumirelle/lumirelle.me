@@ -581,6 +581,62 @@ test('dates are a monospaced, tabular column', async ({ page }) => {
   }
 })
 
+test('the post sections read as `posts` in the header', async ({ page }) => {
+  for (const path of ['/blog', '/notes', '/manuals']) {
+    await page.goto(path, { waitUntil: 'load' })
+
+    const nav = page.getByRole('banner').getByRole('navigation')
+    const posts = nav.getByRole('link', { name: 'posts', exact: true })
+
+    // Visually current, and announced as *this section* rather than as "the
+    // current page", which `/blog` is not.
+    expect(
+      toChannels(await posts.evaluate(el => getComputedStyle(el).color)),
+      path,
+    ).toEqual([17, 17, 17])
+    await expect(posts, path).toHaveAttribute('aria-current', 'true')
+
+    // And no other item claims to be current.
+    await expect(nav.locator('[aria-current="page"]'), path).toHaveCount(0)
+  }
+})
+
+test('the list has no chinese-only control', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+  await expect(page.getByRole('main')).not.toContainText('chinese only')
+  await expect(page.getByRole('button', { name: /chinese/i })).toHaveCount(0)
+})
+
+test('moving between sections types the flag instead of fading the page', async ({ page }) => {
+  await page.goto('/posts', { waitUntil: 'load' })
+
+  const command = page.locator('.command-line')
+  await expect(command).toContainText('ls posts --sort=date')
+
+  await page.getByRole('main').getByRole('link', { name: 'manuals', exact: true }).click()
+  await expect(page).toHaveURL(/\/manuals$/)
+
+  // Not a change of place: no page-level keyframe on the wrapper.
+  expect(
+    await page.locator('main > div').first().evaluate(el => getComputedStyle(el).animationName),
+  ).toBe('none')
+
+  // The flag is what changed, so the flag is what gets typed.
+  await expect
+    .poll(() => command.evaluate(el => (el.textContent ?? '').replaceAll(/\s+/g, ' ').trim()))
+    .toBe('ls posts --type=manual --sort=date')
+})
+
+test('a navigation from elsewhere still cross-fades', async ({ page }) => {
+  await page.goto('/projects', { waitUntil: 'load' })
+  await page.getByRole('banner').getByRole('link', { name: 'posts', exact: true }).click()
+  await expect(page).toHaveURL(/\/posts$/)
+
+  expect(
+    await page.locator('main > div').first().evaluate(el => getComputedStyle(el).animationName),
+  ).toBe('route-in')
+})
+
 test('the ledger keeps its ordering: newest year first, then newest date', async ({ page }) => {
   await page.goto('/posts', { waitUntil: 'load' })
 
@@ -854,13 +910,20 @@ test('keyboard focus reaches the navigation and the rows, and is always painted'
   await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('/posts', { waitUntil: 'load' })
 
+  // The Shell has to be interactive before the first Tab lands on anything;
+  // pressing into a half-hydrated page leaves focus on `body`.
+  await expect(page.getByRole('banner').getByRole('link', { name: 'posts', exact: true }))
+    .toBeVisible()
+
   const seen: string[] = []
   let outlines = 0
   let rowLinks = 0
+  let presses = 0
 
   // Enough stops to leave the header *and* the masthead's command and filter
   // rows behind, and land inside the ledger.
-  for (let i = 0; i < 26; i++) {
+  while (presses < 40 && outlines < 16) {
+    presses += 1
     await page.keyboard.press('Tab')
 
     const focused = await page.evaluate(() => {
@@ -880,8 +943,10 @@ test('keyboard focus reaches the navigation and the rows, and is always painted'
       }
     })
 
+    // Nothing focused yet: the first presses can land before the page is
+    // interactive, which is a timing artefact rather than a tab-order defect.
     if (!focused) {
-      break
+      continue
     }
 
     seen.push(focused.label || focused.identity)

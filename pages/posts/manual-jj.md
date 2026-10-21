@@ -1,7 +1,7 @@
 ---
 title: JJ Manual
-date: 2025-09-26T11:47+08:00
-update: 2026-09-23T18:15+08:00
+date: 2026-09-23T11:47+08:00
+update: 2026-10-21T17:14+08:00
 lang: en
 type: manual
 group: VCS
@@ -62,7 +62,7 @@ JJ shares the same underlying data model as [Git](manual-git): a DAG of commits,
 
   Bookmarks are **not automatically advanced**: JJ has no concept of a "current bookmark". New commits are created on top of the current commit, and you decide when to move the bookmark with `jj bookmark move`, `jj bookmark advance`, etc.. Except some special cases: when a commit is rewritten (amended, rebased, squashed...), any bookmark pointing to it (or to one of its descendants) is moved automatically.
 
-  Remote bookmarks are tracked per remote and displayed with a `@{{remote}}` suffix, e.g. `main@origin`. The `trunk()` revset function refers to the default remote's main bookmark (e.g. `main@origin`).
+  Remote bookmarks are tracked per remote and displayed with a `@{remote}` suffix, e.g. `main@origin`. The `trunk()` revset function refers to the default remote's main bookmark (e.g. `main@origin`).
 
   ```txt
                          (main)
@@ -159,7 +159,7 @@ JJ shares the same underlying data model as [Git](manual-git): a DAG of commits,
 
 - [**Operation Log:**](#operation-log) <i id="operation-log"></i>
 
-  Every command that changes the repository is recorded as an **operation** in the operation log, which tracks atomic updates to all refs at once. This is what powers undo / redo: `jj op log`, `jj undo`, `jj redo`, and `jj op restore {{opId}}` (to go back to any previous state directly).
+  Every command that changes the repository is recorded as an **operation** in the operation log, which tracks atomic updates to all refs at once. This is what powers undo / redo: `jj op log`, `jj undo`, `jj redo`, and `jj op restore {op_id}` (to go back to any previous state directly).
 
   > [!Note]
   > **vs Git:** Git's reflog is per-ref and only a safety net with a limited retention window; JJ's operation log is a first-class, repo-wide history of every state change.
@@ -234,7 +234,7 @@ If the directory already contains files, they will be **snapshotted** into `@` a
 To start from an existing remote repository instead, use `jj git clone`, the counterpart of `git clone`:
 
 ```bash
-jj git clone {{repoUrl}} {{destination}}
+jj git clone {repo_url} path/you/prefer
 ```
 
 The remote is named `origin` unless you pass `--remote <name>`.
@@ -297,7 +297,7 @@ You can inspect the configured remotes with `jj git remote list`, and manage the
 
 As you may already know, JJ uses **bookmarks** to represent Git branches.
 
-Unlike `git fetch`, `jj git fetch` does not only update the locally remembered position of the remote bookmark (`{{bookmark}}@{{remote}}`): if the remote bookmark is tracked (through `jj bookmark track {{bookmark}} --remote {{remote}}`), it also moves your local bookmark with it (which means your local bookmark like `{{bookmark}}` move with `{{bookmark}}@{{remote}}`). After that, you can **integrate changes** from or to that remote bookmark — `jj rebase --destination {{bookmark}}@{{remote}}` to bring commits from it, and `jj bookmark advance && jj git push` to send commits to it.
+Unlike `git fetch`, `jj git fetch` does not only update the locally remembered position of the remote bookmark (`{bookmark}@{remote}`): if the remote bookmark is tracked (through `jj bookmark track {bookmark} --remote {remote}`), it also moves your local bookmark with it (which means your local bookmark like `{bookmark}` move with `{bookmark}@{remote}`). After that, you can **integrate changes** from or to that remote bookmark — `jj rebase --destination {bookmark}@{remote}` to bring commits from it, and `jj bookmark advance && jj git push` to send commits to it.
 
 The biggest difference between JJ and Git is that JJ has **no current bookmark** and no `pull` command: `jj git fetch` may move a tracked bookmark, but it never integrates (merges or rebases for Git) your work onto it. In Git, `pull` does that for the current branch and updates the working directory for you; in JJ the rewrite is always a separate step that you run yourself.
 
@@ -432,10 +432,10 @@ To keep things controlled and organized, there are several common bookmark manag
   - Released version commit lines are for the released major versions, e.g. `v1.x`, `v2.x`, etc.
   - Feature commit lines are for new features, start from the main commit line, and will also be applied back to the main commit line by pull/merge requests once the development is done.
 
-    If this feature needs to be **backported** to any released major version, you should use `jj duplicate` to copy the feature commits onto the appropriate `v{{version}}` commit line. See [examples](https://github.com/nuxt/nuxt) here.
-  - Hotfix commit lines are for hotfixes, start from the first included released version commit line, and will be applied back to the appropriate `v{{version}}` commit line by pull/merge requests after the development is done.
+    If this feature needs to be **backported** to any released major version, you should use `jj duplicate` to copy the feature commits onto the appropriate `v{version}` commit line. See [examples](https://github.com/nuxt/nuxt) here.
+  - Hotfix commit lines are for hotfixes, start from the first included released version commit line, and will be applied back to the appropriate `v{version}` commit line by pull/merge requests after the development is done.
 
-    If this hotfix needs to be **forwardported** to any other released version or next major version, you should use `jj duplicate` to copy the feature commits onto the appropriate `v{{version}}` or main commit line. See [examples](https://github.com/nuxt/nuxt) here.
+    If this hotfix needs to be **forwardported** to any other released version or next major version, you should use `jj duplicate` to copy the feature commits onto the appropriate `v{version}` or main commit line. See [examples](https://github.com/nuxt/nuxt) here.
 
   A simple comparison with feature bookmark workflow:
 
@@ -589,7 +589,7 @@ Committing is just an operation in JJ, when you commit some changes by accident 
 jj undo
 ```
 
-If other commands ran after the commit, use `jj op log` and `jj op restore {{opId}}` to restore that specific operation:
+If other commands ran after the commit, use `jj op log` and `jj op restore {op_id}` to restore that specific operation:
 
 ```bash
 jj op log
@@ -686,7 +686,7 @@ When you want to integrate some changes from the upstream commit line into your 
 
 ```bash
 # The current commit line is the one `@` belongs to
-jj rebase --destination {{bookmark}}
+jj rebase --destination {bookmark}
 
 # A rebase rewrites history!!!
 jj git push
@@ -705,12 +705,12 @@ jj git push
 ```bash
 # Create a merge commit with the target commit line `main` and your commit line
 # `feat/feature-name` as parents, then move the target bookmark to it:
-jj new {{yourBookmark}} {{targetBookmark}}
-jj describe --message "Merge {{yourBookmark}} into {{targetBookmark}}"
-jj bookmark advance {{targetBookmark}}
+jj new {your_bookmark} {target_bookmark}
+jj describe --message "Merge {your_bookmark} into {target_bookmark}"
+jj bookmark advance {target_bookmark}
 
 # Don't forget to push the target bookmark to remote!
-jj git push --bookmark {{targetBookmark}}
+jj git push --bookmark {target_bookmark}
 ```
 
 > [!Note]
@@ -851,7 +851,7 @@ jj git push --bookmark v1.x
 > duplicate_description = 'description ++ "\n\n(duplicated from commit " ++ commit_id.short() ++ ")"'
 > ```
 >
-> The copies then carry `(duplicated from commit {{commit id}})`, just like `git cherry-pick -x`.
+> The copies then carry `(duplicated from commit {commit_id})`, just like `git cherry-pick -x`.
 
 > [!Note]
 > **vs Git:** `git cherry-pick` copies the **changes** of one commit (for a merge commit, with `--mainline`) onto the tip of the current branch; `jj duplicate` copies the **commits** themselves from any revset to any destination, so a whole feature line is backported in one command, and the copies are ordinary new commits with new change IDs.

@@ -1,7 +1,7 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-09-21T16:37+08:00
+update: 2026-10-21T17:18+08:00
 lang: en
 type: manual
 group: Web
@@ -23,7 +23,7 @@ The [`degit` CLI](https://npmx.dev/package/degit).
 > TypeScript 7+
 
 ```nu
-degit git@github.com:lumirelle/starter-ts.git {{project-path}}
+degit git@github.com:lumirelle/starter-ts.git path/you/prefer
 ```
 
 ## TypeScript Monorepo
@@ -31,13 +31,13 @@ degit git@github.com:lumirelle/starter-ts.git {{project-path}}
 > TypeScript 7+
 
 ```nu
-degit git@github.com:lumirelle/starter-monorepo.git {{project-path}}
+degit git@github.com:lumirelle/starter-monorepo.git path/you/prefer
 ```
 
 ## VS Code Extension
 
 ```nu
-degit git@github.com:antfu/starter-vscode.git {{project-path}}
+degit git@github.com:antfu/starter-vscode.git path/you/prefer
 ```
 
 ## Vue
@@ -47,7 +47,7 @@ degit git@github.com:antfu/starter-vscode.git {{project-path}}
 Use the `create-vue` CLI tool:
 
 ```nu
-degit https://github.com/antfu-collective/vitesse-lite {{project-path}}
+degit https://github.com/antfu-collective/vitesse-lite path/you/prefer
 ```
 
 ## Nuxt
@@ -55,5 +55,5 @@ degit https://github.com/antfu-collective/vitesse-lite {{project-path}}
 > Vue 3+, Vite 8+, TypeScript 7+
 
 ```nu
-degit git@github.com:lumirelle/starter-vitesse-nuxt.git {{project-path}}
+degit git@github.com:lumirelle/starter-vitesse-nuxt.git path/you/prefer
 ```

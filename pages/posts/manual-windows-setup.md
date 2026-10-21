@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-10-21T14:49+08:00
+update: 2026-10-21T17:07+08:00
 lang: en
 type: manual
 group: Computer
@@ -343,9 +343,9 @@ Then, choose your favorite Linux distribution to install; I recommend _Arch_ for
 
 ```nu
 # Arch
-wsl --install archlinux --location {{install_location_you_prefer}}
+wsl --install archlinux --location path/you/prefer
 # Debian
-wsl --install Debian --location {{install_location_you_prefer}}
+wsl --install Debian --location path/you/prefer
 ```
 
 ### Prerequisite Archlinux Software
@@ -363,11 +363,11 @@ The software below is required for daily use and development in Archlinux:
 
 If you prefer to use Archlinux as your WSL distribution just like me, you'd better perform some specific setup, such as switching the default user away from `root`.
 
-You should create your own user in the `wheel` group with a custom password:
+You should create your own user (replace `{username}` below with it) in the `wheel` group with a custom password:
 
 ```nu
-useradd -m -G wheel {{username}}
-passwd {{username}}
+useradd -m -G wheel {username}
+passwd {username}
 ```
 
 Then allow the `wheel` group to run `sudo`:
@@ -389,7 +389,7 @@ Append the config below:
 
 ```ini
 [user]
-default={{username}}
+default={username}
 ```
 
 Then save and exit with `:wq` as well.
@@ -397,7 +397,7 @@ Then save and exit with `:wq` as well.
 Finally, you can switch to the newly created user:
 
 ```nu
-su - {{username}}
+su - {username}
 ```
 
 ### Recommended WSL Software
@@ -471,7 +471,7 @@ If you want to try a local LLM on your Windows computer just like me, I highly r
 And then you can deploy your local LLM with the command below:
 
 ```nu
-llama-server -hf {{model-name}}:{{model-version}} ... {{additional-args}}
+llama-server -hf {model-name}:{model-version} # ... Additional args
 ```
 
 You can customize your own model and args, or just refer to my personal [LLM start-up scripts](https://github.com/lumirelle/llm).

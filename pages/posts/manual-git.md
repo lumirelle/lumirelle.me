@@ -1,7 +1,7 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-09-23T18:15+08:00
+update: 2026-10-21T17:11+08:00
 lang: en
 type: manual
 group: VCS
@@ -103,10 +103,10 @@ At that point, there are no commits in your repository, and the working director
 To start from an existing remote repository instead, use `git clone`:
 
 ```bash
-git clone {{repoUrl}} {{destination}}
+git clone {repo_url} path/you/prefer
 ```
 
-The remote is named `origin` unless you pass `--origin {{name}}`, and the default branch is checked out, so you can start working right away. The remote's other branches are available as **remote-tracking branches** (like `origin/main`).
+The remote is named `origin` unless you pass `--origin {name}`, and the default branch is checked out, so you can start working right away. The remote's other branches are available as **remote-tracking branches** (like `origin/main`).
 
 ### Make Changes and Commit
 
@@ -154,9 +154,9 @@ You can inspect the configured remotes with `git remote --verbose`, and manage t
 
 In Git, the branch is the first-class citizen: you sync commits through branches.
 
-As you already know, a branch is a reference to commits. You can use `git fetch` to update the locally remembered position of the remote branch (`refs/remotes/{{remote}}/{{branch}}`). After that, you can **integrate changes** from or to that remote branch — `git pull` commits from that remote branch and `git push` commits to it.
+As you already know, a branch is a reference to commits. You can use `git fetch` to update the locally remembered position of the remote branch (`refs/remotes/{remote}/{branch}`). After that, you can **integrate changes** from or to that remote branch — `git pull` commits from that remote branch and `git push` commits to it.
 
-Both commands operate on the **current branch**, and they need to know which remote branch it is linked to: its **upstream**, recorded as `branch.{{name}}.remote` and `branch.{{name}}.merge`.
+Both commands operate on the **current branch**, and they need to know which remote branch it is linked to: its **upstream**, recorded as `branch.{name}.remote` and `branch.{name}.merge`.
 
 A branch created with `git switch --create` has no upstream yet. You should establish the link once, either by pushing the branch with `--set-upstream`:
 
@@ -251,13 +251,13 @@ To keep things controlled and organized, there are several common branch managem
   Based on the [feature branch workflow](#feature-branch-workflow), with multiple long-term branches for different major versions.
 
   - Main branch is for **the next major version**
-  - Released version branches (`v{{version}}`) are for the released major versions, e.g. `v1.x`, `v2.x`, etc.
+  - Released version branches (`v{version}`) are for the released major versions, e.g. `v1.x`, `v2.x`, etc.
   - Feature (`feat/xxx`) branches are for new features, checkout from the main branch, and applied back to the main branch by pull/merge requests once the development is done.
 
-    If this feature needs to be **backported** to any released major version, you should use `cherry-pick` to pick that merge commit into the appropriate `v{{version}}` branch. See [examples](https://github.com/nuxt/nuxt) here.
+    If this feature needs to be **backported** to any released major version, you should use `cherry-pick` to pick that merge commit into the appropriate `v{version}` branch. See [examples](https://github.com/nuxt/nuxt) here.
   - Hotfix (`hotfix/xxx`) branches are for hotfixes, checkout from the first included released version branch, and applied back to that branch by pull/merge requests once the development is done.
 
-    If this hotfix needs to be **forwardported** to any other released version or next major version, you should use `cherry-pick` to pick that merge commit into the appropriate `v{{version}}` or main branch. See [examples](https://github.com/nuxt/nuxt) here.
+    If this hotfix needs to be **forwardported** to any other released version or next major version, you should use `cherry-pick` to pick that merge commit into the appropriate `v{version}` or main branch. See [examples](https://github.com/nuxt/nuxt) here.
 
   A simple comparison with feature branch workflow:
 
@@ -477,8 +477,8 @@ All the operations are simple:
 When you want to integrate some changes from the upstream branch into your current branch, instead of `merge` with a ugly history tree, you can rebase your current branch onto it.
 
 ```bash
-git switch {{branch}}
-git rebase {{upstreamBranch}}
+git switch {branch}
+git rebase {upstream_branch}
 
 # A rebase rewrites history, so the push needs --force-with-lease --force-if-includes (never plain --force)!!!
 git push --force-with-lease --force-if-includes
@@ -492,8 +492,8 @@ git push --force-with-lease --force-if-includes
 #### Merge Branch (Not Recommended)
 
 ```bash
-git switch {{targetBranch}}
-git merge {{yourBranch}}
+git switch {target_branch}
+git merge {your_branch}
 
 # Don't forget to push the target branch to remote!
 git push

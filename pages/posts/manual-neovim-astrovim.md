@@ -1,7 +1,7 @@
 ---
 title: Neovim and AstroVim Manual
 date: 2025-12-25T14:48+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-09-21T17:01+08:00
 lang: en
 type: manual
 group: Editor
@@ -47,7 +47,7 @@ winget add --exact --id Neovim.Neovim
 
 To install AstroVim, make sure your system satisfies [the requirements](https://docs.astronvim.com/#-requirements) first, then simply follow [the official documentation](https://docs.astronvim.com/).
 
-Or just try [my configuration setup](https://github.com/lumirelle/dotfiles), powered by [Chezmoi](https://github.com/twpayne/chezmoi).
+Or just try [my configuration setup](https://github.com/lumirelle/dotfiles/tree/main/dot_config/shared/nvim), powered by [Chezmoi](https://github.com/twpayne/chezmoi).
 
 ## Basic Usage
 

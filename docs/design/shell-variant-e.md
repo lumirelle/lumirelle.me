@@ -87,7 +87,9 @@ One orchestrated moment, everything else answers an action. All of it is off und
 
 Everything the old `NavBar` provided has to be re-earned by a custom Shell. Each has been missed at least once during the prototype:
 
-- **Breadcrumb** — `lumirelle@me ~/path`, live path, faint plus strong.
+- **Breadcrumb** — `lumirelle@me ~/path`, live path, faint plus strong, and **every segment is its own
+  route**: `lumirelle@me` and `~` both go home, `posts` goes to `/posts`, and the segment you are already
+  reading is marked rather than linked.
 - **Theme toggle** — last item in the nav row, no box, icons `i-ri-sun-line` / `dark:i-ri-moon-line`, `aria-label` follows state ("Switch to dark theme"), and it calls `toggleDark` so the site's circular reveal is reused.
 - **Scroll to top** — fixed bottom-right 24 px, 32 px square, 4 px radius, hairline, mono `↑` at `ink-strong` (17.9:1 light / 18.8:1 dark), inverting on hover. Appears past 320 px and is `inert` while hidden — not merely transparent.
 - **`cd ..`** — Shell element above the outline rail, `$` at full ink, rest faint, parent path with the query preserved.

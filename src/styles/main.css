@@ -155,12 +155,47 @@ html:not(.dark) [img-dark] {
   }
 }
 
+/*
+ * The page-level transition, borrowed from a terminal: going deeper prints
+ * downwards, going back up the tree prints upwards.
+ *
+ * `backwards` fill, never `both` — a filled animation leaves an identity
+ * `transform` behind, which makes the wrapper a containing block. That is the
+ * trap that dragged the fixed outline rail into the content column during the
+ * prototype, and the reason the rail is now adopted out of the routed content
+ * (`src/components/shell/ShellCdUp.vue`) before any of this runs.
+ */
+@keyframes route-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@keyframes route-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+}
+
 .route-in {
-  animation: route-in var(--duration-route) var(--ease-route) both;
+  animation: route-in var(--duration-route) var(--ease-route) backwards;
+}
+
+.route-in.route-down {
+  animation-name: route-in-down;
+}
+
+.route-in.route-up {
+  animation-name: route-in-up;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .route-in {
+  /* The directional rules below outrank `.route-in` alone, so name them all. */
+  .route-in,
+  .route-in.route-down,
+  .route-in.route-up {
     animation: none;
   }
 }

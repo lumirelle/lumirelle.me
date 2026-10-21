@@ -22,6 +22,33 @@ interface Heading {
   top: number
 }
 
+/**
+ * The rail belongs to the Shell, not to the routed content.
+ *
+ * The markdown pipeline generates it *inside* the Post body, which means it lives
+ * under whatever the page transition animates — and a `transform` anywhere up
+ * that tree becomes its containing block, so a `position: fixed` rail resolves
+ * against the content column instead of the viewport and jumps into the text.
+ * Adopting it into `<body>` once per route keeps it viewport-relative and makes
+ * the transition safe.
+ */
+let adopted: HTMLElement | null = null
+
+function adoptRail(): void {
+  const rail = document.querySelector<HTMLElement>('.table-of-contents')
+
+  // The previous page's rail has no Post to belong to any more.
+  if (adopted && adopted !== rail) {
+    adopted.remove()
+    adopted = null
+  }
+
+  if (rail && rail.parentElement !== document.body) {
+    document.body.appendChild(rail)
+    adopted = rail
+  }
+}
+
 let headings: Heading[] = []
 let frame: number | undefined
 
@@ -52,6 +79,7 @@ function onScroll(): void {
 }
 
 function refresh(): void {
+  adoptRail()
   measure()
   track()
 }
@@ -67,6 +95,8 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', refresh)
   if (frame !== undefined)
     cancelAnimationFrame(frame)
+  adopted?.remove()
+  adopted = null
 })
 
 // The TOC is generated per Post, so remeasure once the new page has committed.

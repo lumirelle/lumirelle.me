@@ -49,7 +49,11 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
       class="text-[11px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-6 gap-y-2 max-w-[var(--shell-measure)] items-center justify-between md:text-[12px]"
     >
       <ShellBreadcrumb />
-      <nav class="text-ink-faint flex flex-wrap gap-x-3 gap-y-2 items-center md:gap-x-7" print:op0>
+      <nav
+        class="text-ink-faint flex flex-wrap gap-x-3 gap-y-2 items-center md:gap-x-7"
+        aria-label="Primary"
+        print:op0
+      >
         <RouterLink
           v-for="link in links"
           :key="link.to"

@@ -61,7 +61,7 @@ interface RenderedChrome {
 async function readChrome(page: Page): Promise<RenderedChrome> {
   return page.evaluate(() => {
     const root = getComputedStyle(document.documentElement)
-    const nav = document.querySelector('header nav')
+    const nav = document.querySelector('header nav[aria-label="Primary"]')
     const links = [...(nav?.querySelectorAll('a') ?? [])]
     const current = links.find(link => link.getAttribute('aria-current') === 'page')
     const idle = links.find(link => link !== current && (link.textContent ?? '').trim() !== '')
@@ -166,7 +166,7 @@ test('the header row is five mono text links, two named icons and the theme togg
   await page.goto('/posts', { waitUntil: 'load' })
 
   const header = page.getByRole('banner')
-  const nav = header.getByRole('navigation')
+  const nav = header.getByRole('navigation', { name: 'Primary' })
 
   // The text links are the row's voice: lowercase, in this order, and no other
   // label smuggles itself in beside them.
@@ -380,12 +380,15 @@ test('a route change is one opacity keyframe and never replays the cascade', asy
   const wrapper = page.locator('.route-in')
   const name = await wrapper.evaluate(el => getComputedStyle(el).animationName)
   const duration = await wrapper.evaluate(el => getComputedStyle(el).animationDuration)
-  expect(name).toBe('route-in')
+  expect(name).toBe('route-in-down')
   expect(duration).toBe('0.2s')
 
-  // Opacity only: a filled `transform` would leave an identity transform behind
-  // and turn the wrapper into a containing block.
-  expect(await wrapper.evaluate(el => getComputedStyle(el).transform)).toBe('none')
+  // The move is `backwards`-filled, so once the frame has played there is no
+  // transform left: a lingering one would make the wrapper a containing block
+  // and drag the fixed outline rail into the column.
+  await expect
+    .poll(() => wrapper.evaluate(el => getComputedStyle(el).transform))
+    .toBe('none')
 
   await page.getByRole('banner').getByRole('link', { name: 'projects', exact: true }).click()
   await expect(page).toHaveURL(/\/projects$/)
@@ -405,34 +408,41 @@ test('reduced motion strips the route keyframe and the cascade', async ({ page }
   ).toBe('none')
 })
 
-test('the breadcrumb tracks the live route', async ({ page }) => {
+test('every segment of the breadcrumb is its own route', async ({ page }) => {
   await page.goto('/posts/manual-git', { waitUntil: 'load' })
 
-  const breadcrumb = page.getByRole('banner').getByRole('link', { name: /lumirelle@me/i })
-  await expect(breadcrumb).toBeVisible()
-  await expect(breadcrumb).toHaveAccessibleName('lumirelle@me ~/posts/manual-git')
+  const crumbs = page.getByRole('navigation', { name: 'Breadcrumb' })
 
-  // The Shell has no logo, so this line is the only way home from the header.
-  // If it ever stops linking to `/`, the site becomes a one-way trip.
-  await expect(breadcrumb).toHaveAttribute('href', '/')
+  // The identity and the shell's `~` both lead home.
+  await expect(crumbs.getByRole('link', { name: 'lumirelle@me' })).toHaveAttribute('href', '/')
+  await expect(crumbs.getByRole('link', { name: 'Home', exact: true })).toHaveAttribute('href', '/')
 
-  // The path is at full ink; the constant part is faint. Asserted as rendered
-  // colour, not as a class.
-  const inks = await breadcrumb.evaluate((el) => {
-    const [constant, path] = [...el.querySelectorAll('span')]
-    return {
-      path: getComputedStyle(path!).color,
-      constant: getComputedStyle(constant!).color,
-    }
+  // Every path segment links to itself.
+  await expect(crumbs.getByRole('link', { name: 'posts' })).toHaveAttribute('href', '/posts')
+
+  // The page you are already on is marked, not a link to itself.
+  const current = crumbs.locator('[aria-current="page"]')
+  await expect(current).toHaveText('manual-git')
+  await expect(crumbs.getByRole('link', { name: 'manual-git' })).toHaveCount(0)
+
+  // The constant half is faint; the segment you are reading is at full ink.
+  const inks = await crumbs.evaluate((el) => {
+    const constant = el.querySelector('.const')!
+    const mark = el.querySelector('[aria-current="page"]')!
+    return { constant: getComputedStyle(constant).color, mark: getComputedStyle(mark).color }
   })
-  expect(toChannels(inks.path)).toEqual([17, 17, 17])
-  expect(inks.path).not.toBe(inks.constant)
+  expect(toChannels(inks.constant)).toEqual([118, 118, 118])
+  expect(toChannels(inks.mark)).toEqual([17, 17, 17])
 
-  // It is a live path, so navigating changes it.
+  // And an ancestor segment really navigates.
+  await crumbs.getByRole('link', { name: 'posts' }).click()
+  await expect(page).toHaveURL(/\/posts$/)
+  await expect(crumbs.locator('[aria-current="page"]')).toHaveText('posts')
+
+  // The line tracks a shallower route too.
   await page.goto('/use', { waitUntil: 'load' })
-  await expect(
-    page.getByRole('banner').getByRole('link', { name: /lumirelle@me/i }),
-  ).toHaveAccessibleName('lumirelle@me ~/use')
+  await expect(crumbs.getByRole('link', { name: 'Home', exact: true })).toHaveAttribute('href', '/')
+  await expect(crumbs.locator('[aria-current="page"]')).toHaveText('use')
 })
 
 test('the theme toggle names its destination and reuses the site reveal', async ({ page }) => {
@@ -585,7 +595,7 @@ test('the post sections read as `posts` in the header', async ({ page }) => {
   for (const path of ['/blog', '/notes', '/manuals']) {
     await page.goto(path, { waitUntil: 'load' })
 
-    const nav = page.getByRole('banner').getByRole('navigation')
+    const nav = page.getByRole('banner').getByRole('navigation', { name: 'Primary' })
     const posts = nav.getByRole('link', { name: 'posts', exact: true })
 
     // Visually current, and announced as *this section* rather than as "the
@@ -634,7 +644,7 @@ test('a navigation from elsewhere still cross-fades', async ({ page }) => {
 
   expect(
     await page.locator('main > div').first().evaluate(el => getComputedStyle(el).animationName),
-  ).toBe('route-in')
+  ).toBe('route-in-down')
 })
 
 test('the ledger keeps its ordering: newest year first, then newest date', async ({ page }) => {
@@ -721,7 +731,12 @@ async function expectRouteRendered(page: Page, route: RouteArtifact): Promise<vo
 
   const shell = page.getByRole('banner')
   await expect(shell, `${route.path}: Shell`).toBeVisible()
-  await expect(shell.getByRole('link', { name: /posts/i }).first()).toBeVisible()
+  await expect(
+    shell
+      .getByRole('navigation', { name: 'Primary' })
+      .getByRole('link', { name: 'posts', exact: true }),
+    `${route.path}: navigation`,
+  ).toBeVisible()
 }
 
 /** Marks this test's session as cold, undoing the returning-visitor seed. */
@@ -912,8 +927,11 @@ test('keyboard focus reaches the navigation and the rows, and is always painted'
 
   // The Shell has to be interactive before the first Tab lands on anything;
   // pressing into a half-hydrated page leaves focus on `body`.
-  await expect(page.getByRole('banner').getByRole('link', { name: 'posts', exact: true }))
-    .toBeVisible()
+  await expect(
+    page.getByRole('banner')
+      .getByRole('navigation', { name: 'Primary' })
+      .getByRole('link', { name: 'posts', exact: true }),
+  ).toBeVisible()
 
   const seen: string[] = []
   let outlines = 0
@@ -922,7 +940,7 @@ test('keyboard focus reaches the navigation and the rows, and is always painted'
 
   // Enough stops to leave the header *and* the masthead's command and filter
   // rows behind, and land inside the ledger.
-  while (presses < 40 && outlines < 16) {
+  while (presses < 48 && outlines < 20) {
     presses += 1
     await page.keyboard.press('Tab')
 

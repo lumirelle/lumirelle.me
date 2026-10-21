@@ -124,7 +124,10 @@ onKeyStroke('Escape', (e) => {
         Keyed on the route so the incoming content replays `route-in` (200 ms,
         opacity only — see main.css). Scroll stays the router's business.
       -->
-      <div :key="route.fullPath" :class="kind === 'type' ? '' : 'route-in'">
+      <div
+        :key="route.fullPath"
+        :class="kind === 'type' ? '' : ['route-in', `route-${kind === 'route-up' ? 'up' : 'down'}`]"
+      >
         <RouterView />
       </div>
     </main>

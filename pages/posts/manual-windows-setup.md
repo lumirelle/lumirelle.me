@@ -1,7 +1,7 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-10-15T12:40+08:00
+update: 2026-10-21T14:49+08:00
 lang: en
 type: manual
 group: Computer
@@ -16,10 +16,16 @@ order: 1
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-flow: column;
-  grid-auto-columns: 2.5fr;
+  grid-auto-columns: 2fr;
 }
 .prose table th, .prose table td {
   overflow-x: auto;
+}
+.prose table th .code-window:first-child, .prose table td .code-window:first-child {
+  margin-top: 0;
+}
+.prose table th .code-window:last-child, .prose table td .code-window:last-child {
+  margin-bottom: 0;
 }
 </style>
 
@@ -131,9 +137,9 @@ start ms-cxh:localonly
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Clash Verge Rev | Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | <TextTag text="Optional" /><TextTag text="Chezmoi-ed" />Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time: |
-| Chezmoi | :code[cmd]{winget add twpayne.chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: :code[bash]{chezmoi init git@github.com:lumirelle/dotfiles.git}. |
-| Mise | :code[cmd]{winget add jdx.mise} | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[bash]{mise bootstrap}.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
+| Clash Verge Rev <TextTag text="Optional" text-xs preset="amber" /><TextTag text="Chezmoi-ed" text-xs preset="green" />| Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time. |
+| Chezmoi | :code[nu]{winget add twpayne.chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: :code[nu]{chezmoi init git@github.com:lumirelle/dotfiles.git} |
+| Mise <TextTag text="Chezmoi-ed" text-xs preset="green" /> | :code[nu]{winget add jdx.mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap}See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
 
 ### Configure Windows Itself
 
@@ -150,7 +156,7 @@ Optionally, we can choose a quieter antivirus program instead. I recommend [_Huo
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Huorong | [Official Website](https://www.huorong.cn/person) | <TextTag text="Optional" text-xs /><br><br>You can choose any other antivirus software you like — anything but Windows Defender!!! |
+| Huorong <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://www.huorong.cn/person) | You can choose any other antivirus software you like — anything but Windows Defender!!! |
 
 #### Adjust System Settings
 
@@ -158,13 +164,13 @@ First, adjust system settings via _Winutil_:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Winutil | :code[cmd]{powershell -Command 'irm "https://christitus.com/win" \| iex'} | In the "Tweaks" tab, just apply the recommended settings if you are not sure about those switches~<br><br>In the "Config" tab, I enable the "Windows Subsystem for Linux" feature;<br><br> |
+| Winutil | :code[powershell]{irm "https://christitus.com/win" \| iex} | In the "Tweaks" tab, just apply the recommended settings if you are not sure about those switches~<br><br>In the "Config" tab, I enable the "Windows Subsystem for Linux" feature;<br><br> |
 
 If your Windows is not activated yet, you can use _HEU KMS Activator_ to activate it:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| HEU KMS Activator | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) | <TextTag text="Optional" text-xs /> |
+| HEU KMS Activator <TextTag text="Optional" text-xs preset="amber" /> | [GitHub Releases](https://github.com/zbezj/HEU_KMS_Activator/releases) | / |
 
 > [!Note]
 >
@@ -189,23 +195,23 @@ The software below is highly recommended and helpful for daily use and developme
 | Revo Uninstaller | <TextTag text="Mise-ed" text-xs /> | Software uninstaller (Pro edition). |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For the classic Windows context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For the new Windows 11 context menu. |
-| Driver Store Explorer | :code[cmd]{winget add lostindark.DriverStoreExplorer} | <TextTag text="Optional" text-xs />Clean up unused/outdated device drivers. |
-| CrystalDiskInfo | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | <TextTag text="Optional" text-xs />Disk info viewer. |
+| Driver Store Explorer <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add lostindark.DriverStoreExplorer} | Clean up unused/outdated device drivers. |
+| CrystalDiskInfo <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | Disk info viewer. |
 
 #### Windows Environment/Infrastructure
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | <TextTag text="Optional" text-xs />MSVC Runtime. **Usually, we don't need to install this manually.** |
+| Visual C++ Redistributable <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
 | WinLibs | <TextTag text="Mise-ed" text-xs /> | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the environment variables `CC` & `CXX`, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
 | Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
 | Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
-| Git | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right? |
+| Git <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Nothing is more important than _Git_ for a developer, right? |
 | GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
 | Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
 | Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
-| Apple PKL LSP | :code[bash]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
-| Windows Subsystem for Linux | :code[cmd]{wsl --install} or :code[cmd]{wsl --update} | The best Linux distribution in the world and the best development environment for Windows. 🥰<br><br>Requires a reboot after installation.<br><br>See WSL setup [here](#third-step-set-up-the-wsl-environment-archlinux). |
+| Apple PKL LSP | :code[nu]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
+| Windows Subsystem for Linux | :code[nu]{wsl --install} or :code[nu]{wsl --update} | The best Linux distribution in the world and the best development environment for Windows. 🥰<br><br>Requires a reboot after installation.<br><br>See WSL setup [here](#third-step-set-up-the-wsl-environment-archlinux). |
 
 #### Windows User Experience Enhance
 
@@ -215,10 +221,10 @@ The software below is highly recommended and helpful for daily use and developme
 | Auto Dark Mode | <TextTag text="Mise-ed" text-xs /> | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
 | Wox | <TextTag text="Mise-ed" text-xs /> | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
 | Brave | <TextTag text="Mise-ed" text-xs /> | My daily browser. See extensions setup [here](#browser-setup). |
-| Internet Download Manager | :code[cmd]{winget add Tonec.InternetDownloadManager} | <TextTag text="Optional" text-xs />Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
-| Nutstore | :code[cmd]{winget add Nutstore.Nutstore} | <TextTag text="Optional" text-xs />WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |
-| KeePassXC | :code[cmd]{winget add KeePassXCTeam.KeePassXC} | <TextTag text="Optional" text-xs />Password manager; you can replace it with your preferred one. |
-| PixPin | <TextTag text="Mise-ed" text-xs /> | Screen capture tool.<br><br>I use <TextTag text="Mise-ed" text-xs /> to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
+| Internet Download Manager <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Tonec.InternetDownloadManager} | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
+| Nutstore <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Nutstore.Nutstore} | WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |
+| KeePassXC <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add KeePassXCTeam.KeePassXC} | Password manager; you can replace it with your preferred one. |
+| PixPin | <TextTag text="Mise-ed" text-xs /> | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
 | zoxide | <TextTag text="Mise-ed" text-xs /> | A smarter cd command. |
 | fd | <TextTag text="Mise-ed" text-xs /> | A simple, fast and user-friendly alternative to `find`. |
 | fzf | <TextTag text="Mise-ed" text-xs /> | A command-line fuzzy finder. |
@@ -232,19 +238,19 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal Preview | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> The only choice for Windows so far (2026/8/31)... |
-| Nushell | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Windows Terminal Preview <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | The only choice for Windows so far (2026/8/31)... |
+| Nushell <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | A cross-platform shell powered by Rust. |
 | Starship | <TextTag text="Mise-ed" text-xs /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
-| Herdr | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Terminal multiplexer. |
+| Herdr <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Terminal multiplexer. |
 
 #### Development on Windows
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Neovim | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Zed | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> **Still experimental, but with better performance than Visual Studio Code.** |
-| Visual Studio Code | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /><br><br>A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
-| Pi Coding Agent | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
+| Neovim <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Just much faster than Visual Studio Code. |
+| Zed <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | **Still experimental, but with better performance than Visual Studio Code.** |
+| Visual Studio Code <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
+| Pi Coding Agent <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Just vibe! |
 | DBX | <TextTag text="Mise-ed" text-xs /> | Better database manager! |
 | hyperfine | <TextTag text="Mise-ed" text-xs /> | A command-line benchmarking tool. |
 
@@ -252,19 +258,19 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Thunderbird | :code[cmd]{winget add Mozilla.Thunderbird} | <TextTag text="Optional" text-xs />Email manager. |
-| WeChat | :code[cmd]{winget add Tencent.WeChat.Universal} | <TextTag text="Optional" text-xs />Chat with others. |
-| QQ | :code[cmd]{winget add Tencent.QQ.NT} | <TextTag text="Optional" text-xs />Chat with others. |
-| Enterprise WPS | [Official Website](https://ep.wps.cn/download) | <TextTag text="Optional" text-xs />Office toolbox.<br><br>Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
-| PDF SAM | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | <TextTag text="Optional" text-xs />PDF converter. |
+| Thunderbird <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Mozilla.Thunderbird} | Email manager. |
+| WeChat <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Tencent.WeChat.Universal} | Chat with others. |
+| QQ <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Tencent.QQ.NT} | Chat with others. |
+| Enterprise WPS <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://ep.wps.cn/download) | Office toolbox.<br><br>Mysterious little code: TJ3GN-9NTGQ-GLF7C-YEN8X-TJWML |
+| PDF SAM <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://pdfsam.org/download-pdfsam-basic/) | PDF converter. |
 
 #### Playing on Windows
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| NVIDIA App | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | <TextTag text="Optional" text-xs /> |
-| Steam | :code[cmd]{winget add Valve.Steam} | <TextTag text="Optional" text-xs /> |
-| Epic Games | :code[cmd]{winget add EpicGames.EpicGamesLauncher} | <TextTag text="Optional" text-xs /> |
+| NVIDIA App <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://www.nvidia.com/en-us/software/nvidia-app/) | / |
+| Steam <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Valve.Steam} | / |
+| Epic Games <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add EpicGames.EpicGamesLauncher} | / |
 
 #### Browser Setup
 
@@ -348,10 +354,10 @@ The software below is required for daily use and development in Archlinux:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Base Devel | :code[bash]{sudo pacman -S base-devel} | Basic dev dependencies. |
-| Chezmoi | :code[bash]{sudo pacman -S chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: :code[bash]{chezmoi init git@github.com:lumirelle/dotfiles.git}. |
-| Mise | :code[bash]{sudo pacman -S mise} | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[bash]{mise bootstrap}.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
-| Yay | :code[bash]{git clone https://aur.archlinux.org/yay-bin.git\ncd yay-bin\nmakepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
+| Base Devel | :code[nu]{sudo pacman -S base-devel} | Basic dev dependencies. |
+| Chezmoi | :code[nu]{sudo pacman -S chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: :code[nu]{chezmoi init git@github.com:lumirelle/dotfiles.git} |
+| Mise <TextTag text="Chezmoi-ed" text-xs preset="green" /> | :code[nu]{sudo pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap}See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
+| Yay | :code[nu]{git clone https://aur.archlinux.org/yay-bin.git; cd yay-bin; makepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
 
 ### Configure Archlinux Itself
 
@@ -418,11 +424,11 @@ The software below is highly recommended and helpful for development with Archli
 | Noto Fonts CJK | <TextTag text="Mise-ed" text-xs /> | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
 | Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
 | Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
-| Git | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| Git <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Nothing is more important than _Git_ for a developer, right? |
 | GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
 | Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
 | Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
-| Apple PKL LSP | :code[bash]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
+| Apple PKL LSP | :code[nu]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
 | Chromium | <TextTag text="Mise-ed" text-xs /> | If you need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
 
 #### Archlinux User Experience Enhance
@@ -440,16 +446,16 @@ The software below is highly recommended and helpful for development with Archli
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Nushell | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> A cross-platform shell powered by Rust. |
+| Nushell <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | A cross-platform shell powered by Rust. |
 | Starship | <TextTag text="Mise-ed" text-xs /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
-| Herdr | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Terminal multiplexer. |
+| Herdr <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Terminal multiplexer. |
 
 #### Development on Archlinux
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Neovim | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just much faster than Visual Studio Code. |
-| Pi Coding Agent | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Just vibe! |
+| Neovim <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Just much faster than Visual Studio Code. |
+| Pi Coding Agent <TextTag text="Chezmoi-ed" text-xs preset="green" />  | <TextTag text="Mise-ed" text-xs /> | Just vibe! |
 | hyperfine | <TextTag text="Mise-ed" text-xs /> | A command-line benchmarking tool. |
 
 ## Fourth Step: Local LLM
@@ -458,9 +464,9 @@ If you want to try a local LLM on your Windows computer just like me, I highly r
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| llama.cpp | :code[bash]{sudo pacman -S llama-cpp} | / |
-| ggml-cuda | :code[bash]{sudo pacman -S ggml-cuda} | If you are using an NVIDIA GPU. |
-| ggml-vulkan & vulkan-dzn | :code[bash]{sudo pacman -S ggml-vulkan vulkan-dzn} | If you are using an AMD GPU. |
+| llama.cpp | :code[nu]{sudo pacman -S llama-cpp} | / |
+| ggml-cuda | :code[nu]{sudo pacman -S ggml-cuda} | If you are using an NVIDIA GPU. |
+| ggml-vulkan & vulkan-dzn | :code[nu]{sudo pacman -S ggml-vulkan vulkan-dzn} | If you are using an AMD GPU. |
 
 And then you can deploy your local LLM with the command below:
 

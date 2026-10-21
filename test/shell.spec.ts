@@ -694,6 +694,19 @@ test('the Splash plays once on a cold session and blocks the page beneath it', a
   await expect(overlay).toBeHidden({ timeout: 2000 })
 })
 
+test('the Splash never paints when its stylesheet has not applied', async ({ page }) => {
+  // The markup is in the prerendered HTML, so it exists before any CSS does. If
+  // it were visible by default it would paint as raw ASCII in the corner of the
+  // page — which is exactly what the dev server did, where styles arrive with
+  // the module graph rather than as a render-blocking link.
+  await page.route('**/*.css', route => route.abort())
+  await coldSession(page)
+  await page.goto('/', { waitUntil: 'load' })
+
+  await expect(page.locator(splash)).toBeHidden()
+  await expect(page.getByText('lumirelle.me $ ls posts --sort=date')).toBeHidden()
+})
+
 test('a click jumps the Splash to its end state', async ({ page }) => {
   await coldSession(page)
   await page.goto('/', { waitUntil: 'load' })

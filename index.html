@@ -48,7 +48,15 @@
       `has-splash` class is never added, so this stays hidden and the page is
       fully readable.
     -->
-    <div id="splash" aria-hidden="true">
+    <!--
+      `style="display: none"` is load-bearing, not decorative: it is the state
+      the Splash is in until its stylesheet has actually applied. Without it the
+      markup paints as raw ASCII in the corner for as long as CSS is missing —
+      always in the dev server, where styles arrive with the module graph, and on
+      any load where the stylesheet is late. The stylesheet turns it back on with
+      `!important`, so the overlay never appears unstyleable.
+    -->
+    <div id="splash" aria-hidden="true" style="display: none">
       <div class="splash-panel">
         <pre class="splash-ghost">+-------------------+
 |     .-.   .-.     |

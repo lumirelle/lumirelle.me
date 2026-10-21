@@ -16,8 +16,13 @@
   display: none;
 }
 
+/*
+ * `!important` because the element carries an inline `display: none` in
+ * `index.html`, which is what keeps it invisible on a load where this stylesheet
+ * has not applied yet. This rule is the proof that it has.
+ */
 html.has-splash #splash {
-  display: grid;
+  display: grid !important;
 }
 
 #splash {
@@ -135,7 +140,7 @@ html.has-splash #splash {
  */
 @media (prefers-reduced-motion: reduce) {
   html.has-splash #splash {
-    display: none;
+    display: none !important;
   }
 
   #splash .splash-ghost,

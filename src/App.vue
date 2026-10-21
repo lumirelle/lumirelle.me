@@ -109,7 +109,7 @@ onKeyStroke('Escape', (e) => {
   -->
   <NavBar />
   <main
-    class="mx-auto px-[var(--shell-gutter)] pb-10 pt-12 max-w-[var(--shell-measure)] of-x-hidden"
+    class="mx-auto px-[var(--shell-gutter)] pb-16 pt-12 max-w-[var(--shell-measure)] of-x-hidden"
   >
     <!--
       Keyed on the route so the incoming content replays `route-in` (200 ms,
@@ -118,7 +118,7 @@ onKeyStroke('Escape', (e) => {
     <div :key="route.fullPath" class="route-in">
       <RouterView />
     </div>
-    <Footer :key="route.path" />
+    <Footer />
   </main>
   <Transition name="fade">
     <div

@@ -34,10 +34,19 @@ Mono is for system truth — nav, breadcrumb, dates, counts, labels. Serif is fo
 
 ## Geometry
 
-- Content column **820 px**, padding **32 px**.
-- Margin column **6.5 rem**, right-aligned mono, two lines for manuals (`manuals` / `computer`).
-- List rows: `grid [6.5rem 1fr]`, titles left, reading time right-aligned against the inner edge, dates tabular.
-- Outline rail: fixed, gutter only. `left: max(16px, 50% - 626px)`, width **224 px**, `cd ..` at **top 72**, rail at **top 102** (`--rail-top + 30`). Hidden below **1400 px**, where the gutter can't hold it without touching the column; there the site's existing hover-reveal outline takes over.
+- Content column **820 px**, padding **32 px**. The footer's closing rule is the column's width, not the
+  viewport's.
+- Margin column **6.5 rem**, right-aligned mono, and it carries the **group label** — the year, `Upcoming`,
+  or (for manuals) `manuals` over the manual's own group on a second line. It does not carry the date.
+- List masthead: `h1` at 46 px, a one-sentence lead at 18 px / 1.6 capped at 46ch, then the command line
+  `$ ls posts --sort=date` with a 2 px caret and, at the far edge, `26 entries / 13 manuals`. One hairline
+  closes the block.
+- List rows: `grid [6.5rem 1fr]`; the title is 23 px serif and the **date and reading time sit on a second
+  line beneath the title**, mono 12 px, as `2026-04-21  3min`. Rows are separated by rhythm (`2.25rem`),
+  **never by rules** — thirty rows do not need thirty hairlines.
+- Outline rail: fixed, gutter only. `left: max(16px, 50% - 626px)`, width **224 px**, `cd ..` at **top 72**,
+  rail at **top 102** (`--rail-top + 30`). Hidden below **1400 px**, where the gutter can't hold it without
+  touching the column; there the site's existing hover-reveal outline takes over.
 - Radii: **8 px** on the code window, **4 px** on interactive controls, square everywhere else.
 
 ## Tokens
@@ -138,6 +147,23 @@ route complete with JavaScript disabled.
 - The header row wrapped to three lines on a 390 px phone. It is 11 px with tighter gaps below
   `md`, so it packs to two.
 
+**Fixed after the audit, at the owner's direction** — the rendered page had drifted from this reference and
+the reference itself had drifted from the prototype, so both were corrected:
+
+- The list inverted the row: the date was in the margin and the reading time was right-aligned against the
+  inner edge, with a hairline under every row. It now matches *Geometry* above — group label in the margin,
+  date and reading time on the line under the title, rhythm instead of rules.
+- The list had no masthead and no command line. Both are back, with the entry counts.
+- The outline rail was the fork's hover-revealed hamburger at the viewport edge. It is now the mono rail in
+  the gutter, with `cd ..` above it, the active section marked `>` in a reserved `1.4ch` gutter, and scroll
+  arithmetic tracking it.
+- The footer's rule and items were neither the prototype's width nor its type. They are now.
+
+Two deliberate deviations from the prototype remain. **The list keeps a filter row** (`chinese only`, `all`,
+`blog`, `notes`, `manuals`): the prototype has none, but the Shell's navigation has no other route to
+`/blog`, `/notes` or `/manuals`, and dropping them would have broken navigation to satisfy a screenshot.
+**The header keeps feed and source** as named icon links, which the prototype dropped by accident.
+
 **Recorded, not fixed — these belong to P2:**
 
 - **Code blocks are still `<pre>` blocks**, not the terminal windows described under *Code blocks*:
@@ -148,12 +174,8 @@ route complete with JavaScript disabled.
 - **The Post page's masthead still joins its metadata with `·`** ("First post on … · Last edit on …
   · 20min"). The middle-dot removal in P1 is about the *list*, where columns now do that work; the
   Post page's own header is P2's to set.
-- **The outline rail is unstyled.** The pipeline-generated TOC still appears as the fork's
-  hover-revealed hamburger at the viewport edge, not as the mono rail in the gutter described under
-  *Outline rail* above. `cd ..` is correctly placed above where it will live.
-- **Reading time stacks under the title below 640 px**, right-aligned within the stacked block. The
-  design's inner-edge column needs the two-column grid, and a 390 px screen cannot hold a 6.5 rem
-  margin column plus a title.
+- **Reading time stacks under the title below 640 px.** It is already on the line beneath the title by
+  design, so at 390 px only the margin column narrows (6.5 rem → 4 rem).
 
 **Deliberate, so it is not "fixed" later:** there are no vertical Rails. The earlier Frame idea did
 not survive the prototype, and the column is held by its measure and by row dividers instead.

@@ -3,6 +3,6 @@ title: Posts - Lumirelle
 display: ''
 ---
 
-<SubNav />
+<!-- @layout-full-width -->
 
-<ListPosts only-date />
+<ListPosts title="Posts" lead="Manuals, notes and essays on the tools I use to write software." />

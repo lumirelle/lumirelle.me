@@ -3,6 +3,6 @@ title: Blog - Lumirelle
 display: ''
 ---
 
-<SubNav />
+<!-- @layout-full-width -->
 
-<ListPosts only-date type="blog" />
+<ListPosts title="Blog" lead="Short notes on whatever I am building, breaking or reading." type="blog" />

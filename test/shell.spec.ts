@@ -540,22 +540,28 @@ test('the Post list is a ledger with one row per Post', async ({ page }) => {
   expect(expected).toBeGreaterThan(20)
   await expect(ledgerRows(page)).toHaveCount(expected)
 
-  // Group labels are real headings sitting on the Frame's rule, not oversized
-  // outline numerals floating above the rows.
+  // The group label is a real heading in the margin column, right-aligned and
+  // mono — not an oversized numeral floating above the rows.
   const group = page.getByRole('main').getByRole('heading', { level: 2 }).first()
   await expect(group).toBeVisible()
-  const labelPaint = await group.evaluate((el) => {
+  const label = await group.evaluate((el) => {
     const style = getComputedStyle(el)
-    const section = el.parentElement!
     return {
-      background: style.backgroundColor,
-      canvas: getComputedStyle(document.documentElement).backgroundColor,
-      rule: getComputedStyle(section).borderTopWidth,
+      text: (el.textContent ?? '').trim(),
+      align: style.textAlign,
+      family: style.fontFamily,
     }
   })
-  // The label masks the rule it sits on, so no hairline runs through the text.
-  expect(toRgb(labelPaint.background)).toBe(toRgb(labelPaint.canvas))
-  expect(labelPaint.rule).toBe('1px')
+  expect(label.text).toMatch(/^\d{4}$|^manuals/)
+  expect(label.align).toBe('right')
+  expect(label.family).toMatch(/mono/i)
+
+  // Rows are separated by rhythm, not by rules: the prototype's list carries no
+  // per-row hairline at all.
+  const rowRules = await page.getByRole('main').getByRole('listitem').evaluateAll(els =>
+    els.map(el => getComputedStyle(el).borderBottomWidth),
+  )
+  expect([...new Set(rowRules)]).toEqual(['0px'])
 })
 
 test('dates are a monospaced, tabular column', async ({ page }) => {
@@ -578,25 +584,31 @@ test('dates are a monospaced, tabular column', async ({ page }) => {
 test('the ledger keeps its ordering: newest year first, then newest date', async ({ page }) => {
   await page.goto('/posts', { waitUntil: 'load' })
 
-  // Read what a visitor reads: the group label above each block, then the dates
-  // inside it. Years must descend, and within a year the dates must not rise.
+  // Read what a visitor reads: the group label in the margin, then the dates
+  // beneath each title. `datetime` is the authored date, so the assertion does
+  // not depend on how the meta line prints it.
   const groups = await page.evaluate(() => {
     const sections = [...document.querySelectorAll('main section')]
     return sections.map(section => ({
-      label: section.querySelector('h2')?.textContent?.trim() ?? '',
-      dates: [...section.querySelectorAll('time')].map(time => time.textContent?.trim() ?? ''),
+      label: (section.querySelector('h2')?.textContent ?? '').trim(),
+      stamps: [...section.querySelectorAll('time')]
+        .map(time => time.getAttribute('datetime') ?? ''),
     }))
   })
 
   expect(groups.length).toBeGreaterThan(0)
-  const years = groups.map(group => Number(group.label))
-  expect(years.every(year => Number.isFinite(year))).toBe(true)
+
+  const years = groups
+    .map(group => group.label)
+    .filter(label => /^\d{4}$/.test(label))
+    .map(Number)
+  expect(years.length).toBeGreaterThan(0)
   expect([...years].sort((a, b) => b - a)).toEqual(years)
 
   for (const group of groups) {
-    const stamps = group.dates.map(date => Date.parse(`${date} ${group.label}`))
-    expect(stamps.every(stamp => Number.isFinite(stamp))).toBe(true)
-    expect([...stamps].sort((a, b) => b - a)).toEqual(stamps)
+    const stamps = group.stamps.map(stamp => Date.parse(stamp))
+    expect(stamps.every(stamp => Number.isFinite(stamp)), group.label).toBe(true)
+    expect([...stamps].sort((a, b) => b - a), group.label).toEqual(stamps)
   }
 })
 
@@ -846,7 +858,9 @@ test('keyboard focus reaches the navigation and the rows, and is always painted'
   let outlines = 0
   let rowLinks = 0
 
-  for (let i = 0; i < 20; i++) {
+  // Enough stops to leave the header *and* the masthead's command and filter
+  // rows behind, and land inside the ledger.
+  for (let i = 0; i < 26; i++) {
     await page.keyboard.press('Tab')
 
     const focused = await page.evaluate(() => {

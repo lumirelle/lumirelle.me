@@ -1,6 +1,6 @@
 import type { MarkdownExit, StateBlock } from 'markdown-exit'
 
-const PREVIEW_RE = /^preview(?:[ \t]+(\S.*))?$/
+const PREVIEW_RE = /^html-preview(?:[ \t]+(\S.*))?$/
 
 function escapeAttr(value: string): string {
   return Buffer.from(value).toString('base64')
@@ -62,7 +62,7 @@ export function PreviewPlugin(md: MarkdownExit): void {
 
     const token = state.push('html_block', '', 0)
     token.map = [startLine, nextLine + 1]
-    token.content = `<CodePreview ${codeAttr}${styleAttr} />`
+    token.content = `<HtmlSandboxPreview ${codeAttr}${styleAttr} />`
 
     state.line = nextLine + 1
     return true

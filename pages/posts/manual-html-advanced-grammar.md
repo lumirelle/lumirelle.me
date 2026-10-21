@@ -1,7 +1,7 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-10-21T20:20+08:00
 lang: en
 type: manual
 group: Web
@@ -61,7 +61,7 @@ order: 1
   <div>123</div><div>123</div>
   ```
 
-  ::: preview
+  :::html-preview
   <div>123</div><div>123</div>
   :::
 
@@ -71,7 +71,7 @@ order: 1
   <span>123</span><span>123</span>
   ```
 
-  ::: preview
+  :::html-preview
   <span>123</span><span>123</span>
   :::
 
@@ -84,7 +84,7 @@ order: 1
   </ul>
   ```
 
-  ::: preview
+  :::html-preview
   <ul>
     <li>Item 1</li>
     <li>Item 2</li>
@@ -100,7 +100,7 @@ order: 1
   </ol>
   ```
 
-  ::: preview
+  :::html-preview
   <ol>
     <li>Item 1</li>
     <li>Item 2</li>
@@ -120,7 +120,7 @@ order: 1
   </dl>
   ```
 
-  :::preview
+  :::html-preview
   <p>Order details</p>
 
   <dl style="display: grid; grid-template-columns: 150px 1fr; gap: 12px 20px">
@@ -159,7 +159,7 @@ order: 1
   </details>
   ```
 
-  :::preview
+  :::html-preview
   <details name="requirements">
     <summary>Graduation Requirements</summary>
     <p>
@@ -209,7 +209,7 @@ There are some semantic tags newly introduced in HTML 5:
   </article>
   ```
 
-  ::: preview
+  :::html-preview
   <header>
     <a href="#">Cute Puppies Express!</a>
   </header>
@@ -245,7 +245,7 @@ There are some semantic tags newly introduced in HTML 5:
   </main>
   ```
 
-  ::: preview
+  :::html-preview
   <header style="text-align: center">Gecko facts</header>
   <main>
     <p>
@@ -283,7 +283,7 @@ There are some semantic tags newly introduced in HTML 5:
   </footer>
   ```
 
-  ::: preview
+  :::html-preview
   <header>Wizard</header>
 
   <article>
@@ -325,7 +325,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  ::: preview
+  :::html-preview
   <nav>
     <ol>
       <li><a href="#">Bikes</a></li>
@@ -362,7 +362,7 @@ There are some semantic tags newly introduced in HTML 5:
   </article>
   ```
 
-  ::: preview
+  :::html-preview
   <article>
     <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
     <h1>Weather forecast for Seattle</h1>
@@ -402,7 +402,7 @@ There are some semantic tags newly introduced in HTML 5:
   </section>
   ```
 
-  ::: preview
+  :::html-preview
   <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
   <h1>Choosing an Apple</h1>
   <section>
@@ -457,7 +457,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview
+  :::html-preview
   <header style="text-align: center">Gecko facts</header>
   <div style="display: flex; gap: 16px">
     <!-- Aside of whole `<main>` content -->
@@ -501,7 +501,7 @@ There are some semantic tags newly introduced in HTML 5:
   </figure>
   ```
 
-  :::preview
+  :::html-preview
   <figure>
     <img
       src="https://developer.mozilla.org/shared-assets/images/examples/elephant.jpg"
@@ -525,7 +525,7 @@ There are some semantic tags newly introduced in HTML 5:
   </header>
   ```
 
-  :::preview
+  :::html-preview
   <header>
     <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
     <h1>Movie website</h1>
@@ -554,7 +554,7 @@ There are some semantic tags newly introduced in HTML 5:
   <h6>Heading 6</h6>
   ```
 
-  ::: preview
+  :::html-preview
   <!-- eslint-disable-next-line markdown/no-multiple-h1 -->
   <h1>Heading 1</h1>
   <h2>Heading 2</h2>
@@ -570,7 +570,7 @@ There are some semantic tags newly introduced in HTML 5:
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>This is a paragraph.</p><p>This is another paragraph.</p>
   :::
 
@@ -582,7 +582,7 @@ There are some semantic tags newly introduced in HTML 5:
   <p>P2</p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>P1</p>
   <hr>
   <p>P2</p>
@@ -609,7 +609,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview
+  :::html-preview
   <p>
     O'er all the hilltops<br />
     Is quiet now,<br />
@@ -653,7 +653,7 @@ There are some semantic tags newly introduced in HTML 5:
   </pre>
   ```
 
-  ::: preview
+  :::html-preview
   <pre>
                S
                A
@@ -682,7 +682,7 @@ There are some semantic tags newly introduced in HTML 5:
   <a href="https://www.example.com">This is a link</a>
   ```
 
-  ::: preview
+  :::html-preview
   <a href="https://www.example.com">This is a link</a>
   :::
 
@@ -729,7 +729,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview
+  :::html-preview
   <figure>
     <blockquote>
       <p>
@@ -779,7 +779,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>
     Several species of <mark>salamander</mark> inhabit the temperate rainforest of
     the Pacific Northwest.
@@ -792,7 +792,7 @@ There are some semantic tags newly introduced in HTML 5:
   <strong>This text is important.</strong>
   ```
 
-  ::: preview
+  :::html-preview
   <strong>This text is important.</strong>
   :::
 
@@ -802,7 +802,7 @@ There are some semantic tags newly introduced in HTML 5:
   <em>This text is emphasized.</em>
   ```
 
-  ::: preview
+  :::html-preview
   <em>This text is emphasized.</em>
   :::
 
@@ -821,7 +821,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>
     MDN Web Docs is a learning platform for Web technologies and the software that
     powers the Web.
@@ -840,7 +840,7 @@ There are some semantic tags newly introduced in HTML 5:
   Please <u>pay attention</u>!
   ```
 
-  ::: preview
+  :::html-preview
   Please <u>pay attention</u>!
   :::
 
@@ -850,7 +850,7 @@ There are some semantic tags newly introduced in HTML 5:
   Price: <s>$100</s> $69!
   ```
 
-  ::: preview
+  :::html-preview
   Price: <s>$100</s> $69!
   :::
 
@@ -860,7 +860,7 @@ There are some semantic tags newly introduced in HTML 5:
   <ins datetime="2026-08-19">New inserted item!</ins>
   ```
 
-  ::: preview
+  :::html-preview
   <ins datetime="2026-08-19">New inserted item!</ins>
   :::
 
@@ -870,7 +870,7 @@ There are some semantic tags newly introduced in HTML 5:
   <del datetime="2026-08-19">Deleted item!</del>
   ```
 
-  ::: preview
+  :::html-preview
   <del datetime="2026-08-19">Deleted item!</del>
   :::
 
@@ -888,7 +888,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>
     The Cure will be celebrating their 40th anniversary on
     <time datetime="2018-07-07">July 7</time> in London's Hyde Park.
@@ -910,7 +910,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  :::preview
+  :::html-preview
   <p>
     The volume of a box is <var>l</var> × <var>w</var> × <var>h</var>, where
     <var>l</var> represents the length, <var>w</var> the width and
@@ -933,7 +933,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>
     The <code>push()</code> method adds one or more elements to the end of an
     array and returns the new length of the array.
@@ -957,7 +957,7 @@ There are some semantic tags newly introduced in HTML 5:
   </address>
   ```
 
-  ::: preview
+  :::html-preview
   <p>Contact the author of this page:</p>
 
   <address>
@@ -975,7 +975,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  :::preview
+  :::html-preview
   <p>
     Please press <kbd><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></kbd> to re-render an
     MDN page.
@@ -988,7 +988,7 @@ There are some semantic tags newly introduced in HTML 5:
   H<sub>2</sub>O / 2<sup>2</sup> = 4
   ```
 
-  ::: preview
+  :::html-preview
   H<sub>2</sub>O / 2<sup>2</sup> = 4
   :::
 
@@ -998,7 +998,7 @@ There are some semantic tags newly introduced in HTML 5:
   <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
   ```
 
-  ::: preview
+  :::html-preview
   <ruby>漢<rt>Kan</rt>字<rt>ji</rt></ruby>, <ruby>明日<rt>Ashita</rt></ruby>
   :::
 
@@ -1017,7 +1017,7 @@ There are some semantic tags newly introduced in HTML 5:
   </p>
   ```
 
-  ::: preview
+  :::html-preview
   <p>
     <dfn id="html"><abbr title="HyperText Markup Language">HTML</abbr> </dfn> is a
     markup language used to create the semantics and structure of a web page.
@@ -1046,7 +1046,7 @@ There are some semantic tags newly introduced in HTML 5:
   </form>
   ```
 
-  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  :::html-preview body > :not(:first-child) { margin-top: 1rem }
   <form action="" method="get">
     <div>
       <input type="text" name="username">
@@ -1106,7 +1106,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  :::html-preview body > :not(:first-child) { margin-top: 1rem }
   <div>
     <div>
       <input type="text" placeholder="Enter your name">
@@ -1160,7 +1160,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview
+  :::html-preview
   <div>
     <textarea rows="4" cols="30"></textarea>
   </div>
@@ -1187,7 +1187,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview
+  :::html-preview
   <div>
     <select>
       <optgroup label="Theropods">
@@ -1232,7 +1232,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  :::html-preview body > :not(:first-child) { margin-top: 1rem }
   <div>
     <div>
       <!-- `<label>` before `<input>` -->
@@ -1278,7 +1278,7 @@ There are some semantic tags newly introduced in HTML 5:
   </div>
   ```
 
-  ::: preview body > :not(:first-child) { margin-top: 1rem }
+  :::html-preview body > :not(:first-child) { margin-top: 1rem }
   <div>
     <div>
       <button type="submit">Submit</button>
@@ -1318,7 +1318,7 @@ There are some semantic tags newly introduced in HTML 5:
   </script>
   ```
 
-  :::preview
+  :::html-preview
   <canvas width="120" height="120">
     An alternative text describing what your canvas displays.
   </canvas>
@@ -1343,7 +1343,7 @@ There are some semantic tags newly introduced in HTML 5:
   </dialog>
   ```
 
-  :::preview height:200px
+  :::html-preview height:200px
   <button command="show-modal" commandfor="my-dialog">Open dialog</button>
   <dialog id="my-dialog">
     <p>This dialog was opened using an invoker command.</p>
@@ -1383,7 +1383,7 @@ There are some semantic tags newly introduced in HTML 5:
   </my-card>
   ```
 
-  :::preview
+  :::html-preview
   <template id="my-card">
     <style>
       .card { border: 1px solid #ddd; padding: 16px; border-radius: 8px; }
@@ -1493,7 +1493,7 @@ There are some semantic tags newly introduced in HTML 5:
   <audio controls src="https://developer.mozilla.org/shared-assets/audio/t-rex-roar.mp3"></audio>
   ```
 
-  ::: preview
+  :::html-preview
   <img
   src="https://developer.mozilla.org/shared-assets/images/examples/grapefruit-slice.jpg"
   alt="Grapefruit slice atop a pile of other slices" />
@@ -1541,7 +1541,9 @@ Non-void tags have both a start tag and an end tag; they can contain content. Fo
 
 > [!Caution]
 >
-> There is no concept of a **"self-closing tag"** in HTML; if you write a "self-closing tag" like `<img src="image.jpg" />`, what the browser does is just simply ignore the `/` character, and treat it as `<img src="image.jpg">`.
+> There is no concept of a **"self-closing tag"** in HTML: if you write a "self-closing tag" like `<img src="image.jpg" />`, what the browser does is just simply ignore the `/` character, and treat it as `<img src="image.jpg">`.
+>
+> It's framework introduced concept, like [Vue](https://vuejs.org/guide/essentials/component-basics.html#self-closing-tags).
 
 ## Elements
 
@@ -1570,7 +1572,7 @@ When the attributes change, the characteristics of the element will also change.
 </button>
 ```
 
-::: preview body { display: flex; flex-direction: column; gap: 0.5rem }
+:::html-preview body { display: flex; flex-direction: column; gap: 0.5rem }
 <div><input id="myInput" type="text" value="Hello"></div>
 <button onclick="document.querySelector('#myInput').setAttribute('type', document.querySelector('#myInput').getAttribute('type') === 'text'?'password' : 'text')">
   Toggle Type
@@ -1679,30 +1681,55 @@ See [MDN Web Pages](https://developer.mozilla.org/en-US/docs/Web/API/Document_Ob
 
 ## How Do Browsers Render HTML?
 
+The mordern browser use a multi-process, multi-threaded architecture.
+
+The major processes & threads of browser are:
+
+- Browser Process: The "brain" of browser, responsible for user interface operations such as the address bar.
+- Renderer Process: Responsible for running website content, trun HTML/CSS/JS into interactive pages.
+  - Main Thread: Resposible for parsing HTML, executing JS, building DOM/CSSOM, calculating style and layout.
+  - Compositor Thread: Responsible for page layering and composition, handling page scrolling.
+  - Worker Thread: Responsible for running Web Worker or Service Worker.
+  - ...
+- GPU Process: Responsible for graphical tasks, such as rasterization and composition.
+- Network Process: Responsible for resource loading.
+- ...
+
 ### The Process of Rendering HTML
 
-1.  After the user enters a URL in the browser and starts navigation, the browser process notifies the network process to request the HTML document from the server.
-2.  While receiving the HTML content from the network process, the browser process will entrust the renderer process to **stream-parse** the HTML content **segment by segment and incrementally**;
-3.  When the renderer process parses the HTML, it parses the content from top to bottom:
+1.  After the user enters a URL in the browser and starts navigation, the Browser Process notifies the Network Process to request the HTML document from the server.
+2.  While receiving the HTML content from the Network Process, the Browser Process will entrust the Renderer Process to rendering pages.
+
+    The time it takes from sending a request to the server to receiving the HTML from server is called **TTFB (Time to First Byte)**.
+3.  When the Renderer Process parses the HTML, it parses the contenat in a streaming and chunked manner from top to bottom:
     1.  It will maintain two trees: **DOM (Document Object Model) tree** and **CSSOM (CSS Object Model) tree**;
     2.  When it encounters **a normal HTML tag** while parsing HTML, it will create a corresponding DOM element based on the tag and attributes, and insert the element into the DOM tree;
-    3.  When it encounters **a synchronous inlined `<script>` tag** while parsing HTML, it will pause parsing and start executing the JavaScript code, then resume parsing after the script execution is completed, because JavaScript can modify the DOM tree & CSSOM tree and should be executed directly.
+    3.  When it encounters **a synchronous inlined `<script>` tag** while parsing HTML, it will pause parsing and start executing the JavaScript code, then resume parsing after the script execution is completed, because JavaScript can modify the DOM tree & CSSOM tree and should be executed immediately. This called **parse-blocking**.
 
-        For **a synchronous remote `<script src="...">` tag**, it will entrust the network process to download the file, and pause parsing until the external JavaScript file is both downloaded and executed (unless it's dynamically inserted by JavaScript code, in which case it will be treated as an asynchronous script);
+        For **a synchronous external `<script src="...">` tag**, it will entrust the Network Process to load the file, and pause parsing until the external JavaScript file is both loaded and executed (unless it's dynamically inserted by JavaScript code, in which case it will be treated as an asynchronous script). It's also **parse-blocking**.
 
-        For **an asynchronous `<script src="..." async>` tag**, it will no longer pause parsing while downloading, but pause parsing and execute the script as soon as it's downloaded;
+        For **an asynchronous `<script src="..." async>` tag**, it will no longer pause parsing while loading, but pause parsing and execute the script as soon as it's downloaded. It's not parse-blocking.
 
-        For **a defer `<script src="..." defer>` tag**, it will not pause parsing while downloading either, and will only be executed after parsing is completed (but before the `DOMContentLoaded` event is fired);
+        For **a defer `<script src="..." defer>` tag**, it will not pause parsing while loading either, and will only be executed after parsing is completed (but before the `DOMContentLoaded` event is fired). It's not parse-blocking.
 
-        For **a module `<script type="module" src="...">` tag**, it will behave like a defer script by default.
-    4.  When it encounters **an inlined `<style>` tag** while parsing HTML, it will parse all the CSS content into the CSSOM at once and in place.
-    5.  When it encounters **an [external resource](#resource-tags) referred by a `<link>` tag**, it will entrust the network process to download the resource, and never pause parsing;
+        For **a module `<script type="module" src="...">` tag**, it will behave like a defer script by default. It's not parse blocking.
+    4.  When it encounters **an inlined `<style>` tag** while parsing HTML, it will parse all the CSS content into the CSSOM at once and in place. It's **render-blocking**: without the styles get ready, the browser has no idea about who to render the pages.
 
-        If the external resource is a CSS file `<link rel="stylesheet" href="...">`, it will parse the CSS into the CSSOM (CSS Object Model) after the CSS file is downloaded.
-    6.  When there are no more render-blocking tasks — no `<link rel="stylesheet">` tags that are not downloaded, or downloaded but not parsed — it will join them into a **render tree**, and then **calculate the layout**, **paint the page**, and **composite the layers**.
+        > [!Note]
+        > That does not mean inlined `<style>` is **directly[^1] parse-blocking**: parsing that style first, or parsing HTML first makes no difference, the synchronous script does not.
+        >
+        > Parse-blocking exactly means let HTML parsing **waiting in vain**, so inlined `<style>` does not,synchronous scripts loading & executing does.
+        >
+        > The same as it, render-blocking exactly means let page rendering **waiting in vain**. HTML parsing itself is render-blocking.
 
-        The first painting is the so-called **First Contentful Paint (FCP)**. After that, if there are any changes in the DOM tree or CSSOM tree, the browser will do a **redraw and reflow**.
-4.  After the whole HTML is parsed (and **all deferred scripts are downloaded and executed**), the browser process will fire the `DOMContentLoaded` event, then fire the `load` event after all the resources are loaded, and display the page to the user.
+
+    5.  When it encounters **an [external resource](#resource-tags) referred by a `<link>` tag**, it will entrust the network process to load the resource, and never be parse-blocking.
+
+        If the external resource is a CSS style file `<link rel="stylesheet" href="...">`, it will parse the CSS into the CSSOM (CSS Object Model) after the CSS file is loaded. It's **render-blocking**.
+    6.  When there are no more **render-blocking** tasks — at that time, all of the elements, all of the styles, all of the synchronous scripts **of the HTML it received** are processed — it will treat this as a rendering opportunity. It will join the DOM tree & the CSSOM tree into a **render tree**, and then **calculate the layout**, **paint the page**, and **composite the layers**.
+
+        Then, **First Contentful Paint (FCP)** happens. After that, if there are any changes in the DOM tree or CSSOM tree, the browser will do a **redraw and reflow**.
+4.  If there are no more render-blocking tasks of **the entire HTML**, the Browser Process will fire the `DOMContentLoaded` event, then fire the `load` event after all the resources are loaded.
 
 ### Why Do Browsers Build Two Separate Trees for DOM and CSSOM?
 
@@ -1713,22 +1740,26 @@ Why do browsers build two separate trees for the DOM and CSSOM and join them lat
 
 ### Performance of Rendering HTML
 
-What affects the performance of rendering HTML?
+What affects the performance of rendering HTML? Below are major rendering related measurement introduced by Google:
 
-1. **The size of the HTML document**: The larger the HTML document, the **more time it takes to download**;
-2. **The number / complexity of DOM elements**: The more / more complex DOM elements, the **more time it takes to parse** HTML (create and insert elements into the DOM tree);
-3. **The number / complexity of synchronous `<script>` tags**: Each synchronous `<script>` tag will **pause the parsing** and (**download if it's remote**) execute the JavaScript code, which can significantly affect the performance of parsing HTML, especially if the JavaScript code is large or complex;
-4. **The number / complexity of external `<link rel="stylesheet">` tags**: Each external CSS file will **pause the parsing** and (**download**) parse the CSS code into CSSOM tree, which can significantly affect the performance of parsing HTML, especially if the CSS code is large or complex;
-5. **The number / complexity of CSS rules**: The task of parsing CSS is also done by the rendering process. The more / more complex CSS rules, the **more time it takes on the rendering process** (to parse them into the CSSOM tree), the more time it takes to join the DOM tree and CSSOM tree, and the more time the whole parsing process takes.
-6. **The number / size of other external resources**: Although external resources will not pause the parsing, they still **take the download time and download bandwidth**, which can affect the performance of downloading the HTML document, remote scripts and CSS files, and indirectly the performance of parsing HTML.
+1. **TTFB**: Network topology structure; network performance (latence & speed); server response time, etc.
+2. **FCP**: TTFB; the amount, size & complexity of styles (both inlined and external); the amount, size & complexity of synchronous scripts; the amount, size & complexity of HTMl elements.
+3. **LCP**: FCP; The size & complexity of that largest content itself.
+4. **TBT**: The amount, size & complexity of all the scripts (except for those dynamically loadded by events, scripts in workers).
+5. **Speed Index**: Everything which are render-blocking.
+
+Below are things that may have indirect effects:
+
+1. **Network Competition**: The amount & size of other external resources. Although external resources is not render-blocking, they still **take the network bandwidth**, which can affect the performance of loading HTML document, external scripts and styles, and indirectly affect the performance of rendering HTML.
 
 What's the best practice?
 
 1. [**14 KiB rule**](https://medium.com/@techworldthink/the-14-kb-rule-optimizing-the-critical-rendering-path-for-faster-websites-cd6d9e93b186): Keep the HTML document under 14 KiB;
 2. **Keep everything as simple as possible**:
-   1. Reduce the usage of unnecessary wrapper elements, such as `<div>` and `<span>`;
-   2. Reduce the usage of `<script>`, remove if unused, `async` if possible, `defer` if it can be async but still depends on the DOM tree;
-   3. Reduce the usage of `<link rel="stylesheet">`, remove if unused, `media` if possible, and combine them into a single file if possible (increase the stability when downloading);
-   4. Reduce the usage of CSS rules, remove if unused, and keep them as simple as possible **(please try atomic CSS framework!!!)**;
-   5. Reduce the usage of external resources, remove if unused, apply compression and caching if possible.
+   1. Reduce the usage of unnecessary wrapper elements, such as `<div>` and `<span>`.
+   2. Reduce the usage of `<script>`, remove if unused, `async` if possible, `defer` if it can be async but still depends on the DOM tree.
+   3. Reduce the usage of styles, remove if unused, `media` if possible, and keep them as simple as possible. **Finally, please try atomic CSS library!!!**.
+   4. Reduce the usage of external resources, remove if unused, apply compression and caching if possible.
 3. ...
+
+[^1]: Any style appear before a synchronous script will indrect block HTML parsing by blocking synchronous scripts, because JavaScript has the ability to modify the CSSOM.

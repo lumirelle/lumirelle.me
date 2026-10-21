@@ -23,8 +23,8 @@ import sharp from 'sharp'
 import _Markdown from 'unplugin-vue-markdown/vite'
 import { readingTime } from '../scripts/reading-time.ts'
 import { slugify } from '../scripts/slugify.ts'
+import { PreviewPlugin } from './markdown-html-sandbox-preview.ts'
 import { InlineCodeBlockPlugin } from './markdown-inline-code.ts'
-import { PreviewPlugin } from './markdown-preview.ts'
 import { vercelDark, vercelLight } from './shiki-vercel-theme.ts'
 
 const ogSVg = readFileSync('./scripts/og-template.svg', 'utf8')

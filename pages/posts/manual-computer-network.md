@@ -1,7 +1,7 @@
 ---
 title: Computer Network Manual
 date: 2025-09-30T22:30+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-10-21T16:33+08:00
 lang: en
 type: manual
 group: Computer
@@ -335,17 +335,61 @@ In the next sections, we will talk about the last three layers, which are more r
 
 ### Session Layer
 
-TODO(Lumirelle): Add more details about session layer, such as RPC protocol, WebSocket protocol, etc.
+The session layer is in charge of **sessions**: a conversation between two parties that outlives a single message — who is talking, what they have already agreed on, and what is still unfinished.
 
-### Presentation Layer (Transport Layer Security / Secure Sockets Layer Protocol)
+This layer is best understood by what it keeps: **state**.
 
-#### What Is TLS/SSL?
+#### WebSocket (Turning a Request into a Conversation)
+
+A **WebSocket** connection starts as an ordinary HTTP request that asks to upgrade to WebSocket.
+
+```http
+GET /chat HTTP/1.1
+Host: www.example.com
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Sec-WebSocket-Version: 13
+```
+
+The server agrees with `101 Switching Protocols`:
+
+```http
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+```
+
+From that byte on, the **same TCP connection** carries small WebSocket frames in both directions, at any time, for as long as either side keeps it open. HTTP was only used for the handshake — the polite way to borrow a port that firewalls already allow.
+
+In URLs the protocol becomes `ws://`, or `wss://` when it rides on TLS like HTTPS does.
+
+#### Remote Procedure Call (RPC)
+
+RPC is less a protocol than an idea: make a function that lives on another machine look like a local one.
+
+The client calls `add(1, 2)`, a generated **stub** serializes the call into a message, the server's stub deserializes it, calls the real function, and sends the result back — so the programmer writes a function call and not a request.
+
+```json
+{ "jsonrpc": "2.0", "id": 1, "method": "add", "params": [1, 2] }
+```
+
+```json
+{ "jsonrpc": "2.0", "id": 1, "result": 3 }
+```
+
+Its three parts are always the same: an **interface description** (so both sides agree on names and types), a **serialization** format, and a **transport**.
+
+The famous pair is [**gRPC**](https://grpc.io) — Protocol Buffers over HTTP/2; but the one you use daily is **JSON-RPC** — the **Language Server Protocol** your editor speaks to every language server, which is why one extension can serve VS Code, Neovim, and everything else.
+
+### Presentation Layer
+
+#### TLS/SSL
 
 **TLS (Transport Layer Security)** is a cryptographic protocol designed to provide communications security over a computer network, such as the Internet.
 
 **SSL (Secure Sockets Layer)** is the predecessor of TLS and is now considered deprecated.
-
-#### How TLS/SSL Works?
 
 TLS/SSL works by using a combination of asymmetric and symmetric encryption to secure the communication between a client and a server. The process typically involves the following steps:
 
@@ -359,7 +403,7 @@ This process ensures that the communication between the client and server is sec
 
 The famous **HTTPS (HyperText Transfer Protocol Secure)** protocol is built on top of HTTP and TLS/SSL.
 
-### Application Layer (HyperText Transfer Protocol)
+### Application Layer
 
 #### What Is HTTP?
 
@@ -540,10 +584,55 @@ The only things you need to do are:
 
 See [REST Client documentation](https://github.com/Huachao/vscode-restclient/blob/master/README.md) for more information.
 
+#### What Is DNS?
+
+Every message in this article was addressed to an IP address, and nobody types an IP address into a browser. The **Domain Name System (DNS)** is the application-layer protocol that turns a **domain name** into the IP address of the computer that serves it: a phone book, if a phone book were spread across thousands of servers, cached at every step along the way, and edited constantly.
+
+Like HTTP, DNS is not a single machine but a system of delegation. That is what makes it able to name every host on the Internet without any one server knowing all of them.
+
+#### How a Name Becomes an IP Address
+
+Resolving a name is a walk down that hierarchy. Your computer never does the walk itself; it asks a **resolver** — the one your OS or ISP handed you, or a public one such as `8.8.8.8` or `1.1.1.1` — and the resolver does the walking:
+
+```txt
+resolver --> root server        "who handles .com?"
+         --> .com TLD server    "who handles example.com?"
+         --> authoritative      "the address of www.example.com is 93.184.216.34"
+         <-- A 93.184.216.34    (kept for the TTL, then asked again)
+```
+
+Each level only needs to know the next one, so a single server can delegate millions of names it has never heard of. The **authoritative** server is the one that actually owns the zone and gives the final answer; everything above it only points the way.
+
+Two properties make this fast enough to do on every click:
+
+- **Caching** — every answer carries a **TTL (Time To Live)** in seconds, and every step keeps it for that long. The second request for the same name usually never leaves your machine; that is also why a DNS change takes hours to be seen everywhere and not seconds.
+- **Local answers first** — the browser cache, the OS cache, and `/etc/hosts` are all consulted before a query is sent. The hosts file is the original, pre-DNS internet: a hand-written table of names, still the fastest way to point a name at `127.0.0.1` while developing.
+
+> [!Note]
+>
+> DNS usually rides on UDP port 53, not TCP: a query and an answer each fit in a packet, and a lost one can simply be asked again. It falls back to TCP when an answer is too large, and modern transports (**DNS over TLS** on port 853 and **DNS over HTTPS**, which is just an HTTP request) exist because a plaintext query tells anyone on the path which sites you visit.
+
+#### DNS Records
+
+A zone is a table of **records**, each mapping a name to one kind of answer. The ones you will meet:
+
+| Type    | Answers                                | Example                                                        |
+| ------- | -------------------------------------- | -------------------------------------------------------------- |
+| `A`     | An IPv4 address                        | `example.com. 3600 IN A 93.184.216.34`                         |
+| `AAAA`  | An IPv6 address                        | `example.com. 3600 IN AAAA 2606:2800:220:1:248:1893:25c8:1946` |
+| `CNAME` | "This name is another name" (an alias) | `www.example.com. 3600 IN CNAME example.com.`                  |
+| `MX`    | The mail server for the domain         | `example.com. 3600 IN MX 10 mail.example.com.`                 |
+| `TXT`   | Free-form text, used for verification  | `example.com. 3600 IN TXT "v=spf1 -all"`                       |
+| `NS`    | The authoritative servers for the zone | `example.com. 3600 IN NS a.iana-servers.net.`                  |
+
+That `TXT` row is not a curiosity: SPF, DKIM and DMARC — how mail proves it is not forged — are all DNS records, and so is the record you publish to prove you own a domain or to get a certificate issued for it. **DNS is where the Internet keeps its trust statements**, which is exactly why DNS itself is worth attacking and worth protecting.
+
+And with that the loop closes: a click becomes a DNS query, the name becomes an IP address, HTTP opens a TCP connection to it, TLS secures that connection, and the request finally goes out — built, layer by layer, on a modem and a wire.
+
 [^1]: IPv4 address; there is also IPv6, which is a 128-bit (16 bytes) identifier, usually represented in hexadecimal format, separated by colons. For example, `2001:0db8:85a3:0000:0000:8a2e:0370:7334`.
 
 [^2]: **Safe** methods are those that do not modify resources on the server. They are intended for information retrieval only.
 
 [^3]: **Idempotent** methods are those that can be called multiple times without different outcomes. The first request has the same effect as subsequent requests.
 
-[^4]: How they know each's IP address? One scenario is that you (user) provide it, another is that you provide a domain name, DNS service resolves the actually IP address for you.
+[^4]: How they know each's IP address? One scenario is that you (user) provide it, another is that you provide a domain name, and a DNS service resolves the actual IP address for you (see [Domain Name System](#what-is-dns)).

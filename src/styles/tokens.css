@@ -1,0 +1,57 @@
+/**
+ * Design tokens — the single source of truth for the Shell's material.
+ *
+ * ADR-0001 builds every later surface on this file, so values live here and
+ * nowhere else: a template asks for `bg-canvas`, `text-ink` or `border-stroke`,
+ * and the utility expands to the `var()` below rather than to a hex.
+ *
+ * Two rules keep it honest:
+ *
+ *  - Structure is monochrome. Hue appears only for syntax highlighting and
+ *    alert severity (ADR-0002), never on chrome, decoration, hover or focus.
+ *  - A scheme is resolved once, by the `dark` class on `<html>` — the inline
+ *    script in `index.html` and `useDark` in `src/logics/index.ts` write it.
+ *    No token here reacts to a bare media query, so the site's own toggle and
+ *    the system preference cannot disagree.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces and ink */
+  --color-canvas: #ffffff;
+  --color-surface: #f6f6f6;
+  --color-stroke: #e2e2e2;
+  --color-ink: #3a3a3a;
+  --color-ink-strong: #111111;
+  /* #767676 is the point where faint text clears WCAG AA (4.54:1) on white. */
+  --color-ink-faint: #767676;
+
+  /* The Frame: one centred column, on every route. */
+  --shell-measure: 820px;
+  --shell-gutter: 32px;
+
+  /* Radius: square everywhere else. */
+  --radius-control: 4px; /* interactive surfaces */
+  --radius-window: 8px; /* the code window, styled in P2 */
+
+  /* Motion */
+  --duration-interaction: 120ms;
+  /* Long enough to read as scrolling rather than as a swap. */
+  --duration-route: 600ms;
+  --duration-splash: 300ms;
+  --ease-interaction: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-route: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-splash: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+html.dark {
+  color-scheme: dark;
+
+  --color-canvas: #000000;
+  --color-surface: #0d0d0d;
+  --color-stroke: #262626;
+  --color-ink: #c4c4c4;
+  --color-ink-strong: #f2f2f2;
+  --color-ink-faint: #6e6e6e;
+}

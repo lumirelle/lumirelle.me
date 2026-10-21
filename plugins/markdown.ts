@@ -1,3 +1,4 @@
+import type { ShikiTransformer } from 'shiki'
 import type { Plugin } from 'vite'
 import { Buffer } from 'node:buffer'
 import { existsSync, mkdirSync, readFileSync } from 'node:fs'
@@ -26,6 +27,84 @@ import { PreviewPlugin } from './markdown-preview.ts'
 import { vercelDark, vercelLight } from './shiki-vercel-theme.ts'
 
 const ogSVg = readFileSync('./scripts/og-template.svg', 'utf8')
+
+/** The smallest hast shapes this plugin touches, so it needs no extra types. */
+interface HastNode {
+  type: string
+  tagName?: string
+  properties?: Record<string, unknown>
+  children?: HastNode[]
+  value?: string
+}
+
+function element(tagName: string, className: string, children: HastNode[] = []): HastNode {
+  return { type: 'element', tagName, properties: { class: className }, children }
+}
+
+function text(value: string): HastNode {
+  return { type: 'text', value }
+}
+
+/** The language Shiki recorded on the `<code>` inside the block. */
+function languageOf(pre: HastNode): string {
+  const code = pre.children?.find(child => child.tagName === 'code')
+  const className = code?.properties?.class
+  const classes = Array.isArray(className)
+    ? className.filter(part => typeof part === 'string').join(' ')
+    : typeof className === 'string' ? className : ''
+  const match = classes.match(/language-([\w-]+)/)
+  return match?.[1] ?? 'text'
+}
+
+/**
+ * Dress every fenced block as a terminal window.
+ *
+ * ```
+ * ● ● ●   ts                                    copy
+ * ```
+ *
+ * Done here, in the markdown pipeline, because this is where the language is
+ * already known and because the chrome belongs in the prerendered HTML — the
+ * alternative is client-side DOM surgery on markup that has already shipped.
+ *
+ * The dots keep their traffic-light hues: ADR-0002 bans colour on chrome, and
+ * this is the one exception the design reference states outright.
+ */
+function codeWindow(): ShikiTransformer {
+  return {
+    name: 'code-window',
+    root(node) {
+      const walk = (parent: HastNode): void => {
+        if (!parent.children) {
+          return
+        }
+
+        parent.children = parent.children.map((child) => {
+          if (child.tagName === 'pre') {
+            const language = languageOf(child)
+            const bar = element('div', 'code-window-bar', [
+              element('span', 'code-dot code-dot-red'),
+              element('span', 'code-dot code-dot-yellow'),
+              element('span', 'code-dot code-dot-green'),
+              element('span', 'code-window-lang', [text(language === 'text' ? '' : language)]),
+              {
+                ...element('button', 'code-copy', [text('copy')]),
+                properties: { 'class': 'code-copy', 'type': 'button', 'aria-label': 'Copy code' },
+              },
+            ])
+
+            return element('div', 'code-window', [bar, child])
+          }
+
+          walk(child)
+          return child
+        })
+      }
+
+      walk(node as unknown as HastNode)
+    },
+  }
+}
 
 const EXTERNAL_LINK_REGEX = /^https?:\/\//
 const FRONTMATTER_TITLE_REGEX = /\s-\s.*$/
@@ -63,6 +142,7 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
             transformerNotationHighlight(),
             transformerNotationWordHighlight(),
             transformerNotationFocus(),
+            codeWindow() as ShikiTransformer,
           ],
         }),
       )

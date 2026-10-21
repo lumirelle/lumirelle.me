@@ -1,5 +1,10 @@
 <script setup lang="ts">
+import { transitionKind } from './logics/route-transition.ts'
+
 const route = useRoute()
+
+/** Section changes type the command line; everything else cross-fades. */
+const kind = transitionKind
 
 const imageModel = ref<HTMLImageElement>()
 const imageAlt = ref<string>()
@@ -96,11 +101,47 @@ onKeyStroke('Escape', (e) => {
 </script>
 
 <template>
+  <!--
+    The Frame.
+
+    It belongs to the Shell, not to the page: the column and its rhythm are
+    rendered once, outside `RouterView`, so a route change replaces only what is
+    inside `<main>` and never shifts the measure a reader is anchored to.
+
+    There are no vertical Rails. The column is held by its own 820 px measure and
+    by hairline rules, and the left margin column carries the structure instead.
+    A hairline here is only ever a row divider — never a border around content.
+  -->
   <NavBar />
-  <main class="px-7 py-10 of-x-hidden">
-    <RouterView />
-    <Footer :key="route.path" />
-  </main>
+  <!--
+    The column. It carries the measure and the gutter, and it holds both the
+    content and the footer — so the closing rule is the column's width while the
+    space above it belongs to `main`'s own bottom padding.
+  -->
+  <div class="mx-auto px-[var(--shell-gutter)] max-w-[var(--shell-measure)] of-x-hidden">
+    <main class="pb-28 pt-12">
+      <!--
+        A real enter/leave pair rather than a keyed remount: the outgoing page
+        stays on screen while it moves away, which is what makes the change read
+        as a terminal scrolling rather than as content blinking into place.
+
+        Both pages are stacked in a single grid cell, so they share one column
+        width. Taking the leaving page out of flow instead would have re-resolved
+        its containing block against the viewport, widened it to the window and
+        slid its content left as it left.
+
+        Scroll stays the router's business throughout.
+      -->
+      <div class="route-stack">
+        <Transition :name="kind === 'type' ? 'none' : `route-${kind}`">
+          <div :key="route.fullPath" class="route-frame" :data-route="route.fullPath">
+            <RouterView />
+          </div>
+        </Transition>
+      </div>
+    </main>
+    <Footer />
+  </div>
   <Transition name="fade">
     <div
       v-if="imageModel"

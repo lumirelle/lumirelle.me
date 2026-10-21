@@ -3,7 +3,6 @@ title: Projects - Lumirelle
 display: Projects
 description: List of projects that I am proud of
 wrapperClass: 'text-center'
-art: dots
 projects:
   Current Focus:
     - name: 'Dotfiles'

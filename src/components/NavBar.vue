@@ -1,122 +1,101 @@
 <script setup lang="ts">
-function toTop(): void {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  })
+/**
+ * The Shell's header row: identity, navigation, controls.
+ *
+ * Everything the old `NavBar` provided has to be re-earned here, so the row is
+ * explicit about all of it: the breadcrumb, the five content links, feed and
+ * source, the theme toggle, and the scroll control.
+ */
+const route = useRoute()
+
+/** The Shell's voice: five destinations, lowercase, mono. */
+const links = [
+  // `/blog`, `/notes` and `/manuals` are the same list under another filter, so
+  // they read as `posts` in the navigation — nothing else in the header would
+  // tell a reader which section of the site they are in.
+  { label: 'posts', to: '/posts', also: ['/blog', '/notes', '/manuals'] },
+  { label: 'projects', to: '/projects', also: [] },
+  { label: 'use', to: '/use', also: [] },
+  { label: 'photos', to: '/photos', also: [] },
+  { label: 'demos', to: '/demos', also: [] },
+] as const
+
+type Link = (typeof links)[number]
+
+// `/posts/manual-git` is still `posts`: the section owns its children, so the
+// active mark survives every route deeper in the tree.
+function isCurrent(link: Link): boolean {
+  const { to, also } = link as { to: string, also: readonly string[] }
+  return route.path === to
+    || route.path.startsWith(`${to}/`)
+    || also.includes(route.path)
 }
 
-const { y: scroll } = useWindowScroll()
+/**
+ * `page` only when this is literally that page; a section that merely *contains*
+ * the current route is `true`, so a screen reader does not announce `/blog` as
+ * "posts, current page".
+ */
+function currentMark(link: Link): 'page' | 'true' | undefined {
+  if (!isCurrent(link))
+    return undefined
+  return route.path === link.to ? 'page' : 'true'
+}
 </script>
 
 <template>
-  <!-- eslint-disable vue-a11y/anchor-has-content -->
-  <header class="header z-40">
-    <RouterLink
-      class="m-5 outline-none h-12 w-12 select-none absolute xl:fixed"
-      to="/"
-      focusable="false"
+  <header class="z-40">
+    <div
+      class="text-[11px] font-mono mx-auto px-[var(--shell-gutter)] py-5 flex flex-wrap gap-x-6 gap-y-2 max-w-[var(--shell-measure)] items-center justify-between md:text-[12px] min-[520px]:flex-nowrap"
     >
-      <Logo />
-    </RouterLink>
-    <button
-      title="Scroll to top"
-
-      rounded-full h-10 w-10 transition duration-300 bottom-3 right-3 fixed z-100 hover-bg-hex-8883 hover:op100 print:hidden
-      :class="scroll > 300 ? 'op30' : 'op0! pointer-events-none'"
-      @click="toTop()"
-    >
-      <div i-ri-arrow-up-line />
-    </button>
-    <nav class="nav">
-      <div class="spacer" />
-      <div class="right" print:op0>
-        <RouterLink to="/posts" title="Posts">
-          <span class="lt-md:hidden">Posts</span>
-          <div i-ri-article-line md:hidden />
+      <ShellBreadcrumb />
+      <nav
+        class="text-ink-faint flex flex-none flex-nowrap gap-x-2.5 items-center md:gap-x-7 sm:gap-x-3"
+        aria-label="Primary"
+        print:op0
+      >
+        <RouterLink
+          v-for="link in links"
+          :key="link.to"
+          :to="link.to"
+          class="nav-link"
+          :aria-current="currentMark(link)"
+        >
+          {{ link.label }}
         </RouterLink>
-        <RouterLink to="/projects" title="Projects">
-          <span class="lt-md:hidden">Projects</span>
-          <div i-ri-lightbulb-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/use" title="Use">
-          <span class="lt-md:hidden">Use</span>
-          <div i-ri-heart-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/bookmarks" title="Bookmarks">
-          <span class="lt-md:hidden">Bookmarks</span>
-          <div i-ri-bookmark-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/sponsors-list" title="Sponsors">
-          <span class="lt-md:hidden">Sponsors</span>
-          <div i-ri-heart-line class="md:hidden" />
-        </RouterLink>
-        <RouterLink to="/photos" title="Photos">
-          <div i-ri-camera-3-line />
-        </RouterLink>
-        <RouterLink to="/demos" title="Demos">
-          <div i-ri-screenshot-line />
-        </RouterLink>
-        <a href="https://github.com/lumirelle" target="_blank" title="GitHub" class="lt-md:hidden">
+        <a href="/feed.xml" target="_blank" title="RSS feed" aria-label="RSS feed">
+          <div i-la-rss-square />
+        </a>
+        <a
+          href="https://github.com/lumirelle"
+          target="_blank"
+          title="Source on GitHub"
+          aria-label="Source on GitHub"
+        >
           <div i-uil-github-alt />
         </a>
-        <a href="/feed.xml" target="_blank" title="RSS" class="lt-md:hidden">
-          <div i-la-rss-square style="font-size: 1.25rem; margin: 0 -0.125rem" />
-        </a>
         <ToggleTheme />
-      </div>
-    </nav>
+      </nav>
+    </div>
   </header>
+  <ShellCdUp />
+  <ShellScrollToTop />
 </template>
 
 <style scoped>
-.header h1 {
-  margin-bottom: 0;
-}
+/*
+ * One ink for the whole row, at the faint level: the header is chrome and sits
+ * well behind the titles it frames. It does not brighten on hover and does not
+ * dim the routes you are not on — position is announced by `aria-current` and by
+ * the focus outline instead.
+ */
+nav a {
+  max-width: 12ch;
+  overflow: hidden;
 
-.logo {
-  position: absolute;
-  top: 1.5rem;
-  left: 1.5rem;
-}
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
-.nav {
-  padding: 2rem;
-  width: 100%;
-  display: grid;
-  grid-template-columns: auto max-content;
-  box-sizing: border-box;
-}
-
-.nav > * {
-  margin: auto;
-}
-
-.nav img {
-  margin-bottom: 0;
-}
-
-.nav a {
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  transition: opacity 0.2s ease;
-  opacity: 0.6;
-  outline: none;
-}
-
-.nav a:hover {
-  opacity: 1;
-  text-decoration-color: inherit;
-}
-
-.nav .right {
-  display: grid;
-  grid-gap: 1.2rem;
-  grid-auto-flow: column;
-}
-
-.nav .right > * {
-  margin: auto;
+  color: var(--color-ink-faint);
 }
 </style>

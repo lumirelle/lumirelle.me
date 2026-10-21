@@ -1,18 +1,8 @@
 /* Root Style */
-:root {
-  --c-bg: #fff;
-  --c-scrollbar: #eee;
-  --c-scrollbar-hover: #bbb;
-}
 html {
-  background-color: var(--c-bg);
+  background-color: var(--color-canvas);
   overflow-x: hidden;
   overflow-y: scroll;
-}
-html.dark {
-  --c-bg: #050505;
-  --c-scrollbar: #111;
-  --c-scrollbar-hover: #222;
 }
 
 /* Selection */
@@ -20,24 +10,30 @@ html.dark {
   background: #8884;
 }
 
-/* NProgress */
-#nprogress {
-  pointer-events: none;
+/*
+ * Focus.
+ *
+ * The design treats a hairline as one of three things — a Rail, a row divider,
+ * or a focus outline — so the indicator is a 1 px outline offset 2 px, never a
+ * colour, a glow or a filled state. It is drawn in the strongest ink rather than
+ * in `stroke`: a 1 px #E2E2E2 rule on white is 1.07:1, which is not a focus
+ * indicator, and a keyboard user has to be able to find it in both schemes.
+ */
+:where(a, button, [role='button'], [tabindex]:not([tabindex='-1']), input, select, textarea, summary, details):focus-visible {
+  outline: 1px solid var(--color-ink-strong);
+  outline-offset: 2px;
 }
-#nprogress .bar {
-  background: #888;
-  opacity: 0.75;
-  position: fixed;
-  z-index: 1031;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
+
+/* Content surfaces answer the pointer with a fill, never with a border. */
+a,
+button,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Custom Scrollbar */
 * {
-  scrollbar-color: var(--c-scrollbar) var(--c-bg);
+  scrollbar-color: var(--color-surface) var(--color-canvas);
 }
 ::-webkit-scrollbar {
   width: 6px;
@@ -47,15 +43,15 @@ html.dark {
 }
 ::-webkit-scrollbar-track,
 ::-webkit-scrollbar-corner {
-  background: var(--c-bg);
+  background: var(--color-canvas);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--c-scrollbar);
+  background: var(--color-surface);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--c-scrollbar-hover);
+  background: var(--color-stroke);
 }
 
 /* SponsorKit */
@@ -94,6 +90,17 @@ html:not(.dark) [img-dark] {
   }
 }
 @media (prefers-reduced-motion: no-preference) {
+  /*
+   * The entrance cascade is a first-load Effect, and it is capped at six stages.
+   *
+   * Six because the effect is a *shape* — content arriving in a rhythm — not a
+   * queue: past the sixth row a stage stops adding anything and starts delaying
+   * the page. First load only, because a route change has its own transition
+   * (`route-in` below) and the two must never run over each other.
+   *
+   * `html.no-sliding` is added permanently by `src/main.ts` from the first route
+   * change onward, so this plays once and then never again.
+   */
   html:not(.no-sliding) [slide-enter],
   html:not(.no-sliding) .slide-enter,
   html:not(.no-sliding) .slide-enter-content > *:not(:has(.table-of-contents)) {
@@ -101,7 +108,10 @@ html:not(.dark) [img-dark] {
     --enter-step: 90ms;
     --enter-initial: 0ms;
     animation: slide-enter 1s both 1;
-    animation-delay: calc(var(--enter-initial) + var(--enter-stage) * var(--enter-step));
+    /* The cap: templates may hand in any stage number, the rhythm stops at six. */
+    animation-delay: calc(
+      var(--enter-initial) + min(var(--enter-stage), 6) * var(--enter-step)
+    );
   }
   .slide-enter-content > *:nth-child(1) {
     --enter-stage: 1 !important;
@@ -121,49 +131,116 @@ html:not(.dark) [img-dark] {
   .slide-enter-content > *:nth-child(6) {
     --enter-stage: 6 !important;
   }
-  .slide-enter-content > *:nth-child(7) {
-    --enter-stage: 7 !important;
-  }
-  .slide-enter-content > *:nth-child(8) {
-    --enter-stage: 8 !important;
-  }
-  .slide-enter-content > *:nth-child(9) {
-    --enter-stage: 9 !important;
-  }
-  .slide-enter-content > *:nth-child(10) {
-    --enter-stage: 10 !important;
-  }
-  .slide-enter-content > *:nth-child(11) {
-    --enter-stage: 11 !important;
-  }
-  .slide-enter-content > *:nth-child(12) {
-    --enter-stage: 12 !important;
-  }
-  .slide-enter-content > *:nth-child(13) {
-    --enter-stage: 13 !important;
-  }
-  .slide-enter-content > *:nth-child(14) {
-    --enter-stage: 14 !important;
-  }
-  .slide-enter-content > *:nth-child(15) {
-    --enter-stage: 15 !important;
-  }
-  .slide-enter-content > *:nth-child(16) {
-    --enter-stage: 16 !important;
-  }
-  .slide-enter-content > *:nth-child(17) {
-    --enter-stage: 17 !important;
-  }
-  .slide-enter-content > *:nth-child(18) {
-    --enter-stage: 18 !important;
-  }
-  .slide-enter-content > *:nth-child(19) {
-    --enter-stage: 19 !important;
-  }
-  .slide-enter-content > *:nth-child(20) {
-    --enter-stage: 20 !important;
+  /*
+   * Everything past the sixth block rides the sixth stage, so the tail arrives
+   * as one rather than queueing behind indices the page never asked to show.
+   */
+  .slide-enter-content > *:nth-child(n + 7) {
+    --enter-stage: 6 !important;
   }
 }
+
+/*
+ * Route change.
+ *
+ * A scroll, not a nudge: the old page travels most of a screen while the new one
+ * arrives behind it, over 600 ms, easing out the way a scroll settles. Going
+ * deeper scrolls up (content moves up, the next page comes from below); going
+ * back up the tree reverses it. A change between the list's sections gets no move
+ * at all — it types its command line instead — so `Transition name="none"`
+ * applies no classes.
+ *
+ * The shift is in `vh` so the distance is a screen, whatever the screen is.
+ *
+ * The leaving page is taken out of flow for the 200 ms. Two pages in flow at once
+ * would double the document height and let the footer run away, and absolute
+ * positioning keeps the old page exactly where it was while it moves.
+ *
+ * `transform` on either page would make it a containing block for `position:
+ * fixed` descendants, which is why the outline rail is adopted into `<body>` by
+ * the Shell (`src/components/shell/ShellCdUp.vue`) rather than left inside the
+ * animated subtree. `Transition` removes its classes at the end, so nothing is
+ * left behind either way.
+ */
+/*
+ * Both pages live in the same grid cell, so they keep the column's width and
+ * position while they move. (Out-of-flow was the alternative, and it silently
+ * re-based the leaving page on the viewport — its content then stretched and
+ * slid left.)
+ */
+.route-stack {
+  display: grid;
+  /*
+   * Pinned to the column, never sized by content. An `auto` column takes its
+   * width from the wider of the two pages, so the window between them widened
+   * both and pushed the leaving page past the column's right edge.
+   */
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.route-frame {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+/*
+ * The old page leaves first and quickly; the new one takes the rest of the time.
+ *
+ * A simultaneous cross-fade put two dense pages on top of each other for half a
+ * second, which reads as ghosting rather than as scrolling. Sequencing them means
+ * the outgoing page has vacated before the incoming one is legible.
+ */
+.route-down-leave-active,
+.route-up-leave-active {
+  transition:
+    transform 240ms var(--ease-route),
+    opacity 180ms linear;
+}
+
+.route-down-enter-active,
+.route-up-enter-active {
+  transition:
+    transform var(--duration-route) var(--ease-route),
+    opacity 240ms linear 200ms;
+}
+
+.route-down-enter-from {
+  opacity: 0;
+  transform: translateY(40vh);
+}
+
+.route-down-leave-to {
+  opacity: 0;
+  transform: translateY(-40vh);
+}
+
+.route-up-enter-from {
+  opacity: 0;
+  transform: translateY(-40vh);
+}
+
+.route-up-leave-to {
+  opacity: 0;
+  transform: translateY(40vh);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-down-enter-active,
+  .route-down-leave-active,
+  .route-up-enter-active,
+  .route-up-leave-active {
+    transition: none;
+  }
+
+  .route-down-enter-from,
+  .route-down-leave-to,
+  .route-up-enter-from,
+  .route-up-leave-to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation: none;
@@ -185,7 +262,7 @@ html:not(.dark) [img-dark] {
 /* Overrides Floating Vue */
 .v-popper--theme-dropdown .v-popper__inner,
 .v-popper--theme-tooltip .v-popper__inner {
-  --at-apply: bg-base color-base text-base rounded border border-base shadow;
+  --at-apply: bg-base color-base text-base rounded border border-stroke shadow;
   box-shadow: 0 6px 30px #0000001a;
 }
 .v-popper--theme-tooltip .v-popper__arrow-inner,
@@ -195,7 +272,7 @@ html:not(.dark) [img-dark] {
 }
 .v-popper--theme-tooltip .v-popper__arrow-outer,
 .v-popper--theme-dropdown .v-popper__arrow-outer {
-  --at-apply: border-base;
+  --at-apply: border-stroke;
 }
 .v-popper--theme-tooltip.v-popper--shown,
 .v-popper--theme-tooltip.v-popper--shown * {

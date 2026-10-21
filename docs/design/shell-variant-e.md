@@ -14,7 +14,9 @@ lumirelle@me ~/posts                        posts  projects  use  photos  demos 
                          [ content column, 820 px max ]
 ```
 
-- **Header row** — 20 px vertical padding, no rule beneath it.
+- **Header row** — 20 px vertical padding, no rule beneath it. `/blog`, `/notes` and `/manuals` are the
+  same list under another filter, so all three read as `posts` in the navigation (marked
+  `aria-current="true"`, not `"page"` — they are the current *section*, not the current page).
 - **Content** — starts 48 px below the header on every route (`pt-12`), so list mastheads and post titles share one rhythm.
 - **Footer** — hairline above, mono 11 px, two items.
 
@@ -34,10 +36,19 @@ Mono is for system truth — nav, breadcrumb, dates, counts, labels. Serif is fo
 
 ## Geometry
 
-- Content column **820 px**, padding **32 px**.
-- Margin column **6.5 rem**, right-aligned mono, two lines for manuals (`manuals` / `computer`).
-- List rows: `grid [6.5rem 1fr]`, titles left, reading time right-aligned against the inner edge, dates tabular.
-- Outline rail: fixed, gutter only. `left: max(16px, 50% - 626px)`, width **224 px**, `cd ..` at **top 72**, rail at **top 102** (`--rail-top + 30`). Hidden below **1400 px**, where the gutter can't hold it without touching the column; there the site's existing hover-reveal outline takes over.
+- Content column **820 px**, padding **32 px**. The footer's closing rule is the column's width, not the
+  viewport's.
+- Margin column **6.5 rem**, right-aligned mono, and it carries the **group label** — the year, `Upcoming`,
+  or (for manuals) `manuals` over the manual's own group on a second line. It does not carry the date.
+- List masthead: `h1` at 46 px, a one-sentence lead at 18 px / 1.6 capped at 46ch, then the command line
+  `$ ls posts --sort=date` with a 2 px caret and, at the far edge, `26 entries / 13 manuals`. One hairline
+  closes the block.
+- List rows: `grid [6.5rem 1fr]`; the title is 23 px serif and the **date and reading time sit on a second
+  line beneath the title**, mono 12 px, as `2026-04-21  3min`. Rows are separated by rhythm (`2.25rem`),
+  **never by rules** — thirty rows do not need thirty hairlines.
+- Outline rail: fixed, gutter only. `left: max(16px, 50% - 626px)`, width **224 px**, `cd ..` at **top 72**,
+  rail at **top 102** (`--rail-top + 30`). Hidden below **1400 px**, where the gutter can't hold it without
+  touching the column; there the site's existing hover-reveal outline takes over.
 - Radii: **8 px** on the code window, **4 px** on interactive controls, square everywhere else.
 
 ## Tokens
@@ -76,7 +87,11 @@ One orchestrated moment, everything else answers an action. All of it is off und
 
 Everything the old `NavBar` provided has to be re-earned by a custom Shell. Each has been missed at least once during the prototype:
 
-- **Breadcrumb** — `lumirelle@me ~/path`, live path, faint plus strong.
+- **Breadcrumb** — `lumirelle@me ~/path`, and **every segment is its own route**: `lumirelle@me` and `~`
+  both go home, `posts` goes to `/posts`, and the segment you are already reading is marked rather than
+  linked. The prompt sits at the secondary ink, `~` and the slashes and the path at the faint level. The
+  header is one line at every width it can hold and never collapses the prompt or a parent segment: only
+  the current slug truncates, at 32ch and with an ellipsis.
 - **Theme toggle** — last item in the nav row, no box, icons `i-ri-sun-line` / `dark:i-ri-moon-line`, `aria-label` follows state ("Switch to dark theme"), and it calls `toggleDark` so the site's circular reveal is reused.
 - **Scroll to top** — fixed bottom-right 24 px, 32 px square, 4 px radius, hairline, mono `↑` at `ink-strong` (17.9:1 light / 18.8:1 dark), inverting on hover. Appears past 320 px and is `inert` while hidden — not merely transparent.
 - **`cd ..`** — Shell element above the outline rail, `$` at full ink, rest faint, parent path with the query preserved.
@@ -87,7 +102,10 @@ The TOC comes from the pipeline (`markdown-it-table-of-contents`), restyled — 
 
 ## Code blocks
 
-Terminal windows, not `<pre>` blocks:
+Terminal windows, not `<pre>` blocks — built by a Shiki transformer in
+`plugins/markdown.ts` (`codeWindow()`), because that is where the language is already known and because
+the chrome belongs in the prerendered HTML. The copy control is one delegated listener
+(`src/logics/code-copy.ts`), so it works on markup rendered long before hydration:
 
 ```
 ● ● ●   ts                                    copy
@@ -113,3 +131,64 @@ const str: string = 'hello'
 - **`mouseenter` doesn't bubble**: hover state for a nested element has to come from the row's own handler (and needs `focus`/`blur` pairing for a11y).
 - **`router.push()` resolves before Vue commits.** Any work that races the DOM swap must await `nextTick`.
 - **Never await an unbounded `requestAnimationFrame`** in a lifecycle that gates rendering — a backgrounded tab never fires it.
+
+## P1 exit audit
+
+Run against the production build at 1440 / 1024 / 390 px, in both colour schemes, with the
+Effects stripped. Everything below is what the build actually renders, not what was intended.
+
+**Kept, and now asserted by the suite.** One 820 px column with a 32 px gutter on every route;
+row dividers at every breakpoint and down to 390 px with no horizontal scrolling; a 1 px focus
+outline at 2 px offset, painted in both schemes; dark-mode hairlines (`#262626`) and ink levels
+that stay clear of the canvas; the ledger's tabular date column, right-aligned reading time and
+group labels on the rule; the Splash absent on a seeded session and under reduced motion; every
+route complete with JavaScript disabled.
+
+**Fixed during the audit** — each was a real deviation, not a matter of taste:
+
+- Ledger rows inherited `.prose ul > li::before`, so every row carried a grey bullet and a 1.75 em
+  indent. The pilot page is wrapped in `.prose`, so the ledger now clears that itself.
+- `.prose a:hover` *adds* a 1 px border under a link. On hover, every ledger row and every filter
+  link grew a second hairline — a hairline that was none of a Rail, a row divider or a focus
+  outline. Cleared in both states.
+- `SubNav` was still the fork's 3xl serif link stack, which made the pilot page read as two designs
+  stacked. It is now 12 px mono, active at full ink, with lowercase labels.
+- The header row wrapped to three lines on a 390 px phone. It is 11 px with tighter gaps below
+  `md`, so it packs to two.
+
+**Fixed after the audit, at the owner's direction** — the rendered page had drifted from this reference and
+the reference itself had drifted from the prototype, so both were corrected:
+
+- The list inverted the row: the date was in the margin and the reading time was right-aligned against the
+  inner edge, with a hairline under every row. It now matches *Geometry* above — group label in the margin,
+  date and reading time on the line under the title, rhythm instead of rules.
+- The list had no masthead and no command line. Both are back, with the entry counts.
+- The outline rail was the fork's hover-revealed hamburger at the viewport edge. It is now the mono rail in
+  the gutter, with `cd ..` above it, the active section marked `>` in a reserved `1.4ch` gutter, and scroll
+  arithmetic tracking it.
+- The footer's rule and items were neither the prototype's width nor its type. They are now.
+
+Also settled after the audit: the post sections read as `posts` in the header, the chinese-only filter
+control is gone (its filter had no other consumer), the `$`-to-text gap is 16 px in both the masthead and
+`cd ..`, and the space above the closing rule is `main`'s own bottom padding — 7 rem — rather than
+padding that ended up below the footer.
+
+Two deliberate deviations from the prototype remain. **The list keeps a filter row** (`chinese only`, `all`,
+`blog`, `notes`, `manuals`): the prototype has none, but the Shell's navigation has no other route to
+`/blog`, `/notes` or `/manuals`, and dropping them would have broken navigation to satisfy a screenshot.
+**The header keeps feed and source** as named icon links, which the prototype dropped by accident.
+
+**Recorded, not fixed — these belong to P2:**
+
+- **Twoslash popups** inside code blocks still carry the alpha border
+  (`--twoslash-border-color: #8884`) and a hard-coded `#191919` fill. The windows around them are built;
+  the popup chrome is not.
+
+- **The Post page's masthead still joins its metadata with `·`** ("First post on … · Last edit on …
+  · 20min"). The middle-dot removal in P1 is about the *list*, where columns now do that work; the
+  Post page's own header is P2's to set.
+- **Reading time stacks under the title below 640 px.** It is already on the line beneath the title by
+  design, so at 390 px only the margin column narrows (6.5 rem → 4 rem).
+
+**Deliberate, so it is not "fixed" later:** there are no vertical Rails. The earlier Frame idea did
+not survive the prototype, and the column is held by its measure and by row dividers instead.

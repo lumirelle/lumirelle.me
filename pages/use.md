@@ -3,7 +3,6 @@ title: Use - Lumirelle
 display: Use
 subtitle: Things I am using
 description: Things I am using
-art: dots
 ---
 
 [[toc]]
@@ -226,3 +225,7 @@ Languages (with their own development kits):
 ### VSCode Extension Projects
 
 - [Starter VSCode](https://github.com/antfu/starter-vscode) &ndash; VS Code Extension starter template
+
+## Bookmarks
+
+The sites and tools I keep coming back to: [my bookmarks page](/bookmarks).

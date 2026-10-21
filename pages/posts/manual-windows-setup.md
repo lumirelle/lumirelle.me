@@ -16,7 +16,7 @@ order: 1
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-flow: column;
-  grid-auto-columns: 2fr;
+  grid-auto-columns: 2.5fr;
 }
 .prose table th, .prose table td {
   overflow-x: auto;
@@ -132,8 +132,8 @@ start ms-cxh:localonly
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Clash Verge Rev | Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | <TextTag text="Optional" /><TextTag text="Chezmoi-ed" />Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time: |
-| Chezmoi | `winget add twpayne.chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git`. |
-| Mise | `winget add jdx.mise` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: `mise bootstrap`.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
+| Chezmoi | :code[cmd]{winget add twpayne.chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git`. |
+| Mise | :code[cmd]{winget add jdx.mise} | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: `mise bootstrap`.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
 
 ### Configure Windows Itself
 
@@ -187,7 +187,7 @@ The software below is highly recommended and helpful for daily use and developme
 | GDU | <TextTag text="Mise-ed" text-xs /> | Fask disk usage analyzer written in Go. |
 | DISM++ | <TextTag text="Mise-ed" text-xs /> | Clean up your disk. |
 | Revo Uninstaller | <TextTag text="Mise-ed" text-xs /> | Software uninstaller (Pro edition). |
-| Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | Brings back the classic context menu. |
+| Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For the classic Windows context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For the new Windows 11 context menu. |
 | Driver Store Explorer | `winget add lostindark.DriverStoreExplorer` | <TextTag text="Optional" text-xs />Clean up unused/outdated device drivers. |
 | CrystalDiskInfo | [Official Website](https://crystalmark.info/software/crystaldiskinfo/) | <TextTag text="Optional" text-xs />Disk info viewer. |
@@ -197,14 +197,14 @@ The software below is highly recommended and helpful for daily use and developme
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Visual C++ Redistributable | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | <TextTag text="Optional" text-xs />MSVC Runtime. **Usually, we don't need to install this manually.** |
-| WinLibs | <TextTag text="Mise-ed" text-xs /> | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the `CC` & `CXX` flags, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
+| WinLibs | <TextTag text="Mise-ed" text-xs /> | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the environment variables `CC` & `CXX`, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
 | Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
 | Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
-| Git | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right?<br><br>Is interactive mode needed? |
+| Git | <TextTag text="Mise-ed" text-xs /> | <TextTag text="Chezmoi-ed" text-xs /> Nothing is more important than _Git_ for a developer, right? |
 | GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
 | Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
 | Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
-| Apple PKL LSP | <pre><code>mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar</code></pre> | Apple PKL LSP. |
+| Apple PKL LSP | :code[bash]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
 | Windows Subsystem for Linux | `wsl --install` or `wsl --update` | The best Linux distribution in the world and the best development environment for Windows. 🥰<br><br>Requires a reboot after installation.<br><br>See WSL setup [here](#third-step-set-up-the-wsl-environment-archlinux). |
 
 #### Windows User Experience Enhance
@@ -351,7 +351,7 @@ The software below is required for daily use and development in Archlinux:
 | Base Devel | `sudo pacman -S base-devel` | Basic dev dependencies. |
 | Chezmoi | `sudo pacman -S chezmoi` | Dotfiles manager.<br><br>To init my dotfiles, please use: `chezmoi init git@github.com:lumirelle/dotfiles.git`. |
 | Mise | `sudo pacman -S mise` | <TextTag text="Chezmoi-ed" text-xs /> Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: `mise bootstrap`.<br><br>See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
-| Yay | <pre><code>git clone https://aur.archlinux.org/yay-bin.git<br>cd yay-bin<br>makepkg -si</code></pre> | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
+| Yay | :code[bash]{git clone https://aur.archlinux.org/yay-bin.git\ncd yay-bin\nmakepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
 
 ### Configure Archlinux Itself
 
@@ -422,7 +422,7 @@ The software below is highly recommended and helpful for development with Archli
 | GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
 | Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
 | Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
-| Apple PKL LSP | <pre><code>mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar`</code></pre> | Apple PKL LSP. |
+| Apple PKL LSP | :code[bash]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
 | Chromium | <TextTag text="Mise-ed" text-xs /> | If you need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
 
 #### Archlinux User Experience Enhance

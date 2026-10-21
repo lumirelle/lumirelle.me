@@ -23,6 +23,7 @@ import sharp from 'sharp'
 import _Markdown from 'unplugin-vue-markdown/vite'
 import { readingTime } from '../scripts/reading-time.ts'
 import { slugify } from '../scripts/slugify.ts'
+import { InlineCodeBlockPlugin } from './markdown-inline-code.ts'
 import { PreviewPlugin } from './markdown-preview.ts'
 import { vercelDark, vercelLight } from './shiki-vercel-theme.ts'
 
@@ -74,6 +75,12 @@ function codeWindow(): ShikiTransformer {
   return {
     name: 'code-window',
     root(node) {
+      // Inline blocks (`:code[lang]{…}` in a table cell) opt out: the bar costs
+      // more vertical space than a narrow cell can spare.
+      if (this.options.meta?.__raw?.includes('no-window')) {
+        return
+      }
+
       const walk = (parent: HastNode): void => {
         if (!parent.children) {
           return
@@ -146,6 +153,7 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
           ],
         }),
       )
+      md.use(InlineCodeBlockPlugin)
       md.use(MarkdownItAnchor, {
         slugify,
         permalink: MarkdownItAnchor.permalink.linkInsideHeader({

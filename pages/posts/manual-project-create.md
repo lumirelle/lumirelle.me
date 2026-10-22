@@ -31,7 +31,7 @@ degit git@github.com:lumirelle/starter-ts.git path/you/prefer
 > TypeScript 7+
 
 ```nu
-degit git@github.com:lumirelle/starter-monorepo.git path/you/prefer
+degit git@github.com:lumirelle/starter-ts-monorepo.git path/you/prefer
 ```
 
 ## VS Code Extension
@@ -52,8 +52,8 @@ degit https://github.com/antfu-collective/vitesse-lite path/you/prefer
 
 ## Nuxt
 
-> Vue 3+, Vite 8+, TypeScript 7+
+> Nuxt 4.6+, Vue 3+, Vite 8+, TypeScript 7+
 
 ```nu
-degit git@github.com:lumirelle/starter-vitesse-nuxt.git path/you/prefer
+degit git@github.com:lumirelle/starter-nuxt.git path/you/prefer
 ```

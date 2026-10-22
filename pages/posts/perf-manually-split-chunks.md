@@ -6,6 +6,20 @@ lang: en
 type: note
 ---
 
+<style>
+.prose table thead, .prose table tbody {
+  display: block;
+}
+.prose table tr {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+.prose table th, .prose table td {
+  overflow-x: auto;
+}
+</style>
+
 [[toc]]
 
 ## Introduction
@@ -439,6 +453,9 @@ After understanding the concepts of "module", "chunk" and "bundle", we know "chu
 - **Page loading performance**: **Since HTTP/2.0**, the browser can **handle more requests in parallel** (one TCP connection, multiplexing) than HTTP/1.1 (up to 6 TCP connections per domain), so we can safely split the large output bundles into smaller chunks, to improve the page loading performance.
   > [!Note]
   > [Rolldown](https://rolldown.rs/)'s recommended chunk size is around **100KiB ~ 250KiB**, and [Webpack](https://webpack.js.org/plugins/split-chunks-plugin/#optimizationsplitchunks)`s recommended chunk size is around **20KiB ~ 244KiB**.
+
+> [!Note]
+> During my career, I once encountered an operations manager who complained that the percentage of requests from web crawlers for resources like JavaScript on our website was greater than 30%, resulting in the percentage of HTML requests falling below 50%. Even now, I’m not sure whether this was a farce or not. XD.
 
 ## How to Do Manual Chunk Splitting?
 

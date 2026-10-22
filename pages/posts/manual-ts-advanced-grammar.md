@@ -1,7 +1,6 @@
 ---
 title: TypeScript Advanced Grammar Manual
 date: 2025-11-18T17:16+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 type: manual
 group: Web

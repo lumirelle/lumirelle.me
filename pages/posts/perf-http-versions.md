@@ -1,7 +1,6 @@
 ---
 title: 'Performance Optimization: HTTP Versions'
 date: 2026-04-21T10:48+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 type: note
 ---

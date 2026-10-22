@@ -1,7 +1,6 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-10-22T11:13+08:00
 lang: en
 type: manual
 group: Web

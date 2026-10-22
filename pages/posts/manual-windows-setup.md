@@ -1,7 +1,6 @@
 ---
 title: Windows Setup Manual
 date: 2025-08-24T19:40+08:00
-update: 2026-10-21T17:07+08:00
 lang: en
 type: manual
 group: Computer

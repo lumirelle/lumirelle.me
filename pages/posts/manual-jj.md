@@ -1,7 +1,6 @@
 ---
 title: JJ Manual
 date: 2026-09-23T11:47+08:00
-update: 2026-10-21T17:14+08:00
 lang: en
 type: manual
 group: VCS

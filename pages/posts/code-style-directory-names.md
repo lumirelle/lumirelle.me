@@ -1,7 +1,6 @@
 ---
 title: 'Code Style: Directory Names'
 date: 2026-03-30T17:24+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 type: note
 ---

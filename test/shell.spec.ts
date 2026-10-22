@@ -3,7 +3,7 @@ import type { RouteArtifact } from './support/artifacts'
 import { expect, test } from '@playwright/test'
 import dayjs from 'dayjs'
 import { readAllHtml, readBundle, readPages, routes } from './support/artifacts'
-import { historyAvailability, lastCommitOf } from './support/history'
+import { firstCommitOf, historyAvailability, lastCommitOf } from './support/history'
 
 /**
  * Baseline seam for the site redesign.
@@ -739,6 +739,35 @@ test('no Post carries a hand-written last-edit date', () => {
     .filter(page => /^update:/m.test(frontmatterBlock(page.source)))
     .map(page => page.file)
   expect(authored, 'these Posts still author a last-edit date that git now owns').toEqual([])
+})
+
+test('no Post is published after the commit that introduced it', () => {
+  test.skip(!history.available, `history unavailable, nothing to compare against: ${history.reason}`)
+
+  // A Post dated later than its own first commit is not stale, it is impossible:
+  // nothing exists before the commit that introduced it. The build warns about
+  // that rather than failing (a typo must not make the site depend on history),
+  // so the tree itself must not need the warning — every Post that ships is dated
+  // at or before its first commit.
+  const posts = readPages()
+    .filter(page => /^posts\/[^/]+\.md$/.test(page.file) && page.file !== 'posts/index.md')
+    .map(page => ({ file: page.file, published: frontmatterField(page.source, 'date') }))
+    .filter(post => post.published !== undefined)
+  expect(posts.length).toBeGreaterThan(20)
+
+  const impossible = posts.flatMap(({ file, published }) => {
+    const first = firstCommitOf(`pages/${file}`)
+    // A Post history has never seen cannot contradict itself yet.
+    if (!first) {
+      return []
+    }
+    const offset = offsetOf(first)
+    const days = { published: dayInOffset(published!, offset), first: dayInOffset(first, offset) }
+    // Compared the way the site compares: calendar days in the commit's offset.
+    return days.published > days.first ? [{ file, ...days }] : []
+  })
+
+  expect(impossible).toEqual([])
 })
 
 test('the post sections read as `posts` in the header', async ({ page }) => {

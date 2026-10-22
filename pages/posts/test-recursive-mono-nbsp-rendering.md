@@ -5,6 +5,15 @@ update: 2026-04-28T09:39+08:00
 lang: en
 ---
 
+<style>
+@font-face {
+  font-family: 'Recursive';
+  src: url('/fonts/Recursive_VF_1.085.woff2');
+  font-weight: 300 1000;
+  font-style: oblique 0deg 14deg;
+}
+</style>
+
 [[toc]]
 
 CSS used:

@@ -1,7 +1,6 @@
 ---
 title: Git Manual
 date: 2025-09-26T11:47+08:00
-update: 2026-10-21T17:11+08:00
 lang: en
 type: manual
 group: VCS

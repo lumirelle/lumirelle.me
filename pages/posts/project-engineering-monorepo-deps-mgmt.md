@@ -1,7 +1,6 @@
 ---
 title: 'Project Engineering: Monorepo Dependencies Management'
 date: 2025-11-01T16:06+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 type: note
 ---

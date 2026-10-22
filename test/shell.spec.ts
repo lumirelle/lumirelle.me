@@ -653,10 +653,14 @@ function onOneLine(text: string): string {
   return text.replaceAll(/\s+/g, ' ').trim()
 }
 
+/** A Markdown source's frontmatter block, without its fences. */
+function frontmatterBlock(source: string): string {
+  return /^---\r?\n([\s\S]*?)\r?\n---/.exec(source)?.[1] ?? ''
+}
+
 /** A frontmatter field's raw value, taken from the source file rather than the page. */
 function frontmatterField(source: string, key: string): string | undefined {
-  const block = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source)?.[1] ?? ''
-  const value = new RegExp(`^${key}:[ \\t]*(.*)$`, 'm').exec(block)?.[1]?.trim()
+  const value = new RegExp(`^${key}:[ \\t]*(.*)$`, 'm').exec(frontmatterBlock(source))?.[1]?.trim()
   return value === undefined || value === '' ? undefined : value
 }
 
@@ -676,7 +680,6 @@ test('every Post\'s last edit is the date of the commit that touched its file', 
     expect(source, `${file} is a page of the source tree`).toBeDefined()
 
     const published = frontmatterField(source!, 'date')
-    const authored = frontmatterField(source!, 'update')
     const commit = lastCommitOf(`pages/${file}`)
 
     await page.goto(route.path, { waitUntil: 'load' })
@@ -720,15 +723,22 @@ test('every Post\'s last edit is the date of the commit that touched its file', 
       text.split(`First post on ${renderedDate(published)}`).length - 1,
       `${route.path}: publication date stated once`,
     ).toBe(1)
-
-    // #19 deletes the authored keys; until it does, a stale `update:` must be
-    // inert, so a value git disagrees with may not appear anywhere on the page.
-    if (authored && commit && dayInOffset(authored, offset) !== dayInOffset(commit, offset)) {
-      expect(text, `${route.path}: authored update ${authored} is inert`).not.toContain(
-        renderedDate(authored),
-      )
-    }
   }
+})
+
+test('no Post carries a hand-written last-edit date', () => {
+  // The field is derived from git now: the markdown plugin overwrites or deletes
+  // `update:` before a Post renders, so an authored value would be discarded in
+  // silence — and an author who keeps editing a field that does nothing is the
+  // drift this work removed. The suite refuses the key instead, in the source
+  // tree the build reads.
+  const posts = readPages().filter(page => page.file.startsWith('posts/'))
+  expect(posts.length).toBeGreaterThan(20)
+
+  const authored = posts
+    .filter(page => /^update:/m.test(frontmatterBlock(page.source)))
+    .map(page => page.file)
+  expect(authored, 'these Posts still author a last-edit date that git now owns').toEqual([])
 })
 
 test('the post sections read as `posts` in the header', async ({ page }) => {

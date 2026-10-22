@@ -1,7 +1,6 @@
 ---
 title: Bun vs. Node.js
 date: 2026-01-27T17:46+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 ---
 

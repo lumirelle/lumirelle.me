@@ -1,7 +1,6 @@
 ---
 title: Vue Advanced Grammar Manual
 date: 2026-01-28T11:47+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 type: manual
 group: Web

@@ -4,14 +4,14 @@ import type { Router } from 'vue-router'
  * Which transition a navigation gets.
  *
  * Most navigations answer with the page-level `route-in` cross-fade. A move
- * between the sections of one list* does not: `/posts`, `/blog`, `/notes` and
- * `/manuals` are the same page with a different filter, so fading the whole page
- * would announce a change of place that has not happened. Those navigations get
- * the command line retyping itself instead, which is where the difference
- * actually lives.
+ * between the sections of one list* does not: `/posts`, `/blog`, `/tutorials`,
+ * `/guides` and `/manuals` are the same page with a different filter, so fading
+ * the whole page would announce a change of place that has not happened. Those
+ * navigations get the command line retyping itself instead, which is where the
+ * difference actually lives.
  */
 
-const SECTIONS = ['/posts', '/blog', '/notes', '/manuals']
+const SECTIONS = ['/posts', '/blog', '/tutorials', '/guides', '/manuals']
 
 /**
  * `up` / `down` are the page-level move, borrowed from a terminal: going deeper

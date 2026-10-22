@@ -2,7 +2,8 @@
 title: 'Project Engineering: Monorepo Dependencies Management'
 date: 2025-11-01T16:06+08:00
 lang: en
-type: note
+type: guide
+order: 1
 ---
 
 
@@ -27,7 +28,7 @@ type: note
 
 If you are working on a **"monorepo"**, you may have run into trouble with dependency version management before: Each time you want to change the version of a shared dependency, you need to modify every place where it is referenced.
 
-Thanks to the modern [JavaScript package managers](manual-js-pm), we have **"workspace"** & **"catalogs"** (or "catalog", a unified catalog without an explicit name) to handle this situation: You can define & use a catalog reference instead of a plain version specifier.
+Thanks to the modern [JavaScript package managers](tutorial-js-pm), we have **"workspace"** & **"catalogs"** (or "catalog", a unified catalog without an explicit name) to handle this situation: You can define & use a catalog reference instead of a plain version specifier.
 
 For example:
 

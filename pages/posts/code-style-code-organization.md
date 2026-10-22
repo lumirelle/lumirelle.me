@@ -2,7 +2,8 @@
 title: 'Code Style: Code Organization'
 date: 2025-09-24T16:36+08:00
 lang: en
-type: note
+type: guide
+order: 4
 ---
 
 [[toc]]

@@ -10,10 +10,10 @@ const route = useRoute()
 
 /** The Shell's voice: five destinations, lowercase, mono. */
 const links = [
-  // `/blog`, `/notes` and `/manuals` are the same list under another filter, so
-  // they read as `posts` in the navigation — nothing else in the header would
-  // tell a reader which section of the site they are in.
-  { label: 'posts', to: '/posts', also: ['/blog', '/notes', '/manuals'] },
+  // `/blog`, `/tutorials`, `/guides` and `/manuals` are the same list under
+  // another filter, so they read as `posts` in the navigation — nothing else in
+  // the header would tell a reader which section of the site they are in.
+  { label: 'posts', to: '/posts', also: ['/blog', '/tutorials', '/guides', '/manuals'] },
   { label: 'projects', to: '/projects', also: [] },
   { label: 'use', to: '/use', also: [] },
   { label: 'photos', to: '/photos', also: [] },
@@ -22,7 +22,7 @@ const links = [
 
 type Link = (typeof links)[number]
 
-// `/posts/manual-git` is still `posts`: the section owns its children, so the
+// `/posts/tutorial-git` is still `posts`: the section owns its children, so the
 // active mark survives every route deeper in the tree.
 function isCurrent(link: Link): boolean {
   const { to, also } = link as { to: string, also: readonly string[] }

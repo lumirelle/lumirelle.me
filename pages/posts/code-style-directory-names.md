@@ -2,7 +2,8 @@
 title: 'Code Style: Directory Names'
 date: 2026-03-30T17:24+08:00
 lang: en
-type: note
+type: guide
+order: 2
 ---
 
 [[toc]]

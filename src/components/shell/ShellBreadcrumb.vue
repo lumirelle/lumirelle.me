@@ -5,7 +5,7 @@
  *
  * `lumirelle@me` and `~` both lead home — the first is the identity, the second
  * is the shell's own home shorthand — and every path segment links to itself, so
- * `~/posts/manual-git` offers three routes: the site, the list and (here) the
+ * `~/posts/tutorial-git` offers three routes: the site, the list and (here) the
  * post you are already reading, which is text rather than a link.
  */
 const route = useRoute()

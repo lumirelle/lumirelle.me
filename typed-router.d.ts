@@ -66,6 +66,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/guides': RouteRecordInfo<
+      '/guides',
+      '/guides',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/manuals': RouteRecordInfo<
       '/manuals',
       '/manuals',
@@ -80,13 +87,6 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/notes': RouteRecordInfo<
-      '/notes',
-      '/notes',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
     '/photos': RouteRecordInfo<
       '/photos',
       '/photos',
@@ -97,6 +97,13 @@ declare module 'vue-router/auto-routes' {
     '/posts/': RouteRecordInfo<
       '/posts/',
       '/posts',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/bun-vs-nodejs': RouteRecordInfo<
+      '/posts/bun-vs-nodejs',
+      '/posts/bun-vs-nodejs',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -129,72 +136,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/example-ts-custom-fetch-function': RouteRecordInfo<
-      '/posts/example-ts-custom-fetch-function',
-      '/posts/example-ts-custom-fetch-function',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-computer-network': RouteRecordInfo<
-      '/posts/manual-computer-network',
-      '/posts/manual-computer-network',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-css-advanced-grammar': RouteRecordInfo<
-      '/posts/manual-css-advanced-grammar',
-      '/posts/manual-css-advanced-grammar',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-git': RouteRecordInfo<
-      '/posts/manual-git',
-      '/posts/manual-git',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-html-advanced-grammar': RouteRecordInfo<
-      '/posts/manual-html-advanced-grammar',
-      '/posts/manual-html-advanced-grammar',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-jj': RouteRecordInfo<
-      '/posts/manual-jj',
-      '/posts/manual-jj',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-js-advanced-grammar': RouteRecordInfo<
-      '/posts/manual-js-advanced-grammar',
-      '/posts/manual-js-advanced-grammar',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-js-pm': RouteRecordInfo<
-      '/posts/manual-js-pm',
-      '/posts/manual-js-pm',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-neovim-astrovim': RouteRecordInfo<
-      '/posts/manual-neovim-astrovim',
-      '/posts/manual-neovim-astrovim',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-posix-shell-script': RouteRecordInfo<
-      '/posts/manual-posix-shell-script',
-      '/posts/manual-posix-shell-script',
+    '/posts/first-time-trying-roller-coaster': RouteRecordInfo<
+      '/posts/first-time-trying-roller-coaster',
+      '/posts/first-time-trying-roller-coaster',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -206,51 +150,9 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
-    '/posts/manual-ts-advanced-grammar': RouteRecordInfo<
-      '/posts/manual-ts-advanced-grammar',
-      '/posts/manual-ts-advanced-grammar',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/manual-vue-advanced-grammar': RouteRecordInfo<
-      '/posts/manual-vue-advanced-grammar',
-      '/posts/manual-vue-advanced-grammar',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
     '/posts/manual-windows-setup': RouteRecordInfo<
       '/posts/manual-windows-setup',
       '/posts/manual-windows-setup',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/misc-bun-vs-nodejs': RouteRecordInfo<
-      '/posts/misc-bun-vs-nodejs',
-      '/posts/misc-bun-vs-nodejs',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/misc-first-time-trying-roller-coaster': RouteRecordInfo<
-      '/posts/misc-first-time-trying-roller-coaster',
-      '/posts/misc-first-time-trying-roller-coaster',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/misc-programming-fonts': RouteRecordInfo<
-      '/posts/misc-programming-fonts',
-      '/posts/misc-programming-fonts',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '/posts/misc-vite-and-unbundled': RouteRecordInfo<
-      '/posts/misc-vite-and-unbundled',
-      '/posts/misc-vite-and-unbundled',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -269,6 +171,13 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/programming-fonts': RouteRecordInfo<
+      '/posts/programming-fonts',
+      '/posts/programming-fonts',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/project-engineering-monorepo-deps-mgmt': RouteRecordInfo<
       '/posts/project-engineering-monorepo-deps-mgmt',
       '/posts/project-engineering-monorepo-deps-mgmt',
@@ -276,9 +185,100 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       | never
     >,
+    '/posts/project-engineering-ts-custom-fetch-function': RouteRecordInfo<
+      '/posts/project-engineering-ts-custom-fetch-function',
+      '/posts/project-engineering-ts-custom-fetch-function',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
     '/posts/test-recursive-mono-nbsp-rendering': RouteRecordInfo<
       '/posts/test-recursive-mono-nbsp-rendering',
       '/posts/test-recursive-mono-nbsp-rendering',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-computer-network': RouteRecordInfo<
+      '/posts/tutorial-computer-network',
+      '/posts/tutorial-computer-network',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-css-advanced-grammar': RouteRecordInfo<
+      '/posts/tutorial-css-advanced-grammar',
+      '/posts/tutorial-css-advanced-grammar',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-git': RouteRecordInfo<
+      '/posts/tutorial-git',
+      '/posts/tutorial-git',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-html-advanced-grammar': RouteRecordInfo<
+      '/posts/tutorial-html-advanced-grammar',
+      '/posts/tutorial-html-advanced-grammar',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-jj': RouteRecordInfo<
+      '/posts/tutorial-jj',
+      '/posts/tutorial-jj',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-js-advanced-grammar': RouteRecordInfo<
+      '/posts/tutorial-js-advanced-grammar',
+      '/posts/tutorial-js-advanced-grammar',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-js-pm': RouteRecordInfo<
+      '/posts/tutorial-js-pm',
+      '/posts/tutorial-js-pm',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-neovim-astrovim': RouteRecordInfo<
+      '/posts/tutorial-neovim-astrovim',
+      '/posts/tutorial-neovim-astrovim',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-posix-shell-script': RouteRecordInfo<
+      '/posts/tutorial-posix-shell-script',
+      '/posts/tutorial-posix-shell-script',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-ts-advanced-grammar': RouteRecordInfo<
+      '/posts/tutorial-ts-advanced-grammar',
+      '/posts/tutorial-ts-advanced-grammar',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/tutorial-vue-advanced-grammar': RouteRecordInfo<
+      '/posts/tutorial-vue-advanced-grammar',
+      '/posts/tutorial-vue-advanced-grammar',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/posts/vite-and-unbundled': RouteRecordInfo<
+      '/posts/vite-and-unbundled',
+      '/posts/vite-and-unbundled',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -293,6 +293,13 @@ declare module 'vue-router/auto-routes' {
     '/sponsors-list': RouteRecordInfo<
       '/sponsors-list',
       '/sponsors-list',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/tutorials': RouteRecordInfo<
+      '/tutorials',
+      '/tutorials',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -357,6 +364,14 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'pages/guides.md': {
+      routes:
+        | '/guides'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'pages/manuals.md': {
       routes:
         | '/manuals'
@@ -373,14 +388,6 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'pages/notes.md': {
-      routes:
-        | '/notes'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
     'pages/photos.md': {
       routes:
         | '/photos'
@@ -392,6 +399,14 @@ declare module 'vue-router/auto-routes' {
     'pages/posts/index.md': {
       routes:
         | '/posts/'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/bun-vs-nodejs.md': {
+      routes:
+        | '/posts/bun-vs-nodejs'
       views:
         | never
       pathParamNames:
@@ -429,81 +444,9 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'pages/posts/example-ts-custom-fetch-function.md': {
+    'pages/posts/first-time-trying-roller-coaster.md': {
       routes:
-        | '/posts/example-ts-custom-fetch-function'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-computer-network.md': {
-      routes:
-        | '/posts/manual-computer-network'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-css-advanced-grammar.md': {
-      routes:
-        | '/posts/manual-css-advanced-grammar'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-git.md': {
-      routes:
-        | '/posts/manual-git'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-html-advanced-grammar.md': {
-      routes:
-        | '/posts/manual-html-advanced-grammar'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-jj.md': {
-      routes:
-        | '/posts/manual-jj'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-js-advanced-grammar.md': {
-      routes:
-        | '/posts/manual-js-advanced-grammar'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-js-pm.md': {
-      routes:
-        | '/posts/manual-js-pm'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-neovim-astrovim.md': {
-      routes:
-        | '/posts/manual-neovim-astrovim'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-posix-shell-script.md': {
-      routes:
-        | '/posts/manual-posix-shell-script'
+        | '/posts/first-time-trying-roller-coaster'
       views:
         | never
       pathParamNames:
@@ -517,57 +460,9 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
-    'pages/posts/manual-ts-advanced-grammar.md': {
-      routes:
-        | '/posts/manual-ts-advanced-grammar'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/manual-vue-advanced-grammar.md': {
-      routes:
-        | '/posts/manual-vue-advanced-grammar'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
     'pages/posts/manual-windows-setup.md': {
       routes:
         | '/posts/manual-windows-setup'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/misc-bun-vs-nodejs.md': {
-      routes:
-        | '/posts/misc-bun-vs-nodejs'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/misc-first-time-trying-roller-coaster.md': {
-      routes:
-        | '/posts/misc-first-time-trying-roller-coaster'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/misc-programming-fonts.md': {
-      routes:
-        | '/posts/misc-programming-fonts'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'pages/posts/misc-vite-and-unbundled.md': {
-      routes:
-        | '/posts/misc-vite-and-unbundled'
       views:
         | never
       pathParamNames:
@@ -589,6 +484,14 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'pages/posts/programming-fonts.md': {
+      routes:
+        | '/posts/programming-fonts'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'pages/posts/project-engineering-monorepo-deps-mgmt.md': {
       routes:
         | '/posts/project-engineering-monorepo-deps-mgmt'
@@ -597,9 +500,113 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | never
     }
+    'pages/posts/project-engineering-ts-custom-fetch-function.md': {
+      routes:
+        | '/posts/project-engineering-ts-custom-fetch-function'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
     'pages/posts/test-recursive-mono-nbsp-rendering.md': {
       routes:
         | '/posts/test-recursive-mono-nbsp-rendering'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-computer-network.md': {
+      routes:
+        | '/posts/tutorial-computer-network'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-css-advanced-grammar.md': {
+      routes:
+        | '/posts/tutorial-css-advanced-grammar'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-git.md': {
+      routes:
+        | '/posts/tutorial-git'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-html-advanced-grammar.md': {
+      routes:
+        | '/posts/tutorial-html-advanced-grammar'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-jj.md': {
+      routes:
+        | '/posts/tutorial-jj'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-js-advanced-grammar.md': {
+      routes:
+        | '/posts/tutorial-js-advanced-grammar'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-js-pm.md': {
+      routes:
+        | '/posts/tutorial-js-pm'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-neovim-astrovim.md': {
+      routes:
+        | '/posts/tutorial-neovim-astrovim'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-posix-shell-script.md': {
+      routes:
+        | '/posts/tutorial-posix-shell-script'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-ts-advanced-grammar.md': {
+      routes:
+        | '/posts/tutorial-ts-advanced-grammar'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/tutorial-vue-advanced-grammar.md': {
+      routes:
+        | '/posts/tutorial-vue-advanced-grammar'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/posts/vite-and-unbundled.md': {
+      routes:
+        | '/posts/vite-and-unbundled'
       views:
         | never
       pathParamNames:
@@ -616,6 +623,14 @@ declare module 'vue-router/auto-routes' {
     'pages/sponsors-list.md': {
       routes:
         | '/sponsors-list'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'pages/tutorials.md': {
+      routes:
+        | '/tutorials'
       views:
         | never
       pathParamNames:

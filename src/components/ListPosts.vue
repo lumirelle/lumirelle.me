@@ -3,20 +3,23 @@ import type { Post } from '~/types'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import { transitionKind } from '~/logics/route-transition'
-import { manualGroupOrder } from '../../data/manual-groups'
+import { guideSeriesOrder, postGroupOrder } from '../../data/group-order'
 
 /**
  * The Post list: a masthead, a command line, and a ledger.
  *
  * The masthead is the page's own affordance — `$ ls posts --sort=date` with the
  * entry count at the far edge — and the ledger below it is a two-column grid in
- * which the *margin* carries the group label (year, `Upcoming`, or `manuals` over
- * the manual's group) and each row carries its own date and reading time on the
- * line beneath the title. Rows are separated by rhythm, not by rules: a hairline
+ * which the *margin* carries the group label (year, `Upcoming`, or a section over
+ * its own group) and each row carries its own date and reading time on the line
+ * beneath the title. Rows are separated by rhythm, not by rules: a hairline
  * belongs to the Frame, and a list of thirty rows does not need thirty of them.
  *
- * Ordering is unchanged: manual group order then manual order, otherwise date
- * descending, future-dated Posts still grouped under `Upcoming`.
+ * Ordering follows what the section is. The three sequences — Manuals, Tutorials
+ * and Guides — are read in group order, then in each Post's own `order`, and they
+ * are the only sections that number their rows (`STEP n.`). A group is frontmatter
+ * for a Manual or a Tutorial, and the title's series for a Guide. Everything else
+ * is dated newest first, with future-dated Posts still grouped under `Upcoming`.
  */
 const props = defineProps<{
   title: string
@@ -32,7 +35,8 @@ interface LedgerRow extends Post {
   /** `YYYY-MM-DD`, the form the meta line prints. */
   isoDate: string
   external: boolean
-  manual: boolean
+  /** Frontmatter `type`, defaulted: an untitled-as-anything Post is a blog Post. */
+  type: string
   step?: number
 }
 
@@ -67,38 +71,91 @@ const routes: LedgerRow[] = router
       place: frontmatter.place,
       group: frontmatter.group,
       order: frontmatter.order,
+      type: frontmatter.type || 'blog',
       // The markers the list has always carried, copied so they can render.
       inperson: frontmatter.inperson,
       radio: frontmatter.radio,
       video: frontmatter.video,
       recording: frontmatter.recording,
       external: i.path.includes('://') || Boolean(frontmatter.redirect),
-      manual: (frontmatter.type || 'blog').split('+').includes('manual'),
     }
   })
 
-function manualGroupIndex(post: Post): number {
-  const idx = manualGroupOrder.indexOf(post.group || '')
-  return idx === -1 ? manualGroupOrder.length : idx
+/** The three sections that are sequences: grouped, ordered, and numbered `STEP n.`. */
+const SEQUENCES = ['manual', 'tutorial', 'guide']
+const sequence = computed(() => SEQUENCES.includes(props.type || ''))
+
+/**
+ * Position of a group in its section's reading order; unlisted groups go last.
+ *
+ * A Manual or a Tutorial states its group in frontmatter. A Guide's group is the
+ * series its title carries instead, so its order comes from the series list.
+ */
+function groupIndex(post: Post): number {
+  if (props.type === 'guide') {
+    const idx = guideSeriesOrder.indexOf(seriesOf(post.title))
+    return idx === -1 ? guideSeriesOrder.length : idx
+  }
+  const idx = postGroupOrder.indexOf(post.group || '')
+  return idx === -1 ? postGroupOrder.length : idx
+}
+
+/** The name the margin prints under the section, and the sort's second key. */
+function groupName(post: Post): string {
+  return props.type === 'guide' ? seriesOf(post.title) : post.group || ''
+}
+
+/**
+ * A Guide's series is the part of its title before the colon: `Code Style: Title
+ * Case` belongs to `Code Style`, and the colon is the whole convention.
+ */
+function seriesOf(title: string): string {
+  const colon = title.indexOf(':')
+  return colon === -1 ? 'Other' : title.slice(0, colon).trim()
 }
 
 const posts = computed<LedgerRow[]>(() =>
   [...routes, ...((props.extra as LedgerRow[] | undefined) || [])]
     .sort((a, b) => {
-      if (props.type === 'manual') {
-        const groupDiff = manualGroupIndex(a) - manualGroupIndex(b)
+      if (sequence.value) {
+        const groupDiff = groupIndex(a) - groupIndex(b)
         if (groupDiff !== 0)
           return groupDiff
-        const groupNameDiff = (a.group || '').localeCompare(b.group || '')
+        const groupNameDiff = groupName(a).localeCompare(groupName(b))
         if (groupNameDiff !== 0)
           return groupNameDiff
-        return (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
+        const orderDiff
+          = (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
+        if (orderDiff !== 0)
+          return orderDiff
       }
       return Number(new Date(b.date)) - Number(new Date(a.date))
     }),
 )
 
-const manualCount = computed(() => posts.value.filter(post => post.manual).length)
+/**
+ * The count line: how many rows there are, then how the sections divide them up.
+ *
+ * Only the sections are named — the blog Posts are what is left over — and only
+ * where more than one section is in view: a page filtered to Tutorials would
+ * otherwise spend its second count repeating its first.
+ */
+const counts = computed(() => {
+  const byType = new Map<string, number>()
+  for (const post of posts.value) {
+    byType.set(post.type, (byType.get(post.type) || 0) + 1)
+  }
+
+  const parts = [`${posts.value.length} entries`]
+  if (byType.size > 1) {
+    for (const type of ['manual', 'tutorial', 'guide']) {
+      const count = byType.get(type)
+      if (count)
+        parts.push(`${count} ${type}s`)
+    }
+  }
+  return parts
+})
 
 /**
  * The command is rendered in two parts: what the list *is* (`ls posts`), and the
@@ -164,18 +221,21 @@ function isFuture(a?: Date | string | number): boolean {
 }
 
 function groupKey(post: LedgerRow): string {
-  if (props.type === 'manual')
-    return post.group || 'Other'
+  if (sequence.value)
+    return groupName(post) || 'Other'
   return isFuture(post.date) ? 'Upcoming' : String(new Date(post.date).getFullYear())
 }
 
 /**
- * The margin reads `manuals` over the manual's own group, and the plain group
- * label otherwise. Two lines at most, because it is a 6.5 rem column.
+ * The margin reads the section over its own group (`tutorials` over `web`), and
+ * the plain group label otherwise. Two lines at most, because it is a 6.5 rem
+ * column.
  */
 function marginLines(key: string): [string, string] {
-  if (props.type === 'manual')
-    return ['manuals', key.toLowerCase()]
+  if (sequence.value)
+    return [`${props.type}s`, key.toLowerCase()]
+  if (props.type === 'guide')
+    return ['guide', key.toLowerCase()]
   return [key, '']
 }
 
@@ -191,8 +251,8 @@ const groups = computed<LedgerGroup[]>(() => {
     const group = result.at(-1)!
     group.rows.push({
       ...post,
-      // A Manual is a sequence, so the step belongs to the group, not the page.
-      step: props.type === 'manual' ? group.rows.length + 1 : undefined,
+      // A sequence numbers its rows, so the step belongs to the group, not the page.
+      step: sequence.value ? group.rows.length + 1 : undefined,
     })
   }
 
@@ -205,11 +265,12 @@ function active(path: string): boolean {
   return activeRow.value === path
 }
 
-/** Sections. Kept because they are the only route to /blog, /notes and /manuals. */
+/** Sections. Kept because they are the only route to /blog, /tutorials, /guides and /manuals. */
 const sections = [
   { label: 'all', to: '/posts' },
   { label: 'blog', to: '/blog' },
-  { label: 'notes', to: '/notes' },
+  { label: 'tutorials', to: '/tutorials' },
+  { label: 'guides', to: '/guides' },
   { label: 'manuals', to: '/manuals' },
 ]
 const route = useRoute()
@@ -227,7 +288,7 @@ const route = useRoute()
     <div class="command">
       <span class="prompt">$</span>
       <span class="command-line">ls posts {{ typedFlags }}<span class="caret" aria-hidden="true" /></span>
-      <span class="counts">{{ posts.length }} entries / {{ manualCount }} manuals</span>
+      <span class="counts">{{ counts.join(' / ') }}</span>
     </div>
 
     <nav class="filters" aria-label="Post sections">
@@ -329,8 +390,9 @@ const route = useRoute()
 
 .command {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 1rem;
+  gap: 0.5rem 1rem;
 
   margin-top: 2rem;
 

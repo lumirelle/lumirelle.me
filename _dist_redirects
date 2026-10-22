@@ -6,6 +6,8 @@
 /sponsor https://github.com/sponsors/lumirelle 301
 /support https://github.com/sponsors/lumirelle 301
 
+/notes https://lumirelle.me/posts 301
+
 /posts/code-style-encapsulation-and-modularity https://lumirelle.me/posts/code-style-code-organization 301
 /posts/code-style-symbol-name-pattern https://lumirelle.me/posts/code-style-symbol-naming-patterns 301
 
@@ -14,8 +16,29 @@
 
 /posts/test/recursive-mono-nbsp-rendering https://lumirelle.me/posts/test-recursive-mono-nbsp-rendering 301
 
-/posts/manual-bash-script https://lumirelle.me/posts/manual-posix-shell-script 301
-/posts/manual-neovim-lazyvim https://lumirelle.me/posts/manual-neovim-astrovim 301
+/posts/example-ts-custom-fetch-function https://lumirelle.me/posts/project-engineering-ts-custom-fetch-function 301
+
+/posts/manual-bash-script https://lumirelle.me/posts/tutorial-posix-shell-script 301
+/posts/manual-neovim-lazyvim https://lumirelle.me/posts/tutorial-neovim-astrovim 301
+
+/posts/manual-computer-network https://lumirelle.me/posts/tutorial-computer-network 301
+/posts/manual-css-advanced-grammar https://lumirelle.me/posts/tutorial-css-advanced-grammar 301
+/posts/manual-git https://lumirelle.me/posts/tutorial-git 301
+/posts/manual-html-advanced-grammar https://lumirelle.me/posts/tutorial-html-advanced-grammar 301
+/posts/manual-jj https://lumirelle.me/posts/tutorial-jj 301
+/posts/manual-js-advanced-grammar https://lumirelle.me/posts/tutorial-js-advanced-grammar 301
+/posts/manual-js-pm https://lumirelle.me/posts/tutorial-js-pm 301
+/posts/manual-neovim-astrovim https://lumirelle.me/posts/tutorial-neovim-astrovim 301
+/posts/manual-posix-shell-script https://lumirelle.me/posts/tutorial-posix-shell-script 301
+/posts/manual-ts-advanced-grammar https://lumirelle.me/posts/tutorial-ts-advanced-grammar 301
+/posts/manual-vue-advanced-grammar https://lumirelle.me/posts/tutorial-vue-advanced-grammar 301
+
+/posts/misc-bun-vs-nodejs https://lumirelle.me/posts/bun-vs-nodejs 301
+/posts/misc-first-time-trying-roller-coaster https://lumirelle.me/posts/first-time-trying-roller-coaster 301
+/posts/misc-first-time-trying-roller-coaster/* https://lumirelle.me/posts/first-time-trying-roller-coaster/:splat 301
+/posts/misc-programming-fonts https://lumirelle.me/posts/programming-fonts 301
+/posts/misc-programming-fonts/* https://lumirelle.me/posts/programming-fonts/:splat 301
+/posts/misc-vite-and-unbundled https://lumirelle.me/posts/vite-and-unbundled 301
 
 /stars-rank	https://github.com/search?l=&o=desc&s=stars&type=Repositories&q=user%3Alumirelle	302
 /.github	https://github.com/lumirelle/.github	302

@@ -358,7 +358,7 @@ test('the build carries nothing the redesign retired', () => {
 
 test('the entrance cascade plays once, capped at six stages', async ({ page }) => {
   // A Post is the page with many top-level blocks; the list has one component.
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // A page with many top-level blocks: everything past the sixth must inherit
   // the sixth stage's delay rather than queueing behind its own index.
@@ -430,7 +430,7 @@ test('reduced motion strips the route move and the cascade', async ({ page }) =>
 })
 
 test('every segment of the breadcrumb is its own route', async ({ page }) => {
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   const crumbs = page.getByRole('navigation', { name: 'Breadcrumb' })
 
@@ -443,8 +443,8 @@ test('every segment of the breadcrumb is its own route', async ({ page }) => {
 
   // The page you are already on is marked, not a link to itself.
   const current = crumbs.locator('[aria-current="page"]')
-  await expect(current).toHaveText('manual-git')
-  await expect(crumbs.getByRole('link', { name: 'manual-git' })).toHaveCount(0)
+  await expect(current).toHaveText('tutorial-git')
+  await expect(crumbs.getByRole('link', { name: 'tutorial-git' })).toHaveCount(0)
 
   // The prompt `lumirelle@me` sits one level above the path: `~`, the slashes and
   // the segments are all the faint level, and nothing changes colour for state.
@@ -499,7 +499,7 @@ test('the theme toggle still works under reduced motion', async ({ page }) => {
 
 test('scroll to top is inert until the reader has scrolled', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' })
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   const control = page.getByRole('button', { name: 'Scroll to top', includeHidden: true })
   await expect(control).toHaveCount(1)
@@ -587,7 +587,7 @@ test('the Post list is a ledger with one row per Post', async ({ page }) => {
       family: style.fontFamily,
     }
   })
-  expect(label.text).toMatch(/^\d{4}$|^manuals/)
+  expect(label.text).toMatch(/^\d{4}$/)
   expect(label.align).toBe('right')
   expect(label.family).toMatch(/mono/i)
 
@@ -771,7 +771,7 @@ test('no Post is published after the commit that introduced it', () => {
 })
 
 test('the post sections read as `posts` in the header', async ({ page }) => {
-  for (const path of ['/blog', '/notes', '/manuals']) {
+  for (const path of ['/blog', '/tutorials', '/guides', '/manuals']) {
     await page.goto(path, { waitUntil: 'load' })
 
     const nav = page.getByRole('banner').getByRole('navigation', { name: 'Primary' })
@@ -858,7 +858,7 @@ test('a navigation from elsewhere keeps the outgoing page', async ({ page }) => 
 
 test('the outline rail follows the Post you navigate to', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   const rail = () => page.evaluate(() => {
     const toc = document.querySelector('.table-of-contents')
@@ -874,7 +874,7 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
   })
 
   const git = await rail()
-  expect(git?.owner).toBe('/posts/manual-git')
+  expect(git?.owner).toBe('/posts/tutorial-git')
   expect(git?.first).toBe('What Is Git?')
   // The first section is marked at the top, so the rail is never blank.
   expect(git?.active).toBe('What Is Git?')
@@ -883,11 +883,11 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
   await page.goto('/posts', { waitUntil: 'load' })
   await page.getByRole('main')
     .getByRole('link')
-    .filter({ hasText: 'Vue Advanced Grammar Manual' })
+    .filter({ hasText: 'Tutorial: Vue Advanced Grammar' })
     .first()
     .click()
 
-  await expect.poll(async () => (await rail())?.owner).toBe('/posts/manual-vue-advanced-grammar')
+  await expect.poll(async () => (await rail())?.owner).toBe('/posts/tutorial-vue-advanced-grammar')
   const vue = await rail()
   expect(vue?.first).not.toBe(git?.first)
   // And it is still in the gutter, not dragged into the column by the transition.
@@ -896,7 +896,7 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
 
 test('a rail link scrolls instead of moving the page', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // The rail is adopted into `<body>`, which puts it outside the Post body's own
   // link handling. Left to the browser, the hash reached the router as a new
@@ -921,7 +921,7 @@ test('a rail link scrolls instead of moving the page', async ({ page }) => {
 
 test('the outline rail lists h4 sections as subdivisions', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-computer-network', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-computer-network', { waitUntil: 'load' })
 
   // h4 is a real section level in the Manuals, so the rail carries it. (`#### TLS/SSL`
   // in the Manual; the heading was renamed after this test was written.)
@@ -944,7 +944,7 @@ test('the outline rail lists h4 sections as subdivisions', async ({ page }) => {
 
 test('a long outline scrolls inside the rail, not off the page', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-js-advanced-grammar', { waitUntil: 'load' })
 
   const list = page.locator('.table-of-contents > ul')
   const box = await list.boundingBox()
@@ -975,7 +975,7 @@ test('a long outline scrolls inside the rail, not off the page', async ({ page }
 
 test('the Shell owns the outline at both widths and never duplicates it', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-js-advanced-grammar', { waitUntil: 'load' })
 
   const outline = page.locator('.table-of-contents')
   await expect(outline).toHaveCount(1)
@@ -1040,7 +1040,7 @@ async function scrollToHeading(page: Page, selector: string): Promise<void> {
 
 test('resizing across 1400 px keeps the reader\'s place in the outline', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-js-advanced-grammar', { waitUntil: 'load' })
 
   const mark = page.locator('.table-of-contents a[href="#unhandled-rejections"]')
   await scrollToHeading(page, '#unhandled-rejections')
@@ -1079,7 +1079,7 @@ test('resizing across 1400 px keeps the reader\'s place in the outline', async (
 
 test('below 1400 px a route change hands the outline to the new Post', async ({ page }) => {
   await page.setViewportSize({ width: 1200, height: 950 })
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   const readOutline = () => page.evaluate(() => {
     const outline = document.querySelector('.table-of-contents')
@@ -1107,7 +1107,7 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
 
   await page.getByRole('main')
     .getByRole('link')
-    .filter({ hasText: 'Vue Advanced Grammar Manual' })
+    .filter({ hasText: 'Tutorial: Vue Advanced Grammar' })
     .first()
     .click()
 
@@ -1146,7 +1146,7 @@ function outlineControlAnyState(page: Page) {
  * The control shares the scroll control's threshold — it is `inert` until the
  * reader has moved 320 px — so the page is scrolled before it is pressed.
  */
-async function openOutlinePanel(page: Page, path = '/posts/manual-git') {
+async function openOutlinePanel(page: Page, path = '/posts/tutorial-git') {
   await page.setViewportSize(PHONE)
   await page.goto(path, { waitUntil: 'load' })
   await scrollPageTo(page, 900)
@@ -1160,7 +1160,7 @@ async function openOutlinePanel(page: Page, path = '/posts/manual-git') {
 
 test('below 1400 px the outline is a control, never a hover reveal', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // Where the reveal used to live: the outline's own left-hand column, over the
   // article. Hovering it no longer paints a list of sections on top of the text.
@@ -1195,7 +1195,7 @@ test('below 1400 px the outline is a control, never a hover reveal', async ({ pa
 
 test('the outline control opens the panel and Esc hands focus back', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // The whole control, though it leaves the accessible tree while the panel is
   // open: that absence is what this test asserts.
@@ -1246,7 +1246,7 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
 
 test('the closed outline panel is off-canvas and out of the tab order', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // Nothing inside it is announced while it is closed.
   await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
@@ -1347,7 +1347,7 @@ for (const scheme of ['light', 'dark'] as const) {
 }
 
 test('the outline panel carries the same three levels as the Rail', async ({ page }) => {
-  const panel = await openOutlinePanel(page, '/posts/manual-computer-network')
+  const panel = await openOutlinePanel(page, '/posts/tutorial-computer-network')
 
   const size = async (name: string) => Number.parseFloat(await panel
     .getByRole('link', { name })
@@ -1362,7 +1362,7 @@ test('the outline panel carries the same three levels as the Rail', async ({ pag
 
 test('a section in the outline panel scrolls without re-keying the route', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
   await page.locator('.route-frame').evaluate(el => el.setAttribute('data-kept', ''))
 
   await scrollPageTo(page, 900)
@@ -1385,7 +1385,7 @@ test('a section in the outline panel scrolls without re-keying the route', async
 })
 
 test('the outline panel scrolls its own list inside itself', async ({ page }) => {
-  const panel = await openOutlinePanel(page, '/posts/manual-js-advanced-grammar')
+  const panel = await openOutlinePanel(page, '/posts/tutorial-js-advanced-grammar')
 
   // The panel ends where the viewport does, however long the outline is.
   const panelBox = await panel.boundingBox()
@@ -1447,7 +1447,7 @@ test('the page behind the outline panel cannot scroll until it closes', async ({
 
 test('navigating away closes the outline panel', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-vue-advanced-grammar', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-vue-advanced-grammar', { waitUntil: 'load' })
 
   // Two SPA moves, so that going back lands on another Post that has an outline
   // of its own rather than on a page with none.
@@ -1458,10 +1458,10 @@ test('navigating away closes the outline panel', async ({ page }) => {
   await expect(page).toHaveURL(/\/posts$/)
   await page.getByRole('main')
     .getByRole('link')
-    .filter({ hasText: 'Git Manual' })
+    .filter({ hasText: 'Tutorial: Git' })
     .first()
     .click()
-  await expect(page).toHaveURL(/\/posts\/manual-git$/)
+  await expect(page).toHaveURL(/\/posts\/tutorial-git$/)
 
   await scrollPageTo(page, 900)
   await outlineControl(page).click()
@@ -1470,7 +1470,7 @@ test('navigating away closes the outline panel', async ({ page }) => {
   // The backdrop owns the header while the panel is open, so the way out is the
   // one the browser offers — and the panel belongs to the Post being left.
   await page.evaluate(() => window.history.go(-2))
-  await expect(page).toHaveURL(/\/posts\/manual-vue-advanced-grammar$/)
+  await expect(page).toHaveURL(/\/posts\/tutorial-vue-advanced-grammar$/)
   await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
   await expect
     .poll(() => page.locator('.table-of-contents a').first().textContent())
@@ -1479,7 +1479,7 @@ test('navigating away closes the outline panel', async ({ page }) => {
 
 test('the outline control is absent where the Rail owns the outline', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // The Rail, unchanged and in the gutter.
   await expect(page.getByRole('link', { name: 'What Is Git?' })).toBeVisible()
@@ -1505,7 +1505,7 @@ test('the outline panel appears without sliding under reduced motion', async ({ 
 
 test('o opens and closes the outline panel', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
   await scrollPageTo(page, 900)
 
   const panel = page.getByRole('dialog', { name: 'outline' })
@@ -1521,7 +1521,7 @@ test('o opens and closes the outline panel', async ({ page }) => {
 
 test('o reaches the outline from the top of the page, where the control is not', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
   // The control shares the scroll control's threshold, so at the top of the page
   // there is nothing to press. The keyboard still reaches the outline — and Esc
@@ -1540,7 +1540,7 @@ test('o reaches the outline from the top of the page, where the control is not',
 
 test('neither the outline control nor the panel prints', async ({ page }) => {
   await page.setViewportSize(PHONE)
-  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
   await scrollPageTo(page, 900)
   await page.emulateMedia({ media: 'print' })
 
@@ -1600,7 +1600,7 @@ test('the header stays on one line and never collapses its parents', async ({ pa
 })
 
 test('code blocks are terminal windows with a copy control', async ({ page }) => {
-  await page.goto('/posts/manual-js-pm', { waitUntil: 'load' })
+  await page.goto('/posts/tutorial-js-pm', { waitUntil: 'load' })
 
   const window = page.locator('.code-window').first()
   await expect(window).toBeVisible()
@@ -1672,12 +1672,19 @@ test('no middle-dot metadata strings remain in the list', async ({ page }) => {
   expect(text).not.toContain('·')
 })
 
-test('STEP n. belongs to Manuals only', async ({ page }) => {
+test('STEP n. belongs to the sequences only', async ({ page }) => {
   await page.goto('/posts', { waitUntil: 'load' })
   await expect(page.getByRole('main')).not.toContainText('STEP ')
 
-  await page.goto('/manuals', { waitUntil: 'load' })
-  await expect(page.getByRole('main')).toContainText('STEP 1.')
+  // Every sequence numbers its rows from one, per group.
+  for (const path of ['/manuals', '/tutorials', '/guides']) {
+    await page.goto(path, { waitUntil: 'load' })
+    await expect(page.getByRole('main'), path).toContainText('STEP 1.')
+  }
+
+  // A Guide numbers inside its series, so `STEP 2.` starts over in the next one.
+  await page.goto('/guides', { waitUntil: 'load' })
+  await expect(page.getByRole('main')).toContainText('STEP 4.')
 })
 
 test('hovering a row inverts its date cell without moving the title', async ({ page }) => {
@@ -1891,7 +1898,7 @@ test('every surface keeps its hairlines and ink in dark mode', async ({ page }) 
 test('the Frame degrades below the breakpoint on both P1 pages', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
 
-  for (const path of ['/posts', '/posts/manual-git']) {
+  for (const path of ['/posts', '/posts/tutorial-git']) {
     await page.goto(path, { waitUntil: 'load' })
 
     const frame = await page.evaluate(() => ({

@@ -2,7 +2,8 @@
 title: 'Code Style: Title Case'
 date: 2026-03-22T22:38+08:00
 lang: en
-type: note
+type: guide
+order: 1
 ---
 
 [[toc]]

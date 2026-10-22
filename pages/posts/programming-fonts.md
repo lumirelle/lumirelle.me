@@ -1,0 +1,1110 @@
+---
+title: Programming Fonts
+date: 2025-10-15T14:10+08:00
+lang: en
+---
+
+<style>
+/* Font Definitions */
+/* Strict 62.5%em Group */
+@font-face {
+  font-family: 'Maple Mono WR CN';
+  src: url('/fonts/MapleMonoWR-CN-Regular.ttf');
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Regular_Italic.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Bold.woff2') format('woff2');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Annotation Mono';
+  src: url('/fonts/AnnotationMono_Bold_Italic.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+}
+/* Strict 62%em Group */
+@font-face {
+  font-family: 'Maple Mono WD CN';
+  src: url('/fonts/MapleMonoWD-CN-Regular.ttf');
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Italic.woff2') format('woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: '0xProto';
+  src: url('/fonts/0xProto-Bold.woff2') format('woff2');
+  font-weight: bold;
+}
+/* Strict 60%em Group */
+@font-face {
+  font-family: 'Maple Mono CN';
+  src: url('/fonts/MapleMono-CN-Regular.ttf');
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Italic.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Go Mono';
+  src: url('/fonts/Go-Mono-Bold-Italic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+/* @font-face {
+  font-family: 'Drafting* Mono';
+  src: url('/fonts/DraftingMono-Regular.woff2') format('woff2');
+} */
+@font-face {
+  font-family: 'Recursive';
+  src: url('/fonts/Recursive_VF_1.085.woff2');
+  font-weight: 300 1000;
+  font-style: oblique 0deg 14deg;
+}
+/* Strict 52.5%em Group */
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalregularupright.ttf');
+}
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalregularitalic.ttf');
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalboldupright.ttf');
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'Aporetic Serif Mono';
+  src: url('/fonts/aporetic-serif-mono-normalbolditalic.ttf');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Zhuque Fangsong A1050';
+  src: url('/fonts/ZhuqueFangsong-Aporetic1050.ttf');
+}
+/* Strict 50%em Group */
+@font-face {
+  font-family: 'Source Han Sans TC';
+  src: url('/fonts/SourceHanSansTC-Normal.otf');
+}
+
+</style>
+
+[[toc]]
+
+> [!Note]
+> Current status (2026-10-20T13:56+08:00):
+> ```json
+> {
+>   "UI": "'Aporetic Serif', 'Zhuque Fangsong (technical preview)', 'Symbols Nerd Font', serif",
+>   "code": "'Aporetic Serif Mono', 'Zhuque Fansong A1050', 'Symbols Nerd Font Mono', monospace"
+> }
+> ```
+
+## Introduction to Monospace Fonts
+
+Monospace fonts are fonts in which each character occupies the same amount of horizontal space.
+
+Basically, we always use monospace fonts for programming, because they can align characters in a better way, which can improve readability and reduce eye strain.
+
+## Test-Driven Comparison
+
+You can compare various programming fonts with the test-driven method on this [website](https://programmingfonts.org/).
+
+## My Preference
+
+As a Chinese, sometimes I have to use both Latin and CJK characters in my projects. So I need to pay more attention to the width of each character, in order to get a better development experience.
+
+My basic requirements for fonts are:
+
+1. They must have at least two weights (Regular & Bold)
+2. The latin font must have italic styles
+3. Be easy on the eyes but not too serious
+
+All of the fonts listed below satisfy these requirements.
+
+### Strict 1 Latin Character = 1 CJK Character
+
+> [!Note]
+>
+> In Web development, `em` is based on the current font size. For example, if the font size is `16px`, then `1em` = `16px`. We can use this unit to describe the ratio of character width to font size.
+>
+> As some font families are variable, they may support custom character width, so I will use the default character width to categorize these fonts.
+
+- **62.5%em group**: If the font size is 16px, one Latin character will be 10px (62.5%em), and one CJK character will be 20px (62.5% \* 2 = 125%em), such as "Annotation Mono".
+- **62%em group**: If the font size is 16px, one Latin character will be 9.92px (62%em), and one CJK character will be 19.84px (62% \* 2 = 124%em), such as "Monaspace Xenon Var".
+- **60%em group**: If the font size is 16px, one Latin character will be 9.6px (60%em), and one CJK character will be 19.2px (60% \* 2 = 120%em), such as "Go Mono" and "Maple Font".
+- **52.5%em group**: If the font size is 16px, one Latin character will be 8.4px (52.5%em), and one CJK character will be 16.8px (52.5% \* 2 = 1050%em), such as "Aporetic Serif" and "Zhuque Fansong A1050" (From my custom build, see [here](https://github.com/lumirelle/demo-misc/tree/main/20261019/aporetic-serif-cjk)).
+- **50%em group**: If the font size is 16px, one Latin character will be 8px (50%em), and one CJK character will be 16px (50% \* 2 = 100%em), such as "M PLUS Code Latin" and "Source Han Sans TC".
+
+<a name="font-weights"></a> Also, this is a comparison table of the font weight aliases and the corresponding numeric values:
+
+| Numeric Value	| Keyword Aliases |
+| -- | -- |
+| 100 | thin, hairline |
+| 200 | extra light, ultra light |
+| 300 | light, demi, book |
+| 400 | normal, regular, book, plain |
+| 500 | medium |
+| 600 | semibold, demibold |
+| 700 | bold |
+| 800 | extra bold, ultra bold, heavy |
+| 900 | black, extra black, ultra black, poster, fat |
+| 950 | (non-standard, supported by some variable fonts) |
+
+#### 62.5%em Group
+
+For CJK:
+
+> [!Note]
+>
+> It seems impossible to find a CJK font with 62.5%em width, so I decided to make a custom build based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+
+This group uses my custom build &ndash; ["Maple Mono WR CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK character support, via the command below:
+
+```nu
+python build.py --width wider --cn --no-nf
+```
+
+> [!Note]
+>
+> `--width wider` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most cases.
+
+For Latin:
+
+- ⭐ [Annotation Mono](https://qwerasd205.github.io/AnnotationMono/): <a name="Annotation Mono"></a>
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" preset="blue" /><TextTag text="thin to 1000, with italic" preset="green" />
+
+  A lovingly crafted handwriting-style monospace font.
+
+  <img src="/posts/programming-fonts/AnnotationMono.png" alt="AnnotationMono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use these fonts like this:
+
+```json
+"'Annotation Mono', 'Maple Mono WR CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+#### 62%em Group
+
+For CJK:
+
+> [!Note]
+>
+> It seems impossible to find a CJK font with 62%em width too, so I decided to make a custom build based on [Maple Font](https://github.com/subframe7536/maple-font/). 😇
+
+This group uses my custom build &ndash; ["Maple Mono WD CN (Default ligature and unhinted)"](https://github.com/lumirelle/maple-font/releases) for CJK character support, via the command below:
+
+```nu
+python build.py --width wide --cn --no-nf
+```
+
+> [!Note]
+>
+> `--width wide` is not supported officially, so this custom build may have some rendering issues, such as blurring, but it works well in most cases.
+
+For Latin:
+
+- ⭐ [0xProto](https://github.com/0xType/0xProto/releases): <a name="0xProto"></a>
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" preset="blue" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  An opinionated font for software engineers, with ligatures that don't deform shape.
+
+  <img src="/posts/programming-fonts/0xproto.png" alt="0xProto" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Monaspace Xenon Var](https://github.com/githubnext/monaspace/releases):
+
+  <TextTag text="variable" preset="amber" /><TextTag text="serif" preset="blue" /><TextTag text="extralight to extrabold, with italic" preset="green" />
+
+  The Monaspace type system is a monospaced type superfamily with some modern tricks up its sleeve. Xenon is the slab serif version.
+
+  <img src="/posts/programming-fonts/monaspace-xenon.png" alt="Monaspace Xenon" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use these fonts like this:
+
+```json
+"'0xProto', 'Maple Mono WD CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+#### 60%em Group
+
+For CJK:
+
+> [!Note]
+>
+> Most Latin fonts are designed to be 60%em wide, but very few CJK fonts are.
+
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK character support.
+
+> [!Note]
+>
+> "Maple Mono CN" itself is a beautiful monospace font; you can use it standalone if you want.
+>
+> The variable version of Maple Mono CN is still in progress; see the [discussion](https://github.com/subframe7536/maple-font/discussions/503).
+
+And Latin fonts have more choices:
+
+- [Adwaita Mono](https://gitlab.gnome.org/GNOME/adwaita-fonts/-/tree/main/mono?ref_type=heads):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  A tweaked version of Iosevka, made to look similar to Adwaita's proportional font (based on Inter).
+
+  <img src="/posts/programming-fonts/adwaita-mono.png" alt="Adwaita Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Anka / Coder](https://github.com/loafer-mka/anka-coder-fonts):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  The Anka/Coder family is a monospaced, courier-width (60% of height; em size 2048x1229) font that can be used for source code, terminal windows, etc.
+
+  <img src="/posts/programming-fonts/anka-coder.png" alt="Anka Coder" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [DM Mono](https://fonts.google.com/specimen/DM+Mono):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="light to medium, with italic" preset="green" />
+
+  DM Mono is a three weight, three style family designed for DeepMind. DM Mono was loosely based off of DM Sans, with a reduction in contrast and less geometric proportions.
+
+  <img src="/posts/programming-fonts/dm-mono.png" alt="DM Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Drafting* Mono](https://indestructibletype.com/BuyDrafting.html):
+
+  <TextTag text="static" preset="amber" /><TextTag text="serif" /><TextTag text="thin to bold, with italic" preset="green" />
+
+  An ode to our past. A celebration of inconsistencies.
+
+  <img src="/posts/programming-fonts/drafting-mono.png" alt="Drafting Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Geist Mono](https://github.com/vercel/geist-font/releases):
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="thin to black, with italic" preset="green" />
+
+  Geist is designed for legibility and simplicity. It is a modern, geometric typeface that is based on the principles of classic Swiss typography. Geist Mono is the monospaced version of Geist.
+
+  <img src="/posts/programming-fonts/geist-mono.png" alt="Geist Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- ⭐ [Go Mono](https://go.googlesource.com/image/+/refs/heads/master/font/gofont/ttfs/):
+
+  <TextTag text="static" preset="amber" /><TextTag text="serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  The Go font was created especially for readability in the Go programming language. It’s a humanist, slab serif font created by the famous Bigelow & Holmes foundry.
+
+  <img src="/posts/programming-fonts/go-mono.png" alt="Go Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Google Sans Code](https://github.com/googlefonts/googlesans-code/releases):
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="light to extrabold, with italic" preset="green" />
+
+  Google Sans Code is a fixed-width font family, designed to bring clarity, readability, and a bit of Google's distinctive brand character to code.
+
+  <img src="/posts/programming-fonts/google-sans-code.png" alt="Google Sans Code" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Recursive Mono Linear/Casual](https://github.com/arrowtype/recursive/releases):
+
+  > [!Warning]
+  >
+  > The variable version has some rendering issues with non-breaking spaces in Chromium-based applications (like Chrome, VS Code, etc.); please track [issue #472245780](https://issues.chromium.org/issues/472245780).
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="light to 1000, with italic" preset="green" />
+
+  Built to maximize versatility, control, and performance, Recursive is a five-axis variable font.
+
+  <img src="/posts/programming-fonts/recursive-mono-casual.png" alt="Rec Mono Casual" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Red Hat Mono](https://github.com/RedHatOfficial/RedHatFont):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="thin to bold, with italic" preset="green" />
+
+  Red Hat Mono is a monospaced font family designed for developers. It is based on the Red Hat Display typeface, and includes a range of weights from thin to bold, with italics.
+
+  <img src="/posts/programming-fonts/red-hat-mono.svg" alt="Red Hat Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use these fonts like this:
+
+```json
+// 'Go Mono' can be replaced by any other Latin fonts listed above
+"'Go Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+#### 52.5%em Group
+
+A niche option.
+
+For CJK:
+
+This group use my custom build – "Zhuque Fansong A1050" for CJK character support, see [lumirelle/demo-misc](https://github.com/lumirelle/demo-misc/tree/main/20261019/aporetic-serif-cjk) for more details.
+
+For Latin:
+
+- ⭐ [Aporetic Serif Mono](https://github.com/protesilaos/aporetic):
+
+  <TextTag text="static" preset="amber" /><TextTag text="serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  A custom build of Iosevka with different style and metrics than the default.
+
+  <img src="/posts/programming-fonts/aporetic-serif-mono.png" alt="Aporetic Serif Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use these fonts like this:
+
+```json
+"'Aporetic Serif Mono', 'Zhuque Fansong A1050', 'Symbols Nerd Font Mono', monospace"
+```
+
+#### 50%em Group
+
+For CJK:
+
+> [!Note]
+>
+> Most CJK fonts are designed to be 50%em wide, but very few Latin fonts are.
+
+This group may look a bit narrow for most people; it uses ["Source Han Sans TC VF"](https://github.com/adobe-fonts/source-han-sans/releases) for CJK character support.
+
+These are some Latin fonts you can choose for this group:
+
+- [Inconsolata](https://github.com/google/fonts/blob/main/ofl/inconsolata):
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="extralight to black, with italic" preset="green" />
+
+  Inconsolata is a monospace font, designed for code listings and the like, in print. First and foremost, it is a humanist sans design.
+
+  <img src="/posts/programming-fonts/inconsolata.png" alt="Inconsolata" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Iosevka](https://github.com/be5invis/Iosevka/releases):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="thin to black, with italic" preset="green" />
+
+  An open-source, sans-serif + slab-serif, monospace + quasi‑proportional typeface family, designed for writing code, using in terminals, and preparing technical documents.
+
+  <img src="/posts/programming-fonts/iosevka.png" alt="Iosevka" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- ⭐ [M PLUS Code Latin](https://github.com/coz-m/MPLUS_FONTS/tree/master/fonts):
+
+  <TextTag text="variable" preset="amber" /><TextTag text="sans-serif" /><TextTag text="thin to bold, without italic" preset="green" />
+
+  M PLUS 1/2 are Sans Serif font with 9 weights from Thin to Black.
+
+  <img src="/posts/programming-fonts/m-plus-code-latin.png" alt="M PLUS Code Latin" style="width: 100%; height: auto; border-radius: 12px;" />
+
+- [Ubuntu Mono](https://fonts.google.com/specimen/Ubuntu+Mono?query=Ubuntu):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="regular, bold, without italic" preset="green" />
+
+  The way typography is used says as much about our brand as the words themselves. The Ubuntu typeface has been specially created to complement the Ubuntu tone of voice.
+
+  <img src="/posts/programming-fonts/ubuntu-mono.png" alt="Ubuntu Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use these fonts like this:
+
+```json
+// 'M PLUS Code Latin' can be replaced by any other Latin fonts listed above
+"'M PLUS Code Latin', 'Source Han Sans TC', 'Symbols Nerd Font Mono', monospace"
+```
+
+
+### Casual Choice
+
+If you're thinking, "Whatever!" then the "Comic" font family is perfect for you.
+
+This group uses ["Maple Mono CN (Default ligature and unhinted)"](https://github.com/subframe7536/maple-font/releases) for CJK character support too.
+
+And here are the Latin font families:
+
+- ⭐ [Comic Mono](https://dtinth.github.io/comic-mono-font/):
+
+  <TextTag text="static" preset="amber" /><TextTag text="sans-serif" /><TextTag text="regular, bold, with italic" preset="green" />
+
+  A legible monospace font… the very typeface you’ve been trained to recognize since childhood.
+
+  <img src="/posts/programming-fonts/comic-mono.png" alt="Comic Mono" style="width: 100%; height: auto; border-radius: 12px;" />
+
+Then, you can use this font like this:
+
+```json
+"'Comic Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+## Font Preview
+
+### Strict Preview
+
+#### 62.5%em Group
+
+<div font="[&_code]:62.5%em!">
+
+```json
+"'Annotation Mono', 'Maple Mono WR CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+
+#### 62%em Group
+
+<div font="[&_code]:62%em!">
+
+```json
+"'0xProto', 'Maple Mono WD CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+#### 60%em Group
+
+<div font="[&_code]:60%em!">
+
+```json
+"'Go Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+#### 52.5%em Group
+
+<div font="[&_code]:52.5%em!">
+
+```json
+"'Aporetic Serif Mono', 'Zhuque Fansong A1050', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+
+#### 50%em Group
+
+<div font="[&_code]:50%em!">
+
+```json
+"'M PLUS Code Latin', 'Source Han Sans TC', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>
+
+### Casual Preview
+
+<div font="[&_code]:casual!">
+
+```json
+"'Comic Mono', 'Maple Mono CN', 'Symbols Nerd Font Mono', monospace"
+```
+
+```js
+console.log('Holly shit!')
+console.log('我的娘亲嘞!')
+
+// |wo|!-|so|+=0o|lI|
+// |我|的|天|……哪|！|
+我
+w
+```
+
+```ts
+import type { ProcessConfigOptions } from '../../types'
+import { join } from 'node:path'
+import consola from 'consola'
+import { fs, highlight } from 'starship-butler-utils'
+
+/**
+ * Process config files (copy-paste or symlink).
+ *
+ * @param source Relative path to assets folder (package-root/assets/).
+ * @param target Target path.
+ * @param options Processing options.
+ * @returns Whether operation success or not.
+ */
+export async function processConfig(
+  source: string,
+  target: string,
+  options: Partial<ProcessConfigOptions> = {},
+): Promise<void> {
+  const { mode = 'copy-paste', dryRun = false } = options
+  if (mode === 'copy-paste') {
+    if (dryRun || (await _copyPasteConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${source}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } copied to ${highlight.important(`"${target}"`)}.`,
+      )
+    }
+  }
+  else if (mode === 'symlink') {
+    if (dryRun || (await _symlinkConfig(source, target, options))) {
+      consola.success(
+        `Configuration ${highlight.important(`"${target}"`)} ${
+          dryRun ? highlight.green('will') : 'is'
+        } symlinked to ${highlight.important(`"${source}"`)}.`,
+      )
+    }
+  }
+  else {
+    throw new Error(`Unknown configure mode: ${mode}`)
+  }
+}
+
+/**
+ * Copy config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _copyPasteConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return Promise.resolve(
+    fs.copyFile(join(import.meta.dirname, '..', 'assets', source), target, force),
+  )
+}
+
+/**
+ * Symlink config to target path.
+ *
+ * @private
+ * @param source Relative path to assets folder (`package-root/assets/`).
+ * @param target Target path, absolute path or relative path to CWD.
+ * @returns Whether operation success or not.
+ */
+async function _symlinkConfig(
+  source: string,
+  target: string,
+  options: Omit<Partial<ProcessConfigOptions>, 'mode'> = {},
+): Promise<boolean> {
+  const { useGlob, force } = options
+  if (useGlob) {
+    // TODO: Implement support for glob
+    return Promise.resolve(false)
+  }
+  return fs.createSymlink(join(import.meta.dirname, '..', 'assets', source), target, force)
+}
+```
+
+</div>

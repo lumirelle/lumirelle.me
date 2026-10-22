@@ -21,7 +21,7 @@ const MIN_MARKER_LENGTH = 60
 const ENTITY_BOUNDARY = '\u0000'
 
 export interface RouteArtifact {
-  /** Site path, e.g. `/posts/manual-git`. */
+  /** Site path, e.g. `/posts/tutorial-git`. */
   path: string
   /** The prerendered HTML file that serves it. */
   file: string

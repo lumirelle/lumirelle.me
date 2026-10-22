@@ -1,10 +1,10 @@
 ---
-title: Project Create Manual
+title: 'Manual: Project Create'
 date: 2025-09-28T11:34+08:00
 lang: en
 type: manual
 group: Web
-order: 7
+order: 1
 ---
 
 [[toc]]

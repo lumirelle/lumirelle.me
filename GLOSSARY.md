@@ -1,8 +1,36 @@
 # lumirelle.me
 
-Lumirelle's personal site: Markdown Posts, Manuals and notes published as a static site.
+Lumirelle's personal site: Markdown Posts published as a static site, in four sections — Blog, Tutorials, Guides and Manuals.
 
 ## Language
+
+**Post**:
+One Markdown document under `pages/posts/`, listed by the Post list and published as one page. A Post's `type` in frontmatter decides the section it appears in; a Post that states none is a Blog Post.
+_Avoid_: Article, entry, item
+
+**Section**:
+One filtered view of the Post list: `/blog`, `/tutorials`, `/guides`, `/manuals`, with `/posts` showing all of them. Sections are the same page with a different filter, so moving between them is not a change of place.
+_Avoid_: Category, tag, archive
+
+**Manual**:
+A sequence of set-up steps for a machine or a project, read in order and numbered `STEP n.`. Its Posts carry `group` and `order`, and each group numbers independently.
+_Avoid_: Setup page, instructions
+
+**Tutorial**:
+A sequence teaching one subject, read in order and numbered `STEP n.` like a Manual. It is the same machinery as a Manual — `group` and `order` in frontmatter — and differs only in what it is for: a Manual sets something up, a Tutorial teaches something.
+_Avoid_: Manual, lesson, course
+
+**Guide**:
+A Post that argues for how something should be done, rather than walking a reader through it. A Guide names its series in its title (`Code Style: Title Case`), carries an `order` inside that series, and is numbered `STEP n.` like a Manual or a Tutorial.
+_Avoid_: Note, essay, tip
+
+**Group**:
+The field that places a sequence Post inside its own sequence: frontmatter `group` for a Manual or a Tutorial, the title's series for a Guide. The list orders groups by `data/group-order.ts`, then each Post by `order`.
+_Avoid_: Category, collection, chapter
+
+**Series**:
+What a Guide belongs to, read from the part of its title before the colon. A series is a Guide's group, so guides are listed and numbered one series at a time.
+_Avoid_: Collection, category
 
 **Reading time**:
 The estimated time a reader needs for the body of a Post, shown beside its date and in Post lists. It is derived from the body and never authored.

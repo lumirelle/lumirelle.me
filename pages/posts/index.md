@@ -5,4 +5,4 @@ display: ''
 
 <!-- @layout-full-width -->
 
-<ListPosts title="Posts" lead="Manuals, notes and essays on the tools I use to write software." />
+<ListPosts title="Posts" lead="Manuals, tutorials, guides and essays on the tools I use to write software." />

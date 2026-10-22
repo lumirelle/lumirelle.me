@@ -2,7 +2,8 @@
 title: 'Code Style: Symbol Naming Patterns'
 date: 2025-09-23T15:58+08:00
 lang: en
-type: note
+type: guide
+order: 3
 ---
 
 [[toc]]
@@ -782,7 +783,7 @@ There is a special case worth paying attention to: **upsert (update or insert)**
 
   </details>
 
-To learn more about HTTP methods, please read the [computer network manual](manual-computer-network#http-methods).
+To learn more about HTTP methods, please read the [Tutorial: Computer Network](tutorial-computer-network#http-methods).
 
 > [!Note]
 >

@@ -1,5 +1,5 @@
 ---
-title: Windows Setup Manual
+title: 'Manual: Windows Setup'
 date: 2025-08-24T19:40+08:00
 lang: en
 type: manual

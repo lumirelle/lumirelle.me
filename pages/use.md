@@ -44,7 +44,7 @@ I'm really want to try MAC mini if I have chance in the future. ☺️
 - Editor Settings & Extensions:
   - See [configuration setup section](#configuration-setup)
 - Fonts:
-  - See [my programming font choices](posts/misc-programming-fonts)
+  - See [my programming font choices](posts/programming-fonts)
 - Theme:
   - [Vercel theme for Windows Terminal](https://github.com/lumirelle/zed-vercel-theme)
   - [Vercel theme for Neovim](https://github.com/nvim-tree/nvim-web-devicons)

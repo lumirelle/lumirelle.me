@@ -1,0 +1,637 @@
+---
+title: 'Tutorial: Computer Network'
+date: 2025-09-30T22:30+08:00
+lang: en
+type: tutorial
+group: Computer
+order: 1
+---
+
+[[toc]]
+
+## Simply Explain Computer Network
+
+> [!Note]
+>
+> Like the front-end technology stack, during the development of computer networks, there are many different technologies, protocols, and standards. For example, each layer may have other different protocols with different message structures other than what this article mentions.
+>
+> So, this article only includes the most widely used ones nowadays, and simplifies the explanation to the greatest extent; it is not the entire truth of computer networks.
+
+### Start with the Minimal Network
+
+#### Connect Two Computers
+
+Long, long ago, you invented a method that lets two computers talk to each other: a device called a **modem**. A modem can convert the digital signals from a computer into analog signals that can be transmitted over electrical wires, and also convert them back to digital signals.
+
+Through this method, you can install a modem for each computer, and connect them together with an electrical wire; then these two computers can talk to each other through the modems and the wire. Then, the minimal **local area network (LAN)** composed of two computers was born.
+
+The message structure of the data sent through the network cable looks like the following: raw data without any additional info, which we call a **first-level bit stream**:
+
+```txt
++-------------------+
+| Data              |
+| (variable length) |
++-------------------+
+```
+
+#### Connect Three Computers (Ethernet Protocol)
+
+How about three computers? Easy! Just install two modems in each computer, and connect each pair with a wire, like this:
+
+```txt
+Computer A -- Computer B
+ |                |
+ |                |
+ +-- Computer C --+
+```
+
+But how can computer A know which modem is connected to computer B? If modem 1 is currently connected to computer B, but later you want to swap the connections and connect modem 1 to computer C, how can computer A know?
+
+You got into trouble identifying these computers when they talk to each other.
+
+That couldn't stop your steps; you know, modems are almost never swapped after they are installed inside the computers, so you asked each modem manufacturer to add a unique identifier to their products, which is called a **MAC address (Media Access Control Address, a part of Ethernet Protocol)**.
+
+The structure of a MAC address looks like this: `BB:BB:BB:BB:BB:BB`; it is a 48-bit (6-byte) identifier, with each byte represented by two hexadecimal digits and separated by colons. The first 3 bytes are the manufacturer identifier, assigned by the IEEE; the last 3 bytes are the unique identifier assigned by the manufacturer. This ensures, to the greatest extent, that each computer within the LAN has a unique identifier.
+
+So computer A does not care about who computer B is; it just cares about which modem is `BB:BB:BB:BB:BB:BB`, and sends the message to this modem.
+
+> [!Note]
+>
+> It looks like a MAC address is globally unique, but actually it is not guaranteed, because the MAC address of a device can be changed or spoofed. If there are two devices with the same MAC address in the same LAN, it will cause confusion and communication failure.
+>
+> For devices in different LANs, it doesn't matter, because they have another unique identifier, called an IP address, which will be introduced later.
+
+Now the message structure changes to look like the following: it adds **data link layer** info to store the MAC addresses of both sender and receiver, which we call a **second-level data frame**:
+
+```txt
++---------------------------------------+--------------------------+--------------------------------+
+| Data Link Layer Info (96 bits)        | Data                     | Data Link Layer Info (32 bits) |
+|                                       | (46 * 8 ~ 1500 * 8 bits) |                                |
++---------------------------------------+--------------------------+--------------------------------+
+                    |                                                             |
+                    v                                                             v
++-------------------+-------------------+                          +--------------------------------+
+| Destination MAC   | Source MAC        |                          | Frame Check Sequence (32 bits) |
+| Address (48 bits) | Address (48 bits) |                          |                                |
++-------------------+-------------------+                          +--------------------------------+
+| Internet Layer Protocol (16 bits)     |
+|                                       |
++---------------------------------------+
+```
+
+Let's now see how these three computers communicate with each other:
+
+In the initial state, computer A doesn't know the MAC address of each modem it is connected to, so it should **make a broadcast** (Set the destination MAC address to the broadcast address `FF:FF:FF:FF:FF:FF`) to all computers in the LAN, asking "What's your modem MAC address?", and record the MAC address that it receives from each computer, for instance:
+
+| MAC Address                             | Modem of Computer A        |
+| --------------------------------------- | -------------------------- |
+| BB:BB:BB:BB:BB:BB (Computer B's modem1) | AA:AA:AA:AA:AA:AA (Modem1) |
+| CC:CC:CC:CC:CC:CC (Computer C's modem1) | AA:AA:AA:AA:AA:AB (Modem2) |
+
+The same goes for computers B and C:
+
+| MAC Address                             | Modem of Computer B        |
+| --------------------------------------- | -------------------------- |
+| AA:AA:AA:AA:AA:AA (Computer A's modem1) | BB:BB:BB:BB:BB:BB (Modem1) |
+| CC:CC:CC:CC:CC:CD (Computer C's modem2) | BB:BB:BB:BB:BB:BC (Modem2) |
+
+
+| MAC Address                             | Modem of Computer C        |
+| --------------------------------------- | -------------------------- |
+| AA:AA:AA:AA:AA:AB (Computer A's modem2) | CC:CC:CC:CC:CC:CC (Modem1) |
+| BB:BB:BB:BB:BB:BC (Computer B's modem2) | CC:CC:CC:CC:CC:CD (Modem2) |
+
+When computer A wants to communicate with modem `BB:BB:BB:BB:BB:BB` (Computer B), computer A just needs to find which of its modems is connected to `BB:BB:BB:BB:BB:BB` and send the message through it.
+
+This saved the world!
+
+### Link Computers Nearby Together
+
+Although the previous method works in every case, it is not the best solution, especially when there are many computers in the LAN: if there are 10 computers, you need to install 9 modems in each computer and 45 wires to connect them all! What about 100 computers? 1000 computers? This is pressure from both money and workload.
+
+To solve this problem, you've come up with a good idea: a centralized system, built on top of a **Switch**.
+
+A switch is a device that connects all computers together; it maintains a MAC address table which maps each computer to its corresponding interface (also called a port), and forwards the message to the correct port by reading the MAC address from the Data Link Layer Info. What a wonderful centralized management system! XD
+
+In this case, the way computers get the MAC address of each other is the same as before, but now, each computer only needs one modem connected to the switch.
+
+How does the switch record the MAC address of each computer connected to its ports? Different from computers, the switch cannot send messages; it learns the MAC address by receiving messages from each port: when the switch receives a message from computer A on port 1, it will record:
+
+| MAC Address                    | Interface | Note       |
+| ------------------------------ | --------- | ---------- |
+| AA:AA:AA:AA:AA:AA (Computer A) | Port 1    | New record |
+
+If this message is sent to computer `BB:BB:BB:BB:BB:BB` (Computer B) and the switch doesn't know which port computer B is connected to, it will **forward this message directly to all ports** (in daily practice, we also call this a broadcast, but it's different from a computer's broadcast, since it's passive forwarding). When the switch receives a message from computer B on port 2, it will add a new record:
+
+| MAC Address                    | Interface | Note       |
+| ------------------------------ | --------- | ---------- |
+| AA:AA:AA:AA:AA:AA (Computer A) | Port 1    |            |
+| BB:BB:BB:BB:BB:BB (Computer B) | Port 2    | New record |
+
+The next time computer A sends a message to computer B, the switch will forward this message to port 2 directly.
+
+And the MAC address record in computer A will look like the following: all devices are connected to the same modem, and computer A just needs to send everything through modem `AA:AA:AA:AA:AA:AA` with the correct destination MAC address, then the switch will handle other things for it:
+
+| MAC Address                    | Modem                             |
+| ------------------------------ | --------------------------------- |
+| BB:BB:BB:BB:BB:BB (Computer B) | AA:AA:AA:AA:AA:AA (Computer A)    |
+| CC:CC:CC:CC:CC:CC (Computer C) | AA:AA:AA:AA:AA:AA (Computer A)    |
+| ...                            | AA:AA:AA:AA:AA:AA (Computer A)    |
+
+### Link Computers Far Away Together (Internet Protocol)
+
+Imagine this situation: you have 3 computers in your home, and 3 computers in your office; how can you connect them together?
+
+From a cost perspective, you know you should connect the 3 computers in your home with a switch, and the same for your office. Then, the best solution is to connect these two switches together with another switch, like this:
+
+```txt
+PC1 --+ s1p1 ---
+                |
+PC2 --+ s1p2 -- Switch1 --+ s1p4
+                |         |
+PC3 --+ s1p3 ---          + s2p1
+                          |
+                          Switch2
+                          |
+PC4 --+ s3p1 ---          + s2p2
+                |         |
+PC5 --+ s3p3 -- Switch3 --+ s3p4
+                |
+PC6 --+ s3p3 ---
+```
+
+In this way, you can save most of the wires.
+
+But there is still a problem: In the case above, `Switch1` has 4 ports, called `s1p1`, `s1p2`, `s1p3` and `s1p4`, the same for `Switch3`. `s1p1`, `s1p2` and `s1p3` are each connected to one computer, and `s1p4` is connected to `s2p1` of `Switch2`; the same applies to `Switch3`. The MAC address table of `Switch1` may look like this:
+
+| MAC Address             | Interface |
+| ----------------------- | --------- |
+| 11:11:11:11:11:11 (PC1) | s1p1      |
+| 22:22:22:22:22:22 (PC2) | s1p2      |
+| 33:33:33:33:33:33 (PC3) | s1p3      |
+| 44:44:44:44:44:44 (PC4) | s1p4      |
+| 55:55:55:55:55:55 (PC5) | s1p4      |
+| 66:66:66:66:66:66 (PC6) | s1p4      |
+
+You may notice that `s1p4` is connected to `Switch2`, so all MAC addresses of computers connected to `Switch2` are associated with `s1p4`. In the switch world, MAC address records will be propagated and duplicated.
+
+A network is a huge tree structure. What if there are more switches? The MAC address table of each switch may contain tens of thousands of records; a port of a switch may match up to thousands of MAC addresses!
+
+```txt
+     s1 o
+       /|\
+      / | \
+     o  o  o
+     s2 s3 s4
+    /|\            (The MAC address table of s1, stores s2 ~ sN(*)!)
+   / | \
+  o  o  o ... ...
+  s5 s6 s7           (The port linked to s2 also linked to s5 ~ sN(linked with 2)!)
+
+
+... ... ... ... ...
+```
+
+To solve this problem, you need a small-scale centralized management system in the form of a "enfeoffment system": each small country is built via an **IP address (Internet Protocol Address)** with specific **subnet mask**. Each leader of country is one of the member of a bigger country, finally form the entire kingdom – Internet kingdom.
+
+> In real world, the largest leader of the entire kingdom is **IANA (Internet Assigned Numbers Authority)**, then **RIR (Regional Internet Registry)**, then **LIR (Local Internet Registry)** or **ISP (Internet Service Provider)**, finally you (and your **router**).
+
+An IP address is a 32-bit (4-byte) identifier[^1], usually represented in decimal format, separated by dots. For example, `192.168.1.1`. An IP address uses part of its bits to identify the sub-network it created and the router itself **(called the network part)**, and another part to identify the computers connected to it **(called the host part)**. **Subnet mask** is the thing dynamically determine how many bits of an IP are the network part and how many bits are the host part.
+
+The host part plus the subnet mask are called IP subnet identifier. For example, `255.240.0.0/12` (equivalent to `11111111.11110000.00000000.00000000/12`). The remaining IP address whithin each subnet belong to the leader of that subnet. For example, `255.240.0.0` (`11111111.11110000.00000000.00000000`) ~ `255.240.255.255` (`11111111.11110000.11111111.11111111`) are belong to `255.240.0.0/12`.
+
+> Obviously, larger leaders of country will have larger subnet.
+
+<details>
+  <summary>How does the subnet mask actually work?</summary>
+
+  Let's take a look at an example. For a sub-network with IP addresses from `192.168.1.0` to `192.168.1.255` and subnet mask `255.255.255.0`:
+
+  The subnet mask in binary is `11111111.11111111.11111111.00000000`, which has 24 bits of `1`, so the first 24 bits (the first 3 bytes) of the IP address are the network part, and the last 8 bits (the last byte) are the host part. That is to say, the network part is `192.168.1`, and the host part ranges from `0` to `255`, so this sub-network can have up to 254 IP addresses.
+
+  Why 254? Because there are two special IP addresses in each sub-network that are reserved and cannot be assigned to any computer:
+
+  - The **first address (the network address) is used to identify the subnet itself**. It is the lowest address in the subnet range.
+  - The **last address (the broadcast address) is used to send data to all hosts in the subnet**. It is the highest address in the subnet range.
+
+  So, we can describe this sub-network by `192.168.1.0/24` (in CIDR notation).
+</details>
+
+Unlike a MAC address, an IP address is designed for **routing**: a MAC address only contains device identifier information, but an IP address (with a mask) and the network topology structure can reflect which level the device is at in the network tree. With IP addresses and network topology structure, we no longer need to record all of the devices connected to a port.
+
+How the network topology structure build? Use **routers**, a device to handle message forwarding based on IP addresses, like a switch for MAC addresses.
+
+A router is an enhanced version of a switch; it's a device which has its own MAC address and IP address, and it will assign IP addresses to each computer connected to it, and also set each computer's default gateway to its own IP address.
+
+Due to the characteristics of IP address and subnet masks, routers can easily determine to which destination a message sent to a particular IP address should be forwarded: For router with subnet `192.168.1.0/24`, a message to `192.168.0.3` does not belong to its subnet, so the router will forward that message to the upstream router.
+
+And the message sent has a new structure: we added **internet layer** info to store the IP addresses of both sender and receiver, which we call a **third-level data package**:
+
+```txt
++-------------------+---------------------------------------+--------------------------+-------------------+
+| Data Link Layer   | Internet Layer Info (160 bits)        | Data                     | Data Link Layer   |
+| Info (96 bits)    |                                       | (26 * 8 ~ 1480 * 8 bits) | Info (32 bits)    |
++-------------------+---------------------------------------+--------------------------+-------------------+
+                                        |
+                                        v
+                    +-------------------+-------------------+ (Version 4 bits, Header Length 4 bits, Service Type 8 bits,
+                    | Header Info (96 bits)                 | Total Length 16 bits, Identification 16 bits, Flags 3 bits,
+                    |                                       | Fragment Offset 13 bits, Time To Live 8 bits, Protocol 8 bits,
+                    +-------------------+-------------------+ Header Checksum 16 bits)
+                    | Destination IP    | Source IP         |
+                    | Address (32 bits) | Address (32 bits) |
+                    +-------------------+-------------------+
+```
+
+> [!Note]
+>
+> Notice that, in this case, the computer only knows the IP address of the target device, but it does not know the MAC address. So there's an agreement here: use each router's MAC address as the destination when sending the message to each router, and the last router (the router of the sub-network where the target device is located) will rewrite the destination MAC address to the target device's MAC address before the data link layer transmission begins.
+
+Now how do these computers communicate with each other actually? There are two different cases, depending on whether they are in the same sub-network or not (assuming they know each other's IP address[^4]):
+
+- Computer A with IP address `192.168.1.10` and MAC address `AA:AA:AA:AA:AA:AA` wants to communicate with computer B with IP address `192.168.1.11` and MAC address `BB:BB:BB:BB:BB:BB`, in sub-network `192.168.1.0/24`, computer A knows they are in the same sub-network, so it will do as before and try to send a **second-level data package**.
+
+  Computer A now does not make a broadcast asking "What is your MAC address?" to all devices in the LAN; it can broadcast "What is the MAC address of IP address `192.168.1.11`?", which is much more efficient than before because it will only get a reply from the target device, and this is called the **Address Resolution Protocol (ARP)**.
+
+  > [!Note]
+  > The router is not involved.
+
+  After computer A gets the response, it will record:
+
+  | IP Address        | MAC Address                  | Modem                       | Note       |
+  | ----------------- | ---------------------------- | --------------------------- | ---------- |
+  | 192.168.1.1       | CC:CC:CC:CC:CC:CC            |  AA:AA:AA:AA:AA:AA          | Router     |
+  | 192.168.1.11      | BB:BB:BB:BB:BB:BB            |  AA:AA:AA:AA:AA:AA          | Computer B |
+
+  Like before, computer A just needs to send the message through modem `AA:AA:AA:AA:AA:AA` with the correct destination MAC address `BB:BB:BB:BB:BB:BB`, then the router (actually, it's the switch module of the router) will forward this message to computer B.
+
+- Computer A with IP address `192.168.1.10` and MAC address `AA:AA:AA:AA:AA:AA` wants to communicate with computer B with IP address `192.168.2.11` and MAC address `BB:BB:BB:BB:BB:BB`, they are in different sub-network, so computer A will try to send a **third-level data package**.
+
+  It will send the message to its default gateway (the router), and the destination MAC address is also set to the router's MAC address.
+
+  Then, the router will forward this message to the next router based on the destination IP address, and also rewrite the destination MAC address to the next router's MAC address, until the message reaches the router of the target device; then this router will rewrite the destination MAC address to the target device's MAC address before the data link layer transmission begins.
+
+  In the end, everything is the same as before: the last router finally forwards this message to computer B by using the MAC address records with port information.
+
+  > [!Note]
+  >
+  > Behind how the router finds the next router, there are a lot of technologies and protocols, such as routing algorithms, routing tables, dynamic routing protocols (RIP, OSPF, BGP, etc.), static routing, etc. But we won't go into details here.
+
+Thanks to IP addresses and subnet masks, you can now create a really large network with many sub-networks, and manage the traffic between these sub-networks easily.
+
+Congratulations, you invented the **Internet**, the largest computer network in the world! 😄
+
+### Connect with Processes Inside Computers (Transmission Control Protocol & User Datagram Protocol)
+
+If we want to communicate with a specific process (program) inside a computer, an IP address is not enough; we need an additional identifier, called a **port**. Combined with the IP address, this can uniquely identify a specific process inside a computer.
+
+What's more, to ensure the reliability of communication between processes, we need to add some control information, such as sequence numbers, acknowledgment numbers, etc.
+
+And the message sent has a new structure: we added **transport layer** info to store the port numbers of both sender and receiver, which we call a **fourth-level data fragment**:
+
+```txt
++-------------------+---------------------------------------+------------------------------+-------------------+
+| Data Link Layer   | Internet Layer Info (160 bits)        | Transport Layer Info         | Data (32 bits)    |
+| Info (96 bits)    |                                       | (TCP 128 bits / UDP 64 bits) | (variable length) |
++-------------------+---------------------------------------+------------------------------+-------------------+
+                                                                       |
+                                                                       v
+                                                            +------------------------------+
+                                                            | Destination Port (16 bits)   |
+                                                            |                              |
+                                                            +------------------------------+
+                                                            | Source Port (16 bits)        |
+                                                            |                              |
+                                                            +------------------------------+
+                                                            | Header Info                  |
+                                                            | (TCP 96 bits / UDP 32 bits)  |
+                                                            +------------------------------+
+```
+
+The famous [**TCP (Transmission Control Protocol)**](https://en.wikipedia.org/wiki/Transmission_Control_Protocol) and [**UDP (User Datagram Protocol)**](https://en.wikipedia.org/wiki/User_Datagram_Protocol) are two widely used transport protocols that work on this layer.
+
+Now, you are really close to the truth of today's computer network!
+
+## OSI Seven Layers Model
+
+Reading through the content above, you may already be familiar with some of the seven layers of computer networks.
+
+The seven layers of computer network are:
+
+1. **Physical Layer**: Responsible for the physical connection between devices; cables and optical fibers are the most common medium.
+2. **Data Link Layer**: Responsible for node-to-node data transfer, including MAC addressing and error detection; these happen between the network cards of computers or other network devices.
+3. **Internet Layer**: Responsible for routing data packets across different networks, including IP addressing and packet forwarding; also called the **IP Layer**.
+4. **Transport Layer**: Responsible for end-to-end communication, including TCP and UDP protocols; a port is used in this layer to identify specific processes inside computers.
+5. **Session Layer**: Responsible for establishing, managing, and terminating sessions between applications, for example, RPC (Remote Procedure Call) protocol.
+6. **Presentation Layer**: Responsible for data representation and encryption, including data compression and encryption protocols like TLS/SSL protocols.
+7. **Application Layer**: Responsible for providing network services to applications, including HTTP, FTP, and DNS protocols.
+
+In the OSI layers model, protocols in each layer are based on the protocols in the previous layer, and provide services to the protocols in the next layer. For example, the HTTP protocol in the application layer is based on the TCP protocol in the transport layer, which is based on the IP protocol in the internet layer, which is based on the Ethernet protocol in the data link layer, which is based on the physical layer.
+
+In the next sections, we will talk about the last three layers, which are more related to web development.
+
+## Going Further
+
+### Session Layer
+
+The session layer is in charge of **sessions**: a conversation between two parties that outlives a single message — who is talking, what they have already agreed on, and what is still unfinished.
+
+This layer is best understood by what it keeps: **state**.
+
+#### WebSocket (Turning a Request into a Conversation)
+
+A **WebSocket** connection starts as an ordinary HTTP request that asks to upgrade to WebSocket.
+
+```http
+GET /chat HTTP/1.1
+Host: www.example.com
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Sec-WebSocket-Version: 13
+```
+
+The server agrees with `101 Switching Protocols`:
+
+```http
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+```
+
+From that byte on, the **same TCP connection** carries small WebSocket frames in both directions, at any time, for as long as either side keeps it open. HTTP was only used for the handshake — the polite way to borrow a port that firewalls already allow.
+
+In URLs the protocol becomes `ws://`, or `wss://` when it rides on TLS like HTTPS does.
+
+#### Remote Procedure Call (RPC)
+
+RPC is less a protocol than an idea: make a function that lives on another machine look like a local one.
+
+The client calls `add(1, 2)`, a generated **stub** serializes the call into a message, the server's stub deserializes it, calls the real function, and sends the result back — so the programmer writes a function call and not a request.
+
+```json
+{ "jsonrpc": "2.0", "id": 1, "method": "add", "params": [1, 2] }
+```
+
+```json
+{ "jsonrpc": "2.0", "id": 1, "result": 3 }
+```
+
+Its three parts are always the same: an **interface description** (so both sides agree on names and types), a **serialization** format, and a **transport**.
+
+The famous pair is [**gRPC**](https://grpc.io) — Protocol Buffers over HTTP/2; but the one you use daily is **JSON-RPC** — the **Language Server Protocol** your editor speaks to every language server, which is why one extension can serve VS Code, Neovim, and everything else.
+
+### Presentation Layer
+
+#### TLS/SSL
+
+**TLS (Transport Layer Security)** is a cryptographic protocol designed to provide communications security over a computer network, such as the Internet.
+
+**SSL (Secure Sockets Layer)** is the predecessor of TLS and is now considered deprecated.
+
+TLS/SSL works by using a combination of asymmetric and symmetric encryption to secure the communication between a client and a server. The process typically involves the following steps:
+
+1. The client initiates a connection to the server and requests a secure connection.
+2. The server responds with its digital certificate, which contains the server's public key and is signed by a trusted certificate authority (CA).
+3. The client verifies the server's certificate against a list of trusted CAs. If the certificate is valid, the client generates a random symmetric key and encrypts it with the server's public key, then sends it to the server.
+4. The server decrypts the symmetric key using its private key. Now both the client and the server have the same symmetric key, which they use to encrypt and decrypt the data they exchange during the session.
+5. The client and server can now securely exchange data using the symmetric key for encryption.
+
+This process ensures that the communication between the client and server is secure and that any data exchanged cannot be intercepted or tampered with by third parties.
+
+The famous **HTTPS (HyperText Transfer Protocol Secure)** protocol is built on top of HTTP and TLS/SSL.
+
+### Application Layer
+
+#### What Is HTTP?
+
+**HTTP (HyperText Transfer Protocol)** is an application protocol used for defining how hypertext should be transferred from a web server to a client; it **uses TCP and IP under the hood**.
+
+In web development, HTTP is the most widely used protocol in the application layer (because web applications are always deployed on web servers and accessed through a user's web browser via HTTP).
+
+>[!Note]
+>
+> HTTPS is HTTP over TLS/SSL (a presentation layer protocol); it is more secure than HTTP.
+
+#### HTTP Message Structure
+
+Request and response messages have a similar structure; both consist of three main parts:
+
+- Request line: Method + URL + HTTP version
+- Request headers: Key-value pairs
+- (Optional) Request body: Data sent to the server
+
+For example:
+
+```http
+# Request line
+POST /api/users HTTP/1.1
+# Request headers
+Host: www.example.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0
+Accept: application/json
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 67
+
+# Request body (optional, for POST, PUT, etc.)
+{
+  "name": "John Doe",
+  "email": "john.doe@example.com"
+}
+```
+
+The response message structure is:
+
+- Status line: HTTP version + Status code + Reason phrase
+- Response headers: Key-value pairs
+- (Optional) Response body: Data sent back to the client
+
+For example:
+
+```http
+# Status line
+HTTP/1.1 200 OK
+# Response headers
+Date: Wed, 18 Apr 2024 12:00:00 GMT
+Server: Apache/2.4.1 (Unix)
+Last-Modified: Wed, 18 Apr 2024 11:00:00 GMT
+Content-Length: 12345
+Content-Type: text/html; charset=UTF-8
+
+# Response body (optional)
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example Page</title>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+    <!-- The rest of the HTML content -->
+</body>
+</html>
+```
+
+#### HTTP Versions
+
+See [Performance Optimization: HTTP Versions](perf-http-versions) for more information.
+
+#### HTTP Headers
+
+See [MDN Web Docs: HTTP headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers) for more information.
+
+#### HTTP Methods
+
+HTTP defines a set of request methods to indicate the desired action to be performed for a given resource. The most common methods are:
+
+- `GET`: Retrieve data from the server. It is **safe**[^2] and **idempotent**[^3].
+- `POST`: Send data to the server to create a new resource. It is **not safe** and **not idempotent**.
+- `PUT`: Update or replace an existing resource on the server. It is **not safe** but **idempotent**.
+- `DELETE`: Remove a resource from the server. It is **not safe** but **idempotent**.
+- `PATCH`: Partially update an existing resource on the server. It is **not safe** and not necessarily **idempotent**.
+- `HEAD`: Similar to `GET`, but only retrieves the headers without the body. It is **safe** and **idempotent**.
+- `OPTIONS`: Describe the communication options for the target resource. It is **safe** and **idempotent**.
+- `TRACE`: Perform a message loop-back test along the path to the target resource. It is **safe** and **idempotent**.
+- ...
+
+#### HTTP Status Codes
+
+Here are some common HTTP status codes:
+
+- `1xx` (Informational): Request received, continuing process.
+  - `100 Continue`
+  - `101 Switching Protocols`
+- `2xx` (Successful): The request was successfully received, understood, and accepted.
+  - `200 OK`
+  - `201 Created`
+  - `202 Accepted`
+  - `204 No Content`
+- `3xx` (Redirection): Further action needs to be taken in order to complete the request.
+  - `301 Moved Permanently`
+  - `302 Found`
+  - `304 Not Modified`
+- `4xx` (Client Error): The request contains bad syntax or cannot be fulfilled.
+  - `400 Bad Request`
+  - `401 Unauthorized`
+  - `403 Forbidden`
+  - `404 Not Found`
+  - `409 Conflict`
+- `5xx` (Server Error): The server failed to fulfill an apparently valid request.
+  - `500 Internal Server Error`
+  - `501 Not Implemented`
+  - `502 Bad Gateway`
+  - `503 Service Unavailable`
+  - `504 Gateway Timeout`
+
+See [MDN Web Docs: HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status) for more information.
+
+#### Making HTTP Requests in VS Code
+
+You can use the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension to make HTTP requests directly in VS Code.
+
+I highly recommend it; it's very convenient for testing and debugging APIs when developing web applications.
+
+The only things you need to do are:
+
+1. Install the extension.
+2. Set up the environment variables if needed:
+
+    _.vscode/settings.json_
+
+    ```json
+    {
+      "rest-client.environmentVariables": {
+        "$shared": {
+          // The variables shared across all environments
+        },
+        "dev": {
+          "baseUrl": "http://api-dev.example.com",
+          "authToken": "your-auth-token"
+        },
+        "prod": {
+          "baseUrl": "https://api.example.com",
+          "authToken": "your-auth-token"
+        }
+      }
+    }
+    ```
+
+3. Create a file with a `.http` or `.rest` extension, and write your HTTP requests in the standard HTTP request format:
+
+    _api-test.http_
+
+    ```http
+    ### Get user info
+    GET {{baseUrl}}/users/1
+    Authorization: Bearer {{authToken}}
+    Accept: application/json
+
+    ### Create a new user
+    POST {{baseUrl}}/users
+    Content-Type: application/json
+    Authorization: Bearer {{authToken}}
+
+    {
+      "name": "John Doe",
+      "email": "john.doe@example.com"
+    }
+    ```
+
+    By the way, you can use `###` to separate multiple requests in a single file.
+
+See [REST Client documentation](https://github.com/Huachao/vscode-restclient/blob/master/README.md) for more information.
+
+#### What Is DNS?
+
+Every message in this article was addressed to an IP address, and nobody types an IP address into a browser. The **Domain Name System (DNS)** is the application-layer protocol that turns a **domain name** into the IP address of the computer that serves it: a phone book, if a phone book were spread across thousands of servers, cached at every step along the way, and edited constantly.
+
+Like HTTP, DNS is not a single machine but a system of delegation. That is what makes it able to name every host on the Internet without any one server knowing all of them.
+
+#### How a Name Becomes an IP Address
+
+Resolving a name is a walk down that hierarchy. Your computer never does the walk itself; it asks a **resolver** — the one your OS or ISP handed you, or a public one such as `8.8.8.8` or `1.1.1.1` — and the resolver does the walking:
+
+```txt
+resolver --> root server        "who handles .com?"
+         --> .com TLD server    "who handles example.com?"
+         --> authoritative      "the address of www.example.com is 93.184.216.34"
+         <-- A 93.184.216.34    (kept for the TTL, then asked again)
+```
+
+Each level only needs to know the next one, so a single server can delegate millions of names it has never heard of. The **authoritative** server is the one that actually owns the zone and gives the final answer; everything above it only points the way.
+
+Two properties make this fast enough to do on every click:
+
+- **Caching** — every answer carries a **TTL (Time To Live)** in seconds, and every step keeps it for that long. The second request for the same name usually never leaves your machine; that is also why a DNS change takes hours to be seen everywhere and not seconds.
+- **Local answers first** — the browser cache, the OS cache, and `/etc/hosts` are all consulted before a query is sent. The hosts file is the original, pre-DNS internet: a hand-written table of names, still the fastest way to point a name at `127.0.0.1` while developing.
+
+> [!Note]
+>
+> DNS usually rides on UDP port 53, not TCP: a query and an answer each fit in a packet, and a lost one can simply be asked again. It falls back to TCP when an answer is too large, and modern transports (**DNS over TLS** on port 853 and **DNS over HTTPS**, which is just an HTTP request) exist because a plaintext query tells anyone on the path which sites you visit.
+
+#### DNS Records
+
+A zone is a table of **records**, each mapping a name to one kind of answer. The ones you will meet:
+
+| Type    | Answers                                | Example                                                        |
+| ------- | -------------------------------------- | -------------------------------------------------------------- |
+| `A`     | An IPv4 address                        | `example.com. 3600 IN A 93.184.216.34`                         |
+| `AAAA`  | An IPv6 address                        | `example.com. 3600 IN AAAA 2606:2800:220:1:248:1893:25c8:1946` |
+| `CNAME` | "This name is another name" (an alias) | `www.example.com. 3600 IN CNAME example.com.`                  |
+| `MX`    | The mail server for the domain         | `example.com. 3600 IN MX 10 mail.example.com.`                 |
+| `TXT`   | Free-form text, used for verification  | `example.com. 3600 IN TXT "v=spf1 -all"`                       |
+| `NS`    | The authoritative servers for the zone | `example.com. 3600 IN NS a.iana-servers.net.`                  |
+
+That `TXT` row is not a curiosity: SPF, DKIM and DMARC — how mail proves it is not forged — are all DNS records, and so is the record you publish to prove you own a domain or to get a certificate issued for it. **DNS is where the Internet keeps its trust statements**, which is exactly why DNS itself is worth attacking and worth protecting.
+
+And with that the loop closes: a click becomes a DNS query, the name becomes an IP address, HTTP opens a TCP connection to it, TLS secures that connection, and the request finally goes out — built, layer by layer, on a modem and a wire.
+
+[^1]: IPv4 address; there is also IPv6, which is a 128-bit (16 bytes) identifier, usually represented in hexadecimal format, separated by colons. For example, `2001:0db8:85a3:0000:0000:8a2e:0370:7334`.
+
+[^2]: **Safe** methods are those that do not modify resources on the server. They are intended for information retrieval only.
+
+[^3]: **Idempotent** methods are those that can be called multiple times without different outcomes. The first request has the same effect as subsequent requests.
+
+[^4]: How they know each's IP address? One scenario is that you (user) provide it, another is that you provide a domain name, and a DNS service resolves the actual IP address for you (see [Domain Name System](#what-is-dns)).

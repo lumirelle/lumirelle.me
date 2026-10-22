@@ -14,9 +14,9 @@ lumirelle@me ~/posts                        posts  projects  use  photos  demos 
                          [ content column, 820 px max ]
 ```
 
-- **Header row** — 20 px vertical padding, no rule beneath it. `/blog`, `/notes` and `/manuals` are the
-  same list under another filter, so all three read as `posts` in the navigation (marked
-  `aria-current="true"`, not `"page"` — they are the current *section*, not the current page).
+- **Header row** — 20 px vertical padding, no rule beneath it. `/blog`, `/tutorials`, `/guides` and
+  `/manuals` are the same list under another filter, so all four read as `posts` in the navigation
+  (marked `aria-current="true"`, not `"page"` — they are the current *section*, not the current page).
 - **Content** — starts 48 px below the header on every route (`pt-12`), so list mastheads and post titles share one rhythm.
 - **Footer** — hairline above, mono 11 px, two items.
 
@@ -196,9 +196,10 @@ control is gone (its filter had no other consumer), the `$`-to-text gap is 16 px
 `cd ..`, and the space above the closing rule is `main`'s own bottom padding — 7 rem — rather than
 padding that ended up below the footer.
 
-Two deliberate deviations from the prototype remain. **The list keeps a filter row** (`chinese only`, `all`,
-`blog`, `notes`, `manuals`): the prototype has none, but the Shell's navigation has no other route to
-`/blog`, `/notes` or `/manuals`, and dropping them would have broken navigation to satisfy a screenshot.
+Two deliberate deviations from the prototype remain. **The list keeps a filter row** (`all`, `blog`,
+`tutorials`, `guides`, `manuals`): the prototype has none, but the Shell's navigation has no other
+route to `/blog`, `/tutorials`, `/guides` or `/manuals`, and dropping them would have broken
+navigation to satisfy a screenshot.
 **The header keeps feed and source** as named icon links, which the prototype dropped by accident.
 
 **Recorded, not fixed — these belong to P2:**

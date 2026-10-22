@@ -45,6 +45,14 @@
  * itself is permanent so that the outline always has a host to be adopted into,
  * even before this route is known to have one; on a route without an outline it
  * is empty, closed and unreachable.
+ *
+ * The control goes the same way while the panel is open. The panel covers it, but
+ * covered is not absent: Tab would still land on a control the reader cannot see.
+ * So the open state is `inert`, which takes it out of the tab order and the
+ * accessible tree in one move — `aria-hidden` on top of that is redundant, and
+ * the linter is right to refuse it on something focusable. Closing hands focus
+ * back only once that has been undone: focusing an `inert` element is a no-op,
+ * which is why the return call waits for `nextTick`.
  */
 import { isFocusedElementEditable } from '@vueuse/core'
 import { useImageLightbox } from '~/logics/image-lightbox.ts'
@@ -205,13 +213,13 @@ function openPanel(): void {
 function closePanel(returnFocus = true): void {
   if (!open.value)
     return
-  // Focus leaves before the panel goes inert: the browser blurs a focused
-  // element the moment it does, so returning it afterwards would lose the
-  // reader's place in the tab order.
-  if (returnFocus)
-    trigger.value?.focus()
   open.value = false
   locked.value = false
+  // Focus goes back after the DOM has caught up: the control is `inert` for as
+  // long as the panel is open, and focusing an `inert` element does nothing. So
+  // the call is deferred past the patch that clears it.
+  if (returnFocus)
+    void nextTick(() => trigger.value?.focus())
 }
 
 /**
@@ -282,14 +290,16 @@ watch(wide, () => {
     The panel's control. Absent on a route with no outline, hidden at 1400 px and
     wider where the Rail owns the job, and `inert` until the reader has scrolled —
     the same threshold, the same column and the same hairline box as the scroll
-    control it sits above.
+    control it sits above. While the panel is open it stays in the DOM but leaves
+    the page: `inert` keeps Tab off it and takes it out of the accessible tree, so
+    the panel is the only thing there is to reach.
   -->
   <button
     v-if="hasOutline"
     ref="trigger"
     type="button"
     class="shell-outline-trigger"
-    :inert="reachable ? undefined : true"
+    :inert="reachable && !open ? undefined : true"
     :aria-expanded="open ? 'true' : 'false'"
     :aria-controls="PANEL_ID"
     @click="openPanel"

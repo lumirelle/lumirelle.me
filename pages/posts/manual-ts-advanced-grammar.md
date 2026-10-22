@@ -176,7 +176,7 @@ type Greeting = `Hello ${World}, ${Name}!`
 
 ### Object Type Literal
 
-As you imagine, **object type literal** uses [JavaScript object literal syntax](manual-js-advanced-grammar#object) `{ ... }`, without "," as a separator:
+As you imagine, **object type literal** uses a **no comma separated version of [JavaScript object literal syntax](manual-js-advanced-grammar#object) `{ ... }`**:
 
 ```ts
 // [!code highlight:7]
@@ -507,7 +507,7 @@ const obj2 = {
 
 // ...
 
-obj2.a = 2
+obj2.a = 1
 ```
 
 As you can see, using `as const` on the entire object will infer the types of properties as literals from their values, and also **marks these properties as `readonly`**, which means these properties are not re-assignable, while using `as const` on a specific property does not.
@@ -660,8 +660,7 @@ To overload a function in TypeScript, the only thing you need to do is to define
 ```ts [twoslash]
 function fn(x: number, y: number): number // -> Overload 1
 function fn(xy: string): number // -> Overload 2
-function fn(x: string | number, y: number = 0): number {
-  // -> Implementation
+function fn(x: string | number, y: number = 0): number { // -> Implementation
   if (typeof x === 'string') {
     return +x
   }
@@ -939,8 +938,17 @@ For example, for class decorator, the `Input` is the class constructor:
 // code, is the same as `new<T = void>(...args: any[]) => T`.
 import type { Constructor } from '@antfu/utils'
 
-function logClass(constructor: Constructor) {
+function logClass(constructor: Constructor, { kind }: ClassDecoratorContext) {
+  if (kind !== 'class')
+    return
   console.log(`Class ${constructor.name} was defined at ${new Date().toISOString()}`)
+}
+
+@logClass
+class UserService {
+  getUsers() {
+    return ['Alice', 'Bob', 'Charlie']
+  }
 }
 ```
 

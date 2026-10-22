@@ -122,4 +122,4 @@ Here are my personal opinions about the catalog names:
 | Build tools and their plugins     | `build`                            | `build`                           |
 | Check tools                       | `check`                            | `check`                           |
 | Testing tools                     | `test`                             | `test`                            |
-| Documentation dependencies        | --                                 | `docs`                            |
+| Documentation dependencies        | `docs` (maybe API docs)            | `docs`                            |

@@ -18,3 +18,16 @@ Just like in Yu Hua's books, _I'm as timid as a mouse_ 🐁. All my courage come
 To tell the truth, I have never been so clearly aware that the trembling and anxiety when facing a feat is not cowardice, but a normal physiological reaction. It is only when one is afraid of facing fear itself that one can be considered cowardly.
 
 Now, I take the first step 👣 to face my fears, and I gain the initial courage 🥊 to take more steps in the future. Just take care of this courage, let it grow healthily, and it will definitely become a strong power that can support me in facing more challenges in the future.
+
+---
+
+It’s only today that I’ve come to a sudden realization: isn’t the material basis for repeating the same mistakes precisely that unchanging set of inputs? That **relic** chip you’re too cowardly to update, those destructive changes you’re terrified to introduce—aren’t they exactly that flat, unexperienced plane right beside you, waiting quietly until it finally leaves with nothing to show for it.
+
+The end of the year is fast approaching, and I can’t help but wonder if the character I saved up half a year to pull will still be the main focus in the next big update. Version numbers are flying by at breakneck speed, and it suddenly hits me: what’s the difference between not going out and causing a little chaos, and Windows 11 still running on the NT 10 kernel?
+
+So maybe we were always meant to learn from **oddy the seagulls**.
+
+<div flex>
+  <img !w-50% src="/posts/misc-first-time-trying-roller-coaster/meme1.jpg" alt="I don't know." >
+  <img !w-50% src="/posts/misc-first-time-trying-roller-coaster/meme2.jpg" alt="I don't know too." >
+</div>

@@ -1,7 +1,6 @@
 ---
 title: POSIX Shell Script Manual
 date: 2025-12-01T15:50+08:00
-update: 2026-10-21T16:56+08:00
 lang: en
 type: manual
 group: Shell

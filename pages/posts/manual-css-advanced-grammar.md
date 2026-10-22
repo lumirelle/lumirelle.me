@@ -1,7 +1,6 @@
 ---
 title: CSS Advanced Grammar Manual
 date: 2026-04-26T20:56+08:00
-update: 2026-10-21T20:28+08:00
 lang: en
 type: manual
 group: Web

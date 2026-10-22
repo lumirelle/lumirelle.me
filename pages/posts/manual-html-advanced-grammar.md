@@ -1,7 +1,6 @@
 ---
 title: HTML Advanced Grammar Manual
 date: 2026-01-28T11:46+08:00
-update: 2026-10-21T20:20+08:00
 lang: en
 type: manual
 group: Web

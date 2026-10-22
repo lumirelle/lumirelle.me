@@ -31,6 +31,11 @@
   --shell-measure: 820px;
   --shell-gutter: 32px;
 
+  /* The bottom-right column: two controls stacked, inset from the viewport. */
+  --shell-control-inset: 24px;
+  --shell-control-size: 32px;
+  --shell-control-gap: 8px;
+
   /* Radius: square everywhere else. */
   --radius-control: 4px; /* interactive surfaces */
   --radius-window: 8px; /* the code window, styled in P2 */

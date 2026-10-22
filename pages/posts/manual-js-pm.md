@@ -1,7 +1,6 @@
 ---
 title: JavaScript Package Manager Manual
 date: 2025-10-22T15:28+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 type: manual
 group: Web

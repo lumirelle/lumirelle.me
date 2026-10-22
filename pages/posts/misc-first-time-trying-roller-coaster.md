@@ -1,7 +1,6 @@
 ---
 title: First Time Trying Roller Coaster
 date: 2025-09-28T09:39+08:00
-update: 2026-09-21T10:32+08:00
 lang: en
 ---
 

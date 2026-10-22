@@ -8,8 +8,8 @@
  * the router: the URL is updated with `replaceState` and the move is a scroll.
  *
  * The rule has to be installed wherever an in-page link can be clicked, and there
- * are two such places: the Post body, and the outline rail that `ShellCdUp.vue`
- * adopts into `<body>` — which is outside the body's own listener, and is exactly
+ * are two such places: the Post body, and the outline that `ShellOutline.vue`
+ * adopts out of the Post — which is outside the body's own listener, and is exactly
  * how the rail came to behave differently from the headings it points at.
  */
 

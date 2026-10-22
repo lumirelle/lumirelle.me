@@ -1,9 +1,10 @@
 import type { ShikiTransformer } from 'shiki'
 import type { Plugin } from 'vite'
 import { Buffer } from 'node:buffer'
+import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { cp } from 'node:fs/promises'
-import { basename, dirname } from 'node:path'
+import { basename, dirname, relative } from 'node:path'
 import MarkdownItShiki from '@shikijs/markdown-exit'
 import {
   transformerNotationDiff,
@@ -117,6 +118,148 @@ const EXTERNAL_LINK_REGEX = /^https?:\/\//
 const FRONTMATTER_TITLE_REGEX = /\s-\s.*$/
 const OPEN_COLLECTIVE_VITE_REGEX = /opencollective\.com\/vite/
 const OPEN_COLLECTIVE_ELK_REGEX = /opencollective\.com\/elk/
+const ISO_OFFSET_REGEX = /([+-]\d{2}:\d{2})$/
+
+/** What history knows about one file, as author dates in the offsets they were written in. */
+interface FileHistory {
+  /** The commit that introduced the file; the publication-date check consumes it. */
+  firstCommit: string
+  /** The commit that last touched it. */
+  lastCommit: string
+}
+
+interface History {
+  /** Absolute path of the repository root, which is the base of every key below. */
+  root: string
+  /** Repo-relative path, as `git log --name-only` prints it, to what is known of it. */
+  byFile: Map<string, FileHistory>
+}
+
+/** `undefined` until the walk is attempted, `null` when it could not be read. */
+let history: History | null | undefined
+
+/**
+ * The calendar day an instant falls on, read in a given offset.
+ *
+ * The comparison below is a calendar-day comparison *in the offset the commit
+ * carries*, not in the machine's zone and not in UTC: a file committed at
+ * 09:00 +08:00 was committed on that day, whatever the build machine thinks.
+ * YAML has already turned the authored `date` into a `Date`, which is an
+ * instant with no offset of its own, so the day has to be reconstructed.
+ */
+function dayInOffset(value: string | Date, offset: string): string {
+  const instant = value instanceof Date ? value.getTime() : new Date(value).getTime()
+  const sign = offset.startsWith('-') ? -1 : 1
+  const [hours = 0, minutes = 0] = offset.slice(1).split(':').map(Number)
+  const shifted = new Date(instant + sign * (hours * 60 + minutes) * 60_000)
+  return shifted.toISOString().slice(0, 10)
+}
+
+/**
+ * Author dates of every file the repository has ever known, from one walk.
+ *
+ * Memoised because Post frontmatter asks once per page: the build must pay for
+ * one pass over history, not one `git` per file, so adding Posts does not add
+ * build time.
+ *
+ * `null` when git cannot be asked at all — an export, a container without git,
+ * a clone whose history was stripped. The site then shows no edit dates, exactly
+ * as it does for a Post that has never been committed, so a checkout always
+ * builds. The failure is cached too: a tree without git must not spawn a `git`
+ * per file that asks, nor print the warning once per page.
+ */
+function fileHistory(): History | null {
+  if (history === undefined)
+    history = readHistory() ?? null
+  return history
+}
+
+/** What history knows of one file, keyed the way `git log --name-only` prints it. */
+function historyOf(file: string): FileHistory | undefined {
+  const known = fileHistory()
+  if (!known)
+    return undefined
+  return known.byFile.get(relative(known.root, file).split('\\').join('/'))
+}
+
+function readHistory(): History | undefined {
+  try {
+    const root = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim()
+    // A NUL marks a commit, so no path can be mistaken for one. Commits arrive
+    // newest first, which makes a path's first sighting its last edit and its
+    // last sighting the commit that introduced it.
+    const walk = execFileSync(
+      'git',
+      ['log', '--no-renames', '--name-only', '--pretty=format:%x00%aI'],
+      { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
+    )
+
+    const byFile = new Map<string, FileHistory>()
+    let commit: string | undefined
+    for (const line of walk.split('\n')) {
+      const path = line.trim()
+      if (line.startsWith('\0')) {
+        commit = line.slice(1).trim()
+      }
+      else if (path !== '' && commit) {
+        const known = byFile.get(path)
+        byFile.set(path, { firstCommit: commit, lastCommit: known?.lastCommit ?? commit })
+      }
+    }
+
+    return { root, byFile }
+  }
+  catch (error) {
+    const message = (error as Error).message.split('\n')[0]
+    console.warn(`[history] no edit dates: git history is unavailable (${message})`)
+    return undefined
+  }
+}
+
+/**
+ * The masthead's edit date: the author date of the commit that last touched
+ * `file`, or nothing at all.
+ *
+ * Nothing at all when history has never seen the file, when git could not be
+ * asked, or when that commit falls on the Post's own publication day — a Post
+ * committed only on the day it was published shows one date, not two. There is
+ * no fallback to the file's modification time: a checkout changes that, so it
+ * would produce a date that means nothing.
+ */
+function derivedUpdate(file: string, date: unknown): string | undefined {
+  if (typeof date !== 'string' && !(date instanceof Date))
+    return undefined
+  const entry = historyOf(file)
+  if (!entry)
+    return undefined
+  const offset = ISO_OFFSET_REGEX.exec(entry.lastCommit)?.[1] ?? '+00:00'
+  return dayInOffset(entry.lastCommit, offset) === dayInOffset(date, offset) ? undefined : entry.lastCommit
+}
+
+/**
+ * Warn, never fail, when a Post is published after the commit that introduced it.
+ *
+ * That date is not stale, it is impossible: nothing exists before the commit that
+ * added it, so the value is a typo. A warning surfaces it without making the site
+ * depend on history — a tree without git, or a Post never committed, simply has
+ * nothing to compare. The check reuses the walk the edit dates already took: one
+ * pass over history per bundle, however many questions are asked of it.
+ */
+function warnOnImpossibleDate(file: string, date: unknown): void {
+  if (typeof date !== 'string' && !(date instanceof Date))
+    return
+  const entry = historyOf(file)
+  if (!entry)
+    return
+  const offset = ISO_OFFSET_REGEX.exec(entry.firstCommit)?.[1] ?? '+00:00'
+  const published = dayInOffset(date, offset)
+  const first = dayInOffset(entry.firstCommit, offset)
+  if (published > first) {
+    console.warn(
+      `[history] ${basename(file, '.md')}: publication date ${published} is later than its first commit (${first})`,
+    )
+  }
+}
 
 export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] {
   return _Markdown({
@@ -168,11 +311,12 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
           rel: 'noopener',
         },
       })
+      // The outline's container carries the list and nothing else: the control
+      // that opens it below 1400 px is Shell chrome (`ShellOutline.vue`), not
+      // markup injected into every Post.
       md.use(MarkdownItTOC, {
         includeLevel: [1, 2, 3, 4],
         slugify,
-        containerHeaderHtml:
-            '<div class="table-of-contents-anchor"><div class="i-ri-menu-2-fill" /></div>',
       })
       md.use(MarkdownItMagicLink, {
         linksMap: {
@@ -259,8 +403,17 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
         )
         frontmatter.image = `https://lumirelle.me/${path}`
       })()
-      if (id.includes('/pages/posts/'))
+      if (id.includes('/pages/posts/')) {
         frontmatter.duration = readingTime(readFileSync(id, 'utf8'))
+        // Derived, never authored: the field is set or removed, so a stale
+        // hand-written `update:` cannot reach the page.
+        const update = derivedUpdate(id, frontmatter.date)
+        if (update)
+          frontmatter.update = update
+        else
+          delete frontmatter.update
+        warnOnImpossibleDate(id, frontmatter.date)
+      }
       const head = defaults(frontmatter, options)
       return { head, frontmatter }
     },

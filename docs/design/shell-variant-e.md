@@ -46,9 +46,10 @@ Mono is for system truth — nav, breadcrumb, dates, counts, labels. Serif is fo
 - List rows: `grid [6.5rem 1fr]`; the title is 23 px serif and the **date and reading time sit on a second
   line beneath the title**, mono 12 px, as `2026-04-21  3min`. Rows are separated by rhythm (`2.25rem`),
   **never by rules** — thirty rows do not need thirty hairlines.
-- Outline rail: fixed, gutter only. `left: max(16px, 50% - 626px)`, width **224 px**, `cd ..` at **top 72**,
-  rail at **top 102** (`--rail-top + 30`). Hidden below **1400 px**, where the gutter can't hold it without
-  touching the column; there the site's existing hover-reveal outline takes over.
+- Outline rail: fixed, gutter only, at **1400 px and wider**. `left: max(16px, 50% - 626px)`, width
+  **224 px**, `cd ..` at **top 72**, rail at **top 102** (`--rail-top + 30`). Below **1400 px** there is no
+  rail, because the gutter can't hold it without touching the column — the Outline panel is the outline
+  there (see *Outline*).
 - Radii: **8 px** on the code window, **4 px** on interactive controls, square everywhere else.
 
 ## Tokens
@@ -96,9 +97,31 @@ Everything the old `NavBar` provided has to be re-earned by a custom Shell. Each
 - **Scroll to top** — fixed bottom-right 24 px, 32 px square, 4 px radius, hairline, mono `↑` at `ink-strong` (17.9:1 light / 18.8:1 dark), inverting on hover. Appears past 320 px and is `inert` while hidden — not merely transparent.
 - **`cd ..`** — Shell element above the outline rail, `$` at full ink, rest faint, parent path with the query preserved.
 
-## Outline rail
+## Outline
 
-The TOC comes from the pipeline (`markdown-it-table-of-contents`), restyled — not re-implemented: mono 11 px, hairline on its left, **three levels** (h2, h3, h4), permanent at ≥1400 px, hover-revealed below. h4 is carried because it is a real section level in the Manuals, but set at **10 px** one indent further in: at rail size a fourth level reads as another section instead of a subdivision. An outline taller than the viewport scrolls inside the rail rather than running off it. The active section is tracked with scroll arithmetic (not `IntersectionObserver`, which went stale) and marked with `>` in a reserved `1.4ch` gutter so labels never shift.
+One list, two presentations, one pipeline behind both (`markdown-it-table-of-contents`), restyled — not
+re-implemented, and never duplicated: mono 11 px, **three levels** (h2, h3, h4). h4 is carried because it
+is a real section level in the Manuals, but set at **10 px** one indent further in: at this size a fourth
+level reads as another section instead of a subdivision. The active section is tracked with scroll
+arithmetic (not `IntersectionObserver`, which went stale) and marked with `>` in a reserved `1.4ch` gutter
+so labels never shift. The pipeline emits the list and nothing else — the control that opens it is Shell
+chrome, in `ShellOutline.vue`, where the rest of the chrome lives.
+
+At **1400 px and wider** it is the Rail: fixed in the gutter, hairline on its left, `cd ..` above it,
+scrolling inside itself when the outline is taller than the viewport. Below **1400 px** it is the
+**Outline panel** — opened, never revealed. `outline`, a mono 11 px label in the bottom-right column, 8 px
+above `↑` in the scroll control's hairline box and visible past the same 320 px scroll threshold, slides it
+in from the right edge: the `surface` fill with one hairline on its inner edge, square corners, no shadow,
+the Rail's list between a `$ cat outline` header and an `esc` footer, covering that control while it is
+open. Closed means off-canvas and `inert`, not `display: none`, so the slide stays possible and no hidden
+link is focusable. The backdrop or `Esc` closes it, `o` toggles it, choosing a section scrolls to it
+without re-keying the route, focus enters the dialog and returns to the control, and the page behind is
+scroll-locked until it closes. The 200 ms slide is suppressed under `prefers-reduced-motion`; control and
+panel are gone in print and at ≥1400 px, where the Rail owns the job, and a route with no outline offers
+no control at all.
+
+The 1400 px line is not a taste call: it is where the gutter can hold a 224 px rail without touching the
+820 px column, so the line decides which presentation a reader gets, not how wide the panel is.
 
 ## Code blocks
 
@@ -164,8 +187,8 @@ the reference itself had drifted from the prototype, so both were corrected:
   date and reading time on the line under the title, rhythm instead of rules.
 - The list had no masthead and no command line. Both are back, with the entry counts.
 - The outline rail was the fork's hover-revealed hamburger at the viewport edge. It is now the mono rail in
-  the gutter, with `cd ..` above it, the active section marked `>` in a reserved `1.4ch` gutter, and scroll
-  arithmetic tracking it.
+  the gutter at 1400 px and wider, with `cd ..` above it, the active section marked `>` in a reserved
+  `1.4ch` gutter, and scroll arithmetic tracking it.
 - The footer's rule and items were neither the prototype's width nor its type. They are now.
 
 Also settled after the audit: the post sections read as `posts` in the header, the chinese-only filter

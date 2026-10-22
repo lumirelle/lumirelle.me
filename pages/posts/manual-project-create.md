@@ -1,7 +1,6 @@
 ---
 title: Project Create Manual
 date: 2025-09-28T11:34+08:00
-update: 2026-10-21T17:18+08:00
 lang: en
 type: manual
 group: Web

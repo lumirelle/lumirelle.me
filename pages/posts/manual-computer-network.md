@@ -1,7 +1,6 @@
 ---
 title: Computer Network Manual
 date: 2025-09-30T22:30+08:00
-update: 2026-10-21T16:33+08:00
 lang: en
 type: manual
 group: Computer

@@ -308,11 +308,12 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
           rel: 'noopener',
         },
       })
+      // The outline's container carries the list and nothing else: the control
+      // that opens it below 1400 px is Shell chrome (`ShellOutline.vue`), not
+      // markup injected into every Post.
       md.use(MarkdownItTOC, {
         includeLevel: [1, 2, 3, 4],
         slugify,
-        containerHeaderHtml:
-            '<div class="table-of-contents-anchor"><div class="i-ri-menu-2-fill" /></div>',
       })
       md.use(MarkdownItMagicLink, {
         linksMap: {

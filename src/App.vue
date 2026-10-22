@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useImageLightbox } from './logics/image-lightbox.ts'
 import { transitionKind } from './logics/route-transition.ts'
 
 const route = useRoute()
@@ -6,7 +7,8 @@ const route = useRoute()
 /** Section changes type the command line; everything else cross-fades. */
 const kind = transitionKind
 
-const imageModel = ref<HTMLImageElement>()
+/** The lightbox's state lives outside this component: the Shell's controls ask about it. */
+const imageModel = useImageLightbox()
 const imageAlt = ref<string>()
 
 function setImageModel(img: HTMLImageElement): void {

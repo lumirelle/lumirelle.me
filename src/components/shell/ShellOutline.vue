@@ -15,7 +15,7 @@
  *   mounted, so a plain query would keep finding the old outline.
  * - **The width** — at 1400 px and wider the gutter can hold the rail, so it is
  *   adopted into `<body>` exactly as before. Below that line the same element
- *   goes to this component's host, where the panel will present it; it is never
+ *   goes into the panel this component presents it in; it is never
  *   re-implemented and never left inside the routed content.
  *
  * The markdown pipeline generates the outline *inside* the Post body, under
@@ -30,7 +30,24 @@
  * outline installs the same in-page rule itself (see `~/logics/in-page-links.ts`).
  * Without it an outline click reaches the router, changes the hash, re-keys the
  * route frame and plays the page transition for what is only a scroll.
+ *
+ * ## The panel
+ *
+ * Below 1400 px the outline is *opened*, never revealed: `outline` is a control
+ * in the bottom-right column, above `↑`, and the list lives in a dialog that
+ * slides in from the right edge. A hover reveal had no meaning on a touch screen
+ * — the first tap stuck a transparent column of links over the article — and two
+ * presentations of one behaviour meant two things to fix. Above 1400 px the Rail
+ * is untouched, because it was never the problem.
+ *
+ * Closed means off-canvas and `inert`, not `display: none`: the slide stays
+ * possible and no hidden link is focusable or announced. The panel element
+ * itself is permanent so that the outline always has a host to be adopted into,
+ * even before this route is known to have one; on a route without an outline it
+ * is empty, closed and unreachable.
  */
+import { isFocusedElementEditable } from '@vueuse/core'
+import { useImageLightbox } from '~/logics/image-lightbox.ts'
 import { useInPageLinks } from '~/logics/in-page-links.ts'
 
 const route = useRoute()
@@ -38,8 +55,15 @@ const route = useRoute()
 /** The rail's own breakpoint: the gutter can hold 224 px without touching the column. */
 const wide = useMediaQuery('(min-width: 1400px)')
 
-/** Below 1400 px the outline lives here, ready for the panel to present it. */
+/** Below 1400 px the outline lives here, inside the panel. */
 const host = useTemplateRef<HTMLDivElement>('host')
+const trigger = useTemplateRef<HTMLButtonElement>('trigger')
+const panel = useTemplateRef<HTMLDivElement>('panel')
+
+const lightbox = useImageLightbox()
+
+const PANEL_ID = 'outline-panel'
+const PANEL_TITLE_ID = 'outline-panel-title'
 
 interface Heading {
   id: string
@@ -60,6 +84,9 @@ function outlineTarget(): HTMLElement {
 const adopted = shallowRef<HTMLElement | null>(null)
 
 useInPageLinks(adopted)
+
+/** A route with no outline gets no control, and a panel with nothing in it. */
+const hasOutline = computed(() => adopted.value !== null)
 
 function adoptOutline(): void {
   const frame = liveFrame()
@@ -153,6 +180,71 @@ function refreshAfterMove(): void {
   adoptTimer = window.setTimeout(refresh, 350)
 }
 
+/** Whether the reader has moved far enough for the bottom-right column to be useful. */
+const { y } = useWindowScroll()
+const reachable = computed(() => y.value > 320)
+
+const open = ref(false)
+
+/**
+ * The document's own scroller. `main.css` gives `html` its own overflow, so a
+ * lock on `body` would leave the window scrolling behind the panel.
+ */
+const locked = useScrollLock(computed(() => (typeof document === 'undefined' ? null : document.documentElement)))
+
+function openPanel(): void {
+  if (open.value)
+    return
+  open.value = true
+  locked.value = true
+  // Into the panel, not onto a link: the reader asked for the outline, and Tab
+  // from here reaches the first section.
+  void nextTick(() => panel.value?.focus())
+}
+
+function closePanel(returnFocus = true): void {
+  if (!open.value)
+    return
+  // Focus leaves before the panel goes inert: the browser blurs a focused
+  // element the moment it does, so returning it afterwards would lose the
+  // reader's place in the tab order.
+  if (returnFocus)
+    trigger.value?.focus()
+  open.value = false
+  locked.value = false
+}
+
+/**
+ * Choosing a section dismisses the panel.
+ *
+ * Captured, so the panel is closed — and the page unlocked — before the in-page
+ * link rule scrolls to the heading it was asked for. Only a link counts: the
+ * panel's own surface is not a dismiss target.
+ */
+function onPanelClick(event: MouseEvent): void {
+  if ((event.target as HTMLElement | null)?.closest('a'))
+    closePanel()
+}
+
+// `esc` closes, `o` toggles — one key, no chords, and only when the reader is
+// not typing and the image lightbox does not already own the keyboard.
+onKeyStroke('Escape', () => closePanel())
+
+onKeyStroke('o', (event) => {
+  if (!hasOutline.value || wide.value)
+    return
+  if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
+    return
+  if (lightbox.value || isFocusedElementEditable())
+    return
+
+  event.preventDefault()
+  if (open.value)
+    closePanel()
+  else
+    openPanel()
+})
+
 onMounted(() => {
   refreshAfterMove()
   window.addEventListener('scroll', onScroll, { passive: true })
@@ -170,23 +262,238 @@ onBeforeUnmount(() => {
 })
 
 // The outline is generated per Post, so remeasure once the new page has committed.
-watch(() => route.fullPath, () => nextTick(refreshAfterMove))
+// A route change also ends the panel: it belonged to the Post that is leaving,
+// and the reader did not ask for the new page to start behind it.
+watch(() => route.fullPath, () => {
+  closePanel(false)
+  return nextTick(refreshAfterMove)
+})
 
-// Crossing the rail's breakpoint hands the same node to the other presentation.
-watch(wide, refresh)
+// Crossing the rail's breakpoint hands the same node to the other presentation,
+// and ends the panel: it has no counterpart at 1400 px and wider.
+watch(wide, () => {
+  closePanel(false)
+  refresh()
+})
 </script>
 
 <template>
-  <div ref="host" class="shell-outline-host" />
+  <!--
+    The panel's control. Absent on a route with no outline, hidden at 1400 px and
+    wider where the Rail owns the job, and `inert` until the reader has scrolled —
+    the same threshold, the same column and the same hairline box as the scroll
+    control it sits above.
+  -->
+  <button
+    v-if="hasOutline"
+    ref="trigger"
+    type="button"
+    class="shell-outline-trigger"
+    :inert="reachable ? undefined : true"
+    :aria-expanded="open ? 'true' : 'false'"
+    :aria-controls="PANEL_ID"
+    @click="openPanel"
+  >
+    outline
+  </button>
+  <div class="shell-outline-layer" :inert="open ? undefined : true">
+    <!--
+      The backdrop is a pointer convenience, not a control: the keyboard path out
+      is `Esc`, and the panel's own control is the only focusable way back. It is
+      hidden from assistive technology because there is nothing for it to
+      announce — the dialog above it already states what is on screen.
+    -->
+    <!-- eslint-disable-next-line vue-a11y/click-events-have-key-events, vue-a11y/no-static-element-interactions -->
+    <div class="shell-outline-backdrop" aria-hidden="true" @click="closePanel()" />
+    <!--
+      A dialog named by its header, reporting its state through the control above.
+      Off-canvas and `inert` while closed, so the slide is possible and no link
+      inside it is announced or reachable.
+    -->
+    <div
+      :id="PANEL_ID"
+      ref="panel"
+      class="shell-outline-panel"
+      role="dialog"
+      tabindex="-1"
+      :aria-labelledby="PANEL_TITLE_ID"
+      :aria-hidden="open ? undefined : 'true'"
+      @click.capture="onPanelClick"
+    >
+      <p :id="PANEL_TITLE_ID" class="shell-outline-title">
+        <span class="prompt">$</span> cat outline
+      </p>
+      <!-- The adopted outline lands here; see `markdown.css` for its geometry. -->
+      <div ref="host" class="shell-outline-host" />
+      <p class="shell-outline-foot">
+        <span>esc</span>
+        <span>o</span>
+      </p>
+    </div>
+  </div>
 </template>
 
 <style scoped>
 /*
- * No box of its own: the host is only where the outline lives below 1400 px, and
- * the outline itself keeps its own fixed position. A box here would become a
- * layout row in the Shell and could change what the outline resolves against.
+ * The control: the scroll control's box, one gap above it in the same column.
+ * 24 px bottom + 32 px tall + 8 px = 64 px.
+ */
+.shell-outline-trigger {
+  position: fixed;
+  right: 24px;
+  bottom: 64px;
+  z-index: 100;
+
+  height: 32px;
+  padding: 0 10px;
+
+  appearance: none;
+  cursor: pointer;
+
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1;
+
+  color: var(--color-ink-strong);
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--radius-control);
+
+  /* Off until the reader has moved 320 px; `inert` in the template is what
+   * makes that real. */
+  opacity: 0;
+  transition: opacity var(--duration-interaction) var(--ease-interaction),
+    background-color var(--duration-interaction) var(--ease-interaction),
+    color var(--duration-interaction) var(--ease-interaction);
+}
+
+.shell-outline-trigger:not([inert]) {
+  opacity: 1;
+}
+
+/* Inverts like a selected line in a shell: ink fill, canvas glyph. */
+.shell-outline-trigger:hover {
+  color: var(--color-canvas);
+  background-color: var(--color-ink-strong);
+}
+
+/*
+ * The layer holds the dimmed column and the panel. It is not a layout box: it is
+ * fixed to the viewport so the panel is too, whatever the page transition is
+ * doing underneath. Above the content and the Rail, below the image lightbox.
+ */
+.shell-outline-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+}
+
+/* Closed: nothing here answers the pointer, and nothing in it is reachable. */
+.shell-outline-layer[inert] {
+  pointer-events: none;
+}
+
+.shell-outline-backdrop {
+  position: absolute;
+  inset: 0;
+
+  /* A wash of the canvas, so the column reads as inactive — no hex, no hue, and
+   * the same value in either scheme. */
+  background-color: color-mix(in srgb, var(--color-canvas) 55%, transparent);
+
+  opacity: 0;
+  transition: opacity 200ms var(--ease-interaction);
+}
+
+.shell-outline-layer:not([inert]) .shell-outline-backdrop {
+  opacity: 1;
+}
+
+/*
+ * The panel: a terminal surface at the right edge, square corners, no shadow.
+ * A little over a third of a laptop's width — the Rail's labels need the room —
+ * and never more than 86% of a phone.
+ */
+.shell-outline-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(320px, 86vw);
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--color-surface);
+  border-left: 1px solid var(--color-stroke);
+
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-ink-faint);
+
+  transform: translateX(100%);
+  transition: transform 200ms var(--ease-interaction);
+}
+
+.shell-outline-layer:not([inert]) .shell-outline-panel {
+  transform: none;
+}
+
+.shell-outline-title,
+.shell-outline-foot {
+  display: flex;
+  gap: 1ch;
+  align-items: baseline;
+  justify-content: space-between;
+
+  margin: 0;
+  padding: 12px 14px;
+}
+
+.shell-outline-title {
+  gap: 1ch;
+  justify-content: flex-start;
+}
+
+/* The prompt reads at full ink, as it does in the masthead and in `cd ..`. */
+.prompt {
+  color: var(--color-ink-strong);
+}
+
+.shell-outline-foot {
+  padding-bottom: 14px;
+}
+
+/*
+ * No box of its own: the host is only where the outline is adopted below
+ * 1400 px, and the outline keeps its own geometry. `display: contents` lets the
+ * list be the panel's flex child, so the list is what scrolls.
  */
 .shell-outline-host {
   display: contents;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell-outline-trigger,
+  .shell-outline-backdrop,
+  .shell-outline-panel {
+    transition: none;
+  }
+}
+
+/* The Rail owns the outline from here, and it needs neither control nor panel. */
+@media (min-width: 1400px) {
+  .shell-outline-trigger,
+  .shell-outline-layer {
+    display: none;
+  }
+}
+
+@media print {
+  .shell-outline-trigger,
+  .shell-outline-layer {
+    display: none;
+  }
 }
 </style>

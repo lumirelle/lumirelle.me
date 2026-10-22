@@ -1000,16 +1000,47 @@ test('the Shell owns the outline at both widths and never duplicates it', async 
   expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
 })
 
+/**
+ * Scroll the page to a position, re-asserted until it holds.
+ *
+ * The router restores the incoming page's scroll position as the navigation
+ * commits, so a scroll taken while the page is still hydrating can be undone a
+ * beat later — which would leave the test reading a page nobody scrolled.
+ */
+async function scrollPageTo(page: Page, top: number): Promise<void> {
+  await expect.poll(async () => {
+    await page.evaluate((y) => {
+      document.documentElement.style.scrollBehavior = 'auto'
+      window.scrollTo({ top: y, behavior: 'instant' })
+    }, top)
+    return page.evaluate(() => Math.round(window.scrollY))
+  }).toBe(top)
+}
+
+/** The same, for a heading that has to come to rest at the top of the viewport. */
+async function scrollToHeading(page: Page, selector: string): Promise<void> {
+  await expect.poll(async () => {
+    await page.evaluate((hash) => {
+      document.documentElement.style.scrollBehavior = 'auto'
+      const heading = document.querySelector(hash)!
+      window.scrollTo({
+        top: heading.getBoundingClientRect().top + window.scrollY,
+        behavior: 'instant',
+      })
+    }, selector)
+    return page.evaluate(
+      hash => Math.round(document.querySelector(hash)!.getBoundingClientRect().top) === 0,
+      selector,
+    )
+  }).toBe(true)
+}
+
 test('resizing across 1400 px keeps the reader\'s place in the outline', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
   await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
 
   const mark = page.locator('.table-of-contents a[href="#unhandled-rejections"]')
-  await page.evaluate(() => {
-    const heading = document.querySelector('#unhandled-rejections')!
-    document.documentElement.style.scrollBehavior = 'auto'
-    window.scrollTo(0, heading.getBoundingClientRect().top + window.scrollY)
-  })
+  await scrollToHeading(page, '#unhandled-rejections')
   await expect(mark).toHaveClass(/toc-active/)
 
   const cdUp = page.getByRole('link', { name: /cd \.\./ })
@@ -1085,6 +1116,382 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
     first: 'Introduction to Vue.js',
     inFrame: false,
   })
+})
+
+/*
+ * The outline panel: below 1400 px the outline is opened, never revealed.
+ *
+ * The phone frame is the 390 × 844 the Frame row uses — the width at which the
+ * old hover reveal painted a transparent column of section links over the
+ * article the reader was in the middle of.
+ */
+const PHONE = { width: 390, height: 844 }
+
+/** The `outline` control, reachable or not. */
+function outlineControl(page: Page) {
+  return page.getByRole('button', { name: 'outline', exact: true })
+}
+
+/**
+ * Open the outline panel on a Post, at the phone frame.
+ *
+ * The control shares the scroll control's threshold — it is `inert` until the
+ * reader has moved 320 px — so the page is scrolled before it is pressed.
+ */
+async function openOutlinePanel(page: Page, path = '/posts/manual-git') {
+  await page.setViewportSize(PHONE)
+  await page.goto(path, { waitUntil: 'load' })
+  await scrollPageTo(page, 900)
+  const control = outlineControl(page)
+  await expect(control).toBeVisible()
+  await control.click()
+  const panel = page.getByRole('dialog', { name: 'outline' })
+  await expect(panel).toBeVisible()
+  return panel
+}
+
+test('below 1400 px the outline is a control, never a hover reveal', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  // Where the reveal used to live: the outline's own left-hand column, over the
+  // article. Hovering it no longer paints a list of sections on top of the text.
+  await page.mouse.move(16, 160)
+  await page.mouse.move(60, 300)
+  await page.waitForTimeout(300)
+
+  const outline = page.locator('.table-of-contents')
+  await expect(outline).toHaveCount(1)
+  // Still Shell-owned, but inside the closed panel rather than over the column.
+  expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
+  expect(await outline.evaluate(el => Boolean(el.closest('[inert]')))).toBe(true)
+  // The Rail's active mark is generated content, so it is part of the link's
+  // accessible name; here it is enough that no such link is reachable at all.
+  await expect(page.getByRole('link', { name: 'What Is Git?' })).toHaveCount(0)
+
+  // The control is present, says what it does in words, and reports collapsed.
+  const control = page.getByRole('button', { name: 'outline', exact: true, includeHidden: true })
+  await expect(control).toHaveCount(1)
+  await expect(control).toHaveAttribute('aria-expanded', 'false')
+  const controlled = await control.evaluate(el => el.getAttribute('aria-controls') ?? '')
+  expect(controlled).not.toBe('')
+  expect(await page.locator(`#${controlled}`).getAttribute('role')).toBe('dialog')
+
+  // A laptop-width window is the same story: no width below the line has a
+  // reveal left to hover.
+  await page.setViewportSize({ width: 1200, height: 950 })
+  await page.mouse.move(60, 300)
+  await page.waitForTimeout(300)
+  await expect(page.getByRole('link', { name: 'What Is Git?' })).toHaveCount(0)
+})
+
+test('the outline control opens the panel and Esc hands focus back', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  const control = outlineControl(page)
+  await expect(control).toHaveCount(1)
+  // Absent until the reader has moved, exactly like the scroll control below it.
+  await expect(control).toHaveAttribute('inert', '')
+
+  await scrollPageTo(page, 900)
+  await expect.poll(() => control.evaluate(el => el.hasAttribute('inert'))).toBe(false)
+
+  // Directly above the scroll control, right edges aligned in one column.
+  const scroller = page.getByRole('button', { name: 'Scroll to top', includeHidden: true })
+  const trigger = await control.boundingBox()
+  const scroll = await scroller.boundingBox()
+  expect(trigger!.y + trigger!.height).toBeLessThanOrEqual(scroll!.y)
+  expect(Math.round(trigger!.x + trigger!.width)).toBe(Math.round(scroll!.x + scroll!.width))
+
+  await expect(control).toHaveAttribute('aria-expanded', 'false')
+  await control.click()
+
+  const panel = page.getByRole('dialog', { name: 'outline' })
+  await expect(panel).toBeVisible()
+  await expect(control).toHaveAttribute('aria-expanded', 'true')
+
+  // The panel opens over the column and covers the control with itself, so
+  // nothing of the control is reachable where it used to sit. Polled, because
+  // the panel slides the last few pixels over the control.
+  await expect
+    .poll(() => control.evaluate((el) => {
+      const box = el.getBoundingClientRect()
+      const at = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)
+      return Boolean(at?.closest('[role="dialog"]'))
+    }))
+    .toBe(true)
+
+  // Opening moves focus into the panel…
+  expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
+    .toBe(true)
+
+  await page.keyboard.press('Escape')
+  await expect(panel).toHaveCount(0)
+  await expect(control).toHaveAttribute('aria-expanded', 'false')
+  // …and closing returns it to the control.
+  await expect(control).toBeFocused()
+  await expect(control).not.toHaveAttribute('inert', '')
+})
+
+test('the closed outline panel is off-canvas and out of the tab order', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  // Nothing inside it is announced while it is closed.
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+
+  const closed = page.getByRole('dialog', { name: 'outline', includeHidden: true })
+  await expect(closed).toHaveCount(1)
+  expect(await closed.evaluate(el => el.closest('[inert]') !== null)).toBe(true)
+
+  // Off-canvas, past the right edge, rather than removed: it keeps the layout the
+  // slide and the reader's place in the list both depend on.
+  const box = await closed.boundingBox()
+  expect(box!.x).toBeGreaterThanOrEqual(PHONE.width)
+
+  // And no Tab ever lands on a link the reader cannot see.
+  for (let presses = 0; presses < 10; presses++) {
+    await page.keyboard.press('Tab')
+    expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
+      .toBe(false)
+  }
+})
+
+for (const scheme of ['light', 'dark'] as const) {
+  test(`the outline panel is the site's surface in the ${scheme} scheme`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme })
+    const panel = await openOutlinePanel(page)
+
+    const painted = await panel.evaluate((el) => {
+      const style = getComputedStyle(el)
+      return {
+        surface: style.backgroundColor,
+        edge: style.borderLeftColor,
+        edgeWidth: style.borderLeftWidth,
+        ink: style.color,
+      }
+    })
+
+    // A surface of its own, with one hairline on the inner edge — the assertion
+    // that would have caught a transparent list painted over the article.
+    expect(toRgb(painted.surface)).toBe(PALETTE.surface[scheme])
+    expect(painted.edgeWidth).toBe('1px')
+    expect(toRgb(painted.edge)).toBe(PALETTE.stroke[scheme])
+    expect([PALETTE.ink[scheme], PALETTE.inkStrong[scheme], PALETTE.inkFaint[scheme]])
+      .toContain(toRgb(painted.ink))
+
+    // Headed `$ cat outline` with the prompt at full ink, footed `esc`.
+    await expect(panel).toContainText('cat outline')
+    await expect(panel).toContainText('esc')
+    const prompt = panel.getByText('$', { exact: true })
+    await expect(prompt).toBeVisible()
+    expect(toRgb(await prompt.evaluate(el => getComputedStyle(el).color)))
+      .toBe(PALETTE.inkStrong[scheme])
+
+    // The list itself, with the Rail's active mark: `>` in a reserved gutter, on
+    // exactly the section the reader is in. Polled, because the mark fades in.
+    const marked = () => panel.getByRole('link').evaluateAll(els => els.map(el => ({
+      marker: getComputedStyle(el, '::before').content,
+      shown: getComputedStyle(el, '::before').opacity,
+      label: (el.textContent ?? '').trim(),
+    })))
+    await expect.poll(async () => (await marked()).filter(mark => mark.shown === '1')).toHaveLength(1)
+    const marks = await marked()
+    expect(marks.length).toBeGreaterThan(5)
+    expect(marks.every(mark => mark.marker === '">"')).toBe(true)
+  })
+}
+
+test('the outline panel carries the same three levels as the Rail', async ({ page }) => {
+  const panel = await openOutlinePanel(page, '/posts/manual-computer-network')
+
+  const size = async (name: string) => Number.parseFloat(await panel
+    .getByRole('link', { name })
+    .first()
+    .evaluate(el => getComputedStyle(el).fontSize))
+
+  // h4 is a real section level in the Manuals, so the panel carries it — at
+  // 10 px, one step below the level above it, never as another section.
+  expect(await size('Session Layer')).toBe(11)
+  expect(await size('TLS/SSL')).toBe(10)
+})
+
+test('a section in the outline panel scrolls without re-keying the route', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await page.locator('.route-frame').evaluate(el => el.setAttribute('data-kept', ''))
+
+  await scrollPageTo(page, 900)
+  await outlineControl(page).click()
+  const panel = page.getByRole('dialog', { name: 'outline' })
+  await panel.getByRole('link', { name: 'Basic Usage of Git' }).click()
+
+  // The move is a scroll, not a page: the heading comes to rest under the header
+  // and the frame the reader was in is still the frame on screen.
+  const heading = page.locator('.route-frame[data-kept] #basic-usage-of-git')
+  const top = () => heading.evaluate(el => Math.round(el.getBoundingClientRect().top))
+  await expect.poll(top).toBeLessThan(60)
+
+  await page.waitForTimeout(700)
+  await expect(page.locator('.route-frame[data-kept]')).toHaveCount(1)
+  await expect(page).toHaveURL(/#basic-usage-of-git$/)
+
+  // Choosing a section dismisses the panel it was chosen from.
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+})
+
+test('the outline panel scrolls its own list inside itself', async ({ page }) => {
+  const panel = await openOutlinePanel(page, '/posts/manual-js-advanced-grammar')
+
+  // The panel ends where the viewport does, however long the outline is.
+  const panelBox = await panel.boundingBox()
+  expect(panelBox!.y).toBeGreaterThanOrEqual(0)
+  expect(panelBox!.y + panelBox!.height).toBeLessThanOrEqual(PHONE.height)
+
+  const before = await page.evaluate(() => window.scrollY)
+  const deepest = panel.getByRole('link').last()
+  await deepest.scrollIntoViewIfNeeded()
+  await expect(deepest).toBeVisible()
+
+  // What scrolled was the list inside the panel: the page behind it did not move.
+  const [entry, port] = [await deepest.boundingBox(), await panel.boundingBox()]
+  expect(entry!.y + entry!.height).toBeLessThanOrEqual(port!.y + port!.height + 1)
+  expect(await page.evaluate(() => window.scrollY)).toBe(before)
+})
+
+test('the backdrop closes the outline panel', async ({ page }) => {
+  await openOutlinePanel(page)
+
+  // Anywhere outside the panel: the dimmed column is the dismiss target.
+  await page.mouse.click(20, 400)
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+  // Focus follows the panel out, back to the control.
+  await expect(outlineControl(page)).toBeFocused()
+  await expect(page.getByRole('dialog', { name: 'outline', includeHidden: true })).toHaveCount(1)
+})
+
+test('a route with no outline offers no control', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts', { waitUntil: 'load' })
+  await scrollPageTo(page, 900)
+
+  // Nothing to open, so nothing offered — not a control that opens an empty panel.
+  await expect(page.locator('.table-of-contents')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }))
+    .toHaveCount(0)
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+})
+
+test('the page behind the outline panel cannot scroll until it closes', async ({ page }) => {
+  const panel = await openOutlinePanel(page)
+  await expect(panel).toBeVisible()
+
+  const before = await page.evaluate(() => window.scrollY)
+  // Over the dimmed column, not the panel's own list.
+  await page.mouse.move(20, 400)
+  await page.mouse.wheel(0, 600)
+  await page.waitForTimeout(400)
+  expect(await page.evaluate(() => window.scrollY)).toBe(before)
+
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+
+  await page.mouse.move(20, 400)
+  await page.mouse.wheel(0, 600)
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before)
+})
+
+test('navigating away closes the outline panel', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-vue-advanced-grammar', { waitUntil: 'load' })
+
+  // Two SPA moves, so that going back lands on another Post that has an outline
+  // of its own rather than on a page with none.
+  await page.getByRole('banner')
+    .getByRole('navigation', { name: 'Primary' })
+    .getByRole('link', { name: 'posts', exact: true })
+    .click()
+  await expect(page).toHaveURL(/\/posts$/)
+  await page.getByRole('main')
+    .getByRole('link')
+    .filter({ hasText: 'Git Manual' })
+    .first()
+    .click()
+  await expect(page).toHaveURL(/\/posts\/manual-git$/)
+
+  await scrollPageTo(page, 900)
+  await outlineControl(page).click()
+  await expect(page.getByRole('dialog', { name: 'outline' })).toBeVisible()
+
+  // The backdrop owns the header while the panel is open, so the way out is the
+  // one the browser offers — and the panel belongs to the Post being left.
+  await page.evaluate(() => window.history.go(-2))
+  await expect(page).toHaveURL(/\/posts\/manual-vue-advanced-grammar$/)
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+  await expect
+    .poll(() => page.locator('.table-of-contents').getAttribute('data-owner'))
+    .toBe('/posts/manual-vue-advanced-grammar')
+})
+
+test('the outline control is absent where the Rail owns the outline', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  // The Rail, unchanged and in the gutter.
+  await expect(page.getByRole('link', { name: 'What Is Git?' })).toBeVisible()
+
+  // Nothing of the narrow presentation appears at 1500 px.
+  await expect(outlineControl(page)).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }))
+    .toBeHidden()
+  await expect(page.getByRole('dialog', { name: 'outline', includeHidden: true })).toBeHidden()
+})
+
+test('the outline panel appears without sliding under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  const panel = await openOutlinePanel(page)
+
+  const moving = await panel.evaluate((el) => {
+    const style = getComputedStyle(el)
+    return { property: style.transitionProperty, duration: style.transitionDuration }
+  })
+  expect(moving.duration).toBe('0s')
+  await expect(panel).toBeVisible()
+})
+
+test('o opens and closes the outline panel', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await scrollPageTo(page, 900)
+
+  const panel = page.getByRole('dialog', { name: 'outline' })
+  await page.keyboard.press('o')
+  await expect(panel).toBeVisible()
+
+  await page.keyboard.press('o')
+  await expect(panel).toHaveCount(0)
+})
+
+test('neither the outline control nor the panel prints', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+  await scrollPageTo(page, 900)
+  await page.emulateMedia({ media: 'print' })
+
+  await expect(page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }))
+    .toBeHidden()
+  await expect(page.getByRole('dialog', { name: 'outline', includeHidden: true })).toBeHidden()
+})
+
+test('a prerendered Post keeps its outline for a reader without JavaScript', () => {
+  const html = readAllHtml()
+
+  // The pipeline still generates the outline inside the page, so the Rail is
+  // reachable at 1400 px and wider without a line of JavaScript…
+  expect(html).toMatch(/<div class="table-of-contents">[\s\S]{0,4000}?<a href="#what-is-git">/)
+  // …and the hamburger that used to sit on top of it is retired.
+  expect(html).not.toContain('table-of-contents-anchor')
 })
 
 test('the header stays on one line and never collapses its parents', async ({ page }) => {

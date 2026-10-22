@@ -1,0 +1,81 @@
+/*
+ * The bottom-right column.
+ *
+ * Two controls share one column, one box and one set of states: `outline` above,
+ * `↑` below. They are one surface with two jobs, so the material lives here once
+ * — the hairline box, the mono label, the hover inversion, the hidden state and
+ * the motion — and each component only says where it sits and what it does.
+ *
+ * There is no button styling in the components themselves; a second copy of this
+ * would be a second thing to fix the day the column moves.
+ */
+
+.shell-control {
+  position: fixed;
+  right: var(--shell-control-inset);
+  z-index: 100;
+
+  height: var(--shell-control-size);
+
+  display: grid;
+  place-items: center;
+
+  appearance: none;
+  cursor: pointer;
+
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  line-height: 1;
+
+  color: var(--color-ink-strong);
+  background-color: var(--color-canvas);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--radius-control);
+
+  /* Off until the reader has moved; `inert` in the component is what makes it real. */
+  opacity: 0;
+  transition: opacity var(--duration-interaction) var(--ease-interaction),
+    background-color var(--duration-interaction) var(--ease-interaction),
+    color var(--duration-interaction) var(--ease-interaction);
+}
+
+.shell-control:not([inert]) {
+  opacity: 1;
+}
+
+/* Inverts like a selected line in a shell: ink fill, canvas glyph. */
+.shell-control:hover {
+  color: var(--color-canvas);
+  background-color: var(--color-ink-strong);
+}
+
+/* The two controls are one stack: the upper sits on the lower's box and a gap. */
+.shell-control--stacked {
+  bottom: calc(var(--shell-control-inset) + var(--shell-control-size) + var(--shell-control-gap));
+}
+
+.shell-control--bottom {
+  bottom: var(--shell-control-inset);
+}
+
+/* A square glyph control (`↑`) rather than a labelled one (`outline`). */
+.shell-control--square {
+  width: var(--shell-control-size);
+  font-size: 12px;
+}
+
+.shell-control--labelled {
+  padding: 0 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell-control {
+    transition: none;
+  }
+}
+
+@media print {
+  .shell-control {
+    display: none;
+  }
+}

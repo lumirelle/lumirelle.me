@@ -984,6 +984,9 @@ test('the Shell owns the outline at both widths and never duplicates it', async 
   // transition's transform cannot break its fixed position.
   expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
 
+  const firstEntry = () => outline.evaluate(el => el.querySelector('a')?.textContent?.trim() ?? '')
+  const wideEntry = await firstEntry()
+
   // Below 1400 px the same node stays Shell-owned: the panel ticket hands it a
   // host instead of leaving it in the Post or appending it straight to `<body>`.
   await page.setViewportSize({ width: 1200, height: 950 })
@@ -992,11 +995,11 @@ test('the Shell owns the outline at both widths and never duplicates it', async 
   await expect(page.locator('body > .table-of-contents')).toHaveCount(0)
 
   // Crossing back leaves exactly one outline and the same Post's list, not a
-  // second one from the narrow presentation.
+  // second one from the narrow presentation: the first section a reader can read
+  // is the one they were reading before the width changed.
   await page.setViewportSize({ width: 1500, height: 950 })
   await expect(outline).toHaveCount(1)
-  expect(await outline.evaluate(el => (el as HTMLElement).dataset.owner))
-    .toBe('/posts/manual-js-advanced-grammar')
+  expect(await firstEntry()).toBe(wideEntry)
   expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
 })
 
@@ -1082,7 +1085,6 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
     const outline = document.querySelector('.table-of-contents')
     return {
       count: document.querySelectorAll('.table-of-contents').length,
-      owner: (outline as HTMLElement | null)?.dataset.owner ?? '',
       first: outline?.querySelector('a')?.textContent?.trim() ?? '',
       inFrame: Boolean(outline?.closest('.route-frame')),
     }
@@ -1090,7 +1092,6 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
 
   expect(await readOutline()).toEqual({
     count: 1,
-    owner: '/posts/manual-git',
     first: 'What Is Git?',
     inFrame: false,
   })
@@ -1112,7 +1113,6 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
 
   await expect.poll(readOutline).toEqual({
     count: 1,
-    owner: '/posts/manual-vue-advanced-grammar',
     first: 'Introduction to Vue.js',
     inFrame: false,
   })
@@ -1228,17 +1228,6 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
   // matters; the attribute is what makes it true.
   await expect(control).toHaveCount(1)
   await expect(control).toHaveAttribute('inert', '')
-
-  // The panel opens over the column and covers the control with itself, so
-  // nothing of the control is reachable where it used to sit. Polled, because
-  // the panel slides the last few pixels over the control.
-  await expect
-    .poll(() => control.evaluate((el) => {
-      const box = el.getBoundingClientRect()
-      const at = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2)
-      return Boolean(at?.closest('[role="dialog"]'))
-    }))
-    .toBe(true)
 
   // Opening moves focus into the panel…
   expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
@@ -1490,8 +1479,8 @@ test('navigating away closes the outline panel', async ({ page }) => {
   await expect(page).toHaveURL(/\/posts\/manual-vue-advanced-grammar$/)
   await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
   await expect
-    .poll(() => page.locator('.table-of-contents').getAttribute('data-owner'))
-    .toBe('/posts/manual-vue-advanced-grammar')
+    .poll(() => page.locator('.table-of-contents a').first().textContent())
+    .toBe('Introduction to Vue.js')
 })
 
 test('the outline control is absent where the Rail owns the outline', async ({ page }) => {
@@ -1528,9 +1517,31 @@ test('o opens and closes the outline panel', async ({ page }) => {
   const panel = page.getByRole('dialog', { name: 'outline' })
   await page.keyboard.press('o')
   await expect(panel).toBeVisible()
+  // It says it is the only thing on screen: the column behind cannot scroll and
+  // is dimmed, so assistive technology is told the page is modal.
+  await expect(panel).toHaveAttribute('aria-modal', 'true')
 
   await page.keyboard.press('o')
   await expect(panel).toHaveCount(0)
+})
+
+test('o reaches the outline from the top of the page, where the control is not', async ({ page }) => {
+  await page.setViewportSize(PHONE)
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  // The control shares the scroll control's threshold, so at the top of the page
+  // there is nothing to press. The keyboard still reaches the outline — and Esc
+  // leaves the reader where they were instead of handing focus to a control that
+  // is `inert` and could not take it.
+  await expect(outlineControl(page)).toHaveAttribute('inert', '')
+  await page.keyboard.press('o')
+  await expect(page.getByRole('dialog', { name: 'outline' })).toBeVisible()
+
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
+  expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
+    .toBe(false)
+  expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true)
 })
 
 test('neither the outline control nor the panel prints', async ({ page }) => {

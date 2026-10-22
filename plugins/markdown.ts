@@ -135,7 +135,8 @@ interface History {
   byFile: Map<string, FileHistory>
 }
 
-let history: History | undefined
+/** `undefined` until the walk is attempted, `null` when it could not be read. */
+let history: History | null | undefined
 
 /**
  * The calendar day an instant falls on, read in a given offset.
@@ -161,13 +162,15 @@ function dayInOffset(value: string | Date, offset: string): string {
  * one pass over history, not one `git` per file, so adding Posts does not add
  * build time.
  *
- * `undefined` when git cannot be asked at all — an export, a container without
- * git, a clone whose history was stripped. The site then shows no edit dates,
- * exactly as it does for a Post that has never been committed, so a checkout
- * always builds.
+ * `null` when git cannot be asked at all — an export, a container without git,
+ * a clone whose history was stripped. The site then shows no edit dates, exactly
+ * as it does for a Post that has never been committed, so a checkout always
+ * builds. The failure is cached too: a tree without git must not spawn a `git`
+ * per file that asks, nor print the warning once per page.
  */
-function fileHistory(): History | undefined {
-  history ??= readHistory()
+function fileHistory(): History | null {
+  if (history === undefined)
+    history = readHistory() ?? null
   return history
 }
 

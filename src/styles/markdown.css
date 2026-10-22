@@ -298,7 +298,7 @@ h6:focus .header-anchor {
  * between its header and its footer, and the list is still what scrolls when
  * the outline is taller than the panel — exactly as it scrolls inside the Rail.
  */
-.shell-outline-panel .table-of-contents {
+.outline-panel .table-of-contents {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -312,7 +312,7 @@ h6:focus .header-anchor {
   border-left: 0;
 }
 
-.shell-outline-panel .table-of-contents > ul {
+.outline-panel .table-of-contents > ul {
   flex: 1 1 auto;
   min-height: 0;
   max-height: none;

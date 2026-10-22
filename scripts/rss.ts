@@ -9,7 +9,7 @@ import { glob } from 'tinyglobby'
 const DOMAIN = 'https://lumirelle.me'
 const AUTHOR = {
   name: 'Lumirelle',
-  email: 'shabbyacc@outlook.com',
+  email: 'lumirelle@outlook.com',
   link: DOMAIN,
 }
 const markdown = new MarkdownExit({

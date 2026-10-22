@@ -1219,34 +1219,28 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
 
   const panel = page.getByRole('dialog', { name: 'outline' })
   await expect(panel).toBeVisible()
-  await expect(control).toHaveAttribute('aria-expanded', 'true')
 
-  // Open, the control is absent rather than merely covered. The panel layer
-  // hides it from the pointer, but Tab would still walk onto it — and a control
-  // nobody can see must not be a stop on the way through the page. Playwright's
-  // role engine does not model `inert`, so the walk below is the assertion that
-  // matters; the attribute is what makes it true.
-  await expect(control).toHaveCount(1)
-  await expect(control).toHaveAttribute('inert', '')
+  // Open, the control is absent rather than merely covered: there is nothing
+  // left to tab onto, nothing to announce, and nothing left to misreport state.
+  await expect(outlineControlAnyState(page)).toHaveCount(0)
 
   // Opening moves focus into the panel…
   expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
     .toBe(true)
 
-  // …and the control is not a Tab stop on the way through it, however far the
-  // reader walks: the panel's links are the only stops in there.
-  for (let presses = 0; presses < 12; presses++) {
+  // …and Tab walks the panel instead: the sections are the only stops there.
+  for (let presses = 0; presses < 8; presses++) {
     await page.keyboard.press('Tab')
-    await expect(control).not.toBeFocused()
+    expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
+      .toBe(true)
   }
 
   await page.keyboard.press('Escape')
   await expect(panel).toHaveCount(0)
-  await expect(control).toHaveAttribute('aria-expanded', 'false')
-  // …and closing returns it to the control — which is announced and focusable
-  // again by then, so the reader's place in the tab order is restored, not lost.
+  // …and closing brings the control back, focused and reporting collapsed, so
+  // the reader's place in the tab order is restored rather than lost.
   await expect(control).toBeFocused()
-  await expect(outlineControl(page)).toHaveCount(1)
+  await expect(control).toHaveAttribute('aria-expanded', 'false')
   await expect(control).not.toHaveAttribute('inert', '')
 })
 

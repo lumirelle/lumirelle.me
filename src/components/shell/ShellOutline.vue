@@ -216,11 +216,12 @@ function closePanel(returnFocus = true): void {
   if (!returnFocus)
     return
 
-  // The control if the column is on screen, the opener if it is not. Both are
-  // focused after the patch, because the control is `inert` for as long as the
-  // panel is open and focusing an inert element is a no-op.
-  const target = reachable.value ? trigger.value : opener.value
+  // Looked up after the patch, because the control does not exist while the panel
+  // is open: it is the control when the column is on screen, and otherwise
+  // whatever opened the panel — `o` works at the top of the page, where there is
+  // no control to hand focus back to.
   void nextTick(() => {
+    const target = reachable.value ? trigger.value : opener.value
     if (target?.isConnected)
       target.focus()
   })
@@ -279,19 +280,18 @@ watch(wide, () => {
 
 <template>
   <!--
-    The control. Absent on a route with no outline, hidden at 1400 px and wider
-    where the Rail owns the job, and `inert` until the reader has scrolled — the
+    The control. Absent on a route with no outline, absent at 1400 px and wider
+    where the Rail owns the job, absent in print, and absent while the panel is
+    open — not merely covered by it. `inert` until the reader has scrolled: the
     same threshold, the same column and the same hairline box as the scroll
-    control it sits above. While the panel is open it stays in the DOM but leaves
-    the page: `inert` keeps Tab off it and takes it out of the accessible tree, so
-    the panel is the only thing there is to reach.
+    control it sits above.
   -->
   <button
-    v-if="hasOutline"
+    v-if="hasOutline && !open"
     ref="trigger"
     type="button"
     class="shell-outline-trigger shell-control shell-control--labelled shell-control--stacked"
-    :inert="reachable && !open ? undefined : true"
+    :inert="reachable ? undefined : true"
     :aria-expanded="open ? 'true' : 'false'"
     :aria-controls="OUTLINE_PANEL_ID"
     @click="openPanel"

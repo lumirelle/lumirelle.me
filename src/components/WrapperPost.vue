@@ -64,7 +64,7 @@ onMounted(() => {
   <article
     ref="content"
     :lang="frontmatter.lang"
-    :class="[frontmatter.tocAlwaysOn ? 'toc-always-on' : '', frontmatter.class]"
+    :class="[frontmatter.class]"
   >
     <slot />
   </article>

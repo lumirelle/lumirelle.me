@@ -103,7 +103,6 @@ export default defineConfig<PresetWind4Theme>({
     // Animation rules
     [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
   ],
-  safelist: ['i-ri-menu-2-fill'],
   shortcuts: [
     {
       // Thin aliases kept for existing templates: the value still comes from

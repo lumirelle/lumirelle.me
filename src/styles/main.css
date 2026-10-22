@@ -158,7 +158,7 @@ html:not(.dark) [img-dark] {
  *
  * `transform` on either page would make it a containing block for `position:
  * fixed` descendants, which is why the outline rail is adopted into `<body>` by
- * the Shell (`src/components/shell/ShellCdUp.vue`) rather than left inside the
+ * the Shell (`src/components/shell/ShellOutline.vue`) rather than left inside the
  * animated subtree. `Transition` removes its classes at the end, so nothing is
  * left behind either way.
  */

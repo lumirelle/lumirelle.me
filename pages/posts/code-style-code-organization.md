@@ -15,7 +15,7 @@ type: note
 .prose table tr {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: 2fr;
+  grid-auto-columns: 1fr;
 }
 .prose table th, .prose table td {
   overflow-x: auto;
@@ -27,7 +27,9 @@ type: note
 
 The only reason is to **make the code readable and maintainable**.
 
-As a developer, you spend far more time with code than with your girlfriend! To spend more of that time with your family, we need code to be readable and maintainable.
+As a developer, you spend far more time with code than with your girlfriend! (I mean I love here much much more than developing, she is another half of my heart!)
+
+To spend more of that time with your family, we need code to be readable and maintainable.
 
 ## How to Organize Code?
 

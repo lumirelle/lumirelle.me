@@ -1133,6 +1133,14 @@ function outlineControl(page: Page) {
 }
 
 /**
+ * The same control including the window where it is *absent*: while the panel is
+ * open it is `inert`, which drops it from the tab order and the accessible tree.
+ */
+function outlineControlAnyState(page: Page) {
+  return page.getByRole('button', { name: 'outline', exact: true, includeHidden: true })
+}
+
+/**
  * Open the outline panel on a Post, at the phone frame.
  *
  * The control shares the scroll control's threshold — it is `inert` until the
@@ -1189,7 +1197,9 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
   await page.setViewportSize(PHONE)
   await page.goto('/posts/manual-git', { waitUntil: 'load' })
 
-  const control = outlineControl(page)
+  // The whole control, though it leaves the accessible tree while the panel is
+  // open: that absence is what this test asserts.
+  const control = outlineControlAnyState(page)
   await expect(control).toHaveCount(1)
   // Absent until the reader has moved, exactly like the scroll control below it.
   await expect(control).toHaveAttribute('inert', '')
@@ -1211,6 +1221,14 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
   await expect(panel).toBeVisible()
   await expect(control).toHaveAttribute('aria-expanded', 'true')
 
+  // Open, the control is absent rather than merely covered. The panel layer
+  // hides it from the pointer, but Tab would still walk onto it — and a control
+  // nobody can see must not be a stop on the way through the page. Playwright's
+  // role engine does not model `inert`, so the walk below is the assertion that
+  // matters; the attribute is what makes it true.
+  await expect(control).toHaveCount(1)
+  await expect(control).toHaveAttribute('inert', '')
+
   // The panel opens over the column and covers the control with itself, so
   // nothing of the control is reachable where it used to sit. Polled, because
   // the panel slides the last few pixels over the control.
@@ -1226,11 +1244,20 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
   expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
     .toBe(true)
 
+  // …and the control is not a Tab stop on the way through it, however far the
+  // reader walks: the panel's links are the only stops in there.
+  for (let presses = 0; presses < 12; presses++) {
+    await page.keyboard.press('Tab')
+    await expect(control).not.toBeFocused()
+  }
+
   await page.keyboard.press('Escape')
   await expect(panel).toHaveCount(0)
   await expect(control).toHaveAttribute('aria-expanded', 'false')
-  // …and closing returns it to the control.
+  // …and closing returns it to the control — which is announced and focusable
+  // again by then, so the reader's place in the tab order is restored, not lost.
   await expect(control).toBeFocused()
+  await expect(outlineControl(page)).toHaveCount(1)
   await expect(control).not.toHaveAttribute('inert', '')
 })
 
@@ -1244,6 +1271,11 @@ test('the closed outline panel is off-canvas and out of the tab order', async ({
   const closed = page.getByRole('dialog', { name: 'outline', includeHidden: true })
   await expect(closed).toHaveCount(1)
   expect(await closed.evaluate(el => el.closest('[inert]') !== null)).toBe(true)
+
+  // The panel is the thing hidden while the panel is what is closed; the control
+  // that opens it is not — its own absence belongs to the open state only.
+  await expect(outlineControlAnyState(page)).toHaveCount(1)
+  await expect(outlineControlAnyState(page)).toHaveAttribute('aria-expanded', 'false')
 
   // Off-canvas, past the right edge, rather than removed: it keeps the layout the
   // slide and the reader's place in the list both depend on.
@@ -1300,6 +1332,34 @@ for (const scheme of ['light', 'dark'] as const) {
     const marks = await marked()
     expect(marks.length).toBeGreaterThan(5)
     expect(marks.every(mark => mark.marker === '">"')).toBe(true)
+
+    // Keyboard focus inside the panel keeps the site's one indicator: a 1 px
+    // hairline, 2 px clear of the link, in an ink the panel's surface is not.
+    // Tab lands on the first section, because that is what the reader came for.
+    await page.keyboard.press('Tab')
+    const focused = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement
+      const style = getComputedStyle(el)
+      return {
+        inPanel: Boolean(el.closest('[role="dialog"]')),
+        href: el.getAttribute('href') ?? '',
+        style: style.outlineStyle,
+        width: style.outlineWidth,
+        offset: style.outlineOffset,
+        colour: style.outlineColor,
+      }
+    })
+
+    expect(focused.inPanel).toBe(true)
+    expect(focused.href.startsWith('#')).toBe(true)
+    expect(focused.style).toBe('solid')
+    expect(focused.width).toBe('1px')
+    expect(focused.offset).toBe('2px')
+
+    // Visible in both schemes: the outline must not be the surface it sits on.
+    const [or = 0, og = 0, ob = 0] = (focused.colour.match(/[\d.]+/g) ?? []).map(Number)
+    const [sr = 0, sg = 0, sb = 0] = (painted.surface.match(/[\d.]+/g) ?? []).map(Number)
+    expect(Math.abs(or - sr) + Math.abs(og - sg) + Math.abs(ob - sb)).toBeGreaterThan(60)
   })
 }
 

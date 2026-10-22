@@ -11,7 +11,13 @@ import { defineConfig, devices } from '@playwright/test'
  * `mise run test` prepares the build, builds it, then runs this config.
  */
 
-const PORT = 4173
+/**
+ * `PLAYWRIGHT_PORT` lets a second checkout run the suite beside this one: the
+ * preview server binds a fixed port with `--strictPort`, so two concurrent runs
+ * would otherwise fight over 4173 — and `reuseExistingServer` would hand the
+ * second run the first run's build instead of failing.
+ */
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 4173)
 const baseURL = `http://127.0.0.1:${PORT}`
 
 export default defineConfig({

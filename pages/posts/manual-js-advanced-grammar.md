@@ -1,7 +1,7 @@
 ---
 title: JavaScript Advanced Grammar Manual
 date: 2025-09-28T13:48+08:00
-update: 2026-09-21T10:32+08:00
+update: 2026-10-22T11:13+08:00
 lang: en
 type: manual
 group: Web
@@ -41,7 +41,6 @@ JavaScript has [automatic semicolon insertion (ASI)](https://tc39.github.io/ecma
 // Example 1
 console.log('Hello')
 
-// [!code highlight:1]
 [1].forEach(n => console.log(n))
 
 // Example 2
@@ -49,7 +48,6 @@ console.log('Hello')
   console.log('This is an anonymous function')
 })
 
-// [!code highlight:1]
 () => {
   console.log('This is an arrow function')
 }
@@ -63,7 +61,6 @@ In this case, you will get an error, because the JavaScript engine will interpre
 // Example 1
 console.log('Hello')[1]
 
-// [!code highlight:1]
 .forEach(n => console.log(n))
 
 // Example 2
@@ -71,13 +68,14 @@ console.log('Hello')[1]
   console.log('This is an anonymous function')
 })()
 
-// [!code highlight:1]
 => {
   console.log('This is an arrow function')
 }
 ```
 
-Using variables can avoid these problems:
+Using variables can basically avoid most of these problems:
+
+<!-- eslint-skip -->
 
 ```js
 // Example 1
@@ -87,11 +85,11 @@ const arr = [1, 2, 3]
 arr.forEach(n => console.log(n))
 
 // Example 2
-function anonymousFunc() {
+(function () {
   console.log('This is an anonymous function')
-}
+})
 
-function arrowFunc() {
+const arrowFunc = () => {
   console.log('This is an arrow function')
 }
 ```
@@ -143,7 +141,7 @@ The `"use strict"` directive is a way to end these situations and let JavaScript
 
 For [**CommonJS module**](#module-system) files, you need to explicitly enable it by adding `"use strict"` to the top of a file or a function:
 
-_src/commonjs.js_
+_src/commonjs.cjs_
 
 ```js
 'use strict'
@@ -151,7 +149,7 @@ _src/commonjs.js_
 console.log('This file is in strict mode')
 ```
 
-_src/commonjs-function.js_
+_src/commonjs-function.cjs_
 
 ```js
 function foo() {
@@ -163,13 +161,13 @@ function foo() {
 
 For [**ES module**](#module-system) files, everything is in strict mode:
 
-_src/es-module.js_
+_src/es-module.mjs_
 
 ```js
 console.log('This file is in strict mode')
 ```
 
-_src/es-module-function.js_
+_src/es-module-function.mjs_
 
 ```js
 export function foo() {
@@ -351,6 +349,162 @@ $('#btn2').on('click', () => {
 ```
 
 After the user completes both forms and clicks one of the buttons... Oops! The endpoint will get the combined data for these two forms. 😇
+
+#### So Why They Are So Strange?
+
+Because JavaScript is a totally quick-made product. 🎃
+
+Look at below code:
+
+<!-- eslint-skip -->
+
+```js
+var e = 6
+function foo() {
+  var a = 1
+  let b = 2
+
+  {
+    let b = 3
+    var c = 4
+    let d = 5
+    console.log(a)
+    console.log(b)
+    console.log(d)
+  }
+
+  console.log(b)
+  console.log(c)
+  console.log(d) // ReferenceError!
+}
+foo()
+```
+
+Before running code, the JavaScript engine will create a global execution context:
+
+```txt
++--------------------------------------------------+
+| Global Execution Context:                        |
++--------------------------+-----------------------+
+| Variable Environment:    | Lexical Environment:  |
++--------------------------+-----------------------+
+| e = undefined            |                       |
+| foo = undefined          |                       |
++--------------------------+-----------------------+
+```
+
+In the execution step, after executing `function foo() { ... }`, the engine will create an isolated execution context for `foo()`, with hoisted `var a` & `var c` in the **variable environment**, and `let b` in the **lexical environment**:
+
+> [!Note]
+> JavaScript engine only create execution context for global and functions, that's why we say `var` has only global & function scope.
+
+```txt
++----------------------------------------------------+
+| Global Execution Context:                          |
++--------------------------+-------------------------+
+| Variable Environment:    | Lexical Environment:    |
++--------------------------+-------------------------+
+| e = 6                    |                         |
+| foo = function() { ... } |                         |
++--------------------------+-------------------------+
+
++----------------------------------------------------+
+| Execution Context of foo() :                       |
++--------------------------+-------------------------+
+| Variable Environment:    | Lexical Environment:    |
++--------------------------+-------------------------+
+| a = undefined            |                         |
+| c = undefined            |                         |
+| arguments = ...          | b = uninitialized (TDZ) |
++--------------------------+-------------------------+
+```
+
+After executing to the left bracket of inner block of `foo()`, you can see the value of `var a` & `let b` is assigned, `let b` lives in the top-level lexical environment in the execution context of `foo()`, and the code block creates a new isolated lexical environment:
+
+```txt
++--------------------------------------------------------+
+| Global Execution Context:                              |
++--------------------------+-----------------------------+
+| Variable Environment:    | Lexical Environment:        |
++--------------------------+-----------------------------+
+| e = 6                    |                             |
+| foo = function() { ... } |                             |
++--------------------------+-----------------------------+
+
++--------------------------------------------------------+
+| Execution Context of foo() :                           |
++--------------------------+-----------------------------+
+| Variable Environment:    | Lexical Environment:        |
++--------------------------+-----------------------------+
+| a = 1                    | +-------------------------+ |
+| c = undefined            | | b = uninitialized (TDZ) | |
+|                          | | d = uninitialized (TDZ) | |
+|                          | +-------------------------+ |
+|                          | +-------------------------+ |
+|                          | | b = 2                   | |
+|                          | +-------------------------+ |
++--------------------------+-----------------------------+
+```
+
+With isolated lexical environments other than a single variable environment, we can get block scope in JavaScript!
+
+To the end of code block:
+
+```txt
++--------------------------------------------------+
+| Global Execution Context:                        |
++--------------------------+-----------------------+
+| Variable Environment:    | Lexical Environment:  |
++--------------------------+-----------------------+
+| e = 6                    |                       |
+| foo = function() { ... } |                       |
++--------------------------+-----------------------+
+
++--------------------------------------------------+
+| Execution Context of foo() :                     |
++--------------------------+-----------------------+
+| Variable Environment:    | Lexical Environment:  |
++--------------------------+-----------------------+
+| a = 1                    | +-------------------+ |
+| c = 4                    | | b = 3             | |
+|                          | | d = 5             | |
+|                          | +-------------------+ |
+|                          | +-------------------+ |
+|                          | | b = 2             | |
+|                          | +-------------------+ |
++--------------------------+-----------------------+
+```
+
+To the next line out of code block, that lexical environment created by code block is just destroyed:
+
+```txt
++--------------------------------------------------+
+| Global Execution Context:                        |
++--------------------------+-----------------------+
+| Variable Environment:    | Lexical Environment:  |
++--------------------------+-----------------------+
+| e = 6                    |                       |
+| foo = function() { ... } |                       |
++--------------------------+-----------------------+
+
++--------------------------------------------------+
+| Execution Context of foo() :                     |
++--------------------------+-----------------------+
+| Variable Environment:    | Lexical Environment:  |
++--------------------------+-----------------------+
+| a = 1                    | +-------------------+ |
+| c = 4                    | | b = 2             | |
+|                          | +-------------------+ |
++--------------------------+-----------------------+
+```
+
+Now you know the process, what happens when you try to access variables in different places?
+
+The answer is: each time you try to access variables `abc`, JavaScript engine will try to find them from the nearest execution context.
+
+In the nearest execution context, the engine will try to find them from the nearest lexical environment to the farthest, finally the variable environment.
+
+If not found, it will turn to the further execution context, and do what it done before in the nearest execution context: lexical environment the nearest to the farthest, finally variable environment... Until to the global execution context.
 
 ### Other General Code Styles
 
@@ -665,7 +819,7 @@ console.log(bag.apple)
  */
 ```
 
-This is equivalent to, but has better readability than:
+This is equivalent to (and in one step):
 
 ```js
 const fruit = prompt('Which fruit to buy?', 'apple')
@@ -746,7 +900,7 @@ These two internal method is implemented by the JavaScript engine, we cannot acc
 ;[[Set]](obj, propName, value, receiver)
 ```
 
-The key difference between the two notations is how they pass the `propName` argument to the internal methods:
+The key difference between the dot notation and bracket notation is how they pass the `propName` argument to the internal methods:
 
 - Dot notation:
 
@@ -792,9 +946,9 @@ The key difference between the two notations is how they pass the `propName` arg
 
 #### Accessor Property
 
-Object has two kinds of properties: **data properties** and **accessor properties**.
+Object has two kinds of properties: **data properties (include methods)** and **accessor properties**.
 
-Data properties just store different types of data, what we have seen before is data properties.
+Data properties just store different types of data, what we have seen before are data properties.
 
 Accessor properties are essentially functions that execute on getting and setting a value, look like the custom version of internal `[[Get]]` and `[[Set]]` methods we can control ourselves:
 
@@ -893,7 +1047,7 @@ console.log(obj2.a) // -> 1, not affected
 console.log(obj2.b.c) // -> 3, affected because of shallow clone
 ```
 
-For deep cloning objects **without functions**, you can use built-in global function `structuredClone()` (ECMAScript 2021) to achieve this:
+For deep cloning objects **without methods**, you can use built-in global function `structuredClone()` (ECMAScript 2021) to achieve this:
 
 ```js
 const obj1 = { a: 1, b: { c: 2 } }
@@ -903,7 +1057,7 @@ console.log(obj1.b.c) // -> 2
 console.log(obj2.b.c) // -> 3
 ```
 
-For objects **with functions** or JavaScript runtime does not support ECMAScript 2021, you can use a third-party library like `es-toolkit` to achieve this:
+For objects **with methods** or your JavaScript engine does not support ECMAScript 2021, you can use a third-party library like `es-toolkit` to achieve this:
 
 ```js
 import { cloneDeep } from 'es-toolkit/object'
@@ -919,7 +1073,7 @@ console.log(obj2.b.c) // -> 3
 
 The object-to-primitive conversion is called automatically by many built-in functions and operators that expect a primitive as a value.
 
-There are 3 types (hints) of it, as described in the [specification](https://tc39.github.io/ecma262/#sec-toprimitive):
+There are 3 types (hints) of it with different target primitive type, as described in the [specification](https://tc39.github.io/ecma262/#sec-toprimitive):
 
 - "string" (for `console.log` and other operations that need a string)
 - "number" (for math operators like `+`, `-`, `*`, `/`, etc)
@@ -1028,8 +1182,12 @@ We can create an array using array literal syntax or the `Array()` constructor f
 
 ```js
 const arr1 = [1, 2, 3] // Array literal
-const arr2 = [1, 2, 3] // Array constructor function
+const arr2 = new Array(1, 2, 3) // Array constructor function
+const arr3 = Array(1, 2, 3) // Array constructor function too, without `new`
 ```
+
+> [!Note]
+> Pass single element to array constructor does not create an array with that element, but an array with that capacity. See [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Array#syntax) for more details.
 
 ### Function
 
@@ -1038,6 +1196,8 @@ Functions are code snippets that can be called by other code or itself, or varia
 There are two kinds of functions: **function declarations** and **function expressions**.
 
 Function declarations is the general way to create function which will be hoisted, while function expressions are used to share function as values, so we can assign them to variables, pass them as arguments to other functions, or return them from other functions:
+
+<!-- eslint-skip -->
 
 ```js
 // Function declaration
@@ -1054,10 +1214,10 @@ function fn(args) {
 }
 
 // Function expression with variable assignment
-function fn1(args) {
+const fn1 = function (args) {
   /* function body */
 }
-function fn2(args) {
+const fn2 = (args) => {
   /* function body */
 }
 ```
@@ -1075,14 +1235,34 @@ function fn(a, b) {
 }
 ```
 
-We shouldn't depend on this behavior, as it will make the code less readable.
+Some times, this behavior can be used to hide implement details:
+
+```js
+export function Minesweeper(level) {
+  const map = createMap(level)
+  const context = createContext(map)
+  const game = init(context)
+  return game
+}
+function createMap() {
+  // ...
+}
+function createContext() {
+  // ...
+}
+function init(map) {
+  // ...
+}
+```
 
 #### Function Expression
 
 A function expression is a way to define a function as a value. It's similar to a function declaration, but it's not hoisted.
 
+<!-- eslint-skip -->
+
 ```js
-function func(a, b) {
+const func = function (a, b) {
   return a + b
 }
 console.log(func(1, 2)) // -> 3
@@ -1109,8 +1289,10 @@ A named function expression is a function expression that has a name. The name i
 
 So why do we need it? For instance, when we want to create a recursive function expression:
 
+<!-- eslint-skip -->
+
 ```js
-function doFact(n) {
+const doFact = function fact (n) {
   if (n <= 1)
     return 1
   return n * fact(n - 1) // Use `fact` to call itself
@@ -1145,7 +1327,7 @@ console.log(func(1, 2)) // -> 3
 
 Arrow functions are quite different from regular functions and function expressions: arrow functions have no [`this`](#this), `arguments`, `super`, or `new.target`; `this` is always bound to the outer lexical environment where the arrow function was created.
 
-The most common use case of arrow functions is avoiding the change of `this`, especially in callbacks:
+The most common use case of arrow functions is **avoiding the change of `this`**, especially in callbacks:
 
 ```js
 const obj = {
@@ -1536,7 +1718,7 @@ This is helpful when you want to sort strings in a specific language.
 For [data properties](#accessor-property), besides a value, they have three special attributes (so-called "flags"):
 
 - <details>
-  <summary>`writable` – if `true`, the value can be changed, otherwise it’s read-only.</summary>
+  <summary><code>writable</code> – if <code>true</code>, the value can be changed, otherwise it’s read-only.</summary>
 
   `writable` is `true`:
 
@@ -1563,9 +1745,7 @@ For [data properties](#accessor-property), besides a value, they have three spec
   </details>
 
 - <details>
-  <summary>
-  `enumerable` – if `true`, the property shows up during enumeration of the properties of the object, otherwise it’s hidden.
-  </summary>
+  <summary><code>enumerable</code> – if <code>true</code>, the property shows up during enumeration of the properties of the object, otherwise it’s hidden.</summary>
 
   `enumerable` is `true`:
 
@@ -1594,9 +1774,7 @@ For [data properties](#accessor-property), besides a value, they have three spec
   </details>
 
 - <details>
-  <summary>
-  `configurable` – if `true`, the property can be deleted and these attributes can be modified, otherwise not.
-  </summary>
+  <summary><code>configurable</code> – if <code>true</code>, the property can be deleted and these attributes can be modified, otherwise not.</summary>
 
   `configurable` is `true`:
 
@@ -2123,6 +2301,9 @@ Closure is a function that remembers its outer variables (called **outer lexical
 
 In JavaScript, every function has a hidden property `[[Environment]]`, which is a reference to the lexical environment where the function was created (there is only one exception, it uses global lexical environment which is to be covered in [outer lexical environment of `new Function` syntax](#outer-lexical-environment-of-new-function-syntax)), so we can say that all functions are closures in JavaScript.
 
+> [!Note]
+> That's why things happen like what we mentioned [before (So Why They Are So Strange)](#so-why-they-are-so-strange) when we try to access a variable in functions.
+
 See https://javascript.info/closure for the theory and implementation details of closure in JavaScript.
 
 #### Garbage Collection with Closure
@@ -2154,7 +2335,7 @@ This is the mainly usecase of closure: **To keep the outer variables alive after
 > g()
 > ```
 >
-> As you could see, there is no such variable! In theory, it should be accessible, but the engine optimized it out.
+> As you could see, there is no such variable (You're just scared! XD)! In theory, it should be accessible, but the engine optimized it out.
 
 #### `new Function` Syntax
 
@@ -2183,7 +2364,7 @@ The last argument of `new Function` is the function body, and the previous argum
 
 #### Outer Lexical Environment of `new Function` Syntax
 
-Usually, a function remembers the lexical environment where it was created. But when a function is created with `new Function`, it always uses the global lexical environment as `[[Environment]]`. So it can’t access outer variables, only global ones.
+Usually, a function remembers the lexical environment where it was created. But when a function is created with `new Function`, it always uses the global lexical environment (lexical environment of global execution context) as `[[Environment]]`. So it can’t access outer variables, only global ones.
 
 What if it could access outer variables?
 
@@ -2787,26 +2968,7 @@ To solve the problem, we need another property on each instance method to track 
 
 > [!Note]
 >
-> JavaScript only adds `[[HomeObject]]` for methods, not for function properties, so we can only use `super` in methods.
->
-> <!-- eslint-skip -->
->
-> ```js
-> const animal = {
->   eat: function() { // This is a function property, not a method
->     // ...
->   }
-> };
->
-> const rabbit = {
->   __proto__: animal,
->   eat: function() {
->     super.eat()
->   }
-> };
->
-> rabbit.eat()  // Error calling super (because there's no [[HomeObject]])
-> ```
+> JavaScript only adds `[[HomeObject]]` for methods (function properties).
 
 By using `super`, our code works correctly again:
 
@@ -3248,6 +3410,24 @@ The essential parts are:
 1. We should call `super(message)` in the constructor to pass the error message to the parent `Error` class.
 2. We use `this.constructor.name` to set the `name` property of the error, so that it reflects the actual class name. (Of course, you should not replace the default `prototype` property of the class, we mentioned this [before](#prototype-property-of-a-constructor-function)).
 3. We can change the constructor to accept any parameters we need and generate the message inside.
+
+### Everything Is Throwable
+
+Yes, everything is Throwable in JavaScript. That's means you can just `throw` an object, even a primitive value, instead of an instance of `Error`:
+
+```js
+const userInput = prompt('Please enter 1~9:')
+const convertedUserInput = Number(userInput)
+if (Number.isNaN(convertedUserInput)) {
+  throw { code: 10086, complain: 'Are you an idiot?' }
+}
+if (convertedUserInput < 1 || convertedUserInput > 9) {
+  throw -1
+}
+// ...
+```
+
+This is more like a trick, but, used in quit a lot of places. For example, `<Suspense>` in react.
 
 ## Promises, Async/Await
 

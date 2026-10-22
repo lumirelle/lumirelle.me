@@ -767,8 +767,9 @@ test('the outline rail lists h4 sections as subdivisions', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
   await page.goto('/posts/manual-computer-network', { waitUntil: 'load' })
 
-  // h4 is a real section level in the Manuals, so the rail carries it.
-  const deep = page.locator('.table-of-contents a[href="#what-is-tls-ssl"]')
+  // h4 is a real section level in the Manuals, so the rail carries it. (`#### TLS/SSL`
+  // in the Manual; the heading was renamed after this test was written.)
+  const deep = page.locator('.table-of-contents a[href="#tls-ssl"]')
   await expect(deep).toBeVisible()
 
   // Smaller than the level above it, so a subdivision never reads as a peer.
@@ -776,7 +777,7 @@ test('the outline rail lists h4 sections as subdivisions', async ({ page }) => {
     const rail = document.querySelector('.table-of-contents')!
     const size = (href: string) =>
       Number.parseFloat(getComputedStyle(rail.querySelector(`a[href="${href}"]`)!).fontSize)
-    return { h3: size('#session-layer'), h4: size('#what-is-tls-ssl') }
+    return { h3: size('#session-layer'), h4: size('#tls-ssl') }
   })
   expect(sizes.h4).toBeLessThan(sizes.h3)
 

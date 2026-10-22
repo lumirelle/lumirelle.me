@@ -171,6 +171,14 @@ function fileHistory(): History | undefined {
   return history
 }
 
+/** What history knows of one file, keyed the way `git log --name-only` prints it. */
+function historyOf(file: string): FileHistory | undefined {
+  const known = fileHistory()
+  if (!known)
+    return undefined
+  return known.byFile.get(relative(known.root, file).split('\\').join('/'))
+}
+
 function readHistory(): History | undefined {
   try {
     const root = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: 'utf8' }).trim()
@@ -218,14 +226,36 @@ function readHistory(): History | undefined {
 function derivedUpdate(file: string, date: unknown): string | undefined {
   if (typeof date !== 'string' && !(date instanceof Date))
     return undefined
-  const known = fileHistory()
-  if (!known)
-    return undefined
-  const entry = known.byFile.get(relative(known.root, file).split('\\').join('/'))
+  const entry = historyOf(file)
   if (!entry)
     return undefined
   const offset = ISO_OFFSET_REGEX.exec(entry.lastCommit)?.[1] ?? '+00:00'
   return dayInOffset(entry.lastCommit, offset) === dayInOffset(date, offset) ? undefined : entry.lastCommit
+}
+
+/**
+ * Warn, never fail, when a Post is published after the commit that introduced it.
+ *
+ * That date is not stale, it is impossible: nothing exists before the commit that
+ * added it, so the value is a typo. A warning surfaces it without making the site
+ * depend on history — a tree without git, or a Post never committed, simply has
+ * nothing to compare. The check reuses the walk the edit dates already took: one
+ * pass over history per bundle, however many questions are asked of it.
+ */
+function warnOnImpossibleDate(file: string, date: unknown): void {
+  if (typeof date !== 'string' && !(date instanceof Date))
+    return
+  const entry = historyOf(file)
+  if (!entry)
+    return
+  const offset = ISO_OFFSET_REGEX.exec(entry.firstCommit)?.[1] ?? '+00:00'
+  const published = dayInOffset(date, offset)
+  const first = dayInOffset(entry.firstCommit, offset)
+  if (published > first) {
+    console.warn(
+      `[history] ${basename(file, '.md')}: publication date ${published} is later than its first commit (${first})`,
+    )
+  }
 }
 
 export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] {
@@ -378,6 +408,7 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
           frontmatter.update = update
         else
           delete frontmatter.update
+        warnOnImpossibleDate(id, frontmatter.date)
       }
       const head = defaults(frontmatter, options)
       return { head, frontmatter }

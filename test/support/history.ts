@@ -50,3 +50,20 @@ export function lastCommitOf(file: string): string | undefined {
   const date = git(['log', '-1', '--no-renames', '--format=%aI', '--', file])
   return date === '' ? undefined : date
 }
+
+/**
+ * Author date of the commit that introduced `file`, in the offset it carries.
+ *
+ * A Post may be *older* than this — a file that was rewritten or re-added enters
+ * history late, and the authored date remembers what history lost. It may never
+ * be *newer*: nothing is published before the commit that introduced it.
+ *
+ * `undefined` when history has never seen the file, where nothing is impossible.
+ */
+export function firstCommitOf(file: string): string | undefined {
+  // Oldest first, then the first line: `--reverse` and `-1` do not compose, and
+  // a Post's file history is a handful of commits either way.
+  const date = git(['log', '--no-renames', '--reverse', '--format=%aI', '--', file])
+    .split('\n')[0]
+  return date === undefined || date === '' ? undefined : date
+}

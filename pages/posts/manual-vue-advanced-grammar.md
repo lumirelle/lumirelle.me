@@ -8,6 +8,21 @@ group: Web
 order: 6
 ---
 
+<style>
+.prose table thead, .prose table tbody {
+  display: block;
+}
+.prose table tr {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+}
+.prose table th, .prose table td {
+  overflow-x: auto;
+}
+</style>
+
 [[toc]]
 
 > [!Note]
@@ -29,7 +44,7 @@ The key features of Vue.js include:
 - Declarative rendering: Vue.js uses its own template grammar to build component content that allows you to declaratively render data to the DOM.
 - Reactivity system: Vue.js has a powerful reactivity system that automatically updates the DOM when the underlying data changes.
 - Ecosystem: Vue.js has a rich ecosystem of libraries and tools that can help you build applications more efficiently.
-- Performance: Vue.js uses a virtual DOM and optimized rendering algorithms to ensure high performance. In the future, Vue.js will also support "Vapor Mode" for static content to further improve performance.
+- Performance: Vue.js uses a virtual DOM and optimized rendering algorithms to ensure high performance. In the future, Vue.js will also support "Vapor Mode" for static content to further improve performance. See [JS Framework Benchmark](https://krausest.github.io/js-framework-benchmark/current.html) for more details.
 - ...
 
 > [!Note]
@@ -205,29 +220,31 @@ In the real applications, components are usually structured in a tree-like way, 
 
 ### Defining a Component
 
-You may already know how to define a basic **JavaScript object Vue component** in the browser environment:
+You may already know how to define a basic **JavaScript object Vue component** in the browser environment, we call this **JavaScript Compoment Form**:
 
 ```js
-const { defineComponent } = Vue
+const MyComponent = (() => {
+  const { defineComponent } = Vue
 
-const MyComponent = defineComponent({
-  setup() {
+  return defineComponent({
+    setup() {
+      // ...
+    },
+    template: `
+      <div>
+        <!-- ... -->
+      </div>
+    `,
     // ...
-  },
-  template: `
-    <div>
-      <!-- ... -->
-    </div>
-  `,
-  // ...
-})
+  })
+})()
 ```
 
 `defineComponent()` is a helper function provided by Vue to define a component; it only provides type support and returns the same object we passed in.
 
-But when we are using build steps (like _Vite_, _Webpack_, etc. with _Vue SFC Compiler_), the most common way to define a Vue component is defining it in a single file with `.vue` extension, called **Single File Component (SFC)**.
+But when we are using build steps (like _Vite_, _Webpack_, etc. with _Vue SFC Compiler_), the most common way to define a Vue component is defining it in a single file with `.vue` extension, called **Single File Component (SFC)** or SFC Form.
 
-There are two different syntaxes to define a Vue SFC: **general SFC syntax** and **`<script setup>` SFC syntax**. They look more different than a JavaScript object component, but the underlying logic is the same — they will be compiled to the corresponding JavaScript object component by the _Vue SFC Compiler_.
+There are also two different grammars to define a Vue SFC: **general SFC grammar** and **`<script setup>` SFC grammar**. They look more different than a JavaScript component, but the underlying logic is the same — they will be compiled to the corresponding JavaScript component by the _Vue SFC Compiler_.
 
 > [!Note]
 >
@@ -235,9 +252,9 @@ There are two different syntaxes to define a Vue SFC: **general SFC syntax** and
 >
 > What's more, the real compiled output is more complex than this; for example, the `template` option will be further compiled to a render function, etc. But anyway, to show the core principles of SFC, this is enough. To learn about the real compiled output, you can try [Vue SFC Playground](https://sfc.vuejs.org/) and choose the "JS" output tab.
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
-The general syntax looks similar to JavaScript object component:
+The general grammar looks similar to the JavaScript component:
 
 _src/ComponentSFC.vue_
 
@@ -273,7 +290,7 @@ export default {
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -311,9 +328,9 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
-While the `<script setup>` syntax looks like syntactic sugar for some convenience:
+And the `<script setup>` grammar looks like a syntactic sugar for some convenience:
 
 _src/ComponentSFCScriptSetup.vue_
 
@@ -341,7 +358,7 @@ function increment() {
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -386,13 +403,13 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-You can see that a JavaScript object component and an SFC component are equivalent; they just have different syntax.
+You can see that a JavaScript component and the two different grammars of an SFC component are finally equivalent; they just written in different way.
 
 > [!Note]
 >
-> For simplicity, we will use SFC syntax in the following examples, unless otherwise specified.
+> For simplicity, we will use SFC form in the following examples, unless otherwise specified.
 >
-> In particular, the general SFC syntax has few differences from a JavaScript object component, so we only talk about the general SFC syntax in the following chapters, and you should know a JavaScript object component is also applicable in the same way.
+> In particular, the general grammar of SFC has few differences from a JavaScript component, so we use the general grammar of SFC to stands for both itself and the JavaScript component in the following chapters.
 
 ### Composition API vs. Options API
 
@@ -400,9 +417,9 @@ Until now, we have always been using the Vue **Composition API** to define compo
 
 There is still another API which is widely used in Vue 2.x — the **Options API**.
 
-For better comparison, we use JavaScript object component to show the differences between these two APIs:
+For better comparison, we use JavaScript component to show the differences between these two APIs (based on the standalone JavaScript runtime, so we can get rid of the IIFE wrapper! XD):
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentCompositionAPI.js_
 
@@ -443,7 +460,7 @@ export default defineComponent({
 })
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _src/ComponentOptionsAPI.js_
 
@@ -497,7 +514,7 @@ In a word:
 
 > [!Note]
 >
-> As you can see, the `<script setup>` syntax is only available in the Composition API as it's built on top of the `setup()` function.
+> As you can see, the `<script setup>` grammar is only available in the Composition API as it's built on top of the `setup()` function.
 
 ### Register a Component Globally
 
@@ -515,92 +532,34 @@ app.mount('#app')
 
 After that, any component in that Vue application can use `OtherComponent` without any other extra steps.
 
+Of course, in order to get better performance, it's highly recommended to use [async components](#async-components) instead of synchronous components while global registering:
+
+```js
+const app = createApp(rootComponent)
+
+// [!code highlight:2]
+// Register the other component globally
+app.component('OtherComponent', defineAsyncComponent(() => import('./OtherComponent.js')))
+
+app.mount('#app')
+```
+
 > [!Note]
 >
-> Private components that are not intended to be reused globally are not recommended to be registered globally. The only reason is to avoid manually maintaining the large global registration list with too many one-time-use components, this costs more and saves less.
+> Private components that are not intended to be reused globally are not recommended to be registered globally, there are two reasons:
 >
-> But when you are using frameworks like Nuxt.js, all components in the `components/` directory are automatically registered globally. In this case, you can still use auto-importing features, and use folder structure to organize both public and private components.
+> - Avoid to manually maintain a large global registration list with too many one-time-use components, this costs more and saves less.
+> - A large number of global components list will cause a large size of initial JavaScript file. It was obvious.
 >
-> For example, you can create a `module-xxx/` sub-directory to store private components for "module xxx", when you use them, you can simply add the corresponding prefix to their names.
->
-> Some people like to keep these private components in a sub-directory named `components/` inside each module directory, like `pages/home/components/`. I don't like this approach; it makes the project structure complex and hard to navigate. A simple example in this case is:
->
-> ```txt
-> src/
-> ├── pages/
-> │   ├── home/
-> │   │   ├── components/
-> │   │   │   ├── Header.vue
-> │   │   │
-> │   │   ├── index.vue
-> │   │
-> │   ├── dashboard/
-> │   │   ├── components/
-> │   │   │   ├── Header.vue
-> │   │   │
-> │   │   ├── profile/
-> │   │   │   ├── components/
-> │   │   │   │   ├── Header.vue
-> │   │   │   │
-> │   │   │   ├── index.vue
-> │   │   │
-> │   │   ├── settings/
-> │   │   │   ├── components/
-> │   │   │   │   ├── Header.vue
-> │   │   │   │
-> │   │   │   ├── index.vue
-> │   │   │
-> │   │   ├── index.vue
-> │   │
-> │   ├── about/
-> │   │   ├── components/
-> │   │   │   ├── Header.vue
-> │   │   │
-> │   │   ├── index.vue
-> ```
->
-> And a better way is:
->
-> ```txt
-> src/
-> ├── components/
-> │   ├── home/
-> │   │   ├── Header.vue
-> │   │
-> │   ├── dashboard/
-> │   │   ├── profile/
-> │   │   │   ├── Header.vue
-> │   │   │
-> │   │   ├── settings/
-> │   │   │   ├── Header.vue
-> │   │   │
-> │   │   ├── Header.vue
-> │   │
-> │   ├── about/
-> │       ├── Header.vue
-> │
-> ├── pages/
-> │   ├── home/
-> │   │   ├── index.vue
-> │   │
-> │   ├── dashboard/
-> │   │   ├── profile/
-> │   │   │   ├── index.vue
-> │   │   │
-> │   │   ├── settings/
-> │   │       ├── index.vue
-> │   │
-> │   ├── about/
-> │   │   ├── index.vue
-> ```
+> Auto import is quit different than globally registering, for example, when you are using some meta frameworks like Nuxt.js, all components under the `components/` folder are automatically imported. What the frameworks do is inject an import statement each time the component is used, not globally registering.
 
 ### Using a Component Locally
 
 Instead of registering a component globally, we can also use it locally in another component.
 
-In composition API general SFC syntax, the way to use components locally is importing them and returning them from the `setup` function, then we correctly reference them in the `<template>` block (Yes, the same as JavaScript object component):
+In composition API with general grammar of SFC, the way to use components locally is importing them and returning them from the `setup` function, then we correctly reference them in the `<template>` block (Yes, the same as JavaScript object component):
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ParentComponentWithCompositionAPI.vue_
 
@@ -633,7 +592,7 @@ export default {
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -664,9 +623,9 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-Because **everything imported inside `<script setup>` will be returned automatically**, when you are using `<script setup>` SFC syntax, you don't need to manually return the imported components from the `setup()` function:
+Because **everything imported inside `<script setup>` will be returned automatically**, when you are using `<script setup>` grammar of SFC, you don't need to manually return the imported components from the `setup()` function:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ParentComponentWithScriptSetup.vue_
 
@@ -689,7 +648,7 @@ import ChildComponentVue from './ChildComponent.vue'
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -723,7 +682,7 @@ export default __sfc__
 
 For option API components, we use the `components` option to register local components:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ParentComponentWithOptionsAPI.vue_
 
@@ -750,7 +709,7 @@ export default {
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -791,11 +750,11 @@ export default __sfc__
 
 ### Five Elements of a Component
 
-Let's now look at the details of defining a Vue component.
+Let's now look at the details of a Vue component.
 
 There are five main elements in a Vue component:
 
-- Props: The input data passed from parent components to child components.
+- **Props**: The input data passed from parent components to child components.
 
   <!-- eslint-skip -->
 
@@ -811,7 +770,7 @@ There are five main elements in a Vue component:
   </script>
   ```
 
-- Events: The custom events emitted from child components to parent components.
+- **Events**: The custom events emitted from child components to parent components.
 
   <!-- eslint-skip -->
 
@@ -829,7 +788,7 @@ There are five main elements in a Vue component:
   </script>
   ```
 
-- Exposed public API: The public API of the component, which can be accessed by parent components via component instance/template refs.
+- **Exposed public API**: The public API of the component, which can be accessed by parent components via component instance/template refs.
 
   <!-- eslint-skip -->
 
@@ -848,7 +807,7 @@ There are five main elements in a Vue component:
   </script>
   ```
 
-- Data & State: The internal reactive data and state of the component, with related methods to manipulate them.
+- **Data & State**: The internal reactive data and state of the component, with related methods to manipulate them.
 
   <!-- eslint-skip -->
 
@@ -863,7 +822,7 @@ There are five main elements in a Vue component:
   </script>
   ```
 
-- Template: The HTML-like structure that defines the component's UI.
+- **Template**: The HTML-like structure that defines the component's UI.
 
   <!-- eslint-skip -->
 
@@ -884,24 +843,24 @@ There are five main elements in a Vue component:
 
 These five elements work together to define the behavior and appearance of a Vue component.
 
-In this chapter, we will focus on the first three elements: Props, Events, and Exposed public API.
+In the rest part of this chapter, we will focus on the first three elements: Props, Events, and Exposed public API.
 
-Data & state management will be covered in the [reactivity system](#reactivity-system) chapter, and template syntax will be covered in the [template grammar](#template-grammar) chapter.
+Data & state management will be covered in the [reactivity system](#reactivity-system) chapter, and template grammar will be covered in the [template grammar](#template-grammar) chapter.
 
-### Two Ways to Define Props
+### Two Forms to Define Props
 
 We can define props by the `props` option of Vue components whatever composition API or options API:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
-_src/ComponentWithPropsOption.vue_
+_src/ComponentCompositionAPI.vue_
 
 <!-- eslint-skip -->
 
 ```vue
 <script>
 export default {
-  // [!code highlight:9]
+  // [!code highlight:12]
   props: {
     title: {
       // required
@@ -914,17 +873,20 @@ export default {
       default: 0,
     },
   },
+  setup() {
+    // ...
+  }
 }
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
 ```js
 const __sfc__ = {
-  // [!code highlight:9]
+  // [!code highlight:12]
   props: {
     title: {
       // required
@@ -937,15 +899,79 @@ const __sfc__ = {
       default: 0,
     },
   },
+  setup() {
+    // ...
+  }
+}
+export default __sfc__
+```
+
+</td></tr><tr><td valign="top">
+
+_src/ComponentOptionsAPI.vue_
+
+<!-- eslint-skip -->
+
+```vue
+<script>
+export default {
+  // [!code highlight:12]
+  props: {
+    title: {
+      // required
+      type: String,
+      required: true,
+    },
+    count: {
+      // optional
+      type: Number,
+      default: 0,
+    },
+  },
+  data() {
+    // ...
+  },
+  methods: {
+    // ...
+  }
+}
+</script>
+```
+
+</td><td valign="top">
+
+_Corresponding Compiler Output_
+
+```js
+const __sfc__ = {
+  // [!code highlight:12]
+  props: {
+    title: {
+      // required
+      type: String,
+      required: true,
+    },
+    count: {
+      // optional
+      type: Number,
+      default: 0,
+    },
+  },
+  data() {
+    // ...
+  },
+  methods: {
+    // ...
+  }
 }
 export default __sfc__
 ```
 
 </td></tr></tbody></table>
 
-But when we using `<script setup>` SFC syntax, we cannot access the options of Vue components at all! How to deal with this case? Fortunately, Vue provides a macro helper called `defineProps()`:
+But when we using `<script setup>` grammar of SFC, we cannot access the options of Vue components at all! How to deal with this case? Fortunately, Vue provides a macro helper called `defineProps()`:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentWithPropsMacro.vue_
 
@@ -953,7 +979,7 @@ _src/ComponentWithPropsMacro.vue_
 
 ```vue
 <script setup>
-// [!code highlight:9]
+// [!code highlight:12]
 defineProps({
   title: {
     // required
@@ -969,13 +995,13 @@ defineProps({
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
 ```js
 const __sfc__ = {
-  // [!code highlight:9]
+  // [!code highlight:12]
   props: {
     title: {
       // required
@@ -994,15 +1020,15 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-You can see that, **macros** in `<script setup>` SFC syntax are just a workaround to configure the corresponding options of Vue components, they will be compiled to the equivalent options automatically. For example, there are also other macros like `defineEmits`, which is corresponding to the `emits` option of Vue components...
+You can see that, **macros** in `<script setup>` grammar of SFC are just a workaround to configure the corresponding options of Vue components, they will be compiled to the equivalent options automatically. For example, there are also other macros like `defineEmits`, which is corresponding to the `emits` option of Vue components...
 
-These two example will both create two props called `title` and `count`. `title` is an optional string prop, and `count` is an optional number prop with a default value of `0`. Vue will [validate the types of these props in runtime (development mode)](#props-and-emits-with-validation).
+These three example will both create two props called `title` and `count`. `title` is an optional string prop, and `count` is an optional number prop with a default value of `0`. Vue will [validate the types of these props in runtime (development mode)](#props-and-emits-with-validation).
 
-They are the same way in different syntax: **They both define props by values.**
+They are the same form in different grammars: **They both define props by values.**
 
 As Vue has excellent TypeScript support, there is another and better way to define props -- using TypeScript types. Vue will compile them to the equivalent `props` option automatically:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentWithTypedPropsMacro.vue_
 
@@ -1022,7 +1048,7 @@ const {
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -1048,14 +1074,14 @@ export default __sfc__
 
 </td></tr></tbody></table>
 
-This way is more concise and meaningful: use right tools to do right things, use TypeScript to do type checking!
+This form is more concise and meaningful: use right tools to do right things, use TypeScript to do type checking!
 
 Something you should notice is that there are some limitations:
 
-- You can only use one way to define props in one component, either using values or using TypeScript types.
+- You can only use one form to define props in one component, either using values or using TypeScript types.
 - Before Vue 3.3, the only way to assign default values to the props defined by TypeScript types is using another macro helper called `withDefaults()`:
 
-  <table><tbody><tr><td width="500px" valign="top">
+  <table><tbody><tr><td valign="top">
 
   _src/ComponentV3.3-.vue_
 
@@ -1063,7 +1089,7 @@ Something you should notice is that there are some limitations:
 
   ```vue
   <script setup lang="ts">
-  // [!code highlight:11]
+  // [!code highlight:13]
   interface Props {
     // #0
     title: string
@@ -1080,13 +1106,13 @@ Something you should notice is that there are some limitations:
   </script>
   ```
 
-  </td><td width="500px" valign="top">
+  </td><td valign="top">
 
   _Corresponding Compiler Output_
 
   ```js
   const __sfc__ = {
-    // [!code highlight:19]
+    // [!code highlight:20]
     props: {
       // #0
       title: {
@@ -1117,7 +1143,7 @@ Something you should notice is that there are some limitations:
 
   After Vue 3.3, you can use destructuring assignment with default values, this is actually a grammar sugar, so you don't need to worry about [losing the reactivity of these props](#track-trigger-during-the-access-of-object-properties):
 
-  <table><tbody><tr><td width="500px" valign="top">
+  <table><tbody><tr><td valign="top">
 
   _src/ComponentV3.3+.vue_
 
@@ -1125,7 +1151,7 @@ Something you should notice is that there are some limitations:
 
   ```vue
   <script setup lang="ts">
-  // [!code highlight:8]
+  // [!code highlight:10]
   interface Props {
     // #0
     title: string
@@ -1139,13 +1165,13 @@ Something you should notice is that there are some limitations:
   </script>
   ```
 
-  </td><td width="500px" valign="top">
+  </td><td valign="top">
 
   _Corresponding Compiler Output_
 
   ```js
   const __sfc__ = {
-    // [!code highlight:14]
+    // [!code highlight:16]
     props: {
       // #0
       title: {
@@ -1172,11 +1198,11 @@ Something you should notice is that there are some limitations:
 
   This has better readability, fit well with the way we assign default values in JavaScript and generate less boilerplate code.
 
-### Two Ways to Define Emits (Events)
+### Two Forms to Define Emits (Events)
 
 Emits are similar to props, it can also be defined by values or by TypeScript types.
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentWithEmitsOption.vue_
 
@@ -1221,7 +1247,7 @@ defineEmits<Emits>()
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -1239,7 +1265,7 @@ export default __sfc__
 
 The validation of props and emits are a kind of documentations for that component, it's important for users to understand how to use that component correctly.
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 When we define them by values, we can provide more detailed validation rules for props and emits, and they will take effect **in runtime (development mode)**, for example:
 
@@ -1319,7 +1345,7 @@ defineEmits<Emits>()
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -1424,7 +1450,7 @@ const __sfc__ = {
 
 Props is a way to pass data from parent components to child components, but it's single-directional. When we need to pass data from child components to parent components, we can use with custom events:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentWithModel.vue_
 
@@ -1481,7 +1507,7 @@ const modelValue = useModel(props, 'modelValue')
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -1552,7 +1578,7 @@ const __sfc__ = {
 
 From Vue 3.4, it's recommended to use `defineModel()` macro for better readability and less boilerplate code:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentWithModel.vue_
 
@@ -1566,7 +1592,7 @@ const modelValue = defineModel<string>({ required: true })
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -1601,7 +1627,7 @@ As you can see, so-called "v-model" binding is just a syntax sugar for passing a
 
 > [!Note]
 >
-> For general SFC syntax, you can refers to the _Corresponding Compiler Output_ above, they are similar.
+> For general grammar of SFC, you can refers to the _Corresponding Compiler Output_ above, they are similar.
 
 > [!Caution]
 >
@@ -1613,7 +1639,7 @@ Sometimes, we may need to expose some methods or properties to a child component
 
 We can use `defineExpose()` macro to define the public API of a component:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/ComponentWithExpose.vue_
 
@@ -1634,7 +1660,7 @@ defineExpose({
 </script>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Corresponding Compiler Output_
 
@@ -1697,7 +1723,7 @@ function handleClick() {
 
 > [!Note]
 >
-> For composition API general SFC syntax, you can refers to the _Corresponding Compiler Output_ section above, they are similar.
+> For composition API with general grammar of SFC, you can refers to the _Corresponding Compiler Output_ section above, they are similar.
 >
 > For options API, everything is exposed by default.
 
@@ -1845,9 +1871,47 @@ const tabs = [ComponentA, ComponentB, ComponentC]
 
 ### Async Components
 
-<!-- TODO(Lumirelle): -->
+Like what you do in JavaScript, the purpose of async components is the same to dynamic `import()`: only load what you need when you actually use it.
 
-TODO...
+In the below example, the `sql-driver.js` only loaded when `createSqlConnection()` is called:
+
+```js
+let sqlDriver = null
+
+export async function createSqlConnection() {
+  if (sqlDriver = null)
+    sqlDriver = await import('./sql-driver.js').then(m => m.default || m)
+  sqlDriver.connect('...')
+  // ...
+}
+
+export function validateSqlCommand(command) {
+  // ...
+}
+```
+
+So the same to async components, `MarketingDialog.vue` will loaded only when the reactive data `isLogin` become to `true`:
+
+```vue
+<script setup>
+import { defineAsyncComponent } from 'vue'
+
+const LazyMarketingDialog = defineAsyncComponent(() => import('./MarketingDialog.vue'))
+
+const { isLogin, doLogin } = useUserInfo()
+</script>
+
+<template>
+  <div>
+    <h1>Welcome to Online Shop!</h1>
+    <button v-if="!isLogin" @click="doLogin">
+      Please Login!
+    </button>
+
+    <LazyMarketingDialog v-if="isLogin" />
+  </div>
+</template>
+```
 
 ### Component Lifecycle Hooks
 
@@ -1915,9 +1979,9 @@ There are also some development-only lifecycle hook registers for debugging purp
 
 > [!Note]
 >
-> For composition API, all the lifecycle hook register functions above should be called starting from `setup()` function of Vue components **synchronously**. This means you should only call them inside the `setup()` function, or functions (like composables) used inside the `setup()` function synchronously.
+> For composition API, all the lifecycle hook **register functions** above should be called starting from `setup()` function of Vue components **synchronously**. This means you should only call them inside the `setup()` function, or functions (like composables) used inside the `setup()` function synchronously.
 >
-> The callback functions can be async as your need.
+> The **callback functions** can be async as your need.
 >
 > <!-- eslint-skip -->
 >
@@ -1979,9 +2043,12 @@ export default {
 
 > [!Note]
 >
-> The creation hooks `beforeCreate` and `created` are only available in the Options API, and there is no need to use them in either the Composition API or the Options API, so we will not cover them here.
+> The creation hooks `beforeCreate` and `created` are only available in the Options API, and there is no need to use them in practice in either the Composition API or the Options API, so we will not cover them here.
 
 ### Composables
+
+> [!Note]
+> Composable is a composition API only concept.
 
 As the logic inside the `setup()` function grows, it may become hard to manage and reuse. We have to separate them into smaller and more focused pieces.
 
@@ -1993,9 +2060,9 @@ Composables are some of these pieces, based on the Vue Composition API, that enc
 
 What's stateful and stateless logic?
 
-For example, utils like `formatDate()` or `calculateSum()` are stateless logic, they only take some input parameters and return the corresponding output values, without any internal state.
+For example, utils like `formatDate()` or `calculateSum()` are stateless logic, they only take some input parameters and return the corresponding output values, **without any internal state which may changes with the time**.
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _utils/date.js_
 
@@ -2007,7 +2074,7 @@ export function formatDate(date, format) {
 }
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Usage_
 
@@ -2020,9 +2087,9 @@ console.log(formattedDate)
 
 </td></tr></tbody></table>
 
-Composables are different; they usually **create and manage some reactive state internally**, and expose it. For example, a `useMouse()` composable can create reactive data to track the mouse position, and expose it to the components that use this composable:
+Composables are different. They usually **create and manage some reactive state internally**, and expose it. For example, a `useMouse()` composable can create reactive data to track the mouse position, and expose it to the components that use this composable. The most important thing is those states can be different in different time, if you finally decide to move the mouse:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _composables/useMouse.js_
 
@@ -2054,7 +2121,7 @@ export function useMouse() {
 }
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _Usage_
 
@@ -2139,7 +2206,7 @@ If you are a composable author, there are some best practices you should follow:
   }
   ```
 
-- The parameters should be compatible with **plain values, refs, and getter functions**; it's recommended to use the `toValue()` (Vue 3.3+) helper to handle these cases.
+- The parameters should be compatible with **plain values, refs, and getter functions**. It's recommended to use the `toValue()` (Vue 3.3+) helper to handle these cases.
 
   ```js
   import { toValue } from 'vue'
@@ -2619,6 +2686,8 @@ The key points of reactivity are:
 How could we achieve this in JavaScript? First, we need some variables `C1`, `A1` and `B1`, with an update function to explain the relationship between them:
 
 ```js
+let A1
+let B1
 let C1
 
 function update() {
@@ -2658,7 +2727,7 @@ Calling the function once and creating the side effect is easy; we just need to 
 
 ### Track/Trigger during the Access of Object Properties <a name="track-trigger-during-the-access-of-object-properties"></a>
 
-For variable access, there is no way to do it in native JavaScript, for example:
+For variable access, there is no way to track in native JavaScript, for example:
 
 ```js
 let v = 1
@@ -2668,7 +2737,7 @@ v = v + 1 // Cannot track/trigger during this access
 o = { x: 3 } // Cannot track/trigger during this access
 ```
 
-But it's possible to track/trigger **the access of object properties**. All the reactivity systems in Vue.js are based on this feature.
+But it's possible to track **the access of object properties**. All the reactivity systems in Vue.js are based on this feature.
 
 There are two ways to achieve this:
 
@@ -2832,7 +2901,7 @@ Of course, these are not always perfect: **When you destructure an object, the p
 
 Actually, this is an expected behavior.
 
-This is because in JavaScript, object destructuring will create a brand new variable with the value of that property at that time:
+This is because in JavaScript, object destructuring will create a brand new variable with the copy of value of that property at that time:
 
 ```js
 // getters/setters example
@@ -3552,9 +3621,9 @@ See more details in the [Vue Reactivity System documentation](https://vuejs.org/
 
 ## Template Grammar
 
-Vue.js uses a template syntax that is similar to HTML, but with additional features for directives, data binding, and more.
+Vue.js uses a template grammar that is similar to HTML, but with additional features for directives, data binding, and more.
 
-We already saw some examples of template syntax in previous sections, now let's take a closer look at the template grammar details.
+We already saw some examples of template grammar in previous sections, now let's take a closer look at the template grammar details.
 
 ### Directives
 
@@ -3562,7 +3631,7 @@ Directives are special attributes that start with `v-`; they provide special rea
 
 They are built on top of the [reactivity system](#reactivity-system) we discussed before.
 
-The syntax of a directive is:
+The grammar of a directive is:
 
 ```txt
 directive-name:parameter.modifier="value"
@@ -4034,7 +4103,7 @@ import ChildComponent from './ChildComponent.vue'
 
 A directive is just a special JavaScript object with some agreed hooks.
 
-For `<script setup>` SFC syntax, you can define an object with the variable name starts with `v` inside the `<script setup>` block, and it will be registered as directive automatically:
+For `<script setup>` grammar of SFC, you can define an object with the variable name starts with `v` inside the `<script setup>` block, and it will be registered as directive automatically:
 
 <!-- eslint-skip -->
 
@@ -4055,7 +4124,7 @@ const vHighlight = {
 </template>
 ```
 
-For composition API with general SFC syntax, or options API, you need to define the directive object under `directives` option of the component:
+For composition API with general grammar of SFC, or options API, you need to define the directive object under `directives` option of the component:
 
 <!-- eslint-skip -->
 
@@ -4141,7 +4210,7 @@ const id = ref('my-element')
 > We know HTML elements are themselves, so the binding attributes will attach to them directly. But for Vue components who will be transformed into the real HTML elements, the behavior is different:
 >
 > - For single-root element Vue components, the binding attributes will attach to the root element.
-> - For multi-root element Vue components, the binding attributes will not attach to any element, instead, you should use a special global variable `$attrs` to access them inside the component, and bind them to the desired element manually.
+> - For multi-root element Vue components, the binding attributes will not attach to any element by default, instead, you should use a special global variable `$attrs` to access them inside the component, and bind them to the desired element manually.
 
 #### JavaScript Expressions
 
@@ -4195,7 +4264,7 @@ const imageUrl = ref('https://example.com/image.png')
 > </template>
 > ```
 >
-> Instead, consider using computed properties to handle complex logic.
+> Instead, consider using computed properties to handle complex logic, because it will use the cached result if the input does not change:
 >
 > <!-- eslint-skip -->
 >
@@ -4546,7 +4615,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
 
   For [void elements](https://developer.mozilla.org/en-US/docs/Glossary/Void_element) like `<input>`, the trailing slash is also ignored by browsers. That's to say, `<input id="my-input" />` is just equivalent to `<input id="my-input">` in HTML.
 
-  <table><tbody><tr><td width="500px" valign="top">
+  <table><tbody><tr><td valign="top">
 
   _Source_
 
@@ -4560,7 +4629,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   </div>
   ```
 
-  </td><td width="500px" valign="top">
+  </td><td valign="top">
 
   _Rendered HTML_
 
@@ -4569,7 +4638,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   ```html
   <div>
     <div>Hello!</div>
-    <input id="my-input" />
+    <input id="my-input">
   </div>
   ```
 
@@ -4577,7 +4646,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
 
   Vue.js templates are not the same, they support self-closing tags for all elements, including non-void elements:
 
-  <table><tbody><tr><td width="500px" valign="top">
+  <table><tbody><tr><td valign="top">
 
   _Source_
 
@@ -4593,7 +4662,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   </template>
   ```
 
-  </td><td width="500px" valign="top">
+  </td><td valign="top">
 
   _Rendered HTML_
 
@@ -4603,7 +4672,7 @@ The grammar of Vue.js component templates are not exactly the same as normal bro
   <div>
     <div></div>
     Hello!
-    <input id="my-input" />
+    <input id="my-input">
   </div>
   ```
 
@@ -4623,9 +4692,9 @@ When you add the `scoped` attribute to a `<style>` block, Vue will automatically
 >
 > For child components, only the root element will be applied with it's parent's unique data attributes.
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
-_src/pages/page-with-scoped-style.vue_
+_src/pages/index.vue_
 
 <!-- eslint-skip -->
 
@@ -4634,6 +4703,9 @@ _src/pages/page-with-scoped-style.vue_
   <div class="scoped-style">
     1
   </div>
+  <div class="global-style">
+    2
+  </div>
 </template>
 
 <style scoped>
@@ -4641,19 +4713,6 @@ _src/pages/page-with-scoped-style.vue_
   color: red;
 }
 </style>
-```
-
-_src/pages/page-with-global-style.vue_
-
-<!-- eslint-skip -->
-
-```vue
-<template>
-  <div class="global-style">
-    2
-  </div>
-</template>
-
 <style>
 .global-style {
   color: blue;
@@ -4661,7 +4720,7 @@ _src/pages/page-with-global-style.vue_
 </style>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _dist/index.html_
 
@@ -4681,7 +4740,7 @@ _dist/index.html_
   <body>
     // [!code highlight:2]
     <div class="scoped-style" data-v-12345678>1</div>
-    <div class="global-style">2</div>
+    <div class="global-style" data-v-12345678>2</div>
   </body>
 </html>
 ```
@@ -4692,7 +4751,7 @@ _dist/index.html_
 
 As unique data attributes are only applied to the root element of child components, to apply styles to the inner elements of child components, we should use a special pesudo-class `:deep()` provided by Vue:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/components/ChildComponent.vue_
 
@@ -4708,7 +4767,7 @@ _src/components/ChildComponent.vue_
 </template>
 ```
 
-_src/pages/page-with-deep-selector.vue_
+_src/pages/index.vue_
 
 <!-- eslint-skip -->
 
@@ -4731,7 +4790,7 @@ _src/pages/page-with-deep-selector.vue_
 </style>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _dist/index.html_
 
@@ -4769,7 +4828,7 @@ _dist/index.html_
 
 As we know, slotted content is belongs to the parent component, so they will be applied with the parent's unique data attributes. If the child component wants to apply styles to them, it should use another special pesudo-class `:slotted()` provided by Vue:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/components/ChildComponent.vue_
 
@@ -4793,7 +4852,7 @@ _src/components/ChildComponent.vue_
 </style>
 ```
 
-_src/pages/page-with-slotted-selector.vue_
+_src/pages/index.vue_
 
 <!-- eslint-skip -->
 
@@ -4809,7 +4868,7 @@ _src/pages/page-with-slotted-selector.vue_
 </template>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _dist/index.html_
 
@@ -4951,7 +5010,7 @@ export default {
 
 SFC `<style>` blocks also support linking CSS values to reactive data using `v-bind()` function:
 
-<table><tbody><tr><td width="500px" valign="top">
+<table><tbody><tr><td valign="top">
 
 _src/pages/options-api.vue_
 
@@ -4981,7 +5040,7 @@ export default {
 </style>
 ```
 
-</td><td width="500px" valign="top">
+</td><td valign="top">
 
 _src/pages/composition-api.vue_
 

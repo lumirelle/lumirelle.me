@@ -1,7 +1,9 @@
 import type { ConsoleMessage, Locator, Page } from '@playwright/test'
 import type { RouteArtifact } from './support/artifacts'
 import { expect, test } from '@playwright/test'
+import dayjs from 'dayjs'
 import { readAllHtml, readBundle, readPages, routes } from './support/artifacts'
+import { historyAvailability, lastCommitOf } from './support/history'
 
 /**
  * Baseline seam for the site redesign.
@@ -611,6 +613,121 @@ test('dates are a monospaced, tabular column', async ({ page }) => {
   for (const date of painted) {
     expect(date.variant).toContain('tabular-nums')
     expect(date.family).toMatch(/mono/i)
+  }
+})
+
+/**
+ * The two formats the masthead prints a Post's date in: `MMM D` inside the
+ * current year, `MMM D, YYYY` outside it.
+ *
+ * Mirrored rather than imported, because the suite has one seam — the build —
+ * and never reaches into `src/`.
+ */
+function renderedDate(value: string): string {
+  const date = dayjs(value)
+  return date.year() === dayjs().year() ? date.format('MMM D') : date.format('MMM D, YYYY')
+}
+
+/** The offset an ISO-8601 timestamp carries, or UTC when it carries none. */
+function offsetOf(value: string | undefined): string {
+  return /([+-]\d{2}:\d{2})$/.exec(value ?? '')?.[1] ?? '+00:00'
+}
+
+/**
+ * The calendar day an instant falls on, read in a given offset.
+ *
+ * This is the comparison the site makes: calendar days in *the offset the commit
+ * carries*. The page receives the authored `date` as a `Date` — an instant with
+ * no offset of its own — so the day is reconstructed rather than read off the
+ * string.
+ */
+function dayInOffset(value: string, offset: string): string {
+  const sign = offset.startsWith('-') ? -1 : 1
+  const [hours = 0, minutes = 0] = offset.slice(1).split(':').map(Number)
+  const shifted = new Date(new Date(value).getTime() + sign * (hours * 60 + minutes) * 60_000)
+  return shifted.toISOString().slice(0, 10)
+}
+
+/** A text run with its whitespace collapsed, so a wrapped template compares as one sentence. */
+function onOneLine(text: string): string {
+  return text.replaceAll(/\s+/g, ' ').trim()
+}
+
+/** A frontmatter field's raw value, taken from the source file rather than the page. */
+function frontmatterField(source: string, key: string): string | undefined {
+  const block = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source)?.[1] ?? ''
+  const value = new RegExp(`^${key}:[ \\t]*(.*)$`, 'm').exec(block)?.[1]?.trim()
+  return value === undefined || value === '' ? undefined : value
+}
+
+const history = historyAvailability()
+
+test('every Post\'s last edit is the date of the commit that touched its file', async ({ page }) => {
+  test.skip(!history.available, `history unavailable, nothing to compare against: ${history.reason}`)
+
+  const sources = new Map(readPages().map(entry => [entry.file, entry.source]))
+  const posts = routes
+    .filter(route => /^\/posts\/[^/]+$/.test(route.path))
+    .map(route => ({ route, file: `posts${route.path.slice('/posts'.length)}.md` }))
+  expect(posts.length).toBeGreaterThan(20)
+
+  for (const { route, file } of posts) {
+    const source = sources.get(file)
+    expect(source, `${file} is a page of the source tree`).toBeDefined()
+
+    const published = frontmatterField(source!, 'date')
+    const authored = frontmatterField(source!, 'update')
+    const commit = lastCommitOf(`pages/${file}`)
+
+    await page.goto(route.path, { waitUntil: 'load' })
+
+    const mastheads = page.getByRole('main').locator('p').filter({ hasText: 'First post on' })
+    const masthead = await mastheads.count()
+    const text = masthead === 0 ? '' : onOneLine(await mastheads.first().textContent() ?? '')
+    const segments = text.split('·').map(segment => segment.trim())
+
+    if (!published) {
+      expect(masthead, `${route.path} claims no date at all`).toBe(0)
+      continue
+    }
+
+    expect(masthead, `${route.path}: one masthead line`).toBe(1)
+
+    expect(segments[0], `${route.path}: publication date`).toBe(
+      `First post on ${renderedDate(published)}`,
+    )
+
+    // The expected presence is computed the way the site computes it, so the
+    // same-day rule is exercised the day a Post qualifies for it: a file whose
+    // last commit lands on its publication day shows one date, not two.
+    const offset = offsetOf(commit)
+    const expectsEdit = commit !== undefined
+      && dayInOffset(commit, offset) !== dayInOffset(published, offset)
+    const edit = segments.find(segment => segment.startsWith('Last edit on '))
+
+    if (expectsEdit) {
+      expect(edit, `${route.path}: last edit (git ${commit})`).toBe(
+        `Last edit on ${renderedDate(commit)}`,
+      )
+    }
+    else {
+      expect(edit, `${route.path}: no edit segment`).toBeUndefined()
+    }
+
+    // One date, not two: the publication date is stated once, whatever the edit
+    // segment says.
+    expect(
+      text.split(`First post on ${renderedDate(published)}`).length - 1,
+      `${route.path}: publication date stated once`,
+    ).toBe(1)
+
+    // #19 deletes the authored keys; until it does, a stale `update:` must be
+    // inert, so a value git disagrees with may not appear anywhere on the page.
+    if (authored && commit && dayInOffset(authored, offset) !== dayInOffset(commit, offset)) {
+      expect(text, `${route.path}: authored update ${authored} is inert`).not.toContain(
+        renderedDate(authored),
+      )
+    }
   }
 })
 

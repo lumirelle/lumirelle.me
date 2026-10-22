@@ -78,6 +78,7 @@ function currentMark(link: Link): 'page' | 'true' | undefined {
       </nav>
     </div>
   </header>
+  <ShellOutline />
   <ShellCdUp />
   <ShellScrollToTop />
 </template>

@@ -817,6 +817,120 @@ test('a long outline scrolls inside the rail, not off the page', async ({ page }
   expect(inRail.scrolled).toBe(true)
 })
 
+test('the Shell owns the outline at both widths and never duplicates it', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
+
+  const outline = page.locator('.table-of-contents')
+  await expect(outline).toHaveCount(1)
+
+  // The wide-viewport rail is adopted out of the routed content, so a route
+  // transition's transform cannot break its fixed position.
+  expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
+
+  // Below 1400 px the same node stays Shell-owned: the panel ticket hands it a
+  // host instead of leaving it in the Post or appending it straight to `<body>`.
+  await page.setViewportSize({ width: 1200, height: 950 })
+  await expect(outline).toHaveCount(1)
+  expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
+  await expect(page.locator('body > .table-of-contents')).toHaveCount(0)
+
+  // Crossing back leaves exactly one outline and the same Post's list, not a
+  // second one from the narrow presentation.
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await expect(outline).toHaveCount(1)
+  expect(await outline.evaluate(el => (el as HTMLElement).dataset.owner))
+    .toBe('/posts/manual-js-advanced-grammar')
+  expect(await outline.evaluate(el => Boolean(el.closest('.route-frame')))).toBe(false)
+})
+
+test('resizing across 1400 px keeps the reader\'s place in the outline', async ({ page }) => {
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.goto('/posts/manual-js-advanced-grammar', { waitUntil: 'load' })
+
+  const mark = page.locator('.table-of-contents a[href="#unhandled-rejections"]')
+  await page.evaluate(() => {
+    const heading = document.querySelector('#unhandled-rejections')!
+    document.documentElement.style.scrollBehavior = 'auto'
+    window.scrollTo(0, heading.getBoundingClientRect().top + window.scrollY)
+  })
+  await expect(mark).toHaveClass(/toc-active/)
+
+  const cdUp = page.getByRole('link', { name: /cd \.\./ })
+  const cdTop = await cdUp.evaluate(el => Math.round(el.getBoundingClientRect().top))
+
+  const readPlace = () => page.evaluate(() => {
+    const outline = document.querySelector('.table-of-contents')!
+    const list = outline.querySelector('ul')!
+    const active = outline.querySelector('a.toc-active')
+    const listBox = list.getBoundingClientRect()
+    const entry = active?.parentElement!.getBoundingClientRect()
+    return {
+      active: active?.textContent?.trim() ?? '',
+      shown: Boolean(entry && entry.top >= listBox.top - 1 && entry.bottom <= listBox.bottom + 1),
+      scrolled: list.scrollTop > 0,
+    }
+  })
+
+  const place = { active: 'Unhandled Rejections', shown: true, scrolled: true }
+  expect(await readPlace()).toEqual(place)
+
+  // The rail's tracking and its own scroll window survive the move into the
+  // narrow presentation, and the move back out of it.
+  await page.setViewportSize({ width: 1200, height: 950 })
+  await expect.poll(readPlace).toEqual(place)
+
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await expect.poll(readPlace).toEqual(place)
+
+  // `cd ..` did not move either: it still sits in the gutter above the rail.
+  expect(await cdUp.evaluate(el => Math.round(el.getBoundingClientRect().top))).toBe(cdTop)
+})
+
+test('below 1400 px a route change hands the outline to the new Post', async ({ page }) => {
+  await page.setViewportSize({ width: 1200, height: 950 })
+  await page.goto('/posts/manual-git', { waitUntil: 'load' })
+
+  const readOutline = () => page.evaluate(() => {
+    const outline = document.querySelector('.table-of-contents')
+    return {
+      count: document.querySelectorAll('.table-of-contents').length,
+      owner: (outline as HTMLElement | null)?.dataset.owner ?? '',
+      first: outline?.querySelector('a')?.textContent?.trim() ?? '',
+      inFrame: Boolean(outline?.closest('.route-frame')),
+    }
+  })
+
+  expect(await readOutline()).toEqual({
+    count: 1,
+    owner: '/posts/manual-git',
+    first: 'What Is Git?',
+    inFrame: false,
+  })
+
+  // Leaving the Post takes its outline with it, rather than leaving a stale one
+  // behind for the list page.
+  await page.getByRole('banner')
+    .getByRole('navigation', { name: 'Primary' })
+    .getByRole('link', { name: 'posts', exact: true })
+    .click()
+  await expect(page).toHaveURL(/\/posts$/)
+  await expect.poll(() => page.locator('.table-of-contents').count()).toBe(0)
+
+  await page.getByRole('main')
+    .getByRole('link')
+    .filter({ hasText: 'Vue Advanced Grammar Manual' })
+    .first()
+    .click()
+
+  await expect.poll(readOutline).toEqual({
+    count: 1,
+    owner: '/posts/manual-vue-advanced-grammar',
+    first: 'Introduction to Vue.js',
+    inFrame: false,
+  })
+})
+
 test('the header stays on one line and never collapses its parents', async ({ page }) => {
   // The longest slug on the site: the current segment is the only thing that may
   // give way.

@@ -2,7 +2,7 @@
 const props = withDefaults(
   defineProps<{
     text?: string
-    preset?: 'purple' | 'amber' | 'blue' | 'green' | 'red'
+    preset?: 'purple' | 'amber' | 'blue' | 'green' | 'red' | 'mise'
   }>(),
   {
     preset: 'blue',
@@ -26,6 +26,9 @@ const bgColor = computed(() => {
     case 'red': {
       return 'bg-red'
     }
+    case 'mise': {
+      return 'bg-#8b2252'
+    }
     default: {
       return 'bg-transparent'
     }
@@ -38,7 +41,8 @@ const textColor = computed(() => {
     case 'amber':
     case 'blue':
     case 'green':
-    case 'red': {
+    case 'red':
+    case 'mise': {
       return 'text-white'
     }
     default: {
@@ -49,5 +53,7 @@ const textColor = computed(() => {
 </script>
 
 <template>
-  <span text-sm font-medium mx-1 px-2 py-0.5 rounded-md inline-block :class="[bgColor, textColor]"><slot>{{ text }}</slot></span>
+  <span text-sm font-medium mx-1 px-2 py-0.5 rounded-md inline-block :class="[bgColor, textColor]">
+    <slot>{{ text }}</slot>
+  </span>
 </template>

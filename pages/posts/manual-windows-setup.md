@@ -114,21 +114,30 @@ Then, customize your Windows installation options and wait for the process to co
 
 In my case, I prefer to use the **Windows 11 Professional Edition (without the "N" flag)** and to **create only one partition per disk**. Different people may have different preferences, but I prefer this because the Professional edition ships with the most useful presets out of the box for developers and gamers, and on modern systems, creating multiple partitions on a single disk really has no benefit.
 
-What's more, in order to get a "clean & customized" username on Windows, please **use a local account** to set up Windows instead of a Microsoft account, which saves you from the ugly numeric username generated from your Microsoft account email. When you get stuck on the Microsoft account login page, just press `Shift+F10` to open a command prompt and run the command below to create a local account in the window that pops up:
+Since the latest Windows 26H2 (26300.9711) was released, we can finally customize our username without bypass Microsoft account login: when you are in device name setup page, please click to open the advanced options, and enter your favorite username!
 
-```cmd
-start ms-cxh:localonly
-```
+Let's say good bye to OOBE!
 
-> [!Caution]
->
-> My advice is **not** to use _OOBE_ to bypass the Microsoft account login instead of using a **local account**: it will also bypass the **online updates**, and you may forget to apply, or even skip, the necessary security updates after the reinstallation, which may cause the freshly installed Windows to break — maybe some drivers will be broken, or some core system components, etc.
->
-> It's a lesson learned in blood and tears...
->
-> Of course, the online update of Windows is very slow — it basically takes 1 ~ 2 hours, because it downloads not only the necessary components but also some useless ones. Don't worry and just be patient; we will remove them all later.
->
-> Believe me, all these choices are for the best stability and cleanliness of the system. 🥺
+<details>
+  <summary>For previous version, the bypass operation is still necessary:</summary>
+
+  In order to get a "clean & customized" username on previous version of Windows, please **use a local account** to set up Windows instead of a Microsoft account, which saves you from the ugly numeric username generated from your Microsoft account email. When you get stuck on the Microsoft account login page, just press `Shift+F10` to open a command prompt and run the command below to create a local account in the window that pops up:
+
+  ```cmd
+  start ms-cxh:localonly
+  ```
+
+  > [!Caution]
+  >
+  > My advice is **not** to use _OOBE_ to bypass the Microsoft account login instead of using a **local account**: it will also bypass the **online updates**, and you may forget to apply, or even skip, the necessary security updates after the reinstallation, which may cause the freshly installed Windows to break — maybe some drivers will be broken, or some core system components, etc.
+  >
+  > It's a lesson learned in blood and tears...
+  >
+  > Of course, the online update of Windows is very slow — it basically takes 1 ~ 2 hours, because it downloads not only the necessary components but also some useless ones. Don't worry and just be patient; we will remove them all later.
+  >
+  > Believe me, all these choices are for the best stability and cleanliness of the system. 🥺
+
+</details>
 
 ## Second Step: Set Up the Environment
 
@@ -136,9 +145,9 @@ start ms-cxh:localonly
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Clash Verge Rev <TextTag text="Optional" text-xs preset="amber" /><TextTag text="Chezmoi-ed" text-xs preset="green" />| Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time. |
-| Chezmoi | :code[nu]{winget add twpayne.chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: :code[nu]{chezmoi init git@github.com:lumirelle/dotfiles.git} |
-| Mise <TextTag text="Chezmoi-ed" text-xs preset="green" /> | :code[nu]{winget add jdx.mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap}See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
+| Clash Verge Rev <TextTag text="Optional" text-xs preset="amber" /><TextTag text="Mise-configured" text-xs preset="mise" />| Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time. |
+| Git <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Nothing is more important than _Git_ for a developer, right? |
+| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{winget add jdx.mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/lumirelle.me.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
 ### Configure Windows Itself
 
@@ -175,9 +184,14 @@ If your Windows is not activated yet, you can use _HEU KMS Activator_ to activat
 >
 > Tools like _HEU KMS Activator_ bypass Windows licensing: using them may violate the Microsoft Software License Terms, and they are commonly flagged as malware by security vendors. Keep in mind that you just disabled _Windows Defender_ in the previous step, so run them only if you understand where they come from and accept the risk.
 
-Optionally, [update the OS to the latest version](ms-settings:windowsupdate), [sign in to your Microsoft account](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
+Optionally, [update the OS to the latest version](ms-settings:windowsupdate), [sign in to your Microsoft account (if you bypass the login before)](ms-settings:yourinfo) & adjust other system settings in [Windows Settings](ms-settings://).
 
-Finally, enable Windows' built-in `sudo` support and select the `inline` running method in the "Terminal" section under [System > Advanced](ms-settings:developers) in Settings.
+Finally, enable Windows' advanced features in [Settings > System > Advanced](ms-settings:developers):
+
+1. File Explorer > Enable long paths: On.
+2. Terminal > Powershell > Change execution policy...: On.
+3. Terminal > Enable sudo: On with "Inline" running mode.
+4. For developers > Developer Mode: On, in order to avoid [`winget` shitting on your PATH environment variable](https://github.com/microsoft/winget-cli/issues/3601). First-hand exerience. 💩
 
 ### Recommended Software
 
@@ -187,11 +201,11 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Fastfetch | <TextTag text="Mise-ed" text-xs /> | Display system information. |
-| Bottom | <TextTag text="Mise-ed" text-xs /> | Display system device resource usage. |
-| GDU | <TextTag text="Mise-ed" text-xs /> | Fask disk usage analyzer written in Go. |
-| DISM++ | <TextTag text="Mise-ed" text-xs /> | Clean up your disk. |
-| Revo Uninstaller | <TextTag text="Mise-ed" text-xs /> | Software uninstaller (Pro edition). |
+| Fastfetch | <TextTag text="Mise-installed" text-xs preset="mise" /> | Display system information. |
+| Bottom | <TextTag text="Mise-installed" text-xs preset="mise" /> | Display system device resource usage. |
+| GDU | <TextTag text="Mise-installed" text-xs preset="mise" /> | Fask disk usage analyzer written in Go. |
+| DISM++ | <TextTag text="Mise-installed" text-xs preset="mise" /> | Clean up your disk. |
+| Revo Uninstaller | <TextTag text="Mise-installed" text-xs preset="mise" /> | Software uninstaller (Pro edition). |
 | Context Menu Manager | [GitHub Releases](https://github.com/BluePointLilac/ContextMenuManager/releases) | For the classic Windows context menu. |
 | Windows 11 Context Menu Manager | [GitHub Releases](https://github.com/branhill/windows-11-context-menu-manager/releases) | For the new Windows 11 context menu. |
 | Driver Store Explorer <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add lostindark.DriverStoreExplorer} | Clean up unused/outdated device drivers. |
@@ -202,13 +216,13 @@ The software below is highly recommended and helpful for daily use and developme
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Visual C++ Redistributable <TextTag text="Optional" text-xs preset="amber" /> | [Official Website](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) | MSVC Runtime. **Usually, we don't need to install this manually.** |
-| WinLibs | <TextTag text="Mise-ed" text-xs /> | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the environment variables `CC` & `CXX`, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
-| Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
-| Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
-| Git <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Nothing is more important than _Git_ for a developer, right? |
-| GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
-| Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
-| Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
+| WinLibs | <TextTag text="Mise-installed" text-xs preset="mise" /> | A distribution of _GCC (GNU Compiler Collection)_ and its dependencies on Windows.<br><br>Some tools use MSVC as the default compiler on Windows but respect the environment variables `CC` & `CXX`, so it's recommended to set `CC` & `CXX` to `gcc` & `g++` respectively. |
+| Age | <TextTag text="Mise-installed" text-xs preset="mise" /> | A simple, modern and secure encryption tool.  |
+| Jujutsu <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A Git-compatible VCS that is both simple and powerful. |
+| GitHub CLI | <TextTag text="Mise-installed" text-xs preset="mise" /> | Take GitHub to the command line. |
+| Glab | <TextTag text="Mise-installed" text-xs preset="mise" /> | Brings GitLab to your terminal. |
+| Tree Sitter CLI | <TextTag text="Mise-installed" text-xs preset="mise" /> | An incremental parsing system for programming tools. |
+| Image Magick |  <TextTag text="Mise-installed" text-xs preset="mise" /> | Creating, editing, converting, and manipulating images in over 200 formats. |
 | Apple PKL LSP | :code[nu]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
 | Windows Subsystem for Linux | :code[nu]{wsl --install} or :code[nu]{wsl --update} | The best Linux distribution in the world and the best development environment for Windows. 🥰<br><br>Requires a reboot after installation.<br><br>See WSL setup [here](#third-step-set-up-the-wsl-environment-archlinux). |
 
@@ -216,42 +230,40 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Twinkle Tray | <TextTag text="Mise-ed" text-xs /> | Save my eyes!<br><br>Screen brightness manager. |
-| Auto Dark Mode | <TextTag text="Mise-ed" text-xs /> | Save my eyes!<br><br>I prefer to set `Win+J` to switch color mode. |
-| Wox | <TextTag text="Mise-ed" text-xs /> | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
-| Brave | <TextTag text="Mise-ed" text-xs /> | My daily browser. See extensions setup [here](#browser-setup). |
+| Wox | <TextTag text="Mise-installed" text-xs preset="mise" /> | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
+| Brave | <TextTag text="Mise-installed" text-xs preset="mise" /> | My daily browser. See extensions setup [here](#browser-setup). |
 | Internet Download Manager <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Tonec.InternetDownloadManager} | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
 | Nutstore <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Nutstore.Nutstore} | WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |
 | KeePassXC <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add KeePassXCTeam.KeePassXC} | Password manager; you can replace it with your preferred one. |
-| PixPin | <TextTag text="Mise-ed" text-xs /> | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
-| zoxide | <TextTag text="Mise-ed" text-xs /> | A smarter cd command. |
-| fd | <TextTag text="Mise-ed" text-xs /> | A simple, fast and user-friendly alternative to `find`. |
-| fzf | <TextTag text="Mise-ed" text-xs /> | A command-line fuzzy finder. |
-| ripgrep | <TextTag text="Mise-ed" text-xs /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
-| Lazygit | <TextTag text="Mise-ed" text-xs /> | Simple terminal UI for git commands. |
-| Yazi | <TextTag text="Mise-ed" text-xs /> | Blazing fast terminal file manager. |
-| OBS Studio | <TextTag text="Mise-ed" text-xs /> | / |
-| Microsoft To Do | <TextTag text="Mise-ed" text-xs /> | Just to do! |
+| PixPin | <TextTag text="Mise-installed" text-xs preset="mise" /> | Screen capture tool.<br><br>I use `<PrtSc>` to take screenshots and copy, `<Ctrl-PrtSc>` to only take screenshots, `<Shift-PrtSc>` to pin screenshots. This requires disabling the built-in Windows screenshot feature, "Use the Print screen key to open screen capture". |
+| zoxide | <TextTag text="Mise-installed" text-xs preset="mise" /> | A smarter cd command. |
+| fd | <TextTag text="Mise-installed" text-xs preset="mise" /> | A simple, fast and user-friendly alternative to `find`. |
+| fzf | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line fuzzy finder. |
+| ripgrep | <TextTag text="Mise-installed" text-xs preset="mise" /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
+| Lazygit | <TextTag text="Mise-installed" text-xs preset="mise" /> | Simple terminal UI for git commands. |
+| Yazi <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Blazing fast terminal file manager. |
+| OBS Studio | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
+| Microsoft To Do | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just to do! |
 
 #### Terminal & Shell on Windows
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Windows Terminal Preview <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | The only choice for Windows so far (2026/8/31)... |
-| Nushell <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | A cross-platform shell powered by Rust. |
-| Starship | <TextTag text="Mise-ed" text-xs /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
-| Herdr <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Terminal multiplexer. |
+| WezTerm <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The only one choice for terminal with Kitty graphic protocol support on Windows. |
+| Nushell <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A cross-platform shell powered by Rust. |
+| Starship <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
+| Herdr <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Terminal multiplexer. |
 
 #### Development on Windows
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Neovim <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Just much faster than Visual Studio Code. |
-| Zed <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | **Still experimental, but with better performance than Visual Studio Code.** |
-| Visual Studio Code <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
-| Pi Coding Agent <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Just vibe! |
-| DBX | <TextTag text="Mise-ed" text-xs /> | Better database manager! |
-| hyperfine | <TextTag text="Mise-ed" text-xs /> | A command-line benchmarking tool. |
+| Neovim <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just much faster than Visual Studio Code. |
+| Zed <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | **Still experimental, but with better performance than Visual Studio Code.** |
+| Visual Studio Code <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
+| Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
+| DBX | <TextTag text="Mise-installed" text-xs preset="mise" /> | Better database manager! |
+| hyperfine | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line benchmarking tool. |
 
 #### Working on Windows
 
@@ -286,11 +298,9 @@ In the tables below, `~` means the same as above.
 | Dark Reader | [Chromium](https://chromewebstore.google.com/detail/dark-reader/eimadpbcbfnmbkopoojfekhnkhdbieeh) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/darkreader/) | Save my eyes!!! |
 | KeePassXC-Browser | [Chromium](https://chromewebstore.google.com/detail/keepassxc-browser/oboonakemofpalcgghocfoadofidjkkk) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/keepassxc-browser/) | Connect to my password manager! |
 | Tampermonkey | [Chromium](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/) | User scripts in use: <br>- [_@sxzz/userscripts_](https://github.com/sxzz/userscripts) |
-| Vimium C - All by Keyboard | [Chromium](https://chromewebstore.google.com/detail/vimium-c-all-by-keyboard/hfjbmagddngcpeloejdejnfgbamkjaeg) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/vimium-c/) | For better UX, it's recommended to enable **"Search in bookmarks or add new items"**, **"Run on chrome://_/_ pages"** & **"Run on Chrome's native New Tab Page"**, with the [`#extensions-on-chrome-urls` browser flag](brave://flags/#extensions-on-chrome-urls) enabled. |
 | 豆包，浏览器 AI 助手 | [Chromium](https://www.doubao.com/browser-extension/landing?from=ext&extId=dbjibobgilijgolhjdcbdebjhejelffo) | Translator (`Alt+1`), summaryer (`Alt+2`)! |
 | Refined Github | [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) | Requires your GitHub access token. |
 | File Icons for GitHub and GitLab | [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) | / |
-| Npmx redirect | [Chromium](https://chromewebstore.google.com/detail/npmx-redirect/lbhjgfgpnlihfmobnohoipeljollhlnb) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/npmx-redirect/) | Fuck Npm! Fuck Npm! |
 | Styled XML Viewer | [Chromium](https://chromewebstore.google.com/detail/styled-xml-viewer/ejlmflppkjfbbkhgidccfjelfgfgicph) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/styled-xml-viewer/) | / |
 | CSS Stacking Context inspector | [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) | / |
 
@@ -300,29 +310,8 @@ Sometimes useful extensions:
 | -- | -- | -- |
 | Vue.js Devtools (Community) | [GitHub Releases](https://github.com/kxxxlfe/devtools/releases) | Only used for Vue 2 projects; for Vue 3 projects, the [Vite plugin](https://devtools.vuejs.org/guide/vite-plugin) is recommended instead. |
 
-I also like to customize the default browser fonts:
-
-<details>
-<summary>Brave</summary>
-
-1. Go to [brave://settings/fonts](brave://settings/fonts).
-2. I prefer "Space Grotesk" (a sans-serif font) as both the "Standard", "Serif" and "Sans-serif" font, and "Annotation Mono" as the "Fixed-width" font.
-
-</details>
-
-<details>
-<summary>Firefox</summary>
-
-1. Go to [about:preferences#accessibility](about:preferences#accessibility).
-2. Click "Advanced settings".
-3. For "Latin" fonts, I prefer "Space Grotesk" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Annotation Mono" as the "Monospace" font.
-4. For "Simplified Chinese" fonts, I prefer "Resource Han Rounded SC" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Maple Mono WR CN" as the "Monospace" font.
-5. For "Traditional Chinese (Taiwan)" fonts, I prefer "Resource Han Rounded TW" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Maple Mono WR CN" as the "Monospace" font.
-6. For "Traditional Chinese (Hong Kong)" fonts, I prefer "Resource Han Rounded HK" (a sans-serif font) as both the "Serif" and "Sans-serif" font, and "Maple Mono WR CN" as the "Monospace" font.
-
-To customize the font-family of Firefox DevTools, you can refer to my [GitHub gist](https://gist.github.com/lumirelle/919722d43a643b2a8f2f2ce8db697eda).
-
-</details>
+> [!Note]
+> Now I no longer change browser font settings, instead, I prefer to replace Windows system font (Segoe UI) via [SyrianTurk/SyrianSegoe](https://github.com/SyrianTurk/SyrianSegoe).
 
 #### Uninstall Unnecessary Software
 
@@ -349,14 +338,22 @@ wsl --install Debian --location path/you/prefer
 
 ### Prerequisite Archlinux Software
 
+> [!Note]
+> Before you start, please run: `pacman -Syu` to update the package database.
+
+> [!Note]
+> Because the "archlinux" image uses root user by default, so before you creating your non-root user in the [next section](#configure-archlinux-itself), you don't have to and also can't to (because `sudo` isn't installed yet) call `pacman` with `sudo`.
+
 The software below is required for daily use and development in Archlinux:
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Base Devel | :code[nu]{sudo pacman -S base-devel} | Basic dev dependencies. |
-| Chezmoi | :code[nu]{sudo pacman -S chezmoi} | Dotfiles manager.<br><br>To init my dotfiles, please use: :code[nu]{chezmoi init git@github.com:lumirelle/dotfiles.git} |
-| Mise <TextTag text="Chezmoi-ed" text-xs preset="green" /> | :code[nu]{sudo pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap}See [my global mise configuration](https://github.com/lumirelle/dotfiles/blob/main/dot_config/mise/config.toml) for more details about what I use globally. |
+| Base Devel | :code[nu]{pacman -S base-devel} | Basic dev dependencies. |
+| Vi | :code[nu]{pacman -S vi} | Basic editor. |
+| Git <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{pacman -S git} | Nothing is more important than _Git_ for a developer, right? |
+| OpenSSH | :code[nu]{pacman -S openssh} | Create SSH key, link to everything (Of course, GitHub)! |
 | Yay | :code[nu]{git clone https://aur.archlinux.org/yay-bin.git; cd yay-bin; makepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
+| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/lumirelle.me.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
 ### Configure Archlinux Itself
 
@@ -399,6 +396,12 @@ Finally, you can switch to the newly created user:
 su - {username}
 ```
 
+And call commands with `sudo` if you really need root permission, for example:
+
+```nu
+sudo pacman -Syu
+```
+
 ### Recommended WSL Software
 
 The software below is highly recommended and helpful for development with Archlinux; you may want to install them **in the order you need**:
@@ -407,55 +410,54 @@ The software below is highly recommended and helpful for development with Archli
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Fastfetch | <TextTag text="Mise-ed" text-xs /> | Display system information. |
-| Bottom | <TextTag text="Mise-ed" text-xs /> | Display system device resource usage. |
-| GDU | <TextTag text="Mise-ed" text-xs /> | Fask disk usage analyzer written in Go. |
+| Fastfetch | <TextTag text="Mise-installed" text-xs preset="mise" /> | Display system information. |
+| Bottom | <TextTag text="Mise-installed" text-xs preset="mise" /> | Display system device resource usage. |
+| GDU | <TextTag text="Mise-installed" text-xs preset="mise" /> | Fask disk usage analyzer written in Go. |
 
 #### Archlinux Environment/Infrastructure
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| unzip | <TextTag text="Mise-ed" text-xs /> | / |
-| wget | <TextTag text="Mise-ed" text-xs /> | / |
-| OpenSSH | <TextTag text="Mise-ed" text-xs /> | / |
-| less | <TextTag text="Mise-ed" text-xs /> | / |
-| fontconfig | <TextTag text="Mise-ed" text-xs /> | / |
-| Noto Fonts CJK | <TextTag text="Mise-ed" text-xs /> | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
-| Age | <TextTag text="Mise-ed" text-xs /> | A simple, modern and secure encryption tool.  |
-| Jujutsu | <TextTag text="Mise-ed" text-xs /> | A Git-compatible VCS that is both simple and powerful. |
-| Git <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Nothing is more important than _Git_ for a developer, right? |
-| GitHub CLI | <TextTag text="Mise-ed" text-xs /> | Take GitHub to the command line. |
-| Glab | <TextTag text="Mise-ed" text-xs /> | Brings GitLab to your terminal. |
-| Tree Sitter CLI | <TextTag text="Mise-ed" text-xs /> | An incremental parsing system for programming tools. |
+| unzip | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
+| wget | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
+| less | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
+| fontconfig | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
+| Noto Fonts CJK | <TextTag text="Mise-installed" text-xs preset="mise" /> | If you need to run **WSLg (WSL GUI) applications** with **CJK support**. |
+| Age | <TextTag text="Mise-installed" text-xs preset="mise" /> | A simple, modern and secure encryption tool.  |
+| Jujutsu <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A Git-compatible VCS that is both simple and powerful. |
+| GitHub CLI | <TextTag text="Mise-installed" text-xs preset="mise" /> | Take GitHub to the command line. |
+| Glab | <TextTag text="Mise-installed" text-xs preset="mise" /> | Brings GitLab to your terminal. |
+| Tree Sitter CLI | <TextTag text="Mise-installed" text-xs preset="mise" /> | An incremental parsing system for programming tools. |
+| Image Magick |  <TextTag text="Mise-installed" text-xs preset="mise" /> | Creating, editing, converting, and manipulating images in over 200 formats. |
 | Apple PKL LSP | :code[nu]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
-| Chromium | <TextTag text="Mise-ed" text-xs /> | If you need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
+| Chromium | <TextTag text="Mise-installed" text-xs preset="mise" /> | If you need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
 
 #### Archlinux User Experience Enhance
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| zoxide | <TextTag text="Mise-ed" text-xs /> | A smarter cd command. |
-| fd | <TextTag text="Mise-ed" text-xs /> | A simple, fast and user-friendly alternative to `find`. |
-| fzf | <TextTag text="Mise-ed" text-xs /> | A command-line fuzzy finder. |
-| ripgrep | <TextTag text="Mise-ed" text-xs /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
-| Lazygit | <TextTag text="Mise-ed" text-xs /> | Simple terminal UI for git commands. |
-| Yazi | <TextTag text="Mise-ed" text-xs /> | Blazing fast terminal file manager. |
+| zoxide | <TextTag text="Mise-installed" text-xs preset="mise" /> | A smarter cd command. |
+| fd | <TextTag text="Mise-installed" text-xs preset="mise" /> | A simple, fast and user-friendly alternative to `find`. |
+| fzf | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line fuzzy finder. |
+| ripgrep | <TextTag text="Mise-installed" text-xs preset="mise" /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
+| Lazygit | <TextTag text="Mise-installed" text-xs preset="mise" /> | Simple terminal UI for git commands. |
+| Yazi <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Blazing fast terminal file manager. |
 
 #### Terminal & Shell on Archlinux
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Nushell <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | A cross-platform shell powered by Rust. |
-| Starship | <TextTag text="Mise-ed" text-xs /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
-| Herdr <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Terminal multiplexer. |
+| Nushell <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A cross-platform shell powered by Rust. |
+| Starship <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
+| Herdr <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Terminal multiplexer. |
 
 #### Development on Archlinux
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Neovim <TextTag text="Chezmoi-ed" text-xs preset="green" /> | <TextTag text="Mise-ed" text-xs /> | Just much faster than Visual Studio Code. |
-| Pi Coding Agent <TextTag text="Chezmoi-ed" text-xs preset="green" />  | <TextTag text="Mise-ed" text-xs /> | Just vibe! |
-| hyperfine | <TextTag text="Mise-ed" text-xs /> | A command-line benchmarking tool. |
+| Neovim <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just much faster than Visual Studio Code. |
+| Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" />  | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
+| hyperfine | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line benchmarking tool. |
 
 ## Fourth Step: Local LLM
 
@@ -491,6 +493,15 @@ Programs should live under:
   - Portable
     - `<DRIVER>:/Program Files Portable/`
 
+Projects should live under:
+
+- `~/my/`: My projects:
+  - `~/my/website/`: [lumirelle/lumirelle.me](https://github.com/lumirelle/lumirelle.me).
+  - `~/my/infra/`: My infrastructure projects.
+  - `~/my/learning`: My learning records.
+  - `~/my/demo/`: My demo projects.
+  - ...
+
 Use Revo Uninstaller to clean up useless software at regular intervals.
 
 Use DISM++ to clean up the system at regular intervals.
@@ -502,14 +513,14 @@ Shut down and restart your computer at regular intervals.
 Projects should live under:
 
 - `~/my/`: My projects:
+  - `~/my/website/`: [lumirelle/lumirelle.me](https://github.com/lumirelle/lumirelle.me).
   - `~/my/infra/`: My infrastructure projects.
   - `~/my/learning`: My learning records.
   - `~/my/demo/`: My demo projects.
-  - `~/my/prod/`: My production projects.
   - `~/my/contrib/`: Open source projects I contribute to.
   - `~/my/llm`: My LLM-related projects.
   - ...
-- `~/workon/`: Projects I work on.
+- `~/work/`: Projects I'm working on.
   - ...
 
 > [!Caution]

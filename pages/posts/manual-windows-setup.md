@@ -162,7 +162,7 @@ Let's say good bye to OOBE!
 | -- | -- | -- |
 | Clash Verge Rev <TextTag text="Optional" text-xs preset="amber" /><TextTag text="Mise-configured" text-xs preset="mise" />| Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time. |
 | Git <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Nothing is more important than _Git_ for a developer, right? |
-| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{winget add jdx.mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/lumirelle.me.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
+| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{winget add jdx.mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>Before you start, you may want to connect to your GitHub with a SSH key: [Complete guide to setting up SSH and HTTPS authentication for GitHub](https://gist.github.com/arisng/d8dd3ea7f7e469c84350d065fe4baa76).<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/lumirelle.me.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
 ### Configure Windows Itself
 
@@ -351,30 +351,21 @@ wsl --install archlinux --location path/you/prefer
 wsl --install Debian --location path/you/prefer
 ```
 
-### Prerequisite Archlinux Software
+### Create a Non-root User for Archlinux
+
+Use root user is not a such good idea in Linux world. So the first thing we need to do is create a non-root user for Archlinux.
 
 > [!Note]
 > Before you start, please run: `pacman -Syu` to update the package database.
-
-> [!Note]
-> Because the "archlinux" image uses root user by default, so before you creating your non-root user in the [next section](#configure-archlinux-itself), you don't have to and also can't to (because `sudo` isn't installed yet) call `pacman` with `sudo`.
-
-The software below is required for daily use and development in Archlinux:
+>
+> Because you are logged in as root, you don't need `sudo` for running `pacman`.
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Base Devel | :code[nu]{pacman -S base-devel} | Basic dev dependencies. |
 | Vi | :code[nu]{pacman -S vi} | Basic editor. |
-| Git <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{pacman -S git} | Nothing is more important than _Git_ for a developer, right? |
-| OpenSSH | :code[nu]{pacman -S openssh} | Create SSH key, link to everything (Of course, GitHub)! |
-| Yay | :code[nu]{git clone https://aur.archlinux.org/yay-bin.git; cd yay-bin; makepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
-| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/lumirelle.me.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
-### Configure Archlinux Itself
-
-If you prefer to use Archlinux as your WSL distribution just like me, you'd better perform some specific setup, such as switching the default user away from `root`.
-
-You should create your own user (replace `{username}` below with it) in the `wheel` group with a custom password:
+You can create your own user (replace `{username}` below with it) in the `wheel` group with a custom password:
 
 ```nu
 useradd -m -G wheel {username}
@@ -403,12 +394,16 @@ Append the config below:
 default={username}
 ```
 
-Then save and exit with `:wq` as well.
-
-Finally, you can switch to the newly created user:
+Then save and exit with `:wq` as well, and finally shutdown your WSL (running on the host system):
 
 ```nu
-su - {username}
+wsl --shutdown
+```
+
+And restart:
+
+```nu
+wsl
 ```
 
 And call commands with `sudo` if you really need root permission, for example:
@@ -416,6 +411,15 @@ And call commands with `sudo` if you really need root permission, for example:
 ```nu
 sudo pacman -Syu
 ```
+
+### Prerequisite Archlinux Software
+
+| Software | Source/Install Command | Note |
+| -- | -- | -- |
+| Git <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{sudo pacman -S git} | Nothing is more important than _Git_ for a developer, right? |
+| OpenSSH | :code[nu]{sudo pacman -S openssh} | Create SSH key, link to everything (Of course, GitHub)! |
+| Yay | :code[nu]{git clone https://aur.archlinux.org/yay-bin.git; cd yay-bin; makepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
+| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{sudo pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>Before you start, you may want to connect to your GitHub with a SSH key: [Complete guide to setting up SSH and HTTPS authentication for GitHub](https://gist.github.com/arisng/d8dd3ea7f7e469c84350d065fe4baa76).<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/lumirelle.me.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
 ### Recommended WSL Software
 

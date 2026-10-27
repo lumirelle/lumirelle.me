@@ -20,6 +20,21 @@ order: 6
 .prose table th, .prose table td {
   overflow-x: auto;
 }
+/* Below 768 px the per-cell grid is unreadable: put the table back in its
+   normal layout and let `.prose table`'s own `overflow-x: auto` scroll it. */
+@media (max-width: 767px) {
+  .prose table thead,
+  .prose table tbody {
+    display: revert;
+  }
+  .prose table tr {
+    display: revert;
+  }
+  .prose table th,
+  .prose table td {
+    overflow-x: revert;
+  }
+}
 </style>
 
 [[toc]]

@@ -245,7 +245,7 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Wox | <TextTag text="Mise-installed" text-xs preset="mise" /> | <details><summary>Extensions</summary><br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- RImage<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
+| Wox | <TextTag text="Mise-installed" text-xs preset="mise" /> | <details><summary>Extensions</summary><br>- WinFocus<br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- JSON Formatter<br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- Kill Process<br>- Speedtest<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
 | Brave | <TextTag text="Mise-installed" text-xs preset="mise" /> | My daily browser. See extensions setup [here](#browser-setup). |
 | Internet Download Manager <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Tonec.InternetDownloadManager} | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
 | Nutstore <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Nutstore.Nutstore} | WebDAV.<br><br>I use it to sync my KeePass database among multiple devices.<br><br>**If you run into a crash right after opening Nutstore, it's recommended to restart your application or trigger a Nutstore update.** |

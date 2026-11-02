@@ -245,6 +245,7 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
+| Weasel Rime | Please install Rime Nightly Build from [GitHub Release](https://github.com/rime/weasel/releases/tag/latest), my configuration requires librime v1.14.0+, and the latest stable version still uses librime v1.13.1. | CJK IME. |
 | Wox | <TextTag text="Mise-installed" text-xs preset="mise" /> | <details><summary>Extensions</summary><br>- WinFocus<br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- JSON Formatter<br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- Kill Process<br>- Speedtest<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
 | Brave | <TextTag text="Mise-installed" text-xs preset="mise" /> | My daily browser. See extensions setup [here](#browser-setup). |
 | Internet Download Manager <TextTag text="Optional" text-xs preset="amber" /> | :code[nu]{winget add Tonec.InternetDownloadManager} | Download manager, for a better downloading experience.<br><br>**It also installs a browser extension to handle browser downloads!** |
@@ -264,10 +265,10 @@ The software below is highly recommended and helpful for daily use and developme
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| WezTerm <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The only one choice for terminal with Kitty graphic protocol support on Windows. |
+| Rio <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A hardware-accelerated GPU terminal emulator focusing to run in desktops and browsers. |
 | Nushell <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A cross-platform shell powered by Rust. |
 | Starship <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
-| Herdr <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Terminal multiplexer. |
+| TUIOS <TextTag text="Mise-configured" text-xs preset="mise" /> | Please install TUIOS from [GitHub Release](https://github.com/Gaurav-Gosain/tuios/releases), it hasn't been added to the Winget package registry yet.  | A terminal window manager that knows what your agents are doing. Tiling panes, workspaces, sessions that survive restarts, and one Inbox for every coding agent. |
 
 #### Development on Windows
 
@@ -276,7 +277,8 @@ The software below is highly recommended and helpful for daily use and developme
 | Neovim <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just much faster than Visual Studio Code. |
 | Zed <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | **Still experimental, but with better performance than Visual Studio Code.** |
 | Visual Studio Code <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
-| Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
+| Claude Code | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
+| Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | There are always people who say it's better than Claude Code, including my former self. 🎃 But... |
 | DBX | <TextTag text="Mise-installed" text-xs preset="mise" /> | Better database manager! |
 | hyperfine | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line benchmarking tool. |
 
@@ -449,33 +451,41 @@ The software below is highly recommended and helpful for development with Archli
 | Tree Sitter CLI | <TextTag text="Mise-installed" text-xs preset="mise" /> | An incremental parsing system for programming tools. |
 | Image Magick |  <TextTag text="Mise-installed" text-xs preset="mise" /> | Creating, editing, converting, and manipulating images in over 200 formats. |
 | Apple PKL LSP | :code[nu]{mkdir ~/.local/bin/; curl -fsSL https://github.com/apple/pkl-lsp/releases/download/0.8.0/pkl-lsp-0.8.0.jar -o ~/.local/bin/pkl-lsp.jar} | Apple PKL LSP. |
-| Chromium | <TextTag text="Mise-installed" text-xs preset="mise" /> | If you need to run Playwright with Chromium.<br><br>`playwright install-deps` only supports Ubuntu; as a workaround, we can install Playwright's dependencies by installing Chromium. |
 
 #### Archlinux User Experience Enhance
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
+| Ibus Rime | TODO: <TextTag text="Mise-installed" text-xs preset="mise" /> ?  | CJK IME. |
+| Wox | <TextTag text="Mise-installed" text-xs preset="mise" /> | <details><summary>Extensions</summary><br>- WinFocus<br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- JSON Formatter<br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- Kill Process<br>- Speedtest<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
+| Brave | <TextTag text="Mise-installed" text-xs preset="mise" /> | My daily browser. See extensions setup [here](#browser-setup). |
 | zoxide | <TextTag text="Mise-installed" text-xs preset="mise" /> | A smarter cd command. |
 | fd | <TextTag text="Mise-installed" text-xs preset="mise" /> | A simple, fast and user-friendly alternative to `find`. |
 | fzf | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line fuzzy finder. |
 | ripgrep | <TextTag text="Mise-installed" text-xs preset="mise" /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
 | Lazygit | <TextTag text="Mise-installed" text-xs preset="mise" /> | Simple terminal UI for git commands. |
 | Yazi <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Blazing fast terminal file manager. |
+| OBS Studio | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
 
 #### Terminal & Shell on Archlinux
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
+| Rio <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A hardware-accelerated GPU terminal emulator focusing to run in desktops and browsers. |
 | Nushell <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A cross-platform shell powered by Rust. |
 | Starship <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
-| Herdr <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Terminal multiplexer. |
+| TUIOS <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A terminal window manager that knows what your agents are doing. Tiling panes, workspaces, sessions that survive restarts, and one Inbox for every coding agent. |
 
 #### Development on Archlinux
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Neovim <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just much faster than Visual Studio Code. |
-| Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" />  | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
+| Zed <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | **Still experimental, but with better performance than Visual Studio Code.** |
+| Visual Studio Code <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
+| Claude Code | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
+| Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | There are always people who say it's better than Claude Code, including my former self. 🎃 But... |
+| DBX | <TextTag text="Mise-installed" text-xs preset="mise" /> | Better database manager! |
 | hyperfine | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line benchmarking tool. |
 
 ## Fourth Step: Local LLM

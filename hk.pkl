@@ -32,8 +32,9 @@ steps {
         "**/*.mdc",
         "**/*.mdx",
       )
-    // ESLint caches per-file results here and invalidates them on content or configuration
-    // changes, so a repeat run only lints what changed since the last one.
+    // ESLint caches per-file results in `.eslintcache` at the repository root, where CI can
+    // restore it, and invalidates them on content or configuration changes. The content strategy
+    // keeps entries valid across a fresh checkout, whose timestamps are all new.
     check = new CommandSpec {
       command = new Command {
         argv =
@@ -42,7 +43,9 @@ steps {
             "--no-warn-ignored",
             "--cache",
             "--cache-location",
-            "node_modules/.cache/eslint",
+            ".eslintcache",
+            "--cache-strategy",
+            "content",
             "{{files}}",
           )
       }
@@ -57,7 +60,9 @@ steps {
             "--fix",
             "--cache",
             "--cache-location",
-            "node_modules/.cache/eslint",
+            ".eslintcache",
+            "--cache-strategy",
+            "content",
             "{{files}}",
           )
       }

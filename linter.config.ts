@@ -33,12 +33,15 @@ export const options = {
       },
     },
     // oxfmt lowercases hexadecimal digits, so the formatter owns this choice.
+    // Upstream: https://github.com/oxc-project/oxc/issues/21949 (expected; disable the rule),
+    // https://github.com/oxc-project/oxc/issues/27398 (lowercase option request).
     unicorn: {
       rules: {
         'unicorn/number-literal-case': 'off',
       },
     },
     // Formatting belongs to oxfmt; these template rules disagree with its Vue output.
+    // Upstream: https://github.com/oxc-project/oxc/issues/18275 (expected; disable the rules).
     vue: {
       rules: {
         'vue/html-closing-bracket-newline': 'off',

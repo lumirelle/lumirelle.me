@@ -7,6 +7,9 @@ export default oxlint(options)
   // eslint-plugin-unused-imports runs as a JS plugin, so it does not see template usage and would
   // report (and `--fix` remove) bindings that only a template uses. Oxlint's native rule does see
   // the template, so single-file components fall back to it.
+  // Upstream: https://github.com/oxc-project/oxc/issues/15761 (Vue support),
+  // https://github.com/oxc-project/oxc/issues/20465 (JS plugins only see the extracted script),
+  // https://github.com/oxc-project/oxc/discussions/21936 (language plugins, the planned fix).
   .append({
     name: 'project/vue-unused-vars',
     files: ['**/*.vue'],

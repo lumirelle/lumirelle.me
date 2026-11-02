@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 100,
+  "semi": false,
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "quoteProps": "consistent",
+  "objectWrap": "preserve",
+  "experimentalOperatorPosition": "start",
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    ".agents/**",
+    ".claude/**",
+    "pages/**",
+    "public/**",
+    "auto-imports.d.ts",
+    "components.d.ts",
+    "typed-router.d.ts",
+    "index.html",
+    "temp/**",
+    "test-results/**",
+    "src/data/sponsors-circles.json"
+  ]
+}

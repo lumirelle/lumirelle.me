@@ -45,35 +45,39 @@ function escapeHtml(value: string): string {
 }
 
 export function InlineCodeBlockPlugin(md: MarkdownExit): void {
-  md.inline.ruler.before('backticks', 'inline_code_block', (state: StateInline, silent: boolean) => {
-    const match = state.src.slice(state.pos).match(INLINE_CODE_RE)
-    if (!match)
-      return false
+  md.inline.ruler.before(
+    'backticks',
+    'inline_code_block',
+    (state: StateInline, silent: boolean) => {
+      const match = state.src.slice(state.pos).match(INLINE_CODE_RE)
+      if (!match) return false
 
-    if (!silent) {
-      const spec = (match[1] ?? '').split(',').map(part => part.trim()).filter(Boolean)
-      const [lang = '', ...flags] = spec
-      const token = state.push('inline_code_block', '', 0)
-      token.info = lang || 'text'
-      token.content = unescapeCell(match[2] ?? '')
-      // `md.options.highlight` forwards these attrs to Shiki as `meta.__raw`,
-      // where `codeWindow()` looks for `no-window`.
-      token.meta = flags.includes('plain') ? 'no-window' : ''
-    }
+      if (!silent) {
+        const spec = (match[1] ?? '')
+          .split(',')
+          .map(part => part.trim())
+          .filter(Boolean)
+        const [lang = '', ...flags] = spec
+        const token = state.push('inline_code_block', '', 0)
+        token.info = lang || 'text'
+        token.content = unescapeCell(match[2] ?? '')
+        // `md.options.highlight` forwards these attrs to Shiki as `meta.__raw`,
+        // where `codeWindow()` looks for `no-window`.
+        token.meta = flags.includes('plain') ? 'no-window' : ''
+      }
 
-    state.pos += match[0].length
-    return true
-  })
+      state.pos += match[0].length
+      return true
+    },
+  )
 
   // `renderAsync()` awaits render rules, so the async highlighter is usable here.
   md.renderer.rules.inline_code_block = async (tokens, idx, _options, env) => {
     const token = tokens[idx]
-    if (!token)
-      return ''
+    if (!token) return ''
 
     const highlight = md.options.highlight
-    if (!highlight)
-      return `<code>${escapeHtml(token.content)}</code>`
+    if (!highlight) return `<code>${escapeHtml(token.content)}</code>`
 
     return await highlight(token.content, token.info, token.meta ?? '', env)
   }

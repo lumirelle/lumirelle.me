@@ -28,13 +28,9 @@ const crumbs = computed<Crumb[]>(() => {
 
 <template>
   <nav class="breadcrumb" aria-label="Breadcrumb">
-    <RouterLink to="/" class="const">
-      lumirelle@me
-    </RouterLink>
+    <RouterLink to="/" class="const"> lumirelle@me </RouterLink>
     <span class="gap" aria-hidden="true" />
-    <RouterLink to="/" class="const tilde" aria-label="Home">
-      ~
-    </RouterLink>
+    <RouterLink to="/" class="const tilde" aria-label="Home"> ~ </RouterLink>
 
     <template v-for="crumb in crumbs" :key="crumb.to">
       <span class="sep" aria-hidden="true">/</span>

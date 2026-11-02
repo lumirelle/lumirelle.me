@@ -54,9 +54,16 @@ function handleWheel(e: WheelEvent): void {
         :alt="photo.text"
         :data-photo-index="idx"
         loading="lazy"
-
-        h-80 max-h-80 max-w-80 min-h-80 min-w-80 w-80 w-full aspect-square object-cover
-      >
+        h-80
+        max-h-80
+        max-w-80
+        min-h-80
+        min-w-80
+        w-80
+        w-full
+        aspect-square
+        object-cover
+      />
       <div text-sm mt2 op75>
         {{ photo.text }}
       </div>

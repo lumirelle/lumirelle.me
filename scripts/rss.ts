@@ -43,7 +43,7 @@ async function buildBlogRSS(): Promise<void> {
 
   const options = {
     title: 'Lumirelle',
-    description: 'Lumirelle\' Blog',
+    description: "Lumirelle' Blog",
     id: 'https://lumirelle.me/',
     link: 'https://lumirelle.me/',
     copyright: 'CC BY-NC-SA 4.0 2025 © Lumirelle',
@@ -57,7 +57,7 @@ async function buildBlogRSS(): Promise<void> {
     await Promise.all(
       files
         .filter(i => !i.includes('index'))
-        .map(async (i) => {
+        .map(async i => {
           const raw = await fs.readFile(i, 'utf8')
           const { data, content } = matter(raw)
 

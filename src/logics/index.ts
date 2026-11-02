@@ -10,8 +10,9 @@ export const galleryView = useLocalStorage<'cover' | 'contain'>('lumirelle-galle
  * @see https://github.com/vuejs/vitepress/pull/2347
  */
 export async function toggleDark(event: MouseEvent | KeyboardEvent): Promise<void> {
-  const isAppearanceTransition
-    = 'startViewTransition' in document && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const isAppearanceTransition =
+    'startViewTransition' in document
+    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (!isAppearanceTransition) {
     isDark.value = !isDark.value

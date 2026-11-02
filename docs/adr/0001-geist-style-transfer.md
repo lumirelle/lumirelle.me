@@ -2,7 +2,7 @@
 
 > Amended by ADR-0002: hue is permitted for syntax highlighting and alert severity. Everything structural stays monochrome.
 
-This site is visually identical to the `antfu/antfu.me` fork it came from, and the 2026 redesign wanted it simpler and more "geek". We adopt Geist's *design way* — restraint, hairline materials, a visible structural frame, monochrome surfaces — but not its typefaces or React packages: prose stays in a serif, and the system voice (navigation, dates, counts, labels, code) is Aporetic Serif Mono. All motion is CSS plus the View Transitions API; no motion library, no WebGPU, no shader effects. The per-page pixi canvas backgrounds (`art: plum | dots`) are retired. There is no `upstream` git remote and none will be added: this project diverges freely.
+This site is visually identical to the `antfu/antfu.me` fork it came from, and the 2026 redesign wanted it simpler and more "geek". We adopt Geist's _design way_ — restraint, hairline materials, a visible structural frame, monochrome surfaces — but not its typefaces or React packages: prose stays in a serif, and the system voice (navigation, dates, counts, labels, code) is Aporetic Serif Mono. All motion is CSS plus the View Transitions API; no motion library, no WebGPU, no shader effects. The per-page pixi canvas backgrounds (`art: plum | dots`) are retired. There is no `upstream` git remote and none will be added: this project diverges freely.
 
 ## Considered options
 
@@ -14,7 +14,7 @@ This site is visually identical to the `antfu/antfu.me` fork it came from, and t
 
 ## Consequences
 
-- **The prose face is the system serif, not Aporetic Serif.** No proportional Aporetic Serif file exists in this repo, so `--font-serif` resolves to the `ui-serif` stack (Georgia on macOS). The mono cut *is* shipped: subset to Latin + punctuation and converted to woff2 (4.9 MB → 86 KB per weight) with its `@font-face` declared in a dedicated font stylesheet. Everything that read as "Aporetic" before this change was, in fact, a fallback.
+- **The prose face is the system serif, not Aporetic Serif.** No proportional Aporetic Serif file exists in this repo, so `--font-serif` resolves to the `ui-serif` stack (Georgia on macOS). The mono cut _is_ shipped: subset to Latin + punctuation and converted to woff2 (4.9 MB → 86 KB per weight) with its `@font-face` declared in a dedicated font stylesheet. Everything that read as "Aporetic" before this change was, in fact, a fallback.
 - Reading type went from 16 px to 18 px at 1.7 line height, in the same change.
 - NProgress is deleted; its 2 px bar is redundant once View Transitions paints the swap on prerendered routes.
 - The 20-stage `slide-enter` cascade is capped at ~6 stages and restricted to first load, so it cannot double-animate against a route transition.

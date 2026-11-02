@@ -17,8 +17,12 @@ function copy(): void {
     <slot />
     <button
       title="Copy"
-
-      text-sm ml2 op30 inline transition hover:op100
+      text-sm
+      ml2
+      op30
+      inline
+      transition
+      hover:op100
       :class="copied ? 'i-carbon-checkmark text-green' : 'i-carbon-copy'"
       @click="copy()"
     />

@@ -34,7 +34,8 @@
 
   /* Off until the reader has moved; `inert` in the component is what makes it real. */
   opacity: 0;
-  transition: opacity var(--duration-interaction) var(--ease-interaction),
+  transition:
+    opacity var(--duration-interaction) var(--ease-interaction),
     background-color var(--duration-interaction) var(--ease-interaction),
     color var(--duration-interaction) var(--ease-interaction);
 }

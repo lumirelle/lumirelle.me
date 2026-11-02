@@ -6,7 +6,7 @@
     "scripts/redirects.ts",
     "scripts/copy-dist-redirects.ts",
     "scripts/img-compress-staged.ts",
-    "scripts/photos-manage.ts"
+    "scripts/photos-manage.ts",
   ],
   "ignoreDependencies": [
     // Build tools
@@ -17,9 +17,11 @@
     "@unhead/vue",
     "uno.css",
     // Quality
-    "@lumirelle/oxlint-config",
+    "@lumirelle/linter-plugins-eslint",
+    "@lumirelle/linter-plugins-oxlint",
     "@seepine/vue-tsc",
+    "oxfmt",
     // Node.js dependencies manager
-    "taze"
-  ]
+    "taze",
+  ],
 }

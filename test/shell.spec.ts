@@ -142,7 +142,7 @@ test.beforeEach(async ({ page, baseURL: base }) => {
   // Keep the suite hermetic: third-party embeds (widgets, remote avatars) are
   // answered locally so a network hiccup cannot fail a page-load assertion, and
   // so only this origin can produce a real 404.
-  await page.route('**/*', async (route) => {
+  await page.route('**/*', async route => {
     if (base && route.request().url().startsWith(base)) {
       await route.fallback()
       return
@@ -158,13 +158,13 @@ test('the build prerenders every route with its own content', () => {
 
   // A route whose prerendered content landmark is empty is a route a crawler
   // sees as blank, regardless of what the client renders afterwards.
-  const withoutContent = routes
-    .filter(route => route.marker === '')
-    .map(route => route.file)
+  const withoutContent = routes.filter(route => route.marker === '').map(route => route.file)
   expect(withoutContent).toEqual([])
 })
 
-test('the header row is five mono text links, two named icons and the theme toggle', async ({ page }) => {
+test('the header row is five mono text links, two named icons and the theme toggle', async ({
+  page,
+}) => {
   await page.goto('/posts', { waitUntil: 'load' })
 
   const header = page.getByRole('banner')
@@ -189,7 +189,12 @@ test('the header row is five mono text links, two named icons and the theme togg
   const toggles = nav.getByRole('button')
   await expect(toggles).toHaveCount(1)
   await expect(toggles.first()).toHaveAccessibleName(/switch to (dark|light) theme/i)
-  expect(await nav.locator('a, button').last().evaluate(el => el.tagName)).toBe('BUTTON')
+  expect(
+    await nav
+      .locator('a, button')
+      .last()
+      .evaluate(el => el.tagName),
+  ).toBe('BUTTON')
 
   // `one line, no rule beneath it`: the hairline belongs to the Frame (#5).
   expect(await header.evaluate(el => getComputedStyle(el).borderBottomWidth)).toBe('0px')
@@ -218,9 +223,7 @@ test('the dark palette follows the dark class, not the media query alone', async
   // The class flip is what a visitor's theme toggle does, and the Shell
   // transitions colour over 120 ms, so poll until the paint settles rather than
   // reading a mid-transition `oklab(…)` value.
-  await expect
-    .poll(async () => toRgbChrome(await readChrome(page)))
-    .toEqual(expectedChrome('dark'))
+  await expect.poll(async () => toRgbChrome(await readChrome(page))).toEqual(expectedChrome('dark'))
 })
 
 test('bookmarks are reachable from the use page', async ({ page }) => {
@@ -241,7 +244,7 @@ test('the sponsors list is reachable from the footer', async ({ page }) => {
 })
 
 /** The content column's box, which is what the Frame's measure amounts to. */
-async function readColumn(page: Page): Promise<{ left: number, width: number }> {
+async function readColumn(page: Page): Promise<{ left: number; width: number }> {
   const box = await page.getByRole('main').boundingBox()
   if (!box) {
     throw new Error('the content column has no box')
@@ -301,7 +304,9 @@ test('the Frame does not move when only the page changes', async ({ page }) => {
 })
 
 for (const scheme of ['light', 'dark'] as const) {
-  test(`a keyboard-focused control paints its outline in the ${scheme} scheme`, async ({ page }) => {
+  test(`a keyboard-focused control paints its outline in the ${scheme} scheme`, async ({
+    page,
+  }) => {
     await page.emulateMedia({ colorScheme: scheme })
     await page.goto('/posts', { waitUntil: 'load' })
 
@@ -310,9 +315,7 @@ for (const scheme of ['light', 'dark'] as const) {
     let focused = ''
     for (let i = 0; i < 12 && focused !== 'projects'; i++) {
       await page.keyboard.press('Tab')
-      focused = await page.evaluate(
-        () => (document.activeElement?.textContent ?? '').trim(),
-      )
+      focused = await page.evaluate(() => (document.activeElement?.textContent ?? '').trim())
     }
     expect(focused).toBe('projects')
 
@@ -377,7 +380,8 @@ test('a route change keeps the outgoing page and moves both', async ({ page }) =
   // On first load there is only ever one page on screen.
   await expect(page.locator('.route-frame')).toHaveCount(1)
 
-  await page.getByRole('banner')
+  await page
+    .getByRole('banner')
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'projects', exact: true })
     .click()
@@ -387,10 +391,13 @@ test('a route change keeps the outgoing page and moves both', async ({ page }) =
   await expect.poll(() => page.locator('.route-frame').count()).toBe(2)
 
   // And it is a slow, viewport-scale move rather than a 24 px nudge.
-  const moving = await page.locator('.route-frame').last().evaluate((el) => {
-    const style = getComputedStyle(el)
-    return { duration: style.transitionDuration, property: style.transitionProperty }
-  })
+  const moving = await page
+    .locator('.route-frame')
+    .last()
+    .evaluate(el => {
+      const style = getComputedStyle(el)
+      return { duration: style.transitionDuration, property: style.transitionProperty }
+    })
   expect(moving.duration).toContain('0.6s')
   expect(moving.property).toContain('transform')
 
@@ -408,7 +415,7 @@ test('reduced motion strips the route move and the cascade', async ({ page }) =>
 
   // Ask the stylesheet what it would do, rather than racing the transition: put
   // the move classes on the page and read what they resolve to.
-  const effect = await page.locator('.route-frame').evaluate((el) => {
+  const effect = await page.locator('.route-frame').evaluate(el => {
     el.classList.add('route-down-enter-from', 'route-down-enter-active')
     const style = getComputedStyle(el)
     const resolved = { transform: style.transform, duration: style.transitionDuration }
@@ -448,7 +455,7 @@ test('every segment of the breadcrumb is its own route', async ({ page }) => {
 
   // The prompt `lumirelle@me` sits one level above the path: `~`, the slashes and
   // the segments are all the faint level, and nothing changes colour for state.
-  const inks = await crumbs.evaluate((el) => {
+  const inks = await crumbs.evaluate(el => {
     const prompt = el.querySelector('.const:not(.tilde)')!
     const path = [...el.querySelectorAll('.tilde, .sep, .crumb, [aria-current]')]
     return {
@@ -507,12 +514,14 @@ test('scroll to top is inert until the reader has scrolled', async ({ page }) =>
   // Absent from the accessibility tree and the tab order while hidden — not
   // merely transparent.
   await expect(control).toHaveAttribute('inert', '')
-  expect(await control.evaluate(el => (el as HTMLButtonElement).matches(':enabled') && el.hasAttribute('inert'))).toBe(true)
+  expect(
+    await control.evaluate(
+      el => (el as HTMLButtonElement).matches(':enabled') && el.hasAttribute('inert'),
+    ),
+  ).toBe(true)
 
   await page.evaluate(() => window.scrollTo({ top: 900, behavior: 'instant' }))
-  await expect
-    .poll(() => control.evaluate(el => el.hasAttribute('inert')))
-    .toBe(false)
+  await expect.poll(() => control.evaluate(el => el.hasAttribute('inert'))).toBe(false)
   await expect(control).toBeVisible()
 
   // Inverts on hover: ink fill, canvas glyph. Polled, because the control
@@ -533,7 +542,9 @@ test('scroll to top is inert until the reader has scrolled', async ({ page }) =>
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
 })
 
-test('cd .. sits in the gutter outside the routed content and keeps the query', async ({ page }) => {
+test('cd .. sits in the gutter outside the routed content and keeps the query', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1500, height: 900 })
   await page.goto('/posts?page=2', { waitUntil: 'load' })
 
@@ -579,7 +590,7 @@ test('the Post list is a ledger with one row per Post', async ({ page }) => {
   // mono — not an oversized numeral floating above the rows.
   const group = page.getByRole('main').getByRole('heading', { level: 2 }).first()
   await expect(group).toBeVisible()
-  const label = await group.evaluate((el) => {
+  const label = await group.evaluate(el => {
     const style = getComputedStyle(el)
     return {
       text: (el.textContent ?? '').trim(),
@@ -593,9 +604,10 @@ test('the Post list is a ledger with one row per Post', async ({ page }) => {
 
   // Rows are separated by rhythm, not by rules: the prototype's list carries no
   // per-row hairline at all.
-  const rowRules = await page.getByRole('main').getByRole('listitem').evaluateAll(els =>
-    els.map(el => getComputedStyle(el).borderBottomWidth),
-  )
+  const rowRules = await page
+    .getByRole('main')
+    .getByRole('listitem')
+    .evaluateAll(els => els.map(el => getComputedStyle(el).borderBottomWidth))
   expect([...new Set(rowRules)]).toEqual(['0px'])
 })
 
@@ -605,10 +617,12 @@ test('dates are a monospaced, tabular column', async ({ page }) => {
   const dates = ledgerRows(page).locator('time')
   await expect(dates.first()).toBeVisible()
 
-  const painted = await dates.evaluateAll(els => els.map(el => ({
-    variant: getComputedStyle(el).fontVariantNumeric,
-    family: getComputedStyle(el).fontFamily,
-  })))
+  const painted = await dates.evaluateAll(els =>
+    els.map(el => ({
+      variant: getComputedStyle(el).fontVariantNumeric,
+      family: getComputedStyle(el).fontFamily,
+    })),
+  )
   expect(painted.length).toBeGreaterThan(20)
   for (const date of painted) {
     expect(date.variant).toContain('tabular-nums')
@@ -666,8 +680,11 @@ function frontmatterField(source: string, key: string): string | undefined {
 
 const history = historyAvailability()
 
-test('every Post\'s last edit is the date of the commit that touched its file', async ({ page }) => {
-  test.skip(!history.available, `history unavailable, nothing to compare against: ${history.reason}`)
+test("every Post's last edit is the date of the commit that touched its file", async ({ page }) => {
+  test.skip(
+    !history.available,
+    `history unavailable, nothing to compare against: ${history.reason}`,
+  )
 
   const sources = new Map(readPages().map(entry => [entry.file, entry.source]))
   const posts = routes
@@ -686,7 +703,7 @@ test('every Post\'s last edit is the date of the commit that touched its file', 
 
     const mastheads = page.getByRole('main').locator('p').filter({ hasText: 'First post on' })
     const masthead = await mastheads.count()
-    const text = masthead === 0 ? '' : onOneLine(await mastheads.first().textContent() ?? '')
+    const text = masthead === 0 ? '' : onOneLine((await mastheads.first().textContent()) ?? '')
     const segments = text.split('·').map(segment => segment.trim())
 
     if (!published) {
@@ -704,16 +721,15 @@ test('every Post\'s last edit is the date of the commit that touched its file', 
     // same-day rule is exercised the day a Post qualifies for it: a file whose
     // last commit lands on its publication day shows one date, not two.
     const offset = offsetOf(commit)
-    const expectsEdit = commit !== undefined
-      && dayInOffset(commit, offset) !== dayInOffset(published, offset)
+    const expectsEdit =
+      commit !== undefined && dayInOffset(commit, offset) !== dayInOffset(published, offset)
     const edit = segments.find(segment => segment.startsWith('Last edit on '))
 
     if (expectsEdit) {
       expect(edit, `${route.path}: last edit (git ${commit})`).toBe(
         `Last edit on ${renderedDate(commit)}`,
       )
-    }
-    else {
+    } else {
       expect(edit, `${route.path}: no edit segment`).toBeUndefined()
     }
 
@@ -742,7 +758,10 @@ test('no Post carries a hand-written last-edit date', () => {
 })
 
 test('no Post is published after the commit that introduced it', () => {
-  test.skip(!history.available, `history unavailable, nothing to compare against: ${history.reason}`)
+  test.skip(
+    !history.available,
+    `history unavailable, nothing to compare against: ${history.reason}`,
+  )
 
   // A Post dated later than its own first commit is not stale, it is impossible:
   // nothing exists before the commit that introduced it. The build warns about
@@ -779,10 +798,9 @@ test('the post sections read as `posts` in the header', async ({ page }) => {
 
     // Visually current, and announced as *this section* rather than as "the
     // current page", which `/blog` is not.
-    expect(
-      toChannels(await posts.evaluate(el => getComputedStyle(el).color)),
-      path,
-    ).toEqual([118, 118, 118])
+    expect(toChannels(await posts.evaluate(el => getComputedStyle(el).color)), path).toEqual([
+      118, 118, 118,
+    ])
     await expect(posts, path).toHaveAttribute('aria-current', 'true')
 
     // And no other item claims to be current.
@@ -808,9 +826,9 @@ test('moving between sections types the flag instead of fading the page', async 
   // Not a change of place: no page-level move, so the old page is never kept
   // alongside the new one.
   await expect(page.locator('.route-frame')).toHaveCount(1)
-  expect(
-    await page.locator('.route-frame').evaluate(el => getComputedStyle(el).transform),
-  ).toBe('none')
+  expect(await page.locator('.route-frame').evaluate(el => getComputedStyle(el).transform)).toBe(
+    'none',
+  )
 
   // The flag is what changed, so the flag is what gets typed.
   await expect
@@ -822,15 +840,18 @@ test('the leaving page keeps its column while it goes', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 })
   await page.goto('/posts', { waitUntil: 'load' })
 
-  const boxes = () => page.evaluate(() =>
-    [...document.querySelectorAll('.route-frame')].map((el) => {
-      const box = el.getBoundingClientRect()
-      return { x: Math.round(box.x), width: Math.round(box.width) }
-    }))
+  const boxes = () =>
+    page.evaluate(() =>
+      [...document.querySelectorAll('.route-frame')].map(el => {
+        const box = el.getBoundingClientRect()
+        return { x: Math.round(box.x), width: Math.round(box.width) }
+      }),
+    )
 
   const [rest] = await boxes()
 
-  await page.getByRole('banner')
+  await page
+    .getByRole('banner')
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'projects', exact: true })
     .click()
@@ -846,7 +867,8 @@ test('the leaving page keeps its column while it goes', async ({ page }) => {
 
 test('a navigation from elsewhere keeps the outgoing page', async ({ page }) => {
   await page.goto('/projects', { waitUntil: 'load' })
-  await page.getByRole('banner')
+  await page
+    .getByRole('banner')
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'posts', exact: true })
     .click()
@@ -860,18 +882,19 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
   await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
-  const rail = () => page.evaluate(() => {
-    const toc = document.querySelector('.table-of-contents')
-    if (!toc) {
-      return null
-    }
-    return {
-      owner: (toc as HTMLElement).dataset.owner ?? '',
-      first: toc.querySelector('a')?.textContent?.trim() ?? '',
-      active: toc.querySelector('a.toc-active')?.textContent?.trim() ?? '',
-      x: Math.round(toc.getBoundingClientRect().x),
-    }
-  })
+  const rail = () =>
+    page.evaluate(() => {
+      const toc = document.querySelector('.table-of-contents')
+      if (!toc) {
+        return null
+      }
+      return {
+        owner: (toc as HTMLElement).dataset.owner ?? '',
+        first: toc.querySelector('a')?.textContent?.trim() ?? '',
+        active: toc.querySelector('a.toc-active')?.textContent?.trim() ?? '',
+        x: Math.round(toc.getBoundingClientRect().x),
+      }
+    })
 
   const git = await rail()
   expect(git?.owner).toBe('/posts/tutorial-git')
@@ -881,7 +904,8 @@ test('the outline rail follows the Post you navigate to', async ({ page }) => {
 
   // Navigate to a different Post: the rail must be that Post's, not the last one.
   await page.goto('/posts', { waitUntil: 'load' })
-  await page.getByRole('main')
+  await page
+    .getByRole('main')
     .getByRole('link')
     .filter({ hasText: 'Tutorial: Vue Advanced Grammar' })
     .first()
@@ -961,7 +985,7 @@ test('a long outline scrolls inside the rail, not off the page', async ({ page }
   })
   await expect(mark).toHaveClass(/toc-active/)
 
-  const inRail = await mark.evaluate((el) => {
+  const inRail = await mark.evaluate(el => {
     const rail = document.querySelector('.table-of-contents > ul')!.getBoundingClientRect()
     const entry = el.parentElement!.getBoundingClientRect()
     return {
@@ -1011,34 +1035,38 @@ test('the Shell owns the outline at both widths and never duplicates it', async 
  * beat later — which would leave the test reading a page nobody scrolled.
  */
 async function scrollPageTo(page: Page, top: number): Promise<void> {
-  await expect.poll(async () => {
-    await page.evaluate((y) => {
-      document.documentElement.style.scrollBehavior = 'auto'
-      window.scrollTo({ top: y, behavior: 'instant' })
-    }, top)
-    return page.evaluate(() => Math.round(window.scrollY))
-  }).toBe(top)
+  await expect
+    .poll(async () => {
+      await page.evaluate(y => {
+        document.documentElement.style.scrollBehavior = 'auto'
+        window.scrollTo({ top: y, behavior: 'instant' })
+      }, top)
+      return page.evaluate(() => Math.round(window.scrollY))
+    })
+    .toBe(top)
 }
 
 /** The same, for a heading that has to come to rest at the top of the viewport. */
 async function scrollToHeading(page: Page, selector: string): Promise<void> {
-  await expect.poll(async () => {
-    await page.evaluate((hash) => {
-      document.documentElement.style.scrollBehavior = 'auto'
-      const heading = document.querySelector(hash)!
-      window.scrollTo({
-        top: heading.getBoundingClientRect().top + window.scrollY,
-        behavior: 'instant',
-      })
-    }, selector)
-    return page.evaluate(
-      hash => Math.round(document.querySelector(hash)!.getBoundingClientRect().top) === 0,
-      selector,
-    )
-  }).toBe(true)
+  await expect
+    .poll(async () => {
+      await page.evaluate(hash => {
+        document.documentElement.style.scrollBehavior = 'auto'
+        const heading = document.querySelector(hash)!
+        window.scrollTo({
+          top: heading.getBoundingClientRect().top + window.scrollY,
+          behavior: 'instant',
+        })
+      }, selector)
+      return page.evaluate(
+        hash => Math.round(document.querySelector(hash)!.getBoundingClientRect().top) === 0,
+        selector,
+      )
+    })
+    .toBe(true)
 }
 
-test('resizing across 1400 px keeps the reader\'s place in the outline', async ({ page }) => {
+test("resizing across 1400 px keeps the reader's place in the outline", async ({ page }) => {
   await page.setViewportSize({ width: 1500, height: 950 })
   await page.goto('/posts/tutorial-js-advanced-grammar', { waitUntil: 'load' })
 
@@ -1049,18 +1077,19 @@ test('resizing across 1400 px keeps the reader\'s place in the outline', async (
   const cdUp = page.getByRole('link', { name: /cd \.\./ })
   const cdTop = await cdUp.evaluate(el => Math.round(el.getBoundingClientRect().top))
 
-  const readPlace = () => page.evaluate(() => {
-    const outline = document.querySelector('.table-of-contents')!
-    const list = outline.querySelector('ul')!
-    const active = outline.querySelector('a.toc-active')
-    const listBox = list.getBoundingClientRect()
-    const entry = active?.parentElement!.getBoundingClientRect()
-    return {
-      active: active?.textContent?.trim() ?? '',
-      shown: Boolean(entry && entry.top >= listBox.top - 1 && entry.bottom <= listBox.bottom + 1),
-      scrolled: list.scrollTop > 0,
-    }
-  })
+  const readPlace = () =>
+    page.evaluate(() => {
+      const outline = document.querySelector('.table-of-contents')!
+      const list = outline.querySelector('ul')!
+      const active = outline.querySelector('a.toc-active')
+      const listBox = list.getBoundingClientRect()
+      const entry = active?.parentElement!.getBoundingClientRect()
+      return {
+        active: active?.textContent?.trim() ?? '',
+        shown: Boolean(entry && entry.top >= listBox.top - 1 && entry.bottom <= listBox.bottom + 1),
+        scrolled: list.scrollTop > 0,
+      }
+    })
 
   const place = { active: 'Unhandled Rejections', shown: true, scrolled: true }
   expect(await readPlace()).toEqual(place)
@@ -1081,14 +1110,15 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
   await page.setViewportSize({ width: 1200, height: 950 })
   await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
-  const readOutline = () => page.evaluate(() => {
-    const outline = document.querySelector('.table-of-contents')
-    return {
-      count: document.querySelectorAll('.table-of-contents').length,
-      first: outline?.querySelector('a')?.textContent?.trim() ?? '',
-      inFrame: Boolean(outline?.closest('.route-frame')),
-    }
-  })
+  const readOutline = () =>
+    page.evaluate(() => {
+      const outline = document.querySelector('.table-of-contents')
+      return {
+        count: document.querySelectorAll('.table-of-contents').length,
+        first: outline?.querySelector('a')?.textContent?.trim() ?? '',
+        inFrame: Boolean(outline?.closest('.route-frame')),
+      }
+    })
 
   expect(await readOutline()).toEqual({
     count: 1,
@@ -1098,14 +1128,16 @@ test('below 1400 px a route change hands the outline to the new Post', async ({ 
 
   // Leaving the Post takes its outline with it, rather than leaving a stale one
   // behind for the list page.
-  await page.getByRole('banner')
+  await page
+    .getByRole('banner')
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'posts', exact: true })
     .click()
   await expect(page).toHaveURL(/\/posts$/)
   await expect.poll(() => page.locator('.table-of-contents').count()).toBe(0)
 
-  await page.getByRole('main')
+  await page
+    .getByRole('main')
     .getByRole('link')
     .filter({ hasText: 'Tutorial: Vue Advanced Grammar' })
     .first()
@@ -1225,14 +1257,16 @@ test('the outline control opens the panel and Esc hands focus back', async ({ pa
   await expect(outlineControlAnyState(page)).toHaveCount(0)
 
   // Opening moves focus into the panel…
-  expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
-    .toBe(true)
+  expect(
+    await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))),
+  ).toBe(true)
 
   // …and Tab walks the panel instead: the sections are the only stops there.
   for (let presses = 0; presses < 8; presses++) {
     await page.keyboard.press('Tab')
-    expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
-      .toBe(true)
+    expect(
+      await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))),
+    ).toBe(true)
   }
 
   await page.keyboard.press('Escape')
@@ -1268,8 +1302,9 @@ test('the closed outline panel is off-canvas and out of the tab order', async ({
   // And no Tab ever lands on a link the reader cannot see.
   for (let presses = 0; presses < 10; presses++) {
     await page.keyboard.press('Tab')
-    expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
-      .toBe(false)
+    expect(
+      await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))),
+    ).toBe(false)
   }
 })
 
@@ -1278,7 +1313,7 @@ for (const scheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: scheme })
     const panel = await openOutlinePanel(page)
 
-    const painted = await panel.evaluate((el) => {
+    const painted = await panel.evaluate(el => {
       const style = getComputedStyle(el)
       return {
         surface: style.backgroundColor,
@@ -1293,25 +1328,32 @@ for (const scheme of ['light', 'dark'] as const) {
     expect(toRgb(painted.surface)).toBe(PALETTE.surface[scheme])
     expect(painted.edgeWidth).toBe('1px')
     expect(toRgb(painted.edge)).toBe(PALETTE.stroke[scheme])
-    expect([PALETTE.ink[scheme], PALETTE.inkStrong[scheme], PALETTE.inkFaint[scheme]])
-      .toContain(toRgb(painted.ink))
+    expect([PALETTE.ink[scheme], PALETTE.inkStrong[scheme], PALETTE.inkFaint[scheme]]).toContain(
+      toRgb(painted.ink),
+    )
 
     // Headed `$ cat outline` with the prompt at full ink, footed `esc`.
     await expect(panel).toContainText('cat outline')
     await expect(panel).toContainText('esc')
     const prompt = panel.getByText('$', { exact: true })
     await expect(prompt).toBeVisible()
-    expect(toRgb(await prompt.evaluate(el => getComputedStyle(el).color)))
-      .toBe(PALETTE.inkStrong[scheme])
+    expect(toRgb(await prompt.evaluate(el => getComputedStyle(el).color))).toBe(
+      PALETTE.inkStrong[scheme],
+    )
 
     // The list itself, with the Rail's active mark: `>` in a reserved gutter, on
     // exactly the section the reader is in. Polled, because the mark fades in.
-    const marked = () => panel.getByRole('link').evaluateAll(els => els.map(el => ({
-      marker: getComputedStyle(el, '::before').content,
-      shown: getComputedStyle(el, '::before').opacity,
-      label: (el.textContent ?? '').trim(),
-    })))
-    await expect.poll(async () => (await marked()).filter(mark => mark.shown === '1')).toHaveLength(1)
+    const marked = () =>
+      panel.getByRole('link').evaluateAll(els =>
+        els.map(el => ({
+          marker: getComputedStyle(el, '::before').content,
+          shown: getComputedStyle(el, '::before').opacity,
+          label: (el.textContent ?? '').trim(),
+        })),
+      )
+    await expect
+      .poll(async () => (await marked()).filter(mark => mark.shown === '1'))
+      .toHaveLength(1)
     const marks = await marked()
     expect(marks.length).toBeGreaterThan(5)
     expect(marks.every(mark => mark.marker === '">"')).toBe(true)
@@ -1349,10 +1391,13 @@ for (const scheme of ['light', 'dark'] as const) {
 test('the outline panel carries the same three levels as the Rail', async ({ page }) => {
   const panel = await openOutlinePanel(page, '/posts/tutorial-computer-network')
 
-  const size = async (name: string) => Number.parseFloat(await panel
-    .getByRole('link', { name })
-    .first()
-    .evaluate(el => getComputedStyle(el).fontSize))
+  const size = async (name: string) =>
+    Number.parseFloat(
+      await panel
+        .getByRole('link', { name })
+        .first()
+        .evaluate(el => getComputedStyle(el).fontSize),
+    )
 
   // h4 is a real section level in the Manuals, so the panel carries it — at
   // 10 px, one step below the level above it, never as another section.
@@ -1421,8 +1466,9 @@ test('a route with no outline offers no control', async ({ page }) => {
 
   // Nothing to open, so nothing offered — not a control that opens an empty panel.
   await expect(page.locator('.table-of-contents')).toHaveCount(0)
-  await expect(page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }))
-    .toHaveCount(0)
+  await expect(
+    page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }),
+  ).toHaveCount(0)
   await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
 })
 
@@ -1451,12 +1497,14 @@ test('navigating away closes the outline panel', async ({ page }) => {
 
   // Two SPA moves, so that going back lands on another Post that has an outline
   // of its own rather than on a page with none.
-  await page.getByRole('banner')
+  await page
+    .getByRole('banner')
     .getByRole('navigation', { name: 'Primary' })
     .getByRole('link', { name: 'posts', exact: true })
     .click()
   await expect(page).toHaveURL(/\/posts$/)
-  await page.getByRole('main')
+  await page
+    .getByRole('main')
     .getByRole('link')
     .filter({ hasText: 'Tutorial: Git' })
     .first()
@@ -1486,8 +1534,9 @@ test('the outline control is absent where the Rail owns the outline', async ({ p
 
   // Nothing of the narrow presentation appears at 1500 px.
   await expect(outlineControl(page)).toHaveCount(0)
-  await expect(page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }))
-    .toBeHidden()
+  await expect(
+    page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }),
+  ).toBeHidden()
   await expect(page.getByRole('dialog', { name: 'outline', includeHidden: true })).toBeHidden()
 })
 
@@ -1495,7 +1544,7 @@ test('the outline panel appears without sliding under reduced motion', async ({ 
   await page.emulateMedia({ reducedMotion: 'reduce' })
   const panel = await openOutlinePanel(page)
 
-  const moving = await panel.evaluate((el) => {
+  const moving = await panel.evaluate(el => {
     const style = getComputedStyle(el)
     return { property: style.transitionProperty, duration: style.transitionDuration }
   })
@@ -1519,7 +1568,9 @@ test('o opens and closes the outline panel', async ({ page }) => {
   await expect(panel).toHaveCount(0)
 })
 
-test('o reaches the outline from the top of the page, where the control is not', async ({ page }) => {
+test('o reaches the outline from the top of the page, where the control is not', async ({
+  page,
+}) => {
   await page.setViewportSize(PHONE)
   await page.goto('/posts/tutorial-git', { waitUntil: 'load' })
 
@@ -1533,8 +1584,9 @@ test('o reaches the outline from the top of the page, where the control is not',
 
   await page.keyboard.press('Escape')
   await expect(page.getByRole('dialog', { name: 'outline' })).toHaveCount(0)
-  expect(await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))))
-    .toBe(false)
+  expect(
+    await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))),
+  ).toBe(false)
   expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true)
 })
 
@@ -1544,8 +1596,9 @@ test('neither the outline control nor the panel prints', async ({ page }) => {
   await scrollPageTo(page, 900)
   await page.emulateMedia({ media: 'print' })
 
-  await expect(page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }))
-    .toBeHidden()
+  await expect(
+    page.getByRole('button', { name: 'outline', exact: true, includeHidden: true }),
+  ).toBeHidden()
   await expect(page.getByRole('dialog', { name: 'outline', includeHidden: true })).toBeHidden()
 })
 
@@ -1565,21 +1618,22 @@ test('the header stays on one line and never collapses its parents', async ({ pa
   await page.setViewportSize({ width: 1440, height: 800 })
   await page.goto('/posts/test-recursive-mono-nbsp-rendering', { waitUntil: 'load' })
 
-  const read = () => page.evaluate(() => {
-    const box = (el: Element) => {
-      const rect = el.getBoundingClientRect()
-      return { width: Math.round(rect.width), truncated: el.scrollWidth > el.clientWidth + 1 }
-    }
-    const crumb = document.querySelector('.breadcrumb')!.getBoundingClientRect()
-    const nav = document.querySelector('nav[aria-label="Primary"]')!.getBoundingClientRect()
-    return {
-      prompt: box(document.querySelector('.const:not(.tilde)')!),
-      parent: box(document.querySelector('.crumb:not(.current)')!),
-      current: box(document.querySelector('.current')!),
-      oneLine: Math.abs(crumb.y - nav.y) < 2,
-      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
-    }
-  })
+  const read = () =>
+    page.evaluate(() => {
+      const box = (el: Element) => {
+        const rect = el.getBoundingClientRect()
+        return { width: Math.round(rect.width), truncated: el.scrollWidth > el.clientWidth + 1 }
+      }
+      const crumb = document.querySelector('.breadcrumb')!.getBoundingClientRect()
+      const nav = document.querySelector('nav[aria-label="Primary"]')!.getBoundingClientRect()
+      return {
+        prompt: box(document.querySelector('.const:not(.tilde)')!),
+        parent: box(document.querySelector('.crumb:not(.current)')!),
+        current: box(document.querySelector('.current')!),
+        oneLine: Math.abs(crumb.y - nav.y) < 2,
+        overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+      }
+    })
 
   const wide = await read()
   expect(wide.oneLine).toBe(true)
@@ -1605,7 +1659,7 @@ test('code blocks are terminal windows with a copy control', async ({ page }) =>
   const window = page.locator('.code-window').first()
   await expect(window).toBeVisible()
 
-  const chrome = await window.evaluate((el) => {
+  const chrome = await window.evaluate(el => {
     const style = getComputedStyle(el)
     const bar = el.querySelector('.code-window-bar')!
     return {
@@ -1644,8 +1698,9 @@ test('the ledger keeps its ordering: newest year first, then newest date', async
     const sections = [...document.querySelectorAll('main section')]
     return sections.map(section => ({
       label: (section.querySelector('h2')?.textContent ?? '').trim(),
-      stamps: [...section.querySelectorAll('time')]
-        .map(time => time.getAttribute('datetime') ?? ''),
+      stamps: [...section.querySelectorAll('time')].map(
+        time => time.getAttribute('datetime') ?? '',
+      ),
     }))
   })
 
@@ -1660,8 +1715,14 @@ test('the ledger keeps its ordering: newest year first, then newest date', async
 
   for (const group of groups) {
     const stamps = group.stamps.map(stamp => Date.parse(stamp))
-    expect(stamps.every(stamp => Number.isFinite(stamp)), group.label).toBe(true)
-    expect([...stamps].sort((a, b) => b - a), group.label).toEqual(stamps)
+    expect(
+      stamps.every(stamp => Number.isFinite(stamp)),
+      group.label,
+    ).toBe(true)
+    expect(
+      [...stamps].sort((a, b) => b - a),
+      group.label,
+    ).toEqual(stamps)
   }
 })
 
@@ -1720,8 +1781,9 @@ test('hovering a row inverts its date cell without moving the title', async ({ p
 async function expectRouteRendered(page: Page, route: RouteArtifact): Promise<void> {
   const content = page.getByRole('main')
   await expect(content, `${route.path}: content`).toBeVisible()
-  expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`)
-    .toContain(squash(route.marker))
+  expect(squash((await content.textContent()) ?? ''), `${route.path}: prerendered text`).toContain(
+    squash(route.marker),
+  )
 
   const shell = page.getByRole('banner')
   await expect(shell, `${route.path}: Shell`).toBeVisible()
@@ -1763,9 +1825,9 @@ test('the Splash plays once on a cold session and blocks the page beneath it', a
 
   // The Splash is the first-load moment, so the entrance cascade does not also
   // run underneath it.
-  expect(
-    await page.evaluate(() => document.documentElement.classList.contains('no-sliding')),
-  ).toBe(true)
+  expect(await page.evaluate(() => document.documentElement.classList.contains('no-sliding'))).toBe(
+    true,
+  )
 
   // And it finishes by itself, in about a second, with nobody touching it.
   await expect(overlay).toBeHidden({ timeout: 2000 })
@@ -1915,14 +1977,17 @@ test('the Frame degrades below the breakpoint on both P1 pages', async ({ page }
   }
 })
 
-test('keyboard focus reaches the navigation and the rows, and is always painted', async ({ page }) => {
+test('keyboard focus reaches the navigation and the rows, and is always painted', async ({
+  page,
+}) => {
   await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('/posts', { waitUntil: 'load' })
 
   // The Shell has to be interactive before the first Tab lands on anything;
   // pressing into a half-hydrated page leaves focus on `body`.
   await expect(
-    page.getByRole('banner')
+    page
+      .getByRole('banner')
       .getByRole('navigation', { name: 'Primary' })
       .getByRole('link', { name: 'posts', exact: true }),
   ).toBeVisible()
@@ -1965,8 +2030,9 @@ test('keyboard focus reaches the navigation and the rows, and is always painted'
     expect(focused.style, `focus outline on ${focused.identity}`).toBe('solid')
     expect(focused.width, `focus outline width on ${focused.identity}`).toBe('1px')
     expect(focused.offset, `focus outline offset on ${focused.identity}`).toBe('2px')
-    expect(toChannels(focused.colour), `focus outline colour on ${focused.identity}`)
-      .toEqual([17, 17, 17])
+    expect(toChannels(focused.colour), `focus outline colour on ${focused.identity}`).toEqual([
+      17, 17, 17,
+    ])
     outlines += 1
     if (focused.inRow) {
       rowLinks += 1

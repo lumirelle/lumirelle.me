@@ -25,8 +25,7 @@ onMounted(() => {
 
 function onLoad(): void {
   const doc = frame.value?.contentDocument
-  if (!doc)
-    return
+  if (!doc) return
 
   const parent = window.parent.document.documentElement
   const apply = () => {
@@ -43,8 +42,7 @@ function onLoad(): void {
   })
 
   const h = doc.body.scrollHeight
-  if (h)
-    frame.value!.style.height = `${h + 24}px`
+  if (h) frame.value!.style.height = `${h + 24}px`
 }
 </script>
 

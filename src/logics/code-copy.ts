@@ -15,8 +15,7 @@ async function copy(text: string): Promise<boolean> {
       await navigator.clipboard.writeText(text)
       return true
     }
-  }
-  catch {
+  } catch {
     // Fall through to the selection-based copy.
   }
 
@@ -32,14 +31,13 @@ async function copy(text: string): Promise<boolean> {
     const ok = document.execCommand('copy')
     area.remove()
     return ok
-  }
-  catch {
+  } catch {
     return false
   }
 }
 
 export function installCodeCopy(): void {
-  useEventListener(document, 'click', async (event) => {
+  useEventListener(document, 'click', async event => {
     const button = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>('.code-copy')
     if (!button) {
       return

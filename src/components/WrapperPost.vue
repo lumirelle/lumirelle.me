@@ -35,7 +35,9 @@ onMounted(() => {
     </h1>
     <p v-if="frontmatter.date" class="opacity-50 slide-enter-50 !-mt-6">
       First post on {{ formatDate(frontmatter.date, false) }}
-      <span v-if="frontmatter.update">· Last edit on {{ formatDate(frontmatter.update, false) }}</span>
+      <span v-if="frontmatter.update"
+        >· Last edit on {{ formatDate(frontmatter.update, false) }}</span
+      >
       <span v-if="frontmatter.duration">· {{ frontmatter.duration }}</span>
     </p>
     <p v-if="frontmatter.place" class="mt--4!">
@@ -53,19 +55,16 @@ onMounted(() => {
     <p
       v-if="frontmatter.draft"
       class="slide-enter"
-
       border="l-3 orange-4"
-
-      bg-orange-4:10 text-orange-4 px4 py2
+      bg-orange-4:10
+      text-orange-4
+      px4
+      py2
     >
       This is a draft post, the content may be incomplete. Please check back later.
     </p>
   </div>
-  <article
-    ref="content"
-    :lang="frontmatter.lang"
-    :class="[frontmatter.class]"
-  >
+  <article ref="content" :lang="frontmatter.lang" :class="[frontmatter.class]">
     <slot />
   </article>
 </template>

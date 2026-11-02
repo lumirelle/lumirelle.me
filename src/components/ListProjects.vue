@@ -9,9 +9,7 @@ function slug(name: string): string {
 
 <template>
   <div class="mx-auto max-w-300">
-    <p text-lg mb5 mt--6 text-center op50 italic>
-      Projects that I created or maintaining.
-    </p>
+    <p text-lg mb5 mt--6 text-center op50 italic>Projects that I created or maintaining.</p>
     <div class="prose mx-auto mt10 pb5 text-center">
       <div flex="~ gap-2 justify-center">
         <a href="https://github.com/lumirelle" target="_blank" class="group btn-blue inline-block">
@@ -38,7 +36,7 @@ function slug(name: string): string {
           Yak Map
         </a> -->
       </div>
-      <hr>
+      <hr />
     </div>
     <div
       v-for="(key, cidx) in Object.keys(projects)"
@@ -48,17 +46,31 @@ function slug(name: string): string {
     >
       <div
         :id="slug(key)"
-
-        slide-enter mt5 h18 pointer-events-none select-none relative
+        slide-enter
+        mt5
+        h18
+        pointer-events-none
+        select-none
+        relative
         :style="{
           '--enter-stage': cidx - 2,
           '--enter-step': '60ms',
         }"
       >
         <span
-
-          text-5em color-transparent leading-1em font-bold text-stroke-1.5 text-stroke-hex-aaa op35 left--1rem top-0rem absolute dark:op20
-        >{{ key }}</span>
+          text-5em
+          color-transparent
+          leading-1em
+          font-bold
+          text-stroke-1.5
+          text-stroke-hex-aaa
+          op35
+          left--1rem
+          top-0rem
+          absolute
+          dark:op20
+          >{{ key }}</span
+        >
       </div>
       <div
         class="project-grid mx-auto py-2 max-w-500 w-max"
@@ -84,9 +96,11 @@ function slug(name: string): string {
     </div>
     <div class="prose mx-auto mt10 pb5 text-center">
       <div mt-5 block>
-        <a href="https://lumirelle.me/stars-rank" target="_blank" op50>All projects sort by Stars</a>
+        <a href="https://lumirelle.me/stars-rank" target="_blank" op50
+          >All projects sort by Stars</a
+        >
       </div>
-      <hr>
+      <hr />
       <SponsorButtons />
     </div>
   </div>

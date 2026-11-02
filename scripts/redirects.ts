@@ -20,9 +20,7 @@ async function run(): Promise<void> {
 
     for (const repo of repos) {
       if (
-        ['test', 'static', 'repro', 'issue', 'resume', 'lumirelle'].some(e =>
-          repo.name.includes(e),
-        )
+        ['test', 'static', 'repro', 'issue', 'resume', 'lumirelle'].some(e => repo.name.includes(e))
       ) {
         continue
       }

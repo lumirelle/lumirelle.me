@@ -53,7 +53,9 @@ function languageOf(pre: HastNode): string {
   const className = code?.properties?.class
   const classes = Array.isArray(className)
     ? className.filter(part => typeof part === 'string').join(' ')
-    : typeof className === 'string' ? className : ''
+    : typeof className === 'string'
+      ? className
+      : ''
   const match = classes.match(/language-([\w-]+)/)
   return match?.[1] ?? 'text'
 }
@@ -87,7 +89,7 @@ function codeWindow(): ShikiTransformer {
           return
         }
 
-        parent.children = parent.children.map((child) => {
+        parent.children = parent.children.map(child => {
           if (child.tagName === 'pre') {
             const language = languageOf(child)
             const bar = element('div', 'code-window-bar', [
@@ -169,16 +171,14 @@ function dayInOffset(value: string | Date, offset: string): string {
  * per file that asks, nor print the warning once per page.
  */
 function fileHistory(): History | null {
-  if (history === undefined)
-    history = readHistory() ?? null
+  if (history === undefined) history = readHistory() ?? null
   return history
 }
 
 /** What history knows of one file, keyed the way `git log --name-only` prints it. */
 function historyOf(file: string): FileHistory | undefined {
   const known = fileHistory()
-  if (!known)
-    return undefined
+  if (!known) return undefined
   return known.byFile.get(relative(known.root, file).split('\\').join('/'))
 }
 
@@ -200,16 +200,14 @@ function readHistory(): History | undefined {
       const path = line.trim()
       if (line.startsWith('\0')) {
         commit = line.slice(1).trim()
-      }
-      else if (path !== '' && commit) {
+      } else if (path !== '' && commit) {
         const known = byFile.get(path)
         byFile.set(path, { firstCommit: commit, lastCommit: known?.lastCommit ?? commit })
       }
     }
 
     return { root, byFile }
-  }
-  catch (error) {
+  } catch (error) {
     const message = (error as Error).message.split('\n')[0]
     console.warn(`[history] no edit dates: git history is unavailable (${message})`)
     return undefined
@@ -227,13 +225,13 @@ function readHistory(): History | undefined {
  * would produce a date that means nothing.
  */
 function derivedUpdate(file: string, date: unknown): string | undefined {
-  if (typeof date !== 'string' && !(date instanceof Date))
-    return undefined
+  if (typeof date !== 'string' && !(date instanceof Date)) return undefined
   const entry = historyOf(file)
-  if (!entry)
-    return undefined
+  if (!entry) return undefined
   const offset = ISO_OFFSET_REGEX.exec(entry.lastCommit)?.[1] ?? '+00:00'
-  return dayInOffset(entry.lastCommit, offset) === dayInOffset(date, offset) ? undefined : entry.lastCommit
+  return dayInOffset(entry.lastCommit, offset) === dayInOffset(date, offset)
+    ? undefined
+    : entry.lastCommit
 }
 
 /**
@@ -246,11 +244,9 @@ function derivedUpdate(file: string, date: unknown): string | undefined {
  * pass over history per bundle, however many questions are asked of it.
  */
 function warnOnImpossibleDate(file: string, date: unknown): void {
-  if (typeof date !== 'string' && !(date instanceof Date))
-    return
+  if (typeof date !== 'string' && !(date instanceof Date)) return
   const entry = historyOf(file)
-  if (!entry)
-    return
+  if (!entry) return
   const offset = ISO_OFFSET_REGEX.exec(entry.firstCommit)?.[1] ?? '+00:00'
   const published = dayInOffset(date, offset)
   const first = dayInOffset(entry.firstCommit, offset)
@@ -340,9 +336,15 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
           'ESLint': 'https://github.com/eslint/eslint',
           'Astro': 'https://github.com/withastro/astro',
           'TwoSlash': 'https://github.com/twoslashes/twoslash',
-          'Anthony Fu Collective': { link: 'https://opencollective.com/antfu', imageUrl: 'https://github.com/antfu-collective.png' },
+          'Anthony Fu Collective': {
+            link: 'https://opencollective.com/antfu',
+            imageUrl: 'https://github.com/antfu-collective.png',
+          },
           'Netlify': { link: 'https://netlify.com', imageUrl: 'https://github.com/netlify.png' },
-          'Stackblitz': { link: 'https://stackblitz.com', imageUrl: 'https://github.com/stackblitz.png' },
+          'Stackblitz': {
+            link: 'https://stackblitz.com',
+            imageUrl: 'https://github.com/stackblitz.png',
+          },
           'Vercel': { link: 'https://vercel.com', imageUrl: 'https://github.com/vercel.png' },
         },
         imageOverrides: [
@@ -361,16 +363,13 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
       md.use(PreviewPlugin)
     },
     frontmatterPreprocess(frontmatter, options, id, defaults) {
-      ((): void => {
-        if (!id.endsWith('.md'))
-          return
+      ;((): void => {
+        if (!id.endsWith('.md')) return
         const route = basename(id, '.md')
-        if (route === 'index' || frontmatter.image || !frontmatter.title)
-          return
+        if (route === 'index' || frontmatter.image || !frontmatter.title) return
         const path = `og/${route}.png`
         async function generateOg(title: string, output: string): Promise<void> {
-          if (existsSync(output))
-            return
+          if (existsSync(output)) return
           mkdirSync(dirname(output), { recursive: true })
           // breakline every 30 chars
           const lines = title
@@ -391,15 +390,17 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
               .resize(1200 * 1.1, 630 * 1.1)
               .png()
               .toFile(output)
-          }
-          catch (error) {
+          } catch (error) {
             console.error('Failed to generate og image', error)
           }
         }
         promises.push(
           existsSync(`${id.slice(0, -3)}.png`)
             ? cp(`${id.slice(0, -3)}.png`, `public/${path}`)
-            : generateOg(frontmatter.title.replace(FRONTMATTER_TITLE_REGEX, '').trim(), `public/${path}`),
+            : generateOg(
+                frontmatter.title.replace(FRONTMATTER_TITLE_REGEX, '').trim(),
+                `public/${path}`,
+              ),
         )
         frontmatter.image = `https://lumirelle.me/${path}`
       })()
@@ -408,10 +409,8 @@ export function Markdown(promises: Promise<any>[]): Plugin<any> | Plugin<any>[] 
         // Derived, never authored: the field is set or removed, so a stale
         // hand-written `update:` cannot reach the page.
         const update = derivedUpdate(id, frontmatter.date)
-        if (update)
-          frontmatter.update = update
-        else
-          delete frontmatter.update
+        if (update) frontmatter.update = update
+        else delete frontmatter.update
         warnOnImpossibleDate(id, frontmatter.date)
       }
       const head = defaults(frontmatter, options)

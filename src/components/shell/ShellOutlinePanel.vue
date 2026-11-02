@@ -31,10 +31,12 @@ const host = useTemplateRef<HTMLDivElement>('host')
  * Into the panel, not onto a link: the reader asked for the outline, and Tab
  * from here reaches the first section.
  */
-watch(() => props.open, (open) => {
-  if (open)
-    void nextTick(() => panel.value?.focus())
-})
+watch(
+  () => props.open,
+  open => {
+    if (open) void nextTick(() => panel.value?.focus())
+  },
+)
 
 /** The element the adopted outline is appended to, for the owner to fill. */
 function outlineHost(): HTMLElement | null {
@@ -51,8 +53,7 @@ defineExpose({ outlineHost })
  * for. Only a link counts: the panel's own surface is not a dismiss target.
  */
 function onPanelClick(event: MouseEvent): void {
-  if ((event.target as HTMLElement | null)?.closest('a'))
-    emit('close')
+  if ((event.target as HTMLElement | null)?.closest('a')) emit('close')
 }
 </script>
 

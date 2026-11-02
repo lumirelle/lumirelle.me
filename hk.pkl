@@ -32,13 +32,34 @@ steps {
         "**/*.mdc",
         "**/*.mdx",
       )
+    // ESLint caches per-file results here and invalidates them on content or configuration
+    // changes, so a repeat run only lints what changed since the last one.
     check = new CommandSpec {
-      command = new Command { argv = List("eslint", "--no-warn-ignored", "{{files}}") }
+      command = new Command {
+        argv =
+          List(
+            "eslint",
+            "--no-warn-ignored",
+            "--cache",
+            "--cache-location",
+            "node_modules/.cache/eslint",
+            "{{files}}",
+          )
+      }
       effect = "read"
     }
     fix = new CommandSpec {
       command = new Command {
-        argv = List("eslint", "--no-warn-ignored", "--fix", "{{files}}")
+        argv =
+          List(
+            "eslint",
+            "--no-warn-ignored",
+            "--fix",
+            "--cache",
+            "--cache-location",
+            "node_modules/.cache/eslint",
+            "{{files}}",
+          )
       }
       effect = "write"
     }

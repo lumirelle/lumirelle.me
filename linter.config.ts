@@ -10,7 +10,6 @@ export const options = {
   // deliberately broken examples.
   ignores: ['.agents/**', '.claude/**', 'pages/**'],
   overrides: {
-    // The rules the previous configuration removed from ESLint's default set.
     javascript: {
       rules: {
         'no-labels': 'off',

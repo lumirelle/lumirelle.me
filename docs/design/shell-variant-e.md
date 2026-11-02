@@ -1,6 +1,6 @@
 # Shell — variant E (confirmed)
 
-The redesign's Shell, as confirmed from the prototype. **This file is the design reference the tickets build against.** The runnable version lives on branch `prototype/redesign-shell` (commit `8955979`, `?variant=E`) — read it for proportions and feel, not for implementation, because half of it is deliberately throwaway (see *Prototype hacks* below).
+The redesign's Shell, as confirmed from the prototype. **This file is the design reference the tickets build against.** The runnable version lives on branch `prototype/redesign-shell` (commit `8955979`, `?variant=E`) — read it for proportions and feel, not for implementation, because half of it is deliberately throwaway (see _Prototype hacks_ below).
 
 Companion decisions: [ADR-0001](../adr/0001-geist-style-transfer.md) (style transfer, zero-dependency motion), [ADR-0002](../adr/0002-semantic-and-syntax-colour.md) (hue only for syntax and severity).
 
@@ -16,21 +16,21 @@ lumirelle@me ~/posts                        posts  projects  use  photos  demos 
 
 - **Header row** — 20 px vertical padding, no rule beneath it. `/blog`, `/tutorials`, `/guides` and
   `/manuals` are the same list under another filter, so all four read as `posts` in the navigation
-  (marked `aria-current="true"`, not `"page"` — they are the current *section*, not the current page).
+  (marked `aria-current="true"`, not `"page"` — they are the current _section_, not the current page).
 - **Content** — starts 48 px below the header on every route (`pt-12`), so list mastheads and post titles share one rhythm.
 - **Footer** — hairline above, mono 11 px, two items.
 
 ## Type
 
-| role | face | size |
-| --- | --- | --- |
-| Post / page titles | Aporetic Serif (system serif fallback) | 46 px |
-| List row titles | same | 23 px, 1.32 |
-| Prose | same | 18 px / 1.7 |
-| Chrome, dates, metadata | **Aporetic Serif Mono** | 12 px |
-| Rail entries, group labels, footer | same | 11 px |
-| Code | same | 13.5 px / 1.7 |
-| Code window bar, copy | same | 10 px |
+| role                               | face                                   | size          |
+| ---------------------------------- | -------------------------------------- | ------------- |
+| Post / page titles                 | Aporetic Serif (system serif fallback) | 46 px         |
+| List row titles                    | same                                   | 23 px, 1.32   |
+| Prose                              | same                                   | 18 px / 1.7   |
+| Chrome, dates, metadata            | **Aporetic Serif Mono**                | 12 px         |
+| Rail entries, group labels, footer | same                                   | 11 px         |
+| Code                               | same                                   | 13.5 px / 1.7 |
+| Code window bar, copy              | same                                   | 10 px         |
 
 Mono is for system truth — nav, breadcrumb, dates, counts, labels. Serif is for voice — titles and prose. Never mix the two in one line. No all-caps labels; `STEP n.` stays only in Manuals, which are genuinely ordered.
 
@@ -49,21 +49,21 @@ Mono is for system truth — nav, breadcrumb, dates, counts, labels. Serif is fo
 - Outline rail: fixed, gutter only, at **1400 px and wider**. `left: max(16px, 50% - 626px)`, width
   **224 px**, `cd ..` at **top 72**, rail at **top 102** (`--rail-top + 30`). Below **1400 px** there is no
   rail, because the gutter can't hold it without touching the column — the Outline panel is the outline
-  there (see *Outline*).
+  there (see _Outline_).
 - Radii: **8 px** on the code window, **4 px** on interactive controls, square everywhere else.
 
 ## Tokens
 
-| token | light | dark |
-| --- | --- | --- |
-| canvas | `#FFFFFF` | `#000000` |
-| surface | `#F6F6F6` | `#0D0D0D` |
-| stroke | `#E2E2E2` | `#262626` |
-| ink | `#3A3A3A` | `#C4C4C4` |
+| token      | light     | dark      |
+| ---------- | --------- | --------- |
+| canvas     | `#FFFFFF` | `#000000` |
+| surface    | `#F6F6F6` | `#0D0D0D` |
+| stroke     | `#E2E2E2` | `#262626` |
+| ink        | `#3A3A3A` | `#C4C4C4` |
 | ink-strong | `#111111` | `#F2F2F2` |
-| ink-faint | `#767676` | `#6E6E6E` |
+| ink-faint  | `#767676` | `#6E6E6E` |
 
-`#767676` is not a taste call: it is the point where faint text clears WCAG AA (4.54:1) on white. The darker *strong* border in dark mode is `#454545`, because `#262626` disappears against black.
+`#767676` is not a taste call: it is the point where faint text clears WCAG AA (4.54:1) on white. The darker _strong_ border in dark mode is `#454545`, because `#262626` disappears against black.
 
 ## Colour
 
@@ -139,13 +139,13 @@ const str: string = 'hello'
 
 ## Prototype hacks — do not copy
 
-| in the prototype | where it belongs |
-| --- | --- |
+| in the prototype                                               | where it belongs                                                                    |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | `enhanceCodeBlocks()` wraps `<pre>` and injects the window bar | markdown plugin (Shiki transformer / renderer), where the language is already known |
-| language label via DOM post-processing | same |
-| `?variant=` branch in `App.vue`, `PrototypeSwitcher` | deleted; the Shell ships as the real `NavBar`/`App.vue` |
-| inline hex values everywhere | the token layer (#4) |
-| glitch and rail mounted by `refreshOutline()` on route change | Vue components inside the Shell, rendered once |
+| language label via DOM post-processing                         | same                                                                                |
+| `?variant=` branch in `App.vue`, `PrototypeSwitcher`           | deleted; the Shell ships as the real `NavBar`/`App.vue`                             |
+| inline hex values everywhere                                   | the token layer (#4)                                                                |
+| glitch and rail mounted by `refreshOutline()` on route change  | Vue components inside the Shell, rendered once                                      |
 
 ## Traps worth remembering
 
@@ -171,7 +171,7 @@ route complete with JavaScript disabled.
 
 - Ledger rows inherited `.prose ul > li::before`, so every row carried a grey bullet and a 1.75 em
   indent. The pilot page is wrapped in `.prose`, so the ledger now clears that itself.
-- `.prose a:hover` *adds* a 1 px border under a link. On hover, every ledger row and every filter
+- `.prose a:hover` _adds_ a 1 px border under a link. On hover, every ledger row and every filter
   link grew a second hairline — a hairline that was none of a Rail, a row divider or a focus
   outline. Cleared in both states.
 - `SubNav` was still the fork's 3xl serif link stack, which made the pilot page read as two designs
@@ -183,7 +183,7 @@ route complete with JavaScript disabled.
 the reference itself had drifted from the prototype, so both were corrected:
 
 - The list inverted the row: the date was in the margin and the reading time was right-aligned against the
-  inner edge, with a hairline under every row. It now matches *Geometry* above — group label in the margin,
+  inner edge, with a hairline under every row. It now matches _Geometry_ above — group label in the margin,
   date and reading time on the line under the title, rhythm instead of rules.
 - The list had no masthead and no command line. Both are back, with the entry counts.
 - The outline rail was the fork's hover-revealed hamburger at the viewport edge. It is now the mono rail in
@@ -209,7 +209,7 @@ navigation to satisfy a screenshot.
   the popup chrome is not.
 
 - **The Post page's masthead still joins its metadata with `·`** ("First post on … · Last edit on …
-  · 20min"). The middle-dot removal in P1 is about the *list*, where columns now do that work; the
+  · 20min"). The middle-dot removal in P1 is about the _list_, where columns now do that work; the
   Post page's own header is P2's to set.
 - **Reading time stacks under the title below 640 px.** It is already on the line beneath the title by
   design, so at 390 px only the margin column narrows (6.5 rem → 4 rem).

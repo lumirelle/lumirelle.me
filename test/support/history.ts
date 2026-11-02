@@ -34,8 +34,7 @@ export function historyAvailability(): HistoryAvailability {
       return { available: false, reason: 'not a git working tree' }
     }
     return { available: true }
-  }
-  catch (error) {
+  } catch (error) {
     return { available: false, reason: `git is unavailable: ${(error as Error).message}` }
   }
 }
@@ -63,7 +62,6 @@ export function lastCommitOf(file: string): string | undefined {
 export function firstCommitOf(file: string): string | undefined {
   // Oldest first, then the first line: `--reverse` and `-1` do not compose, and
   // a Post's file history is a handful of commits either way.
-  const date = git(['log', '--no-renames', '--reverse', '--format=%aI', '--', file])
-    .split('\n')[0]
+  const date = git(['log', '--no-renames', '--reverse', '--format=%aI', '--', file]).split('\n')[0]
   return date === undefined || date === '' ? undefined : date
 }

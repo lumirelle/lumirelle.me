@@ -171,3 +171,10 @@ mise.*.local.lock
 auto-imports.d.ts
 components.d.ts
 public/assets/fonts
+
+# --- Build & test artifacts ---
+temp/
+src/data/sponsors-circles.json
+public/sponsors.svg
+test-results/
+playwright-report/

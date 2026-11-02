@@ -2,7 +2,7 @@
 // use a custom implementation here
 import { remove } from 'diacritics'
 
-// oxlint-disable-next-line no-control-regex
+// eslint-disable-next-line no-control-regex -- the pattern strips control characters on purpose
 const rControl = /[\u0000-\u001F]/g
 const rSpecial = /[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'<>,.?/]+/g
 const rContinuos = /-{2,}/g

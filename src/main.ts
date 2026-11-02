@@ -45,14 +45,12 @@ export const createApp = ViteSSG(
       // authoring is not fought by it; everywhere else it plays once, and the
       // first route change retires it for good so it can never run underneath
       // the route transition.
-      if (import.meta.env.DEV)
-        html.classList.add('no-sliding')
+      if (import.meta.env.DEV) html.classList.add('no-sliding')
 
       let navigations = 0
       router.afterEach(() => {
         navigations += 1
-        if (navigations > 1)
-          html.classList.add('no-sliding')
+        if (navigations > 1) html.classList.add('no-sliding')
       })
 
       // The Splash's end state. With JavaScript off the head script never adds

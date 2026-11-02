@@ -12,13 +12,7 @@
  * the whole Guides page, and a series not listed falls back to the end,
  * alphabetically.
  */
-export const postGroupOrder: string[] = [
-  'Computer',
-  'Shell',
-  'Editor',
-  'VCS',
-  'Web',
-]
+export const postGroupOrder: string[] = ['Computer', 'Shell', 'Editor', 'VCS', 'Web']
 
 export const guideSeriesOrder: string[] = [
   'Code Style',

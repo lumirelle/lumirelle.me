@@ -12,7 +12,7 @@
  * absolutely positioned, clipped box — the row cannot change height or move its
  * wrap points whatever the random characters turn out to be.
  */
-const props = defineProps<{ text: string, active?: boolean }>()
+const props = defineProps<{ text: string; active?: boolean }>()
 
 const reduced = usePreferredReducedMotion()
 const display = ref(props.text)
@@ -42,16 +42,13 @@ function run(): void {
     const revealed = Math.floor(progress * source.length)
     display.value = [...source]
       .map((glyph, i) =>
-        i < revealed || glyph === ' '
-          ? glyph
-          : GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
+        i < revealed || glyph === ' ' ? glyph : GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
       )
       .join('')
 
     if (progress < 1) {
       frame = requestAnimationFrame(tick)
-    }
-    else {
+    } else {
       display.value = source
       frame = undefined
     }
@@ -61,15 +58,21 @@ function run(): void {
   frame = requestAnimationFrame(tick)
 }
 
-watch(() => props.active, (isActive) => {
-  if (isActive) {
-    run()
-  }
-})
+watch(
+  () => props.active,
+  isActive => {
+    if (isActive) {
+      run()
+    }
+  },
+)
 
-watch(() => props.text, (text) => {
-  display.value = text
-})
+watch(
+  () => props.text,
+  text => {
+    display.value = text
+  },
+)
 
 onUnmounted(stop)
 </script>

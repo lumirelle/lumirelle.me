@@ -74,8 +74,7 @@ function liveFrame(): HTMLElement | null {
 
 /** Where this width's presentation keeps the outline. */
 function outlineTarget(): HTMLElement {
-  if (wide.value)
-    return document.body
+  if (wide.value) return document.body
   return panel.value?.outlineHost() ?? document.body
 }
 
@@ -103,8 +102,7 @@ function adoptOutline(): void {
   // mark intact; removing and re-querying would lose them because the outline
   // is no longer inside the frame.
   if (current?.dataset.owner === route.fullPath) {
-    if (current.parentElement !== target)
-      target.appendChild(current)
+    if (current.parentElement !== target) target.appendChild(current)
     return
   }
 
@@ -127,15 +125,17 @@ let adoptTimer: number | undefined
 function measure(): void {
   const live = liveFrame()
   const scope = live ?? document
-  headings = [...scope.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id], .prose h4[id]')]
-    .map(heading => ({ id: heading.id, top: heading.getBoundingClientRect().top + window.scrollY }))
+  headings = [
+    ...scope.querySelectorAll<HTMLElement>('.prose h2[id], .prose h3[id], .prose h4[id]'),
+  ].map(heading => ({ id: heading.id, top: heading.getBoundingClientRect().top + window.scrollY }))
 }
 
 function track(): void {
   frameRequest = undefined
-  const marks = (adopted.value ?? document).querySelectorAll<HTMLAnchorElement>('.table-of-contents a[href^="#"]')
-  if (!marks.length || !headings.length)
-    return
+  const marks = (adopted.value ?? document).querySelectorAll<HTMLAnchorElement>(
+    '.table-of-contents a[href^="#"]',
+  )
+  if (!marks.length || !headings.length) return
 
   // A heading becomes active once its top passes a third of the viewport down; at
   // the very top of the page nobody has, so the first section is where you are.
@@ -147,8 +147,7 @@ function track(): void {
   for (const mark of marks) {
     const isActive = mark.getAttribute('href') === `#${activeId}`
     mark.classList.toggle('toc-active', isActive)
-    if (isActive)
-      active = mark
+    if (isActive) active = mark
   }
 
   // The rail is a window on the outline, and with h4 in it a long Manual's mark
@@ -158,8 +157,7 @@ function track(): void {
 }
 
 function onScroll(): void {
-  if (frameRequest === undefined)
-    frameRequest = requestAnimationFrame(track)
+  if (frameRequest === undefined) frameRequest = requestAnimationFrame(track)
 }
 
 function refresh(): void {
@@ -197,11 +195,12 @@ const opener = shallowRef<HTMLElement | null>(null)
  * The document's own scroller. `main.css` gives `html` its own overflow, so a
  * lock on `body` would leave the window scrolling behind the panel.
  */
-const locked = useScrollLock(computed(() => (typeof document === 'undefined' ? null : document.documentElement)))
+const locked = useScrollLock(
+  computed(() => (typeof document === 'undefined' ? null : document.documentElement)),
+)
 
 function openPanel(): void {
-  if (open.value)
-    return
+  if (open.value) return
   const active = document.activeElement
   opener.value = active instanceof HTMLElement && active !== document.body ? active : null
   open.value = true
@@ -209,12 +208,10 @@ function openPanel(): void {
 }
 
 function closePanel(returnFocus = true): void {
-  if (!open.value)
-    return
+  if (!open.value) return
   open.value = false
   locked.value = false
-  if (!returnFocus)
-    return
+  if (!returnFocus) return
 
   // Looked up after the patch, because the control does not exist while the panel
   // is open: it is the control when the column is on screen, and otherwise
@@ -222,8 +219,7 @@ function closePanel(returnFocus = true): void {
   // no control to hand focus back to.
   void nextTick(() => {
     const target = reachable.value ? trigger.value : opener.value
-    if (target?.isConnected)
-      target.focus()
+    if (target?.isConnected) target.focus()
   })
 }
 
@@ -231,19 +227,14 @@ function closePanel(returnFocus = true): void {
 // not typing and the image lightbox does not already own the keyboard.
 onKeyStroke('Escape', () => closePanel())
 
-onKeyStroke('o', (event) => {
-  if (!hasOutline.value || wide.value)
-    return
-  if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey)
-    return
-  if (lightbox.value || isFocusedElementEditable())
-    return
+onKeyStroke('o', event => {
+  if (!hasOutline.value || wide.value) return
+  if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return
+  if (lightbox.value || isFocusedElementEditable()) return
 
   event.preventDefault()
-  if (open.value)
-    closePanel()
-  else
-    openPanel()
+  if (open.value) closePanel()
+  else openPanel()
 })
 
 onMounted(() => {
@@ -255,8 +246,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
   window.removeEventListener('resize', refresh)
-  if (frameRequest !== undefined)
-    cancelAnimationFrame(frameRequest)
+  if (frameRequest !== undefined) cancelAnimationFrame(frameRequest)
   window.clearTimeout(adoptTimer)
   adopted.value?.remove()
   adopted.value = null
@@ -265,10 +255,13 @@ onBeforeUnmount(() => {
 // The outline is generated per Post, so remeasure once the new page has committed.
 // A route change also ends the panel: it belonged to the Post that is leaving,
 // and the reader did not ask for the new page to start behind it.
-watch(() => route.fullPath, () => {
-  closePanel(false)
-  return nextTick(refreshAfterMove)
-})
+watch(
+  () => route.fullPath,
+  () => {
+    closePanel(false)
+    return nextTick(refreshAfterMove)
+  },
+)
 
 // Crossing the rail's breakpoint hands the same node to the other presentation,
 // and ends the panel: it has no counterpart at 1400 px and wider.

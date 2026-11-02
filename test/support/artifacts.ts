@@ -64,18 +64,20 @@ function stripLists(html: string): string {
 }
 
 function toReadableText(html: string): string {
-  return html
-    // Rendered code and JSON payloads are not page content.
-    .replaceAll(/<(script|style)\b[\s\S]*?<\/\1>/g, ENTITY_BOUNDARY)
-    // Tags vanish without leaving a gap, exactly as `textContent` joins
-    // adjacent elements — otherwise `toContainText` would disagree with us at
-    // every block boundary.
-    .replaceAll(/<[^>]+>/g, '')
-    // Entities are decoded by the browser but not here, so mark them as a
-    // boundary instead of guessing an equivalent character.
-    .replaceAll(/&[#\w]+;/g, ENTITY_BOUNDARY)
-    .replaceAll(/\s+/g, ' ')
-    .trim()
+  return (
+    html
+      // Rendered code and JSON payloads are not page content.
+      .replaceAll(/<(script|style)\b[\s\S]*?<\/\1>/g, ENTITY_BOUNDARY)
+      // Tags vanish without leaving a gap, exactly as `textContent` joins
+      // adjacent elements — otherwise `toContainText` would disagree with us at
+      // every block boundary.
+      .replaceAll(/<[^>]+>/g, '')
+      // Entities are decoded by the browser but not here, so mark them as a
+      // boundary instead of guessing an equivalent character.
+      .replaceAll(/&[#\w]+;/g, ENTITY_BOUNDARY)
+      .replaceAll(/\s+/g, ' ')
+      .trim()
+  )
 }
 
 /**
@@ -116,7 +118,7 @@ function readRouteArtifacts(): RouteArtifact[] {
     .filter(file => !NOT_A_PAGE.some(prefix => file.startsWith(`${prefix}/`)))
     .sort((a, b) => a.localeCompare(b))
 
-  return files.map((file) => {
+  return files.map(file => {
     const html = readFileSync(join(DIST, file), 'utf8')
     return { path: toSitePath(file), file, marker: extractMarker(html) }
   })
@@ -151,7 +153,7 @@ export function readAllHtml(): string {
 }
 
 /** Every Markdown page, which is where authoring conventions are observable. */
-export function readPages(): { file: string, source: string }[] {
+export function readPages(): { file: string; source: string }[] {
   return readdirSync('pages', { recursive: true, encoding: 'utf8' })
     .filter(file => file.endsWith('.md'))
     .sort((a, b) => a.localeCompare(b))

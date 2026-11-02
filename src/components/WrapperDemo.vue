@@ -14,11 +14,14 @@ const { frontmatter, video, date } = defineProps<{
   <div>
     <a
       border="~ stroke"
-
       class="group"
       hover="scale-101 z-10"
-
-      bg-base block transition-all duration-500 relative of-hidden
+      bg-base
+      block
+      transition-all
+      duration-500
+      relative
+      of-hidden
       :href="frontmatter.link"
       target="_blank"
     >

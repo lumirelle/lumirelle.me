@@ -18,12 +18,10 @@ const OFFSET = 40
 
 /** Scroll to the current `location.hash`. Returns whether it found the target. */
 export function scrollToHash(): boolean {
-  if (!location.hash)
-    return false
+  if (!location.hash) return false
 
   const target = document.querySelector(decodeURIComponent(location.hash))
-  if (!target)
-    return false
+  if (!target) return false
 
   window.scrollTo({
     top: window.scrollY + target.getBoundingClientRect().top - OFFSET,
@@ -42,38 +40,42 @@ export function scrollToHash(): boolean {
 export function useInPageLinks(target: MaybeRefOrGetter<HTMLElement | null | undefined>): void {
   const router = useRouter()
 
-  useEventListener(target, 'click', (event: MouseEvent) => {
-    const link = (event.target as HTMLElement | null)?.closest('a')
+  useEventListener(
+    target,
+    'click',
+    (event: MouseEvent) => {
+      const link = (event.target as HTMLElement | null)?.closest('a')
 
-    if (
-      !link
-      || event.defaultPrevented
-      || event.button !== 0
-      || link.target === '_blank'
-      || link.rel === 'external'
-      || link.download
-      || event.metaKey
-      || event.ctrlKey
-      || event.shiftKey
-      || event.altKey
-    ) {
-      return
-    }
+      if (
+        !link
+        || event.defaultPrevented
+        || event.button !== 0
+        || link.target === '_blank'
+        || link.rel === 'external'
+        || link.download
+        || event.metaKey
+        || event.ctrlKey
+        || event.shiftKey
+        || event.altKey
+      ) {
+        return
+      }
 
-    const url = new URL(link.href)
-    if (url.origin !== location.origin)
-      return
+      const url = new URL(link.href)
+      if (url.origin !== location.origin) return
 
-    const { pathname, hash } = url
+      const { pathname, hash } = url
 
-    event.preventDefault()
+      event.preventDefault()
 
-    if (hash && (!pathname || pathname === location.pathname)) {
-      globalThis.history.replaceState({}, '', hash)
-      scrollToHash()
-      return
-    }
+      if (hash && (!pathname || pathname === location.pathname)) {
+        globalThis.history.replaceState({}, '', hash)
+        scrollToHash()
+        return
+      }
 
-    void router.push({ path: pathname, hash })
-  }, { passive: false })
+      void router.push({ path: pathname, hash })
+    },
+    { passive: false },
+  )
 }

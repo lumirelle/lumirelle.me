@@ -49,15 +49,13 @@ interface LedgerGroup {
 
 const routes: LedgerRow[] = router
   .getRoutes()
-  .filter(
-    i => i.path.startsWith('/posts') && i.meta.frontmatter.date && !i.meta.frontmatter.draft,
-  )
+  .filter(i => i.path.startsWith('/posts') && i.meta.frontmatter.date && !i.meta.frontmatter.draft)
   .filter(
     i =>
       !i.path.endsWith('.html')
       && (!props.type || (i.meta.frontmatter.type || 'blog').split('+').includes(props.type)),
   )
-  .map((i) => {
+  .map(i => {
     const frontmatter = i.meta.frontmatter
     return {
       path: frontmatter.redirect || i.path,
@@ -115,22 +113,17 @@ function seriesOf(title: string): string {
 }
 
 const posts = computed<LedgerRow[]>(() =>
-  [...routes, ...((props.extra as LedgerRow[] | undefined) || [])]
-    .sort((a, b) => {
-      if (sequence.value) {
-        const groupDiff = groupIndex(a) - groupIndex(b)
-        if (groupDiff !== 0)
-          return groupDiff
-        const groupNameDiff = groupName(a).localeCompare(groupName(b))
-        if (groupNameDiff !== 0)
-          return groupNameDiff
-        const orderDiff
-          = (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
-        if (orderDiff !== 0)
-          return orderDiff
-      }
-      return Number(new Date(b.date)) - Number(new Date(a.date))
-    }),
+  [...routes, ...((props.extra as LedgerRow[] | undefined) || [])].sort((a, b) => {
+    if (sequence.value) {
+      const groupDiff = groupIndex(a) - groupIndex(b)
+      if (groupDiff !== 0) return groupDiff
+      const groupNameDiff = groupName(a).localeCompare(groupName(b))
+      if (groupNameDiff !== 0) return groupNameDiff
+      const orderDiff = (a.order || Number.MAX_SAFE_INTEGER) - (b.order || Number.MAX_SAFE_INTEGER)
+      if (orderDiff !== 0) return orderDiff
+    }
+    return Number(new Date(b.date)) - Number(new Date(a.date))
+  }),
 )
 
 /**
@@ -150,8 +143,7 @@ const counts = computed(() => {
   if (byType.size > 1) {
     for (const type of ['manual', 'tutorial', 'guide']) {
       const count = byType.get(type)
-      if (count)
-        parts.push(`${count} ${type}s`)
+      if (count) parts.push(`${count} ${type}s`)
     }
   }
   return parts
@@ -163,9 +155,7 @@ const counts = computed(() => {
  * so a section change shows `--type=` arriving rather than the whole line
  * appearing — the flag is the thing that actually changed.
  */
-const flags = computed(() =>
-  props.type ? `--type=${props.type} --sort=date` : '--sort=date',
-)
+const flags = computed(() => (props.type ? `--type=${props.type} --sort=date` : '--sort=date'))
 
 /** The tail as currently typed out. Prerendered complete, so no-JS reads it. */
 const typedFlags = ref(flags.value)
@@ -192,8 +182,7 @@ function typeFlags(): void {
     typedFlags.value = full.slice(0, Math.ceil(progress * full.length))
     if (progress < 1) {
       typeFrame = requestAnimationFrame(tick)
-    }
-    else {
+    } else {
       typeFrame = undefined
     }
   }
@@ -221,8 +210,7 @@ function isFuture(a?: Date | string | number): boolean {
 }
 
 function groupKey(post: LedgerRow): string {
-  if (sequence.value)
-    return groupName(post) || 'Other'
+  if (sequence.value) return groupName(post) || 'Other'
   return isFuture(post.date) ? 'Upcoming' : String(new Date(post.date).getFullYear())
 }
 
@@ -232,10 +220,8 @@ function groupKey(post: LedgerRow): string {
  * column.
  */
 function marginLines(key: string): [string, string] {
-  if (sequence.value)
-    return [`${props.type}s`, key.toLowerCase()]
-  if (props.type === 'guide')
-    return ['guide', key.toLowerCase()]
+  if (sequence.value) return [`${props.type}s`, key.toLowerCase()]
+  if (props.type === 'guide') return ['guide', key.toLowerCase()]
   return [key, '']
 }
 
@@ -287,7 +273,9 @@ const route = useRoute()
 
     <div class="command">
       <span class="prompt">$</span>
-      <span class="command-line">ls posts {{ typedFlags }}<span class="caret" aria-hidden="true" /></span>
+      <span class="command-line"
+        >ls posts {{ typedFlags }}<span class="caret" aria-hidden="true"
+      /></span>
       <span class="counts">{{ counts.join(' / ') }}</span>
     </div>
 
@@ -305,9 +293,7 @@ const route = useRoute()
     </nav>
   </header>
 
-  <div v-if="!posts.length" class="text-ink-faint py-2">
-    { nothing here yet }
-  </div>
+  <div v-if="!posts.length" class="text-ink-faint py-2">{ nothing here yet }</div>
 
   <div v-else class="ledger">
     <section v-for="group in groups" :key="group.key" class="group">
@@ -335,7 +321,13 @@ const route = useRoute()
             >
               <span class="row-title">
                 <GlitchText :text="row.title" :active="active(row.path)" />
-                <span v-if="row.redirect" class="row-external" title="External" aria-label="External link">↗</span>
+                <span
+                  v-if="row.redirect"
+                  class="row-external"
+                  title="External"
+                  aria-label="External link"
+                  >↗</span
+                >
               </span>
 
               <span class="row-meta">
@@ -344,12 +336,22 @@ const route = useRoute()
                   class="row-date"
                   :class="{ active: active(row.path) }"
                   :datetime="String(row.date)"
-                >{{ row.isoDate }}</time>
+                  >{{ row.isoDate }}</time
+                >
                 <span v-if="row.duration">{{ row.duration }}</span>
                 <span v-if="row.lang === 'zh'">chinese</span>
-                <span v-if="row.inperson" title="In person" aria-label="In person"><span i-ri-group-2-line aria-hidden="true" /></span>
-                <span v-if="row.recording || row.video" title="Provided in video" aria-label="Provided in video"><span i-ri-film-line aria-hidden="true" /></span>
-                <span v-if="row.radio" title="Provided in radio" aria-label="Provided in radio"><span i-ri-radio-line aria-hidden="true" /></span>
+                <span v-if="row.inperson" title="In person" aria-label="In person"
+                  ><span i-ri-group-2-line aria-hidden="true"
+                /></span>
+                <span
+                  v-if="row.recording || row.video"
+                  title="Provided in video"
+                  aria-label="Provided in video"
+                  ><span i-ri-film-line aria-hidden="true"
+                /></span>
+                <span v-if="row.radio" title="Provided in radio" aria-label="Provided in radio"
+                  ><span i-ri-radio-line aria-hidden="true"
+                /></span>
                 <span v-if="row.place">{{ row.place }}</span>
               </span>
             </component>
@@ -563,7 +565,8 @@ const route = useRoute()
   margin-inline: -0.25rem;
   padding-inline: 0.25rem;
   font-variant-numeric: tabular-nums;
-  transition: background-color var(--duration-interaction) var(--ease-interaction),
+  transition:
+    background-color var(--duration-interaction) var(--ease-interaction),
     color var(--duration-interaction) var(--ease-interaction);
 }
 

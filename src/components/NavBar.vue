@@ -25,10 +25,8 @@ type Link = (typeof links)[number]
 // `/posts/tutorial-git` is still `posts`: the section owns its children, so the
 // active mark survives every route deeper in the tree.
 function isCurrent(link: Link): boolean {
-  const { to, also } = link as { to: string, also: readonly string[] }
-  return route.path === to
-    || route.path.startsWith(`${to}/`)
-    || also.includes(route.path)
+  const { to, also } = link as { to: string; also: readonly string[] }
+  return route.path === to || route.path.startsWith(`${to}/`) || also.includes(route.path)
 }
 
 /**
@@ -37,8 +35,7 @@ function isCurrent(link: Link): boolean {
  * "posts, current page".
  */
 function currentMark(link: Link): 'page' | 'true' | undefined {
-  if (!isCurrent(link))
-    return undefined
+  if (!isCurrent(link)) return undefined
   return route.path === link.to ? 'page' : 'true'
 }
 </script>

@@ -19,16 +19,14 @@ interface Fragments {
 
 function collect(tokens: Token[], fragments: Fragments): void {
   for (const token of tokens) {
-    if (token.type === 'inline')
-      collect(token.children ?? [], fragments)
-    else if (token.type === 'text')
-      fragments.prose.push(token.content)
+    if (token.type === 'inline') collect(token.children ?? [], fragments)
+    else if (token.type === 'text') fragments.prose.push(token.content)
     else if (token.type === 'fence' || token.type === 'code_block' || token.type === 'code_inline')
       fragments.code.push(token.content)
   }
 }
 
-function count(fragment: string): { words: number, cjk: number } {
+function count(fragment: string): { words: number; cjk: number } {
   return {
     words: fragment.match(WORD_REGEX)?.length ?? 0,
     cjk: fragment.match(CJK_REGEX)?.length ?? 0,
@@ -48,8 +46,7 @@ export function readingTime(raw: string): string {
   const minutes = Math.max(
     1,
     Math.ceil(
-      (prose.words + code.words) / WORDS_PER_MINUTE
-      + (prose.cjk + code.cjk) / CJK_CHARS_PER_MINUTE,
+      (prose.words + code.words) / WORDS_PER_MINUTE + (prose.cjk + code.cjk) / CJK_CHARS_PER_MINUTE,
     ),
   )
 

@@ -11,13 +11,11 @@ export function VueRouter(): Plugin<any> | Plugin<any>[] {
     // logs: true,
     extendRoute(route) {
       const path = route.components.get('default')
-      if (!path)
-        return
+      if (!path) return
       if (!path.includes('projects.md') && path.endsWith('.md')) {
         const raw = readFileSync(path, 'utf8')
         const { data } = matter(raw)
-        if (path.includes('/pages/posts/'))
-          data.duration = readingTime(raw)
+        if (path.includes('/pages/posts/')) data.duration = readingTime(raw)
         route.addToMeta({
           frontmatter: data,
         })

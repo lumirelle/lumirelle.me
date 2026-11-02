@@ -1,6 +1,13 @@
 import type { PresetWind4Theme } from 'unocss'
 import { createLocalFontProcessor } from '@unocss/preset-web-fonts/local'
-import { defineConfig, presetAttributify, presetIcons, presetWebFonts, presetWind4, transformerDirectives } from 'unocss'
+import {
+  defineConfig,
+  presetAttributify,
+  presetIcons,
+  presetWebFonts,
+  presetWind4,
+  transformerDirectives,
+} from 'unocss'
 
 export default defineConfig<PresetWind4Theme>({
   presets: [
@@ -95,11 +102,26 @@ export default defineConfig<PresetWind4Theme>({
     ['font-62.5%em', { 'font-family': '"Annotation Mono", "Maple Mono WR CN", monospace' }],
     ['font-62%em', { 'font-family': '"0xProto", "Maple Mono WD CN", monospace' }],
     ['font-60%em', { 'font-family': '"Go Mono", "Maple Mono CN", monospace' }],
-    ['font-52.5%em', { 'font-family': '"Aporetic Serif Mono", "Zhuque Fangsong A1050", monospace' }],
+    [
+      'font-52.5%em',
+      { 'font-family': '"Aporetic Serif Mono", "Zhuque Fangsong A1050", monospace' },
+    ],
     ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC", monospace' }],
     ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN", monospace' }],
-    ['font-recursive', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'MONO\' 1, \'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
-    ['font-recursive-without-mono', { 'font-family': '"Recursive", "Maple Mono CN"', 'font-variation-settings': '\'CASL\' 0, \'wght\' 400, \'slnt\' 0, \'CRSV\' 0.5' }],
+    [
+      'font-recursive',
+      {
+        'font-family': '"Recursive", "Maple Mono CN"',
+        'font-variation-settings': "'MONO' 1, 'CASL' 0, 'wght' 400, 'slnt' 0, 'CRSV' 0.5",
+      },
+    ],
+    [
+      'font-recursive-without-mono',
+      {
+        'font-family': '"Recursive", "Maple Mono CN"',
+        'font-variation-settings': "'CASL' 0, 'wght' 400, 'slnt' 0, 'CRSV' 0.5",
+      },
+    ],
     // Animation rules
     [/^slide-enter-(\d+)$/, ([_, n]): Record<string, any> => ({ '--enter-stage': n })],
   ],

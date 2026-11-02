@@ -71,11 +71,23 @@ function theme(name: string, type: 'light' | 'dark', palette: Palette, backgroun
         settings: { foreground: fg },
       },
       {
-        scope: ['constant.numeric', 'constant.language', 'constant.character.escape', 'support.constant'],
+        scope: [
+          'constant.numeric',
+          'constant.language',
+          'constant.character.escape',
+          'support.constant',
+        ],
         settings: { foreground: blue },
       },
       {
-        scope: ['keyword', 'storage', 'storage.type', 'storage.modifier', 'keyword.operator', 'keyword.control'],
+        scope: [
+          'keyword',
+          'storage',
+          'storage.type',
+          'storage.modifier',
+          'keyword.operator',
+          'keyword.control',
+        ],
         settings: { foreground: pink },
       },
       {
@@ -103,7 +115,14 @@ function theme(name: string, type: 'light' | 'dark', palette: Palette, backgroun
         settings: { foreground: blue },
       },
       {
-        scope: ['variable', 'variable.other', 'variable.parameter', 'identifier', 'punctuation', 'meta.brace'],
+        scope: [
+          'variable',
+          'variable.other',
+          'variable.parameter',
+          'identifier',
+          'punctuation',
+          'meta.brace',
+        ],
         settings: { foreground: fg },
       },
       {
@@ -111,7 +130,11 @@ function theme(name: string, type: 'light' | 'dark', palette: Palette, backgroun
         settings: { foreground: green },
       },
       {
-        scope: ['keyword.other.unit', 'constant.other.color.rgb-value', 'entity.name.tag.reference'],
+        scope: [
+          'keyword.other.unit',
+          'constant.other.color.rgb-value',
+          'entity.name.tag.reference',
+        ],
         settings: { foreground: teal },
       },
       {
@@ -127,7 +150,12 @@ function theme(name: string, type: 'light' | 'dark', palette: Palette, backgroun
         settings: { foreground: green },
       },
       {
-        scope: ['markup.changed', 'punctuation.definition.changed', 'markup.warning', 'message.warning'],
+        scope: [
+          'markup.changed',
+          'punctuation.definition.changed',
+          'markup.warning',
+          'message.warning',
+        ],
         settings: { foreground: amber },
       },
       {

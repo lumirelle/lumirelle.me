@@ -21,8 +21,7 @@ if (images.length > 0) {
   if (!isConfirmed) {
     process.exit(0)
   }
-}
-else {
+} else {
   console.log('No images to compress')
   process.exit(0)
 }

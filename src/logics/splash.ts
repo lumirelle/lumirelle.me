@@ -61,8 +61,7 @@ export function runSplash(): void {
     // reload during the lift cannot replay it.
     try {
       sessionStorage.setItem(SESSION_KEY, '1')
-    }
-    catch {
+    } catch {
       // Private mode and blocked storage: the Splash simply may run again.
     }
 

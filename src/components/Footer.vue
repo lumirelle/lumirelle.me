@@ -7,11 +7,9 @@
   -->
   <footer class="copyright">
     <span class="items">
-      <a
-        target="_blank"
-        rel="noopener"
-        href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-      >CC BY-NC-SA 4.0</a>
+      <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        >CC BY-NC-SA 4.0</a
+      >
       <RouterLink to="/sponsors-list">sponsors</RouterLink>
     </span>
     <span>2025 — present, Lumirelle</span>

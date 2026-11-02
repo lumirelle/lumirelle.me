@@ -421,7 +421,7 @@ sudo pacman -Syu
 | Git <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{sudo pacman -S git} | Nothing is more important than _Git_ for a developer, right? |
 | OpenSSH | :code[nu]{sudo pacman -S openssh} | Create SSH key, link to everything (Of course, GitHub)! |
 | Yay | :code[nu]{git clone https://aur.archlinux.org/yay-bin.git; cd yay-bin; makepkg -si} | AUR helper (package manager), used to install packages from the AUR instead of the official Arch repositories. |
-| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{sudo pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>Before you start, you may want to connect to your GitHub with a SSH key: [Complete guide to setting up SSH and HTTPS authentication for GitHub](https://gist.github.com/arisng/d8dd3ea7f7e469c84350d065fe4baa76).<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/dotfiles.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
+| Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{sudo pacman -S mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>Before you start, you may want to connect to your GitHub with a SSH key: [Complete guide to setting up SSH and HTTPS authentication for GitHub](https://gist.github.com/arisng/d8dd3ea7f7e469c84350d065fe4baa76).<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mkdir -p ~/.config/mise && printf 'env = ["wsl"]\n' > ~/.config/mise/miserc.local.toml && mise bootstrap --adopt https://github.com/lumirelle/dotfiles.git --env WSL}Of course, I prefer SSH more than HTTPS: :code[nu]{mkdir -p ~/.config/mise && printf 'env = ["wsl"]\n' > ~/.config/mise/miserc.local.toml && mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git --env WSL}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
 ### Recommended WSL Software
 
@@ -456,8 +456,6 @@ The software below is highly recommended and helpful for development with Archli
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Ibus Rime | TODO: <TextTag text="Mise-installed" text-xs preset="mise" /> ?  | CJK IME. |
-| Wox | <TextTag text="Mise-installed" text-xs preset="mise" /> | <details><summary>Extensions</summary><br>- WinFocus<br>- DeepL translator<br>- Iconify<br>- Gif Search<br><br>- Hacker News<br>- RSS Reader<br><br>- JSON Formatter<br>- IP Geolocation<br>- Timestamp<br>- Random Data Generator<br>- Kill Process<br>- Speedtest<br><br>- Droppy<br>- LocalSend<br><br>- Custom Commands</details> |
 | Brave | <TextTag text="Mise-installed" text-xs preset="mise" /> | My daily browser. See extensions setup [here](#browser-setup). |
 | zoxide | <TextTag text="Mise-installed" text-xs preset="mise" /> | A smarter cd command. |
 | fd | <TextTag text="Mise-installed" text-xs preset="mise" /> | A simple, fast and user-friendly alternative to `find`. |
@@ -465,13 +463,11 @@ The software below is highly recommended and helpful for development with Archli
 | ripgrep | <TextTag text="Mise-installed" text-xs preset="mise" /> | Recursively searches directories for a regex pattern while respecting your gitignore. |
 | Lazygit | <TextTag text="Mise-installed" text-xs preset="mise" /> | Simple terminal UI for git commands. |
 | Yazi <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Blazing fast terminal file manager. |
-| OBS Studio | <TextTag text="Mise-installed" text-xs preset="mise" /> | / |
 
 #### Terminal & Shell on Archlinux
 
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
-| Rio <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A hardware-accelerated GPU terminal emulator focusing to run in desktops and browsers. |
 | Nushell <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A cross-platform shell powered by Rust. |
 | Starship <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | The minimal, blazing-fast, and infinitely customizable prompt for any shell! |
 | TUIOS <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A terminal window manager that knows what your agents are doing. Tiling panes, workspaces, sessions that survive restarts, and one Inbox for every coding agent. |
@@ -481,11 +477,8 @@ The software below is highly recommended and helpful for development with Archli
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Neovim <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just much faster than Visual Studio Code. |
-| Zed <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | **Still experimental, but with better performance than Visual Studio Code.** |
-| Visual Studio Code <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | A: Best IDE!<br>B: It's not an IDE, it's just a text editor!<br>... |
 | Claude Code | <TextTag text="Mise-installed" text-xs preset="mise" /> | Just vibe! |
 | Pi Coding Agent <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | There are always people who say it's better than Claude Code, including my former self. 🎃 But... |
-| DBX | <TextTag text="Mise-installed" text-xs preset="mise" /> | Better database manager! |
 | hyperfine | <TextTag text="Mise-installed" text-xs preset="mise" /> | A command-line benchmarking tool. |
 
 ## Fourth Step: Local LLM

@@ -24,53 +24,19 @@ export default defineConfig<PresetWind4Theme>({
     presetWebFonts({
       fonts: {
         // Standards
-        'serif': {
-          name: 'Aporetic Serif',
-          provider: 'none',
-        },
-        'sans': 'Inter Tight',
-        'mono': {
-          name: '"Aporetic Serif Mono"',
-          provider: 'none',
-        },
-        // XXX: Only load when necessary
-        // Strict 62.5%em Group
-        'maple-mono-wr-cn': {
-          name: '"Maple Mono WR CN"',
-          provider: 'none',
-        },
-        'annotation-mono': {
-          name: '"Annotation Mono"',
-          provider: 'none',
-        },
-        // Strict 62%em Group
-        'maple-mono-wd-cn': {
-          name: '"Maple Mono WD CN"',
-          provider: 'none',
-        },
-        '0xproto': {
-          name: '"0xProto"',
-          provider: 'none',
-        },
+        'sans': 'Geist',
+        'serif': 'Geist Serif',
+        'mono': 'Geist Mono',
         // Strict 60%em Group
+        'geist-mono': 'Geist Mono',
         'maple-mono-cn': {
           name: '"Maple Mono CN"',
-          provider: 'none',
-        },
-        'go-mono': {
-          name: '"Go Mono"',
           provider: 'none',
         },
         'recursive': {
           name: '"Recursive"',
           provider: 'none',
         },
-        // Strict 50%em Group
-        'source-han-sans-tc': {
-          name: '"Source Han Sans TC"',
-          provider: 'none',
-        },
-        'm-plus-code-latin': 'M PLUS Code Latin',
       },
       processors: [createLocalFontProcessor()],
     }),
@@ -98,16 +64,8 @@ export default defineConfig<PresetWind4Theme>({
   },
 
   rules: [
-    // Font family rules, without nerd symbols
-    ['font-62.5%em', { 'font-family': '"Annotation Mono", "Maple Mono WR CN", monospace' }],
-    ['font-62%em', { 'font-family': '"0xProto", "Maple Mono WD CN", monospace' }],
-    ['font-60%em', { 'font-family': '"Go Mono", "Maple Mono CN", monospace' }],
-    [
-      'font-52.5%em',
-      { 'font-family': '"Aporetic Serif Mono", "Zhuque Fangsong A1050", monospace' },
-    ],
-    ['font-50%em', { 'font-family': '"M PLUS Code Latin", "Source Han Sans TC", monospace' }],
-    ['font-casual', { 'font-family': '"Comic Mono", "Maple Mono CN", monospace' }],
+    // Without nerd symbols
+    ['font-code', { 'font-family': '"Geist Mono", "Maple Mono CN", monospace' }],
     [
       'font-recursive',
       {

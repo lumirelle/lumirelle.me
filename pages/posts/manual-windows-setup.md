@@ -161,7 +161,7 @@ Let's say good bye to OOBE!
 | Software | Source/Install Command | Note |
 | -- | -- | -- |
 | Clash Verge Rev <TextTag text="Optional" text-xs preset="amber" /><TextTag text="Mise-configured" text-xs preset="mise" />| Download it from the [GitHub releases page](https://github.com/Clash-Verge-rev/clash-verge-rev/releases) onto your USB flash drive.<br><br>You'd better prepare it before the reinstallation. | Network proxy client.<br><br>If the area you live in has some **"mysterious"** network restrictions, you may need to prepare proxy software before any other network-dependent step — for example, by downloading it onto your USB flash drive ahead of time. |
-| Git <TextTag text="Mise-configured" text-xs preset="mise" /> | <TextTag text="Mise-installed" text-xs preset="mise" /> | Nothing is more important than _Git_ for a developer, right? |
+| Git <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{winget add Git.Git} | Nothing is more important than _Git_ for a developer, right? |
 | Mise <TextTag text="Mise-configured" text-xs preset="mise" /> | :code[nu]{winget add jdx.mise} | Dotfiles (outside home directory), packages & tools manager.<br><br>Before you start, you may want to connect to your GitHub with a SSH key: [Complete guide to setting up SSH and HTTPS authentication for GitHub](https://gist.github.com/arisng/d8dd3ea7f7e469c84350d065fe4baa76).<br><br>To bootstrap the rest of my dotfiles, global pacakges & global tools, please use: :code[nu]{mise bootstrap --adopt https://github.com/lumirelle/dotfiles.git}Of course, I prefer SSH more than HTTPS: :code[nu]{mise bootstrap --adopt git@github.com:lumirelle/lumirelle.me.git}See [the usage guide of my dotfile project](https://github.com/lumirelle/dotfiles#usage) for more details. |
 
 ### Configure Windows Itself
@@ -318,7 +318,6 @@ In the tables below, `~` means the same as above.
 | 豆包，浏览器 AI 助手 | [Chromium](https://www.doubao.com/browser-extension/landing?from=ext&extId=dbjibobgilijgolhjdcbdebjhejelffo) | Translator (`Alt+1`), summaryer (`Alt+2`)! |
 | Refined Github | [Chromium](https://chromewebstore.google.com/detail/refined-github/hlepfoohegkhhmjieoechaddaejaokhf) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/refined-github-/) | Requires your GitHub access token. |
 | File Icons for GitHub and GitLab | [Chromium](https://chromewebstore.google.com/detail/file-icons-for-github-and/ficfmibkjjnpogdcfhfokmihanoldbfe) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/github-file-icons/) | / |
-| Styled XML Viewer | [Chromium](https://chromewebstore.google.com/detail/styled-xml-viewer/ejlmflppkjfbbkhgidccfjelfgfgicph) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/styled-xml-viewer/) | / |
 | CSS Stacking Context inspector | [Chromium](https://chromewebstore.google.com/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) & [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) | / |
 
 Sometimes useful extensions:
